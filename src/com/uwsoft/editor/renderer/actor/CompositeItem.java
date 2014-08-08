@@ -385,34 +385,16 @@ public class CompositeItem extends Group implements IBaseItem {
 			return;
 		}
 		for(int i = 0; i < items.size(); i++) {
-			if(items.get(i).getDataVO().itemIdentifier.equals("asdd")){
-				System.out.println("asdd  before sort" + items.get(i).getDataVO().zIndex);
-			}
-			if(items.get(i).getDataVO().itemIdentifier.equals("pppp")){
-				System.out.println("pppp  before sort" + items.get(i).getDataVO().zIndex);
-			}
 			items.get(i).setLayerIndex(getlayerIndexByName(items.get(i).getDataVO().layerName));
 		}
 		Collections.sort(items, ZIndexComparator);
 		for (int i = 0; i < items.size(); i++) {
 			IBaseItem value = items.get(i);
-			
-			if(value.getDataVO().itemIdentifier.equals("asdd")){
-				System.out.println("asdd after sort" + value.getDataVO().zIndex);
-			}
-			if(value.getDataVO().itemIdentifier.equals("pppp")){
-				System.out.println("pppp after sort" + value.getDataVO().zIndex);
-			}
-			
 			if(value.getDataVO().zIndex<0){
 				value.getDataVO().zIndex = 0;
 			}
-			//if(this.getStage() != null){
-				((Actor) value).setZIndex(i);
-				//System.out.println("Sorted " + value.getDataVO().itemIdentifier + " index" + i);
-				value.getDataVO().zIndex = i;
-			//}
-			//System.out.println("Sorting results " + value.getDataVO().itemIdentifier + " index" + i);
+			((Actor) value).setZIndex(i);
+			value.getDataVO().zIndex = i;
 		}
 	}
 
@@ -420,7 +402,6 @@ public class CompositeItem extends Group implements IBaseItem {
 		ArrayList<LayerItemVO> layers = this.dataVO.composite.layers;
 		for(int i=0;i<layers.size();i++){
 			if(layers.get(i).layerName.equals(layerName)){
-				//System.out.println(layerName + " --index " +i);
 				return i;
 			}
 		}

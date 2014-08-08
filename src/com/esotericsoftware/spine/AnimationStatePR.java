@@ -97,19 +97,19 @@ public class AnimationStatePR {
 
 				if (previous == null) {
 					current.animation.mix(skeleton, lastTime, time, loop, events, alpha);
-					System.out.println("none -> " + current.animation + ": " + alpha);
+					//System.out.println("none -> " + current.animation + ": " + alpha);
 				} else {
 					float previousTime = previous.time;
 					if (!previous.loop && previousTime > previous.endTime) previousTime = previous.endTime;
 
 					if (current.animation == null) {
 						previous.animation.mix(skeleton, previousTime, previousTime, previous.loop, null, 1 - alpha);
-						System.out.println(previous.animation + " -> none: " + alpha);
+						//System.out.println(previous.animation + " -> none: " + alpha);
 
 					} else {
 						previous.animation.apply(skeleton, previousTime, previousTime, previous.loop, null);
 						current.animation.mix(skeleton, lastTime, time, loop, events, alpha);
-						System.out.println(previous.animation + " -> " + current.animation + ": " + alpha);
+						//System.out.println(previous.animation + " -> " + current.animation + ": " + alpha);
 					}
 
 					if (alpha >= 1) {
