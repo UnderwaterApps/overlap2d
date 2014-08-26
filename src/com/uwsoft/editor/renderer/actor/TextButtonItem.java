@@ -78,12 +78,12 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 	}
 
 	@Override
-	public boolean isLockedByLyaer() {
+	public boolean isLockedByLayer() {
 		return isLockedByLayer;
 	}
 
 	@Override
-	public void setLockByLyaer(boolean isLocked) {
+	public void setLockByLayer(boolean isLocked) {
 		isLockedByLayer = isLocked;
 	}
 

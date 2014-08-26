@@ -4,8 +4,8 @@ import com.uwsoft.editor.renderer.data.MainItemVO;
 
 public interface IBaseItem {
 	public MainItemVO getDataVO(); 
-	public boolean isLockedByLyaer() ;
-	public void setLockByLyaer(boolean isLocked);
+	public boolean isLockedByLayer() ;
+	public void setLockByLayer(boolean isLocked);
 	public boolean isComposite();
 	public void renew();
 	public int getLayerIndex();
