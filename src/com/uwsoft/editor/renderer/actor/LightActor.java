@@ -16,6 +16,7 @@ import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.renderer.data.LightVO.LightType;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 
 public class LightActor extends Actor implements IBaseItem{
@@ -35,6 +36,8 @@ public class LightActor extends Actor implements IBaseItem{
 	private CompositeItem parentItem = null;
 	private Image debugImg;
 	private Vector2 tmpVector = new Vector2();
+
+    private CustomVariables customVariables = new CustomVariables();
 	
 	public LightActor(LightVO data, Essentials essentials, CompositeItem parent) {
 		this(data, essentials);
@@ -48,7 +51,9 @@ public class LightActor extends Actor implements IBaseItem{
 		this.rm = essentials.rm;
 		setX(dataVO.x);
 		setY(dataVO.y);
-		
+
+        customVariables.loadFromString(dataVO.customVars);
+
 		if(dataVO.type == LightType.POINT){
 			createPointLight();
 		}else{
@@ -162,6 +167,7 @@ public class LightActor extends Actor implements IBaseItem{
 		}else{
 			createConeLight();
 		}
+        customVariables.loadFromString(dataVO.customVars);
 	}
 
 	@Override
@@ -193,6 +199,8 @@ public class LightActor extends Actor implements IBaseItem{
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 
 	public void applyResolution(float mulX, float mulY) {
@@ -258,6 +266,9 @@ public class LightActor extends Actor implements IBaseItem{
 		lightObject.remove();
 		lightObject = null;
 	}
-	
-	
+
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
 }

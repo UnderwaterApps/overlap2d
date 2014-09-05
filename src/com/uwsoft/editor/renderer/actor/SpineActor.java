@@ -1,5 +1,7 @@
 package com.uwsoft.editor.renderer.actor;
 
+import java.lang.reflect.InvocationTargetException;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -10,11 +12,13 @@ import com.esotericsoftware.spine.attachments.RegionAttachment;
 import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.spine.SpineDataHelper;
+import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class SpineActor extends Actor implements IBaseItem{
 	
 	public SpineVO dataVO;	
-	public IResource rm;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	
@@ -22,16 +26,21 @@ public class SpineActor extends Actor implements IBaseItem{
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 	
-	private SkeletonRenderer renderer;
-	private Skeleton skeleton;
-	private AnimationState state;
+	//private SkeletonRenderer renderer;
+	//private Skeleton skeleton;
+	//private AnimationState state;
 	private Essentials essentials;
 
-    private SkeletonJson skeletonJson;
-    public SkeletonData skeletonData;
+	//private SkeletonJson skeletonJson;
+    //public SkeletonData skeletonData;
 
     private float minX = 0;
     private float minY = 0;
+
+    private CustomVariables customVariables = new CustomVariables();
+    
+	private SpineReflectionHelper spineReflectionHelper;
+	private SpineDataHelper spineData;
 	
 	public SpineActor(SpineVO vo, Essentials e,CompositeItem parent) {
 		this(vo, e);
@@ -40,7 +49,7 @@ public class SpineActor extends Actor implements IBaseItem{
 
 	public SpineActor(SpineVO vo, Essentials e) {
 		essentials = e;
-		this.renderer = essentials.skeletonRenderer;
+		this.spineReflectionHelper = essentials.spineReflectionHelper;
 
         dataVO = vo;
 
@@ -50,6 +59,7 @@ public class SpineActor extends Actor implements IBaseItem{
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
 		setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -62,47 +72,57 @@ public class SpineActor extends Actor implements IBaseItem{
 		
 	}
 
-    private void computeBoundBox() {
-        skeleton.updateWorldTransform();
-        minX = Float.MAX_VALUE; minY = Float.MAX_VALUE;
-        float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE;
-        for (int i = 0, n = skeleton.getSlots().size; i < n; i++) {
-            Slot slot = skeleton.getSlots().get(i);
-            Attachment attachment = slot.getAttachment();
-            if (attachment == null) continue;
-            if (!(attachment instanceof RegionAttachment)) continue;
-            RegionAttachment imageRegion = (RegionAttachment)attachment;
-            imageRegion.updateWorldVertices(slot, false);
-            float[] vertices = imageRegion.getWorldVertices();
-            for (int ii = 0, nn = vertices.length; ii < nn; ii +=5) {
-                minX = Math.min(minX, vertices[ii]);
-                minY = Math.min(minY, vertices[ii + 1]);
-                maxX = Math.max(maxX, vertices[ii]);
-                maxY = Math.max(maxY, vertices[ii + 1]);
-            }
-        }
-
-        setWidth(maxX - minX);
-        setHeight(maxY - minY);
-    }
+//    private void computeBoundBox() {
+//        skeleton.updateWorldTransform();
+//        minX = Float.MAX_VALUE; minY = Float.MAX_VALUE;
+//        float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE;
+//        for (int i = 0, n = skeleton.getSlots().size; i < n; i++) {
+//            Slot slot = skeleton.getSlots().get(i);
+//            Attachment attachment = slot.getAttachment();
+//            if (attachment == null) continue;
+//            if (!(attachment instanceof RegionAttachment)) continue;
+//            RegionAttachment imageRegion = (RegionAttachment)attachment;
+//            imageRegion.updateWorldVertices(slot, false);
+//            float[] vertices = imageRegion.getWorldVertices();
+//            for (int ii = 0, nn = vertices.length; ii < nn; ii +=5) {
+//                minX = Math.min(minX, vertices[ii]);
+//                minY = Math.min(minY, vertices[ii + 1]);
+//                maxX = Math.max(maxX, vertices[ii]);
+//                maxY = Math.max(maxY, vertices[ii + 1]);
+//            }
+//        }
+//
+//        setWidth(maxX - minX);
+//        setHeight(maxY - minY);
+//    }
 
     private void initSpine() {
-        skeletonJson = new SkeletonJson(essentials.rm.getSkeletonAtlas(dataVO.animationName));
-        skeletonJson.setScale(dataVO.scaleX);
-        skeletonData = skeletonJson.readSkeletonData((essentials.rm.getSkeletonJSON(dataVO.animationName)));
-
-        skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
-        AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
-        state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
-
-        computeBoundBox();
-
-        // todo: fix this, it's a temporary soluition
-        setAnimation(skeletonData.getAnimations().get(0).getName());
+    	spineData = new SpineDataHelper();
+    	try {
+			spineData.initSpine(dataVO, essentials.rm, spineReflectionHelper);
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			System.out.println("Reflection problem");
+			e.printStackTrace();
+		}
+//        skeletonJson = new SkeletonJson(essentials.rm.getSkeletonAtlas(dataVO.animationName));
+//        skeletonJson.setScale(dataVO.scaleX);
+//        skeletonData = skeletonJson.readSkeletonData((essentials.rm.getSkeletonJSON(dataVO.animationName)));
+//
+//        skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
+//        AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
+//        state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
+//
+//        computeBoundBox();
+//
+//        // todo: fix this, it's a temporary soluition
+//        setAnimation(skeletonData.getAnimations().get(0).getName());
+    	setWidth(spineData.width);
+    	setHeight(spineData.height);
     }
 	
 	public void setAnimation(String animName){
-		state.setAnimation(0, animName, true);
+		spineData.setAnimation(animName);
+		//state.setAnimation(0, animName, true);
 	}
 
 //	private void drawRect() {
@@ -122,16 +142,18 @@ public class SpineActor extends Actor implements IBaseItem{
 
 	@Override
 	public void draw(Batch batch, float parentAlpha) {
-		renderer.draw(batch, skeleton);
+		spineData.draw(batch, parentAlpha);
+		//renderer.draw(batch, skeleton);
 		super.draw(batch, parentAlpha);
 	}
 
 	@Override
 	public void act(float delta) {
-		skeleton.updateWorldTransform(); // 
-		state.update(delta); // Update the animation time.
-		state.apply(skeleton); // Poses skeleton using current animations. This sets the bones' local SRT.
-		skeleton.setPosition(getX()-minX, getY()-minY);
+//		skeleton.updateWorldTransform(); // 
+//		state.update(delta); // Update the animation time.
+//		state.apply(skeleton); // Poses skeleton using current animations. This sets the bones' local SRT.
+//		skeleton.setPosition(getX()-minX, getY()-minY);
+		spineData.act(delta, getX(), getY());
 		super.act(delta);
 	}
 	
@@ -158,7 +180,7 @@ public class SpineActor extends Actor implements IBaseItem{
 		setScaleY(dataVO.scaleY*this.mulY);
 		setRotation(dataVO.rotation);
         setColor(dataVO.tint[0],dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
-
+        customVariables.loadFromString(dataVO.customVars);
         initSpine();
 	}
 
@@ -189,6 +211,8 @@ public class SpineActor extends Actor implements IBaseItem{
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 
 	public void applyResolution(float mulX, float mulY) {
@@ -227,5 +251,10 @@ public class SpineActor extends Actor implements IBaseItem{
         super.setScale(scale, scale);
         dataVO.scaleX = scale;
         renew();
+    }
+
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
     }
 }

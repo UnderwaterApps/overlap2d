@@ -1,16 +1,21 @@
 package com.uwsoft.editor.renderer.actor;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**
  * Created by sargis on 8/19/14.
@@ -38,6 +43,10 @@ public class SpriteAnimation extends Actor implements IBaseItem {
     private int playingTo = -1;
     private float normalSpeed = 1.0f;
     private boolean paused = true;
+    private Map<String, Animation> animations = new HashMap<>();
+
+    private CustomVariables customVariables = new CustomVariables();
+    private String currentAnimationName = "";
 
     public SpriteAnimation(SpriteAnimationVO vo, Essentials e, CompositeItem parent) {
         this(vo, e);
@@ -51,6 +60,8 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         setY(dataVO.y);
         setScaleX(dataVO.scaleX);
         setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
+        animations = Animation.constructJsonObject(dataVO.animations);
         this.setRotation(dataVO.rotation);
 
         if (dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -62,6 +73,10 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         }
 
         initSpriteAnimation();
+    }
+
+    public String getCurrentAnimationName() {
+        return currentAnimationName;
     }
 
     private void initSpriteAnimation() {
@@ -90,6 +105,10 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         setAnimation(dataVO.fps, true);
     }
 
+    public int getFramesCount() {
+        return animationAtlasRegions.length;
+    }
+
     public void setAnimation(boolean looping) {
         setAnimation(24, looping);
     }
@@ -103,6 +122,18 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         super.draw(batch, parentAlpha);
     }
 
+    public TextureAtlas.AtlasRegion getAtlasRegionAt(int index) {
+        return animationAtlasRegions[index];
+    }
+
+    public void setAnimation(String name) {
+        Animation animation = animations.get(name);
+        if (animation != null) {
+            setAnimation(animation.startFrame, animation.endFrame, dataVO.fps, looping);
+            currentAnimationName = name;
+        }
+    }
+
     public void setAnimation(int fps, boolean looping) {
         firstFrame = 0;
         endFrame = framesCount - 1;
@@ -113,21 +144,17 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         frameDuration = 1.0f / fps;
         this.looping = looping;
 
-        if (firstFrame > endFrame) {
-            reverse = true;
-        } else {
-            reverse = false;
-        }
+        reverse = firstFrame > endFrame;
     }
 
-    public void setAnimation(int firstFrame, int endFrame, int duration, boolean looping) {
+    public void setAnimation(int firstFrame, int endFrame, int fps, boolean looping) {
         this.firstFrame = firstFrame;
         this.endFrame = endFrame;
         playingTo = this.endFrame;
 
         frameIndex = firstFrame;
 
-        this.frameDuration = duration / 1000f;
+        this.frameDuration = 1.0f / fps;
         this.looping = looping;
 
         if (firstFrame > endFrame) {
@@ -181,11 +208,17 @@ public class SpriteAnimation extends Actor implements IBaseItem {
     public void renew() {
         setX(dataVO.x * this.mulX);
         setY(dataVO.y * this.mulY);
-        setScaleX(dataVO.scaleX * this.mulX);
-        setScaleY(dataVO.scaleY * this.mulY);
+        setScaleX(dataVO.scaleX);
+        setScaleY(dataVO.scaleY);
         setRotation(dataVO.rotation);
         setColor(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
-        setAnimation(dataVO.fps, looping);
+        if (currentAnimationName.isEmpty()) {
+            setAnimation(dataVO.fps, looping);
+        } else {
+            setAnimation(currentAnimationName);
+        }
+        customVariables.loadFromString(dataVO.customVars);
+        animations = Animation.constructJsonObject(dataVO.animations);
     }
 
     @Override
@@ -211,6 +244,9 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         if (dataVO.layerName == null || dataVO.layerName.equals("")) {
             dataVO.layerName = "Default";
         }
+
+        dataVO.customVars = customVariables.saveAsString();
+        dataVO.animations = Animation.constructJsonString(animations);
     }
 
     @Override
@@ -343,8 +379,47 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         this.animationCompleteListener = animationCompleteListener;
     }
 
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
+
+    public Map<String, Animation> getAnimations() {
+        return animations;
+    }
+
 
     public interface AnimationCompleteListener {
         public void complete(SpriteAnimation sprite);
+    }
+
+    public static class Animation {
+        public int startFrame;
+        public int endFrame;
+        public String name;
+
+        public Animation(int startFrame, int endFrame, String name) {
+            this.startFrame = startFrame;
+            this.endFrame = endFrame;
+            this.name = name;
+        }
+
+        public Animation() {
+        }
+
+        public static String constructJsonString(Map<String, Animation> animations) {
+            String str = "";
+            Json json = new Json();
+            json.setOutputType(JsonWriter.OutputType.json);
+            str = json.toJson(animations);
+            return str;
+        }
+
+        public static Map<String, Animation> constructJsonObject(String animations) {
+            if (animations.isEmpty()) {
+                return new HashMap<>();
+            }
+            Json json = new Json();
+            return json.fromJson(HashMap.class, animations);
+        }
     }
 }

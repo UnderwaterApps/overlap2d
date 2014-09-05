@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.script.IScript;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,6 +27,9 @@ public class CompositeItem extends Group implements IBaseItem {
     private HashMap<String, IBaseItem> itemIdMap = new HashMap<String, IBaseItem>();
     private boolean isLockedByLayer = false;
     private CompositeItem parentItem = null;
+
+    private CustomVariables customVariables = new CustomVariables();
+
     private Comparator<IBaseItem> ZIndexComparator = new Comparator<IBaseItem>() {
 
         @Override
@@ -49,6 +53,7 @@ public class CompositeItem extends Group implements IBaseItem {
         setY(dataVO.y);
         setScaleX(dataVO.scaleX);
         setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
         this.setRotation(dataVO.rotation);
 
         if (dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -238,15 +243,18 @@ public class CompositeItem extends Group implements IBaseItem {
             addActor(itm);
             itm.setZIndex(itm.dataVO.zIndex);
         }
-
-        for (int i = 0; i < dataVO.composite.sSpriteAnimations.size(); i++) {
-            SpriteAnimationVO tmpVo = dataVO.composite.sSpriteAnimations.get(i);
-            SpriteAnimation itm = new SpriteAnimation(tmpVo, essentials, this);
-            inventorize(itm);
-            itm.start();
-            addActor(itm);
-            itm.setZIndex(itm.dataVO.zIndex);
+        
+        if(essentials.spineReflectionHelper != null){
+        	for (int i = 0; i < dataVO.composite.sSpriteAnimations.size(); i++) {
+                SpriteAnimationVO tmpVo = dataVO.composite.sSpriteAnimations.get(i);
+                SpriteAnimation itm = new SpriteAnimation(tmpVo, essentials, this);
+                inventorize(itm);
+                itm.start();
+                addActor(itm);
+                itm.setZIndex(itm.dataVO.zIndex);
+            }
         }
+        
 
         if (dataVO.composite.layers.size() == 0) {
             LayerItemVO layerVO = new LayerItemVO();
@@ -437,6 +445,8 @@ public class CompositeItem extends Group implements IBaseItem {
         //if(getParentItem() != null){
         sortZindexes();
         //}
+
+        dataVO.customVars = customVariables.saveAsString();
     }
 
     public CompositeItemVO getDataVO() {
@@ -558,6 +568,7 @@ public class CompositeItem extends Group implements IBaseItem {
         setScaleY(dataVO.scaleY * this.mulY);
         setRotation(dataVO.rotation);
         setColor(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
+        customVariables.loadFromString(dataVO.customVars);
     }
 
     @Override
@@ -595,5 +606,10 @@ public class CompositeItem extends Group implements IBaseItem {
                 ((LightActor) items.get(i)).removeLights();
             }
         }
+    }
+
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
     }
 }

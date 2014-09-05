@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.SelectBoxVO;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 	
@@ -14,6 +15,8 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
+
+    private CustomVariables customVariables = new CustomVariables();
 	
 	public SelectBoxItem(SelectBoxVO vo, IResource rm,CompositeItem parent) {
 		this(vo, rm);
@@ -28,6 +31,7 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
 		setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -68,7 +72,8 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 		setY(dataVO.y*this.mulY);
 		setScaleX(dataVO.scaleX*this.mulX);
 		setScaleY(dataVO.scaleY*this.mulY);
-		setRotation(dataVO.rotation); 
+		setRotation(dataVO.rotation);
+        customVariables.loadFromString(dataVO.customVars);
 	}
 	
 	@Override
@@ -99,6 +104,8 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 
 	public void applyResolution(float mulX, float mulY) {
@@ -139,4 +146,9 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 		// TODO Auto-generated method stub
 		
 	}
+
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
 }

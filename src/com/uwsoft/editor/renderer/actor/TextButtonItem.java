@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.ButtonVO;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class TextButtonItem extends TextButton  implements IBaseItem {
 
@@ -15,6 +16,8 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
+
+    private CustomVariables customVariables = new CustomVariables();
 
 	public TextButtonItem(ButtonVO vo, IResource rm,CompositeItem parent) {
 		this(vo, rm);
@@ -30,6 +33,7 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 		setY(dataVO.y);
 //		setScaleX(dataVO.scaleX);
 //		setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
 		getLabel().setFontScale(dataVO.scaleX, dataVO.scaleY);
 		this.setRotation(dataVO.rotation); 
 		
@@ -61,12 +65,14 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 	public void updateDataVO() {
 		dataVO.x = getX();
 		dataVO.y = getY();
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 	
 	@Override
 	public void renew() {
 		setText(dataVO.text);
-		
+        customVariables.loadFromString(dataVO.customVars);
 		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
@@ -125,4 +131,8 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
 }

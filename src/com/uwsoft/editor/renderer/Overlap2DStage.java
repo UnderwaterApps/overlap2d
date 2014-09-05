@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
 
 public class Overlap2DStage extends Stage {
 
@@ -18,8 +19,17 @@ public class Overlap2DStage extends Stage {
 	public IResource rm;
 	public Essentials essentials = new Essentials();
 	
-	public Overlap2DStage(Viewport viewPort) {
+	public Overlap2DStage() {
+		super();
+		initStage();
+	}
+	
+	public Overlap2DStage(Viewport viewPort) {		
 		super(viewPort);
+		initStage();
+	}
+	
+	private void initStage() {
 		RayHandler.setGammaCorrection(true);
 		RayHandler.useDiffuseLight(true);
 		
@@ -34,7 +44,11 @@ public class Overlap2DStage extends Stage {
 		skeletonRenderer = new SkeletonRenderer();
 		
 		essentials.rayHandler = rayHandler;
-		essentials.skeletonRenderer = skeletonRenderer;
+		SpineReflectionHelper refdata = new SpineReflectionHelper();
+		if(refdata.isSpineAviable){
+			essentials.spineReflectionHelper = refdata;
+		}
+		
 	}
 	
 	@Override

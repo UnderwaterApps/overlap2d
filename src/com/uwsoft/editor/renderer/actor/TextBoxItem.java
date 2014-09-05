@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class TextBoxItem extends TextField implements IBaseItem  {
 
@@ -14,6 +15,8 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
+
+    private CustomVariables customVariables = new CustomVariables();
 
 	public TextBoxItem(TextBoxVO vo, IResource rm,CompositeItem parent) {
 		this(vo, rm);
@@ -29,6 +32,7 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
 		setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -74,7 +78,8 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		setY(dataVO.y*this.mulY);
 		setScaleX(dataVO.scaleX*this.mulX);
 		setScaleY(dataVO.scaleY*this.mulY);
-		setRotation(dataVO.rotation); 
+		setRotation(dataVO.rotation);
+        customVariables.loadFromString(dataVO.customVars);
 	}
 	
 
@@ -106,6 +111,8 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 	
 	public void applyResolution(float mulX, float mulY) {
@@ -147,4 +154,8 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		
 	}
 
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
 }

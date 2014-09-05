@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.CheckBoxVO;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class CheckBoxItem extends CheckBox implements IBaseItem {
 	
@@ -12,7 +13,10 @@ public class CheckBoxItem extends CheckBox implements IBaseItem {
 	public float mulX = 1f;
 	public float mulY = 1f;
 	protected int layerIndex = 0;
-	private boolean isLockedByLayer = false;
+
+    private CustomVariables customVariables = new CustomVariables();
+
+    private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 	
 	public CheckBoxItem(CheckBoxVO vo, IResource rm,CompositeItem parent) {
@@ -22,13 +26,14 @@ public class CheckBoxItem extends CheckBox implements IBaseItem {
 	
 	public CheckBoxItem(CheckBoxVO vo, IResource rm) {
 		super(vo.text, rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
-		dataVO = vo;	
-				
+		dataVO = vo;
 		this.rm = rm;
 		setX(dataVO.x);
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
 		setScaleY(dataVO.scaleY);
+        customVariables.loadFromString(dataVO.customVars);
+
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -66,6 +71,8 @@ public class CheckBoxItem extends CheckBox implements IBaseItem {
 		setScaleY(dataVO.scaleY*this.mulY);
 		setRotation(dataVO.rotation);
         setColor(dataVO.tint[0],dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
+
+        customVariables.loadFromString(dataVO.customVars);
 	}
 	
 	@Override
@@ -96,6 +103,8 @@ public class CheckBoxItem extends CheckBox implements IBaseItem {
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
+
+        dataVO.customVars = customVariables.saveAsString();
 	}
 
 	public void applyResolution(float mulX, float mulY) {
@@ -138,4 +147,8 @@ public class CheckBoxItem extends CheckBox implements IBaseItem {
 		// TODO Auto-generated method stub
 		
 	}
+
+    public CustomVariables getCustomVariables() {
+        return customVariables;
+    }
 }

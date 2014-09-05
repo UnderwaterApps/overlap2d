@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public interface IBaseItem {
 	public MainItemVO getDataVO(); 
@@ -8,6 +9,7 @@ public interface IBaseItem {
 	public void setLockByLayer(boolean isLocked);
 	public boolean isComposite();
 	public void renew();
+    public CustomVariables getCustomVariables();
 	public int getLayerIndex();
 	public void setLayerIndex(int index);
 	public void updateDataVO();

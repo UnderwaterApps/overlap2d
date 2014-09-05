@@ -6,6 +6,8 @@ import java.util.Arrays;
 public class MainItemVO {
 	public String itemIdentifier = "";
 	public String itemName = "";
+    public String[] tags = null;
+    public String customVars = "";
 	public float x; 
 	public float y;
 	public float scaleX	=	1f; 
@@ -24,12 +26,15 @@ public class MainItemVO {
 	public MainItemVO(MainItemVO vo) {
 		itemIdentifier = new String(vo.itemIdentifier);
 		itemName = new String(vo.itemName);
+        if(tags != null) tags = Arrays.copyOf(vo.tags, vo.tags.length);
+        customVars = new String(vo.customVars);
 		x = vo.x; 
 		y = vo.y;
 		rotation = vo.rotation;
 		zIndex = vo.zIndex;
 		layerName = new String(vo.layerName);
-		tint = Arrays.copyOf(vo.tint, vo.tint.length);
+		//if(tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
+		if(vo.tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
 		isFlipedH 	= vo.isFlipedH;
 		isFlipedV 	= vo.isFlipedV;
 		scaleX 		= vo.scaleX;

@@ -1,13 +1,16 @@
 package com.uwsoft.editor.renderer;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.Essentials;
+import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.script.IScript;
 
 public class SceneLoader {
@@ -20,16 +23,19 @@ public class SceneLoader {
 	public Essentials essentials;
 
     public SceneLoader() {
+        // better use SceneLoader with IResource, and pass DefaultAssetManager configured beforehead
+    }
+
+    public SceneLoader(IResource rm) {
+        Essentials emptyEssentuials = new Essentials();
+        emptyEssentuials.rm = rm;
+        essentials = emptyEssentuials;
     }
 
 	public SceneLoader(Essentials e) {
 		this.essentials = e;
 	}
-	
-//	public void setRayHandler(RayHandler rayHandler){
-//		this.rayHandler = rayHandler;
-//	}
-	
+
 	public void setResolution(String resolutionName) {
 		curResolution = resolutionName;
 		if(sceneActor != null){
