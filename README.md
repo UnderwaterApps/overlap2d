@@ -11,6 +11,10 @@ The Overlap2dRuntime provides functionality to load, manipulate and render scene
 For alternative or other IDEs you will need to create a new project and import the source.
 Or you can just copy all sources to your project.
 
+##Spine
+
+[Spine](http://esotericsoftware.com/) animations are now optional. You must download [spine libgdx runtime](https://github.com/EsotericSoftware/spine-runtimes/tree/master/spine-libgdx) and include it in your project. If you don't have spine runtime SpineActors will not be created and used by overlap2druntime.
+
 ##Note
 
 Please note that [Overlap2D](http://overlap2d.com/) is in development and this runtime is for test purposes.
