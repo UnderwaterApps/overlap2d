@@ -1,5 +1,10 @@
 package com.uwsoft.editor.renderer.actor;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -7,14 +12,24 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.ButtonVO;
+import com.uwsoft.editor.renderer.data.CheckBoxVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.Essentials;
+import com.uwsoft.editor.renderer.data.Image9patchVO;
+import com.uwsoft.editor.renderer.data.LabelVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SelectBoxVO;
+import com.uwsoft.editor.renderer.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.data.TextBoxVO;
 import com.uwsoft.editor.renderer.script.IScript;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
-
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
 
 public class CompositeItem extends Group implements IBaseItem {
 
@@ -228,33 +243,32 @@ public class CompositeItem extends Group implements IBaseItem {
         }
 
         if (essentials.rayHandler != null) {
-            for (int i = 0; i < dataVO.composite.slights.size(); i++) {
-                LightVO tmpVo = dataVO.composite.slights.get(i);
+            for (int i = 0; i < dataVO.composite.sLights.size(); i++) {
+                LightVO tmpVo = dataVO.composite.sLights.get(i);
                 LightActor itm = new LightActor(tmpVo, essentials, this);
                 inventorize(itm);
                 addActor(itm);
             }
         }
+        
+        if(essentials.spineReflectionHelper != null){
+	        for (int i = 0; i < dataVO.composite.sSpineAnimations.size(); i++) {
+	            SpineVO tmpVo = dataVO.composite.sSpineAnimations.get(i);
+	            SpineActor itm = new SpineActor(tmpVo, essentials, this);
+	            inventorize(itm);
+	            addActor(itm);
+	            itm.setZIndex(itm.dataVO.zIndex);
+	        }
+        }	        
 
-        for (int i = 0; i < dataVO.composite.sSpineAnimations.size(); i++) {
-            SpineVO tmpVo = dataVO.composite.sSpineAnimations.get(i);
-            SpineActor itm = new SpineActor(tmpVo, essentials, this);
+        for (int i = 0; i < dataVO.composite.sSpriteAnimations.size(); i++) {
+            SpriteAnimationVO tmpVo = dataVO.composite.sSpriteAnimations.get(i);
+            SpriteAnimation itm = new SpriteAnimation(tmpVo, essentials, this);
             inventorize(itm);
+            itm.start();
             addActor(itm);
             itm.setZIndex(itm.dataVO.zIndex);
         }
-        
-        if(essentials.spineReflectionHelper != null){
-        	for (int i = 0; i < dataVO.composite.sSpriteAnimations.size(); i++) {
-                SpriteAnimationVO tmpVo = dataVO.composite.sSpriteAnimations.get(i);
-                SpriteAnimation itm = new SpriteAnimation(tmpVo, essentials, this);
-                inventorize(itm);
-                itm.start();
-                addActor(itm);
-                itm.setZIndex(itm.dataVO.zIndex);
-            }
-        }
-        
 
         if (dataVO.composite.layers.size() == 0) {
             LayerItemVO layerVO = new LayerItemVO();
@@ -445,7 +459,8 @@ public class CompositeItem extends Group implements IBaseItem {
         //if(getParentItem() != null){
         sortZindexes();
         //}
-
+        dataVO.scaleX = getScaleX();
+        dataVO.scaleY = getScaleY();
         dataVO.customVars = customVariables.saveAsString();
     }
 
