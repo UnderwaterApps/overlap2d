@@ -4,8 +4,8 @@ The Overlap2dRuntime provides functionality to load, manipulate and render scene
 
 ##**Setup**
 
-1. Download the Overlap2D Runtime source using [git](https://help.github.com/articles/set-up-git) or by downloading it as a [zip](https://github.com/gevorg-kopalyan/Overlap2dRuntime/archive/master.zip).
-2. If you have don't have Gradle Eclipse plugin you can go [here](https://github.com/spring-projects/eclipse-integration-gradle) 
+1. Download the Overlap2D Runtime source using [git](https://help.github.com/articles/set-up-git) or by downloading it as a [zip](https://github.com/gevorg-kopalyan/Overlap2dRuntime/archive/master.zip) and extarct it somewhere.
+2. If you don't have Gradle Eclipse plugin then you can go [here](https://github.com/spring-projects/eclipse-integration-gradle) and install it.
 3. Using Eclipse Grdale plugin, import the project by choosing File -> Import -> Gradle -> Gradle project.
 
 For alternative or other IDEs you will need to create a new project and import the source.
