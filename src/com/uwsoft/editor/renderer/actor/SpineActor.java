@@ -5,11 +5,6 @@ import java.lang.reflect.InvocationTargetException;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.esotericsoftware.spine.*;
-import com.esotericsoftware.spine.attachments.Attachment;
-import com.esotericsoftware.spine.attachments.BoundingBoxAttachment;
-import com.esotericsoftware.spine.attachments.RegionAttachment;
-import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.spine.SpineDataHelper;
@@ -26,16 +21,7 @@ public class SpineActor extends Actor implements IBaseItem{
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 	
-	//private SkeletonRenderer renderer;
-	//private Skeleton skeleton;
-	//private AnimationState state;
 	private Essentials essentials;
-
-	//private SkeletonJson skeletonJson;
-    //public SkeletonData skeletonData;
-
-    private float minX = 0;
-    private float minY = 0;
 
     private CustomVariables customVariables = new CustomVariables();
     

@@ -6,7 +6,6 @@ import box2dLight.RayHandler;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.esotericsoftware.spine.SkeletonRenderer;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
@@ -15,7 +14,6 @@ public class Overlap2DStage extends Stage {
 
 	public SceneLoader sceneLoader;
 	public RayHandler rayHandler;
-	public SkeletonRenderer skeletonRenderer;
 	public IResource rm;
 	public Essentials essentials = new Essentials();
 	
@@ -40,8 +38,6 @@ public class Overlap2DStage extends Stage {
 		rayHandler.setBlurNum(3);
 		rayHandler.setShadows(true);
 		rayHandler.setCombinedMatrix(getCamera().combined);
-		
-		skeletonRenderer = new SkeletonRenderer();
 		
 		essentials.rayHandler = rayHandler;
 		SpineReflectionHelper refdata = new SpineReflectionHelper();
