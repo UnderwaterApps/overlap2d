@@ -13,7 +13,7 @@ public class CompositeVO {
     public ArrayList<CheckBoxVO> sCheckBoxes = new ArrayList<>(1);
     public ArrayList<SelectBoxVO> sSelectBoxes = new ArrayList<>(1);
     public ArrayList<ParticleEffectVO> sParticleEffects = new ArrayList<>(1);
-    public ArrayList<LightVO> sLights = new ArrayList<>(1);
+    public ArrayList<LightVO> slights = new ArrayList<>(1);
     public ArrayList<SpineVO> sSpineAnimations = new ArrayList<>(1);
     public ArrayList<SpriteAnimationVO> sSpriteAnimations = new ArrayList<>(1);
 
@@ -62,8 +62,8 @@ public class CompositeVO {
             sParticleEffects.add(new ParticleEffectVO(vo.sParticleEffects.get(i)));
         }
 
-        for (int i = 0; i < vo.sLights.size(); i++) {
-            sLights.add(new LightVO(vo.sLights.get(i)));
+        for (int i = 0; i < vo.slights.size(); i++) {
+            slights.add(new LightVO(vo.slights.get(i)));
         }
 
         for (int i = 0; i < vo.sSpineAnimations.size(); i++) {
@@ -113,7 +113,7 @@ public class CompositeVO {
             sParticleEffects.add((ParticleEffectVO) vo);
         }
         if (className.equals("LightVO")) {
-            sLights.add((LightVO) vo);
+            slights.add((LightVO) vo);
         }
         if (className.equals("SpineVO")) {
             sSpineAnimations.add((SpineVO) vo);
@@ -153,7 +153,7 @@ public class CompositeVO {
             sParticleEffects.remove((ParticleEffectVO) vo);
         }
         if (className.equals("LightVO")) {
-            sLights.remove((LightVO) vo);
+            slights.remove((LightVO) vo);
         }
         if (className.equals("SpineVO")) {
             sSpineAnimations.remove((SpineVO) vo);
@@ -172,7 +172,7 @@ public class CompositeVO {
         sCheckBoxes.clear();
         sSelectBoxes.clear();
         sParticleEffects.clear();
-        sLights.clear();
+        slights.clear();
         sSpineAnimations.clear();
         sSpriteAnimations.clear();
     }
@@ -185,7 +185,7 @@ public class CompositeVO {
                 sButtons.size() == 0 &&
                 sCheckBoxes.size() == 0 &&
                 sLabels.size() == 0 &&
-                sLights.size() == 0 &&
+                slights.size() == 0 &&
                 sParticleEffects.size() == 0 &&
                 sCheckBoxes.size() == 0 &&
                 sSpriteAnimations.size() == 0 &&

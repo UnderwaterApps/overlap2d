@@ -243,8 +243,8 @@ public class CompositeItem extends Group implements IBaseItem {
         }
 
         if (essentials.rayHandler != null) {
-            for (int i = 0; i < dataVO.composite.sLights.size(); i++) {
-                LightVO tmpVo = dataVO.composite.sLights.get(i);
+            for (int i = 0; i < dataVO.composite.slights.size(); i++) {
+                LightVO tmpVo = dataVO.composite.slights.get(i);
                 LightActor itm = new LightActor(tmpVo, essentials, this);
                 inventorize(itm);
                 addActor(itm);
