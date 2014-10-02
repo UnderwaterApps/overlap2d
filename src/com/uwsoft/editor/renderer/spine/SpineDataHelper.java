@@ -20,7 +20,7 @@ public class SpineDataHelper {
 	public float width;
 	public float height;
 	
-	public void initSpine(SpineVO dataVO, IResourceRetriever rm, SpineReflectionHelper refData) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	public void initSpine(SpineVO dataVO, IResourceRetriever rm, SpineReflectionHelper refData, float mulX) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		renderer = refData.skeletonRendererObject;
 		reflectionData = refData;
@@ -28,7 +28,7 @@ public class SpineDataHelper {
 		Object skeletonJsonObject = reflectionData.skeletonJsonConstructorAccess.newInstance(rm.getSkeletonAtlas(dataVO.animationName));
 		
 		MethodAccess methodAccess = MethodAccess.get(reflectionData.skeletonJsonClass);
-		methodAccess.invoke(skeletonJsonObject, "setScale", dataVO.scaleX);
+		methodAccess.invoke(skeletonJsonObject, "setScale", dataVO.scaleX * mulX);
 		
 		skeletonData = methodAccess.invoke(skeletonJsonObject, "readSkeletonData", rm.getSkeletonJSON(dataVO.animationName));
 		

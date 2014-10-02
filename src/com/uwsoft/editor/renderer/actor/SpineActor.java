@@ -93,7 +93,7 @@ public class SpineActor extends Actor implements IBaseItem{
     private void initSpine() {
     	spineData = new SpineDataHelper();
     	try {
-			spineData.initSpine(dataVO, essentials.rm, spineReflectionHelper);
+			spineData.initSpine(dataVO, essentials.rm, spineReflectionHelper,mulX);
 		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			System.out.println("Reflection problem");
 			e.printStackTrace();
