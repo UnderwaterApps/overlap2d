@@ -5,19 +5,22 @@ import java.lang.reflect.InvocationTargetException;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.reflectasm.MethodAccess;
-import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class SpineDataHelper {
 	private Object renderer; // SkeletonRenderer
 	private Object skeletonObject; // Skeleton
-	private Object stateObject; // AnimationState
+	public Object stateObject; // AnimationState
+	private Object skeletonData;
+	
 	private float minX;
 	private float minY;
 	private SpineReflectionHelper reflectionData;
 	public float width;
 	public float height;
-	public void initSpine(SpineVO dataVO, IResource rm, SpineReflectionHelper refData) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
+	
+	public void initSpine(SpineVO dataVO, IResourceRetriever rm, SpineReflectionHelper refData) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException {
 		
 		renderer = refData.skeletonRendererObject;
 		reflectionData = refData;
@@ -27,7 +30,7 @@ public class SpineDataHelper {
 		MethodAccess methodAccess = MethodAccess.get(reflectionData.skeletonJsonClass);
 		methodAccess.invoke(skeletonJsonObject, "setScale", dataVO.scaleX);
 		
-		Object skeletonData = methodAccess.invoke(skeletonJsonObject, "readSkeletonData", rm.getSkeletonJSON(dataVO.animationName));
+		skeletonData = methodAccess.invoke(skeletonJsonObject, "readSkeletonData", rm.getSkeletonJSON(dataVO.animationName));
 		
 		skeletonObject = reflectionData.skeletonConstructorAccess.newInstance(skeletonData);
 		
@@ -81,6 +84,9 @@ public class SpineDataHelper {
 			return;
 		}
 		reflectionData.stateObjectMethodAccess.invoke(stateObject,reflectionData.setAnimationMethodIndex,0, animName, true);
+	}
+	public Array<Object> getAnimations(){
+		return (Array<Object>) reflectionData.skeletonDataClassMethodAccess.invoke(skeletonData, reflectionData.getAnimationMethodIndex);
 	}
 
 	public void draw(Batch batch, float parentAlpha) {

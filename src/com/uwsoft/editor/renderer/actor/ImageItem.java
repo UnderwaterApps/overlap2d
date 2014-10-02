@@ -2,15 +2,17 @@ package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.renderer.IResource;
+import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class ImageItem extends Image implements IBaseItem {
 
     public SimpleImageVO dataVO;
-    public IResource rm;
+    public Essentials essentials;
     public float mulX = 1f;
     public float mulY = 1f;
     protected int layerIndex = 0;
@@ -18,24 +20,26 @@ public class ImageItem extends Image implements IBaseItem {
     private boolean isLockedByLayer = false;
     private CompositeItem parentItem = null;
 
-    public ImageItem(SimpleImageVO vo, IResource rm, CompositeItem parent) {
-        this(vo, rm);
+    private Body body;
+
+    public ImageItem(SimpleImageVO vo, Essentials e, CompositeItem parent) {
+        this(vo, e);
         setParentItem(parent);
     }
 
-    public ImageItem(SimpleImageVO vo, IResource rm) {
-        super(rm.getAsset(vo.imageName));
-        init(vo, rm);
+    public ImageItem(SimpleImageVO vo, Essentials e) {
+        super(e.rm.getTextureRegion(vo.imageName));
+        init(vo, e);
     }
 
-    protected ImageItem(SimpleImageVO vo, IResource rm, NinePatch ninePatch) {
+    protected ImageItem(SimpleImageVO vo, Essentials e, NinePatch ninePatch) {
         super(ninePatch);
-        init(vo, rm);
+        init(vo, e);
     }
 
-    private void init(SimpleImageVO vo, IResource rm) {
+    private void init(SimpleImageVO vo, Essentials e) {
         dataVO = vo;
-        this.rm = rm;
+        this.essentials = e;
         setX(dataVO.x);
         setY(dataVO.y);
         setScaleX(dataVO.scaleX);
@@ -137,12 +141,18 @@ public class ImageItem extends Image implements IBaseItem {
         this.parentItem = parentItem;
     }
 
-    @Override
-    public void dispose() {
-        // TODO Auto-generated method stub
-
+    public Body getBody() {
+        return body;
     }
 
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        setBody(null);
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;

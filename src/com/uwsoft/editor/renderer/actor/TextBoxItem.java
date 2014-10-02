@@ -1,32 +1,36 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.uwsoft.editor.renderer.IResource;
+import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class TextBoxItem extends TextField implements IBaseItem  {
 
 	public TextBoxVO dataVO;	
-	public IResource rm;
+	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
+    private Body body;
+
     private CustomVariables customVariables = new CustomVariables();
 
-	public TextBoxItem(TextBoxVO vo, IResource rm,CompositeItem parent) {
+	public TextBoxItem(TextBoxVO vo, Essentials rm,CompositeItem parent) {
 		this(vo, rm);
 		setParentItem(parent);
 	}
 	
-	public TextBoxItem(TextBoxVO vo, IResource rm) {
-		super(vo.defaultText, rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
+	public TextBoxItem(TextBoxVO vo, Essentials e) {
+		super(vo.defaultText, e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
 		
-		this.rm = rm;
+		this.essentials = e;
 		dataVO = vo;
 		setX(dataVO.x);
 		setY(dataVO.y);
@@ -148,12 +152,19 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		dataVO.style	=	styleName;
 	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
 
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
+        setBody(null);
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;

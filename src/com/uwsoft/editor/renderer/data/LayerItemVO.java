@@ -9,6 +9,10 @@ public class LayerItemVO {
 	public LayerItemVO() {
 		
 	}
+
+    public LayerItemVO(String name) {
+        layerName = new String(name);
+    }
 	
 	public LayerItemVO(LayerItemVO vo) {
 		layerName = new String(vo.layerName);

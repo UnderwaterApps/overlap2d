@@ -1,15 +1,17 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.ButtonVO;
+import com.uwsoft.editor.renderer.data.Essentials;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class TextButtonItem extends TextButton  implements IBaseItem {
 
 	public ButtonVO dataVO;	
-	public IResource rm;
+	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	
@@ -17,18 +19,20 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
+    private Body body;
+
     private CustomVariables customVariables = new CustomVariables();
 
-	public TextButtonItem(ButtonVO vo, IResource rm,CompositeItem parent) {
-		this(vo, rm);
+	public TextButtonItem(ButtonVO vo, Essentials e,CompositeItem parent) {
+		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public TextButtonItem(ButtonVO vo, IResource rm) {
-		super(vo.text, rm.getSkin());
+	public TextButtonItem(ButtonVO vo, Essentials e) {
+		super(vo.text, e.rm.getSkin());
 		dataVO = vo;
 		
-		this.rm = rm;
+		this.essentials = e;
 		setX(dataVO.x);
 		setY(dataVO.y);
 //		setScaleX(dataVO.scaleX);
@@ -126,11 +130,19 @@ public class TextButtonItem extends TextButton  implements IBaseItem {
 		this.parentItem = parentItem;
 	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
+        setBody(null);
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;

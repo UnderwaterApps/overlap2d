@@ -9,13 +9,15 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.renderer.IResource;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.renderer.data.LightVO.LightType;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 
@@ -25,7 +27,7 @@ public class LightActor extends Actor implements IBaseItem{
 	public RayHandler rayHandler = null;
 	
 	private LightVO dataVO;	
-	public IResource rm;
+	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	
@@ -38,17 +40,19 @@ public class LightActor extends Actor implements IBaseItem{
 	private Vector2 tmpVector = new Vector2();
 
     private CustomVariables customVariables = new CustomVariables();
+
+    private Body body;
 	
-	public LightActor(LightVO data, Essentials essentials, CompositeItem parent) {
-		this(data, essentials);
+	public LightActor(LightVO data, Essentials e, CompositeItem parent) {
+		this(data, e);
 		setParentItem(parent);
 	}
 	
-	public LightActor(LightVO data, Essentials essentials) {
+	public LightActor(LightVO data, Essentials e) {
+        this.essentials = e;
+
 		rayHandler = essentials.rayHandler;
 		dataVO = data;
-		
-		this.rm = essentials.rm;
 		setX(dataVO.x);
 		setY(dataVO.y);
 
@@ -73,22 +77,22 @@ public class LightActor extends Actor implements IBaseItem{
 //	}
 
 	public void createPointLight(){
-		lightObject = new PointLight(rayHandler, 12);
+		lightObject = new PointLight(rayHandler, dataVO.rays);
 		//Color asd = new Color(vo.tint);
 		lightObject.setColor(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
-		lightObject.setDistance(dataVO.distance*mulX);
-		lightObject.setPosition(dataVO.x*mulX, dataVO.y*mulY);
+		lightObject.setDistance(dataVO.distance * mulX * PhysicsBodyLoader.SCALE);
+		lightObject.setPosition(dataVO.x * mulX * PhysicsBodyLoader.SCALE, dataVO.y * mulY * PhysicsBodyLoader.SCALE);
 		lightObject.setStaticLight(dataVO.isStatic);
 		lightObject.setActive(true);
 		lightObject.setXray(dataVO.isXRay);
 	}
 
 	public void createConeLight(){ 
-		lightObject = new ConeLight(rayHandler,12,Color.WHITE,1,0,0,0,0);
+		lightObject = new ConeLight(rayHandler,  dataVO.rays , Color.WHITE,1,0,0,0,0);
 		//Color asd = new Color(vo.tint);
 		lightObject.setColor(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
-		lightObject.setDistance(dataVO.distance*mulX);
-		lightObject.setPosition(dataVO.x*mulX, dataVO.y*mulY);
+		lightObject.setDistance(dataVO.distance * mulX * PhysicsBodyLoader.SCALE);
+		lightObject.setPosition(dataVO.x * mulX * PhysicsBodyLoader.SCALE, dataVO.y * mulY * PhysicsBodyLoader.SCALE);
 		lightObject.setStaticLight(dataVO.isStatic);
 		direction = dataVO.directionDegree;
 		lightObject.setDirection(direction);
@@ -126,7 +130,7 @@ public class LightActor extends Actor implements IBaseItem{
 				yy=getY()-yy;
 				xx=getX()-xx;
 			}
-			lightObject.setPosition(relativeX-xx, relativeY-yy);
+			lightObject.setPosition((relativeX-xx+20)*PhysicsBodyLoader.SCALE, (relativeY-yy+20)*PhysicsBodyLoader.SCALE);
 		}
 		if(dataVO.type == LightType.CONE){
 			lightObject.setDirection(direction+relativeRotation);
@@ -144,12 +148,7 @@ public class LightActor extends Actor implements IBaseItem{
 	}
 
 	public void changeDistance(int amount) {
-		lightObject.setDistance(amount);
-	}
-
-	public void removeLights() {
-		lightObject.remove();
-		lightObject = null;
+		lightObject.setDistance(amount * PhysicsBodyLoader.SCALE);
 	}
 
 	public LightVO getDataVO() {
@@ -169,6 +168,14 @@ public class LightActor extends Actor implements IBaseItem{
 		}
         customVariables.loadFromString(dataVO.customVars);
 	}
+	
+	@Override
+	public float getRotation() {
+		if(dataVO.type == LightType.POINT){
+			return 0;
+		}
+		return super.getRotation();
+	}
 
 	@Override
 	public boolean isLockedByLayer() {
@@ -186,7 +193,7 @@ public class LightActor extends Actor implements IBaseItem{
 	}
 	
 	public void updateDataVO() {
-		dataVO.distance = (int) lightObject.getDistance();
+		dataVO.distance = (int) lightObject.getDistance()/ PhysicsBodyLoader.SCALE;
 		dataVO.directionDegree = direction;
 
         if(dataVO.type == LightType.CONE) {
@@ -195,7 +202,7 @@ public class LightActor extends Actor implements IBaseItem{
 
 		dataVO.x = getX()/this.mulX;
 		dataVO.y = getY()/this.mulY;
-		
+
 		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
 			dataVO.layerName = "Default";
 		}
@@ -209,7 +216,7 @@ public class LightActor extends Actor implements IBaseItem{
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		if(lightObject != null){
-			lightObject.setDistance(dataVO.distance*mulX);
+			lightObject.setDistance(dataVO.distance*mulX * PhysicsBodyLoader.SCALE);
 		}
 		updateDataVO();			
 	}
@@ -247,26 +254,42 @@ public class LightActor extends Actor implements IBaseItem{
 		if(dataVO.type == LightType.CONE){
 			lightObject.setDirection(direction+degrees);
 		} 
-		super.setRotation(degrees);
+		//super.setRotation(degrees);
 	}
 
 	@Override
 	public void rotateBy(float ammount) {
 		if(dataVO.type == LightType.POINT){
-			lightObject.setDistance(lightObject.getDistance() + ammount);
+			lightObject.setDistance(lightObject.getDistance() + ammount*PhysicsBodyLoader.SCALE);
 		} else {
 			direction+=ammount;
 			lightObject.setDirection(direction);
 		}	
-		super.rotateBy(ammount);
+		//super.rotateBy(ammount);
 	}
 	
 	@Override
 	public void dispose() {
-		lightObject.remove();
-		lightObject = null;
+		removeLights();
+
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        setBody(null);
 	}
 
+
+    public void removeLights() {
+        if(lightObject == null) return;
+        lightObject.remove();
+        lightObject = null;
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;

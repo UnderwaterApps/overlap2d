@@ -4,7 +4,9 @@ import java.lang.reflect.InvocationTargetException;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.spine.SpineDataHelper;
@@ -27,6 +29,8 @@ public class SpineActor extends Actor implements IBaseItem{
     
 	private SpineReflectionHelper spineReflectionHelper;
 	private SpineDataHelper spineData;
+	
+	private Body body;
 	
 	public SpineActor(SpineVO vo, Essentials e,CompositeItem parent) {
 		this(vo, e);
@@ -81,6 +85,10 @@ public class SpineActor extends Actor implements IBaseItem{
 //        setWidth(maxX - minX);
 //        setHeight(maxY - minY);
 //    }
+	
+	public Array<Object> getAnimations() {
+		return spineData.getAnimations();
+	}
 
     private void initSpine() {
     	spineData = new SpineDataHelper();
@@ -108,9 +116,12 @@ public class SpineActor extends Actor implements IBaseItem{
 	
 	public void setAnimation(String animName){
 		spineData.setAnimation(animName);
-		//state.setAnimation(0, animName, true);
+		dataVO.currentAnimationName = animName;
 	}
 
+	public Object getState() {
+		return spineData.stateObject;
+	}
 //	private void drawRect() {
 //		Texture pixmapBoundTexture = null;
 //	
@@ -162,8 +173,8 @@ public class SpineActor extends Actor implements IBaseItem{
 	public void renew() {
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
-		setScaleX(dataVO.scaleX*this.mulX);
-		setScaleY(dataVO.scaleY*this.mulY);
+        setScaleX(dataVO.scaleX);
+        setScaleY(dataVO.scaleY);
 		setRotation(dataVO.rotation);
         setColor(dataVO.tint[0],dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
         customVariables.loadFromString(dataVO.customVars);
@@ -201,13 +212,14 @@ public class SpineActor extends Actor implements IBaseItem{
         dataVO.customVars = customVariables.saveAsString();
 	}
 
-	public void applyResolution(float mulX, float mulY) {
-		this.mulX = mulX;
-		this.mulY = mulY;
-		setX(dataVO.x*this.mulX);
-		setY(dataVO.y*this.mulY);
-		updateDataVO();			
-	}
+    public void applyResolution(float mulX, float mulY) {
+        this.mulX = mulX;
+        this.mulY = mulY;
+        setX(dataVO.x * this.mulX);
+        setY(dataVO.y * this.mulY);
+        updateDataVO();
+        initSpine();
+    }
 
 	@Override
 	public int getLayerIndex() {
@@ -227,10 +239,6 @@ public class SpineActor extends Actor implements IBaseItem{
 		this.parentItem = parentItem;
 	}
 
-	@Override
-	public void dispose() {
-		
-	}
 
     @Override
     public void setScale(float scale) {
@@ -239,8 +247,23 @@ public class SpineActor extends Actor implements IBaseItem{
         renew();
     }
 
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(getBody() != null) essentials.world.destroyBody(getBody());
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;
+    }
+
+    public String getCurrentAnimationName() {
+        return dataVO.currentAnimationName;
     }
 }

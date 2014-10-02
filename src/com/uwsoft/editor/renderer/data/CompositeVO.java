@@ -1,6 +1,11 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.resources.FontSizePair;
+
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashSet;
 
 public class CompositeVO {
 
@@ -13,7 +18,7 @@ public class CompositeVO {
     public ArrayList<CheckBoxVO> sCheckBoxes = new ArrayList<>(1);
     public ArrayList<SelectBoxVO> sSelectBoxes = new ArrayList<>(1);
     public ArrayList<ParticleEffectVO> sParticleEffects = new ArrayList<>(1);
-    public ArrayList<LightVO> slights = new ArrayList<>(1);
+    public ArrayList<LightVO> sLights = new ArrayList<>(1);
     public ArrayList<SpineVO> sSpineAnimations = new ArrayList<>(1);
     public ArrayList<SpriteAnimationVO> sSpriteAnimations = new ArrayList<>(1);
 
@@ -62,8 +67,8 @@ public class CompositeVO {
             sParticleEffects.add(new ParticleEffectVO(vo.sParticleEffects.get(i)));
         }
 
-        for (int i = 0; i < vo.slights.size(); i++) {
-            slights.add(new LightVO(vo.slights.get(i)));
+        for (int i = 0; i < vo.sLights.size(); i++) {
+            sLights.add(new LightVO(vo.sLights.get(i)));
         }
 
         for (int i = 0; i < vo.sSpineAnimations.size(); i++) {
@@ -83,7 +88,7 @@ public class CompositeVO {
     }
 
     public void addItem(MainItemVO vo) {
-        String className = vo.getClass().getSimpleName().toString();
+        String className = vo.getClass().getSimpleName();
 
         if (className.equals("SimpleImageVO")) {
             sImages.add((SimpleImageVO) vo);
@@ -113,7 +118,7 @@ public class CompositeVO {
             sParticleEffects.add((ParticleEffectVO) vo);
         }
         if (className.equals("LightVO")) {
-            slights.add((LightVO) vo);
+            sLights.add((LightVO) vo);
         }
         if (className.equals("SpineVO")) {
             sSpineAnimations.add((SpineVO) vo);
@@ -124,7 +129,7 @@ public class CompositeVO {
     }
 
     public void removeItem(MainItemVO vo) {
-        String className = vo.getClass().getSimpleName().toString();
+        String className = vo.getClass().getSimpleName();
         if (className.equals("SimpleImageVO")) {
             sImages.remove((SimpleImageVO) vo);
         }
@@ -153,7 +158,7 @@ public class CompositeVO {
             sParticleEffects.remove((ParticleEffectVO) vo);
         }
         if (className.equals("LightVO")) {
-            slights.remove((LightVO) vo);
+            sLights.remove((LightVO) vo);
         }
         if (className.equals("SpineVO")) {
             sSpineAnimations.remove((SpineVO) vo);
@@ -172,7 +177,7 @@ public class CompositeVO {
         sCheckBoxes.clear();
         sSelectBoxes.clear();
         sParticleEffects.clear();
-        slights.clear();
+        sLights.clear();
         sSpineAnimations.clear();
         sSpriteAnimations.clear();
     }
@@ -185,12 +190,121 @@ public class CompositeVO {
                 sButtons.size() == 0 &&
                 sCheckBoxes.size() == 0 &&
                 sLabels.size() == 0 &&
-                slights.size() == 0 &&
+                sLights.size() == 0 &&
                 sParticleEffects.size() == 0 &&
                 sCheckBoxes.size() == 0 &&
                 sSpriteAnimations.size() == 0 &&
                 sSpineAnimations.size() == 0 &&
                 sSelectBoxes.size() == 0 &&
                 sTextBox.size() == 0;
+    }
+
+    public String[] getRecursiveParticleEffectsList() {
+        HashSet<String> list = new HashSet<>();
+        for (ParticleEffectVO sParticleEffect : sParticleEffects) {
+            list.add(sParticleEffect.particleName);
+        }
+        for (CompositeItemVO sComposite : sComposites) {
+            String[] additionalList = sComposite.composite.getRecursiveParticleEffectsList();
+            Collections.addAll(list, additionalList);
+        }
+        String[] finalList = new String[list.size()];
+        list.toArray(finalList);
+
+        return finalList;
+    }
+
+    public String[] getRecursiveSpineAnimationList() {
+        HashSet<String> list = new HashSet<>();
+        for (SpineVO sSpineAnimation : sSpineAnimations) {
+            list.add(sSpineAnimation.animationName);
+        }
+        for (CompositeItemVO sComposite : sComposites) {
+            String[] additionalList = sComposite.composite.getRecursiveSpineAnimationList();
+            Collections.addAll(list, additionalList);
+        }
+        String[] finalList = new String[list.size()];
+        list.toArray(finalList);
+
+        return finalList;
+    }
+
+    public String[] getRecursiveSpriteAnimationList() {
+        HashSet<String> list = new HashSet<>();
+        for (SpriteAnimationVO sSpriteAnimation : sSpriteAnimations) {
+            list.add(sSpriteAnimation.animationName);
+        }
+        for (CompositeItemVO sComposite : sComposites) {
+            String[] additionalList = sComposite.composite.getRecursiveSpriteAnimationList();
+            Collections.addAll(list, additionalList);
+        }
+        String[] finalList = new String[list.size()];
+        list.toArray(finalList);
+
+        return finalList;
+    }
+
+    public FontSizePair[] getRecursiveFontList() {
+        HashSet<FontSizePair> list = new HashSet<>();
+        for (LabelVO sLabel : sLabels) {
+            list.add(new FontSizePair(sLabel.style.isEmpty() ? "arial" : sLabel.style, sLabel.size == 0 ? 12 : sLabel.size));
+        }
+        for (CompositeItemVO sComposite : sComposites) {
+            FontSizePair[] additionalList = sComposite.composite.getRecursiveFontList();
+            Collections.addAll(list, additionalList);
+        }
+        FontSizePair[] finalList = new FontSizePair[list.size()];
+        list.toArray(finalList);
+
+        return finalList;
+    }
+
+    public ArrayList<MainItemVO> getAllItems() {
+        ArrayList<MainItemVO> itemsList = new ArrayList<>();
+        itemsList = getAllItemsRecursive(itemsList, this);
+
+        return itemsList;
+    }
+
+    private ArrayList<MainItemVO> getAllItemsRecursive(ArrayList<MainItemVO> itemsList, CompositeVO compositeVo) {
+        for(MainItemVO vo: compositeVo.sButtons) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sCheckBoxes) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sImage9patchs) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sImages) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sLabels) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sLights) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sParticleEffects) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sSelectBoxes) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sSpineAnimations) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sSpriteAnimations) {
+            itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sTextBox) {
+            itemsList.add(vo);
+        }
+        for(CompositeItemVO vo: compositeVo.sComposites) {
+            itemsList = getAllItemsRecursive(itemsList,vo.composite);
+            itemsList.add(vo);
+        }
+
+        return itemsList;
     }
 }

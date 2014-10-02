@@ -5,6 +5,7 @@ public class LabelVO extends MainItemVO {
 	public String 	text 	= "Label";
 	public String	style	=  "";
 	public int		size;
+	public int		align;
 	
 	public LabelVO() {
 		super();
@@ -15,5 +16,6 @@ public class LabelVO extends MainItemVO {
 		text 	= new String(vo.text);
 		style 	= new String(vo.style);
 		size 	= vo.size;
+		align 	= vo.align;
 	}
 }

@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
@@ -48,6 +49,8 @@ public class SpriteAnimation extends Actor implements IBaseItem {
     private CustomVariables customVariables = new CustomVariables();
     private String currentAnimationName = "";
 
+    private Body body;
+
     public SpriteAnimation(SpriteAnimationVO vo, Essentials e, CompositeItem parent) {
         this(vo, e);
         setParentItem(parent);
@@ -85,7 +88,7 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         setOriginX(0);
         setOriginY(0);
 
-        Array<TextureAtlas.AtlasRegion> regions = essentials.rm.getSpriteAnimationAtlas(dataVO.animationName).getRegions();
+        Array<TextureAtlas.AtlasRegion> regions = essentials.rm.getSpriteAnimation(dataVO.animationName).getRegions();
 
         animationAtlasRegions = new TextureAtlas.AtlasRegion[regions.size];
 
@@ -269,11 +272,6 @@ public class SpriteAnimation extends Actor implements IBaseItem {
     }
 
     @Override
-    public void dispose() {
-
-    }
-
-    @Override
     public void setScale(float scale) {
         super.setScale(scale, scale);
         dataVO.scaleX = scale;
@@ -365,6 +363,19 @@ public class SpriteAnimation extends Actor implements IBaseItem {
         }
 
         return Integer.parseInt(result);
+    }
+
+    public Body getBody() {
+        return body;
+    }
+
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
+        setBody(null);
     }
 
     public void setNormalSpeed(float speed) {

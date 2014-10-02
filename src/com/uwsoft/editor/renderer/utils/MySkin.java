@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer;
+package com.uwsoft.editor.renderer.utils;
 
 import java.util.ArrayList;
 

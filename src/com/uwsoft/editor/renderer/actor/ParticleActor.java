@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class ParticleActor extends Actor {
@@ -9,7 +10,7 @@ public class ParticleActor extends Actor {
 	private ParticleEffect particleEffect;
 	private float lastDelta = 0.0f;
 
-	public ParticleActor(ParticleEffect effect) {
+    public ParticleActor(ParticleEffect effect) {
 		setVisible(true);
 		particleEffect = effect;
 	}
@@ -37,7 +38,6 @@ public class ParticleActor extends Actor {
     }
 
 	public void act(float delta) {
-		
 		lastDelta = delta;
 		particleEffect.setPosition(getX(), getY());
 

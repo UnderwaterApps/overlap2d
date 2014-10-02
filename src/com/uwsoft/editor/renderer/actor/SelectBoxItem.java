@@ -1,15 +1,17 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
-import com.uwsoft.editor.renderer.IResource;
+import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SelectBoxVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 	
 	public SelectBoxVO dataVO;	
-	public IResource rm;
+	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	protected int layerIndex = 0;
@@ -17,16 +19,18 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 	private CompositeItem parentItem = null;
 
     private CustomVariables customVariables = new CustomVariables();
+
+    private Body body;
 	
-	public SelectBoxItem(SelectBoxVO vo, IResource rm,CompositeItem parent) {
-		this(vo, rm);
+	public SelectBoxItem(SelectBoxVO vo, Essentials e,CompositeItem parent) {
+		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public SelectBoxItem(SelectBoxVO vo, IResource rm) {
-		super(rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
+	public SelectBoxItem(SelectBoxVO vo, Essentials e) {
+		super(e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
 		dataVO = vo;	
-		this.rm = rm;
+		this.essentials = e;
 		setX(dataVO.x);
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
@@ -141,12 +145,18 @@ public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
 		dataVO.style	=	styleName;
 	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+    public Body getBody() {
+        return body;
+    }
 
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        setBody(null);
+    }
 
     public CustomVariables getCustomVariables() {
         return customVariables;

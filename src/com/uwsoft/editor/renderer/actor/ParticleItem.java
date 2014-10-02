@@ -2,33 +2,37 @@ package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.renderer.IResource;
+import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class ParticleItem extends Group implements IBaseItem {
 
 	private ParticleActor particle;
 	public ParticleEffectVO dataVO;	
-	public IResource rm;
+	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
+    private Body body;
+
     private CustomVariables customVariables = new CustomVariables();
 	
-	public ParticleItem(ParticleEffectVO vo, IResource rm,CompositeItem parent) {
-		this(vo, rm);
+	public ParticleItem(ParticleEffectVO vo, Essentials e,CompositeItem parent) {
+		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public ParticleItem(ParticleEffectVO vo, IResource rm) {
+	public ParticleItem(ParticleEffectVO vo, Essentials e) {
 		
-		this.rm = rm;
+		this.essentials = e;
 		dataVO = vo;
 		setX(dataVO.x);
 		setY(dataVO.y);
@@ -45,7 +49,7 @@ public class ParticleItem extends Group implements IBaseItem {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
 
-		particle = new ParticleActor(rm.getParticle(vo.particleName));
+		particle = new ParticleActor(e.rm.getParticleEffect(vo.particleName));
 		addActor(particle);
 		
 		particle.setX(50);
@@ -166,12 +170,18 @@ public class ParticleItem extends Group implements IBaseItem {
 		return super.getHeight()*getScaleY();
 	}
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
-		
-	}
+    public Body getBody() {
+        return body;
+    }
 
+    public void setBody(Body body) {
+        this.body = body;
+    }
+
+    public void dispose() {
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        setBody(null);
+    }
     public CustomVariables getCustomVariables() {
         return customVariables;
     }
