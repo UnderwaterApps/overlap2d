@@ -2,10 +2,12 @@ package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
@@ -156,5 +158,18 @@ public class ImageItem extends Image implements IBaseItem {
 
     public CustomVariables getCustomVariables() {
         return customVariables;
+    }
+
+
+    @Override
+    public void act(float delta) {
+        // physics is enabled for this body and it is not static body
+        if(essentials.world != null && body != null && dataVO.physicsBodyData != null && dataVO.physicsBodyData.bodyType > 0 && !essentials.physicsStopped) {
+            setX(body.getPosition().x/ PhysicsBodyLoader.SCALE);
+            setY(body.getPosition().y/PhysicsBodyLoader.SCALE);
+            setRotation(body.getAngle() * MathUtils.radiansToDegrees);
+        }
+
+        super.act(delta);
     }
 }

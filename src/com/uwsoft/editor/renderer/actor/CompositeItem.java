@@ -7,6 +7,7 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -597,18 +598,36 @@ public class CompositeItem extends Group implements IBaseItem {
         for (int i = 0; i < items.size(); i++) {
             Actor value = (Actor) items.get(i);
             if (i == 0) {
-                lowerX = value.getX();
-                lowerY = value.getY();
-                upperX = value.getX() + value.getWidth() * value.getScaleX();
-                upperY = value.getY() + value.getHeight() * value.getScaleY();
-            }
+                if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                    lowerX = value.getX();
+                    upperX = value.getX() + value.getWidth();
+                } else {
+                    upperX = value.getX();
+                    lowerX = value.getX() + value.getWidth();
+                }
 
-            if (lowerX > value.getX()) lowerX = value.getX();
-            if (lowerY > value.getY()) lowerY = value.getY();
-            if (upperX < value.getX() + value.getWidth() * value.getScaleX())
-                upperX = value.getX() + value.getWidth() * value.getScaleX();
-            if (upperY < value.getY() + value.getHeight() * value.getScaleY())
-                upperY = value.getY() + value.getHeight() * value.getScaleY();
+                if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                    lowerY = value.getY();
+                    upperY = value.getY() + value.getHeight();
+                } else {
+                    upperY = value.getY();
+                    lowerY = value.getY() + value.getHeight();
+                }
+            }
+            if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                if (lowerX > value.getX()) lowerX = value.getX();
+                if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
+            } else {
+                if (upperX < value.getX()) upperX = value.getX();
+                if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
+            }
+            if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                if (lowerY > value.getY()) lowerY = value.getY();
+                if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
+            } else {
+                if (upperY < value.getY()) upperY = value.getY();
+                if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
+            }
 
         }
 
@@ -725,10 +744,10 @@ public class CompositeItem extends Group implements IBaseItem {
             scripts.get(i).act(delta);
         }
         // physics is enabled for this body and it is not static body
-        if(essentials.world != null && body != null && dataVO.physicsBodyData != null && dataVO.physicsBodyData.bodyType > 0) {
-            setX(body.getPosition().x);
-            setY(body.getPosition().y);
-            setRotation(body.getAngle());
+        if(essentials.world != null && body != null && dataVO.physicsBodyData != null && dataVO.physicsBodyData.bodyType > 0 && !essentials.physicsStopped) {
+            setX(body.getPosition().x/PhysicsBodyLoader.SCALE);
+            setY(body.getPosition().y/PhysicsBodyLoader.SCALE);
+            setRotation(body.getAngle() * MathUtils.radiansToDegrees);
         }
 
         super.act(delta);

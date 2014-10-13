@@ -12,5 +12,6 @@ public class Essentials {
     public SpineReflectionHelper spineReflectionHelper;
     public IResourceRetriever rm;
     public World world;
+    public boolean physicsStopped = false;
 
 }

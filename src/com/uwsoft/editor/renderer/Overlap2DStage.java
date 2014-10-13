@@ -4,6 +4,7 @@ package com.uwsoft.editor.renderer;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -29,6 +30,8 @@ public class Overlap2DStage extends Stage {
 	public Essentials essentials;
 
     private float timeAcc = 0;
+    
+    public boolean physiscStopped = false;
 	
 	public Overlap2DStage() {
 		super();
@@ -113,10 +116,10 @@ public class Overlap2DStage extends Stage {
 	@Override
 	public void act(float delta)
 	{
-        if(essentials.world != null) {
+        if(essentials.world != null && !physiscStopped) {
             // physics is enabled
             while (timeAcc < delta) {
-                timeAcc += 1f/60;
+                timeAcc += 1f/60; 
                 essentials.world.step(1f/60, 10, 10);
             }
             timeAcc -= delta;

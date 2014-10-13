@@ -25,7 +25,7 @@ public class SimpleButtonScript implements IScript {
     private float origTextY;
     private float origTextScaleX;
     private float origTextScaleY;
-
+    
     public static SimpleButtonScript selfInit(CompositeItem item) {
         SimpleButtonScript script = new SimpleButtonScript();
         item.addScript(script);
@@ -54,10 +54,12 @@ public class SimpleButtonScript implements IScript {
         this.buttonHolder = item;
 
         String text = item.getCustomVariables().getStringVariable("text");
-        if (text != null && item.getLabelById("text") != null) {
-            item.getLabelById("text").setText(text);
+        if (item.getLabelById("text") != null) {
+        	if(text != null) {
+        		item.getLabelById("text").setText(text);
+        	}
+        	
             item.getLabelById("text").setAlignment(Align.center);
-
             origTextY = item.getLabelById("text").getY();
             origTextScaleX = item.getLabelById("text").getScaleX();
             origTextScaleY = item.getLabelById("text").getScaleY();
@@ -157,4 +159,8 @@ public class SimpleButtonScript implements IScript {
         listeners.clear();
     }
 
+    public CompositeItem getItem() {
+    	return buttonHolder;
+    }
+    
 }

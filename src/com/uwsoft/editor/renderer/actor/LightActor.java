@@ -85,6 +85,8 @@ public class LightActor extends Actor implements IBaseItem{
 		lightObject.setStaticLight(dataVO.isStatic);
 		lightObject.setActive(true);
 		lightObject.setXray(dataVO.isXRay);
+		
+		
 	}
 
 	public void createConeLight(){ 
@@ -99,6 +101,8 @@ public class LightActor extends Actor implements IBaseItem{
 		((ConeLight)lightObject).setConeDegree(dataVO.coneDegree);
 		lightObject.setActive(true);
 		lightObject.setXray(dataVO.isXRay);
+		
+		
 	}
 
 	@Override
@@ -193,7 +197,10 @@ public class LightActor extends Actor implements IBaseItem{
 	}
 	
 	public void updateDataVO() {
-		dataVO.distance = (int) lightObject.getDistance()/ PhysicsBodyLoader.SCALE;
+		dataVO.distance = (int) lightObject.getDistance()/this.mulX/PhysicsBodyLoader.SCALE;
+		
+		System.out.println("dataVO.distance = " + dataVO.distance);
+		
 		dataVO.directionDegree = direction;
 
         if(dataVO.type == LightType.CONE) {
@@ -216,7 +223,7 @@ public class LightActor extends Actor implements IBaseItem{
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		if(lightObject != null){
-			lightObject.setDistance(dataVO.distance*mulX * PhysicsBodyLoader.SCALE);
+			lightObject.setDistance(dataVO.distance * this.mulX * PhysicsBodyLoader.SCALE);
 		}
 		updateDataVO();			
 	}
@@ -241,6 +248,9 @@ public class LightActor extends Actor implements IBaseItem{
 	
 	@Override
 	public void setColor(Color color) {
+		if(color == null){
+			return;
+		}
 		lightObject.setColor(color);
 	}
 	

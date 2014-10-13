@@ -43,6 +43,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public String spineAnimationsPath = "spine_animations";
     public String fontsPath = "freetypefonts";
 
+    private float resMultiplier;
 
     private ProjectInfoVO projectVO;
 
@@ -249,12 +250,12 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public void loadFonts() {
     	//resolution related stuff
     	ResolutionEntryVO curResolution = getProjectVO().getResolution(packResolutionName);
-    	float mul = 1;
+        resMultiplier = 1;
     	if(!packResolutionName.equals("orig")) {
-    		if(curResolution.base == 0) { 
-    			mul = (float) curResolution.width / (float) getProjectVO().originalResolution.width;
+    		if(curResolution.base == 0) {
+                resMultiplier = (float) curResolution.width / (float) getProjectVO().originalResolution.width;
     		} else{
-    			mul = (float) curResolution.height / (float) getProjectVO().originalResolution.height;
+                resMultiplier = (float) curResolution.height / (float) getProjectVO().originalResolution.height;
     		}
     	}
     	
@@ -266,14 +267,18 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         }
 
         for (FontSizePair pair : fontsToLoad) {
-            FileHandle fontFile;
-            fontFile = Gdx.files.internal(fontsPath + File.separator + pair.fontName + ".ttf");
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            parameter.size = Math.round(pair.fontSize * mul);
-            BitmapFont font = generator.generateFont(parameter);
-            bitmapFonts.put(pair, font);
+            loadFont(pair);
         }
+    }
+
+    public void loadFont(FontSizePair pair) {
+        FileHandle fontFile;
+        fontFile = Gdx.files.internal(fontsPath + File.separator + pair.fontName + ".ttf");
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = Math.round(pair.fontSize * resMultiplier);
+        BitmapFont font = generator.generateFont(parameter);
+        bitmapFonts.put(pair, font);
     }
 
     @Override
