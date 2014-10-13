@@ -256,7 +256,8 @@ public class SpineActor extends Actor implements IBaseItem{
     }
 
     public void dispose() {
-        if(getBody() != null) essentials.world.destroyBody(getBody());
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        	setBody(null);
     }
 
     public CustomVariables getCustomVariables() {
