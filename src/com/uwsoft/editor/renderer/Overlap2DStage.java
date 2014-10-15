@@ -8,11 +8,11 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.esotericsoftware.spine.SkeletonRenderer;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
-import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
 
 
 /**
@@ -49,10 +49,7 @@ public class Overlap2DStage extends Stage {
      */
 	protected void initStage() {
 		essentials = new Essentials();
-		SpineReflectionHelper refdata = new SpineReflectionHelper();
-		if(refdata.isSpineAviable){
-			essentials.spineReflectionHelper = refdata;
-		}
+		essentials.skeletonRenderer = new SkeletonRenderer();
 		initLightsConfiguration();
 	}
 

@@ -1,0 +1,2 @@
+include 'spine-runtime-libgdx'
+project(':spine-runtime-libgdx').projectDir = new File(settingsDir, '../spine-runtimes/spine-libgdx')

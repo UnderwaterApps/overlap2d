@@ -352,7 +352,7 @@ public class CompositeItem extends Group implements IBaseItem {
             }
         }
 
-        if (essentials.spineReflectionHelper != null) {
+        if (essentials.skeletonRenderer != null) {
             for (int i = 0; i < dataVO.composite.sSpineAnimations.size(); i++) {
                 SpineVO tmpVo = dataVO.composite.sSpineAnimations.get(i);
                 SpineActor itm = new SpineActor(tmpVo, essentials, this);

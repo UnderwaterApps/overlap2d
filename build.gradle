@@ -10,6 +10,7 @@ ext {
 }
 
 dependencies {
+    compile project(":spine-runtime-libgdx")
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
@@ -17,6 +18,14 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     
     
+}
+
+project(":spine-runtime-libgdx") {
+    apply plugin: "java"
+    sourceSets.main.java.srcDirs = [ "src/" ]
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    }
 }
 
 repositories {
