@@ -1,0 +1,14 @@
+bin/
+.settings/
+.DS_STORE
+.idea/
+.gradle/
+build/
+target/
+*.iml
+*.ipr
+*.iws
+.classpath
+.project
+config.pit
+contributors.txt

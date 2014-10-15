@@ -1,0 +1,57 @@
+package com.uwsoft.editor.gdx.ui.layer.drag;
+
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
+import com.uwsoft.editor.gdx.ui.layer.LayerItem;
+import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+
+/**
+ * Created by sargis on 7/2/14.
+ */
+public class LayerItemTarget extends Target {
+    private final LayerItem layerItem;
+    private final UILayerBox uiLayerBox;
+
+    public LayerItemTarget(LayerItem layerItem, UILayerBox uiLayerBox) {
+        super(layerItem);
+        this.layerItem = layerItem;
+        this.uiLayerBox = uiLayerBox;
+    }
+
+    @Override
+    public boolean drag(Source source, Payload payload, float x, float y, int pointer) {
+        if (source.getActor() != layerItem) {
+            layerItem.showLayerRowSeparator();
+        }
+        return true;
+    }
+
+    @Override
+    public void drop(Source source, Payload payload, float x, float y, int pointer) {
+        LayerItem sourceLayerItem = (LayerItem) source.getActor();
+        if (layerItem == sourceLayerItem) {
+            return;
+        }
+        uiLayerBox.arrangeLayers(sourceLayerItem, layerItem);
+//        ArrayList<LayerItemVO> layers = sandboxStage.getCurrentScene().dataVO.composite.layers;
+//        int index = -1;
+//        for (LayerItemVO layer : layers) {
+//            if (layer.layerName.equals(sourceLayerItem.getLayerName())) {
+//                index = layers.indexOf(layer);
+//                break;
+//            }
+//        }
+//        if (index != -1) {
+//
+//        }
+//        layers.addAll(0, layers.subList(0, 20));
+    }
+
+    public void reset(Source source, Payload payload) {
+        if (source.getActor() == layerItem) {
+            return;
+        }
+        layerItem.hideLayerRowSeparator();
+    }
+}
