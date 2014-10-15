@@ -573,7 +573,7 @@ public class CompositeItem extends Group implements IBaseItem {
 
             if( itemVO.meshId < 0 || bodyData == null) continue;
             
-            item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
+            item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId+""), mulVec));
             item.getBody().setUserData(item);
         }
         positionPhysics();
