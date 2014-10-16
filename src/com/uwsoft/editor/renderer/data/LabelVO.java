@@ -6,6 +6,11 @@ public class LabelVO extends MainItemVO {
 	public String	style	=  "";
 	public int		size;
 	public int		align;
+
+    public float width = 0;
+    public float height = 0;
+
+    public boolean multiline = false;
 	
 	public LabelVO() {
 		super();
@@ -17,5 +22,8 @@ public class LabelVO extends MainItemVO {
 		style 	= new String(vo.style);
 		size 	= vo.size;
 		align 	= vo.align;
+        width 	= vo.width;
+        height 	= vo.height;
+        multiline 	= vo.multiline;
 	}
 }

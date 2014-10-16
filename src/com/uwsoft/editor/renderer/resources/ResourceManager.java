@@ -15,10 +15,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Json;
-import com.uwsoft.editor.renderer.data.CompositeVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.utils.MySkin;
 
 /**
@@ -164,6 +161,11 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] spineAnimations = composite.getRecursiveSpineAnimationList();
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
+            for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
+                FontSizePair[] libFonts = library.composite.getRecursiveFontList();
+                Collections.addAll(fontsToLoad, libFonts);
+            }
+
             //
             Collections.addAll(particleEffectNamesToLoad, particleEffects);
             Collections.addAll(spineAnimNamesToLoad, spineAnimations);
