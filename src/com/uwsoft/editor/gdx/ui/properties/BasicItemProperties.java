@@ -17,6 +17,7 @@ import com.uwsoft.editor.gdx.ui.components.ColorPicker;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;
+import com.uwsoft.editor.renderer.data.LabelVO;
 import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
@@ -145,7 +146,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         widthVal.setDisabled(true);
         heightVal.setDisabled(true);
 
-        if (className.equals("TextBoxItem") || className.equals("SelectBoxItem") || className.equals("Image9patchItem") || className.equals("ImageItem")) {
+        if (className.equals("TextBoxItem") || className.equals("SelectBoxItem") || className.equals("Image9patchItem") || className.equals("ImageItem") || className.equals("LabelItem")) {
             widthVal.setDisabled(false);
             heightVal.setDisabled(false);
         }
@@ -408,6 +409,13 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                     dirty = true;
                 }
                 break;
+            case "LabelItem":
+                LabelVO labelVO = ((LabelItem) item).getDataVO();
+                if (labelVO.height != newHeight) {
+                    labelVO.height = newHeight;
+                    dirty = true;
+                }
+                break;
             case "Image9patchItem":
             case "ImageItem":
                 SimpleImageVO imageVO = ((ImageItem) item).getDataVO();
@@ -440,6 +448,13 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 SelectBoxVO selectBoxVO = ((SelectBoxItem) item).getDataVO();
                 if (selectBoxVO.width != newWidth) {
                     selectBoxVO.width = newWidth;
+                    dirty = true;
+                }
+                break;
+            case "LabelItem":
+                LabelVO labelVO = ((LabelItem) item).getDataVO();
+                if (labelVO.width != newWidth) {
+                    labelVO.width = newWidth;
                     dirty = true;
                 }
                 break;
