@@ -2,7 +2,6 @@ package com.uwsoft.editor.data.migrations;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.google.gson.Gson;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
 import com.uwsoft.editor.data.vo.ProjectVO;
@@ -29,7 +28,7 @@ public class ProjectVersionMigrator {
 
     public void start() {
 
-        if(projectVo.projectVersion == null || projectVo.projectVersion.equals("")) {
+        if (projectVo.projectVersion == null || projectVo.projectVersion.equals("")) {
             projectVo.projectVersion = "0.0.4";
         }
 
@@ -37,15 +36,15 @@ public class ProjectVersionMigrator {
     }
 
     private void migrationIterator() {
-        if(projectVo.projectVersion.equals(AppConfig.getInstance().version)) return;
+        if (projectVo.projectVersion.equals(AppConfig.getInstance().version)) return;
 
-        if(safetyIterator > 100) {
+        if (safetyIterator > 100) {
             System.out.println("Emergency exit from version migration process due to safety lock");
             return;
         }
         safetyIterator++;
 
-        if(projectVo.projectVersion.equals("0.0.4")) {
+        if (projectVo.projectVersion.equals("0.0.4")) {
             VersionMigTo005 vmt = new VersionMigTo005();
             doMigartion(vmt, "0.0.5");
         }
@@ -56,7 +55,7 @@ public class ProjectVersionMigrator {
 
         boolean successs = vmt.doMigration();
 
-        if(successs) {
+        if (successs) {
             setVersion(nextVersion);
             migrationIterator();
         } else {
