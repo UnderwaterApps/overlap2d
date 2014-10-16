@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
+import com.google.gson.Gson;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
@@ -15,9 +16,9 @@ import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
-import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
 import org.apache.commons.io.FileUtils;
@@ -255,8 +256,8 @@ public class DataManager {
         if (prjFile.exists() && !prjFile.isDirectory()) {
             FileHandle projectFile = Gdx.files.internal(prjFilePath);
             String projectContents = readFileContents(projectFile);
-            Json json = new Json();
-            ProjectVO vo = json.fromJson(ProjectVO.class, projectContents);
+            Gson gson = new Gson();
+            ProjectVO vo = gson.fromJson(projectContents, ProjectVO.class);
             currentProjectVO = vo;
 
             goThroughVersionMigrationProtocol(projectPath, vo);
@@ -264,7 +265,7 @@ public class DataManager {
             String prjInfoFilePath = projectPath + "/project.dt";
             FileHandle projectInfoFile = Gdx.files.internal(prjInfoFilePath);
             String projectInfoContents = readFileContents(projectInfoFile);
-            ProjectInfoVO voInfo = json.fromJson(ProjectInfoVO.class, projectInfoContents);
+            ProjectInfoVO voInfo = gson.fromJson(projectInfoContents, ProjectInfoVO.class);
 
             currentProjectInfoVO = voInfo;
 
@@ -296,24 +297,24 @@ public class DataManager {
             if (!entry.file().isDirectory()) {
                 Json json = new Json();
                 SceneVO sceneVO = json.fromJson(SceneVO.class, entry);
-                if (sceneVO.composite == null) continue;
+                if(sceneVO.composite == null) continue;
                 ArrayList<MainItemVO> items = sceneVO.composite.getAllItems();
-                for (MainItemVO vo : items) {
-                    if (vo.meshId == -1) continue;
+                for(MainItemVO vo: items) {
+                    if(vo.meshId == -1) continue;
                     uniqueMeshIds.add(vo.meshId);
                 }
                 for (CompositeItemVO libraryItem : sceneVO.libraryItems.values()) {
-                    if (libraryItem.composite == null) continue;
+                    if(libraryItem.composite == null) continue;
                     items = libraryItem.composite.getAllItems();
-                    for (MainItemVO vo : items) {
-                        if (vo.meshId == -1) continue;
+                    for(MainItemVO vo: items) {
+                        if(vo.meshId == -1) continue;
                         uniqueMeshIds.add(vo.meshId);
                     }
                 }
             }
         }
         // addsset list
-        for (Integer meshId : currentProjectInfoVO.assetMeshMap.values()) {
+        for (Integer meshId :  currentProjectInfoVO.assetMeshMap.values()) {
             uniqueMeshIds.add(meshId);
         }
 
@@ -458,7 +459,7 @@ public class DataManager {
             createIfNotExist(outputPath);
         }
 
-        if (outputDir.exists()) {
+        if(outputDir.exists()) {
             try {
                 FileUtils.cleanDirectory(outputDir);
             } catch (IOException e) {
@@ -606,9 +607,9 @@ public class DataManager {
     }
 
     public void importExternalSpriteAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
-        if (files.size() == 0) {
-            return;
-        }
+    	if(files.size()== 0){
+    		return;
+    	}
         handler = progressHandler;
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -665,7 +666,7 @@ public class DataManager {
                     }
                 }
 
-                if (newAnimName != null) {
+                if(newAnimName != null) {
                     resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
                 }
             }
@@ -784,7 +785,7 @@ public class DataManager {
     public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
 
-        if (targetFolder.exists()) {
+        if(targetFolder.exists()) {
             try {
                 FileUtils.cleanDirectory(targetFolder);
             } catch (IOException e) {
@@ -813,17 +814,17 @@ public class DataManager {
     }
 
     public void createResizedSpineAnimation(String animName, ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
+        String currProjectPath  = currentWorkingPath + File.separator + currentProjectVO.projectName;
 
         File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/" + animName + ".atlas");
 
         String tmpPath = currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/tmp";
         File tmpFolder = new File(tmpPath);
 
-        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/");
-        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName);
+        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name +"/spine-animations/");
+        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name +"/spine-animations/" + animName);
 
-        String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName;
+        String targetPath = currProjectPath + File.separator + "assets/" + resolution.name +"/spine-animations/" + animName;
         File targetFolder = new File(targetPath);
 
         unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
@@ -837,16 +838,16 @@ public class DataManager {
     }
 
     public void createResizedSpriteAnimation(String animName, ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
+        String currProjectPath  = currentWorkingPath + File.separator + currentProjectVO.projectName;
         File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/" + animName + ".atlas");
 
         String tmpPath = currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/tmp";
         File tmpFolder = new File(tmpPath);
 
-        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/");
-        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName);
+        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name +"/sprite-animations/");
+        createIfNotExist(currProjectPath + File.separator + "assets/" + resolution.name +"/spine-animations/" + animName);
 
-        String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/" + animName;
+        String targetPath = currProjectPath + File.separator + "assets/" + resolution.name +"/sprite-animations/" + animName;
         File targetFolder = new File(targetPath);
 
         unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
@@ -860,11 +861,11 @@ public class DataManager {
     }
 
     public void createResizedAnimations(ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
+        String currProjectPath  = currentWorkingPath + File.separator + currentProjectVO.projectName;
 
         // Unpack spine orig
         File spineSourceDir = new File(currProjectPath + File.separator + "assets/orig/spine-animations");
-        if (spineSourceDir != null && spineSourceDir.exists()) {
+        if(spineSourceDir != null && spineSourceDir.exists()) {
             for (File entry : spineSourceDir.listFiles()) {
                 if (entry.isDirectory()) {
                     String animName = FilenameUtils.removeExtension(entry.getName());
@@ -875,7 +876,7 @@ public class DataManager {
 
         //Unpack sprite orig
         File spriteSourceDir = new File(currProjectPath + File.separator + "assets/orig/sprite-animations");
-        if (spriteSourceDir != null && spriteSourceDir.exists()) {
+        if(spriteSourceDir != null && spriteSourceDir.exists()) {
             for (File entry : spriteSourceDir.listFiles()) {
                 if (entry.isDirectory()) {
                     String animName = FilenameUtils.removeExtension(entry.getName());
@@ -887,7 +888,7 @@ public class DataManager {
 
 
     public void resizeSpriteAnimationForAllResolutions(String animName, ProjectInfoVO currentProjectInfoVO) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
+        String currProjectPath  = currentWorkingPath + File.separator + currentProjectVO.projectName;
 
         File atlasFile = new File(currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + animName + ".atlas");
 
@@ -896,8 +897,8 @@ public class DataManager {
 
         unpackAtlasIntoTmpFolder(atlasFile, tmpDir);
 
-        for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-            String spriteAnimationsRoot = currProjectPath + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "sprite-animations";
+        for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions ) {
+            String spriteAnimationsRoot = currProjectPath + File.separator + "assets"+ File.separator + resolutionEntryVO.name + File.separator + "sprite-animations";
             createIfNotExist(spriteAnimationsRoot);
             String targetPath = spriteAnimationsRoot + File.separator + animName;
             File targetFolder = new File(targetPath);
@@ -1091,8 +1092,8 @@ public class DataManager {
             source = Gdx.files.internal("freetypefonts");
         } else if (OSType.getOS_Type() == OSType.Windows) {
             source = Gdx.files.internal("assets/freetypefonts");
-        } else {
-            source = Gdx.files.internal("freetypefonts");
+        }else{
+        	source = Gdx.files.internal("freetypefonts");
         }
         System.out.println(source.exists() + " " + source.isDirectory());
         if (!source.exists()) {
@@ -1227,14 +1228,14 @@ public class DataManager {
     private void buildAnimations(String targetPath) {
         exportSpineAnimationForResolution("orig", targetPath);
         exportSpriteAnimationForResolution("orig", targetPath);
-        for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-            exportSpineAnimationForResolution(resolutionEntryVO.name, targetPath);
+    	for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
+    		exportSpineAnimationForResolution(resolutionEntryVO.name, targetPath);
             exportSpriteAnimationForResolution(resolutionEntryVO.name, targetPath);
-        }
+    	}
     }
-
+    
     private void exportSpineAnimationForResolution(String res, String targetPath) {
-        String spineSrcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + res + File.separator + "spine-animations";
+		String spineSrcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + res + File.separator + "spine-animations";
         createIfNotExist(targetPath + File.separator + res + File.separator + "spine_animations");
         File fileSrc = new File(spineSrcPath);
         String finalTarget = targetPath + File.separator + res + File.separator + "spine_animations";
@@ -1298,9 +1299,9 @@ public class DataManager {
         if (!configFile.exists()) {
             writeToFile(configFilePath, editorConfig.constructJsonString());
         } else {
-            Json gson = new Json();
+            Gson gson = new Gson();
             String editorConfigJson = readFileContents(Gdx.files.absolute(configFilePath));
-            editorConfig = gson.fromJson(EditorConfigVO.class, editorConfigJson);
+            editorConfig = gson.fromJson(editorConfigJson, EditorConfigVO.class);
         }
         return editorConfig;
     }
@@ -1327,11 +1328,7 @@ public class DataManager {
         currentProjectInfoVO.scenes = scenes;
         String projPath = currentWorkingPath + "/" + currentProjectVO.projectName;
         writeToFile(projPath + "/project.dt", currentProjectInfoVO.constructJsonString());
-        try {
-            FileUtils.forceDelete(new File(projPath + "/scenes/" + sceneName + ".dt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        FileUtils.deleteQuietly(new File(projPath + "/scenes/" + sceneName + ".dt"));
     }
 
 
@@ -1359,7 +1356,6 @@ public class DataManager {
             return name.toLowerCase().endsWith(".json");
         }
     }
-
     public static class DTFilenameFilter implements FilenameFilter {
 
         @Override
