@@ -1,5 +1,6 @@
 package com.uwsoft.editor.renderer.actor;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
@@ -45,7 +46,7 @@ public class SpineActor extends Actor implements IBaseItem {
         this.renderer = essentials.skeletonRenderer;
 
         dataVO = vo;
-
+        initSkeletonData();
         initSpine();
 
         setX(dataVO.x);
@@ -91,18 +92,20 @@ public class SpineActor extends Actor implements IBaseItem {
         setHeight(maxY - minY);
     }
 
-    private void initSpine() {
+    private void initSkeletonData() {
+        long time = System.currentTimeMillis();
         skeletonJson = new SkeletonJson(essentials.rm.getSkeletonAtlas(dataVO.animationName));
-        skeletonJson.setScale(dataVO.scaleX*mulX);
         skeletonData = skeletonJson.readSkeletonData((essentials.rm.getSkeletonJSON(dataVO.animationName)));
+        Gdx.app.log("initSkeletonData", String.valueOf(System.currentTimeMillis() - time));
+    }
 
+    private void initSpine() {
+        BoneData root = skeletonData.findBone("root");
+        root.setScale(dataVO.scaleX * mulX, dataVO.scaleX * mulX);
         skeleton = new Skeleton(skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
         AnimationStateData stateData = new AnimationStateData(skeletonData); // Defines mixing (crossfading) between animations.
         state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
-
-
         computeBoundBox();
-
         // todo: fix this, it's a temporary soluition
         setAnimation(dataVO.currentAnimationName.isEmpty() ? skeletonData.getAnimations().get(0).getName() : dataVO.currentAnimationName);
     }
@@ -112,12 +115,12 @@ public class SpineActor extends Actor implements IBaseItem {
     }
 
     public void setAnimation(String animName) {
-    	state.setAnimation(0, animName, true);
+        state.setAnimation(0, animName, true);
         dataVO.currentAnimationName = animName;
     }
-    
+
     public AnimationState getState() {
-       return state;
+        return state;
     }
 
 
@@ -177,6 +180,7 @@ public class SpineActor extends Actor implements IBaseItem {
         initSpine();
     }
 
+
     @Override
     public boolean isLockedByLayer() {
         return isLockedByLayer;
@@ -215,6 +219,7 @@ public class SpineActor extends Actor implements IBaseItem {
         setY(dataVO.y * this.mulY);
         updateDataVO();
         initSpine();
+        //initSpine();
     }
 
     @Override
@@ -252,7 +257,7 @@ public class SpineActor extends Actor implements IBaseItem {
     }
 
     public void dispose() {
-        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        if (essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
         setBody(null);
     }
 
