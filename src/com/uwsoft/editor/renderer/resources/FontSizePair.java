@@ -22,6 +22,11 @@ public class FontSizePair {
     }
 
     @Override
+    public String toString() {
+        return fontName + "_" + fontSize;
+    }
+
+    @Override
     public int hashCode() {
         return (fontName + "_" + fontSize).hashCode();
     }
