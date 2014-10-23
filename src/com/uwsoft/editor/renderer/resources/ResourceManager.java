@@ -1,10 +1,7 @@
 package com.uwsoft.editor.renderer.resources;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -40,26 +37,26 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public String spineAnimationsPath = "spine_animations";
     public String fontsPath = "freetypefonts";
 
-    private float resMultiplier;
+    protected float resMultiplier;
 
-    private ProjectInfoVO projectVO;
+    protected ProjectInfoVO projectVO;
 
-    private ArrayList<String> preparedSceneNames = new ArrayList<>();
-    private HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
+    protected ArrayList<String> preparedSceneNames = new ArrayList<>();
+    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
 
-    private HashSet<String> particleEffectNamesToLoad = new HashSet<>();
-    private HashSet<String> spineAnimNamesToLoad = new HashSet<>();
-    private HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
-    private HashSet<FontSizePair> fontsToLoad = new HashSet<>();
+    protected HashSet<String> particleEffectNamesToLoad = new HashSet<>();
+    protected HashSet<String> spineAnimNamesToLoad = new HashSet<>();
+    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
+    protected HashSet<FontSizePair> fontsToLoad = new HashSet<>();
 
-    private TextureAtlas mainPack;
-    private HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
+    protected TextureAtlas mainPack;
+    protected HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
 
-    private HashMap<String, TextureAtlas> skeletonAtlases = new HashMap<String, TextureAtlas>();
-    private HashMap<String, FileHandle> skeletonJSON = new HashMap<String, FileHandle>();
+    protected HashMap<String, TextureAtlas> skeletonAtlases = new HashMap<String, TextureAtlas>();
+    protected HashMap<String, FileHandle> skeletonJSON = new HashMap<String, FileHandle>();
 
-    private HashMap<String, TextureAtlas> spriteAnimations = new HashMap<String, TextureAtlas>();
-    private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
+    protected HashMap<String, TextureAtlas> spriteAnimations = new HashMap<String, TextureAtlas>();
+    protected HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
     /**
      * Constructor does nothing
@@ -236,12 +233,13 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public void loadSpineAnimations() {
         // empty existing ones that are not scheduled to load
-        for (String key : skeletonAtlases.keySet()) {
-            if (!spriteAnimNamesToLoad.contains(key)) {
-                skeletonAtlases.remove(key);
-                skeletonJSON.remove(key);
-            }
+        Iterator it = skeletonAtlases.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            it.remove();
+            skeletonJSON.remove(pairs.getKey());
         }
+
 
         for (String name : spineAnimNamesToLoad) {
         	loadSpineAnimation(name);
