@@ -236,8 +236,12 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         Iterator it = skeletonAtlases.entrySet().iterator();
         while (it.hasNext()) {
             Map.Entry pairs = (Map.Entry)it.next();
-            it.remove();
-            skeletonJSON.remove(pairs.getKey());
+            if(spineAnimNamesToLoad.contains(pairs.getKey())) {
+                spineAnimNamesToLoad.remove(pairs.getKey());
+            } else {
+                it.remove();
+                skeletonJSON.remove(pairs.getKey());
+            }
         }
 
 
