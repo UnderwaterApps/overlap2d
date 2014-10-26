@@ -598,35 +598,35 @@ public class CompositeItem extends Group implements IBaseItem {
         for (int i = 0; i < items.size(); i++) {
             Actor value = (Actor) items.get(i);
             if (i == 0) {
-                if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                if (value.getScaleX() > 0 && value.getWidth()*value.getScaleX() > 0) {
                     lowerX = value.getX();
-                    upperX = value.getX() + value.getWidth();
+                    upperX = value.getX() + value.getWidth()*value.getScaleX();
                 } else {
                     upperX = value.getX();
-                    lowerX = value.getX() + value.getWidth();
+                    lowerX = value.getX() + value.getWidth()*value.getScaleX();
                 }
 
-                if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                if (value.getScaleY() > 0 && value.getHeight()*value.getScaleY() > 0) {
                     lowerY = value.getY();
-                    upperY = value.getY() + value.getHeight();
+                    upperY = value.getY() + value.getHeight()*value.getScaleY();
                 } else {
                     upperY = value.getY();
-                    lowerY = value.getY() + value.getHeight();
+                    lowerY = value.getY() + value.getHeight()*value.getScaleY();
                 }
             }
             if (value.getScaleX() > 0 && value.getWidth() > 0) {
                 if (lowerX > value.getX()) lowerX = value.getX();
-                if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
+                if (upperX < value.getX() + value.getWidth()*value.getScaleX()) upperX = value.getX() + value.getWidth()*value.getScaleX();
             } else {
                 if (upperX < value.getX()) upperX = value.getX();
-                if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
+                if (lowerX > value.getX() + value.getWidth()*value.getScaleX()) lowerX = value.getX() + value.getWidth()*value.getScaleX();
             }
-            if (value.getScaleY() > 0 && value.getHeight() > 0) {
+            if (value.getScaleY() > 0 && value.getHeight()*value.getScaleY() > 0) {
                 if (lowerY > value.getY()) lowerY = value.getY();
-                if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
+                if (upperY < value.getY() + value.getHeight()*value.getScaleY()) upperY = value.getY() + value.getHeight()*value.getScaleY();
             } else {
                 if (upperY < value.getY()) upperY = value.getY();
-                if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
+                if (lowerY > value.getY() + value.getHeight()*value.getScaleY()) lowerY = value.getY() + value.getHeight()*value.getScaleY();
             }
 
         }
