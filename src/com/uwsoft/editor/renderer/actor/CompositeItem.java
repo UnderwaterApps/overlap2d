@@ -593,7 +593,7 @@ public class CompositeItem extends Group implements IBaseItem {
     	}
 	}
 
-    private void recalculateSize() {
+    public void recalculateSize() {
         float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
         for (int i = 0; i < items.size(); i++) {
             Actor value = (Actor) items.get(i);
@@ -928,6 +928,11 @@ public class CompositeItem extends Group implements IBaseItem {
      */
     public CustomVariables getCustomVariables() {
         return customVariables;
+    }
+
+
+    public ArrayList<IBaseItem> getItemsByLayerName(String layerName) {
+        return itemLayerMap.get(layerName);
     }
 
 }
