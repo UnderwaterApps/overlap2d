@@ -268,4 +268,41 @@ public class SceneLoader {
     public CompositeItem getRoot() {
         return sceneActor;
     }
+	/**
+	 * Injects elements loaded through this scene loader into properly annotated
+	 * fields
+	 * 
+	 * @param object
+	 */
+	@SuppressWarnings("unchecked")
+	public void inject(Object object) {
+		Class<?> cls = object.getClass();
+		// get all public fields
+		Field[] fields = cls.getDeclaredFields();
+		System.out.println(fields.length);
+		// iterate over fields, injecting values from the root composite item
+		// into the object
+		for (Field field : fields) {
+			System.out.println(field.getName());
+			if (IBaseItem.class.isAssignableFrom(field.getType())) {
+				Class<? extends IBaseItem> type = (Class<? extends IBaseItem>) field
+						.getType();
+				Class<?> realType = field.getType();
+				System.out.println(Arrays.toString(field
+						.getDeclaredAnnotations()));
+				if (field.isAnnotationPresent(Overlap2D.class)) {
+					System.out.println("annotation found");
+					String name = field.getName();
+					IBaseItem result = getRoot().getById(name, type);
+					System.out.println(result);
+					try {
+						field.set(object, realType.cast(result));
+					} catch (IllegalArgumentException | IllegalAccessException e) {
+						e.printStackTrace();
+						System.exit(-1);
+					}
+				}
+			}
+		}
+	}
 }
