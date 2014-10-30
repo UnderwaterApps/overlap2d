@@ -929,5 +929,8 @@ public class CompositeItem extends Group implements IBaseItem {
     public CustomVariables getCustomVariables() {
         return customVariables;
     }
+	public <T extends IBaseItem> T getById(String itemId, Class<T> itemType) {
+		return itemType.cast(itemIdMap.get(itemId));
+	}
 
 }
