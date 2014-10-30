@@ -1,6 +1,8 @@
 package com.uwsoft.editor.renderer;
 
+import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
@@ -10,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
@@ -289,7 +292,7 @@ public class SceneLoader {
 						.getType();
 				Class<?> realType = field.getType();
 				System.out.println(Arrays.toString(field
-						.getDeclaredAnnotations()));
+                        .getDeclaredAnnotations()));
 				if (field.isAnnotationPresent(Overlap2D.class)) {
 					System.out.println("annotation found");
 					String name = field.getName();
