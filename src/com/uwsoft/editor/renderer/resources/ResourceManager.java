@@ -161,6 +161,10 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
                 Collections.addAll(fontsToLoad, libFonts);
+
+                // loading particle effects used in library items
+                String[] libEffects = library.composite.getRecursiveParticleEffectsList();
+                Collections.addAll(particleEffectNamesToLoad, libEffects);
             }
 
             //
