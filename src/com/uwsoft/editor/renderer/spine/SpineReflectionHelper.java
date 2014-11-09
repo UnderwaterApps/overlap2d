@@ -58,21 +58,21 @@ public class SpineReflectionHelper {
 			skeletonJsonClass = Class.forName("com.esotericsoftware.spine.SkeletonJson");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
 		try {
 			skeletonJsonConstructorAccess = skeletonJsonClass.getConstructor(TextureAtlas.class);
 		} catch (NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		try {
 			skeletonClass = Class.forName("com.esotericsoftware.spine.Skeleton");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -80,35 +80,35 @@ public class SpineReflectionHelper {
 			skeletonDataClass = Class.forName("com.esotericsoftware.spine.SkeletonData");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 
 		try {
 			skeletonConstructorAccess = skeletonClass.getConstructor(skeletonDataClass);
 		} catch (NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		try {
 			animationStateDataClass = Class.forName("com.esotericsoftware.spine.AnimationStateData");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
 		try {
 			animationStateDataConstructorAccess = animationStateDataClass.getConstructor(skeletonDataClass);
 		} catch (NoSuchMethodException | SecurityException e1) {
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		try {
 			stateClass = Class.forName("com.esotericsoftware.spine.AnimationState");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -116,14 +116,14 @@ public class SpineReflectionHelper {
 			animationStateConstructorAccess = stateClass.getConstructor(animationStateDataClass);
 		} catch (NoSuchMethodException | SecurityException e1) {
 			isSpineAviable = false;
-			e1.printStackTrace();
+			//e1.printStackTrace();
 		}
 		
 		try {
 			animationClass = Class.forName("com.esotericsoftware.spine.Animation");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -131,7 +131,7 @@ public class SpineReflectionHelper {
 			skeletonClassMethodAccess = MethodAccess.get(skeletonClass);
 		}catch(Exception e){
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -139,7 +139,7 @@ public class SpineReflectionHelper {
 			skeletonRendererClass = Class.forName("com.esotericsoftware.spine.SkeletonRenderer");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -147,7 +147,7 @@ public class SpineReflectionHelper {
 			slotClass = Class.forName("com.esotericsoftware.spine.Slot");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
@@ -177,7 +177,7 @@ public class SpineReflectionHelper {
 			regionAttachmentClass = Class.forName("com.esotericsoftware.spine.attachments.RegionAttachment");
 		} catch (ClassNotFoundException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
