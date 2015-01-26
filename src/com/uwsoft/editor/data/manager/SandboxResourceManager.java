@@ -79,4 +79,11 @@ public class SandboxResourceManager implements IResourceRetriever {
 
         return sceneVO;
     }
+
+	@Override
+	public FileHandle getSCMLFile(String name) {
+		return TextureManager.getInstance().getProjectSpriterAnimationsList().get(name);		
+	}
+
+
 }

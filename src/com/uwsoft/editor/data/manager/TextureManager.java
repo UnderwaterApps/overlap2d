@@ -14,12 +14,14 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
+
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -41,6 +43,7 @@ public class TextureManager {
     private TextureAtlas editorAtlas;
     private HashMap<String, SpineAnimData> spineAnimAtlases = new HashMap<>();
     private HashMap<String, TextureAtlas> spriteAnimAtlases = new HashMap<>();
+    private HashMap<String, FileHandle> spriterAnimFiles = new HashMap<>();
 
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
@@ -116,6 +119,18 @@ public class TextureManager {
             }
         }
     }
+    
+    public void loadCurrentProjectSpriterAnimations(String path, String curResolution) {
+    	spriterAnimFiles.clear();
+    	FileHandle sourceDir = new FileHandle(path + curResolution + "/spriter");
+    	for (FileHandle entry : sourceDir.list()) {
+    		if (entry.file().isDirectory()) {
+    			String animName = entry.file().getName();  
+    			FileHandle scmlFile	=	new FileHandle(path + curResolution + "/spriter/"+animName+"/"+animName+".scml");
+    			spriterAnimFiles.put(animName, scmlFile);
+    		}
+    	}
+    }
 
     public void loadCurrentProjectAssets(String packPath) {
         try {
@@ -163,6 +178,10 @@ public class TextureManager {
 
     public HashMap<String, TextureAtlas> getProjectSpriteAnimationsList() {
         return spriteAnimAtlases;
+    }
+    
+    public HashMap<String, FileHandle> getProjectSpriterAnimationsList() {
+    	return spriterAnimFiles;
     }
 
     public TextureAtlas getEditorAssetsList() {

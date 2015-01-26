@@ -1,6 +1,5 @@
 package com.uwsoft.editor.gdx.stage;
 
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -26,7 +25,6 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.SimpleImageVO;
 
 public class UIStage extends BaseStage {
 
@@ -65,10 +63,11 @@ public class UIStage extends BaseStage {
 //        uiMainTable.setWidth(getWidth());
 //        uiMainTable.setHeight(getHeight());
 //        uiMainTable.setY(11);
+        
         addActor(uiMainTable);
         addActor(contextMenuContainer);
         setListeners();
-
+        
         DataManager.getInstance().setStage(this);
         
 //        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);

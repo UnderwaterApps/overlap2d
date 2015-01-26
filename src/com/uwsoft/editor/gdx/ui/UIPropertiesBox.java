@@ -108,6 +108,14 @@ public class UIPropertiesBox extends ExpandableUIBox {
             mainLayer.addActor(spineAnimationProperties);
             additionalBoxes.add(spineAnimationProperties);
         }
+        if (className.equals("SpriterActor")) {
+        	SpriterAnimationProperties spriterAnimationProperties = new SpriterAnimationProperties(stage.sandboxStage,sceneLoader);
+        	spriterAnimationProperties.setObject((SpriterActor) currentItem);
+        	spriterAnimationProperties.setX(getWidth() / 2 - basicBox.getWidth() / 2);
+        	spriterAnimationProperties.setY(basicBox.getY() - spriterAnimationProperties.getHeight() - 25);
+        	mainLayer.addActor(spriterAnimationProperties);
+        	additionalBoxes.add(spriterAnimationProperties);
+        }
     }
 
     public void setItem(IBaseItem item) {

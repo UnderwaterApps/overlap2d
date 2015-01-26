@@ -2,11 +2,14 @@ package com.uwsoft.editor.data.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
+import com.sun.xml.internal.txw2.Document;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
@@ -20,12 +23,23 @@ import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
+import java.nio.file.CopyOption;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -358,6 +372,7 @@ public class DataManager {
         TextureManager.getInstance().loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
         TextureManager.getInstance().loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
         TextureManager.getInstance().loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        TextureManager.getInstance().loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
     }
 
     public SceneVO createNewScene(String name) {
@@ -530,7 +545,37 @@ public class DataManager {
         return images;
     }
 
-    public void importExternalSpineAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    private ArrayList<File> getScmlFileImagesList(File file) {
+    	ArrayList<File> images = new ArrayList<File>();
+    	DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        DocumentBuilder db = null;
+		try {
+			db = dbf.newDocumentBuilder();
+			org.w3c.dom.Document document = db.parse(file);
+			NodeList nodeList = document.getElementsByTagName("file");
+		        for(int x=0,size= nodeList.getLength(); x<size; x++) {
+		        	String absolutePath = file.getAbsolutePath();
+    				String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + nodeList.item(x).getAttributes().getNamedItem("name").getNodeValue();
+
+    				File imgFile = new File(path);
+    				images.add(imgFile);
+		        }
+		} catch (SAXException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+        catch (ParserConfigurationException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}    	
+    	return images;
+    }
+
+
+    public void importExternalAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -538,8 +583,12 @@ public class DataManager {
             @Override
             public void run() {
                 for (File file : files) {
-                    File copiedAtlasFile = importExternalSpineAnimationIntoProject(file);
-                    resizeSpineAnimationForAllResolutions(copiedAtlasFile, currentProjectInfoVO);
+                    File copiedFile = importExternalAnimationIntoProject(file);
+                    if(copiedFile.getName().toLowerCase().endsWith(".json")){
+                    	resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
+                    }else if(copiedFile.getName().toLowerCase().endsWith(".scml")){
+                    	resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
+                    }
                 }
 
             }
@@ -560,52 +609,73 @@ public class DataManager {
 
     }
 
-    public File importExternalSpineAnimationIntoProject(File jsonFileSource) {
+    public File importExternalAnimationIntoProject(File animationFileSource) {
         JsonFilenameFilter jsonFilenameFilter = new JsonFilenameFilter();
-        if (!jsonFilenameFilter.accept(null, jsonFileSource.getName())) {
-            showError("Spine animation should be a .json file with atlas in same folder");
+        ScmlFilenameFilter scmlFilenameFilter = new ScmlFilenameFilter();
+        if (!jsonFilenameFilter.accept(null, animationFileSource.getName()) && !scmlFilenameFilter.accept(null, animationFileSource.getName())) {
+            showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
 
             return null;
         }
-        String fileNameWithOutExt = FilenameUtils.removeExtension(jsonFileSource.getName());
-        String sourcePath = jsonFileSource.getAbsolutePath();
-        String animationDataPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator)) + File.separator;
-        String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
+        
+        String fileNameWithOutExt = FilenameUtils.removeExtension(animationFileSource.getName());
+        String sourcePath;
+        String animationDataPath;
+        String targetPath;
+        if(jsonFilenameFilter.accept(null, animationFileSource.getName())){
+        	sourcePath = animationFileSource.getAbsolutePath();
+        	animationDataPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator)) + File.separator;
+        	targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
+        	File atlasFileSource = new File(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
+            if (!atlasFileSource.exists()) {
+                showError("the atlas file needs to have same name and location as the json file");
 
-        File atlasFileSource = new File(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
-        if (!atlasFileSource.exists()) {
-            showError("the atlas file needs to have same name and location as the json file");
-
-            return null;
-        }
-
-        createIfNotExist(targetPath);
-        File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
-        File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
-
-
-        ArrayList<File> imageFiles = getAtlasFileImagesList(atlasFileSource);
-
-        try {
-            FileUtils.copyFile(jsonFileSource, jsonFileTarget);
-            FileUtils.copyFile(atlasFileSource, atlasFileTarget);
-
-            for (int i = 0; i < imageFiles.size(); i++) {
-                File imgFileTarget = new File(targetPath + File.separator + imageFiles.get(i).getName());
-                FileUtils.copyFile(imageFiles.get(i), imgFileTarget);
+                return null;
             }
+            createIfNotExist(targetPath);
+            File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
+            File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
+            ArrayList<File> imageFiles = getAtlasFileImagesList(atlasFileSource);
+            try {
+                FileUtils.copyFile(animationFileSource, jsonFileTarget);
+                FileUtils.copyFile(atlasFileSource, atlasFileTarget);
 
-            return atlasFileTarget;
+                for (int i = 0; i < imageFiles.size(); i++) {
+                    File imgFileTarget = new File(targetPath + File.separator + imageFiles.get(i).getName());
+                    FileUtils.copyFile(imageFiles.get(i), imgFileTarget);
+                }
 
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
+                return atlasFileTarget;
+
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+        }else if(scmlFilenameFilter.accept(null, animationFileSource.getName())){
+        	sourcePath = animationFileSource.getAbsolutePath();
+        	targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt;
+        	File scmlFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".scml");
+        	ArrayList<File> imageFiles = getScmlFileImagesList(animationFileSource); 
+        	try {
+                 FileUtils.copyFile(animationFileSource, scmlFileTarget);
+                 for (int i = 0; i < imageFiles.size(); i++) {
+                     File imgFileTarget = new File(targetPath + File.separator + imageFiles.get(i).getName());
+                     FileUtils.copyFile(imageFiles.get(i), imgFileTarget);
+                 }
+                 return scmlFileTarget;
+
+             } catch (IOException e) {
+                 // TODO Auto-generated catch block
+                 e.printStackTrace();
+             }
+        }               
 
         return null;
     }
 
-    public void importExternalSpriteAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    
+
+	public void importExternalSpriteAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
         if (files.size() == 0) {
             return;
         }
@@ -781,7 +851,7 @@ public class DataManager {
     }
 
 
-    public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
+	public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
 
         if (targetFolder.exists()) {
@@ -801,7 +871,6 @@ public class DataManager {
         settings.filterMin = TextureFilter.Linear;
 
         TexturePacker tp = new TexturePacker(settings);
-
         for (final File fileEntry : sourceFolder.listFiles()) {
             if (!fileEntry.isDirectory()) {
                 BufferedImage bufferedImage = ResolutionManager.imageResize(fileEntry, ratio);
@@ -811,6 +880,32 @@ public class DataManager {
 
         tp.pack(targetFolder, packName);
     }
+	public void resizeSpriterImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
+		float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
+		
+		if (targetFolder.exists()) {
+			try {
+				FileUtils.cleanDirectory(targetFolder);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+		}
+		else{
+			targetFolder.mkdirs();
+		}
+		for (final File fileEntry : sourceFolder.listFiles()) {
+			if (!fileEntry.isDirectory()) {
+				BufferedImage bufferedImage = ResolutionManager.imageResize(fileEntry, ratio);								
+				try {					
+					File outputfile = new File(targetFolder.getPath()+"/"+fileEntry.getName());
+					ImageIO.write(bufferedImage, FilenameUtils.getExtension(fileEntry.getName()), outputfile);
+				} catch (IOException e) {
+					System.out.println(e);
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 
     public void createResizedSpineAnimation(String animName, ResolutionEntryVO resolution) {
         String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
@@ -935,8 +1030,50 @@ public class DataManager {
             e.printStackTrace();
         }
     }
+    public void resizeSpriterAnimationForAllResolutions(File scmlFile, ProjectInfoVO currentProjectInfoVO) {
+    	
+    	String fileNameWithOutExt = FilenameUtils.removeExtension(scmlFile.getName());
+    	String imagesDir 	= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt;
+    	String tmpDir 		= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt + File.separator + "tmp";
+    	
+    	File imagesFolder = new File(imagesDir);
+        File sourceFolder = new File(tmpDir);
+       
+        try {
+			copyOnlyImageFilesIntoTmpFolder(imagesFolder, sourceFolder);
+		} catch (IOException e) {
+			System.out.println(e);
+			e.printStackTrace();
+		}
+    	for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
+    		createIfNotExist(currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter");
+    		String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter" + File.separator + fileNameWithOutExt;
+    		createIfNotExist(targetPath);
+    		File targetFolder = new File(targetPath);    		
+    		resizeSpriterImagesTmpDirToResolution(scmlFile.getName(), sourceFolder, resolutionEntryVO, targetFolder);
+    	}
+    	 try {
+             FileUtils.deleteDirectory(sourceFolder);
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
 
-    public void rePackProjectImagesForAllResolutions() {
+    }
+
+    private void copyOnlyImageFilesIntoTmpFolder(File imagesFolder, File sourceFolder) throws IOException {
+		File[] children = imagesFolder.listFiles();
+     	for (int i = 0; i < children.length; i++) {
+			if(children[i].getName().toLowerCase().endsWith(".png")){
+				if (!sourceFolder.exists()) {
+					sourceFolder.mkdirs();
+					System.out.println("hre");
+				}
+				FileUtils.copyFileToDirectory(children[i], sourceFolder);				
+			}
+		}		
+	}
+
+	public void rePackProjectImagesForAllResolutions() {
         rePackProjectImages(currentProjectInfoVO.originalResolution);
         for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
             rePackProjectImages(resolutionEntryVO);
@@ -1359,6 +1496,14 @@ public class DataManager {
             return name.toLowerCase().endsWith(".json");
         }
     }
+    
+    public static class ScmlFilenameFilter implements FilenameFilter {
+    	
+    	@Override
+    	public boolean accept(File dir, String name) {
+    		return name.toLowerCase().endsWith(".scml");
+    	}
+    }
 
     public static class DTFilenameFilter implements FilenameFilter {
 
@@ -1367,4 +1512,6 @@ public class DataManager {
             return name.toLowerCase().endsWith(".dt");
         }
     }
+
+	
 }
