@@ -120,6 +120,7 @@ public class SpriterActor extends Actor implements IBaseItem {
         super.draw(batch, parentAlpha);
         
         player.setPosition(getX(), getY());
+        player.setPivot(getWidth()/2, getHeight()/2);
         player.setScale(dataVO.scale * this.mulX);
         player.rotate(getRotation()-player.getAngle());        
         drawer.beforeDraw(player,batch);        
@@ -260,6 +261,7 @@ public class SpriterActor extends Actor implements IBaseItem {
 	}
 	public void setEntity(int i) {
 		currentEntityIndex	=	i;	
+		setAnimation(0);
 		updateDataVO();
 		initPlayer();	
 	}
