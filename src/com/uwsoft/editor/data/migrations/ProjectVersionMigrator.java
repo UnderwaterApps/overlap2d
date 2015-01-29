@@ -3,6 +3,7 @@ package com.uwsoft.editor.data.migrations;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.data.migrations.migrators.DummyMig;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.utils.AppConfig;
@@ -47,6 +48,14 @@ public class ProjectVersionMigrator {
         if (projectVo.projectVersion.equals("0.0.4")) {
             VersionMigTo005 vmt = new VersionMigTo005();
             doMigartion(vmt, "0.0.5");
+        }
+        if (projectVo.projectVersion.equals("0.0.5")) {
+            DummyMig vmt = new DummyMig();
+            doMigartion(vmt, "0.0.6");
+        }
+        if (projectVo.projectVersion.equals("0.0.6")) {
+            DummyMig vmt = new DummyMig();
+            doMigartion(vmt, "0.0.7");
         }
     }
 
