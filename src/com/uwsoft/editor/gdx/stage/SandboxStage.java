@@ -335,7 +335,27 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         anim.setX(vo.x);
         anim.setY(vo.y);
     }
+    public void createSpriterAnimation(String animationsName, float x, float y) {
+    	currentScene.updateDataVO();
+        SpriterVO vo = new SpriterVO();
+        vo.animationName = animationsName;
 
+        if (checkForNoLayersSelectedDialog()) return;
+
+        vo.layerName = uiStage.getCurrentSelectedLayer().layerName;
+
+        vo.x = x + getCamera().position.x - getWidth() / 2;
+        vo.y = y + getCamera().position.y - getHeight() / 2;
+
+        SpriterActor anim = new SpriterActor(vo, sceneLoader.essentials, currentScene);
+
+        currentScene.addItem(anim);
+        initItemListeners(anim);
+        updateSceneTree();
+        anim.setX(vo.x);
+        anim.setY(vo.y);
+		
+	}
     public void createLight(LightVO vo) {
         currentScene.updateDataVO();
         vo.x += getCamera().position.x - getWidth() / 2;
@@ -1551,5 +1571,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
             //box2dDebugRenderer.render(essentials.world, getCamera().combined.cpy().scl(1/PhysicsBodyLoader.SCALE));
         }
     }
+	
 
 }

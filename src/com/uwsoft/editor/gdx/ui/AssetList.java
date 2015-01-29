@@ -1,11 +1,14 @@
 package com.uwsoft.editor.gdx.ui;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.data.SpineAnimData;
@@ -14,6 +17,7 @@ import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
 
 public class AssetList extends Group {
 
@@ -41,6 +45,7 @@ public class AssetList extends Group {
 
         HashMap<String, SpineAnimData> spineAnimations = s.textureManager.getProjectSpineAnimationsList();
         HashMap<String, TextureAtlas> spriteAnimations = s.textureManager.getProjectSpriteAnimationsList();
+        HashMap<String, FileHandle> spriterAnimations = s.textureManager.getProjectSpriterAnimationsList();
 
         if (atlas == null) return;
 
@@ -79,6 +84,17 @@ public class AssetList extends Group {
                 table.row();
             }
             itemIter++;
+        }
+        
+        for (String animationName : spriterAnimations.keySet()) {
+        	final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(s, animationName);
+        	
+        	table.add(thumb).size(50, 50).pad(3);
+        	if ((itemIter - 7) % 4 == 0) {
+        		
+        		table.row();
+        	}
+        	itemIter++;
         }
 
 
