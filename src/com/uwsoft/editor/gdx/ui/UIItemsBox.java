@@ -77,7 +77,10 @@ public class UIItemsBox extends ExpandableUIBox {
                 for (int i = 0; i < selectedNodes.size; i++) {
                     System.out.println();
                     IBaseItem baseItem = (IBaseItem) selectedNodes.get(i).getObject();
-                    addSelectionAction(getCurrentSceneItem(stage.sandboxStage.getCurrentScene(), baseItem));
+                    IBaseItem item = getCurrentSceneItem(stage.sandboxStage.getCurrentScene(), baseItem);
+                    if(item != null) {
+                        addSelectionAction(item);
+                    }
                 }
 
             }
@@ -88,6 +91,7 @@ public class UIItemsBox extends ExpandableUIBox {
         IBaseItem currentSceneItem = baseItem;
         while (currentScene != currentSceneItem.getParentItem()) {
             currentSceneItem = currentSceneItem.getParentItem();
+            if(currentSceneItem == null) break;
         }
         return currentSceneItem;
     }
