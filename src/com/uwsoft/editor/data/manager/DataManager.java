@@ -14,16 +14,19 @@ import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
+import com.uwsoft.editor.gdx.ui.dialogs.InfoDialog;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import javax.imageio.ImageIO;
+
 import java.awt.image.BufferedImage;
 import java.io.*;
 import java.util.ArrayList;
@@ -725,6 +728,9 @@ public class DataManager {
                             File target = new File(targetPath + "/" + newName);
                             FileUtils.copyFile(file, target);
                         } catch (Exception e) {
+                        	e.printStackTrace();
+                        	System.out.println("Error importing particles");
+                        	showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect file in the same directory ");
                         }
                     }
                 }
