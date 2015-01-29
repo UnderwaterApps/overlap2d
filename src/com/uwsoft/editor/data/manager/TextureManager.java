@@ -122,11 +122,11 @@ public class TextureManager {
     
     public void loadCurrentProjectSpriterAnimations(String path, String curResolution) {
     	spriterAnimFiles.clear();
-    	FileHandle sourceDir = new FileHandle(path + curResolution + "/spriter");
+    	FileHandle sourceDir = new FileHandle(path + "orig" + "/spriter-animations");
     	for (FileHandle entry : sourceDir.list()) {
     		if (entry.file().isDirectory()) {
     			String animName = entry.file().getName();  
-    			FileHandle scmlFile	=	new FileHandle(path + curResolution + "/spriter/"+animName+"/"+animName+".scml");
+    			FileHandle scmlFile	=	new FileHandle(path + "orig" + "/spriter-animations/"+animName+"/"+animName+".scml");
     			spriterAnimFiles.put(animName, scmlFile);
     		}
     	}

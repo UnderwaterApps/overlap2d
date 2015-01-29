@@ -584,10 +584,10 @@ public class DataManager {
             public void run() {
                 for (File file : files) {
                     File copiedFile = importExternalAnimationIntoProject(file);
-                    if(copiedFile.getName().toLowerCase().endsWith(".json")){
+                    if(copiedFile.getName().toLowerCase().endsWith(".atlas")){                    	
                     	resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                     }else if(copiedFile.getName().toLowerCase().endsWith(".scml")){
-                    	resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
+                    	//resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                     }
                 }
 
@@ -653,7 +653,7 @@ public class DataManager {
             }
         }else if(scmlFilenameFilter.accept(null, animationFileSource.getName())){
         	sourcePath = animationFileSource.getAbsolutePath();
-        	targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt;
+        	targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt;
         	File scmlFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".scml");
         	ArrayList<File> imageFiles = getScmlFileImagesList(animationFileSource); 
         	try {
@@ -1033,8 +1033,8 @@ public class DataManager {
     public void resizeSpriterAnimationForAllResolutions(File scmlFile, ProjectInfoVO currentProjectInfoVO) {
     	
     	String fileNameWithOutExt = FilenameUtils.removeExtension(scmlFile.getName());
-    	String imagesDir 	= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt;
-    	String tmpDir 		= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter" + File.separator + fileNameWithOutExt + File.separator + "tmp";
+    	String imagesDir 	= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt;
+    	String tmpDir 		= currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt + File.separator + "tmp";
     	
     	File imagesFolder = new File(imagesDir);
         File sourceFolder = new File(tmpDir);
@@ -1046,11 +1046,18 @@ public class DataManager {
 			e.printStackTrace();
 		}
     	for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-    		createIfNotExist(currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter");
-    		String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter" + File.separator + fileNameWithOutExt;
+    		createIfNotExist(currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter-animations");
+    		String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "spriter-animations" + File.separator + fileNameWithOutExt;
     		createIfNotExist(targetPath);
     		File targetFolder = new File(targetPath);    		
     		resizeSpriterImagesTmpDirToResolution(scmlFile.getName(), sourceFolder, resolutionEntryVO, targetFolder);
+    		try {
+				FileUtils.copyFileToDirectory(scmlFile, targetFolder);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}				
+    		
     	}
     	 try {
              FileUtils.deleteDirectory(sourceFolder);
@@ -1364,9 +1371,11 @@ public class DataManager {
     private void buildAnimations(String targetPath) {
         exportSpineAnimationForResolution("orig", targetPath);
         exportSpriteAnimationForResolution("orig", targetPath);
+        exportSpriterAnimationForResolution("orig", targetPath);
         for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
             exportSpineAnimationForResolution(resolutionEntryVO.name, targetPath);
             exportSpriteAnimationForResolution(resolutionEntryVO.name, targetPath);
+            exportSpriterAnimationForResolution(resolutionEntryVO.name, targetPath);
         }
     }
 
@@ -1380,7 +1389,7 @@ public class DataManager {
         try {
             FileUtils.copyDirectory(fileSrc, fileTargetSpine);
         } catch (IOException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
@@ -1390,12 +1399,26 @@ public class DataManager {
         File fileSrc = new File(spineSrcPath);
         String finalTarget = targetPath + File.separator + res + File.separator + "sprite_animations";
 
-        File fileTargetSpine = new File(finalTarget);
+        File fileTargetSprite = new File(finalTarget);
         try {
-            FileUtils.copyDirectory(fileSrc, fileTargetSpine);
+            FileUtils.copyDirectory(fileSrc, fileTargetSprite);
         } catch (IOException e) {
             //e.printStackTrace();
         }
+    }
+    
+    private void exportSpriterAnimationForResolution(String res, String targetPath) {
+    	String spineSrcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + res + File.separator + "spriter-animations";
+    	createIfNotExist(targetPath + File.separator + res + File.separator + "spriter_animations");
+    	File fileSrc = new File(spineSrcPath);
+    	String finalTarget = targetPath + File.separator + res + File.separator + "spriter_animations";
+    	
+    	File fileTargetSpriter = new File(finalTarget);
+    	try {
+    		FileUtils.copyDirectory(fileSrc, fileTargetSpriter);
+    	} catch (IOException e) {
+    		//e.printStackTrace();
+    	}
     }
 
     private void buildPacks(String targetPath) {
