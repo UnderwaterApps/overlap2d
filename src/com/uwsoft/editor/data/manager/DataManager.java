@@ -1,15 +1,41 @@
 package com.uwsoft.editor.data.manager;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
-import com.sun.xml.internal.txw2.Document;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
@@ -17,35 +43,17 @@ import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.MeshVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class DataManager {
@@ -795,6 +803,9 @@ public class DataManager {
                             File target = new File(targetPath + "/" + newName);
                             FileUtils.copyFile(file, target);
                         } catch (Exception e) {
+                        	e.printStackTrace();
+                        	System.out.println("Error importing particles");
+                        	showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect file in the same directory ");
                         }
                     }
                 }
