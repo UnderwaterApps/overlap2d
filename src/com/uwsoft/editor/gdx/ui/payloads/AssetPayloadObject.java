@@ -8,6 +8,6 @@ public class AssetPayloadObject {
 	public float yOffset;
 
     public enum AssetType {
-        Sprite, Particle, Animation, Component
+        Sprite, Particle, Animation, Spriter, Component
     }
 }

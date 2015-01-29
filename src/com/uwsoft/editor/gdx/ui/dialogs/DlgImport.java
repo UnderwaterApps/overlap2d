@@ -86,7 +86,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                 }
 
                 if (paths.get("spine") != null) {
-                    DataManager.getInstance().importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
+                    DataManager.getInstance().importExternalAnimationsIntoProject(paths.get("spine"), progressHandler);
                 }
 
                 if (paths.get("spriteAnimation") != null) {
