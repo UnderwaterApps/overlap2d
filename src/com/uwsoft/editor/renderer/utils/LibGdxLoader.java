@@ -1,5 +1,6 @@
 package com.uwsoft.editor.renderer.utils;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Set;
 import java.util.Map.Entry;
@@ -50,7 +51,11 @@ public class LibGdxLoader extends Loader<Sprite> implements Disposable{
 	@Override
 	protected Sprite loadResource(FileReference ref) {
 		FileHandle f;
-		String path = super.root+"/"+data.getFile(ref).name;
+		
+		String filename = new File(data.getFile(ref).name).getName();
+		//String path = super.root+"/"+data.getFile(ref).name;
+		String path = super.root+"/"+filename;
+		
 		switch(Gdx.app.getType()){
 		case iOS: f = Gdx.files.absolute(path); break;
 		default: f = Gdx.files.internal(path); break;

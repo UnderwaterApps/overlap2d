@@ -61,7 +61,6 @@ public class SpriterActor extends Actor implements IBaseItem {
         dataVO = vo;
         setX(dataVO.x);
         setY(dataVO.y);
-        setScale(dataVO.scale);
         customVariables.loadFromString(dataVO.customVars);
         this.setRotation(dataVO.rotation);
 
@@ -90,18 +89,22 @@ public class SpriterActor extends Actor implements IBaseItem {
 		currentAnimationIndex	=	dataVO.animation;	
 		currentEntityIndex		=	dataVO.entity;	
 		initPlayer();
-	
     }
 
     private void initPlayer() {
     	player = new Player(data.getEntity(currentEntityIndex));
     	player.setAnimation(currentAnimationIndex);
+    	player.setScale(dataVO.scale * this.mulX);
+    	setRectangle();		
+	}
+
+	private void setRectangle() {
+		player.update();
 		Rectangle bbox = player.getBoundingRectangle(null);
         frameWidth = (int) bbox.size.width;
 		frameHeight = (int) bbox.size.height;
         setWidth(frameWidth);
-        setHeight(frameHeight);
-		
+        setHeight(frameHeight);	
 	}
 
 	@Override
@@ -117,24 +120,22 @@ public class SpriterActor extends Actor implements IBaseItem {
         super.draw(batch, parentAlpha);
         
         player.setPosition(getX(), getY());
-        player.setScale(dataVO.scale);
-        player.rotate(getRotation()-player.getAngle());
-        
-        drawer.beforeDraw(player,batch);
+        player.setScale(dataVO.scale * this.mulX);
+        player.rotate(getRotation()-player.getAngle());        
+        drawer.beforeDraw(player,batch);        
     }
     @Override
     public void renew() {
         setX(dataVO.x * this.mulX);
         setY(dataVO.y * this.mulY);
-        setScale(dataVO.scale);
-        setRotation(dataVO.rotation);
-        
-        customVariables.loadFromString(dataVO.customVars);
+        player.setScale(dataVO.scale * this.mulX);
+        setRotation(dataVO.rotation);        
+        customVariables.loadFromString(dataVO.customVars);       
+        setRectangle();
     }
 
-    public void setSpriterScale(float scale) {
-    	super.setScale(scale, scale);    	
-    	dataVO.scale = scale;
+    public void setSpriterScale(float scale) {  	
+    	dataVO.scale = scale;    	
     	renew();
     }
   
@@ -206,6 +207,7 @@ public class SpriterActor extends Actor implements IBaseItem {
         setX(dataVO.x * this.mulX);
         setY(dataVO.y * this.mulY);
         updateDataVO();
+        initPlayer();
     }
 
     @Override
