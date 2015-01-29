@@ -80,6 +80,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
     public SandboxStage() {
         super();
+
         instance = this;
         cameraPanOn = false;
         isUsingSelectionTool = false;
