@@ -25,7 +25,7 @@ public class SpriterAnimationProperties extends PropertyBox implements IProperty
     private SelectBoxItem<String> animationSelectbox;
     private SelectBoxItem<String> entitySelectbox;
 
-    public SpriterAnimationProperties(SandboxStage sandboxStage, SceneLoader sceneLoader) {
+    public SpriterAnimationProperties(SandboxStage sandboxStage, SceneLoader sceneLoader) {    	
         super(sceneLoader, "spriterAnimationProperties");
         this.sandboxStage = sandboxStage;
     }
