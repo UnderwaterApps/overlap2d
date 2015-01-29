@@ -81,7 +81,7 @@ public class SandboxResourceManager implements IResourceRetriever {
     }
 
 	@Override
-	public FileHandle getSCMLFile(String name) {
+	public FileHandle getSCMLFile(String name) {		
 		return TextureManager.getInstance().getProjectSpriterAnimationsList().get(name);		
 	}
 

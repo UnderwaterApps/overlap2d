@@ -99,6 +99,7 @@ public class DlgExport extends CompositeDialog {
         paths.put("atlas", paths.get("global"));
         paths.put("effects", paths.get("global"));
         paths.put("spine", paths.get("global"));
+        paths.put("spriter", paths.get("global"));
         paths.put("fonts", paths.get("global"));
     }
 
