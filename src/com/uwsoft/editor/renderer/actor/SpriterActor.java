@@ -246,8 +246,9 @@ public class SpriterActor extends Actor implements IBaseItem {
 
 	public ArrayList<String> getAnimations() {		
 		animations	=	new ArrayList<String>();
-		for (int i = 0; i < data.getEntity(currentEntityIndex).getAnimations().length; i++) {
-			animations.add(data.getEntity(currentEntityIndex).getAnimations()[i].name);
+		
+		for (int i = 0; i < data.getEntity(currentEntityIndex).animations(); i++) {
+			animations.add(data.getEntity(currentEntityIndex).getAnimation(i).name);
 		} 
         return animations;
     }
