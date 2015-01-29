@@ -464,10 +464,12 @@ public class DataManager {
         Settings settings = new Settings();
 
         settings.flattenPaths = true;
-        settings.maxHeight = getMinSquareNum(resEntry.height);
-        settings.maxWidth = getMinSquareNum(resEntry.height);
-        settings.filterMag = TextureFilter.Linear;
-        settings.filterMin = TextureFilter.Linear;
+//        settings.maxHeight = getMinSquareNum(resEntry.height);
+//        settings.maxWidth = getMinSquareNum(resEntry.height);
+        settings.maxHeight 	= Integer.parseInt(currentProjectVO.texturepackerHeight);
+        settings.maxWidth 	= Integer.parseInt(currentProjectVO.texturepackerWidth);
+        settings.filterMag 	= TextureFilter.Linear;
+        settings.filterMin 	= TextureFilter.Linear;
 
         TexturePacker tp = new TexturePacker(settings);
 
@@ -1456,7 +1458,11 @@ public class DataManager {
     public void setExportPaths(File path) {
         currentProjectVO.projectMainExportPath = path.getPath();
     }
-
+    public void setTexturePackerSizes(String width, String height) {
+    	currentProjectVO.texturepackerWidth 	= width; 
+    	currentProjectVO.texturepackerHeight 	= height; 
+    }
+    
     public String getRootPath() {
         File root = new File(new File(".").getAbsolutePath()).getParentFile();
         return root.getAbsolutePath();

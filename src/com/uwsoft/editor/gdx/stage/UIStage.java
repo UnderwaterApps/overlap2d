@@ -174,6 +174,14 @@ public class UIStage extends BaseStage {
 
         return dlg;
     }
+    public InfoDialog showInfoDialogNavigateBack(String desc) {
+    	InfoDialog dlg = new InfoDialog(this);
+    	dlg.setDescription(desc);
+    	addActor(dlg);
+    	dlg.show();
+    	
+    	return dlg;
+    }
 
     public DlgExport showExportDialog() {
         DlgExport dlg = new DlgExport(this);

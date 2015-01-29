@@ -23,17 +23,23 @@ import com.uwsoft.editor.renderer.actor.TextButtonItem;
 public class DlgExport extends CompositeDialog {
 
     private final TextBoxItem projectAssets;
-
+    private final TextBoxItem packerWidth;
+    private final TextBoxItem packerHeight;
+    private ProjectVO projectVO;
     private HashMap<String, File> paths = new HashMap<>();
 
     public DlgExport(UIStage s) {
-        super(s, "exportSettingsDlg", 480, 160);
+        super(s, "exportSettingsDlg", 480, 230);
 
         setTitle("Export settings");
 
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
-
-        projectAssets = ui.getTextBoxById("projectAssetsPath");
+       
+        projectVO = DataManager.getInstance().getCurrentProjectVO();
+        packerWidth 	= ui.getTextBoxById("packerWidth");
+        packerWidth.setText(projectVO.texturepackerWidth);
+        packerHeight 	= ui.getTextBoxById("packerHeight");
+        packerHeight.setText(projectVO.texturepackerHeight);
+        projectAssets 	= ui.getTextBoxById("projectAssetsPath");
         projectAssets.setDisabled(true);
         projectAssets.setText(projectVO.projectMainExportPath);
         paths.put("global", new File(projectVO.projectMainExportPath));
@@ -99,6 +105,16 @@ public class DlgExport extends CompositeDialog {
 
     private void saveNewExportPaths() {
         // save before importing
+    	int width	=	Integer.parseInt(packerWidth.getText());
+    	int height	=	Integer.parseInt(packerHeight.getText());
+    	if(! ((width > 0) && ((width & (width - 1)) == 0) && (width > 0) && ((height & (height - 1)) == 0))){    		
+    		stage.showInfoDialogNavigateBack("Width and height must be power of 2");
+    		return;
+    	}
+    	if(width!=Integer.parseInt(projectVO.texturepackerWidth) || height!=Integer.parseInt(projectVO.texturepackerHeight)){
+    		DataManager.getInstance().setTexturePackerSizes(Integer.toString(width),Integer.toString(height));    		
+    		DataManager.getInstance().rePackProjectImagesForAllResolutions();
+    	}
         DataManager.getInstance().setExportPaths(paths.get("global"));
         DataManager.getInstance().saveCurrentProject();
 
