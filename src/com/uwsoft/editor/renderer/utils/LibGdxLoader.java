@@ -55,7 +55,7 @@ public class LibGdxLoader extends Loader<Sprite> implements Disposable{
 		String filename = new File(data.getFile(ref).name).getName();
 		//String path = super.root+"/"+data.getFile(ref).name;
 		String path = super.root+"/"+filename;
-		
+		System.out.println(path);
 		switch(Gdx.app.getType()){
 		case iOS: f = Gdx.files.absolute(path); break;
 		default: f = Gdx.files.internal(path); break;
