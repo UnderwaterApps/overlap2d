@@ -1118,6 +1118,13 @@ public class DataManager {
             }
             try {
                 BufferedImage bufferedImage = performResize ? ResolutionManager.imageResize(file, ratio) : ImageIO.read(file);
+                
+                File target = new File(targetPath);
+                if (!target.exists()) {
+                    File newFile = new File(targetPath);
+                    newFile.mkdir();
+                }
+                
                 ImageIO.write(bufferedImage, "png", new File(targetPath + "/" + file.getName().replace("_", "")));
             } catch (IOException e) {
                 e.printStackTrace();
