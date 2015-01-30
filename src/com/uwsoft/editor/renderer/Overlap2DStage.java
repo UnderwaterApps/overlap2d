@@ -91,6 +91,12 @@ public class Overlap2DStage extends Stage {
         essentials.rm = rm;
 	}
 
+	public void initSceneLoader(ResourceManager rm) {
+		sceneLoader = new SceneLoader(essentials);
+		essentials.rayHandler.setWorld(essentials.world);
+		essentials.rm = rm;
+	}
+
     /**
      * Does the routine of configuring the default light system
      * by setting gray ambient light, and some settings
