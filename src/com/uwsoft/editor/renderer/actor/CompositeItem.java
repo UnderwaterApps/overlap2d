@@ -584,7 +584,10 @@ public class CompositeItem extends Group implements IBaseItem {
             PhysicsBodyDataVO bodyData = itemVO.physicsBodyData;
 
             if( itemVO.meshId < 0 || bodyData == null) continue;
-            
+
+            if( essentials.rm.getProjectVO().meshes.get(itemVO.meshId) == null) {
+                continue;
+            }
             item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
             item.getBody().setUserData(item);
         }
