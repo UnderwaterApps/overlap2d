@@ -13,3 +13,4 @@ target/
 config.pit
 contributors.txt
 assets/app.properties
+/overlog.txt
