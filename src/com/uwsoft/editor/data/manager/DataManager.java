@@ -312,7 +312,7 @@ public class DataManager {
         // check if current project requires cleanup
         // Cleanup unused meshes
         // 1. open all scenes make list of mesh_id's and then remove all unused meshes
-        HashSet<Integer> uniqueMeshIds = new HashSet<>();
+        HashSet<String> uniqueMeshIds = new HashSet<>();
         FileHandle sourceDir = new FileHandle(currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/");
         for (FileHandle entry : sourceDir.list(new DTFilenameFilter())) {
             if (!entry.file().isDirectory()) {
@@ -321,29 +321,30 @@ public class DataManager {
                 if (sceneVO.composite == null) continue;
                 ArrayList<MainItemVO> items = sceneVO.composite.getAllItems();
                 for (MainItemVO vo : items) {
-                    if (vo.meshId == -1) continue;
+                    if (vo.meshId == "-1") continue;
                     uniqueMeshIds.add(vo.meshId);
                 }
                 for (CompositeItemVO libraryItem : sceneVO.libraryItems.values()) {
                     if (libraryItem.composite == null) continue;
                     items = libraryItem.composite.getAllItems();
                     for (MainItemVO vo : items) {
-                        if (vo.meshId == -1) continue;
+                        if (vo.meshId == "-1") continue;
                         uniqueMeshIds.add(vo.meshId);
                     }
                 }
             }
         }
         // addsset list
-        for (Integer meshId : currentProjectInfoVO.assetMeshMap.values()) {
+        for (String meshId : currentProjectInfoVO.assetMeshMap.values()) {
             uniqueMeshIds.add(meshId);
         }
 
         // check for not used meshes and remove
-        Iterator<Map.Entry<Integer, MeshVO>> iter = currentProjectInfoVO.meshes.entrySet().iterator();
+        Iterator<Map.Entry<String, MeshVO>> iter = currentProjectInfoVO.meshes.entrySet().iterator();
         while (iter.hasNext()) {
-            Map.Entry<Integer, MeshVO> entry = iter.next();
+            Map.Entry<String, MeshVO> entry = iter.next();
             if (!uniqueMeshIds.contains(entry.getKey())) {
+            	System.out.println("KEY " +entry.getKey());
                 iter.remove();
                 System.out.println("meshe removed");
             }

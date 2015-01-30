@@ -268,7 +268,7 @@ public class ItemPhysicsEditor extends Group {
 		}
 		
 		ProjectInfoVO projectInfo = DataManager.getInstance().getCurrentProjectInfoVO();
-		if(currentItem.getDataVO().meshId>=0){
+		if(Integer.parseInt(currentItem.getDataVO().meshId)>=0){
 			Vector2 localToGlobal = new Vector2();
 			currentActor.localToStageCoordinates(localToGlobal);
 			MeshVO mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
@@ -339,23 +339,23 @@ public class ItemPhysicsEditor extends Group {
                     mesh.minPolygonData = new Vector2[minPolies.length][];
                     mesh.initialProperties = new PhysicsBodyDataVO(physicsBodyDataVO);
                     arrayCopy(minPolies, mesh.minPolygonData, true);
-                    Integer meshKey = projectInfo.addNewMesh(mesh);
-                    projectInfo.assetMeshMap.put(assetName, meshKey);
+                    String meshKey = projectInfo.addNewMesh(mesh);
+                    projectInfo.assetMeshMap.put(assetName, meshKey+"");
                 }
 			}
 		}else if(currentItem != null){
-			if(currentItem.getDataVO().meshId>=0){
+			if(Integer.parseInt(currentItem.getDataVO().meshId)>=0){
 				mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
 				mesh.minPolygonData = new Vector2[minPolies.length][];
 				arrayCopy(minPolies, mesh.minPolygonData, true);
 			}else{
                 if(minPolies == null) {
-                    currentItem.getDataVO().meshId = -1;
+                    currentItem.getDataVO().meshId = "-1";
                 } else {
                     mesh = new MeshVO();
                     mesh.minPolygonData = new Vector2[minPolies.length][];
                     arrayCopy(minPolies, mesh.minPolygonData, true);
-                    Integer meshKey = projectInfo.addNewMesh(mesh);
+                    String meshKey = projectInfo.addNewMesh(mesh);
                     currentItem.getDataVO().meshId = meshKey;
                 }
 			}
@@ -777,7 +777,7 @@ public class ItemPhysicsEditor extends Group {
                 projectInfo.assetMeshMap.remove(assetName);
             }
         } else if(currentItem != null) {
-            if (currentItem != null) currentItem.getDataVO().meshId = -1;
+            if (currentItem != null) currentItem.getDataVO().meshId = "-1";
             currentItem.getDataVO().physicsBodyData = null;
         }
         minPolies = null;
