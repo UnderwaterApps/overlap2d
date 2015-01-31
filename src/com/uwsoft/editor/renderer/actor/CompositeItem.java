@@ -518,7 +518,7 @@ public class CompositeItem extends Group implements IBaseItem {
         reAssembleLayers();
 
         //apply physics
-        if(item.getDataVO().physicsBodyData != null && item.getDataVO().meshId >= 0) {
+        if(item.getDataVO().physicsBodyData != null && Integer.parseInt(item.getDataVO().meshId) >= 0) {
         	Vector2 toStageVec = new Vector2();
     		toStageVec.set(item.getDataVO().x * this.mulX, item.getDataVO().y * this.mulY);
             localToStageCoordinates(toStageVec);
@@ -583,7 +583,7 @@ public class CompositeItem extends Group implements IBaseItem {
             MainItemVO itemVO = item.getDataVO();
             PhysicsBodyDataVO bodyData = itemVO.physicsBodyData;
 
-            if( itemVO.meshId < 0 || bodyData == null) continue;
+            if( Integer.parseInt(itemVO.meshId) < 0 || bodyData == null) continue;
 
             if( essentials.rm.getProjectVO().meshes.get(itemVO.meshId) == null) {
                 continue;
