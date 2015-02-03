@@ -1427,15 +1427,15 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
         ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
         Actor firstItem = (Actor) fakeItem.getItems().get(0);
-        float offsetX = firstItem.getX();
-        float offsetY = firstItem.getY();
+        float offsetX = firstItem.getX()*currentScene.mulX;
+        float offsetY = firstItem.getY()*currentScene.mulY;
         for (int i = 1; i < fakeItem.getItems().size(); i++) {
             Actor item = (Actor) fakeItem.getItems().get(i);
-            if (item.getX() < offsetX) {
-                offsetX = item.getX();
+            if (item.getX()*currentScene.mulX < offsetX) {
+                offsetX = item.getX()*currentScene.mulX;
             }
-            if (item.getY() < offsetY) {
-                offsetY = item.getY();
+            if (item.getY()*currentScene.mulY < offsetY) {
+                offsetY = item.getY()*currentScene.mulY;
             }
         }
         Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) getCamera()).position;
