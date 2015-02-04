@@ -1,5 +1,7 @@
 package com.uwsoft.editor.gdx.stage;
 
+import box2dLight.Light;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -1560,6 +1562,57 @@ public class SandboxStage extends BaseStage implements TypeConstants {
             }
         }
         return lowestY;
+    }
+    
+    public void disableLights(boolean disable) {
+    	
+    	ArrayList<LightActor> lights = getAllLights(currentScene);
+//        if (disable) {
+//            lights = essentials.rayHandler.lightList;
+//        } else {
+//            lights = essentials.rayHandler.disabledLights;
+//        }
+        for (int i = lights.size() - 1; i >= 0; i--) {
+        	LightActor lightActor = lights.get(i); 
+        	if(lightActor.lightObject !=null){
+        		lightActor.lightObject.setActive(!disable);
+        	}
+            
+        }
+    }
+    
+    
+    private ArrayList<LightActor> getAllLights(CompositeItem curComposite){
+    	
+    	ArrayList<LightActor> lights = new ArrayList<LightActor>();
+    	
+    	if(curComposite == null){
+    		return lights;
+    	}
+    	
+    	ArrayList<IBaseItem> items = curComposite.getItems();
+
+    	ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
+
+    	
+    	int i=0;
+    	for(i=0;i<items.size();i++){
+    		IBaseItem item = items.get(i);
+    		if(item instanceof LightActor){
+    			lights.add((LightActor) item);
+    		}
+    		
+    		if( item instanceof CompositeItem){
+    			nestedComposites.add((CompositeItem) item);
+    		}
+    		
+    	}
+    	    	
+    	for(i=0;i<nestedComposites.size();i++){
+    		lights.addAll(getAllLights(nestedComposites.get(i)));
+    	}
+    	
+    	return lights;
     }
 
     @Override

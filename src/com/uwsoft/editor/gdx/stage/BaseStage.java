@@ -54,19 +54,6 @@ public class BaseStage extends Overlap2DStage {
         UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
     }
 
-    public void disableLights(boolean disable) {
-
-        Array<Light> lights;
-        if (disable) {
-            lights = essentials.rayHandler.lightList;
-        } else {
-            lights = essentials.rayHandler.disabledLights;
-        }
-        for (int i = lights.size - 1; i >= 0; i--) {
-            lights.get(i).setActive(!disable);
-        }
-    }
-
     public void disableAmbience(boolean disable) {
         if (disable) {
             essentials.rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 1f);
