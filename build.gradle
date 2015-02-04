@@ -16,7 +16,7 @@ allprojects {
     ext {
         appName = 'Overlap2D'
         gdxVersion = '1.5.3'
-        box2DLightsVersion = '1.2'
+        box2DLightsVersion = '1.3'
     }
 
     repositories {
