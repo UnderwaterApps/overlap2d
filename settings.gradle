@@ -1,4 +1,0 @@
-include 'spine-runtime-libgdx'
-include 'spriter'
-project(':spine-runtime-libgdx').projectDir = new File(settingsDir, '../spine-runtimes/spine-libgdx')
-project(':spriter').projectDir = new File(settingsDir, '../spriter')
