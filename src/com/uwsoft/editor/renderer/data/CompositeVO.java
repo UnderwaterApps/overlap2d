@@ -21,6 +21,7 @@ public class CompositeVO {
     public ArrayList<LightVO> sLights = new ArrayList<>(1);
     public ArrayList<SpineVO> sSpineAnimations = new ArrayList<>(1);
     public ArrayList<SpriteAnimationVO> sSpriteAnimations = new ArrayList<>(1);
+    public ArrayList<SpriterVO> sSpriterAnimations = new ArrayList<>(1);
 
     public ArrayList<LayerItemVO> layers = new ArrayList<LayerItemVO>();
 
@@ -78,6 +79,10 @@ public class CompositeVO {
         for (int i = 0; i < vo.sSpriteAnimations.size(); i++) {
             sSpriteAnimations.add(new SpriteAnimationVO(vo.sSpriteAnimations.get(i)));
         }
+        
+        for (int i = 0; i < vo.sSpriterAnimations.size(); i++) {
+        	sSpriterAnimations.add(new SpriterVO(vo.sSpriterAnimations.get(i)));
+        }
 
 
         layers.clear();
@@ -123,6 +128,9 @@ public class CompositeVO {
         if (className.equals("SpineVO")) {
             sSpineAnimations.add((SpineVO) vo);
         }
+        if (className.equals("SpriterVO")) {
+            sSpriterAnimations.add((SpriterVO) vo);
+        }
         if (className.equals("SpriteAnimationVO")) {
             sSpriteAnimations.add((SpriteAnimationVO) vo);
         }
@@ -166,6 +174,9 @@ public class CompositeVO {
         if (className.equals("SpriteAnimationVO")) {
             sSpriteAnimations.remove((SpriteAnimationVO) vo);
         }
+        if (className.equals("SpriterVO")) {
+        	sSpriterAnimations.remove((SpriterVO) vo);
+        }
     }
 
     public void clear() {
@@ -180,6 +191,7 @@ public class CompositeVO {
         sLights.clear();
         sSpineAnimations.clear();
         sSpriteAnimations.clear();
+        sSpriterAnimations.clear();
     }
 
     public boolean isEmpty() {
@@ -194,6 +206,7 @@ public class CompositeVO {
                 sParticleEffects.size() == 0 &&
                 sCheckBoxes.size() == 0 &&
                 sSpriteAnimations.size() == 0 &&
+                sSpriterAnimations.size() == 0 &&
                 sSpineAnimations.size() == 0 &&
                 sSelectBoxes.size() == 0 &&
                 sTextBox.size() == 0;
@@ -242,6 +255,21 @@ public class CompositeVO {
         list.toArray(finalList);
 
         return finalList;
+    }
+    
+    public String[] getRecursiveSpriterAnimationList() {
+    	HashSet<String> list = new HashSet<>();
+    	for (SpriterVO sSpriterAnimation : sSpriterAnimations) {
+    		list.add(sSpriterAnimation.animationName);
+    	}
+    	for (CompositeItemVO sComposite : sComposites) {
+    		String[] additionalList = sComposite.composite.getRecursiveSpriterAnimationList();
+    		Collections.addAll(list, additionalList);
+    	}
+    	String[] finalList = new String[list.size()];
+    	list.toArray(finalList);
+    	
+    	return finalList;
     }
 
     public FontSizePair[] getRecursiveFontList() {
@@ -296,6 +324,9 @@ public class CompositeVO {
         }
         for(MainItemVO vo: compositeVo.sSpriteAnimations) {
             itemsList.add(vo);
+        }
+        for(MainItemVO vo: compositeVo.sSpriterAnimations) {
+        	itemsList.add(vo);
         }
         for(MainItemVO vo: compositeVo.sTextBox) {
             itemsList.add(vo);

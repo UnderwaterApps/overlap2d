@@ -15,16 +15,16 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 public class SimpleButtonScript implements IScript {
 
     public static final int TEXT_EFFECT_NONE = 0;
-    private int textEffect = TEXT_EFFECT_NONE;
+    protected int textEffect = TEXT_EFFECT_NONE;
     public static final int TEXT_EFFECT_PUSH = 1;
     public static final int TEXT_EFFECT_DOWN = 2;
-    private final DelayedRemovalArray<ClickListener> listeners = new DelayedRemovalArray(0);
+    protected final DelayedRemovalArray<ClickListener> listeners = new DelayedRemovalArray(0);
     protected CompositeItem buttonHolder;
     protected boolean isDown = false;
-    private boolean isToggled = false;
-    private float origTextY;
-    private float origTextScaleX;
-    private float origTextScaleY;
+    protected boolean isToggled = false;
+    protected float origTextY;
+    protected float origTextScaleX;
+    protected float origTextScaleY;
     
     public static SimpleButtonScript selfInit(CompositeItem item) {
         SimpleButtonScript script = new SimpleButtonScript();

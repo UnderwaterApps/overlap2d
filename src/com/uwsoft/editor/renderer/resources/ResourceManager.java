@@ -1,10 +1,7 @@
 package com.uwsoft.editor.renderer.resources;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
+import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -15,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Json;
-import com.uwsoft.editor.renderer.data.CompositeVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.utils.MySkin;
 
 /**
@@ -40,29 +34,32 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public String scenesPath = "scenes";
     public String particleEffectsPath = "particles";
     public String spriteAnimationsPath = "sprite_animations";
+    public String spriterAnimationsPath = "spriter_animations";
     public String spineAnimationsPath = "spine_animations";
     public String fontsPath = "freetypefonts";
 
-    private float resMultiplier;
+    protected float resMultiplier;
 
-    private ProjectInfoVO projectVO;
+    protected ProjectInfoVO projectVO;
 
-    private ArrayList<String> preparedSceneNames = new ArrayList<>();
-    private HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
+    protected ArrayList<String> preparedSceneNames = new ArrayList<>();
+    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
 
-    private HashSet<String> particleEffectNamesToLoad = new HashSet<>();
-    private HashSet<String> spineAnimNamesToLoad = new HashSet<>();
-    private HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
-    private HashSet<FontSizePair> fontsToLoad = new HashSet<>();
+    protected HashSet<String> particleEffectNamesToLoad = new HashSet<>();
+    protected HashSet<String> spineAnimNamesToLoad = new HashSet<>();
+    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
+    protected HashSet<String> spriterAnimNamesToLoad = new HashSet<>();
+    protected HashSet<FontSizePair> fontsToLoad = new HashSet<>();
 
-    private TextureAtlas mainPack;
-    private HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
+    protected TextureAtlas mainPack;
+    protected HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
 
-    private HashMap<String, TextureAtlas> skeletonAtlases = new HashMap<String, TextureAtlas>();
-    private HashMap<String, FileHandle> skeletonJSON = new HashMap<String, FileHandle>();
+    protected HashMap<String, TextureAtlas> skeletonAtlases = new HashMap<String, TextureAtlas>();
+    protected HashMap<String, FileHandle> skeletonJSON = new HashMap<String, FileHandle>();
 
-    private HashMap<String, TextureAtlas> spriteAnimations = new HashMap<String, TextureAtlas>();
-    private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
+    protected HashMap<String, TextureAtlas> spriteAnimations = new HashMap<String, TextureAtlas>();
+    protected HashMap<String, FileHandle> spriterAnimations = new HashMap<String, FileHandle>();
+    protected HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
     /**
      * Constructor does nothing
@@ -152,6 +149,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         particleEffectNamesToLoad.clear();
         spineAnimNamesToLoad.clear();
         spriteAnimNamesToLoad.clear();
+        spriterAnimNamesToLoad.clear();
         fontsToLoad.clear();
 
         for (String preparedSceneName : preparedSceneNames) {
@@ -163,11 +161,22 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] particleEffects = composite.getRecursiveParticleEffectsList();
             String[] spineAnimations = composite.getRecursiveSpineAnimationList();
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
+            String[] spriterAnimations = composite.getRecursiveSpriterAnimationList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
+            for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
+                FontSizePair[] libFonts = library.composite.getRecursiveFontList();
+                Collections.addAll(fontsToLoad, libFonts);
+
+                // loading particle effects used in library items
+                String[] libEffects = library.composite.getRecursiveParticleEffectsList();
+                Collections.addAll(particleEffectNamesToLoad, libEffects);
+            }
+
             //
             Collections.addAll(particleEffectNamesToLoad, particleEffects);
             Collections.addAll(spineAnimNamesToLoad, spineAnimations);
             Collections.addAll(spriteAnimNamesToLoad, spriteAnimations);
+            Collections.addAll(spriterAnimNamesToLoad, spriterAnimations);
             Collections.addAll(fontsToLoad, fonts);
         }
     }
@@ -181,6 +190,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         loadParticleEffects();
         loadSpineAnimations();
         loadSpriteAnimations();
+        loadSpriterAnimations();
         loadFonts();
     }
 
@@ -224,22 +234,42 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             spriteAnimations.put(name, animAtlas);
         }
     }
+    @Override
+    public void loadSpriterAnimations() {
+    	// empty existing ones that are not scheduled to load
+    	for (String key : spriterAnimations.keySet()) {
+    		if (!spriterAnimNamesToLoad.contains(key)) {
+    			spriterAnimations.remove(key);
+    		}
+    	}
+    	for (String name : spriterAnimNamesToLoad) {
+    		FileHandle animFile = Gdx.files.internal("orig" + File.separator + spriterAnimationsPath + File.separator + name + File.separator + name + ".scml");
+    		spriterAnimations.put(name, animFile);
+    	}
+    }
     
+
     public void loadSpineAnimation(String name) {
         TextureAtlas animAtlas = new TextureAtlas(Gdx.files.internal(packResolutionName + File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".atlas"));
         skeletonAtlases.put(name, animAtlas);
         skeletonJSON.put(name, Gdx.files.internal("orig"+ File.separator + spineAnimationsPath + File.separator + name + File.separator + name + ".json"));
     }
+  
 
     @Override
     public void loadSpineAnimations() {
         // empty existing ones that are not scheduled to load
-        for (String key : skeletonAtlases.keySet()) {
-            if (!spriteAnimNamesToLoad.contains(key)) {
-                skeletonAtlases.remove(key);
-                skeletonJSON.remove(key);
+        Iterator it = skeletonAtlases.entrySet().iterator();
+        while (it.hasNext()) {
+            Map.Entry pairs = (Map.Entry)it.next();
+            if(spineAnimNamesToLoad.contains(pairs.getKey())) {
+                spineAnimNamesToLoad.remove(pairs.getKey());
+            } else {
+                it.remove();
+                skeletonJSON.remove(pairs.getKey());
             }
         }
+
 
         for (String name : spineAnimNamesToLoad) {
         	loadSpineAnimation(name);
@@ -362,4 +392,9 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public void dispose() {
         mainPack.dispose();
     }
+
+	@Override
+	public FileHandle getSCMLFile(String name) {
+		return spriterAnimations.get(name);
+	}
 }

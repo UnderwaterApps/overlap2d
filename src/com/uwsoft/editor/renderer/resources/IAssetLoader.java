@@ -12,4 +12,5 @@ public interface IAssetLoader {
     public void loadSpriteAnimations();
     public void loadSpineAnimations();
     public void loadFonts();
+	void loadSpriterAnimations();
 }

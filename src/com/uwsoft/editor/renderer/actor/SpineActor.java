@@ -13,82 +13,84 @@ import com.uwsoft.editor.renderer.spine.SpineDataHelper;
 import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class SpineActor extends Actor implements IBaseItem{
-	
-	public SpineVO dataVO;	
-	public float mulX = 1f;
-	public float mulY = 1f;
-	
-	protected int layerIndex = 0;
-	private boolean isLockedByLayer = false;
-	private CompositeItem parentItem = null;
-	
-	private Essentials essentials;
+public class SpineActor extends Actor implements IBaseItem {
 
+    public SpineVO dataVO;
+    public float mulX = 1f;
+    public float mulY = 1f;
+	
+    protected int layerIndex = 0;
+    private boolean isLockedByLayer = false;
+    private CompositeItem parentItem = null;
+	
+    private Essentials essentials;
     private CustomVariables customVariables = new CustomVariables();
     
 	private SpineReflectionHelper spineReflectionHelper;
 	private SpineDataHelper spineData;
-	
-	private Body body;
-	
-	public SpineActor(SpineVO vo, Essentials e,CompositeItem parent) {
-		this(vo, e);
-		setParentItem(parent);
-	}
 
-	public SpineActor(SpineVO vo, Essentials e) {
-		essentials = e;
+	//private float minX = 0;
+    //private float minY = 0;
+
+    private Body body;
+
+    public SpineActor(SpineVO vo, Essentials e, CompositeItem parent) {
+        this(vo, e);
+        setParentItem(parent);
+    }
+
+    public SpineActor(SpineVO vo, Essentials e) {
+        essentials = e;
 		this.spineReflectionHelper = essentials.spineReflectionHelper;
 
         dataVO = vo;
 
         initSpine();
 
-		setX(dataVO.x);
-		setY(dataVO.y);
-		setScaleX(dataVO.scaleX);
-		setScaleY(dataVO.scaleY);
-        customVariables.loadFromString(dataVO.customVars);
-		this.setRotation(dataVO.rotation); 
-		
-		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
-				
-		if(dataVO.tint == null) {			
-			setTint(new Color(1, 1, 1, 1));	
-		} else {
-			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
-		}
-		
-	}
+        setX(dataVO.x);
+        setY(dataVO.y);
+        setScaleX(dataVO.scaleX);
+        setScaleY(dataVO.scaleY);
 
-//    private void computeBoundBox() {
-//        skeleton.updateWorldTransform();
-//        minX = Float.MAX_VALUE; minY = Float.MAX_VALUE;
-//        float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE;
-//        for (int i = 0, n = skeleton.getSlots().size; i < n; i++) {
-//            Slot slot = skeleton.getSlots().get(i);
-//            Attachment attachment = slot.getAttachment();
-//            if (attachment == null) continue;
-//            if (!(attachment instanceof RegionAttachment)) continue;
-//            RegionAttachment imageRegion = (RegionAttachment)attachment;
-//            imageRegion.updateWorldVertices(slot, false);
-//            float[] vertices = imageRegion.getWorldVertices();
-//            for (int ii = 0, nn = vertices.length; ii < nn; ii +=5) {
-//                minX = Math.min(minX, vertices[ii]);
-//                minY = Math.min(minY, vertices[ii + 1]);
-//                maxX = Math.max(maxX, vertices[ii]);
-//                maxY = Math.max(maxY, vertices[ii + 1]);
-//            }
-//        }
-//
-//        setWidth(maxX - minX);
-//        setHeight(maxY - minY);
-//    }
+        customVariables.loadFromString(dataVO.customVars);
+        this.setRotation(dataVO.rotation);
+
+        if (dataVO.zIndex < 0) dataVO.zIndex = 0;
+
+        if (dataVO.tint == null) {
+            setTint(new Color(1, 1, 1, 1));
+        } else {
+            setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
+        }
+
+    }
+
+    //private void computeBoundBox() {
+    //    skeleton.updateWorldTransform();
+    //    minX = Float.MAX_VALUE;
+    //    minY = Float.MAX_VALUE;
+    //    float maxX = Float.MIN_VALUE, maxY = Float.MIN_VALUE;
+    //    for (int i = 0, n = skeleton.getSlots().size; i < n; i++) {
+    //        Slot slot = skeleton.getSlots().get(i);
+    //        Attachment attachment = slot.getAttachment();
+    //        if (attachment == null) continue;
+    //        if (!(attachment instanceof RegionAttachment)) continue;
+    //        RegionAttachment imageRegion = (RegionAttachment) attachment;
+    //        imageRegion.updateWorldVertices(slot, false);
+    //        float[] vertices = imageRegion.getWorldVertices();
+    //        for (int ii = 0, nn = vertices.length; ii < nn; ii += 5) {
+    //            minX = Math.min(minX, vertices[ii]);
+    //            minY = Math.min(minY, vertices[ii + 1]);
+    //            maxX = Math.max(maxX, vertices[ii]);
+    //            maxY = Math.max(maxY, vertices[ii + 1]);
+    //        }
+    //    }
+	//
+    //    setWidth(maxX - minX);
+    //    setHeight(maxY - minY);
+    //}
+
 	
-	public Array<Object> getAnimations() {
-		return spineData.getAnimations();
-	}
 
     private void initSpine() {
     	spineData = new SpineDataHelper();
@@ -113,6 +115,10 @@ public class SpineActor extends Actor implements IBaseItem{
     	setWidth(spineData.width);
     	setHeight(spineData.height);
     }
+	
+	public Array<Object> getAnimations() {
+		return spineData.getAnimations();
+	}
 	
 	public void setAnimation(String animName){
 		spineData.setAnimation(animName);
@@ -170,47 +176,48 @@ public class SpineActor extends Actor implements IBaseItem{
 	
 
 
-	public void renew() {
-		setX(dataVO.x*this.mulX);
-		setY(dataVO.y*this.mulY);
+    public void renew() {
+        setX(dataVO.x * this.mulX);
+        setY(dataVO.y * this.mulY);
         setScaleX(dataVO.scaleX);
         setScaleY(dataVO.scaleY);
-		setRotation(dataVO.rotation);
-        setColor(dataVO.tint[0],dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
+        setRotation(dataVO.rotation);
+        setColor(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
         customVariables.loadFromString(dataVO.customVars);
         initSpine();
-	}
+    }
 
-	@Override
-	public boolean isLockedByLayer() {
-		return isLockedByLayer;
-	}
 
-	@Override
-	public void setLockByLayer(boolean isLocked) {
-		isLockedByLayer = isLocked;
-	}
+    @Override
+    public boolean isLockedByLayer() {
+        return isLockedByLayer;
+    }
 
-	@Override
-	public boolean isComposite() {
-		return false;
-	}
-	
-	public void updateDataVO() {
-		dataVO.x = getX()/this.mulX;
-		dataVO.y = getY()/this.mulY;
-		dataVO.rotation = getRotation();
-		
-		if(getZIndex()>=0){
-			dataVO.zIndex = getZIndex();
-		}
-		
-		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
-			dataVO.layerName = "Default";
-		}
+    @Override
+    public void setLockByLayer(boolean isLocked) {
+        isLockedByLayer = isLocked;
+    }
+
+    @Override
+    public boolean isComposite() {
+        return false;
+    }
+
+    public void updateDataVO() {
+        dataVO.x = getX() / this.mulX;
+        dataVO.y = getY() / this.mulY;
+        dataVO.rotation = getRotation();
+
+        if (getZIndex() >= 0) {
+            dataVO.zIndex = getZIndex();
+        }
+
+        if (dataVO.layerName == null || dataVO.layerName.equals("")) {
+            dataVO.layerName = "Default";
+        }
 
         dataVO.customVars = customVariables.saveAsString();
-	}
+    }
 
     public void applyResolution(float mulX, float mulY) {
         this.mulX = mulX;
@@ -219,25 +226,26 @@ public class SpineActor extends Actor implements IBaseItem{
         setY(dataVO.y * this.mulY);
         updateDataVO();
         initSpine();
+        //initSpine();
     }
 
-	@Override
-	public int getLayerIndex() {
-		return layerIndex;
-	}
+    @Override
+    public int getLayerIndex() {
+        return layerIndex;
+    }
 
-	@Override
-	public void setLayerIndex(int index) {
-		layerIndex = index;
-	}
-	
-	public CompositeItem getParentItem() {
-		return parentItem;
-	}
-	
-	public void setParentItem(CompositeItem parentItem) {
-		this.parentItem = parentItem;
-	}
+    @Override
+    public void setLayerIndex(int index) {
+        layerIndex = index;
+    }
+
+    public CompositeItem getParentItem() {
+        return parentItem;
+    }
+
+    public void setParentItem(CompositeItem parentItem) {
+        this.parentItem = parentItem;
+    }
 
 
     @Override
@@ -256,8 +264,8 @@ public class SpineActor extends Actor implements IBaseItem{
     }
 
     public void dispose() {
-        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
-        	setBody(null);
+        if (essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
+        setBody(null);
     }
 
     public CustomVariables getCustomVariables() {

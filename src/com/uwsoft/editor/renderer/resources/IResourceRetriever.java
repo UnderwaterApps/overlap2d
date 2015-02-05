@@ -19,6 +19,7 @@ public interface IResourceRetriever {
     public ParticleEffect getParticleEffect(String name);
     public TextureAtlas getSkeletonAtlas(String name);
     public FileHandle getSkeletonJSON(String name);
+    public FileHandle getSCMLFile(String name);
     public TextureAtlas getSpriteAnimation(String name);
     public BitmapFont getBitmapFont(String name, int size);
     public MySkin getSkin();
