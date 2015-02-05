@@ -56,8 +56,11 @@ public class LabelItem extends Label implements IBaseItem {
         }else{
         	setAlignment(dataVO.align);
         }
-       // pack();
-       //layout();
+
+
+
+        if(dataVO.width == 0) dataVO.width = getTextBounds().width / this.mulX;
+        if(dataVO.height == 0) dataVO.height = getTextBounds().height / this.mulY;
 
         renew();
     }
@@ -95,6 +98,9 @@ public class LabelItem extends Label implements IBaseItem {
             setStyle(style);
             fontName = dataVO.style;
             fontSize = dataVO.size;
+
+            if(dataVO.width == 0) dataVO.width = getTextBounds().width / this.mulX;
+            if(dataVO.height == 0) dataVO.height = getTextBounds().height / this.mulY;
         }
 
         setText(dataVO.text);
@@ -105,8 +111,15 @@ public class LabelItem extends Label implements IBaseItem {
         setColor(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
         setScale(dataVO.scaleX, dataVO.scaleY);
         setAlignment(dataVO.align);
-        pack();
-        layout();
+
+        setWidth(dataVO.width *  this.mulY);
+        setHeight(dataVO.height *  this.mulY);
+
+        //setBounds(0, 0, dataVO.width, dataVO.height);
+        setWrap(true);
+
+        //pack();
+        //layout();
     }
 
     @Override
@@ -174,6 +187,9 @@ public class LabelItem extends Label implements IBaseItem {
 
         dataVO.scaleX = getScaleX();
         dataVO.scaleY = getScaleY();
+
+        //dataVO.width = getWidth() / this.mulX;
+        //dataVO.height = getHeight() / this.mulY;
     }
 
     public void applyResolution(float mulX, float mulY) {
@@ -182,9 +198,11 @@ public class LabelItem extends Label implements IBaseItem {
         setX(dataVO.x * this.mulX);
         setY(dataVO.y * this.mulY);
         setScale(dataVO.scaleX, dataVO.scaleY);
+        setWidth(dataVO.width * mulX);
+        setHeight(dataVO.height * mulY);
         updateDataVO();
-        pack();
-        layout();
+        //pack();
+        //layout();
     }
 
 

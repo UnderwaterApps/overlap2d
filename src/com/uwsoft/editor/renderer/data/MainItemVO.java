@@ -19,7 +19,7 @@ public class MainItemVO {
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
 	
-	public int meshId = -1;
+	public String meshId = "-1";
 	public PhysicsBodyDataVO physicsBodyData = null;
 	
 	public MainItemVO() {

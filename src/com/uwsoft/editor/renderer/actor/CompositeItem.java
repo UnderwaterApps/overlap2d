@@ -36,6 +36,7 @@ import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.script.IScript;
@@ -370,6 +371,14 @@ public class CompositeItem extends Group implements IBaseItem {
             addActor(itm);
             itm.setZIndex(itm.dataVO.zIndex);
         }
+        
+        for (int i = 0; i < dataVO.composite.sSpriterAnimations.size(); i++) {
+        	SpriterVO tmpVo = dataVO.composite.sSpriterAnimations.get(i);
+        	SpriterActor itm = new SpriterActor(tmpVo, essentials, this);
+        	inventorize(itm);
+        	addActor(itm);
+        	itm.setZIndex(itm.dataVO.zIndex);
+        }
 
         if (dataVO.composite.layers.size() == 0) {
             LayerItemVO layerVO = new LayerItemVO();
@@ -478,6 +487,9 @@ public class CompositeItem extends Group implements IBaseItem {
     public SpriteAnimation getSpriteAnimationById(String itemId) {
         return (SpriteAnimation) itemIdMap.get(itemId);
     }
+    public SpriterActor getSpriterActorById(String itemId) {
+    	return (SpriterActor) itemIdMap.get(itemId);
+    }
 
     public SpineActor getSpineActorById(String itemId) {
         return (SpineActor) itemIdMap.get(itemId);
@@ -506,7 +518,7 @@ public class CompositeItem extends Group implements IBaseItem {
         reAssembleLayers();
 
         //apply physics
-        if(item.getDataVO().physicsBodyData != null && item.getDataVO().meshId >= 0) {
+        if(item.getDataVO().physicsBodyData != null && Integer.parseInt(item.getDataVO().meshId) >= 0) {
         	Vector2 toStageVec = new Vector2();
     		toStageVec.set(item.getDataVO().x * this.mulX, item.getDataVO().y * this.mulY);
             localToStageCoordinates(toStageVec);
@@ -571,9 +583,12 @@ public class CompositeItem extends Group implements IBaseItem {
             MainItemVO itemVO = item.getDataVO();
             PhysicsBodyDataVO bodyData = itemVO.physicsBodyData;
 
-            if( itemVO.meshId < 0 || bodyData == null) continue;
-            
-            item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId+""), mulVec));
+            if( Integer.parseInt(itemVO.meshId) < 0 || bodyData == null) continue;
+
+            if( essentials.rm.getProjectVO().meshes.get(itemVO.meshId) == null) {
+                continue;
+            }
+            item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
             item.getBody().setUserData(item);
         }
         positionPhysics();
@@ -593,40 +608,40 @@ public class CompositeItem extends Group implements IBaseItem {
     	}
 	}
 
-    private void recalculateSize() {
+    public void recalculateSize() {
         float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
         for (int i = 0; i < items.size(); i++) {
             Actor value = (Actor) items.get(i);
             if (i == 0) {
-                if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                if (value.getScaleX() > 0 && value.getWidth()*value.getScaleX() > 0) {
                     lowerX = value.getX();
-                    upperX = value.getX() + value.getWidth();
+                    upperX = value.getX() + value.getWidth()*value.getScaleX();
                 } else {
                     upperX = value.getX();
-                    lowerX = value.getX() + value.getWidth();
+                    lowerX = value.getX() + value.getWidth()*value.getScaleX();
                 }
 
-                if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                if (value.getScaleY() > 0 && value.getHeight()*value.getScaleY() > 0) {
                     lowerY = value.getY();
-                    upperY = value.getY() + value.getHeight();
+                    upperY = value.getY() + value.getHeight()*value.getScaleY();
                 } else {
                     upperY = value.getY();
-                    lowerY = value.getY() + value.getHeight();
+                    lowerY = value.getY() + value.getHeight()*value.getScaleY();
                 }
             }
             if (value.getScaleX() > 0 && value.getWidth() > 0) {
                 if (lowerX > value.getX()) lowerX = value.getX();
-                if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
+                if (upperX < value.getX() + value.getWidth()*value.getScaleX()) upperX = value.getX() + value.getWidth()*value.getScaleX();
             } else {
                 if (upperX < value.getX()) upperX = value.getX();
-                if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
+                if (lowerX > value.getX() + value.getWidth()*value.getScaleX()) lowerX = value.getX() + value.getWidth()*value.getScaleX();
             }
-            if (value.getScaleY() > 0 && value.getHeight() > 0) {
+            if (value.getScaleY() > 0 && value.getHeight()*value.getScaleY() > 0) {
                 if (lowerY > value.getY()) lowerY = value.getY();
-                if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
+                if (upperY < value.getY() + value.getHeight()*value.getScaleY()) upperY = value.getY() + value.getHeight()*value.getScaleY();
             } else {
                 if (upperY < value.getY()) upperY = value.getY();
-                if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
+                if (lowerY > value.getY() + value.getHeight()*value.getScaleY()) lowerY = value.getY() + value.getHeight()*value.getScaleY();
             }
 
         }
@@ -928,6 +943,14 @@ public class CompositeItem extends Group implements IBaseItem {
      */
     public CustomVariables getCustomVariables() {
         return customVariables;
+    }
+	public <T extends IBaseItem> T getById(String itemId, Class<T> itemType) {
+		return itemType.cast(itemIdMap.get(itemId));
+	}
+
+
+    public ArrayList<IBaseItem> getItemsByLayerName(String layerName) {
+        return itemLayerMap.get(layerName);
     }
 
 }
