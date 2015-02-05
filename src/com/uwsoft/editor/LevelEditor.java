@@ -22,7 +22,7 @@ public class LevelEditor {
         //Get project version
         System.out.println("Current Build Version: " + AppConfig.getInstance().version);
 
-		//Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler());
+		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler());
 
 		listener = new LunarEditorListener();
 		if(OSType.getOS_Type() == OSType.MacOS) {
