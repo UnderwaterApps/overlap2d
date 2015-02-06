@@ -1,5 +1,5 @@
 Copyright 2015 Underwater Apps LLC
-(https://github.com/UnderwaterApps/overlap2d-runtime-libgdx)
+( https://github.com/UnderwaterApps/overlap2d-runtime-libgdx  http://overlap2d.com )
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
