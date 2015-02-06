@@ -109,7 +109,7 @@ public class Overlap2DStage extends Stage {
 		RayHandler.useDiffuseLight(true);
 
         RayHandler rayHandler = new RayHandler(null);
-		rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 1f);
+		rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
 		rayHandler.setCulling(true);	
 		rayHandler.setBlur(true);
 		rayHandler.setBlurNum(3);
