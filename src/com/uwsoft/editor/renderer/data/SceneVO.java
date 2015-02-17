@@ -13,7 +13,7 @@ public class SceneVO {
 
     public CompositeVO composite;
 
-    public float[] ambientColor = {0.5f, 0.5f, 0.5f, 1f};
+    public float[] ambientColor = {1f, 1f, 1f, 1f};
 
     public HashMap<String, CompositeItemVO> libraryItems = new HashMap<String, CompositeItemVO>();
 

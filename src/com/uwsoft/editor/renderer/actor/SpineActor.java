@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.spine.SpineDataHelper;
@@ -96,7 +97,7 @@ public class SpineActor extends Actor implements IBaseItem {
     	spineData = new SpineDataHelper();
     	try {
 			spineData.initSpine(dataVO, essentials.rm, spineReflectionHelper,mulX);
-		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+		} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ReflectionException e) {
 			System.out.println("Reflection problem");
 			e.printStackTrace();
 		}
