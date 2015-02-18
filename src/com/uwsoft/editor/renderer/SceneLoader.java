@@ -12,11 +12,11 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.script.IScript;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 
 
 /**

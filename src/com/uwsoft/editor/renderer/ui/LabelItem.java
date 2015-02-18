@@ -1,11 +1,11 @@
-package com.uwsoft.editor.renderer.actor;
+package com.uwsoft.editor.renderer.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-
+import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.LabelVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;

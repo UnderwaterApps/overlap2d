@@ -9,6 +9,7 @@ import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class ImageItem extends Image implements IBaseItem {

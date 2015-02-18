@@ -1,16 +1,17 @@
-package com.uwsoft.editor.renderer.actor;
+package com.uwsoft.editor.renderer.ui;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.TextBoxVO;
+import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class TextBoxItem extends TextField implements IBaseItem  {
-
-	public TextBoxVO dataVO;	
+public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
+	
+	public SelectBoxVO dataVO;	
 	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
@@ -18,20 +19,19 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
-    private Body body;
-
     private CustomVariables customVariables = new CustomVariables();
 
-	public TextBoxItem(TextBoxVO vo, Essentials rm,CompositeItem parent) {
-		this(vo, rm);
+    private Body body;
+	
+	public SelectBoxItem(SelectBoxVO vo, Essentials e,CompositeItem parent) {
+		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public TextBoxItem(TextBoxVO vo, Essentials e) {
-		super(vo.defaultText, e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
-		
+	public SelectBoxItem(SelectBoxVO vo, Essentials e) {
+		super(e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
+		dataVO = vo;	
 		this.essentials = e;
-		dataVO = vo;
 		setX(dataVO.x);
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
@@ -46,9 +46,6 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		} else {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
-		
-		setFocusTraversal(false);
-		renew();
 	}	
 	
 	public void setTint(Color tint) {
@@ -61,22 +58,20 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		this.setColor(tint);
 	}
 		
-	
-	public TextBoxVO getDataVO() {
+	public SelectBoxVO getDataVO() {
 		//updateDataVO();
 		return dataVO;
 	}
 	
 	@Override
-	public void renew() {
-		setText(dataVO.defaultText);
+	public void renew() {		
+		pack(); layout();
 		if(dataVO.width > 0) {
 			setWidth(dataVO.width);
 		}
 		if(dataVO.height > 0) {
 			setHeight(dataVO.height);
 		}
-		invalidate();
 		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
@@ -86,7 +81,6 @@ public class TextBoxItem extends TextField implements IBaseItem  {
         customVariables.loadFromString(dataVO.customVars);
 	}
 	
-
 	@Override
 	public boolean isLockedByLayer() {
 		return isLockedByLayer;
@@ -118,7 +112,7 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 
         dataVO.customVars = customVariables.saveAsString();
 	}
-	
+
 	public void applyResolution(float mulX, float mulY) {
 		setScaleX(dataVO.scaleX*mulX);
 		setScaleY(dataVO.scaleY*mulY);
@@ -147,11 +141,10 @@ public class TextBoxItem extends TextField implements IBaseItem  {
 		this.parentItem = parentItem;
 	}
 	
-	public void setStyle(TextFieldStyle lst, String styleName) {
+	public void setStyle(SelectBoxStyle lst, String styleName) {
 		setStyle(lst);
 		dataVO.style	=	styleName;
 	}
-
 
     public Body getBody() {
         return body;
@@ -162,7 +155,7 @@ public class TextBoxItem extends TextField implements IBaseItem  {
     }
 
     public void dispose() {
-        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
+        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
         setBody(null);
     }
 

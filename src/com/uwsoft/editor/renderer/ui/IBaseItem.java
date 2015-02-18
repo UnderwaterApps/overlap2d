@@ -1,6 +1,7 @@
-package com.uwsoft.editor.renderer.actor;
+package com.uwsoft.editor.renderer.ui;
 
 import com.badlogic.gdx.physics.box2d.Body;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 

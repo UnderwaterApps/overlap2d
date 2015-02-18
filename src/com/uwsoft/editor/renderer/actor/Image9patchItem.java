@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.Image9patchVO;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 
 public class Image9patchItem extends ImageItem implements IBaseItem {
 

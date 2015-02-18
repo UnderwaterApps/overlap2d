@@ -8,6 +8,7 @@ import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class ParticleItem extends Group implements IBaseItem {

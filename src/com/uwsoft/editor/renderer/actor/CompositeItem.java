@@ -40,6 +40,12 @@ import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.script.IScript;
+import com.uwsoft.editor.renderer.ui.CheckBoxItem;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
+import com.uwsoft.editor.renderer.ui.LabelItem;
+import com.uwsoft.editor.renderer.ui.SelectBoxItem;
+import com.uwsoft.editor.renderer.ui.TextBoxItem;
+import com.uwsoft.editor.renderer.ui.TextButtonItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**

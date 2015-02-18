@@ -18,6 +18,7 @@ import com.uwsoft.editor.renderer.actor.SpriteAnimation.Animation;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.SpriterVO;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
 import com.uwsoft.editor.renderer.utils.LibGdxLoader;

@@ -12,6 +12,7 @@ import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.spine.SpineDataHelper;
 import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class SpineActor extends Actor implements IBaseItem {

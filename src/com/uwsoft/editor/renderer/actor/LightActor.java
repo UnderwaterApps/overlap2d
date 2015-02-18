@@ -18,6 +18,7 @@ import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.renderer.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 
