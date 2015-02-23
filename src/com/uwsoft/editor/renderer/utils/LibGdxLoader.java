@@ -55,7 +55,6 @@ public class LibGdxLoader extends Loader<Sprite> implements Disposable{
 		String filename = new File(data.getFile(ref).name).getName();
 		//String path = super.root+"/"+data.getFile(ref).name;
 		String path = super.root+"/"+filename;
-		System.out.println(path);
 		switch(Gdx.app.getType()){
 		case iOS: f = Gdx.files.absolute(path); break;
 		default: f = Gdx.files.internal(path); break;
@@ -111,7 +110,7 @@ public class LibGdxLoader extends Loader<Sprite> implements Disposable{
 	}
 	
 	protected void createSprite(FileReference ref, Pixmap image){
-		Texture tex = new Texture(image);
+        Texture tex = new Texture(image);
 		tex.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		int width = (int) data.getFile(ref.folder, ref.file).size.width;
 		int height = (int) data.getFile(ref.folder, ref.file).size.height;

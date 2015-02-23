@@ -46,6 +46,7 @@ public class LibGdxDrawer extends Drawer<Sprite>{
 	@Override
 	public void draw(Object object) {
 		Sprite sprite = loader.get(object.ref);
+
 		float newPivotX = (sprite.getWidth() * object.pivot.x);
 		float newX = object.position.x - newPivotX;
 		float newPivotY = (sprite.getHeight() * object.pivot.y);
@@ -53,8 +54,7 @@ public class LibGdxDrawer extends Drawer<Sprite>{
 		
 		sprite.setX(newX);
 		sprite.setY(newY);
-		
-		sprite.setOrigin(newPivotX, newPivotY);
+        sprite.setOrigin(newPivotX, newPivotY);
 		sprite.setRotation(object.angle);
 		
 		sprite.setColor(1f, 1f, 1f, object.alpha);
