@@ -17,7 +17,9 @@ public class ProjectVO {
     public String projectSpineExportPath = "";
     public String projectFontsExportPath = "";
     public String lastOpenScene = "";
-    public String lastOpenResolution = "";
+    public String lastOpenResolution = "";    
+    public String texturepackerWidth	=	"4096";
+    public String texturepackerHeight  =	"4096";
 
     public String constructJsonString() {
         String str = "";

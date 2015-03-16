@@ -1,9 +1,7 @@
 package com.uwsoft.editor.controlles;
 
 import java.awt.EventQueue;
-import java.io.PrintWriter;
-import java.io.StringWriter;
-import java.io.Writer;
+import java.io.*;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
 
@@ -15,6 +13,7 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpParametersUtils;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
 
@@ -37,10 +36,12 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
         final PrintWriter printWriter = new PrintWriter(result);
         e.printStackTrace(printWriter);
         String stacktrace = result.toString();
+		String filename = "overlog.txt";
+		writeToFile(stacktrace, filename);
         printWriter.close();
+
         sendError(stacktrace);
-        //String filename = "overlaplog_" + MathUtils.random(1, 1000) + ".stacktrace";
-        //writeToFile(stacktrace, filename);
+
         showErrorDialog();
         //defaultUEH.uncaughtException(t, e);
     }
@@ -52,7 +53,7 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
 
 					@Override
 					public void run() {
-						JOptionPane.showMessageDialog(null, "We are so embarrassed, but there seems to be problem, please run this app again","Error",JOptionPane.ERROR_MESSAGE);
+						JOptionPane.showMessageDialog(null, "Overlap2D just crashed, see stacktrace in overlog.txt file","Error",JOptionPane.ERROR_MESSAGE);
 					}
     	        	
     	        });
@@ -80,18 +81,21 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
 				
 			}
 		 });
+
+
 	}
 
-//    private void writeToFile(String stacktrace, String filename) {
-//        try {
-//            String localPath = DataManager.getMyDocumentsLocation();
-//            System.out.println(localPath +  File.separator + filename);
-//            BufferedWriter bos = new BufferedWriter(new FileWriter(localPath +  File.separator + filename));
-//            bos.write(stacktrace);
-//            bos.flush();
-//            bos.close();
-//        } catch (Exception e) {
-//            e.printStackTrace();
-//        }
-//    }
+    private void writeToFile(String stacktrace, String filename) {
+        try {
+            //String localPath = DataManager.getMyDocumentsLocation();
+			String localPath = DataManager.getInstance().getRootPath();
+            System.out.println(localPath +  File.separator + filename);
+            BufferedWriter bos = new BufferedWriter(new FileWriter(localPath +  File.separator + filename));
+            bos.write(stacktrace);
+            bos.flush();
+            bos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }

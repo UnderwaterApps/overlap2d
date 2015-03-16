@@ -231,14 +231,24 @@ public class ItemPhysicsEditor extends Group {
 			for(Vector2 [] poly : minPolies){
 				for(int i=0;i<poly.length;i++){
 					if(!verticesList.contains(poly[i]))
-						verticesList.add(poly[i].add(localToGlobal));
+						verticesList.add(poly[i]);
 				}
 			}
+			
+			for(Vector2 poly : verticesList){
+				poly.add(localToGlobal);
+			}
+			
 			currentMode = EditMode.Edit;
 		}
 		Collections.reverse(verticesList);
 		vertices = verticesList.toArray(new Vector2[0]);
 		stage.setScrollFocus(this);
+		
+		printArray(vertices);
+        if(mesh != null){
+        	printArray(minPolies);
+        }
 	}
 	
 	public void editItem(IBaseItem item){
@@ -268,7 +278,7 @@ public class ItemPhysicsEditor extends Group {
 		}
 		
 		ProjectInfoVO projectInfo = DataManager.getInstance().getCurrentProjectInfoVO();
-		if(currentItem.getDataVO().meshId>=0){
+		if(Integer.parseInt(currentItem.getDataVO().meshId)>=0){
 			Vector2 localToGlobal = new Vector2();
 			currentActor.localToStageCoordinates(localToGlobal);
 			MeshVO mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
@@ -278,9 +288,14 @@ public class ItemPhysicsEditor extends Group {
 			for(Vector2 [] poly : minPolies){
 				for(int i=0;i<poly.length;i++){
 					if(!verticesList.contains(poly[i]))
-						verticesList.add(poly[i].scl(resVec).add(localToGlobal));
+						verticesList.add(poly[i]);
 				}
 			}
+			
+			for(Vector2 poly : verticesList){
+				poly.scl(resVec).add(localToGlobal);
+			}
+			
 			currentMode = EditMode.Edit;
 		}
 		Collections.reverse(verticesList);
@@ -330,7 +345,10 @@ public class ItemPhysicsEditor extends Group {
 				mesh.minPolygonData = new Vector2[minPolies.length][];
 				mesh.initialProperties = new PhysicsBodyDataVO(physicsBodyDataVO);
 				arrayCopy(minPolies,mesh.minPolygonData,true);
-				System.out.println("paz");
+				printArray(vertices);
+                if(mesh != null){
+                	printArray(mesh.minPolygonData);
+                }
 			}else{
                 if(minPolies == null) {
                     projectInfo.assetMeshMap.remove(assetName);
@@ -339,23 +357,31 @@ public class ItemPhysicsEditor extends Group {
                     mesh.minPolygonData = new Vector2[minPolies.length][];
                     mesh.initialProperties = new PhysicsBodyDataVO(physicsBodyDataVO);
                     arrayCopy(minPolies, mesh.minPolygonData, true);
-                    Integer meshKey = projectInfo.addNewMesh(mesh);
-                    projectInfo.assetMeshMap.put(assetName, meshKey);
+                    String meshKey = projectInfo.addNewMesh(mesh);
+                    projectInfo.assetMeshMap.put(assetName, meshKey+"");
                 }
+               printArray(vertices);
+                if(mesh != null){
+                	printArray(mesh.minPolygonData);
+                }
+                
+                
+                
+                
 			}
 		}else if(currentItem != null){
-			if(currentItem.getDataVO().meshId>=0){
+			if(Integer.parseInt(currentItem.getDataVO().meshId)>=0){
 				mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
 				mesh.minPolygonData = new Vector2[minPolies.length][];
 				arrayCopy(minPolies, mesh.minPolygonData, true);
 			}else{
                 if(minPolies == null) {
-                    currentItem.getDataVO().meshId = -1;
+                    currentItem.getDataVO().meshId = "-1";
                 } else {
                     mesh = new MeshVO();
                     mesh.minPolygonData = new Vector2[minPolies.length][];
                     arrayCopy(minPolies, mesh.minPolygonData, true);
-                    Integer meshKey = projectInfo.addNewMesh(mesh);
+                    String meshKey = projectInfo.addNewMesh(mesh);
                     currentItem.getDataVO().meshId = meshKey;
                 }
 			}
@@ -376,6 +402,24 @@ public class ItemPhysicsEditor extends Group {
 
 	}
 	
+	public void printArray(Vector2[] array){
+		String strToPrint = "";
+		for(int i=0;i<array.length;i++){
+			strToPrint+=" "+array[i].toString();
+		}
+		System.out.println("array" + strToPrint);
+	}
+	
+	public void printArray(Vector2[][] array){
+		String strToPrint = "";
+		for(int i=0;i<array.length;i++){
+			for(int j=0;j<array[i].length;j++){
+				strToPrint+=" "+array[i][j].toString();
+			}
+			System.out.println("array " + i + " " + strToPrint);
+		}
+	}
+	
 	public void arrayCopy(Vector2[][] aSource, Vector2[][] aDestination,boolean toLocal) {
 		//Vector2 globalToLocal = new Vector2();
 		
@@ -384,9 +428,12 @@ public class ItemPhysicsEditor extends Group {
 	    	for(int j=0;j<aSource[i].length;j++){
 	    		aDestination[i][j] = aSource[i][j].cpy();
 	    		if(toLocal && currentActor != null){
+	    			
 	    			currentActor.stageToLocalCoordinates(aDestination[i][j]);
-	    			aDestination[i][j].x/=resVec.x;
-	    			aDestination[i][j].y/=resVec.y;
+	    			if(assetName == null || assetName.isEmpty()){
+	    				aDestination[i][j].x/=resVec.x;
+	    				aDestination[i][j].y/=resVec.y;
+	    			}
 	    			//aDestination[i][j].sub(globalToLocal); 		
 	    		}
 	    	}
@@ -777,7 +824,7 @@ public class ItemPhysicsEditor extends Group {
                 projectInfo.assetMeshMap.remove(assetName);
             }
         } else if(currentItem != null) {
-            if (currentItem != null) currentItem.getDataVO().meshId = -1;
+            if (currentItem != null) currentItem.getDataVO().meshId = "-1";
             currentItem.getDataVO().physicsBodyData = null;
         }
         minPolies = null;

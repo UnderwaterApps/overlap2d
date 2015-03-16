@@ -31,6 +31,8 @@ public class AppConfig  {
     }
 
     private void loadProperties() {
+
+        /*
         properties = new Properties();
        // Gdx.files
         File file = new File("app.properties");
@@ -49,5 +51,7 @@ public class AppConfig  {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        */
+        version = "0.0.7";
     }
 }

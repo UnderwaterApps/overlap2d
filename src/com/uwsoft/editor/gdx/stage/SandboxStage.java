@@ -1,5 +1,7 @@
 package com.uwsoft.editor.gdx.stage;
 
+import box2dLight.Light;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
@@ -80,6 +82,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
     public SandboxStage() {
         super();
+
         instance = this;
         cameraPanOn = false;
         isUsingSelectionTool = false;
@@ -334,7 +337,27 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         anim.setX(vo.x);
         anim.setY(vo.y);
     }
+    public void createSpriterAnimation(String animationsName, float x, float y) {
+    	currentScene.updateDataVO();
+        SpriterVO vo = new SpriterVO();
+        vo.animationName = animationsName;
 
+        if (checkForNoLayersSelectedDialog()) return;
+
+        vo.layerName = uiStage.getCurrentSelectedLayer().layerName;
+
+        vo.x = x + getCamera().position.x - getWidth() / 2;
+        vo.y = y + getCamera().position.y - getHeight() / 2;
+
+        SpriterActor anim = new SpriterActor(vo, sceneLoader.essentials, currentScene);
+
+        currentScene.addItem(anim);
+        initItemListeners(anim);
+        updateSceneTree();
+        anim.setX(vo.x);
+        anim.setY(vo.y);
+		
+	}
     public void createLight(LightVO vo) {
         currentScene.updateDataVO();
         vo.x += getCamera().position.x - getWidth() / 2;
@@ -1406,15 +1429,15 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
         ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
         Actor firstItem = (Actor) fakeItem.getItems().get(0);
-        float offsetX = firstItem.getX();
-        float offsetY = firstItem.getY();
+        float offsetX = firstItem.getX()*currentScene.mulX;
+        float offsetY = firstItem.getY()*currentScene.mulY;
         for (int i = 1; i < fakeItem.getItems().size(); i++) {
             Actor item = (Actor) fakeItem.getItems().get(i);
-            if (item.getX() < offsetX) {
-                offsetX = item.getX();
+            if (item.getX()*currentScene.mulX < offsetX) {
+                offsetX = item.getX()*currentScene.mulX;
             }
-            if (item.getY() < offsetY) {
-                offsetY = item.getY();
+            if (item.getY()*currentScene.mulY < offsetY) {
+                offsetY = item.getY()*currentScene.mulY;
             }
         }
         Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) getCamera()).position;
@@ -1540,6 +1563,57 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         }
         return lowestY;
     }
+    
+    public void disableLights(boolean disable) {
+    	
+    	ArrayList<LightActor> lights = getAllLights(currentScene);
+//        if (disable) {
+//            lights = essentials.rayHandler.lightList;
+//        } else {
+//            lights = essentials.rayHandler.disabledLights;
+//        }
+        for (int i = lights.size() - 1; i >= 0; i--) {
+        	LightActor lightActor = lights.get(i); 
+        	if(lightActor.lightObject !=null){
+        		lightActor.lightObject.setActive(!disable);
+        	}
+            
+        }
+    }
+    
+    
+    private ArrayList<LightActor> getAllLights(CompositeItem curComposite){
+    	
+    	ArrayList<LightActor> lights = new ArrayList<LightActor>();
+    	
+    	if(curComposite == null){
+    		return lights;
+    	}
+    	
+    	ArrayList<IBaseItem> items = curComposite.getItems();
+
+    	ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
+
+    	
+    	int i=0;
+    	for(i=0;i<items.size();i++){
+    		IBaseItem item = items.get(i);
+    		if(item instanceof LightActor){
+    			lights.add((LightActor) item);
+    		}
+    		
+    		if( item instanceof CompositeItem){
+    			nestedComposites.add((CompositeItem) item);
+    		}
+    		
+    	}
+    	    	
+    	for(i=0;i<nestedComposites.size();i++){
+    		lights.addAll(getAllLights(nestedComposites.get(i)));
+    	}
+    	
+    	return lights;
+    }
 
     @Override
     public void draw() {
@@ -1550,5 +1624,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
             //box2dDebugRenderer.render(essentials.world, getCamera().combined.cpy().scl(1/PhysicsBodyLoader.SCALE));
         }
     }
+	
 
 }

@@ -89,6 +89,9 @@ public class LightItemProperties extends PropertyBox implements IPropertyBox<Lig
                 if (keycode == 66) {
                     // set item id to
                     int raysNum = (int) Float.parseFloat(rays.getText());
+                    if(raysNum<4){
+                    	raysNum = 4;
+                    }
                     if (item != null) {
                         item.getDataVO().rays = raysNum;
                         item.renew();
