@@ -13,7 +13,7 @@ import com.uwsoft.editor.utils.OSType;
 import java.util.Properties;
 
 
-public class LevelEditor {
+public class Overlap2D {
 
 	private static LunarEditorListener listener;
 
@@ -55,15 +55,5 @@ public class LevelEditor {
 			}
 		});
 	}
-	
-//	public static int calc (){
-//		int t = 2;
-//	      int d = "QCL".hashCode() % 3000;
-//	      int f = "KOM".hashCode() % 3000;
-//	      for (int h = 0; h <= f; h++)
-//	         t = (t ^ h) % d;
-//	      return t;
-//	}
-	
 	
 }
