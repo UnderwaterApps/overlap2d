@@ -62,9 +62,6 @@ public class LevelEditorScreen extends Screen implements IObserver {
         gl.glClearColor(0.129f, 0.129f, 0.129f, 1.0f);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-//	   	batch.begin();
-//	   	batch.draw(pixmaptex, 500, 300);
-//		batch.end();
         sandboxStage.act(deltaTime);
         sandboxStage.draw();
 
