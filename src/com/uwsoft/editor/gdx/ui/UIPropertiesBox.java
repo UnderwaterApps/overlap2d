@@ -77,7 +77,7 @@ public class UIPropertiesBox extends ExpandableUIBox {
             additionalBoxes.add(compositekBox);
         }
         if (className.equals("ParticleItem")) {
-            ParticleItemProperties particleBox = new ParticleItemProperties(stage.sandboxStage.sceneLoader);
+            ParticleItemProperties particleBox = new ParticleItemProperties(sceneLoader);
             particleBox.setObject((ParticleItem) currentItem);
             particleBox.setX(getWidth() / 2 - basicBox.getWidth() / 2);
             particleBox.setY(basicBox.getY() - particleBox.getHeight() - 10);
