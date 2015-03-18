@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
@@ -32,7 +33,7 @@ public class SelectionRectangle extends PixelRect {
     private float[] touchDiff = new float[2];
     private Group transformGroup;
     private Image[] miniRects = new Image[8];
-    private int mode;
+    private EditingMode mode;
 
     public SelectionRectangle(SandboxStage sm) {
         super(sm.textureManager, 0, 0);
@@ -51,7 +52,7 @@ public class SelectionRectangle extends PixelRect {
     public void act(float delta) {
         super.act(delta);
 
-        if (mode != SandboxStage.MODE_TRANSFORM) return;
+        if (mode != EditingMode.TRANSFORM) return;
 
         Vector2 mouseCoords = getMouseLocalCoordinates();
 
@@ -209,9 +210,9 @@ public class SelectionRectangle extends PixelRect {
         return touchDiff;
     }
 
-    public void setMode(int mode) {
+    public void setMode(EditingMode mode) {
         this.mode = mode;
-        if (mode == SandboxStage.MODE_TRANSFORM && !(getHostAsActor() instanceof LabelItem) ) {
+        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem) ) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);
