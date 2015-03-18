@@ -151,4 +151,8 @@ public class SceneControlMediator {
         return currentSceneVo;
     }
 
+    public CompositeItem getCompositeElement(CompositeItemVO vo) {
+        return sceneLoader.getCompositeElement(vo);
+    }
+
 }

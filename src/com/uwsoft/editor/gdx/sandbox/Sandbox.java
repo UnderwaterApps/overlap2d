@@ -64,6 +64,7 @@ public class Sandbox {
     private boolean dirty = false;
     private Vector3 copedItemCameraOffset;
     private IResourceRetriever rm;
+    private  ArrayList<MainItemVO> tempClipboard;
 
     public Sandbox() {
 
@@ -168,20 +169,20 @@ public class Sandbox {
 
         if (removeOthers) clearSelections();
 
-        SelectionRectangle rect = new SelectionRectangle(stage);
+        SelectionRectangle rect = new SelectionRectangle(sandboxStage);
         rect.claim(item);
         rect.setMode(editingMode);
         currentSelection.put(item, rect);
-        stage.frontUI.addActor(rect);
+        sandboxStage.frontUI.addActor(rect);
         rect.show();
-        stage.uiStage.itemWasSelected(item);
+        sandboxStage.uiStage.itemWasSelected(item);
 
-        if (stage.dropDown != null) {
-            stage.dropDown.remove();
-            stage.dropDown = null;
+        if (sandboxStage.frontUI.dropDown != null) {
+            sandboxStage.frontUI.dropDown.remove();
+            sandboxStage.frontUI.dropDown = null;
         }
 
-        stage.uiStage.getItemsBox().setSelected(currentSelection);
+        sandboxStage.uiStage.getItemsBox().setSelected(currentSelection);
 
     }
 
@@ -189,7 +190,7 @@ public class Sandbox {
         currentSelection.get(item).remove();
         currentSelection.remove(item);
 
-        stage.uiStage.getItemsBox().setSelected(currentSelection);
+        sandboxStage.uiStage.getItemsBox().setSelected(currentSelection);
     }
 
     private void clearSelections() {
@@ -198,7 +199,7 @@ public class Sandbox {
         }
 
         currentSelection.clear();
-        stage.uiStage.getItemsBox().setSelected(currentSelection);
+        sandboxStage.uiStage.getItemsBox().setSelected(currentSelection);
     }
 
     private void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
@@ -220,7 +221,7 @@ public class Sandbox {
             selectionRect.setY(selectionRect.getY() + y);
         }
 
-        stage.saveSceneCurrentSceneData();
+        saveSceneCurrentSceneData();
     }
 
     private void removeCurrentSelectedItems() {
@@ -228,14 +229,14 @@ public class Sandbox {
             itemControl.removeItem(selectionRect.getHostAsActor());
             selectionRect.remove();
         }
-        stage.uiStage.getItemsBox().initContent();
+        sandboxStage.uiStage.getItemsBox().initContent();
         currentSelection.clear();
     }
 
 
 
     public void getIntoPrevComposite() {
-        getCamera().position.set(0, 0, 0);
+        sandboxStage.getCamera().position.set(0, 0, 0);
         uiStage.getCompositePanel().stepUp();
         uiStage.getItemsBox().initContent();
     }
@@ -252,7 +253,7 @@ public class Sandbox {
 
         if (item == null) return;
 
-        InputDialog dlg = uiStage.showInputDialog();
+        InputDialog dlg = uiStage.dialogs().showInputDialog();
 
         dlg.setDescription("Please set unique name for your component");
 
@@ -262,7 +263,7 @@ public class Sandbox {
 
             @Override
             public void onConfirm(String input) {
-                currentSceneVo.libraryItems.put(input, itemToAdd.getDataVO());
+                sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
                 uiStage.reInitLibrary();
             }
         });
@@ -272,7 +273,7 @@ public class Sandbox {
 
     public void getIntoComposite() {
         CompositeItem item = null;
-        getCurrentScene().updateDataVO();
+        sceneControl.getCurrentScene().updateDataVO();
         if (currentSelection.size() == 1) {
             for (SelectionRectangle value : currentSelection.values()) {
                 if (value.getHost().isComposite()) {
@@ -287,8 +288,8 @@ public class Sandbox {
 
     public void getIntoComposite(CompositeItemVO compositeItemVO) {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
-        getCamera().position.set(0, 0, 0);
-        disableAmbience(true);
+        sandboxStage.getCamera().position.set(0, 0, 0);
+        sandboxStage.disableAmbience(true);
         uiStage.getLightBox().disableAmbiance.setChecked(true);
         uiStage.getCompositePanel().addScene(compositeItemVO);
         initSceneView(compositeItemVO);
@@ -297,8 +298,8 @@ public class Sandbox {
 
     public void copyCurrentSelection() {
         ArrayList<MainItemVO> voList = new ArrayList<>();
-        for (int i = 0; i < currentScene.getItems().size(); i++) {
-            voList.add(currentScene.getItems().get(i).getDataVO());
+        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
+            voList.add(sceneControl.getCurrentScene().getItems().get(i).getDataVO());
         }
 
         //TODO: change this to real clipboard
@@ -310,7 +311,7 @@ public class Sandbox {
     }
 
     public CompositeItem groupItemsIntoComposite() {
-        currentScene.updateDataVO();
+        sceneControl.getCurrentScene().updateDataVO();
         CompositeItemVO vo = new CompositeItemVO();
 
         // Calculating lower left and upper values
@@ -365,7 +366,7 @@ public class Sandbox {
         vo.y = lowerY;
         vo.layerName = uiStage.getCurrentSelectedLayer().layerName;
 
-        CompositeItem item = sceneLoader.getCompositeElement(vo);
+        CompositeItem item = sceneControl.getCompositeElement(vo);
 
         item.setWidth(width);
         item.setHeight(height);
@@ -374,7 +375,7 @@ public class Sandbox {
 
         removeCurrentSelectedItems();
 
-        currentScene.addItem(item);
+        sceneControl.getCurrentScene().addItem(item);
 
         ///System.out.println("SSSSddddd " + ((Actor)item.getItems().get(0)).getX());
         initItemListeners(item);
@@ -428,7 +429,12 @@ public class Sandbox {
         currentLoadedSceneFileName = sceneName;
         uiStage.getCompositePanel().clearScenes();
         initData(sceneName);
-        initView();
+
+        sandboxStage.initView();
+        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
+        initSceneView(sceneControl.getRootSceneVO());
+        initEvents();
+
         ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         DataManager.getInstance().saveCurrentProject();
@@ -700,5 +706,12 @@ public class Sandbox {
 
     public void initEvents() {
         inputHandler.initSandboxEvents();
+    }
+
+
+    public void setCurrentlyTransforming(IBaseItem item, int transformType) {
+        if (item == null || item.getClass().getSimpleName().equals("LabelItem")) return;
+        currTransformType = transformType;
+        currTransformHost = item;
     }
 }
