@@ -47,7 +47,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
             @Override
             public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.sandboxStage.createItemFromLibrary(pld.assetName, x, y);
+                stage.getSandbox().getUac().createItemFromLibrary(pld.assetName, x, y);
             }
         };
 

@@ -127,9 +127,7 @@ public class UILightBox extends ExpandableUIBox {
                 vo.tint = clr;
 
                 vo.type = LightType.POINT;
-                vo.x = x;
-                vo.y = y;
-                stage.sandboxStage.createLight(vo);
+                stage.getSandbox().getUac().createLight(vo, x, y);
             }
 
             @Override
@@ -170,7 +168,7 @@ public class UILightBox extends ExpandableUIBox {
                 vo.tint = clr;
                 vo.x = x;
                 vo.y = y;
-                stage.sandboxStage.createLight(vo);
+                stage.getSandbox().getUac().createLight(vo);
             }
 
             @Override

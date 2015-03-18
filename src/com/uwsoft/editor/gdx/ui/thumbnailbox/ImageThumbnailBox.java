@@ -71,7 +71,7 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
 			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 				if(button == Buttons.RIGHT){
 					//stage.editPhysics(region.name);
-                    stage.sandboxStage.showDropDownForSelection(x, y, region.name);
+                    stage.sandboxStage.frontUI.showDropDownForSelection(x, y, region.name);
 				}
 				super.touchUp(event, x, y, pointer, button);
 			}
@@ -84,7 +84,7 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
     }
 
     protected void itemDropped(String assetName, float x, float y) {
-        stage.sandboxStage.createItem(assetName, x, y);
+        stage.getSandbox().getUac().createImage(assetName, x, y);
     }
 
 }

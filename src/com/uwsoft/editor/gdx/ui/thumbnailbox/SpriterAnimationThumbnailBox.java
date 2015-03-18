@@ -58,7 +58,7 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
         DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
             @Override
             public void drop(AssetPayloadObject pld, float x, float y) {
-                 stage.sandboxStage.createSpriterAnimation(payload.assetName, x, y);
+                stage.getSandbox().getUac().createSpriterAnimation(payload.assetName, x, y);
             }
         };
 

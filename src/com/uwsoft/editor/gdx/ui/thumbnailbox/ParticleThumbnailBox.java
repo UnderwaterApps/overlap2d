@@ -31,7 +31,7 @@ public class ParticleThumbnailBox extends DraggableThumbnailBox {
         DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
             @Override
             public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.sandboxStage.createParticleItem(pld.assetName, x, y);
+                stage.getSandbox().getUac().createParticleItem(pld.assetName, x, y);
             }
         };
 
