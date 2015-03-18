@@ -134,10 +134,6 @@ public class SceneControlMediator {
         return lights;
     }
 
-    public void setCurrentSceneVo(CompositeVO vo) {
-        currentSceneVo = vo;
-    }
-
     public Essentials getEssentials() {
         return essentials;
     }

@@ -463,7 +463,7 @@ public class Sandbox {
     public SceneVO sceneVoFromItems() {
         CompositeItemVO itemVo = sceneControl.getRootSceneVO();
         cleanComposite(itemVo.composite);
-        sceneControl.setCurrentSceneVo(itemVo.composite);
+        sceneControl.getCurrentSceneVO().composite = itemVo.composite;
         return sceneControl.getCurrentSceneVO();
     }
 
