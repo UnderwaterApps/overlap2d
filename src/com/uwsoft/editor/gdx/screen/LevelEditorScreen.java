@@ -9,6 +9,7 @@ import com.uwsoft.editor.controlles.NameConstants;
 import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.LunarEditorListener;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
@@ -22,32 +23,20 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     public SandboxStage sandboxStage;
     public UIStage uiStage;
-    InputMultiplexer inputMultiplexer;
     private boolean paused = false;
-    private Texture pixmaptex;
-    private SpriteBatch batch;
+
+    private Sandbox sandbox;
 
     public LevelEditorScreen(LunarEditorListener game) {
         super(game);
 
-
-        inputMultiplexer = new InputMultiplexer();
-        Gdx.input.setInputProcessor(inputMultiplexer);
-
-        sandboxStage = new SandboxStage();
-
-        uiStage = new UIStage(sandboxStage);
-        sandboxStage.setUIStage(uiStage);
-
-        inputMultiplexer.addProcessor(uiStage);
-        inputMultiplexer.addProcessor(sandboxStage);
-
+        sandbox = new Sandbox();
 
         // check for demo project
         File demoDir = new File(DataManager.getInstance().getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
         if (demoDir.isDirectory() && demoDir.exists()) {
             DataManager.getInstance().openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
-            sandboxStage.loadCurrentProject();
+            sandbox.loadCurrentProject();
             uiStage.loadCurrentProject();
             sandboxStage.getCamera().position.set(400, 200, 0);
         }

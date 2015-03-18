@@ -1,5 +1,7 @@
 package com.uwsoft.editor.gdx.sandbox;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector3;
@@ -47,8 +49,9 @@ public class Sandbox {
     private UserActionController uac;
     private ItemFactory itemFactory;
 
-    HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
+    private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
 
+    private InputMultiplexer inputMultiplexer;
     /**
      * this part is to be modified
      */
@@ -61,17 +64,23 @@ public class Sandbox {
     private Vector3 copedItemCameraOffset;
     private IResourceRetriever rm;
 
-    public Sandbox(SandboxStage sandboxStage, SceneLoader sceneLoader, Essentials essentials) {
+    public Sandbox() {
+
+        inputMultiplexer = new InputMultiplexer();
+        Gdx.input.setInputProcessor(inputMultiplexer);
+        sandboxStage = new SandboxStage();
+        uiStage = new UIStage(sandboxStage);
+        sandboxStage.setUIStage(uiStage);
+
+        inputMultiplexer.addProcessor(uiStage);
+        inputMultiplexer.addProcessor(sandboxStage);
 
         editingMode = EditingMode.SELECTION;
 
-        sceneControl = new SceneControlMediator(sceneLoader, essentials);
+        sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
         inputHandler = new InputHandler();
         uac = new UserActionController(this);
-
-        this.sandboxStage = sandboxStage;
-        this.uiStage = sandboxStage.uiStage;
     }
 
     public UserActionController getUac() {

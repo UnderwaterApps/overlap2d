@@ -51,8 +51,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         rm = essentials.rm;
 
         physiscStopped = true;
-
-        sandbox = new Sandbox(this, sceneLoader, essentials);
     }
 
     @Override
