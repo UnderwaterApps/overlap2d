@@ -113,7 +113,7 @@ public class InputHandler extends InputAdapter {
         ((Actor) iterableItem).addListener(listener);
     }
 
-    private void initSandboxEvents() {
+    public void initSandboxEvents() {
         ClickListener listener = new ClickListener() {
 
             private float lastX = 0

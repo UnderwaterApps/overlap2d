@@ -25,6 +25,7 @@ import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LightActor;
+import com.uwsoft.editor.renderer.actor.ParticleItem;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -114,9 +115,41 @@ public class Sandbox {
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
-        sceneControl.initSceneView(compositeItemVO);
+        initSceneView(sceneControl.initSceneView(compositeItemVO));
     }
 
+    public void initSceneView(CompositeItem composite) {
+        clearSelections();
+        sandboxStage.mainBox.clear();
+        sceneControl.initSceneView(composite, uiStage.getCompositePanel().isRootScene());
+        if (uiStage.getCompositePanel().isRootScene()) {
+            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
+        }
+        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
+            inputHandler.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
+        }
+        sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
+        sceneControl.getCurrentScene().setX(0);
+        sceneControl.getCurrentScene().setY(0);
+
+        uiStage.getLayerPanel().initContent();
+        forceContinuousParticles(composite);
+    }
+
+    private void forceContinuousParticles(CompositeItem composite) {
+        ArrayList<IBaseItem> asd = composite.getItems();
+        for (int i = 0; i < asd.size(); i++) {
+            IBaseItem item = asd.get(i);
+            if (item instanceof ParticleItem) {
+                ((ParticleItem) item).forceContinuous();
+                continue;
+            }
+            if (item instanceof CompositeItem) {
+                forceContinuousParticles((CompositeItem) item);
+            }
+
+        }
+    }
 
     public void selectItemsByLayerName(String name) {
         ArrayList<IBaseItem> itemsArr = new ArrayList<IBaseItem>();
@@ -199,39 +232,7 @@ public class Sandbox {
         currentSelection.clear();
     }
 
-    public void initSceneView(CompositeItem composite) {
 
-        composite.applyResolution(DataManager.getInstance().curResolution);
-
-        clearSelections();
-
-        mainBox.clear();
-        currentScene = composite;
-        if (uiStage.getCompositePanel().isRootScene()) {
-            rootSceneVO = currentScene.dataVO;
-            uiStage.getCompositePanel().updateRootScene(rootSceneVO);
-        }
-
-        for (int i = 0; i < currentScene.getItems().size(); i++) {
-            inputHandler.initItemListeners(currentScene.getItems().get(i));
-        }
-
-        mainBox.addActor(currentScene);
-        currentScene.setX(0);
-        currentScene.setY(0);
-
-        uiStage.getLayerPanel().initContent();
-
-        if (currentSceneVo.ambientColor == null) {
-            currentSceneVo.ambientColor = new float[4];
-            currentSceneVo.ambientColor[0] = 0.5f;
-            currentSceneVo.ambientColor[1] = 0.5f;
-            currentSceneVo.ambientColor[2] = 0.5f;
-            currentSceneVo.ambientColor[3] = 1.0f;
-        }
-
-        forceContinuousParticles(composite);
-    }
 
     public void getIntoPrevComposite() {
         getCamera().position.set(0, 0, 0);
@@ -683,56 +684,6 @@ public class Sandbox {
         return lowestY;
     }
 
-    public void disableLights(boolean disable) {
-
-        ArrayList<LightActor> lights = getAllLights(currentScene);
-//        if (disable) {
-//            lights = essentials.rayHandler.lightList;
-//        } else {
-//            lights = essentials.rayHandler.disabledLights;
-//        }
-        for (int i = lights.size() - 1; i >= 0; i--) {
-            LightActor lightActor = lights.get(i);
-            if(lightActor.lightObject !=null){
-                lightActor.lightObject.setActive(!disable);
-            }
-
-        }
-    }
-
-
-    private ArrayList<LightActor> getAllLights(CompositeItem curComposite){
-
-        ArrayList<LightActor> lights = new ArrayList<LightActor>();
-
-        if(curComposite == null){
-            return lights;
-        }
-
-        ArrayList<IBaseItem> items = curComposite.getItems();
-
-        ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
-
-
-        int i=0;
-        for(i=0;i<items.size();i++){
-            IBaseItem item = items.get(i);
-            if(item instanceof LightActor){
-                lights.add((LightActor) item);
-            }
-
-            if( item instanceof CompositeItem){
-                nestedComposites.add((CompositeItem) item);
-            }
-
-        }
-
-        for(i=0;i<nestedComposites.size();i++){
-            lights.addAll(getAllLights(nestedComposites.get(i)));
-        }
-
-        return lights;
-    }
 
     public boolean isComponentSkinAvailable() {
         if (TextureManager.getInstance().projectSkin == null) {
@@ -745,5 +696,9 @@ public class Sandbox {
 
     public LayerItemVO getSelectedLayer() {
         return uiStage.getCurrentSelectedLayer();
+    }
+
+    public void initEvents() {
+        inputHandler.initSandboxEvents();
     }
 }

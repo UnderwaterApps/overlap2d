@@ -37,7 +37,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
     private FPSLogger fpsLogger;
 
 
-    private Group mainBox = new Group();
+    public Group mainBox = new Group();
 
 
     public Sandbox sandbox;
@@ -67,29 +67,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         flow = new FlowManager(sandbox.sceneControl.getRootSceneVO());
     }
 
-
-    private boolean checkForNoSkinDialog(final String type, final float x, final float y) {
-        if (TextureManager.getInstance().projectSkin == null) {
-            ConfirmDialog confirmDialog = uiStage.showConfirmDialog();
-
-            confirmDialog.setDescription("There is no style imported yet. Do you want to add default style instead to make this work?");
-            confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
-                @Override
-                public void onConfirm() {
-                    DataManager.getInstance().copyDefaultStyleIntoProject();
-                    createComponent(type, x, y);
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-            return true;
-        }
-        return false;
-    }
-
     private void initView() {
         if (mainBox != null) mainBox.clear();
         clear();
@@ -110,26 +87,12 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
         addActor(frontUI);
 
-        initEvents();
-
         sandbox.initSceneView(rootSceneVO);
         uiStage.getCompositePanel().addScene(rootSceneVO);
+
+        sandbox.initEvents();
     }
 
-    private void forceContinuousParticles(CompositeItem composite) {
-        ArrayList<IBaseItem> asd = composite.getItems();
-        for (int i = 0; i < asd.size(); i++) {
-            IBaseItem item = asd.get(i);
-            if (item instanceof ParticleItem) {
-                ((ParticleItem) item).forceContinuous();
-                continue;
-            }
-            if (item instanceof CompositeItem) {
-                forceContinuousParticles((CompositeItem) item);
-            }
-
-        }
-    }
 
     public void setKeyboardFocus() {
         setKeyboardFocus(mainBox);
