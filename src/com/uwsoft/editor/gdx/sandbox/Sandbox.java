@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
+import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.SandboxResourceManager;
 import com.uwsoft.editor.data.manager.TextureManager;
@@ -53,6 +54,9 @@ public class Sandbox {
     private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
 
     private InputMultiplexer inputMultiplexer;
+
+    public FlowManager flow;
+
     /**
      * this part is to be modified
      */
@@ -65,6 +69,8 @@ public class Sandbox {
     private Vector3 copedItemCameraOffset;
     private IResourceRetriever rm;
     private  ArrayList<MainItemVO> tempClipboard;
+    private String fakeClipboard;
+    private String currentLoadedSceneFileName;
 
     public Sandbox() {
 
@@ -113,6 +119,8 @@ public class Sandbox {
         DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
 
         sceneControl.initScene(sceneName);
+
+        flow = new FlowManager(sceneControl.getRootSceneVO());
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
@@ -370,16 +378,13 @@ public class Sandbox {
 
         item.setWidth(width);
         item.setHeight(height);
-        //item.getItems().get(0).getDataVO();
-        ///System.out.println("fddddd " + ((Actor)item.getItems().get(0)).getX());
 
         removeCurrentSelectedItems();
 
         sceneControl.getCurrentScene().addItem(item);
 
-        ///System.out.println("SSSSddddd " + ((Actor)item.getItems().get(0)).getX());
-        initItemListeners(item);
-        updateSceneTree();
+        inputHandler.initItemListeners(item);
+        uiStage.getItemsBox().initContent();
         setSelection(item, true);
 
         return item;
@@ -416,7 +421,7 @@ public class Sandbox {
 
     public void loadCurrentProject(String name) {
         rm = new SandboxResourceManager();
-        essentials.rm = rm;
+        sceneControl.getEssentials().rm = rm;
         loadScene(name);
     }
 
@@ -438,17 +443,17 @@ public class Sandbox {
         ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         DataManager.getInstance().saveCurrentProject();
-        getCamera().position.set(0, 0, 0);
+        sandboxStage.getCamera().position.set(0, 0, 0);
 
     }
 
 
-    public int getCurrentMode() {
-        return currentMode;
+    public EditingMode getCurrentMode() {
+        return editingMode;
     }
 
-    public void setCurrentMode(int currentMode) {
-        this.currentMode = currentMode;
+    public void setCurrentMode(EditingMode currentMode) {
+        this.editingMode = currentMode;
         for (SelectionRectangle value : currentSelection.values()) {
             value.setMode(currentMode);
         }
@@ -456,10 +461,10 @@ public class Sandbox {
 
 
     public SceneVO sceneVoFromItems() {
-        CompositeItemVO itemVo = rootSceneVO;
+        CompositeItemVO itemVo = sceneControl.getRootSceneVO();
         cleanComposite(itemVo.composite);
-        currentSceneVo.composite = itemVo.composite;
-        return currentSceneVo;
+        sceneControl.setCurrentSceneVo(itemVo.composite);
+        return sceneControl.getCurrentSceneVO();
     }
 
     private void cleanComposite(CompositeVO compositeVO) {
@@ -500,7 +505,7 @@ public class Sandbox {
                 reconstructFromSceneVo(compositeItemVO);
                 break;
         }
-        currentScene.updateDataVO();
+        sceneControl.getCurrentScene().updateDataVO();
     }
 
     public void redo() {
@@ -517,7 +522,7 @@ public class Sandbox {
                 reconstructFromSceneVo(compositeItemVO);
                 break;
         }
-        currentScene.updateDataVO();
+        sceneControl.getCurrentScene().updateDataVO();
     }
 
     public ArrayList<IBaseItem> getSelectedItems() {
@@ -535,7 +540,7 @@ public class Sandbox {
     }
 
     public void copyAction() {
-        currentScene.updateDataVO();
+        sceneControl.getCurrentScene().updateDataVO();
         ArrayList<IBaseItem> items = getSelectedItems();
         putItemsToClipboard(items);
     }
@@ -551,35 +556,35 @@ public class Sandbox {
         CompositeItemVO fakeVO = new CompositeItemVO();
 
         fakeVO.composite = tempHolder;
-        CompositeItem fakeItem = new CompositeItem(fakeVO, sceneLoader.essentials);
+        CompositeItem fakeItem = new CompositeItem(fakeVO, sceneControl.getEssentials());
 
         ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
         Actor firstItem = (Actor) fakeItem.getItems().get(0);
-        float offsetX = firstItem.getX()*currentScene.mulX;
-        float offsetY = firstItem.getY()*currentScene.mulY;
+        float offsetX = firstItem.getX()*sceneControl.getCurrentScene().mulX;
+        float offsetY = firstItem.getY()*sceneControl.getCurrentScene().mulY;
         for (int i = 1; i < fakeItem.getItems().size(); i++) {
             Actor item = (Actor) fakeItem.getItems().get(i);
-            if (item.getX()*currentScene.mulX < offsetX) {
-                offsetX = item.getX()*currentScene.mulX;
+            if (item.getX()*sceneControl.getCurrentScene().mulX < offsetX) {
+                offsetX = item.getX()*sceneControl.getCurrentScene().mulX;
             }
-            if (item.getY()*currentScene.mulY < offsetY) {
-                offsetY = item.getY()*currentScene.mulY;
+            if (item.getY()*sceneControl.getCurrentScene().mulY < offsetY) {
+                offsetY = item.getY()*sceneControl.getCurrentScene().mulY;
             }
         }
-        Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) getCamera()).position;
+        Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) sandboxStage.getCamera()).position;
         for (int i = 0; i < fakeItem.getItems().size(); i++) {
             IBaseItem itm = fakeItem.getItems().get(i);
             itm.getDataVO().layerName = uiStage.getCurrentSelectedLayer().layerName;
-            currentScene.addItem(itm);
+            sceneControl.getCurrentScene().addItem(itm);
             ((Actor) itm).setX(x + ((Actor) itm).getX() - offsetX + (cameraPos.x + copedItemCameraOffset.x));
             ((Actor) itm).setY(y + ((Actor) itm).getY() - offsetY + (cameraPos.y + copedItemCameraOffset.y));
             itm.updateDataVO();
-            initItemListeners(itm);
+            inputHandler.initItemListeners(itm);
             finalItems.add(itm);
         }
 
         setSelections(finalItems, true);
-        updateSceneTree();
+        uiStage.getItemsBox().initContent();
     }
 
     private void putItemsToClipboard(ArrayList<IBaseItem> items) {
@@ -587,7 +592,7 @@ public class Sandbox {
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
         Actor actor = (Actor) items.get(0);
-        Vector3 cameraPos = ((OrthographicCamera) getCamera()).position;
+        Vector3 cameraPos = ((OrthographicCamera) sandboxStage.getCamera()).position;
         Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
         for (IBaseItem item : items) {
             tempHolder.addItem(item.getDataVO());
@@ -604,17 +609,17 @@ public class Sandbox {
     }
 
     public void saveSceneCurrentSceneData() {
-        currentScene.updateDataVO();
-        flow.setPendingHistory(getCurrentScene().dataVO);
+        sceneControl.getCurrentScene().updateDataVO();
+        flow.setPendingHistory(sceneControl.getCurrentScene().dataVO);
         flow.applyPendingAction();
     }
 
     public void setSceneAmbientColor(Color color) {
-        currentSceneVo.ambientColor[0] = color.r;
-        currentSceneVo.ambientColor[1] = color.g;
-        currentSceneVo.ambientColor[2] = color.b;
-        currentSceneVo.ambientColor[3] = color.a;
-        essentials.rayHandler.setAmbientLight(color);
+        sceneControl.getCurrentSceneVO().ambientColor[0] = color.r;
+        sceneControl.getCurrentSceneVO().ambientColor[1] = color.g;
+        sceneControl.getCurrentSceneVO().ambientColor[2] = color.b;
+        sceneControl.getCurrentSceneVO().ambientColor[3] = color.a;
+        sceneControl.getEssentials().rayHandler.setAmbientLight(color);
     }
 
     public void updateSelections() {

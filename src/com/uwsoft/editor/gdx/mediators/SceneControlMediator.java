@@ -8,6 +8,7 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LightActor;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -133,7 +134,9 @@ public class SceneControlMediator {
         return lights;
     }
 
-
+    public void setCurrentSceneVo(CompositeVO vo) {
+        currentSceneVo = vo;
+    }
 
     public Essentials getEssentials() {
         return essentials;

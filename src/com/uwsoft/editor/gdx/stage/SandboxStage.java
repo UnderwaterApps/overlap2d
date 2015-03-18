@@ -18,8 +18,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
     public SandboxUI ui;
     public SandboxFrontUI frontUI;
 
-    public FlowManager flow;
-
     public PixelRect selectionRec;
     private FPSLogger fpsLogger;
 
@@ -46,10 +44,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         this.uiStage = uiStage;
     }
 
-    private void initData(String sceneName) {
-        sandbox.initData(sceneName);
-        flow = new FlowManager(sandbox.sceneControl.getRootSceneVO());
-    }
 
     public void initView() {
         if (mainBox != null) mainBox.clear();
