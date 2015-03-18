@@ -28,6 +28,9 @@ public class LevelEditorScreen extends Screen implements IObserver {
         super(game);
 
         sandbox = new Sandbox();
+        sandboxStage = sandbox.getSandboxStage();
+        uiStage = sandbox.getUIStage();
+        sandboxStage.sandbox = sandbox;
 
         // check for demo project
         File demoDir = new File(DataManager.getInstance().getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");

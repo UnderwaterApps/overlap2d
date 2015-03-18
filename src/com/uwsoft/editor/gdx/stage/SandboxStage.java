@@ -24,7 +24,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
     public Group mainBox = new Group();
 
-
     public Sandbox sandbox;
 
     public SandboxStage() {

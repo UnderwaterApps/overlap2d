@@ -134,7 +134,7 @@ public class UIStage extends BaseStage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (sandboxStage.frontUI.dropDown != null) {
+                if (sandboxStage.frontUI != null && sandboxStage.frontUI.dropDown != null) {
                     sandboxStage.frontUI.dropDown.remove();
                 }
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
