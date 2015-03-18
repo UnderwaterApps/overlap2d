@@ -92,42 +92,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         return false;
     }
 
-    private boolean checkForNoLabelStyleDialog(final String type, final float x, final float y) {
-        if (!TextureManager.getInstance().checkFontExistence()) {
-            ConfirmDialog confirmDialog = uiStage.showConfirmDialog();
-
-            confirmDialog.setDescription("There is no fonts imported yet.Do you want to copy default font");
-            confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
-                @Override
-                public void onConfirm() {
-                    DataManager.getInstance().copyDefaultFontIntoProject();
-                    createComponent(type, x, y);
-                }
-
-                @Override
-                public void onCancel() {
-
-                }
-            });
-            return true;
-        }
-        return false;
-    }
-
-    public boolean checkForNoLayersSelectedDialog() {
-        if (uiStage.getCurrentSelectedLayer() == null) {
-            // TODO: alert that there is no layers availibly
-            return true;
-        }
-
-        return false;
-    }
-
-    private void updateSceneTree() {
-        uiStage.getItemsBox().initContent();
-    }
-
-
     private void initView() {
         if (mainBox != null) mainBox.clear();
         clear();

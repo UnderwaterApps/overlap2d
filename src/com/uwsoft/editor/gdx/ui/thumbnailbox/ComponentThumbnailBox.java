@@ -28,7 +28,7 @@ public class ComponentThumbnailBox extends DraggableThumbnailBox {
         DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
             @Override
             public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.sandboxStage.createComponent(pld.assetName, x, y);
+                stage.getSandbox().getUac().createComponent(pld.assetName, x, y);
             }
         };
 

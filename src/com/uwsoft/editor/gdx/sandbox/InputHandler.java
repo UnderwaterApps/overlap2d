@@ -28,7 +28,7 @@ public class InputHandler extends InputAdapter {
 
     }
 
-    private void initItemListeners(final IBaseItem iterableItem) {
+    public void initItemListeners(final IBaseItem iterableItem) {
         ClickListener listener = new ClickListener() {
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

@@ -10,12 +10,15 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.SandboxResourceManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
+import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
+import com.uwsoft.editor.gdx.ui.layer.LayerItem;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -37,9 +40,12 @@ public class Sandbox {
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
 
-    private SandboxStage stage;
+    private SandboxStage sandboxStage;
+    private UIStage uiStage;
 
     private InputHandler inputHandler;
+    private UserActionController uac;
+    private ItemFactory itemFactory;
 
     HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
 
@@ -55,15 +61,41 @@ public class Sandbox {
     private Vector3 copedItemCameraOffset;
     private IResourceRetriever rm;
 
-    public Sandbox(SandboxStage stage, SceneLoader sceneLoader, Essentials essentials) {
+    public Sandbox(SandboxStage sandboxStage, SceneLoader sceneLoader, Essentials essentials) {
 
         editingMode = EditingMode.SELECTION;
 
         sceneControl = new SceneControlMediator(sceneLoader, essentials);
         itemControl = new ItemControlMediator(sceneControl);
         inputHandler = new InputHandler();
+        uac = new UserActionController(this);
 
-        this.stage = stage;
+        this.sandboxStage = sandboxStage;
+        this.uiStage = sandboxStage.uiStage;
+    }
+
+    public UserActionController getUac() {
+        return uac;
+    }
+
+    public SandboxStage getSandboxStage() {
+        return sandboxStage;
+    }
+
+    public UIStage getUIStage() {
+        return uiStage;
+    }
+
+    public ItemFactory getItemFactory() {
+        return itemFactory;
+    }
+
+    public SceneControlMediator getSceneControl() {
+        return sceneControl;
+    }
+
+    public InputHandler getInputHandler() {
+        return inputHandler;
     }
 
     public void initData(String sceneName) {
@@ -691,5 +723,18 @@ public class Sandbox {
         }
 
         return lights;
+    }
+
+    public boolean isComponentSkinAvailable() {
+        if (TextureManager.getInstance().projectSkin == null) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    public LayerItemVO getSelectedLayer() {
+        return uiStage.getCurrentSelectedLayer();
     }
 }
