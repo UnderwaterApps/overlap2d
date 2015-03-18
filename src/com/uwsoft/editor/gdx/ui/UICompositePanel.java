@@ -71,21 +71,21 @@ public class UICompositePanel extends UIBox {
         }
     }*/
     public void updateOriginalItem() {
-        updateOriginalItem(scenes.get(scenes.size() - 1), stage.sandboxStage.getCurrentScene());
+        updateOriginalItem(scenes.get(scenes.size() - 1), stage.getSandbox().getCurrentScene());
     }
 
     private void updateOriginalItem(CompositeItemVO updatableVo, CompositeItem currItem) {
         updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
 
         String libName = currItem.getDataVO().itemName;
-        CompositeItemVO libItem = stage.sandboxStage.getCurrentSceneVO().libraryItems.get(libName);
+        CompositeItemVO libItem = stage.getSandbox().sceneControl.getCurrentSceneVO().libraryItems.get(libName);
 
         if (libItem != null) {
             libItem.update(currItem.getDataVO());
 
 
             //TODO: update other items with same name
-            revursiveUpdateLibraryVO(libName, stage.sandboxStage.getRootScene(), currItem.getDataVO());
+            revursiveUpdateLibraryVO(libName, stage.getSandbox().sceneControl.getRootSceneVO(), currItem.getDataVO());
         }
     }
 
@@ -103,8 +103,8 @@ public class UICompositePanel extends UIBox {
     public void stepUp() {
         if (scenes.size() > 1) {
             int currIndex = scenes.size() - 1;
-            stage.sandboxStage.getCurrentScene().updateDataVO();
-            updateOriginalItem(scenes.get(currIndex), stage.sandboxStage.getCurrentScene());
+            stage.getSandbox().getCurrentScene().updateDataVO();
+            updateOriginalItem(scenes.get(currIndex), stage.getSandbox().getCurrentScene());
             scenes.remove(currIndex);
             CompositeItemVO scn = scenes.get(currIndex - 1);
             loadScene(scn);
@@ -135,7 +135,7 @@ public class UICompositePanel extends UIBox {
                     super.touchUp(event, x, y, pointer, button);
 
                     for (int j = scenes.size() - 1; j > currIter; j--) {
-                        updateOriginalItem(scenes.get(j), stage.sandboxStage.getCurrentScene());
+                        updateOriginalItem(scenes.get(j), stage.getSandbox().getCurrentScene());
                         scenes.remove(j);
                     }
                     loadScene(currScn);

@@ -126,7 +126,7 @@ public class UIStage extends BaseStage {
     }
 
     public void loadScene(CompositeItemVO scene) {
-        sandboxStage.initSceneView(scene);
+        getSandbox().initSceneView(scene);
     }
 
 
@@ -134,8 +134,8 @@ public class UIStage extends BaseStage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (sandboxStage.dropDown != null) {
-                    sandboxStage.dropDown.remove();
+                if (sandboxStage.frontUI.dropDown != null) {
+                    sandboxStage.frontUI.dropDown.remove();
                 }
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
@@ -157,7 +157,7 @@ public class UIStage extends BaseStage {
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
 
-        return sandboxStage.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
+        return getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
     }
 
 

@@ -108,7 +108,7 @@ public class DlgExport extends CompositeDialog {
     	int width	=	Integer.parseInt(packerWidth.getText());
     	int height	=	Integer.parseInt(packerHeight.getText());
     	if(! ((width > 0) && ((width & (width - 1)) == 0) && (width > 0) && ((height & (height - 1)) == 0))){    		
-    		stage.showInfoDialogNavigateBack("Width and height must be power of 2");
+    		stage.dialogs().showInfoDialogNavigateBack("Width and height must be power of 2");
     		return;
     	}
     	if(width!=Integer.parseInt(projectVO.texturepackerWidth) || height!=Integer.parseInt(projectVO.texturepackerHeight)){

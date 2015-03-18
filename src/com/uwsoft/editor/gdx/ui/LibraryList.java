@@ -53,7 +53,7 @@ public class LibraryList extends Group {
         scroll.setFlickScroll(false);
 
 
-        items = s.sandboxStage.getCurrentSceneVO().libraryItems;
+        items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
 
 
         Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
@@ -116,7 +116,7 @@ public class LibraryList extends Group {
     }
 
     private void showConfirmDialog(final LibraryItemThumbnailBox librarySelectedItem) {
-        ConfirmDialog confirmDialog = stage.showConfirmDialog();
+        ConfirmDialog confirmDialog = stage.dialogs().showConfirmDialog();
         confirmDialog.setDescription("Are you sure you want to delete library item?");
 
         confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
@@ -134,7 +134,7 @@ public class LibraryList extends Group {
     }
 
     private void showRenameDialog() {
-        InputDialog dlg = stage.showInputDialog();
+        InputDialog dlg = stage.dialogs().showInputDialog();
 
 
         dlg.setDescription("New name for your layer");

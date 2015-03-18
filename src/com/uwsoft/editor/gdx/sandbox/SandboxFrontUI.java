@@ -17,6 +17,12 @@ public class SandboxFrontUI extends Group {
 
     public SelectionActions dropDown;
 
+    private Sandbox sandbox;
+
+    public SandboxFrontUI(Sandbox sandbox) {
+        this.sandbox = sandbox;
+    }
+
     public void showDropDownForSelection(final float x, final float y) {
         showDropDownForSelection(x, y, null);
     }
@@ -36,12 +42,12 @@ public class SandboxFrontUI extends Group {
             dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
         } else {
 
-            if (currentSelection.size() > 0) {
+            if (sandbox.getCurrentSelection().size() > 0) {
                 dropDown.addItem(SelectionActions.GROUP_ITEMS, "Group into Composite");
             }
 
-            if (currentSelection.size() == 1) {
-                for (SelectionRectangle value : currentSelection.values()) {
+            if (sandbox.getCurrentSelection().size() == 1) {
+                for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                     if (value.getHost().isComposite()) {
                         dropDown.addItem(SelectionActions.ADD_TO_LIBRARY, "Add to Library");
                         dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
@@ -51,7 +57,7 @@ public class SandboxFrontUI extends Group {
 
             dropDown.addItem(SelectionActions.PASTE, "Paste");
 
-            if (isItemTouched) {
+            if (sandbox.isItemTouched) {
                 dropDown.addItem(SelectionActions.CONVERT_TO_BUTTON, "Convert to Button");
                 dropDown.addItem(SelectionActions.EDIT_PHYSICS, "Edit Physics");
                 dropDown.addItem(SelectionActions.CUT, "Cut");
@@ -61,10 +67,10 @@ public class SandboxFrontUI extends Group {
         }
 
         dropDown.initView();
-        Vector2 vector2 = uiStage.contextMenuContainer.stageToLocalCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        Vector2 vector2 = sandbox.getUIStage().contextMenuContainer.stageToLocalCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
         dropDown.setX(vector2.x);
-        dropDown.setY(uiStage.getHeight() - vector2.y);
-        uiStage.contextMenuContainer.addActor(dropDown);
+        dropDown.setY(sandbox.getUIStage().getHeight() - vector2.y);
+        sandbox.getUIStage().contextMenuContainer.addActor(dropDown);
 
         //
         dropDown.setEventListener(new SelectionActions.SelectionEvent() {
@@ -73,51 +79,51 @@ public class SandboxFrontUI extends Group {
             public void doAction(int action) {
                 switch (action) {
                     case SelectionActions.GROUP_ITEMS:
-                        groupItemsIntoComposite();
-                        saveSceneCurrentSceneData();
+                        sandbox.groupItemsIntoComposite();
+                        sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.CONVERT_TO_BUTTON:
-                        CompositeItem btn = groupItemsIntoComposite();
+                        CompositeItem btn = sandbox.groupItemsIntoComposite();
                         btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
                         btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
                         btn.reAssembleLayers();
 
-                        saveSceneCurrentSceneData();
+                        sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.EDIT_ASSET_PHYSICS:
-                        uiStage.editPhysics(regionName);
+                        sandbox.getUIStage().editPhysics(regionName);
                         break;
                     case SelectionActions.EDIT_PHYSICS:
-                        if (currentSelection.size() == 1) {
-                            for (SelectionRectangle value : currentSelection.values()) {
+                        if (sandbox.getCurrentSelection().size() == 1) {
+                            for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                                 IBaseItem item = value.getHost();
-                                uiStage.editPhysics(item);
+                                sandbox.getUIStage().editPhysics(item);
                                 break;
                             }
                         }
 
                         break;
                     case SelectionActions.ADD_TO_LIBRARY:
-                        addCompositeToLibrary();
+                        sandbox.addCompositeToLibrary();
                         break;
                     case SelectionActions.EDIT_COMPOSITE:
-                        getIntoComposite();
-                        flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
-                        flow.applyPendingAction();
+                        sandbox.getIntoComposite();
+                        sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
+                        sandbox.flow.applyPendingAction();
                         break;
                     case SelectionActions.COPY:
-                        copyAction();
+                        sandbox.copyAction();
                         break;
                     case SelectionActions.CUT:
-                        cutAction();
-                        saveSceneCurrentSceneData();
+                        sandbox.cutAction();
+                        sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.PASTE:
-                        pasteAction(x, y, true);
-                        saveSceneCurrentSceneData();
+                        sandbox.pasteAction(x, y, true);
+                        sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.DELETE:
-                        removeCurrentSelectedItems();
+                        sandbox.removeCurrentSelectedItems();
                         break;
                     default:
                         break;

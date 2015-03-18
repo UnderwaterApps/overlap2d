@@ -27,7 +27,7 @@ public class UIPropertiesBox extends ExpandableUIBox {
         if (currentItem == null) return;
         SceneLoader sceneLoader = stage.sceneLoader;
 
-        basicBox = new BasicItemProperties(stage.sandboxStage, sceneLoader);
+        basicBox = new BasicItemProperties(stage.getSandbox(), sceneLoader);
         basicBox.setObject(currentItem);
         basicBox.setX(getWidth() / 2 - basicBox.getWidth() / 2);
         basicBox.setY(getHeight() - basicBox.getHeight() - 20);
@@ -37,7 +37,7 @@ public class UIPropertiesBox extends ExpandableUIBox {
         String className = currentItem.getClass().getSimpleName().toString();
 
         if (className.equals("LabelItem")) {
-            LabelItemProperties lblBox = new LabelItemProperties(stage.sandboxStage, sceneLoader);
+            LabelItemProperties lblBox = new LabelItemProperties(stage.getSandbox(), sceneLoader);
             lblBox.setObject((LabelItem) currentItem);
             lblBox.setX(getWidth() / 2 - basicBox.getWidth() / 2);
             lblBox.setY(basicBox.getY() - lblBox.getHeight() - 10);

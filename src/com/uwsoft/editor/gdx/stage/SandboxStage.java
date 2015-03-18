@@ -50,7 +50,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         clear();
         getCamera().position.set(0, 0, 0);
 
-        frontUI = new SandboxFrontUI();
+        frontUI = new SandboxFrontUI(sandbox);
 
         ui = new SandboxUI(this);
         addActor(ui);

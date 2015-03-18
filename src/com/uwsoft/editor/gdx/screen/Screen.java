@@ -1,12 +1,12 @@
 package com.uwsoft.editor.gdx.screen;
 
-import com.uwsoft.editor.gdx.LunarEditorListener;
+import com.uwsoft.editor.gdx.Overlap2DListener;
 
 public abstract class Screen
 {
-		public LunarEditorListener game;    // the game listener
+		public Overlap2DListener game;    // the game listener
 		
-        public Screen(LunarEditorListener g)
+        public Screen(Overlap2DListener g)
         {
                 this.game = g;
         }

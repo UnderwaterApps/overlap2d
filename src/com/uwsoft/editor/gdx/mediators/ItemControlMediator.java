@@ -22,7 +22,7 @@ public class ItemControlMediator {
     }
 
 
-    private void itemZIndexChange( HashMap<IBaseItem, SelectionRectangle> currentSelection, boolean isUp) {
+    public void itemZIndexChange( HashMap<IBaseItem, SelectionRectangle> currentSelection, boolean isUp) {
         for (SelectionRectangle value : currentSelection.values()) {
             sceneControl.getCurrentScene().updateDataVO();
 

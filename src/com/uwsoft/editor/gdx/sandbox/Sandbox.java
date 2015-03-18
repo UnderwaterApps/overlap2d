@@ -60,17 +60,18 @@ public class Sandbox {
     /**
      * this part is to be modified
      */
-    private int currTransformType = -1;
-    private IBaseItem currTransformHost;
-    private boolean isResizing = false;
-    private boolean isUsingSelectionTool = true;
-    private boolean isItemTouched = false;
-    private boolean dirty = false;
-    private Vector3 copedItemCameraOffset;
-    private IResourceRetriever rm;
-    private  ArrayList<MainItemVO> tempClipboard;
-    private String fakeClipboard;
-    private String currentLoadedSceneFileName;
+    public int currTransformType = -1;
+    public IBaseItem currTransformHost;
+    public boolean isResizing = false;
+    public boolean isUsingSelectionTool = true;
+    public boolean isItemTouched = false;
+    public boolean dirty = false;
+    public Vector3 copedItemCameraOffset;
+    public IResourceRetriever rm;
+    public  ArrayList<MainItemVO> tempClipboard;
+    public String fakeClipboard;
+    public String currentLoadedSceneFileName;
+    public boolean cameraPanOn;
 
     public Sandbox() {
 
@@ -87,7 +88,7 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
-        inputHandler = new InputHandler();
+        inputHandler = new InputHandler(this);
         uac = new UserActionController(this);
     }
 
@@ -177,7 +178,7 @@ public class Sandbox {
 
         if (removeOthers) clearSelections();
 
-        SelectionRectangle rect = new SelectionRectangle(sandboxStage);
+        SelectionRectangle rect = new SelectionRectangle(this);
         rect.claim(item);
         rect.setMode(editingMode);
         currentSelection.put(item, rect);
@@ -194,14 +195,14 @@ public class Sandbox {
 
     }
 
-    private void releaseSelection(IBaseItem item) {
+    public void releaseSelection(IBaseItem item) {
         currentSelection.get(item).remove();
         currentSelection.remove(item);
 
         sandboxStage.uiStage.getItemsBox().setSelected(currentSelection);
     }
 
-    private void clearSelections() {
+    public void clearSelections() {
         for (SelectionRectangle value : currentSelection.values()) {
             value.remove();
         }
@@ -210,7 +211,7 @@ public class Sandbox {
         sandboxStage.uiStage.getItemsBox().setSelected(currentSelection);
     }
 
-    private void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
+    public void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
         clearSelections();
 
         for (int i = 0; i < items.size(); i++) {
@@ -221,7 +222,7 @@ public class Sandbox {
         }
     }
 
-    private void moveSelectedItemsBy(float x, float y) {
+    public void moveSelectedItemsBy(float x, float y) {
         for (SelectionRectangle selectionRect : currentSelection.values()) {
             itemControl.moveItemBy(selectionRect.getHostAsActor(), x, y);
 
@@ -232,7 +233,7 @@ public class Sandbox {
         saveSceneCurrentSceneData();
     }
 
-    private void removeCurrentSelectedItems() {
+    public void removeCurrentSelectedItems() {
         for (SelectionRectangle selectionRect : currentSelection.values()) {
             itemControl.removeItem(selectionRect.getHostAsActor());
             selectionRect.remove();
@@ -316,6 +317,10 @@ public class Sandbox {
 
     public void pastClipBoard() {
         //TODO: duplicate item here
+    }
+
+    public HashMap<IBaseItem, SelectionRectangle> getCurrentSelection() {
+        return currentSelection;
     }
 
     public CompositeItem groupItemsIntoComposite() {
@@ -718,5 +723,9 @@ public class Sandbox {
         if (item == null || item.getClass().getSimpleName().equals("LabelItem")) return;
         currTransformType = transformType;
         currTransformHost = item;
+    }
+
+    public CompositeItem getCurrentScene() {
+        return sceneControl.getCurrentScene();
     }
 }

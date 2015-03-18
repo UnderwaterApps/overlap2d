@@ -24,8 +24,10 @@ import java.util.ArrayList;
  */
 public class InputHandler extends InputAdapter {
 
-    public InputHandler() {
+    private Sandbox sandbox;
 
+    public InputHandler(Sandbox sandbox) {
+        this.sandbox = sandbox;
     }
 
     public void initItemListeners(final IBaseItem iterableItem) {
@@ -34,32 +36,32 @@ public class InputHandler extends InputAdapter {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
                 iterableItem.updateDataVO();
-                if (cameraPanOn) {
+                if (sandbox.cameraPanOn) {
                     return false;
                 }
 
-                if (currentSelection.get(iterableItem) != null && Gdx.input.isKeyPressed(59)) {
-                    releaseSelection(iterableItem);
+                if (sandbox.getCurrentSelection().get(iterableItem) != null && Gdx.input.isKeyPressed(59)) {
+                    sandbox.releaseSelection(iterableItem);
                 } else {
                     if (iterableItem.isLockedByLayer()) {
-                        clearSelections();
+                        sandbox.clearSelections();
                     } else {
-                        setSelection(iterableItem, !Gdx.input.isKeyPressed(59));
+                        sandbox.setSelection(iterableItem, !Gdx.input.isKeyPressed(59));
                     }
                 }
 
-                for (SelectionRectangle value : currentSelection.values()) {
+                for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                     value.setTouchDiff(event.getStageX() - value.getHostAsActor().getX(), event.getStageY() - value.getHostAsActor().getY());
                 }
-                isItemTouched = true;
-                uiStage.updateCurrentItemState();
+                sandbox.isItemTouched = true;
+                sandbox.getUIStage().updateCurrentItemState();
                 return true;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-                for (SelectionRectangle value : currentSelection.values()) {
+                for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                     IBaseItem item = ((IBaseItem) value.getHostAsActor());
                     item.updateDataVO();
 
@@ -67,65 +69,66 @@ public class InputHandler extends InputAdapter {
                     if (item.isComposite()) {
                         ((CompositeItem) item).positionPhysics();
                     } else if (item.getBody() != null) {
-                        item.getBody().setTransform(item.getDataVO().x * currentScene.mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * currentScene.mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
+                        item.getBody().setTransform(item.getDataVO().x * sandbox.getCurrentScene().mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * sandbox.getCurrentScene().mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
                     }
 
                 }
 
-                if (cameraPanOn) {
-                    // cameraPanOn = !(button == 2);
+                if (sandbox.cameraPanOn) {
+                    // sandbox.cameraPanOn = !(button == 2);
                     return;
                 }
                 if (button == 1) {
-                    showDropDownForSelection(event.getStageX(), event.getStageY());
+                    sandbox.getSandboxStage().frontUI.showDropDownForSelection(event.getStageX(), event.getStageY());
                 }
-                for (SelectionRectangle value : currentSelection.values()) {
+                for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                     value.show();
                 }
 
-                if (dirty) {
-                    saveSceneCurrentSceneData();
+                if (sandbox.dirty) {
+                    sandbox.saveSceneCurrentSceneData();
                 }
-                isItemTouched = false;
-                dirty = false;
+                sandbox.isItemTouched = false;
+                sandbox.dirty = false;
                 if (getTapCount() == 2) {
-                    getIntoComposite();
-                    flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
-                    flow.applyPendingAction();
+                    sandbox.getIntoComposite();
+                    sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
+                    sandbox.flow.applyPendingAction();
                 }
-                uiStage.updateCurrentItemState();
+                sandbox.getUIStage().updateCurrentItemState();
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                if (isItemTouched && !isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-                    dirty = true;
-                    for (SelectionRectangle value : currentSelection.values()) {
+                if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+                    sandbox.dirty = true;
+                    for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                         float[] diff = value.getTouchDiff();
                         value.getHostAsActor().setX(event.getStageX() - diff[0]);
                         value.getHostAsActor().setY(event.getStageY() - diff[1]);
                         value.hide();
                     }
                 }
-                uiStage.updateCurrentItemState();
+                sandbox.getUIStage().updateCurrentItemState();
             }
         };
         listener.setTapCountInterval(0.5f);
         ((Actor) iterableItem).addListener(listener);
     }
 
+
+
     public void initSandboxEvents() {
         ClickListener listener = new ClickListener() {
 
-            private float lastX = 0
-                    ,
+            private float lastX = 0,
                     lastY = 0;
 
 
             /** Called when the mouse wheel has been scrolled. When true is returned, the event is {@link com.badlogic.gdx.scenes.scene2d.Event#handle() handled}. */
             public boolean scrolled(InputEvent event, float x, float y, int amount) {
                 if (amount == 0) return false;
-                if (isItemTouched) {
-                    for (SelectionRectangle value : currentSelection.values()) {
+                if (sandbox.isItemTouched) {
+                    for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
                         float degreeAmmount = 1;
                         if (amount < 0) degreeAmmount = -1;
                         if (Gdx.input.isKeyPressed(59)) {
@@ -134,94 +137,95 @@ public class InputHandler extends InputAdapter {
                         value.getHostAsActor().rotateBy(degreeAmmount);
                         value.update();
                     }
-                    dirty = true;
+                    sandbox.dirty = true;
                 }
                 return false;
             }
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
-//                cameraPanOn = false;
+//                sandbox.cameraPanOn = false;
 //                if (event.getStage() == uiStage) {
 //                    return false;
 //                }
                 lastX = Gdx.input.getX();
                 lastY = Gdx.input.getY();
-                uiStage.setKeyboardFocus();
-                uiStage.setScrollFocus(mainBox);
-                setKeyboardFocus();
-                if (dropDown != null) {
-                    dropDown.remove();
-                    dropDown = null;
+                sandbox.getUIStage().setKeyboardFocus();
+                sandbox.getUIStage().setScrollFocus(sandbox.getSandboxStage().mainBox);
+                sandbox.getSandboxStage().setKeyboardFocus();
+
+                if (sandbox.getSandboxStage().frontUI.dropDown != null) {
+                    sandbox.getSandboxStage().frontUI.dropDown.remove();
+                    sandbox.getSandboxStage().frontUI.dropDown = null;
                 }
                 switch (button) {
                     case 2:
-                        cameraPanOn = true;
-                        clearSelections();
-                        isItemTouched = false;
+                        sandbox.cameraPanOn = true;
+                        sandbox.clearSelections();
+                        sandbox.isItemTouched = false;
                         break;
                     case 0:
                         if (!Gdx.input.isKeyPressed(62)) {
-                            selectionRec.setOpacity(0.6f);
+                            sandbox.getSandboxStage().selectionRec.setOpacity(0.6f);
                         }
-                        selectionRec.setWidth(0);
-                        selectionRec.setHeight(0);
-                        selectionRec.setX(x);
-                        selectionRec.setY(y);
+                        sandbox.getSandboxStage().selectionRec.setWidth(0);
+                        sandbox.getSandboxStage().selectionRec.setHeight(0);
+                        sandbox.getSandboxStage().selectionRec.setX(x);
+                        sandbox.getSandboxStage().selectionRec.setY(y);
                         break;
                 }
-                return !isItemTouched;
+                return !sandbox.isItemTouched;
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if (button == 1 && (dropDown == null || dropDown.getParent() == null)) {
-                    clearSelections();
-                    showDropDownForSelection(x, y);
+                if (button == 1 && (sandbox.getSandboxStage().frontUI.dropDown == null || sandbox.getSandboxStage().frontUI.dropDown.getParent() == null)) {
+                    sandbox.clearSelections();
+                    sandbox.getSandboxStage().frontUI.showDropDownForSelection(x, y);
                     return;
                 }
-                if (cameraPanOn) {
-                    cameraPanOn = Gdx.input.isKeyPressed(Input.Keys.SPACE);
+                if (sandbox.cameraPanOn) {
+                    sandbox.cameraPanOn = Gdx.input.isKeyPressed(Input.Keys.SPACE);
                     return;
                 }
-                isUsingSelectionTool = false;
-                selectionRec.setOpacity(0.0f);
+                sandbox.isUsingSelectionTool = false;
+                sandbox.getSandboxStage().selectionRec.setOpacity(0.0f);
                 ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-                Rectangle sR = selectionRec.getRect();
-                for (int i = 0; i < currentScene.getItems().size(); i++) {
-                    Actor asActor = (Actor) currentScene.getItems().get(i);
-                    if (!currentScene.getItems().get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
-                        curr.add(currentScene.getItems().get(i));
+                Rectangle sR = sandbox.getSandboxStage().selectionRec.getRect();
+                for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
+                    Actor asActor = (Actor) sandbox.getCurrentScene().getItems().get(i);
+                    if (!sandbox.getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+                        curr.add(sandbox.getCurrentScene().getItems().get(i));
                     }
                 }
 
-                setSelections(curr, true);
+                sandbox.setSelections(curr, true);
 
                 if (curr.size() == 0) {
-                    uiStage.emptyClick();
+                    sandbox.getUIStage().emptyClick();
                 }
                 if (getTapCount() == 2) {
-                    getIntoPrevComposite();
-                    flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
-                    flow.applyPendingAction();
+                    sandbox.getIntoPrevComposite();
+                    sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
+                    sandbox.flow.applyPendingAction();
                 }
 
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                if (isResizing) return;
+                if (sandbox.isResizing) return;
 
-                if (cameraPanOn) {
-                    float currX = getCamera().position.x + (lastX - Gdx.input.getX());
-                    float currY = getCamera().position.y + (Gdx.input.getY() - lastY);
-                    getCamera().position.set(currX, currY, 0);
+                if (sandbox.cameraPanOn) {
+                    float currX = sandbox.getSandboxStage().getCamera().position.x + (lastX - Gdx.input.getX());
+                    float currY = sandbox.getSandboxStage().getCamera().position.y + (Gdx.input.getY() - lastY);
+                    sandbox.getSandboxStage().getCamera().position.set(currX, currY, 0);
                     lastX = Gdx.input.getX();
                     lastY = Gdx.input.getY();
                 } else {
                     // else using selection tool
-                    isUsingSelectionTool = true;
-                    selectionRec.setWidth(x - selectionRec.getX());
-                    selectionRec.setHeight(y - selectionRec.getY());
+                    sandbox.isUsingSelectionTool = true;
+                    sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
+                    sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
                 }
             }
 
@@ -230,31 +234,31 @@ public class InputHandler extends InputAdapter {
 
                 if (Gdx.input.isKeyPressed(129) || Gdx.input.isKeyPressed(0)) {
                     if (keycode == 19) { // up
-                        itemZeIndexChange(true);
+                        sandbox.itemControl.itemZIndexChange(sandbox.getCurrentSelection(), true);
                     }
                     if (keycode == 20) { // down
-                        itemZeIndexChange(false);
+                        sandbox.itemControl.itemZIndexChange(sandbox.getCurrentSelection(), false);
                     }
                     if (keycode == 29) { // A
                         ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-                        for (int i = 0; i < currentScene.getItems().size(); i++) {
-                            curr.add(currentScene.getItems().get(i));
+                        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
+                            curr.add(sandbox.getCurrentScene().getItems().get(i));
                         }
 
-                        setSelections(curr, true);
+                        sandbox.setSelections(curr, true);
                     }
 
                     if (keycode == Input.Keys.NUM_1 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-                        alignSelections(Align.top);
+                        sandbox.alignSelections(Align.top);
                     }
                     if (keycode == Input.Keys.NUM_2 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-                        alignSelections(Align.left);
+                        sandbox.alignSelections(Align.left);
                     }
                     if (keycode == Input.Keys.NUM_3 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-                        alignSelections(Align.bottom);
+                        sandbox.alignSelections(Align.bottom);
                     }
                     if (keycode == Input.Keys.NUM_4 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-                        alignSelections(Align.right);
+                        sandbox.alignSelections(Align.right);
                     }
 
                     return true;
@@ -262,20 +266,20 @@ public class InputHandler extends InputAdapter {
 
                 if (Gdx.input.isKeyPressed(59)) deltaMove = 20;
                 if (keycode == 19) {
-                    moveSelectedItemsBy(0, deltaMove);
+                    sandbox.moveSelectedItemsBy(0, deltaMove);
                 }
                 if (keycode == 20) {
-                    moveSelectedItemsBy(0, -deltaMove);
+                    sandbox.moveSelectedItemsBy(0, -deltaMove);
                 }
                 if (keycode == 21) {
-                    moveSelectedItemsBy(-deltaMove, 0);
+                    sandbox.moveSelectedItemsBy(-deltaMove, 0);
                 }
                 if (keycode == 22) {
-                    moveSelectedItemsBy(deltaMove, 0);
+                    sandbox.moveSelectedItemsBy(deltaMove, 0);
                 }
-                if (keycode == Input.Keys.SPACE && !isItemTouched && !isUsingSelectionTool) {
-                    setCursor(Cursor.HAND_CURSOR);
-                    cameraPanOn = true;
+                if (keycode == Input.Keys.SPACE && !sandbox.isItemTouched && !sandbox.isUsingSelectionTool) {
+                    sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
+                    sandbox.cameraPanOn = true;
                 }
 
 
@@ -285,17 +289,17 @@ public class InputHandler extends InputAdapter {
             public boolean keyUp(InputEvent event, int keycode) {
                 if (keycode == 67) {
                     // delete
-                    removeCurrentSelectedItems();
+                    sandbox.removeCurrentSelectedItems();
                 }
                 if (keycode == 62) {
-                    setCursor(Cursor.DEFAULT_CURSOR);
-                    cameraPanOn = false;
+                    sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
+                    sandbox.cameraPanOn = false;
                 }
                 return true;
             }
         };
 
-        this.addListener(listener);
+        sandbox.getSandboxStage().addListener(listener);
 
         listener.setTapCountInterval(0.5f);
 
@@ -306,28 +310,28 @@ public class InputHandler extends InputAdapter {
             private Actor currHost;
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (currTransformHost != null && currTransformType >= 0) {
-                    isResizing = true;
-                    currType = currTransformType;
-                    currHost = (Actor) currTransformHost;
+                if (sandbox.currTransformHost != null && sandbox.currTransformType >= 0) {
+                    sandbox.isResizing = true;
+                    currType = sandbox.currTransformType;
+                    currHost = (Actor) sandbox.currTransformHost;
                 }
                 return super.touchDown(event, x, y, pointer, button);
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if (isResizing == true && currHost != null) {
+                if (sandbox.isResizing == true && currHost != null) {
                     ((IBaseItem) currHost).updateDataVO();
                 }
-                isResizing = false;
+                sandbox.isResizing = false;
                 currType = -1;
                 currHost = null;
-                currTransformHost = null;
-                setCursor(Cursor.DEFAULT_CURSOR);
+                sandbox.currTransformHost = null;
+                sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-                if (!isResizing) {
+                if (!sandbox.isResizing) {
                     return;
                 }
                 float pseudoWidth = currHost.getWidth() * (currHost instanceof LabelItem ? 1 : currHost.getScaleX());
@@ -385,8 +389,8 @@ public class InputHandler extends InputAdapter {
 
                 }
                 currHost.setScale(pseudoWidth / currHost.getWidth(), pseudoHeight / currHost.getHeight());
-                uiStage.updateCurrentItemState();
-                SelectionRectangle selectionRectangle = currentSelection.get(currHost);
+                sandbox.getUIStage().updateCurrentItemState();
+                SelectionRectangle selectionRectangle = sandbox.getCurrentSelection().get(currHost);
                 //TODO: sometimes it is null, find out why
                 if (selectionRectangle != null) {
                     selectionRectangle.update();
@@ -394,7 +398,7 @@ public class InputHandler extends InputAdapter {
             }
         };
 
-        this.addListener(transformationListeners);
+        sandbox.getSandboxStage().addListener(transformationListeners);
     }
 
     public void copyAction() {

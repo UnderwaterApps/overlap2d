@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
 
@@ -45,42 +46,42 @@ public class UIToolBox extends UIBox {
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.alignSelections(Align.top);
+                stage.getSandbox().alignSelections(Align.top);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         leftIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.alignSelections(Align.left);
+                stage.getSandbox().alignSelections(Align.left);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         bottomIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.alignSelections(Align.bottom);
+                stage.getSandbox().alignSelections(Align.bottom);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         rightIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.alignSelections(Align.right);
+                stage.getSandbox().alignSelections(Align.right);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         mainIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.setCurrentMode(SandboxStage.MODE_SELECT);
+                stage.getSandbox().setCurrentMode(EditingMode.SELECTION);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         resizeIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.sandboxStage.setCurrentMode(SandboxStage.MODE_TRANSFORM);
+                stage.getSandbox().setCurrentMode(EditingMode.TRANSFORM);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });

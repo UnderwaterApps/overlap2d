@@ -9,7 +9,7 @@ import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.screen.LevelEditorScreen;
 import com.uwsoft.editor.gdx.screen.Screen;
 
-public class LunarEditorListener implements ApplicationListener {
+public class Overlap2DListener implements ApplicationListener {
 	
 	public static final int TOOL_SELECT_MESSAGE = 1;
 	
@@ -19,13 +19,13 @@ public class LunarEditorListener implements ApplicationListener {
 	//public Music menuMusic = null;
 	private ArrayList<Runnable>		runnables	= new ArrayList<Runnable>();
 	
-	public LunarEditorListener() {
+	public Overlap2DListener() {
 
 	}	
 
 	public void create() {
 		//try {
-			LevelEditorScreen editor = new LevelEditorScreen(LunarEditorListener.this);
+			LevelEditorScreen editor = new LevelEditorScreen(Overlap2DListener.this);
 			currentScreen = editor;
 			UIController.instance.addObserver(editor);
 //		} catch (final Exception e) {

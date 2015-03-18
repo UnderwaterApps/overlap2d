@@ -95,7 +95,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
 
 
                 // save before importing
-                SceneVO vo = stage.sandboxStage.sceneVoFromItems();
+                SceneVO vo = stage.getSandbox().sceneVoFromItems();
                 stage.getCompositePanel().updateOriginalItem();
                 DataManager.getInstance().saveScene(vo);
                 DataManager.getInstance().saveCurrentProject();
@@ -194,7 +194,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                 stage.getCompositePanel().initResolutionBox();
                 remove();
                 stage.loadCurrentProject();
-                stage.sandboxStage.loadCurrentProject(stage.sandboxStage.currentLoadedSceneFileName);
+                stage.getSandbox().loadCurrentProject(stage.getSandbox().currentLoadedSceneFileName);
             }
         });
     }

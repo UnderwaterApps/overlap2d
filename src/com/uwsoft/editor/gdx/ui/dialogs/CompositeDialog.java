@@ -39,12 +39,4 @@ public class CompositeDialog extends SimpleDialog {
     public void setListener(DialogListener listener) {
         this.listener = listener;
     }
-
-    public static void create(UIStage stage, Group context, String text, DialogListener listener) {
-        ConfirmDialog dialog = new ConfirmDialog(stage);
-        context.addActor(dialog);
-        dialog.show();
-        dialog.setDescription(text);
-        dialog.setListener(listener);
-    }
 }

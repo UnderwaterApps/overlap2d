@@ -13,6 +13,8 @@ public class ConfirmDialog extends CompositeDialog {
         public void onConfirm();
         public void onCancel();
     }
+
+    private ConfirmDialogListener listener;
 	
 	public ConfirmDialog(UIStage s) {
 		super(s, "yesNoDialog", 250, 100);

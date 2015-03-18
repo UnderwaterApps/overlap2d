@@ -189,7 +189,7 @@ public class ItemPhysicsEditor extends Group {
 		
 		currentMode = EditMode.Create;
         box2dRenderer = new Box2DDebugRenderer();
-        resVec = new Vector2(stage.sandboxStage.getCurrentScene().mulX,stage.sandboxStage.getCurrentScene().mulY);
+        resVec = new Vector2(stage.getSandbox().getCurrentScene().mulX,stage.getSandbox().getCurrentScene().mulY);
 	}
 	
 	public void editAsset(String assetName){
@@ -385,7 +385,7 @@ public class ItemPhysicsEditor extends Group {
                     currentItem.getDataVO().meshId = meshKey;
                 }
 			}
-			Vector2 resVec = new Vector2(stage.sandboxStage.getCurrentScene().mulX, stage.sandboxStage.getCurrentScene().mulY);
+			Vector2 resVec = new Vector2(stage.getSandbox().getCurrentScene().mulX, stage.getSandbox().getCurrentScene().mulY);
 
 			if(mesh != null) {
                 if(originalItem.getBody() != null) {
