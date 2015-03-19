@@ -7,18 +7,12 @@ import com.uwsoft.editor.controlles.NameConstants;
 import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.EditorResourceManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.UICompositePanel;
 import com.uwsoft.editor.gdx.ui.UIItemsBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.UIMainTable;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.CreateNewResolutionDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.DlgExport;
-import com.uwsoft.editor.gdx.ui.dialogs.DlgImport;
-import com.uwsoft.editor.gdx.ui.dialogs.DlgNewProject;
-import com.uwsoft.editor.gdx.ui.dialogs.InfoDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
+import com.uwsoft.editor.gdx.ui.dialogs.*;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -34,9 +28,10 @@ public class UIStage extends BaseStage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
+    public DialogSystem dlgSystem;
+
     public UIStage(SandboxStage sandboxStage) {
         super();
-        
 
         EditorResourceManager edRm = new EditorResourceManager();
         essentials.rm = edRm;
@@ -50,31 +45,35 @@ public class UIStage extends BaseStage {
 
         sceneUI = sceneLoader.getSceneAsActor();
 
-
         dummyTarget = new Group();
         dummyTarget.setWidth(getWidth());
         dummyTarget.setHeight(getHeight());
         dummyTarget.setY(0);
         dummyTarget.setX(0);
         addActor(dummyTarget);
-        //
+
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable(this);
-//        uiMainTable.setWidth(getWidth());
-//        uiMainTable.setHeight(getHeight());
-//        uiMainTable.setY(11);
-        
+
         addActor(uiMainTable);
         addActor(contextMenuContainer);
         setListeners();
         
         DataManager.getInstance().setStage(this);
-        
-//        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-//        addActor(dlg);
-//        sandboxStage.unfocusAll();
-//		unfocusAll();
-//		setKeyboardFocus(dlg);
+
+        initDialogSystem();
+    }
+
+    public Sandbox getSandbox() {
+        return sandboxStage.sandbox;
+    }
+
+    public DialogSystem dialogs() {
+        return dlgSystem;
+    }
+
+    public void initDialogSystem() {
+        dlgSystem = new DialogSystem(this);
     }
     
     public void editPhysics(String assetName){
@@ -104,7 +103,6 @@ public class UIStage extends BaseStage {
     }
 
     public void loadCurrentProject() {
-//        topPanel.initView();
         uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
         uiMainTable.itemsBox.initContent();
@@ -128,66 +126,7 @@ public class UIStage extends BaseStage {
     }
 
     public void loadScene(CompositeItemVO scene) {
-        sandboxStage.initSceneView(scene);
-    }
-
-    public void createNewProjectDialg() {
-        DlgNewProject dlg = new DlgNewProject(this);
-        addActor(dlg);
-        dlg.show();
-    }
-
-    public void showImportDialog() {
-        DlgImport dlg = new DlgImport(this);
-        addActor(dlg);
-        dlg.show();
-    }
-
-    public void showCreateNewResolutionDialog() {
-        CreateNewResolutionDialog dlg = new CreateNewResolutionDialog(this);
-        addActor(dlg);
-        dlg.show();
-    }
-
-    public ConfirmDialog showConfirmDialog() {
-        ConfirmDialog dlg = new ConfirmDialog(this);
-        addActor(dlg);
-        dlg.show();
-
-        return dlg;
-    }
-
-    public InputDialog showInputDialog() {
-        InputDialog dlg = new InputDialog(this);
-        addActor(dlg);
-        dlg.show();
-
-        return dlg;
-    }
-
-
-    public InfoDialog showInfoDialog(String desc) {
-        InfoDialog dlg = new InfoDialog(this);
-        dlg.setDescription(desc);
-        addActor(dlg);
-        dlg.show();
-
-        return dlg;
-    }
-    public InfoDialog showInfoDialogNavigateBack(String desc) {
-    	InfoDialog dlg = new InfoDialog(this);
-    	dlg.setDescription(desc);
-    	addActor(dlg);
-    	dlg.show();
-    	
-    	return dlg;
-    }
-
-    public DlgExport showExportDialog() {
-        DlgExport dlg = new DlgExport(this);
-        addActor(dlg);
-        dlg.show();
-        return dlg;
+        getSandbox().initSceneView(scene);
     }
 
 
@@ -195,8 +134,8 @@ public class UIStage extends BaseStage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (sandboxStage.dropDown != null) {
-                    sandboxStage.dropDown.remove();
+                if (sandboxStage.frontUI != null && sandboxStage.frontUI.dropDown != null) {
+                    sandboxStage.frontUI.dropDown.remove();
                 }
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
@@ -218,7 +157,7 @@ public class UIStage extends BaseStage {
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
 
-        return sandboxStage.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
+        return getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
     }
 
 

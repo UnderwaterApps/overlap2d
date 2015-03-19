@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -17,7 +18,7 @@ import java.io.File;
 
 public class LabelItemProperties extends PropertyBox implements IPropertyBox<LabelItem> {
 
-    private final SandboxStage sandboxStage;
+    private final Sandbox sandbox;
     private TextField lblTxtBox;
     private SelectBox<String> selectBox;
     private SelectBox<String> alignSelectBox;
@@ -27,9 +28,9 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
     private Integer[] sizeArray = new Integer[]{10, 12, 14, 16, 18, 24, 28, 32, 36, 42, 48, 54, 60, 72, 78, 88, 84, 102};
     private String[] alignArray = new String[]{"center","left","right","bottom","top","top-left","top-right","bottom-right","bottom-left"};
 
-    public LabelItemProperties(SandboxStage sandboxStage, SceneLoader scene) {
+    public LabelItemProperties(Sandbox sandbox, SceneLoader scene) {
         super(scene, "LabelItemProperties");
-        this.sandboxStage = sandboxStage;
+        this.sandbox = sandbox;
     }
 
     @Override
@@ -76,8 +77,8 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
                     if (item != null) {
                         String choosenStyle = selectBox.getSelected().toString();
                         setStyleToLabel(item, choosenStyle, ((LabelItem) item).getDataVO().size);
-                        sandboxStage.saveSceneCurrentSceneData();
-                        sandboxStage.uiStage.getItemsBox().initContent();
+                        sandbox.saveSceneCurrentSceneData();
+                        sandbox.getUIStage().getItemsBox().initContent();
                     }
                 }
             });
@@ -102,8 +103,8 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
         		if (item != null) {
         			Integer choosenSize = sizeSelectBox.getSelected();
         			setStyleToLabel(item, ((LabelItem) item).getDataVO().style, choosenSize);
-        			sandboxStage.saveSceneCurrentSceneData();
-        			sandboxStage.uiStage.getItemsBox().initContent();
+                    sandbox.saveSceneCurrentSceneData();
+                    sandbox.getUIStage().getItemsBox().initContent();
         		}
         	}
         });
@@ -127,8 +128,8 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
                     Integer choosenAlign = getAlignInt(alignSelectBox.getSelected());
                     ((LabelItem) item).setAlign(choosenAlign);
                     ((LabelItem) item).renew();
-                    sandboxStage.saveSceneCurrentSceneData();
-                    sandboxStage.uiStage.getItemsBox().initContent();
+                    sandbox.saveSceneCurrentSceneData();
+                    sandbox.getUIStage().getItemsBox().initContent();
                 }
             }
         });

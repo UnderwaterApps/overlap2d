@@ -12,6 +12,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.uwsoft.editor.controlles.ColorPickerHandler;
 import com.uwsoft.editor.controlles.NameConstants;
 import com.uwsoft.editor.controlles.UIController;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPicker;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
@@ -24,7 +25,7 @@ import com.uwsoft.editor.renderer.data.TextBoxVO;
 
 public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBaseItem> {
 
-    private final SandboxStage sandboxStage;
+    private final Sandbox sandbox;
     private TextField idBox;
 
     private TextField xVal;
@@ -46,9 +47,9 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
     private Actor itemActor;
     private TextBoxItem rotationVal;
 
-    public BasicItemProperties(SandboxStage sandboxStage, SceneLoader scene) {
+    public BasicItemProperties(Sandbox sandbox, SceneLoader scene) {
         super(scene, "BasicItemProperties");
-        this.sandboxStage = sandboxStage;
+        this.sandbox = sandbox;
         tintColorComponent = new ColorPicker();
         LabelItem tintLbl = ui.getLabelById("tintLbl");
         tintColorComponent.setX(tintLbl.getX() + tintLbl.getWidth() + 5);
@@ -157,8 +158,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                CustomVariablesDialog dlg = new CustomVariablesDialog(sandboxStage.uiStage, item);
-                sandboxStage.uiStage.addActor(dlg);
+                CustomVariablesDialog dlg = new CustomVariablesDialog(sandbox.getUIStage(), item);
+                sandbox.getUIStage().addActor(dlg);
             }
         });
 
@@ -308,8 +309,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 item.getDataVO().scaleY *= -1;
                 item.renew();
                 super.touchUp(event, x, y, pointer, button);
-                sandboxStage.updateSelections();
-                sandboxStage.saveSceneCurrentSceneData();
+                sandbox.updateSelections();
+                sandbox.saveSceneCurrentSceneData();
             }
         });
         flipH.addListener(new ClickListener() {
@@ -317,8 +318,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 item.getDataVO().scaleX *= -1;
                 item.renew();
                 super.touchUp(event, x, y, pointer, button);
-                sandboxStage.updateSelections();
-                sandboxStage.saveSceneCurrentSceneData();
+                sandbox.updateSelections();
+                sandbox.saveSceneCurrentSceneData();
             }
         });
 
@@ -336,7 +337,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                         item.getDataVO().tint[2] = javaColor.getBlue() / 255f;
                         item.getDataVO().tint[3] = javaColor.getAlpha() / 255f;
                         item.renew();
-                        sandboxStage.saveSceneCurrentSceneData();
+                        sandbox.saveSceneCurrentSceneData();
                     }
                 };
 
@@ -369,8 +370,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().rotation != rotation) {
             item.getDataVO().rotation = rotation;
             item.renew();
-            sandboxStage.updateSelections();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.updateSelections();
+            sandbox.saveSceneCurrentSceneData();
         }
     }
 
@@ -378,8 +379,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().scaleY != scaleY) {
             item.getDataVO().scaleY = scaleY;
             item.renew();
-            sandboxStage.updateSelections();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.updateSelections();
+            sandbox.saveSceneCurrentSceneData();
         }
     }
 
@@ -387,7 +388,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().y != y) {
             item.getDataVO().y = y;
             item.renew();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.saveSceneCurrentSceneData();
         }
     }
 
@@ -395,7 +396,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().x != x) {
             item.getDataVO().x = x;
             item.renew();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.saveSceneCurrentSceneData();
         }
     }
 
@@ -428,9 +429,9 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         }
         if (dirty) {
             item.renew();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.saveSceneCurrentSceneData();
             updateView();
-            sandboxStage.updateSelections();
+            sandbox.updateSelections();
         }
     }
 
@@ -470,9 +471,9 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         }
         if (dirty) {
             item.renew();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.saveSceneCurrentSceneData();
             updateView();
-            sandboxStage.updateSelections();
+            sandbox.updateSelections();
         }
     }
 
@@ -480,8 +481,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item != null && !item.getDataVO().itemIdentifier.equals(id)) {
             item.getDataVO().itemIdentifier = id;
             item.renew();
-            sandboxStage.saveSceneCurrentSceneData();
-            sandboxStage.uiStage.getItemsBox().initContent();
+            sandbox.saveSceneCurrentSceneData();
+            sandbox.getUIStage().getItemsBox().initContent();
         }
     }
 
@@ -490,8 +491,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().scaleX != scaleX) {
             item.getDataVO().scaleX = scaleX;
             item.renew();
-            sandboxStage.updateSelections();
-            sandboxStage.saveSceneCurrentSceneData();
+            sandbox.updateSelections();
+            sandbox.saveSceneCurrentSceneData();
         }
     }
 

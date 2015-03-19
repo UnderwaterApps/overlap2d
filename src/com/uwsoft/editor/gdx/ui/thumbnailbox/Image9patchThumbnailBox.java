@@ -12,7 +12,7 @@ public class Image9patchThumbnailBox extends ImageThumbnailBox {
     }
 
     protected void itemDropped(String assetName, float x, float y) {
-        stage.sandboxStage.create9patchItem(assetName, x, y);
+        stage.getSandbox().getUac().create9Patch(assetName, x, y);
     }
 
     @Override

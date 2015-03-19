@@ -6,25 +6,23 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import com.uwsoft.editor.controlles.CustomExceptionHandler;
 import com.uwsoft.editor.controlles.UIController;
-import com.uwsoft.editor.gdx.LunarEditorListener;
+import com.uwsoft.editor.gdx.Overlap2DListener;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
-
-import java.util.Properties;
 
 
 public class Overlap2D {
 
-	private static LunarEditorListener listener;
+	private static Overlap2DListener listener;
 
 	
 	public static void main(String[] argv) {
         //Get project version
-        System.out.println("Current Build Version: " + AppConfig.getInstance().version);
+        //System.out.println("Current Build Version: " + AppConfig.getInstance().version);
 
-		Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler());
+		//Thread.setDefaultUncaughtExceptionHandler(new CustomExceptionHandler());
 
-		listener = new LunarEditorListener();
+		listener = new Overlap2DListener();
 		if(OSType.getOS_Type() == OSType.MacOS) {
 			System.setProperty("apple.laf.useScreenMenuBar", "true");
 		    System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");

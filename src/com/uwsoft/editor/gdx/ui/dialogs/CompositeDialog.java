@@ -2,6 +2,7 @@ package com.uwsoft.editor.gdx.ui.dialogs;
 
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -9,6 +10,8 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 public class CompositeDialog extends SimpleDialog {
 
 	protected CompositeItem ui;
+
+    protected DialogListener listener = null;
 	
 	public CompositeDialog(UIStage s, String compositeId, float width, float height) {
 		super(s, width, height);
@@ -32,4 +35,8 @@ public class CompositeDialog extends SimpleDialog {
 		Action scaleIn = Actions.scaleTo(1, 1, 0.3f, Interpolation.swingOut);
 		addAction(scaleIn);
 	}
+
+    public void setListener(DialogListener listener) {
+        this.listener = listener;
+    }
 }

@@ -69,7 +69,7 @@ public class DataManager {
     private ProgressHandler handler;
     private EditorConfigVO editorConfigVO;
 
-    private UIStage stage;
+    private UIStage uiStage;
 
     public DataManager() {
         initWorkspace();
@@ -128,12 +128,12 @@ public class DataManager {
     }
 
     public void setStage(UIStage stage) {
-        this.stage = stage;
+        this.uiStage = stage;
     }
 
     private void showError(String txt) {
-        if (stage != null) {
-            stage.showInfoDialog(txt);
+        if (uiStage != null) {
+            uiStage.dialogs().showInfoDialog(txt);
         }
     }
 
@@ -1299,10 +1299,11 @@ public class DataManager {
             ignored.printStackTrace();
         }
         saveCurrentProject();
-        String name = stage.sandboxStage.getCurrentSceneVO().sceneName;
+        String name = uiStage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
         DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName, "orig");
-        stage.sandboxStage.loadCurrentProject(name);
-        stage.loadCurrentProject();
+
+        uiStage.getSandbox().loadCurrentProject(name);
+        uiStage.getSandbox().loadCurrentProject();
     }
 
     public String getFreeTypeFontPath() {

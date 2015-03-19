@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.gdx.sandbox.EditingMode;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
@@ -28,16 +30,16 @@ public class SelectionRectangle extends PixelRect {
     public static final int L = 7;
     private IBaseItem host;
     private TextureManager tm;
-    private SandboxStage stage;
+    private Sandbox sandbox;
     private float[] touchDiff = new float[2];
     private Group transformGroup;
     private Image[] miniRects = new Image[8];
-    private int mode;
+    private EditingMode mode;
 
-    public SelectionRectangle(SandboxStage sm) {
-        super(sm.textureManager, 0, 0);
-        this.tm = sm.textureManager;
-        stage = sm;
+    public SelectionRectangle(Sandbox sandbox) {
+        super(TextureManager.getInstance(), 0, 0);
+        this.tm =TextureManager.getInstance();
+        this.sandbox = sandbox;
         setTouchable(Touchable.disabled);
         setVisible(false);
         setOpacity(0.4f);
@@ -51,11 +53,11 @@ public class SelectionRectangle extends PixelRect {
     public void act(float delta) {
         super.act(delta);
 
-        if (mode != SandboxStage.MODE_TRANSFORM) return;
+        if (mode != EditingMode.TRANSFORM) return;
 
         Vector2 mouseCoords = getMouseLocalCoordinates();
 
-        stage.setCurrentlyTransforming(null, -1);
+        sandbox.setCurrentlyTransforming(null, -1);
 
         boolean isOver = false;
 
@@ -63,39 +65,39 @@ public class SelectionRectangle extends PixelRect {
             final int currRectIndex = i;
             Rectangle rect = new Rectangle(miniRects[currRectIndex].getX() - 2, miniRects[currRectIndex].getY() - 2, 8, 8);
             if (rect.contains(mouseCoords) && !(getHostAsActor() instanceof LabelItem)) {
-                stage.setCurrentlyTransforming(getHost(), currRectIndex);
+                sandbox.setCurrentlyTransforming(getHost(), currRectIndex);
                 isOver = true;
                 switch (currRectIndex) {
                     case LT:
-                        stage.setCursor(Cursor.NW_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.NW_RESIZE_CURSOR);
                         break;
                     case T:
-                        stage.setCursor(Cursor.N_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.N_RESIZE_CURSOR);
                         break;
                     case RT:
-                        stage.setCursor(Cursor.NE_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.NE_RESIZE_CURSOR);
                         break;
                     case R:
-                        stage.setCursor(Cursor.E_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.E_RESIZE_CURSOR);
                         break;
                     case RB:
-                        stage.setCursor(Cursor.SE_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.SE_RESIZE_CURSOR);
                         break;
                     case B:
-                        stage.setCursor(Cursor.S_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.S_RESIZE_CURSOR);
                         break;
                     case LB:
-                        stage.setCursor(Cursor.SW_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.SW_RESIZE_CURSOR);
                         break;
                     case L:
-                        stage.setCursor(Cursor.W_RESIZE_CURSOR);
+                        sandbox.getSandboxStage().setCursor(Cursor.W_RESIZE_CURSOR);
                         break;
                 }
             }
         }
 
         if (!isOver) {
-            stage.setCursor(Cursor.DEFAULT_CURSOR);
+            sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
         }
 
 
@@ -105,8 +107,8 @@ public class SelectionRectangle extends PixelRect {
     private Vector2 getMouseLocalCoordinates() {
         Vector2 vec = new Vector2();
 
-        vec.x = Gdx.input.getX() - (-stage.getCamera().position.x + stage.getWidth() / 2) - getX();
-        vec.y = (stage.getHeight() - Gdx.input.getY()) - (-stage.getCamera().position.y + stage.getHeight() / 2) - getY();
+        vec.x = Gdx.input.getX() - (-sandbox.getSandboxStage().getCamera().position.x + sandbox.getSandboxStage().getWidth() / 2) - getX();
+        vec.y = (sandbox.getSandboxStage().getHeight() - Gdx.input.getY()) - (-sandbox.getSandboxStage().getCamera().position.y + sandbox.getSandboxStage().getHeight() / 2) - getY();
 
         return vec;
     }
@@ -209,9 +211,9 @@ public class SelectionRectangle extends PixelRect {
         return touchDiff;
     }
 
-    public void setMode(int mode) {
+    public void setMode(EditingMode mode) {
         this.mode = mode;
-        if (mode == SandboxStage.MODE_TRANSFORM && !(getHostAsActor() instanceof LabelItem) ) {
+        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem) ) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);

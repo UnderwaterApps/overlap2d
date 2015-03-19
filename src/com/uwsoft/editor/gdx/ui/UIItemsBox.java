@@ -42,7 +42,7 @@ public class UIItemsBox extends ExpandableUIBox {
         tree = new Tree(skin);
 
 
-        CompositeItem sceneItems = stage.sandboxStage.getCurrentScene();
+        CompositeItem sceneItems = stage.getSandbox().getCurrentScene();
         Node root = addTree(sceneItems, stage.getCompositePanel().isRootScene());
 
 
@@ -77,7 +77,7 @@ public class UIItemsBox extends ExpandableUIBox {
                 for (int i = 0; i < selectedNodes.size; i++) {
                     System.out.println();
                     IBaseItem baseItem = (IBaseItem) selectedNodes.get(i).getObject();
-                    IBaseItem item = getCurrentSceneItem(stage.sandboxStage.getCurrentScene(), baseItem);
+                    IBaseItem item = getCurrentSceneItem(stage.getSandbox().getCurrentScene(), baseItem);
                     if(item != null) {
                         addSelectionAction(item);
                     }
@@ -191,15 +191,15 @@ public class UIItemsBox extends ExpandableUIBox {
                 System.out.println("CLICKED");
                 if (getTapCount() == 2) {
                     if (!iBaseItem.isComposite()) {
-                        if (iBaseItem.getParentItem() != null && !iBaseItem.getParentItem().equals(stage.sandboxStage.getCurrentScene()))
-                            stage.sandboxStage.getIntoComposite(iBaseItem.getParentItem().getDataVO());
+                        if (iBaseItem.getParentItem() != null && !iBaseItem.getParentItem().equals(stage.getSandbox().getCurrentScene()))
+                            stage.getSandbox().getIntoComposite(iBaseItem.getParentItem().getDataVO());
                     } else {
-                        if (!iBaseItem.equals(stage.sandboxStage.getCurrentScene())) {
-                            stage.sandboxStage.getIntoComposite(((CompositeItem) iBaseItem).getDataVO());
+                        if (!iBaseItem.equals(stage.getSandbox().getCurrentScene())) {
+                            stage.getSandbox().getIntoComposite(((CompositeItem) iBaseItem).getDataVO());
                         }
                     }
                 } else {
-                    stage.sandboxStage.setSelection(iBaseItem, true);
+                    stage.getSandbox().setSelection(iBaseItem, true);
                 }
             }
 
@@ -207,7 +207,7 @@ public class UIItemsBox extends ExpandableUIBox {
     }
 
     private void addSelectionAction(IBaseItem iBaseItem) {
-        stage.sandboxStage.setSelection(iBaseItem, true);
+        stage.getSandbox().setSelection(iBaseItem, true);
     }
 
     public void setSelected(HashMap<IBaseItem, SelectionRectangle> currentSelection) {

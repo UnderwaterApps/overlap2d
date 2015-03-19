@@ -6,6 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
@@ -17,13 +18,13 @@ public class LayerItem extends Group {
     private Image eye;
 
     private LayerItemVO layerItemVo;
-    private SandboxStage sandboxStage;
+    private Sandbox sandbox;
     private Image rowSeparator;
 
-    public LayerItem(LayerItemVO vo, SandboxStage s) {
+    public LayerItem(LayerItemVO vo, Sandbox sandbox) {
 
         this.layerItemVo = vo;
-        this.sandboxStage = s;
+        this.sandbox = sandbox;
         setWidth(247);
         setHeight(20);
 
@@ -70,7 +71,7 @@ public class LayerItem extends Group {
     }
 
     public LayerItem(LayerItem layerItem) {
-        this(layerItem.layerItemVo, layerItem.sandboxStage);
+        this(layerItem.layerItemVo, layerItem.sandbox);
     }
 
     public String getLayerName() {
@@ -83,8 +84,8 @@ public class LayerItem extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 layerItemVo.isLocked = !layerItemVo.isLocked;
                 updateUI();
-                sandboxStage.getCurrentScene().reAssembleLayers();
-                sandboxStage.uiStage.getLayerPanel().initContent();
+                sandbox.getCurrentScene().reAssembleLayers();
+                sandbox.getUIStage().getLayerPanel().initContent();
             }
         });
         eye.addListener(new ClickListener() {
@@ -92,15 +93,15 @@ public class LayerItem extends Group {
                 super.touchUp(event, x, y, pointer, button);
                 layerItemVo.isVisible = !layerItemVo.isVisible;
                 updateUI();
-                sandboxStage.getCurrentScene().reAssembleLayers();
-                sandboxStage.uiStage.getLayerPanel().initContent();
+                sandbox.getCurrentScene().reAssembleLayers();
+                sandbox.getUIStage().getLayerPanel().initContent();
             }
         });
     }
 
     public void showLayerRowSeparator() {
         if (rowSeparator == null) {
-            rowSeparator = new Image(sandboxStage.textureManager.getEditorAsset("pixel"));
+            rowSeparator = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
             rowSeparator.setColor(0.97f, 0.97f, 0.98f, 1.0f);
             rowSeparator.setScaleX(getWidth());
             rowSeparator.setScaleY(2);

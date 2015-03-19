@@ -23,7 +23,7 @@ public class PhysicsPropertiesBox extends PropertyBox {
 
     public PhysicsPropertiesBox(UIStage stage) {
         super(stage.sceneLoader, "PhysicsItemProperties");
-        currentSceneVO = stage.sandboxStage.getCurrentSceneVO();
+        currentSceneVO = stage.getSandbox().sceneControl.getCurrentSceneVO();
         physicsPropertiesVO = currentSceneVO.physicsPropertiesVO;
         initValues();
     }

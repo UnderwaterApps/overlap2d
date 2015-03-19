@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglAWTCanvas;
 import com.uwsoft.editor.data.EpisodeData;
-import com.uwsoft.editor.gdx.LunarEditorListener;
+import com.uwsoft.editor.gdx.Overlap2DListener;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.view.EditorSplashScreen;
 import com.uwsoft.editor.view.MenuToolbar;
@@ -26,10 +26,10 @@ public class UIController extends Facade {
     public boolean isBgMode = false;
     public Application glApplication;
     private WorkingArea componentPane;
-    private LunarEditorListener listener;
+    private Overlap2DListener listener;
 
 
-    public UIController(LunarEditorListener listener) {
+    public UIController(Overlap2DListener listener) {
         instance = this;
         this.listener = listener;
         SwingApiProvider sap = new SwingApiProvider();

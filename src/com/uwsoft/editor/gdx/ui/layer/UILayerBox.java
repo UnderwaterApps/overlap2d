@@ -60,7 +60,7 @@ public class UILayerBox extends ExpandableUIBox {
     }
 
     public void initContent() {
-        layers = stage.sandboxStage.getCurrentScene().dataVO.composite.layers;
+        layers = stage.getSandbox().getCurrentScene().dataVO.composite.layers;
         contentGroup.clear();
         layerActors.clear();
         float heightSize = layers.size() * 20;
@@ -72,7 +72,7 @@ public class UILayerBox extends ExpandableUIBox {
         checkForSelectedIndexChanges();
 
         for (int i = 0; i < layers.size(); i++) {
-            LayerItem itm = new LayerItem(layers.get(i), stage.sandboxStage);
+            LayerItem itm = new LayerItem(layers.get(i), stage.getSandbox());
             itm.initListeners();
             itm.setY(contentGroup.getHeight() - (layers.size() - i - 1) * itm.getHeight());
             contentGroup.addActor(itm);
@@ -100,7 +100,7 @@ public class UILayerBox extends ExpandableUIBox {
 
                     currentSelectedLayerIndex = iter;
                     selectItem(iter);
-                    stage.sandboxStage.selectItemsByLayerName(layers.get(iter).layerName);
+                    stage.getSandbox().selectItemsByLayerName(layers.get(iter).layerName);
 
                     if (getTapCount() == 2) {
                         showRenameDialog();
@@ -118,7 +118,7 @@ public class UILayerBox extends ExpandableUIBox {
     }
 
     private void showRenameDialog() {
-        InputDialog dlg = stage.showInputDialog();
+        InputDialog dlg = stage.dialogs().showInputDialog();
 
         dlg.setDescription("New name for your layer");
 
@@ -200,7 +200,7 @@ public class UILayerBox extends ExpandableUIBox {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (layers == null) return;
-                InputDialog dlg = stage.showInputDialog();
+                InputDialog dlg = stage.dialogs().showInputDialog();
 
                 dlg.setDescription("Please set unique name for your Layer");
 
@@ -241,7 +241,7 @@ public class UILayerBox extends ExpandableUIBox {
             layers.set(targetIndex - 1, sourceLayerItemVo);
         }
         initContent();
-        stage.sandboxStage.getCurrentScene().sortZindexes();
+        stage.getSandbox().getCurrentScene().sortZindexes();
         selectLayerByName(sourceLayerItem.getLayerName());
     }
 

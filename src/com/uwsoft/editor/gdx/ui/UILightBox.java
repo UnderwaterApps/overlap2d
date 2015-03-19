@@ -43,7 +43,7 @@ public class UILightBox extends ExpandableUIBox {
         cPicker.setY(getHeight() - 92);
         mainLayer.addActor(cPicker);
 
-        float[] ambientColor = stage.sandboxStage.getCurrentSceneVO().ambientColor;
+        float[] ambientColor = stage.getSandbox().sceneControl.getCurrentSceneVO().ambientColor;
         cPicker.setColorValue(new Color(ambientColor[0], ambientColor[1], ambientColor[2], ambientColor[3]));
 
         //System.out.println("ambient " +cPicker.getColorValue().toString());
@@ -71,7 +71,7 @@ public class UILightBox extends ExpandableUIBox {
                         cPicker.setColorValue(color);
 
                         // change scene ambient light
-                        stage.sandboxStage.setSceneAmbientColor(color);
+                        stage.getSandbox().setSceneAmbientColor(color);
                     }
                 };
 
@@ -127,9 +127,7 @@ public class UILightBox extends ExpandableUIBox {
                 vo.tint = clr;
 
                 vo.type = LightType.POINT;
-                vo.x = x;
-                vo.y = y;
-                stage.sandboxStage.createLight(vo);
+                stage.getSandbox().getUac().createLight(vo, x, y);
             }
 
             @Override
@@ -168,9 +166,7 @@ public class UILightBox extends ExpandableUIBox {
                 clr[2] = tint.b;
                 clr[3] = tint.a;
                 vo.tint = clr;
-                vo.x = x;
-                vo.y = y;
-                stage.sandboxStage.createLight(vo);
+                stage.getSandbox().getUac().createLight(vo, x, y);
             }
 
             @Override
@@ -191,7 +187,7 @@ public class UILightBox extends ExpandableUIBox {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                stage.sandboxStage.disableLights(disableLights.isChecked());
+                stage.getSandbox().sceneControl.disableLights(disableLights.isChecked());
             }
 
         });

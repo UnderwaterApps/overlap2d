@@ -75,7 +75,7 @@ public class SpineAnimationThumbnailBox extends DraggableThumbnailBox {
         DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
             @Override
             public void drop(AssetPayloadObject pld, float x, float y) {
-                 stage.sandboxStage.createSpineAnimation(payload.assetName, x, y);
+                stage.getSandbox().getUac().createSpineAnimation(payload.assetName, x, y);
             }
         };
 

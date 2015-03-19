@@ -102,7 +102,7 @@ public class UIResolutionBox extends Group {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-                stage.showCreateNewResolutionDialog();
+                stage.dialogs().showCreateNewResolutionDialog();
 
             }
         });
@@ -118,7 +118,7 @@ public class UIResolutionBox extends Group {
 
                 ResolutionEntryVO resEntry = projectInfoVO.resolutions.get(index - 1);
 
-                ConfirmDialog dlg = stage.showConfirmDialog();
+                ConfirmDialog dlg = stage.dialogs().showConfirmDialog();
                 dlg.setDescription("Are you sure you want to delete resolution: " + resEntry.toString() + " ?");
 
                 dlg.setListener(new ConfirmDialogListener() {
@@ -154,9 +154,9 @@ public class UIResolutionBox extends Group {
         if (index > 0) {
             res = projectInfoVO.resolutions.get(index - 1).name;
         }
-        String name = stage.sandboxStage.getCurrentSceneVO().sceneName;
+        String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
         DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName, res);
-        stage.sandboxStage.loadCurrentProject(name);
+        stage.getSandbox().loadCurrentProject(name);
         stage.loadCurrentProject();
     }
 }

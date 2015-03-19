@@ -114,7 +114,7 @@ public class DlgNewProject extends CompositeDialog {
         DataManager.getInstance().createEmptyProject(projectName, origWidthValue, origHeightValue);
         DataManager.getInstance().openProjectAndLoadAllData(projectName);
 
-        stage.sandboxStage.loadCurrentProject();
+        stage.getSandbox().loadCurrentProject();
         stage.loadCurrentProject();
 
         remove();
