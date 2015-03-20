@@ -1,9 +1,12 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Intersector;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -21,13 +24,11 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
-import com.uwsoft.editor.gdx.ui.layer.LayerItem;
-import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.LightActor;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
 import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
@@ -47,7 +48,7 @@ public class Sandbox {
     private SandboxStage sandboxStage;
     private UIStage uiStage;
 
-    private InputHandler inputHandler;
+    private SandboxInputAdapter sandboxInputAdapter;
     private UserActionController uac;
     private ItemFactory itemFactory;
 
@@ -56,6 +57,8 @@ public class Sandbox {
     private InputMultiplexer inputMultiplexer;
 
     public FlowManager flow;
+
+	 public TransformationHandler transformationHandler;
 
     /**
      * this part is to be modified
@@ -88,7 +91,8 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
-        inputHandler = new InputHandler(this);
+		  transformationHandler = new TransformationHandler();
+        sandboxInputAdapter = new SandboxInputAdapter(this);
         uac = new UserActionController(this);
     }
 
@@ -112,8 +116,8 @@ public class Sandbox {
         return sceneControl;
     }
 
-    public InputHandler getInputHandler() {
-        return inputHandler;
+    public SandboxInputAdapter getSandboxInputAdapter () {
+        return sandboxInputAdapter;
     }
 
     public void initData(String sceneName) {
@@ -136,7 +140,7 @@ public class Sandbox {
             uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
         }
         for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
-            inputHandler.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
+            sandboxInputAdapter.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
         }
         sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
         sceneControl.getCurrentScene().setX(0);
@@ -388,7 +392,7 @@ public class Sandbox {
 
         sceneControl.getCurrentScene().addItem(item);
 
-        inputHandler.initItemListeners(item);
+        sandboxInputAdapter.initItemListeners(item);
         uiStage.getItemsBox().initContent();
         setSelection(item, true);
 
@@ -584,7 +588,7 @@ public class Sandbox {
             ((Actor) itm).setX(x + ((Actor) itm).getX() - offsetX + (cameraPos.x + copedItemCameraOffset.x));
             ((Actor) itm).setY(y + ((Actor) itm).getY() - offsetY + (cameraPos.y + copedItemCameraOffset.y));
             itm.updateDataVO();
-            inputHandler.initItemListeners(itm);
+            sandboxInputAdapter.initItemListeners(itm);
             finalItems.add(itm);
         }
 
@@ -715,7 +719,7 @@ public class Sandbox {
     }
 
     public void initEvents() {
-        inputHandler.initSandboxEvents();
+        sandboxInputAdapter.initSandboxEvents();
     }
 
 
@@ -728,4 +732,73 @@ public class Sandbox {
     public CompositeItem getCurrentScene() {
         return sceneControl.getCurrentScene();
     }
+
+	 public void flushAllSelectedItems() {
+		  for (SelectionRectangle value : getCurrentSelection().values()) {
+				IBaseItem item = ((IBaseItem) value.getHostAsActor());
+				item.updateDataVO();
+
+				// update physics objetcs
+				if (item.isComposite()) {
+					 ((CompositeItem) item).positionPhysics();
+				} else if (item.getBody() != null) {
+					 item.getBody().setTransform(item.getDataVO().x * getCurrentScene().mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * getCurrentScene().mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
+				}
+
+		  }
+	 }
+
+	 public void enablePan() {
+		  cameraPanOn = true;
+		  clearSelections();
+		  isItemTouched = false;
+	 }
+
+	 public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
+		  // space is panning, so if we are not, then prepare the selection rectangle
+		  if (setOpacity) {
+				getSandboxStage().selectionRec.setOpacity(0.6f);
+		  }
+		  getSandboxStage().selectionRec.setWidth(0);
+		  getSandboxStage().selectionRec.setHeight(0);
+		  getSandboxStage().selectionRec.setX(x);
+		  getSandboxStage().selectionRec.setY(y);
+	 }
+
+	 public boolean showDropDown(float x, float y) {
+		  getSandboxStage().frontUI.showDropDownForSelection(x, y);
+
+		  return true;
+	 }
+
+	 public void selectionComplete() {
+		  // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
+		  isUsingSelectionTool = false;
+		  // hiding selection rectangle
+		  getSandboxStage().selectionRec.setOpacity(0.0f);
+		  ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+		  Rectangle sR = getSandboxStage().selectionRec.getRect();
+		  for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
+				Actor asActor = (Actor) getCurrentScene().getItems().get(i);
+				if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
+					.overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+					 curr.add(getCurrentScene().getItems().get(i));
+				}
+		  }
+
+		  setSelections(curr, true);
+
+		  if (curr.size() == 0) {
+				getUIStage().emptyClick();
+		  }
+	 }
+
+	 public void selectAllItems() {
+		  ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+		  for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
+				curr.add(getCurrentScene().getItems().get(i));
+		  }
+
+		  setSelections(curr, true);
+	 }
 }

@@ -35,7 +35,7 @@ public class ItemFactory {
     private void addItem(IBaseItem item, MainItemVO vo) {
         Actor itemActor = (Actor) item;
         sceneControl.getCurrentScene().addItem(item);
-        sandbox.getInputHandler().initItemListeners(item);
+        sandbox.getSandboxInputAdapter().initItemListeners(item);
         sandbox.saveSceneCurrentSceneData();
         sandbox.getUIStage().getItemsBox().initContent();
         itemActor.setX(vo.x);
