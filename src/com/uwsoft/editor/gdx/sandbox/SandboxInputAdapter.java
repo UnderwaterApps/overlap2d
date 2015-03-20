@@ -439,6 +439,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
                 sandbox.getUIStage().updateCurrentItemState();
                 SelectionRectangle selectionRectangle = sandbox.getCurrentSelection().get(sandbox.transformationHandler.getHost());
+
                 //TODO: sometimes it is null, find out why
                 if (selectionRectangle != null) {
                     selectionRectangle.update();
