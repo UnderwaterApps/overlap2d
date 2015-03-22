@@ -309,7 +309,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 item.getDataVO().scaleY *= -1;
                 item.renew();
                 super.touchUp(event, x, y, pointer, button);
-                sandbox.updateSelections();
+                sandbox.getSelector().updateSelections();
                 sandbox.saveSceneCurrentSceneData();
             }
         });
@@ -318,7 +318,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 item.getDataVO().scaleX *= -1;
                 item.renew();
                 super.touchUp(event, x, y, pointer, button);
-                sandbox.updateSelections();
+                sandbox.getSelector().updateSelections();
                 sandbox.saveSceneCurrentSceneData();
             }
         });
@@ -370,7 +370,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().rotation != rotation) {
             item.getDataVO().rotation = rotation;
             item.renew();
-            sandbox.updateSelections();
+            sandbox.getSelector().updateSelections();
             sandbox.saveSceneCurrentSceneData();
         }
     }
@@ -379,7 +379,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().scaleY != scaleY) {
             item.getDataVO().scaleY = scaleY;
             item.renew();
-            sandbox.updateSelections();
+            sandbox.getSelector().updateSelections();
             sandbox.saveSceneCurrentSceneData();
         }
     }
@@ -431,7 +431,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             item.renew();
             sandbox.saveSceneCurrentSceneData();
             updateView();
-            sandbox.updateSelections();
+            sandbox.getSelector().updateSelections();
         }
     }
 
@@ -473,7 +473,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             item.renew();
             sandbox.saveSceneCurrentSceneData();
             updateView();
-            sandbox.updateSelections();
+            sandbox.getSelector().updateSelections();
         }
     }
 
@@ -491,7 +491,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         if (item.getDataVO().scaleX != scaleX) {
             item.getDataVO().scaleX = scaleX;
             item.renew();
-            sandbox.updateSelections();
+            sandbox.getSelector().updateSelections();
             sandbox.saveSceneCurrentSceneData();
         }
     }

@@ -100,7 +100,7 @@ public class UILayerBox extends ExpandableUIBox {
 
                     currentSelectedLayerIndex = iter;
                     selectItem(iter);
-                    stage.getSandbox().selectItemsByLayerName(layers.get(iter).layerName);
+                    stage.getSandbox().getSelector().selectItemsByLayerName(layers.get(iter).layerName);
 
                     if (getTapCount() == 2) {
                         showRenameDialog();

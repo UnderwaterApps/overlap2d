@@ -199,7 +199,7 @@ public class UIItemsBox extends ExpandableUIBox {
                         }
                     }
                 } else {
-                    stage.getSandbox().setSelection(iBaseItem, true);
+                    stage.getSandbox().getSelector().setSelection(iBaseItem, true);
                 }
             }
 
@@ -207,7 +207,7 @@ public class UIItemsBox extends ExpandableUIBox {
     }
 
     private void addSelectionAction(IBaseItem iBaseItem) {
-        stage.getSandbox().setSelection(iBaseItem, true);
+        stage.getSandbox().getSelector().setSelection(iBaseItem, true);
     }
 
     public void setSelected(HashMap<IBaseItem, SelectionRectangle> currentSelection) {

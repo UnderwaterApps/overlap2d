@@ -42,12 +42,12 @@ public class SandboxFrontUI extends Group {
             dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
         } else {
 
-            if (sandbox.getCurrentSelection().size() > 0) {
+            if (sandbox.getSelector().getCurrentSelection().size() > 0) {
                 dropDown.addItem(SelectionActions.GROUP_ITEMS, "Group into Composite");
             }
 
-            if (sandbox.getCurrentSelection().size() == 1) {
-                for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+            if (sandbox.getSelector().getCurrentSelection().size() == 1) {
+                for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
                     if (value.getHost().isComposite()) {
                         dropDown.addItem(SelectionActions.ADD_TO_LIBRARY, "Add to Library");
                         dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
@@ -94,8 +94,8 @@ public class SandboxFrontUI extends Group {
                         sandbox.getUIStage().editPhysics(regionName);
                         break;
                     case SelectionActions.EDIT_PHYSICS:
-                        if (sandbox.getCurrentSelection().size() == 1) {
-                            for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+                        if (sandbox.getSelector().getCurrentSelection().size() == 1) {
+                            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
                                 IBaseItem item = value.getHost();
                                 sandbox.getUIStage().editPhysics(item);
                                 break;
@@ -123,7 +123,7 @@ public class SandboxFrontUI extends Group {
                         sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.DELETE:
-                        sandbox.removeCurrentSelectedItems();
+                        sandbox.getSelector().removeCurrentSelectedItems();
                         break;
                     default:
                         break;
