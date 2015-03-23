@@ -160,10 +160,7 @@ public class ItemSelector {
 
         sandbox.getSandboxStage().uiStage.itemWasSelected(item);
 
-        if (sandbox.getSandboxStage().frontUI.dropDown != null) {
-            sandbox.getSandboxStage().frontUI.dropDown.remove();
-            sandbox.getSandboxStage().frontUI.dropDown = null;
-        }
+		  sandbox.getUIStage().mainDropDown.hide();
 
         sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
 

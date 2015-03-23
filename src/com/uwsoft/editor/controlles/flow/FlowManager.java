@@ -4,6 +4,9 @@ import java.util.ArrayList;
 
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
+/**
+ * Keeps track of user actions for undo/redo to work
+ */
 public class FlowManager {
 
     private ArrayList<HistoryData> history = new ArrayList<>();

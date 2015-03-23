@@ -139,19 +139,19 @@ public class LevelEditorScreen extends Screen implements IObserver {
                         DataManager.getInstance().saveCurrentProject();
                         break;
                     case NameConstants.UNDO:
-                        sandbox.undo();
+                        sandbox.getUac().undo();
                         break;
                     case NameConstants.REDO:
-                        sandbox.redo();
+                        sandbox.getUac().redo();
                         break;
                     case NameConstants.CUT_ACTION:
-                        sandbox.cutAction();
+                        sandbox.getUac().cutAction();
                         break;
                     case NameConstants.COPY_ACTION:
-                        sandbox.copyAction();
+                        sandbox.getUac().copyAction();
                         break;
                     case NameConstants.PASTE_ACTION:
-                        sandbox.pasteAction(0, 0, false);
+                        sandbox.getUac().pasteAction(0, 0, false);
                         break;
                     case NameConstants.IMPORT_DIALOG_SHOW:
                         uiStage.dialogs().showImportDialog();

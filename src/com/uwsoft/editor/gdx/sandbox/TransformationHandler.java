@@ -8,7 +8,7 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.renderer.actor.LabelItem;
 
 /**
- * Created by azakhary on 3/20/2015.
+ * Provides logic for item size/scale/rotation visual transformation by dragging from selection rectangle corners
  */
 public class TransformationHandler {
 

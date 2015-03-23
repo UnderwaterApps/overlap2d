@@ -8,10 +8,7 @@ import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.EditorResourceManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.UICompositePanel;
-import com.uwsoft.editor.gdx.ui.UIItemsBox;
-import com.uwsoft.editor.gdx.ui.UILightBox;
-import com.uwsoft.editor.gdx.ui.UIMainTable;
+import com.uwsoft.editor.gdx.ui.*;
 import com.uwsoft.editor.gdx.ui.dialogs.*;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -29,6 +26,8 @@ public class UIStage extends BaseStage {
     public Group contextMenuContainer;
 
     public DialogSystem dlgSystem;
+
+	 public DropDown mainDropDown;
 
     public UIStage(SandboxStage sandboxStage) {
         super();
@@ -61,6 +60,8 @@ public class UIStage extends BaseStage {
         
 
         initDialogSystem();
+
+		  mainDropDown = new DropDown(contextMenuContainer);
     }
 
     public Sandbox getSandbox() {
@@ -133,9 +134,7 @@ public class UIStage extends BaseStage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                if (sandboxStage.frontUI != null && sandboxStage.frontUI.dropDown != null) {
-                    sandboxStage.frontUI.dropDown.remove();
-                }
+					 mainDropDown.hide();
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
         });
