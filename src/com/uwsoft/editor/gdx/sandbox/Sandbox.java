@@ -1,7 +1,6 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,7 +8,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
@@ -23,16 +21,13 @@ import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
 import com.uwsoft.editor.renderer.data.*;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -90,7 +85,7 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
-		 transformationHandler = new TransformationHandler();
+		  transformationHandler = new TransformationHandler();
         sandboxInputAdapter = new SandboxInputAdapter(this);
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
@@ -120,6 +115,12 @@ public class Sandbox {
         return sandboxInputAdapter;
     }
 
+	 public EditingMode getCurrentMode() {
+		  return editingMode;
+	 }
+
+
+
     public void initData(String sceneName) {
         DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
 
@@ -127,6 +128,35 @@ public class Sandbox {
 
         flow = new FlowManager(sceneControl.getRootSceneVO());
     }
+
+
+	 public void loadCurrentProject(String name) {
+		  rm = new SandboxResourceManager();
+		  sceneControl.getEssentials().rm = rm;
+		  loadScene(name);
+	 }
+
+	 public void loadCurrentProject() {
+		  ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
+		  loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
+	 }
+
+	 public void loadScene(String sceneName) {
+		  currentLoadedSceneFileName = sceneName;
+		  uiStage.getCompositePanel().clearScenes();
+		  initData(sceneName);
+
+		  sandboxStage.initView();
+		  uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
+		  initSceneView(sceneControl.getRootSceneVO());
+		  initEvents();
+
+		  ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
+		  projectVO.lastOpenScene = sceneName;
+		  DataManager.getInstance().saveCurrentProject();
+		  sandboxStage.getCamera().position.set(0, 0, 0);
+
+	 }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
         initSceneView(sceneControl.initSceneView(compositeItemVO));
@@ -150,193 +180,60 @@ public class Sandbox {
         forceContinuousParticles(composite);
     }
 
-    private void forceContinuousParticles(CompositeItem composite) {
-        ArrayList<IBaseItem> asd = composite.getItems();
-        for (int i = 0; i < asd.size(); i++) {
-            IBaseItem item = asd.get(i);
-            if (item instanceof ParticleItem) {
-                ((ParticleItem) item).forceContinuous();
-                continue;
-            }
-            if (item instanceof CompositeItem) {
-                forceContinuousParticles((CompositeItem) item);
-            }
-
-        }
-    }
 
 
 
 
-
-    public void getIntoPrevComposite() {
-        sandboxStage.getCamera().position.set(0, 0, 0);
-        uiStage.getCompositePanel().stepUp();
-        uiStage.getItemsBox().initContent();
-    }
-
-    public void addCompositeToLibrary() {
-        CompositeItem item = null;
-        if (selector.getCurrentSelection().size() == 1) {
-            for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-                if (value.getHost().isComposite()) {
-                    item = (CompositeItem) value.getHost();
-                }
-            }
-        }
-
-        if (item == null) return;
-
-        InputDialog dlg = uiStage.dialogs().showInputDialog();
-
-        dlg.setDescription("Please set unique name for your component");
-
-        final CompositeItem itemToAdd = item;
-
-        dlg.setListener(new InputDialog.InputDialogListener() {
-
-            @Override
-            public void onConfirm(String input) {
-                sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
-                uiStage.reInitLibrary();
-            }
-        });
-
-
-    }
-
-    public void getIntoComposite() {
-        CompositeItem item = null;
-        sceneControl.getCurrentScene().updateDataVO();
-        if (selector.getCurrentSelection().size() == 1) {
-            for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-                if (value.getHost().isComposite()) {
-                    item = (CompositeItem) value.getHost();
-                }
-            }
-        }
-        if (item == null) return;
-        selector.clearSelections();
-        getIntoComposite(item.getDataVO());
-    }
-
-    public void getIntoComposite(CompositeItemVO compositeItemVO) {
-        //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
-        sandboxStage.getCamera().position.set(0, 0, 0);
-        sandboxStage.disableAmbience(true);
-        uiStage.getLightBox().disableAmbiance.setChecked(true);
-        uiStage.getCompositePanel().addScene(compositeItemVO);
-        initSceneView(compositeItemVO);
-        uiStage.getItemsBox().initContent();
-    }
-
-    public CompositeItem groupItemsIntoComposite() {
-        sceneControl.getCurrentScene().updateDataVO();
-        CompositeItemVO vo = new CompositeItemVO();
-
-        // Calculating lower left and upper values
-        float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
-        int iter = 0;
-        for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-            if (iter++ == 0) {
-                if (value.getScaleX() > 0 && value.getWidth() > 0) {
-                    lowerX = value.getX();
-                    upperX = value.getX() + value.getWidth();
-                } else {
-                    upperX = value.getX();
-                    lowerX = value.getX() + value.getWidth();
-                }
-
-                if (value.getScaleY() > 0 && value.getHeight() > 0) {
-                    lowerY = value.getY();
-                    upperY = value.getY() + value.getHeight();
-                } else {
-                    upperY = value.getY();
-                    lowerY = value.getY() + value.getHeight();
-                }
-            }
-            if (value.getScaleX() > 0 && value.getWidth() > 0) {
-                if (lowerX > value.getX()) lowerX = value.getX();
-                if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
-            } else {
-                if (upperX < value.getX()) upperX = value.getX();
-                if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
-            }
-            if (value.getScaleY() > 0 && value.getHeight() > 0) {
-                if (lowerY > value.getY()) lowerY = value.getY();
-                if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
-            } else {
-                if (upperY < value.getY()) upperY = value.getY();
-                if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
-            }
-        }
-
-        float width = upperX - lowerX;
-        float height = upperY - lowerY;
-
-        for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-            MainItemVO itemVo = value.getHost().getDataVO();
-            //System.out.println("ASSSDDD " + itemVo.x + " BASDDD " + lowerX);
-            itemVo.x = itemVo.x - lowerX;
-            itemVo.y = itemVo.y - lowerY;
-            //System.out.println("adddd " + itemVo.x );
-            vo.composite.addItem(itemVo);
-        }
-        vo.x = lowerX;
-        vo.y = lowerY;
-        vo.layerName = uiStage.getCurrentSelectedLayer().layerName;
-
-        CompositeItem item = sceneControl.getCompositeElement(vo);
-
-        item.setWidth(width);
-        item.setHeight(height);
-
-        selector.removeCurrentSelectedItems();
-
-        sceneControl.getCurrentScene().addItem(item);
-
-        sandboxInputAdapter.initItemListeners(item);
-        uiStage.getItemsBox().initContent();
-        selector.setSelection(item, true);
-
-        return item;
-    }
+	 public void enterIntoPrevComposite () {
+		  sandboxStage.getCamera().position.set(0, 0, 0);
+		  uiStage.getCompositePanel().stepUp();
+		  uiStage.getItemsBox().initContent();
+	 }
 
 
 
+	 public void enterIntoComposite () {
+		  CompositeItem item = null;
+		  sceneControl.getCurrentScene().updateDataVO();
+		  if (selector.getCurrentSelection().size() == 1) {
+				for (SelectionRectangle value : selector.getCurrentSelection().values()) {
+					 if (value.getHost().isComposite()) {
+						  item = (CompositeItem) value.getHost();
+					 }
+				}
+		  }
+		  if (item == null) return;
+		  selector.clearSelections();
+		  enterIntoComposite(item.getDataVO());
+	 }
 
-    public void loadCurrentProject(String name) {
-        rm = new SandboxResourceManager();
-        sceneControl.getEssentials().rm = rm;
-        loadScene(name);
-    }
-
-    public void loadCurrentProject() {
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
-        loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
-    }
-
-    public void loadScene(String sceneName) {
-        currentLoadedSceneFileName = sceneName;
-        uiStage.getCompositePanel().clearScenes();
-        initData(sceneName);
-
-        sandboxStage.initView();
-        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
-        initSceneView(sceneControl.getRootSceneVO());
-        initEvents();
-
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
-        projectVO.lastOpenScene = sceneName;
-        DataManager.getInstance().saveCurrentProject();
-        sandboxStage.getCamera().position.set(0, 0, 0);
-
-    }
+	 public void enterIntoComposite (CompositeItemVO compositeItemVO) {
+		  //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
+		  sandboxStage.getCamera().position.set(0, 0, 0);
+		  sandboxStage.disableAmbience(true);
+		  uiStage.getLightBox().disableAmbiance.setChecked(true);
+		  uiStage.getCompositePanel().addScene(compositeItemVO);
+		  initSceneView(compositeItemVO);
+		  uiStage.getItemsBox().initContent();
+	 }
 
 
-    public EditingMode getCurrentMode() {
-        return editingMode;
-    }
+
+	 private void forceContinuousParticles(CompositeItem composite) {
+		  ArrayList<IBaseItem> asd = composite.getItems();
+		  for (int i = 0; i < asd.size(); i++) {
+				IBaseItem item = asd.get(i);
+				if (item instanceof ParticleItem) {
+					 ((ParticleItem) item).forceContinuous();
+					 continue;
+				}
+				if (item instanceof CompositeItem) {
+					 forceContinuousParticles((CompositeItem) item);
+				}
+
+		  }
+	 }
+
 
     public void setCurrentMode(EditingMode currentMode) {
         this.editingMode = currentMode;
@@ -348,44 +245,24 @@ public class Sandbox {
 
     public SceneVO sceneVoFromItems() {
         CompositeItemVO itemVo = sceneControl.getRootSceneVO();
-        cleanComposite(itemVo.composite);
+        itemFactory.cleanComposite(itemVo.composite);
         sceneControl.getCurrentSceneVO().composite = itemVo.composite;
         return sceneControl.getCurrentSceneVO();
-    }
-
-    private void cleanComposite(CompositeVO compositeVO) {
-        Iterator<CompositeItemVO> compositeItemVOIterator = compositeVO.sComposites.iterator();
-        while (compositeItemVOIterator.hasNext()) {
-            CompositeItemVO next = compositeItemVOIterator.next();
-            if (isCompositeEmpty(next.composite)) {
-                compositeItemVOIterator.remove();
-            }
-        }
-    }
-
-    private boolean isCompositeEmpty(CompositeVO composite) {
-        if (composite.isEmpty()) {
-            return true;
-        }
-        cleanComposite(composite);
-        return composite.isEmpty();
     }
 
     public void reconstructFromSceneVo(CompositeItemVO vo) {
         initSceneView(vo);
     }
 
-
-
     public void undo() {
         FlowActionEnum lastFlowAction = flow.getFlowLastAction();
         CompositeItemVO compositeItemVO = flow.undo();
         switch (lastFlowAction) {
             case GET_INTO_COMPOSITE:
-                getIntoPrevComposite();
+                enterIntoPrevComposite();
                 break;
             case GET_OUT_COMPOSITE:
-                getIntoComposite(compositeItemVO);
+                enterIntoComposite(compositeItemVO);
                 break;
             default:
                 reconstructFromSceneVo(compositeItemVO);
@@ -399,10 +276,10 @@ public class Sandbox {
         FlowActionEnum lastFlowAction = flow.getFlowLastAction();
         switch (lastFlowAction) {
             case GET_INTO_COMPOSITE:
-                getIntoComposite(compositeItemVO);
+                enterIntoComposite(compositeItemVO);
                 break;
             case GET_OUT_COMPOSITE:
-                getIntoPrevComposite();
+                enterIntoPrevComposite();
                 break;
             default:
                 reconstructFromSceneVo(compositeItemVO);

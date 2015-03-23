@@ -3,21 +3,15 @@ package com.uwsoft.editor.gdx.sandbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.LabelItem;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 import java.awt.*;
-import java.util.ArrayList;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -106,7 +100,7 @@ public class SandboxInputAdapter extends InputAdapter {
 	 }
 
 	 private void itemDoubleClick(IBaseItem item, InputEvent event, float x, float y, int button) {
-		  sandbox.getIntoComposite();
+		  sandbox.enterIntoComposite();
 		  sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
 		  sandbox.flow.applyPendingAction();
 	 }
@@ -213,7 +207,7 @@ public class SandboxInputAdapter extends InputAdapter {
 	 private void sandboxDoubleClick(InputEvent event, float x, float y) {
 		  // if empty space is double clicked, then get back into previous composite
 		  // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
-		  sandbox.getIntoPrevComposite();
+		  sandbox.enterIntoPrevComposite();
 		  sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
 		  sandbox.flow.applyPendingAction();
 	 }

@@ -79,11 +79,11 @@ public class SandboxFrontUI extends Group {
             public void doAction(int action) {
                 switch (action) {
                     case SelectionActions.GROUP_ITEMS:
-                        sandbox.groupItemsIntoComposite();
+                        sandbox.getItemFactory().groupItemsIntoComposite();
                         sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.CONVERT_TO_BUTTON:
-                        CompositeItem btn = sandbox.groupItemsIntoComposite();
+                        CompositeItem btn = sandbox.getItemFactory().groupItemsIntoComposite();
                         btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
                         btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
                         btn.reAssembleLayers();
@@ -104,10 +104,10 @@ public class SandboxFrontUI extends Group {
 
                         break;
                     case SelectionActions.ADD_TO_LIBRARY:
-                        sandbox.addCompositeToLibrary();
+                        sandbox.getItemFactory().addCompositeToLibrary();
                         break;
                     case SelectionActions.EDIT_COMPOSITE:
-                        sandbox.getIntoComposite();
+                        sandbox.enterIntoComposite();
                         sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
                         sandbox.flow.applyPendingAction();
                         break;

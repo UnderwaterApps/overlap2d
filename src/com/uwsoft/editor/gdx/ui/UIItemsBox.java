@@ -192,10 +192,10 @@ public class UIItemsBox extends ExpandableUIBox {
                 if (getTapCount() == 2) {
                     if (!iBaseItem.isComposite()) {
                         if (iBaseItem.getParentItem() != null && !iBaseItem.getParentItem().equals(stage.getSandbox().getCurrentScene()))
-                            stage.getSandbox().getIntoComposite(iBaseItem.getParentItem().getDataVO());
+                            stage.getSandbox().enterIntoComposite(iBaseItem.getParentItem().getDataVO());
                     } else {
                         if (!iBaseItem.equals(stage.getSandbox().getCurrentScene())) {
-                            stage.getSandbox().getIntoComposite(((CompositeItem) iBaseItem).getDataVO());
+                            stage.getSandbox().enterIntoComposite(((CompositeItem)iBaseItem).getDataVO());
                         }
                     }
                 } else {
