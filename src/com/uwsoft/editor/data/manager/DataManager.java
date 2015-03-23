@@ -52,7 +52,6 @@ public class DataManager {
     private ProgressHandler handler;
     private EditorConfigVO editorConfigVO;
 
-    private UIStage uiStage;
 
     public DataManager() {
         initWorkspace();
@@ -110,15 +109,15 @@ public class DataManager {
         return 4096;
     }
 
-    public void setStage(UIStage stage) {
-        this.uiStage = stage;
-    }
-
-    private void showError(String txt) {
-        if (uiStage != null) {
-            uiStage.dialogs().showInfoDialog(txt);
-        }
-    }
+//    public void setStage(UIStage stage) {
+//        this.uiStage = stage;
+//    }
+//
+//    private void showError(String txt) {
+//        if (uiStage != null) {
+//            uiStage.dialogs().showInfoDialog(txt);
+//        }
+//    }
 
     public ProjectVO getCurrentProjectVO() {
         return currentProjectVO;
@@ -583,7 +582,7 @@ public class DataManager {
             JsonFilenameFilter jsonFilenameFilter = new JsonFilenameFilter();
             ScmlFilenameFilter scmlFilenameFilter = new ScmlFilenameFilter();
             if (!jsonFilenameFilter.accept(null, animationFileSource.getName()) && !scmlFilenameFilter.accept(null, animationFileSource.getName())) {
-                showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
+                //showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
 
                 return null;
             }
@@ -598,7 +597,7 @@ public class DataManager {
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
                 File atlasFileSource = new File(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
                 if (!atlasFileSource.exists()) {
-                    showError("the atlas file needs to have same name and location as the json file");
+                    //showError("the atlas file needs to have same name and location as the json file");
 
                     return null;
                 }
@@ -762,7 +761,7 @@ public class DataManager {
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("Error importing particles");
-                            showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect file in the same directory ");
+                            //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect file in the same directory ");
                         }
                     }
                 }
@@ -1188,11 +1187,7 @@ public class DataManager {
             ignored.printStackTrace();
         }
         saveCurrentProject();
-        String name = uiStage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
-        DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName, "orig");
-
-        uiStage.getSandbox().loadCurrentProject(name);
-        uiStage.getSandbox().loadCurrentProject();
+        openProjectAndLoadAllData(getCurrentProjectVO().projectName, "orig");
     }
 
     public String getFreeTypeFontPath() {

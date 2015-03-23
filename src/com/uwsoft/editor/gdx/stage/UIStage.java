@@ -59,7 +59,6 @@ public class UIStage extends BaseStage {
         addActor(contextMenuContainer);
         setListeners();
         
-        DataManager.getInstance().setStage(this);
 
         initDialogSystem();
     }
