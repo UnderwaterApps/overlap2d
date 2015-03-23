@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 
 public class PixelRect extends Group {
@@ -11,8 +12,8 @@ public class PixelRect extends Group {
     private PixelLine[] lines = new PixelLine[4];
     private Image fill;
 
-    public PixelRect(TextureManager tm, float width, float height) {
-
+    public PixelRect(float width, float height) {
+        TextureManager tm = DataManager.getInstance().textureManager;
         lines[0] = new PixelLine(tm, 0, 0, width, 0);
         lines[1] = new PixelLine(tm, 0, 0, 0, height);
         lines[2] = new PixelLine(tm, width, 0, width, height);

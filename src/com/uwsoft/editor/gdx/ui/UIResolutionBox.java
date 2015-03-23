@@ -125,7 +125,7 @@ public class UIResolutionBox extends Group {
 
                     @Override
                     public void onConfirm() {
-                        DataManager.getInstance().deleteResolution(index - 1);
+                        DataManager.getInstance().resolutionManager.deleteResolution(index - 1);
                         String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
                         stage.getSandbox().loadCurrentProject(name);
                         stage.getSandbox().loadCurrentProject();

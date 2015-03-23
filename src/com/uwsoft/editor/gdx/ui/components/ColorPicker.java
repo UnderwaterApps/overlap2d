@@ -4,6 +4,7 @@ package com.uwsoft.editor.gdx.ui.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 
 
@@ -15,8 +16,8 @@ public class ColorPicker extends Group {
     private Image colorImg;
 
     public ColorPicker() {
-        colorImg = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
-        Image borderImg = new Image(TextureManager.getInstance().getEditorAsset("colorBox"));
+        colorImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("pixel"));
+        Image borderImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("colorBox"));
 
         colorImg.setScale(16);
         colorImg.setX(2);

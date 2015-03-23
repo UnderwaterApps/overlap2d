@@ -424,5 +424,16 @@ public class ResolutionManager {
             rePackProjectImages(resolutionEntryVO);
         }
     }
+
+    public void deleteResolution(int index) {
+        ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().resolutions.remove(index);
+        try {
+            FileUtils.deleteDirectory(new File(dataManager.getWorkspacePath() + "/" + dataManager.currentProjectVO.projectName + "/assets/" + resolutionEntryVO.name));
+        } catch (IOException ignored) {
+            ignored.printStackTrace();
+        }
+        dataManager.saveCurrentProject();
+        dataManager.openProjectAndLoadAllData(dataManager.currentProjectVO.projectName, "orig");
+    }
 }
 

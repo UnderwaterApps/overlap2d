@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
@@ -37,9 +38,9 @@ public class SimpleDialog extends UIBox {
 
 
         ButtonStyle stl = new ButtonStyle();
-        stl.down = new TextureRegionDrawable(TextureManager.getInstance().getEditorAsset("closeBtnClicked"));
-        stl.up = new TextureRegionDrawable(TextureManager.getInstance().getEditorAsset("closeBtn"));
-        stl.over = new TextureRegionDrawable(TextureManager.getInstance().getEditorAsset("closeHoverBtn"));
+        stl.down = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeBtnClicked"));
+        stl.up = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeBtn"));
+        stl.over = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeHoverBtn"));
 
         Button closeBtn = new Button(stl);
         addActor(closeBtn);
@@ -55,7 +56,7 @@ public class SimpleDialog extends UIBox {
             }
         });
 
-        titleLabel = new Label("Default Title", TextureManager.getInstance().editorSkin);
+        titleLabel = new Label("Default Title", DataManager.getInstance().textureManager.editorSkin);
         titleLabel.setX(6);
         titleLabel.setY(topImg.getY() + 2);
         titleLabel.setColor(new Color(1, 1, 1, 0.6f));
@@ -71,12 +72,9 @@ public class SimpleDialog extends UIBox {
     public void initDragDrop() {
         addListener(new InputListener() {
             int edge;
-            float startX
-                    ,
-                    startY
-                    ,
-                    lastX
-                    ,
+            float startX,
+                    startY,
+                    lastX,
                     lastY;
 
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {

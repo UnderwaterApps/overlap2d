@@ -1,7 +1,6 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -9,14 +8,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.SandboxResourceManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
@@ -28,11 +25,9 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
 import com.uwsoft.editor.renderer.data.*;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -57,7 +52,7 @@ public class Sandbox {
 
     public FlowManager flow;
 
-	 public TransformationHandler transformationHandler;
+    public TransformationHandler transformationHandler;
 
     /**
      * this part is to be modified
@@ -70,7 +65,7 @@ public class Sandbox {
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
     public IResourceRetriever rm;
-    public  ArrayList<MainItemVO> tempClipboard;
+    public ArrayList<MainItemVO> tempClipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
@@ -90,7 +85,7 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
-		 transformationHandler = new TransformationHandler();
+        transformationHandler = new TransformationHandler();
         sandboxInputAdapter = new SandboxInputAdapter(this);
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
@@ -116,12 +111,12 @@ public class Sandbox {
         return sceneControl;
     }
 
-    public SandboxInputAdapter getSandboxInputAdapter () {
+    public SandboxInputAdapter getSandboxInputAdapter() {
         return sandboxInputAdapter;
     }
 
     public void initData(String sceneName) {
-        DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
+        DataManager.getInstance().sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
 
         sceneControl.initScene(sceneName);
 
@@ -164,9 +159,6 @@ public class Sandbox {
 
         }
     }
-
-
-
 
 
     public void getIntoPrevComposite() {
@@ -303,8 +295,6 @@ public class Sandbox {
     }
 
 
-
-
     public void loadCurrentProject(String name) {
         rm = new SandboxResourceManager();
         sceneControl.getEssentials().rm = rm;
@@ -376,7 +366,6 @@ public class Sandbox {
     }
 
 
-
     public void undo() {
         FlowActionEnum lastFlowAction = flow.getFlowLastAction();
         CompositeItemVO compositeItemVO = flow.undo();
@@ -439,15 +428,15 @@ public class Sandbox {
 
         ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
         Actor firstItem = (Actor) fakeItem.getItems().get(0);
-        float offsetX = firstItem.getX()*sceneControl.getCurrentScene().mulX;
-        float offsetY = firstItem.getY()*sceneControl.getCurrentScene().mulY;
+        float offsetX = firstItem.getX() * sceneControl.getCurrentScene().mulX;
+        float offsetY = firstItem.getY() * sceneControl.getCurrentScene().mulY;
         for (int i = 1; i < fakeItem.getItems().size(); i++) {
             Actor item = (Actor) fakeItem.getItems().get(i);
-            if (item.getX()*sceneControl.getCurrentScene().mulX < offsetX) {
-                offsetX = item.getX()*sceneControl.getCurrentScene().mulX;
+            if (item.getX() * sceneControl.getCurrentScene().mulX < offsetX) {
+                offsetX = item.getX() * sceneControl.getCurrentScene().mulX;
             }
-            if (item.getY()*sceneControl.getCurrentScene().mulY < offsetY) {
-                offsetY = item.getY()*sceneControl.getCurrentScene().mulY;
+            if (item.getY() * sceneControl.getCurrentScene().mulY < offsetY) {
+                offsetY = item.getY() * sceneControl.getCurrentScene().mulY;
             }
         }
         Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) sandboxStage.getCamera()).position;
@@ -507,7 +496,7 @@ public class Sandbox {
     }
 
     public boolean isComponentSkinAvailable() {
-        if (TextureManager.getInstance().projectSkin == null) {
+        if (DataManager.getInstance().textureManager.projectSkin == null) {
             return false;
         }
 
@@ -535,49 +524,48 @@ public class Sandbox {
     }
 
 
+    public void enablePan() {
+        cameraPanOn = true;
+        selector.clearSelections();
+        isItemTouched = false;
+    }
 
-	 public void enablePan() {
-		  cameraPanOn = true;
-         selector.clearSelections();
-		  isItemTouched = false;
-	 }
+    public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
+        // space is panning, so if we are not, then prepare the selection rectangle
+        if (setOpacity) {
+            getSandboxStage().selectionRec.setOpacity(0.6f);
+        }
+        getSandboxStage().selectionRec.setWidth(0);
+        getSandboxStage().selectionRec.setHeight(0);
+        getSandboxStage().selectionRec.setX(x);
+        getSandboxStage().selectionRec.setY(y);
+    }
 
-	 public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
-		  // space is panning, so if we are not, then prepare the selection rectangle
-		  if (setOpacity) {
-				getSandboxStage().selectionRec.setOpacity(0.6f);
-		  }
-		  getSandboxStage().selectionRec.setWidth(0);
-		  getSandboxStage().selectionRec.setHeight(0);
-		  getSandboxStage().selectionRec.setX(x);
-		  getSandboxStage().selectionRec.setY(y);
-	 }
+    public boolean showDropDown(float x, float y) {
+        getSandboxStage().frontUI.showDropDownForSelection(x, y);
 
-	 public boolean showDropDown(float x, float y) {
-		  getSandboxStage().frontUI.showDropDownForSelection(x, y);
+        return true;
+    }
 
-		  return true;
-	 }
+    public void selectionComplete() {
+        // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
+        isUsingSelectionTool = false;
+        // hiding selection rectangle
+        getSandboxStage().selectionRec.setOpacity(0.0f);
+        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+        Rectangle sR = getSandboxStage().selectionRec.getRect();
+        for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
+            Actor asActor = (Actor) getCurrentScene().getItems().get(i);
+            if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
+                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+                curr.add(getCurrentScene().getItems().get(i));
+            }
+        }
 
-	 public void selectionComplete() {
-		  // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
-		  isUsingSelectionTool = false;
-		  // hiding selection rectangle
-		  getSandboxStage().selectionRec.setOpacity(0.0f);
-		  ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-		  Rectangle sR = getSandboxStage().selectionRec.getRect();
-		  for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
-				Actor asActor = (Actor) getCurrentScene().getItems().get(i);
-				if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
-					.overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
-					 curr.add(getCurrentScene().getItems().get(i));
-				}
-		  }
+        selector.setSelections(curr, true);
 
-         selector.setSelections(curr, true);
-
-		  if (curr.size() == 0) {
-				getUIStage().emptyClick();
-		  }
-	 }
+        if (curr.size() == 0) {
+            getUIStage().emptyClick();
+        }
+    }
 }

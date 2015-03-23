@@ -1,7 +1,5 @@
 package com.uwsoft.editor.gdx.actors;
 
-import java.awt.Cursor;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,13 +8,15 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
+
+import java.awt.*;
 
 public class SelectionRectangle extends PixelRect {
 
@@ -37,8 +37,8 @@ public class SelectionRectangle extends PixelRect {
     private EditingMode mode;
 
     public SelectionRectangle(Sandbox sandbox) {
-        super(TextureManager.getInstance(), 0, 0);
-        this.tm =TextureManager.getInstance();
+        super(0, 0);
+        this.tm = DataManager.getInstance().textureManager;
         this.sandbox = sandbox;
         setTouchable(Touchable.disabled);
         setVisible(false);
@@ -159,8 +159,8 @@ public class SelectionRectangle extends PixelRect {
         setX(hostAsActor.getX());
         setY(hostAsActor.getY());
         setRotation(hostAsActor.getRotation());
-        setWidth(hostAsActor.getWidth() *(hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-        setHeight(hostAsActor.getHeight()*(hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
     }
 
     public void update() {
@@ -172,8 +172,8 @@ public class SelectionRectangle extends PixelRect {
         setOriginX(hostAsActor.getOriginX());
         setOriginY(hostAsActor.getOriginY());
         setRotation(hostAsActor.getRotation());
-        setWidth(hostAsActor.getWidth()*(hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-        setHeight(hostAsActor.getHeight()*(hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
 
         positionTransformables();
     }
@@ -213,7 +213,7 @@ public class SelectionRectangle extends PixelRect {
 
     public void setMode(EditingMode mode) {
         this.mode = mode;
-        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem) ) {
+        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem)) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);

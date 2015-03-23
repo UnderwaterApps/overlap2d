@@ -12,7 +12,6 @@ import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
-import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
@@ -39,6 +38,8 @@ public class DataManager {
 
     private static DataManager instance = null;
     public final ResolutionManager resolutionManager;
+    public final SceneDataManager sceneDataManager;
+    public final TextureManager textureManager;
     private String currentWorkingPath;
     private String workspacePath;
     private String DEFAULT_FOLDER = "Overlap2D";
@@ -52,6 +53,8 @@ public class DataManager {
     public DataManager() {
         initWorkspace();
         resolutionManager = new ResolutionManager(this);
+        sceneDataManager = new SceneDataManager(this);
+        textureManager = new TextureManager(this);
     }
 
     public static DataManager getInstance() {
@@ -154,7 +157,7 @@ public class DataManager {
         currentProjectVO = projVo;
         currentProjectInfoVO = projInfoVo;
 
-        createNewScene("MainScene");
+        sceneDataManager.createNewScene("MainScene");
         FileUtils.writeStringToFile(new File(projPath + "/project.pit"), projVo.constructJsonString(), "utf-8");
         FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projInfoVo.constructJsonString(), "utf-8");
 
@@ -273,32 +276,12 @@ public class DataManager {
         }
     }
 
-    public void preloadSceneSpecificData(SceneVO sceneVO, String resolution) {
-        if (sceneVO == null || sceneVO.composite == null) return;
-
-        FontSizePair[] fonts = sceneVO.composite.getRecursiveFontList();
-
-        TextureManager.getInstance().loadBitmapFonts(fonts, resolutionManager.getCurrentMul());
-    }
 
     private void loadProjectData(String projectName) {
         // All legit loading assets
-        TextureManager.getInstance().loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.curResolution);
+        textureManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.curResolution);
     }
 
-    public SceneVO createNewScene(String name) {
-        SceneVO vo = new SceneVO();
-        vo.sceneName = name;
-        try {
-            String projPath = currentWorkingPath + "/" + currentProjectVO.projectName;
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
-            FileUtils.writeStringToFile(new File(projPath + "/scenes/" + vo.sceneName + ".dt"), vo.constructJsonString(), "utf-8");
-            currentProjectInfoVO.scenes.add(vo);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return vo;
-    }
 
     public String getCurrentWorkingPath() {
         return currentWorkingPath;
@@ -310,18 +293,6 @@ public class DataManager {
 
     public void setWorkspacePath(String path) {
         workspacePath = path;
-    }
-
-    public String getCurrProjectScenePathByName(String sceneName) {
-        return currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
-    }
-
-    public void saveScene(SceneVO vo) {
-        try {
-            FileUtils.writeStringToFile(new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/" + vo.sceneName + ".dt"), vo.constructJsonString(), "utf-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     public void saveCurrentProject() {
@@ -784,7 +755,7 @@ public class DataManager {
         if (!(source.exists() && source.isDirectory())) {
             try {
                 JarUtils.copyResourcesToDirectory(JarUtils.getThisJar(getClass()), "ui", targetPath);
-                TextureManager.getInstance().loadCurrentProjectSkin(targetPath);
+                textureManager.loadCurrentProjectSkin(targetPath);
                 return;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -794,59 +765,13 @@ public class DataManager {
         File fileTarget = new File(targetPath);
         try {
             FileUtils.copyDirectory(source, fileTarget);
-            TextureManager.getInstance().loadCurrentProjectSkin(targetPath);
+            textureManager.loadCurrentProjectSkin(targetPath);
         } catch (IOException e) {
             // TODO Auto-generated catch block
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
 
-    }
-
-    public void copyDefaultFontIntoProject() {
-        System.out.println("here");
-        String targetPath = currentWorkingPath + File.separator + currentProjectVO.projectName + File.separator + "assets" + File.separator + "orig" + File.separator + "freetypefonts";
-        FileHandle source = null;
-        if (OSType.getOS_Type() == OSType.MacOS) {
-            source = Gdx.files.internal("freetypefonts");
-        } else if (OSType.getOS_Type() == OSType.Windows) {
-            source = Gdx.files.internal("assets/freetypefonts");
-        } else {
-            source = Gdx.files.internal("freetypefonts");
-        }
-        System.out.println(source.exists() + " " + source.isDirectory());
-        if (!source.exists()) {
-            try {
-                JarUtils.copyResourcesToDirectory(JarUtils.getThisJar(getClass()), "freetypefonts", targetPath);
-                //TextureManager.getInstance().loadCurrentProjectSkin(targetPath);
-                return;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        File fileTarget = new File(targetPath);
-        try {
-            FileUtils.copyDirectory(source.file(), fileTarget);
-            //TextureManager.getInstance().loadCurrentProjectSkin(targetPath);
-        } catch (IOException e) {
-            // TODO Auto-generated catch block
-            System.err.println(e.getMessage());
-            e.printStackTrace();
-        }
-
-    }
-
-
-    public void deleteResolution(int index) {
-        ResolutionEntryVO resolutionEntryVO = currentProjectInfoVO.resolutions.remove(index);
-        try {
-            FileUtils.deleteDirectory(new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resolutionEntryVO.name));
-        } catch (IOException ignored) {
-            ignored.printStackTrace();
-        }
-        saveCurrentProject();
-        openProjectAndLoadAllData(getCurrentProjectVO().projectName, "orig");
     }
 
     public String getFreeTypeFontPath() {
@@ -873,28 +798,12 @@ public class DataManager {
             buildFonts(currentProjectVO.projectMainExportPath);
         }
         buildStyles(defaultBuildPath);
-        buildScenes(defaultBuildPath);
+        sceneDataManager.buildScenes(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
-            buildScenes(currentProjectVO.projectMainExportPath);
+            sceneDataManager.buildScenes(currentProjectVO.projectMainExportPath);
         }
     }
 
-    private void buildScenes(String targetPath) {
-        String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes";
-        FileHandle scenesDirectoryHandle = Gdx.files.absolute(srcPath);
-        File fileTarget = new File(targetPath + "/" + scenesDirectoryHandle.name());
-        try {
-            FileUtils.copyDirectory(scenesDirectoryHandle.file(), fileTarget);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        //copy project dt
-        try {
-            FileUtils.copyFile(new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/project.dt"), new File(targetPath + "/project.dt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
     private void buildStyles(String targetPath) {
         String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig";
@@ -1043,35 +952,6 @@ public class DataManager {
             }
         }
         return editorConfig;
-    }
-
-    public void deleteCurrentScene() {
-        if (currentProjectVO.lastOpenScene.equals("MainScene")) {
-            return;
-        }
-        deleteScene(currentProjectVO.lastOpenScene);
-    }
-
-    private void deleteScene(String sceneName) {
-        ArrayList<SceneVO> scenes = currentProjectInfoVO.scenes;
-        SceneVO sceneToDelete = null;
-        for (SceneVO scene : scenes) {
-            if (scene.sceneName.equals(sceneName)) {
-                sceneToDelete = scene;
-                break;
-            }
-        }
-        if (sceneToDelete != null) {
-            scenes.remove(sceneToDelete);
-        }
-        currentProjectInfoVO.scenes = scenes;
-        String projPath = currentWorkingPath + "/" + currentProjectVO.projectName;
-        try {
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
-            FileUtils.forceDelete(new File(projPath + "/scenes/" + sceneName + ".dt"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
 

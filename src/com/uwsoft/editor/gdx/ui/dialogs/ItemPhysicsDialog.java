@@ -71,7 +71,7 @@ public class ItemPhysicsDialog extends SimpleDialog {
 
         mainLayer.addActor(controlPanel);
 
-        PixelRect pixelRect = new PixelRect(stage.textureManager, mainLayer.getWidth() - propertyPanel.getWidth() - 12, mainLayer.getHeight() - controlPanel.getHeight() - 27);
+        PixelRect pixelRect = new PixelRect(mainLayer.getWidth() - propertyPanel.getWidth() - 12, mainLayer.getHeight() - controlPanel.getHeight() - 27);
         pixelRect.setFillColor(new Color(0, 0, 0, 0.4f));
         pixelRect.setBorderColor(new Color(0, 0, 0, 0.7f));
         mainLayer.addActor(pixelRect);

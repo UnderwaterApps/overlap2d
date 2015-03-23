@@ -135,7 +135,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                     case NameConstants.SAVE_PROJECT:
                         SceneVO vo = sandbox.sceneVoFromItems();
                         //uiStage.compositePanel.updateOriginalItem();
-                        DataManager.getInstance().saveScene(vo);
+                        DataManager.getInstance().sceneDataManager.saveScene(vo);
                         DataManager.getInstance().saveCurrentProject();
                         break;
                     case NameConstants.UNDO:
@@ -164,7 +164,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                                 if (input == null || input.equals("")) {
                                     return;
                                 }
-                                SceneVO sceneVO = DataManager.getInstance().createNewScene(input);
+                                SceneVO sceneVO = DataManager.getInstance().sceneDataManager.createNewScene(input);
                                 sandboxStage.loadScene(input);
                                 uiStage.reInitLibrary();
                                 UIController.instance.sendNotification(NameConstants.NEW_SCENE_CRATED, sceneVO);
@@ -178,7 +178,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
                             @Override
                             public void onConfirm() {
-                                DataManager.getInstance().deleteCurrentScene();
+                                DataManager.getInstance().sceneDataManager.deleteCurrentScene();
                                 sandboxStage.loadScene("MainScene");
                                 uiStage.reInitLibrary();
                                 UIController.instance.sendNotification(NameConstants.SCENE_DELETED, DataManager.getInstance().getCurrentProjectInfoVO());

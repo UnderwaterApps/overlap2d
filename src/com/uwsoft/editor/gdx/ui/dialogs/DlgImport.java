@@ -97,7 +97,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                 // save before importing
                 SceneVO vo = stage.getSandbox().sceneVoFromItems();
                 stage.getCompositePanel().updateOriginalItem();
-                DataManager.getInstance().saveScene(vo);
+                DataManager.getInstance().sceneDataManager.saveScene(vo);
                 DataManager.getInstance().saveCurrentProject();
             }
         });
@@ -105,13 +105,13 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
 
         // adding progress bar
 
-        progressBar = new ProgressBar(0, 100, 1, false, TextureManager.getInstance().editorSkin);
+        progressBar = new ProgressBar(0, 100, 1, false, DataManager.getInstance().textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(33);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", TextureManager.getInstance().editorSkin);
+        progressLbl = new Label("0%", DataManager.getInstance().textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(38);
         mainLayer.addActor(progressLbl);

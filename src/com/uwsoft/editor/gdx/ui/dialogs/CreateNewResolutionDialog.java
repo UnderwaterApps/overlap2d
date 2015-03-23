@@ -53,13 +53,13 @@ public class CreateNewResolutionDialog extends CompositeDialog implements Progre
 
         // adding progress bar
 
-        progressBar = new ProgressBar(0, 100, 1, false, TextureManager.getInstance().editorSkin);
+        progressBar = new ProgressBar(0, 100, 1, false, DataManager.getInstance().textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(55);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", TextureManager.getInstance().editorSkin);
+        progressLbl = new Label("0%", DataManager.getInstance().textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(58);
         mainLayer.addActor(progressLbl);

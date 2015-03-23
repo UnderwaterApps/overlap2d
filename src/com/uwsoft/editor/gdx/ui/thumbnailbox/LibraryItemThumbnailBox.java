@@ -2,6 +2,7 @@ package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
@@ -24,7 +25,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         this.key = key;
         this.compositeItemVO = compositeItemVO;
         setWidth(width);
-        bgImg = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        bgImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0.425f, 0.425f, 0.425f, 1.0f);
 
 

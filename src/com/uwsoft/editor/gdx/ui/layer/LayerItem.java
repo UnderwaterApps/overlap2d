@@ -5,13 +5,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class LayerItem extends Group {
 
+    private final DataManager dataManager;
     private Image bgImg;
 
     private Image lock;
@@ -25,43 +26,44 @@ public class LayerItem extends Group {
 
         this.layerItemVo = vo;
         this.sandbox = sandbox;
+
         setWidth(247);
         setHeight(20);
-
-        bgImg = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        dataManager = DataManager.getInstance();
+        bgImg = new Image(dataManager.textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0.425f, 0.425f, 0.425f, 1.0f);
         bgImg.setScaleX(getWidth());
         bgImg.setScaleY(getHeight());
         addActor(bgImg);
 
-        Image bottom = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        Image bottom = new Image(dataManager.textureManager.getEditorAsset("pixel"));
         bottom.setColor(0.125f, 0.125f, 0.125f, 1.0f);
         bottom.setScaleX(getWidth());
         addActor(bottom);
 
-        Image sep1 = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        Image sep1 = new Image(dataManager.textureManager.getEditorAsset("pixel"));
         sep1.setColor(0.225f, 0.225f, 0.225f, 1.0f);
         sep1.setScaleY(getHeight());
         sep1.setX(20);
         addActor(sep1);
 
-        Image sep2 = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        Image sep2 = new Image(dataManager.textureManager.getEditorAsset("pixel"));
         sep2.setColor(0.225f, 0.225f, 0.225f, 1.0f);
         sep2.setScaleY(getHeight());
         sep2.setX(40);
         addActor(sep2);
 
-        lock = new Image(TextureManager.getInstance().getEditorAsset("lock"));
+        lock = new Image(dataManager.textureManager.getEditorAsset("lock"));
         lock.setX(4);
         lock.setY(4);
         addActor(lock);
 
-        eye = new Image(TextureManager.getInstance().getEditorAsset("eye"));
+        eye = new Image(dataManager.textureManager.getEditorAsset("eye"));
         eye.setX(24);
         eye.setY(5);
         addActor(eye);
 
-        Label lbl = new Label(layerItemVo.layerName, TextureManager.getInstance().editorSkin);
+        Label lbl = new Label(layerItemVo.layerName, dataManager.textureManager.editorSkin);
         lbl.setX(44);
         lbl.setY(4);
         addActor(lbl);
@@ -101,7 +103,7 @@ public class LayerItem extends Group {
 
     public void showLayerRowSeparator() {
         if (rowSeparator == null) {
-            rowSeparator = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+            rowSeparator = new Image(dataManager.textureManager.getEditorAsset("pixel"));
             rowSeparator.setColor(0.97f, 0.97f, 0.98f, 1.0f);
             rowSeparator.setScaleX(getWidth());
             rowSeparator.setScaleY(2);

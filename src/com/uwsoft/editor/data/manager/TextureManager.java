@@ -29,8 +29,8 @@ import java.util.HashMap;
 
 public class TextureManager {
 
-    private static TextureManager instance = null;
 
+    private final DataManager dataManager;
     public AssetManager assetsManager;
 
     public String labelStylePath;
@@ -45,18 +45,11 @@ public class TextureManager {
 
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
-    public TextureManager() {
+    public TextureManager(DataManager dataManager) {
+        this.dataManager = dataManager;
         assetsManager = new AssetManager();
 
         loadEditorAssets();
-    }
-
-    public static TextureManager getInstance() {
-        if (instance == null) {
-            instance = new TextureManager();
-        }
-
-        return instance;
     }
 
     public void loadEditorAssets() {
@@ -255,7 +248,8 @@ public class TextureManager {
         FontSizePair[] tmp = new FontSizePair[1];
         tmp[0] = pair;
 
-        if (!bitmapFonts.containsKey(pair)) loadBitmapFonts(tmp, DataManager.getInstance().resolutionManager.getCurrentMul());
+        if (!bitmapFonts.containsKey(pair))
+            loadBitmapFonts(tmp, DataManager.getInstance().resolutionManager.getCurrentMul());
 
         return bitmapFonts.get(pair);
     }

@@ -39,7 +39,7 @@ public class ResolutionBounds extends Group {
     }
 
     private void crateBoundsRectangle() {
-        PixelRect resolutionBounds = new PixelRect(textureManager, width, height);
+        PixelRect resolutionBounds = new PixelRect(width, height);
         addActor(resolutionBounds);
     }
 }
