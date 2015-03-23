@@ -8,7 +8,6 @@ import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.TypeConstants;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.sandbox.SandboxFrontUI;
 import com.uwsoft.editor.gdx.ui.SandboxUI;
 
 public class SandboxStage extends BaseStage implements TypeConstants {
@@ -16,7 +15,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
     public UIStage uiStage;
     public SandboxUI ui;
-    public SandboxFrontUI frontUI;
+    public Group frontUI;
 
     public PixelRect selectionRec;
     private FPSLogger fpsLogger;
@@ -49,7 +48,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         clear();
         getCamera().position.set(0, 0, 0);
 
-        frontUI = new SandboxFrontUI(sandbox);
+        frontUI = new Group();
 
         ui = new SandboxUI(this);
         addActor(ui);

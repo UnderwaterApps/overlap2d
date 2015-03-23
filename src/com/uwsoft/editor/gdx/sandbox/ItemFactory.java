@@ -14,7 +14,7 @@ import java.io.File;
 import java.util.Iterator;
 
 /**
- * Created by CyberJoe on 3/18/2015.
+ * Provides methods to create items of different types based on provided data, and adds them to the scene.
  */
 public class ItemFactory {
 

@@ -1,0 +1,109 @@
+package com.uwsoft.editor.gdx.ui;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * DropDown element with list of clickable items
+ */
+public class DropDown extends Group {
+
+	 private Group container;
+
+	 public DropDown (Group container) {
+
+		this.container = container;
+		container.addActor(this);
+
+	 }
+
+	 private HashMap<Integer, String> listEntries = new HashMap<Integer, String>();
+	 private SelectionEvent eventListener;
+
+	 public SelectionEvent getEventListener () {
+		  return eventListener;
+	 }
+
+	 public void setEventListener (SelectionEvent eventListener) {
+		  this.eventListener = eventListener;
+	 }
+
+	 public void clearItems() {
+			listEntries.clear();
+	 }
+
+	 public void initView (float x, float y) {
+		  super.clear();
+		  setVisible(true);
+
+		  int iterator = 0;
+		  for (Map.Entry<Integer, String> entry : listEntries.entrySet()) {
+				final Integer action = entry.getKey();
+				String name = entry.getValue();
+
+				final PixelRect rct = new PixelRect(TextureManager.getInstance(), 130, 20);
+				rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
+				rct.setBorderColor(new Color(0.22f, 0.22f, 0.22f, 1));
+
+				rct.setY(-(iterator + 1) * rct.getHeight());
+
+				addActor(rct);
+
+				Label lbl = new Label(name, TextureManager.getInstance().editorSkin);
+				lbl.setX(3);
+				lbl.setY(rct.getY() + 3);
+				lbl.setColor(new Color(1, 1, 1, 0.65f));
+				lbl.setTouchable(Touchable.disabled);
+				addActor(lbl);
+
+				rct.addListener(new ClickListener() {
+					 @Override public boolean mouseMoved (InputEvent event, float x, float y) {
+						  rct.setFillColor(new Color(0.26f, 0.26f, 0.26f, 1));
+						  return true;
+					 }
+
+					 public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+						  rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
+					 }
+
+					 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+						  if (eventListener != null) {
+								eventListener.doAction(action);
+						  }
+						  hide();
+					 }
+				});
+
+				iterator++;
+		  }
+
+		  Vector2 vector2 = container.stageToLocalCoordinates(new Vector2(x, y));
+		  setX(vector2.x);
+		  setY(container.getStage().getHeight() - vector2.y);
+	 }
+
+	 public void addItem (int action, String name) {
+		  listEntries.put(action, name);
+	 }
+
+	 public interface SelectionEvent {
+		  public void doAction (int action);
+
+	 }
+
+	 public void hide() {
+		  setVisible(false);
+	 }
+}

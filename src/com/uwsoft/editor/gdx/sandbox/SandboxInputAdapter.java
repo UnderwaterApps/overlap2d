@@ -14,7 +14,11 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
 import java.awt.*;
 
 /**
- * Created by CyberJoe on 3/18/2015.
+ * Adds listeners to everything sandbox related, including
+ * items, entire scene, mouse, keys e.g.
+ * Communicates user actions/intentions to Sandbox or UAC
+ *
+ * @author azakhary
  */
 public class SandboxInputAdapter extends InputAdapter {
 
@@ -155,10 +159,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
 		  // if there was a drop down remove it
 		  // TODO: this is job for front UI to figure out
-		  if (sandbox.getSandboxStage().frontUI.dropDown != null) {
-				sandbox.getSandboxStage().frontUI.dropDown.remove();
-				sandbox.getSandboxStage().frontUI.dropDown = null;
-		  }
+		  sandbox.getUIStage().mainDropDown.hide();
 
 		  switch (button) {
 		  case Input.Buttons.MIDDLE:

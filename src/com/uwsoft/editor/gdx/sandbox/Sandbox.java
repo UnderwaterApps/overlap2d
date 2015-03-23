@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Json;
@@ -21,6 +22,8 @@ import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.gdx.ui.DropDown;
+import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -31,7 +34,10 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * Created by CyberJoe on 3/18/2015.
+ * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
+ * user drops all items, moves them around, and composes the scene. sandbox is responsible for using runtime to render the visual scene,
+ * it is responsible to listen for all the events, item resizing, selecting, aligning, removing and things like that.
+ * @author azakhary
  */
 public class Sandbox {
 
@@ -69,13 +75,9 @@ public class Sandbox {
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
+	 /** end of shitty part */
 
-	 /**
-	  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
-	  * user drops all items, moves them around, and composes the scene. sandbox is responsible for using runtime to render the visual scene,
-	  * it is responsible to listen for all the events, item resizing, selecting, aligning, removing and things like that.
-	  * @author azakhary
-	  */
+
     public Sandbox() {
 
         inputMultiplexer = new InputMultiplexer();
@@ -91,10 +93,12 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
+
 		  transformationHandler = new TransformationHandler();
         sandboxInputAdapter = new SandboxInputAdapter(this);
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
+		  itemFactory = new ItemFactory(this);
     }
 
 
@@ -131,6 +135,10 @@ public class Sandbox {
 
 	 /** Initializers **/
 
+	 /**
+	  * TODO: loading fonts this way is a bit outdated and needs to change
+	  * @param sceneName
+	  */
     public void initData(String sceneName) {
         DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
 
@@ -349,7 +357,7 @@ public class Sandbox {
 	 }
 
 	 public boolean showDropDown(float x, float y) {
-		  getSandboxStage().frontUI.showDropDownForSelection(x, y);
+		  showDropDownForSelection(x, y);
 
 		  return true;
 	 }
@@ -374,5 +382,89 @@ public class Sandbox {
 		  if (curr.size() == 0) {
 				getUIStage().emptyClick();
 		  }
+	 }
+
+	 public void showDropDownForSelection(final float x, final float y) {
+		  DropDown dropDown = uiStage.mainDropDown;
+		  dropDown.clearItems();
+
+		  if (getSelector().getCurrentSelection().size() > 0) {
+				dropDown.addItem(SelectionActions.GROUP_ITEMS, "Group into Composite");
+		  }
+
+		  if (getSelector().getCurrentSelection().size() == 1) {
+				for (SelectionRectangle value : getSelector().getCurrentSelection().values()) {
+					 if (value.getHost().isComposite()) {
+						  dropDown.addItem(SelectionActions.ADD_TO_LIBRARY, "Add to Library");
+						  dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
+					 }
+				}
+		  }
+
+		  dropDown.addItem(SelectionActions.PASTE, "Paste");
+
+		  if (isItemTouched) {
+				dropDown.addItem(SelectionActions.CONVERT_TO_BUTTON, "Convert to Button");
+				dropDown.addItem(SelectionActions.EDIT_PHYSICS, "Edit Physics");
+				dropDown.addItem(SelectionActions.CUT, "Cut");
+				dropDown.addItem(SelectionActions.COPY, "Copy");
+				dropDown.addItem(SelectionActions.DELETE, "Delete");
+		  }
+
+		  dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
+
+		  dropDown.setEventListener(new DropDown.SelectionEvent() {
+
+				@Override
+				public void doAction(int action) {
+					 switch (action) {
+					 case SelectionActions.GROUP_ITEMS:
+						  getItemFactory().groupItemsIntoComposite();
+						  saveSceneCurrentSceneData();
+						  break;
+					 case SelectionActions.CONVERT_TO_BUTTON:
+						  CompositeItem btn = getItemFactory().groupItemsIntoComposite();
+						  btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
+						  btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
+						  btn.reAssembleLayers();
+
+						  saveSceneCurrentSceneData();
+						  break;
+					 case SelectionActions.EDIT_PHYSICS:
+						  if (getSelector().getCurrentSelection().size() == 1) {
+								for (SelectionRectangle value : getSelector().getCurrentSelection().values()) {
+									 IBaseItem item = value.getHost();
+									 getUIStage().editPhysics(item);
+									 break;
+								}
+						  }
+						  break;
+					 case SelectionActions.ADD_TO_LIBRARY:
+						  getItemFactory().addCompositeToLibrary();
+						  break;
+					 case SelectionActions.EDIT_COMPOSITE:
+						  enterIntoComposite();
+						  flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
+						  flow.applyPendingAction();
+						  break;
+					 case SelectionActions.COPY:
+						  getUac().copyAction();
+						  break;
+					 case SelectionActions.CUT:
+						  getUac().cutAction();
+						  saveSceneCurrentSceneData();
+						  break;
+					 case SelectionActions.PASTE:
+						  getUac().pasteAction(x, y, true);
+						  saveSceneCurrentSceneData();
+						  break;
+					 case SelectionActions.DELETE:
+						  getSelector().removeCurrentSelectedItems();
+						  break;
+					 default:
+						  break;
+					 }
+				}
+		  });
 	 }
 }
