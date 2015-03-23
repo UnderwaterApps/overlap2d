@@ -1,9 +1,5 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import java.io.File;
-
-import javax.swing.JFileChooser;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -13,6 +9,10 @@ import com.uwsoft.editor.controlles.NameConstants;
 import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
+
+import javax.swing.*;
+import java.io.File;
+import java.io.IOException;
 
 public class DlgNewProject extends CompositeDialog {
 
@@ -111,11 +111,14 @@ public class DlgNewProject extends CompositeDialog {
         } catch (Exception ignored) {
         }
 
-        DataManager.getInstance().createEmptyProject(projectName, origWidthValue, origHeightValue);
-        DataManager.getInstance().openProjectAndLoadAllData(projectName);
-
-        stage.getSandbox().loadCurrentProject();
-        stage.loadCurrentProject();
+        try {
+            DataManager.getInstance().createEmptyProject(projectName, origWidthValue, origHeightValue);
+            DataManager.getInstance().openProjectAndLoadAllData(projectName);
+            stage.getSandbox().loadCurrentProject();
+            stage.loadCurrentProject();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         remove();
     }
