@@ -51,7 +51,7 @@ public class VersionMigTo005 implements IVersionMigrator {
 
             // run through all resolutions and remake animations for all
             for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-                DataManager.getInstance().createResizedAnimations(resolutionEntryVO);
+                DataManager.getInstance().resolutionManager.createResizedAnimations(resolutionEntryVO);
             }
         } catch (IOException e) {
             e.printStackTrace();

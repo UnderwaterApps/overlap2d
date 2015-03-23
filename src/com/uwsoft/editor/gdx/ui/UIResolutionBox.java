@@ -143,7 +143,7 @@ public class UIResolutionBox extends Group {
 
         repackBtn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                DataManager.getInstance().rePackProjectImagesForAllResolutions();
+                DataManager.getInstance().resolutionManager.rePackProjectImagesForAllResolutions();
                 loadCurrentResolution();
             }
         });

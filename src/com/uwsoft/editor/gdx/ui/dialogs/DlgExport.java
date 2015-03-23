@@ -113,7 +113,7 @@ public class DlgExport extends CompositeDialog {
     	}
     	if(width!=Integer.parseInt(projectVO.texturepackerWidth) || height!=Integer.parseInt(projectVO.texturepackerHeight)){
     		DataManager.getInstance().setTexturePackerSizes(Integer.toString(width),Integer.toString(height));    		
-    		DataManager.getInstance().rePackProjectImagesForAllResolutions();
+    		DataManager.getInstance().resolutionManager.rePackProjectImagesForAllResolutions();
     	}
         DataManager.getInstance().setExportPaths(paths.get("global"));
         DataManager.getInstance().saveCurrentProject();

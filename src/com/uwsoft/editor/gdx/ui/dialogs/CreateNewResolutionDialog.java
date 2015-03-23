@@ -45,9 +45,9 @@ public class CreateNewResolutionDialog extends CompositeDialog implements Progre
         ui.getTextButtonById("createBtn").addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if(resName.getText().length() == 0) return;
+                if (resName.getText().length() == 0) return;
 
-                DataManager.getInstance().createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
+                DataManager.getInstance().resolutionManager.createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
             }
         });
 

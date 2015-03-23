@@ -2,8 +2,6 @@ package com.uwsoft.editor.data.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
@@ -12,12 +10,10 @@ import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
-import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
-import com.uwsoft.editor.tools.TextureUnpackerFixed;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.OSType;
 import org.apache.commons.io.FileUtils;
@@ -42,6 +38,7 @@ import java.util.concurrent.Executors;
 public class DataManager {
 
     private static DataManager instance = null;
+    public final ResolutionManager resolutionManager;
     public String curResolution;
     private String currentWorkingPath;
     private String workspacePath;
@@ -55,6 +52,7 @@ public class DataManager {
 
     public DataManager() {
         initWorkspace();
+        resolutionManager = new ResolutionManager(this);
     }
 
     public static DataManager getInstance() {
@@ -96,28 +94,6 @@ public class DataManager {
 
         return myDocuments;
     }
-
-    public static int getMinSquareNum(int num) {
-
-        // if (num < 1024) return 1024;
-
-        // if (num < 2048) return 2048;
-
-        // if (num < 4096) return 4096;
-
-
-        return 4096;
-    }
-
-//    public void setStage(UIStage stage) {
-//        this.uiStage = stage;
-//    }
-//
-//    private void showError(String txt) {
-//        if (uiStage != null) {
-//            uiStage.dialogs().showInfoDialog(txt);
-//        }
-//    }
 
     public ProjectVO getCurrentProjectVO() {
         return currentProjectVO;
@@ -179,7 +155,7 @@ public class DataManager {
         currentProjectVO = projVo;
         currentProjectInfoVO = projInfoVo;
 
-        createEmptyScene("MainScene", workspacePath);
+        createNewScene("MainScene");
         FileUtils.writeStringToFile(new File(projPath + "/project.pit"), projVo.constructJsonString(), "utf-8");
         FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projInfoVo.constructJsonString(), "utf-8");
 
@@ -268,14 +244,14 @@ public class DataManager {
                 if (sceneVO.composite == null) continue;
                 ArrayList<MainItemVO> items = sceneVO.composite.getAllItems();
                 for (MainItemVO vo : items) {
-                    if (vo.meshId == "-1") continue;
+                    if (vo.meshId.equals("-1")) continue;
                     uniqueMeshIds.add(vo.meshId);
                 }
                 for (CompositeItemVO libraryItem : sceneVO.libraryItems.values()) {
                     if (libraryItem.composite == null) continue;
                     items = libraryItem.composite.getAllItems();
                     for (MainItemVO vo : items) {
-                        if (vo.meshId == "-1") continue;
+                        if (vo.meshId.equals("-1")) continue;
                         uniqueMeshIds.add(vo.meshId);
                     }
                 }
@@ -322,31 +298,15 @@ public class DataManager {
 
     private void loadProjectData(String projectName) {
         // All legit loading assets
-        TextureManager.getInstance().loadCurrentProjectAssets(currentWorkingPath + "/" + projectName + "/assets/" + curResolution + "/pack/pack.atlas");
-        TextureManager.getInstance().loadCurrentProjectSkin(currentWorkingPath + "/" + projectName + "/assets/orig/styles");
-        TextureManager.getInstance().loadCurrentProjectLabelStylePath(currentWorkingPath + "/" + projectName + "/assets/orig/freetypefonts");
-        TextureManager.getInstance().loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
-        TextureManager.getInstance().loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
-        TextureManager.getInstance().loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
-        TextureManager.getInstance().loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        TextureManager.getInstance().loadCurrentProjectData(currentWorkingPath, projectName, curResolution);
     }
 
     public SceneVO createNewScene(String name) {
-        SceneVO vo = createEmptyScene(name, currentWorkingPath);
-        try {
-            String projPath = currentWorkingPath + "/" + currentProjectVO.projectName;
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return vo;
-    }
-
-    private SceneVO createEmptyScene(String name, String path) {
-        String projPath = path + "/" + currentProjectVO.projectName;
         SceneVO vo = new SceneVO();
         vo.sceneName = name;
         try {
+            String projPath = currentWorkingPath + "/" + currentProjectVO.projectName;
+            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
             FileUtils.writeStringToFile(new File(projPath + "/scenes/" + vo.sceneName + ".dt"), vo.constructJsonString(), "utf-8");
             currentProjectInfoVO.scenes.add(vo);
         } catch (IOException e) {
@@ -355,42 +315,8 @@ public class DataManager {
         return vo;
     }
 
-//    public static String readFileContents(FileHandle file) {
-//        BufferedReader in = null;
-//        try {
-//            in = new BufferedReader(file.reader());
-//        } catch (IllegalStateException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//        StringBuffer sb = new StringBuffer("");
-//        String line = "";
-//        try {
-//            while ((line = in.readLine()) != null) {
-//                sb.append(line);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//            return null;
-//        }
-//
-//        try {
-//            in.close();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        String json = sb.toString();
-//
-//        return json;
-//    }
-
     public String getCurrentWorkingPath() {
         return currentWorkingPath;
-    }
-
-    public void setCurrentWorkingPath(String currentWorkingPath) {
-        this.currentWorkingPath = currentWorkingPath;
     }
 
     public String getWorkspacePath() {
@@ -402,9 +328,7 @@ public class DataManager {
     }
 
     public String getCurrProjectScenePathByName(String sceneName) {
-        String scenePath = currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
-
-        return scenePath;
+        return currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
     }
 
     public void saveScene(SceneVO vo) {
@@ -422,44 +346,6 @@ public class DataManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public void rePackProjectImages(ResolutionEntryVO resEntry) {
-        Settings settings = new Settings();
-
-        settings.flattenPaths = true;
-//        settings.maxHeight = getMinSquareNum(resEntry.height);
-//        settings.maxWidth = getMinSquareNum(resEntry.height);
-        settings.maxHeight = Integer.parseInt(currentProjectVO.texturepackerHeight);
-        settings.maxWidth = Integer.parseInt(currentProjectVO.texturepackerWidth);
-        settings.filterMag = TextureFilter.Linear;
-        settings.filterMin = TextureFilter.Linear;
-
-        TexturePacker tp = new TexturePacker(settings);
-
-        String sourcePath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resEntry.name + "/images";
-        String outputPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resEntry.name + "/pack";
-
-        FileHandle sourceDir = new FileHandle(sourcePath);
-        File outputDir = new File(outputPath);
-
-
-        try {
-            FileUtils.forceMkdir(outputDir);
-            FileUtils.cleanDirectory(outputDir);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        for (FileHandle entry : sourceDir.list()) {
-            String filename = entry.file().getName();
-            String extension = filename.substring(filename.lastIndexOf(".") + 1, filename.length()).toLowerCase();
-            if (extension.equals("png")) {
-                tp.addImage(entry.file());
-            }
-        }
-
-        tp.pack(outputDir, "pack");
     }
 
 
@@ -486,31 +372,6 @@ public class DataManager {
             }
         }
         br.close();
-        return images;
-    }
-
-
-    private ArrayList<File> getAtlasFileImagesList(File file) {
-        ArrayList<File> images = new ArrayList<File>();
-        BufferedReader br;
-        try {
-            br = new BufferedReader(new FileReader(file));
-            String line;
-            while ((line = br.readLine()) != null) {
-                if (line.equals("")) {
-                    line = br.readLine();
-                    String absolutePath = file.getAbsolutePath();
-                    String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + line;
-                    File imgFile = new File(path);
-                    images.add(imgFile);
-                }
-            }
-            br.close();
-        } catch (Exception e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-        }
-
         return images;
     }
 
@@ -543,7 +404,7 @@ public class DataManager {
     }
 
 
-    public void importExternalAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    public void importExternalSpineAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -553,7 +414,7 @@ public class DataManager {
                 for (File file : files) {
                     File copiedFile = importExternalAnimationIntoProject(file);
                     if (copiedFile.getName().toLowerCase().endsWith(".atlas")) {
-                        resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
+                        resolutionManager.resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                     } else if (copiedFile.getName().toLowerCase().endsWith(".scml")) {
                         //resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                     }
@@ -605,7 +466,7 @@ public class DataManager {
                 FileUtils.forceMkdir(new File(targetPath));
                 File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
                 File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
-                ArrayList<File> imageFiles = getAtlasFileImagesList(atlasFileSource);
+                ArrayList<File> imageFiles = getImageListFromAtlas(atlasFileSource);
 
                 FileUtils.copyFile(animationFileSource, jsonFileTarget);
                 FileUtils.copyFile(atlasFileSource, atlasFileTarget);
@@ -700,7 +561,7 @@ public class DataManager {
                 }
 
                 if (newAnimName != null) {
-                    resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
+                    resolutionManager.resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
                 }
             }
         });
@@ -765,7 +626,7 @@ public class DataManager {
                         }
                     }
                 }
-                rePackProjectImagesForAllResolutions();
+                resolutionManager.rePackProjectImagesForAllResolutions();
             }
         });
         executor.execute(new Runnable() {
@@ -791,7 +652,7 @@ public class DataManager {
             @Override
             public void run() {
                 copyImageFilesForAllResolutionsIntoProject(files, true);
-                rePackProjectImagesForAllResolutions();
+                resolutionManager.rePackProjectImagesForAllResolutions();
             }
         });
         executor.execute(new Runnable() {
@@ -808,185 +669,6 @@ public class DataManager {
             }
         });
         executor.shutdown();
-    }
-
-    public void unpackAtlasIntoTmpFolder(File atlasFile, String tmpDir) {
-        FileHandle atlasFileHandle = new FileHandle(atlasFile);
-        TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(atlasFileHandle, atlasFileHandle.parent(), false);
-        TextureUnpackerFixed unpacker = new TextureUnpackerFixed();
-        unpacker.splitAtlas(atlasData, tmpDir);
-    }
-
-
-    public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
-        float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
-
-        if (targetFolder.exists()) {
-            try {
-                FileUtils.cleanDirectory(targetFolder);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        // now pack
-        Settings settings = new Settings();
-
-        settings.flattenPaths = true;
-        settings.maxHeight = getMinSquareNum(resolution.height);
-        settings.maxWidth = getMinSquareNum(resolution.height);
-        settings.filterMag = TextureFilter.Linear;
-        settings.filterMin = TextureFilter.Linear;
-
-        TexturePacker tp = new TexturePacker(settings);
-        for (final File fileEntry : sourceFolder.listFiles()) {
-            if (!fileEntry.isDirectory()) {
-                BufferedImage bufferedImage = ResolutionManager.imageResize(fileEntry, ratio);
-                tp.addImage(bufferedImage, FilenameUtils.removeExtension(fileEntry.getName()));
-            }
-        }
-
-        tp.pack(targetFolder, packName);
-    }
-
-    public void createResizedSpineAnimation(String animName, ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
-
-        File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/" + animName + ".atlas");
-
-        String tmpPath = currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/tmp";
-        File tmpFolder = new File(tmpPath);
-        try {
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/"));
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
-
-            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName;
-            File targetFolder = new File(targetPath);
-
-            unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
-            resizeImagesTmpDirToResolution(animName, tmpFolder, resolution, targetFolder);
-
-            FileUtils.deleteDirectory(tmpFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createResizedSpriteAnimation(String animName, ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
-        File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/" + animName + ".atlas");
-
-        String tmpPath = currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/tmp";
-        File tmpFolder = new File(tmpPath);
-        try {
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/"));
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
-
-            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/" + animName;
-            File targetFolder = new File(targetPath);
-
-            unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
-            resizeImagesTmpDirToResolution(animName, tmpFolder, resolution, targetFolder);
-
-
-            FileUtils.deleteDirectory(tmpFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void createResizedAnimations(ResolutionEntryVO resolution) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
-
-        // Unpack spine orig
-        File spineSourceDir = new File(currProjectPath + File.separator + "assets/orig/spine-animations");
-        if (spineSourceDir != null && spineSourceDir.exists()) {
-            for (File entry : spineSourceDir.listFiles()) {
-                if (entry.isDirectory()) {
-                    String animName = FilenameUtils.removeExtension(entry.getName());
-                    createResizedSpineAnimation(animName, resolution);
-                }
-            }
-        }
-
-        //Unpack sprite orig
-        File spriteSourceDir = new File(currProjectPath + File.separator + "assets/orig/sprite-animations");
-        if (spriteSourceDir != null && spriteSourceDir.exists()) {
-            for (File entry : spriteSourceDir.listFiles()) {
-                if (entry.isDirectory()) {
-                    String animName = FilenameUtils.removeExtension(entry.getName());
-                    createResizedSpriteAnimation(animName, resolution);
-                }
-            }
-        }
-    }
-
-
-    public void resizeSpriteAnimationForAllResolutions(String animName, ProjectInfoVO currentProjectInfoVO) {
-        String currProjectPath = currentWorkingPath + File.separator + currentProjectVO.projectName;
-
-        File atlasFile = new File(currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + animName + ".atlas");
-
-        String tmpDir = currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + "tmp";
-        File sourceFolder = new File(tmpDir);
-
-        unpackAtlasIntoTmpFolder(atlasFile, tmpDir);
-        try {
-            for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-                String spriteAnimationsRoot = currProjectPath + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "sprite-animations";
-                FileUtils.forceMkdir(new File(spriteAnimationsRoot));
-                String targetPath = spriteAnimationsRoot + File.separator + animName;
-                File targetFolder = new File(targetPath);
-
-                resizeImagesTmpDirToResolution(animName, sourceFolder, resolutionEntryVO, targetFolder);
-            }
-
-            FileUtils.deleteDirectory(sourceFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void resizeSpineAnimationForAllResolutions(File atlasFile, ProjectInfoVO currentProjectInfoVO) {
-
-        String fileNameWithOutExt = FilenameUtils.removeExtension(atlasFile.getName());
-        String tmpDir = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt + File.separator + "tmp";
-        File sourceFolder = new File(tmpDir);
-
-        unpackAtlasIntoTmpFolder(atlasFile, tmpDir);
-        try {
-            for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-                FileUtils.forceMkdir(new File(currentWorkingPath + "/" + currentProjectVO.projectName + File.separator +
-                        "assets" + File.separator + resolutionEntryVO.name + File.separator + "spine-animations"));
-                String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + File.separator + "assets" +
-                        File.separator + resolutionEntryVO.name + File.separator + "spine-animations" + File.separator + fileNameWithOutExt;
-                FileUtils.forceMkdir(new File(targetPath));
-                File targetFolder = new File(targetPath);
-                resizeImagesTmpDirToResolution(atlasFile.getName(), sourceFolder, resolutionEntryVO, targetFolder);
-            }
-            FileUtils.deleteDirectory(sourceFolder);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private void copyOnlyImageFilesIntoTmpFolder(File imagesFolder, File sourceFolder) throws IOException {
-        File[] children = imagesFolder.listFiles();
-        for (File child : children) {
-            if (child.getName().toLowerCase().endsWith(".png")) {
-                if (!sourceFolder.exists()) {
-                    sourceFolder.mkdirs();
-                    System.out.println("hre");
-                }
-                FileUtils.copyFileToDirectory(child, sourceFolder);
-            }
-        }
-    }
-
-    public void rePackProjectImagesForAllResolutions() {
-        rePackProjectImages(currentProjectInfoVO.originalResolution);
-        for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-            rePackProjectImages(resolutionEntryVO);
-        }
     }
 
     private void copyImageFilesForAllResolutionsIntoProject(ArrayList<File> files, Boolean performResize) {
@@ -1170,14 +852,6 @@ public class DataManager {
 
     }
 
-
-    public void createNewResolution(String name, int width, int height, String resolutionBase, ProgressHandler handler) {
-
-        ResolutionManager resManager = new ResolutionManager(currentProjectVO, currentProjectInfoVO, currentWorkingPath);
-
-        resManager.createNewResolution(name, width, height, resolutionBase, handler);
-
-    }
 
     public void deleteResolution(int index) {
         ResolutionEntryVO resolutionEntryVO = currentProjectInfoVO.resolutions.remove(index);
