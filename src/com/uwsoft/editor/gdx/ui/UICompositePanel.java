@@ -150,7 +150,7 @@ public class UICompositePanel extends UIBox {
             resolutionBox.remove();
         }
 
-        resolutionBox = new UIResolutionBox(stage, DataManager.getInstance().getCurrentProjectInfoVO(), stage.dataManager.curResolution);
+        resolutionBox = new UIResolutionBox(stage, DataManager.getInstance().getCurrentProjectInfoVO(), stage.dataManager.resolutionManager.curResolution);
         addActor(resolutionBox);
         resolutionBox.setX(getWidth() - resolutionBox.getWidth());
     }

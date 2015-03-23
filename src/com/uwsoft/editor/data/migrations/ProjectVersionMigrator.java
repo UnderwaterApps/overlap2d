@@ -2,11 +2,13 @@ package com.uwsoft.editor.data.migrations;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.migrations.migrators.DummyMig;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.utils.AppConfig;
+import org.apache.commons.io.FileUtils;
+
+import java.io.IOException;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -75,7 +77,10 @@ public class ProjectVersionMigrator {
     private void setVersion(String version) {
         projectVo.projectVersion = version;
         String projectVoJson = json.toJson(projectVo, ProjectVO.class);
-
-        DataManager.writeToFile(projectPath + "/project.pit", projectVoJson);
+        try {
+            FileUtils.writeStringToFile(new java.io.File(projectPath + "/project.pit"), projectVoJson, "utf-8");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

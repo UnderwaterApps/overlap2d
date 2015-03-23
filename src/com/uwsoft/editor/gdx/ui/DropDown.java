@@ -8,6 +8,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 
@@ -53,7 +54,7 @@ public class DropDown extends Group {
 				final Integer action = entry.getKey();
 				String name = entry.getValue();
 
-				final PixelRect rct = new PixelRect(TextureManager.getInstance(), 130, 20);
+				final PixelRect rct = new PixelRect(130, 20);
 				rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
 				rct.setBorderColor(new Color(0.22f, 0.22f, 0.22f, 1));
 
@@ -61,7 +62,7 @@ public class DropDown extends Group {
 
 				addActor(rct);
 
-				Label lbl = new Label(name, TextureManager.getInstance().editorSkin);
+				Label lbl = new Label(name,DataManager.getInstance().textureManager.editorSkin);
 				lbl.setX(3);
 				lbl.setY(rct.getY() + 3);
 				lbl.setColor(new Color(1, 1, 1, 0.65f));

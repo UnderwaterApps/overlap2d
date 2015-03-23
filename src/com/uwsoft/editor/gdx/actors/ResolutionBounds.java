@@ -23,7 +23,7 @@ public class ResolutionBounds extends Group {
     }
 
     private void detectDimensions(BaseStage baseStage) {
-        ResolutionEntryVO resolutionEntryVO = baseStage.dataManager.getCurrentProjectInfoVO().getResolution(baseStage.dataManager.curResolution);
+        ResolutionEntryVO resolutionEntryVO = baseStage.dataManager.getCurrentProjectInfoVO().getResolution(baseStage.dataManager.resolutionManager.curResolution);
         if (resolutionEntryVO == null) {
             resolutionEntryVO = baseStage.dataManager.getCurrentProjectInfoVO().originalResolution;
         }
@@ -39,7 +39,7 @@ public class ResolutionBounds extends Group {
     }
 
     private void crateBoundsRectangle() {
-        PixelRect resolutionBounds = new PixelRect(textureManager, width, height);
+        PixelRect resolutionBounds = new PixelRect(width, height);
         addActor(resolutionBounds);
     }
 }

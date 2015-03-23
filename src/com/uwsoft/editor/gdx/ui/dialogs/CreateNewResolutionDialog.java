@@ -45,21 +45,21 @@ public class CreateNewResolutionDialog extends CompositeDialog implements Progre
         ui.getTextButtonById("createBtn").addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                if(resName.getText().length() == 0) return;
+                if (resName.getText().length() == 0) return;
 
-                DataManager.getInstance().createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
+                DataManager.getInstance().resolutionManager.createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
             }
         });
 
         // adding progress bar
 
-        progressBar = new ProgressBar(0, 100, 1, false, TextureManager.getInstance().editorSkin);
+        progressBar = new ProgressBar(0, 100, 1, false, DataManager.getInstance().textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(55);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", TextureManager.getInstance().editorSkin);
+        progressLbl = new Label("0%", DataManager.getInstance().textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(58);
         mainLayer.addActor(progressLbl);

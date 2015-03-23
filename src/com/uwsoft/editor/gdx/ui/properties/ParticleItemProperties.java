@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.ParticleActor;
@@ -29,7 +30,7 @@ public class ParticleItemProperties extends Group implements IPropertyBox<Partic
     @Override
     public void initView() {
         clear();
-        Image bgImg = new Image(TextureManager.getInstance().getEditorAsset("pixel"));
+        Image bgImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0, 0, 0, 1.0f);
         bgImg.setScale(230, 100);
         addActor(bgImg);

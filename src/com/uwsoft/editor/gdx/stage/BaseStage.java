@@ -19,8 +19,8 @@ public class BaseStage extends Overlap2DStage {
 
     public BaseStage() {
         super(new ScreenViewport());
-        textureManager = TextureManager.getInstance();
         dataManager = DataManager.getInstance();
+        textureManager = dataManager.textureManager;
         initLightsConfiguration();
         
         

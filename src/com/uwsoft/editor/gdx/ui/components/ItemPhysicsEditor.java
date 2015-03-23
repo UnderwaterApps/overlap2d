@@ -195,7 +195,7 @@ public class ItemPhysicsEditor extends Group {
 	public void editAsset(String assetName){
 		this.assetName  = assetName;
 		
-		Texture texture = TextureManager.getInstance().getRegionOriginalImage(assetName);
+		Texture texture = DataManager.getInstance().textureManager.getRegionOriginalImage(assetName);
 		Image img = new Image(texture);
 		currentActor = img;
 		if(currentActor.getWidth()>this.getWidth() || currentActor.getHeight()>this.getHeight()){
@@ -311,7 +311,7 @@ public class ItemPhysicsEditor extends Group {
 		
 		System.out.println("Retrace");
 		
-		Texture texture = TextureManager.getInstance().getRegionOriginalImage(assetName);
+		Texture texture = DataManager.getInstance().textureManager.getRegionOriginalImage(assetName);
 		Image img = new Image(texture);
 		img.setX((getWidth() - img.getWidth()) / 2);
 		img.setY((getHeight() - img.getHeight()) / 2);

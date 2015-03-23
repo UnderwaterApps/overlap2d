@@ -14,14 +14,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
-
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
@@ -31,8 +29,8 @@ import java.util.HashMap;
 
 public class TextureManager {
 
-    private static TextureManager instance = null;
 
+    private final DataManager dataManager;
     public AssetManager assetsManager;
 
     public String labelStylePath;
@@ -41,24 +39,17 @@ public class TextureManager {
     public HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>(1);
     private TextureAtlas currentProjectAtlas;
     private TextureAtlas editorAtlas;
-    private HashMap<String, SpineAnimData> spineAnimAtlases = new HashMap<>();
-    private HashMap<String, TextureAtlas> spriteAnimAtlases = new HashMap<>();
-    private HashMap<String, FileHandle> spriterAnimFiles = new HashMap<>();
+    private HashMap<String, SpineAnimData> spineAnimAtlases = new HashMap<String, SpineAnimData>();
+    private HashMap<String, TextureAtlas> spriteAnimAtlases = new HashMap<String, TextureAtlas>();
+    private HashMap<String, FileHandle> spriterAnimFiles = new HashMap<String, FileHandle>();
 
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
-    public TextureManager() {
+    public TextureManager(DataManager dataManager) {
+        this.dataManager = dataManager;
         assetsManager = new AssetManager();
 
         loadEditorAssets();
-    }
-
-    public static TextureManager getInstance() {
-        if (instance == null) {
-            instance = new TextureManager();
-        }
-
-        return instance;
     }
 
     public void loadEditorAssets() {
@@ -119,17 +110,17 @@ public class TextureManager {
             }
         }
     }
-    
+
     public void loadCurrentProjectSpriterAnimations(String path, String curResolution) {
-    	spriterAnimFiles.clear();
-    	FileHandle sourceDir = new FileHandle(path + "orig" + "/spriter-animations");
-    	for (FileHandle entry : sourceDir.list()) {
-    		if (entry.file().isDirectory()) {
-    			String animName = entry.file().getName();  
-    			FileHandle scmlFile	=	new FileHandle(path + "orig" + "/spriter-animations/"+animName+"/"+animName+".scml");
-    			spriterAnimFiles.put(animName, scmlFile);
-    		}
-    	}
+        spriterAnimFiles.clear();
+        FileHandle sourceDir = new FileHandle(path + "orig" + "/spriter-animations");
+        for (FileHandle entry : sourceDir.list()) {
+            if (entry.file().isDirectory()) {
+                String animName = entry.file().getName();
+                FileHandle scmlFile = new FileHandle(path + "orig" + "/spriter-animations/" + animName + "/" + animName + ".scml");
+                spriterAnimFiles.put(animName, scmlFile);
+            }
+        }
     }
 
     public void loadCurrentProjectAssets(String packPath) {
@@ -179,9 +170,9 @@ public class TextureManager {
     public HashMap<String, TextureAtlas> getProjectSpriteAnimationsList() {
         return spriteAnimAtlases;
     }
-    
+
     public HashMap<String, FileHandle> getProjectSpriterAnimationsList() {
-    	return spriterAnimFiles;
+        return spriterAnimFiles;
     }
 
     public TextureAtlas getEditorAssetsList() {
@@ -257,13 +248,24 @@ public class TextureManager {
         FontSizePair[] tmp = new FontSizePair[1];
         tmp[0] = pair;
 
-        if (!bitmapFonts.containsKey(pair)) loadBitmapFonts(tmp, DataManager.getInstance().getCurrentMul());
+        if (!bitmapFonts.containsKey(pair))
+            loadBitmapFonts(tmp, DataManager.getInstance().resolutionManager.getCurrentMul());
 
         return bitmapFonts.get(pair);
     }
 
-	public Texture getRegionOriginalImage(String regionName) {
-		String sourcePath = DataManager.getInstance().getCurrentWorkingPath() + "/" + DataManager.getInstance().getCurrentProjectVO().projectName + "/assets/orig/images/"+ regionName+".png";
-		return new Texture(Gdx.files.absolute(sourcePath));
-	}
+    public Texture getRegionOriginalImage(String regionName) {
+        String sourcePath = DataManager.getInstance().getCurrentWorkingPath() + "/" + DataManager.getInstance().getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
+        return new Texture(Gdx.files.absolute(sourcePath));
+    }
+
+    public void loadCurrentProjectData(String currentWorkingPath, String projectName, String curResolution) {
+        loadCurrentProjectAssets(currentWorkingPath + "/" + projectName + "/assets/" + curResolution + "/pack/pack.atlas");
+        loadCurrentProjectSkin(currentWorkingPath + "/" + projectName + "/assets/orig/styles");
+        loadCurrentProjectLabelStylePath(currentWorkingPath + "/" + projectName + "/assets/orig/freetypefonts");
+        loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
+        loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+    }
 }

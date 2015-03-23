@@ -140,7 +140,7 @@ public class Sandbox {
 	  * @param sceneName
 	  */
     public void initData(String sceneName) {
-        DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
+        DataManager.getInstance().sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
 
         sceneControl.initScene(sceneName);
 
@@ -318,7 +318,7 @@ public class Sandbox {
     }
 
     public boolean isComponentSkinAvailable() {
-        if (TextureManager.getInstance().projectSkin == null) {
+        if (DataManager.getInstance().textureManager.projectSkin == null) {
             return false;
         }
 

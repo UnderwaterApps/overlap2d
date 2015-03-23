@@ -29,7 +29,7 @@ public class DraggableThumbnailBox extends Group {
 
     public DraggableThumbnailBox(UIStage stage) {
         this.stage = stage;
-        rc = new PixelRect(TextureManager.getInstance(), thumbnailSize, thumbnailSize);
+        rc = new PixelRect(thumbnailSize, thumbnailSize);
         rc.setFillColor(new Color(1, 1, 1, 0.2f));
         rc.setBorderColor(new Color(1, 1, 1, 0.4f));
         addActor(rc);

@@ -53,7 +53,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         ui = new SandboxUI(this);
         addActor(ui);
 
-        selectionRec = new PixelRect(textureManager, 0, 0);
+        selectionRec = new PixelRect(0, 0);
         selectionRec.setFillColor(new Color(1, 1, 1, 0.1f));
         selectionRec.setOpacity(0.0f);
         selectionRec.setTouchable(Touchable.disabled);
