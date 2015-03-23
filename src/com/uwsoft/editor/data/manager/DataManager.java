@@ -39,7 +39,6 @@ public class DataManager {
 
     private static DataManager instance = null;
     public final ResolutionManager resolutionManager;
-    public String curResolution;
     private String currentWorkingPath;
     private String workspacePath;
     private String DEFAULT_FOLDER = "Overlap2D";
@@ -214,10 +213,10 @@ public class DataManager {
             }
 
             if (resolution == null) {
-                curResolution = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
+                resolutionManager.curResolution = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
             } else {
-                curResolution = resolution;
-                currentProjectVO.lastOpenResolution = curResolution;
+                resolutionManager.curResolution = resolution;
+                currentProjectVO.lastOpenResolution = resolutionManager.curResolution;
                 saveCurrentProject();
 
             }
@@ -274,31 +273,17 @@ public class DataManager {
         }
     }
 
-    public float getCurrentMul() {
-        ResolutionEntryVO curRes = getCurrentProjectInfoVO().getResolution(curResolution);
-        float mul = 1f;
-        if (!curResolution.equals("orig")) {
-            if (curRes.base == 0) {
-                mul = (float) curRes.width / (float) getCurrentProjectInfoVO().originalResolution.width;
-            } else {
-                mul = (float) curRes.height / (float) getCurrentProjectInfoVO().originalResolution.height;
-            }
-        }
-
-        return mul;
-    }
-
     public void preloadSceneSpecificData(SceneVO sceneVO, String resolution) {
         if (sceneVO == null || sceneVO.composite == null) return;
 
         FontSizePair[] fonts = sceneVO.composite.getRecursiveFontList();
 
-        TextureManager.getInstance().loadBitmapFonts(fonts, getCurrentMul());
+        TextureManager.getInstance().loadBitmapFonts(fonts, resolutionManager.getCurrentMul());
     }
 
     private void loadProjectData(String projectName) {
         // All legit loading assets
-        TextureManager.getInstance().loadCurrentProjectData(currentWorkingPath, projectName, curResolution);
+        TextureManager.getInstance().loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.curResolution);
     }
 
     public SceneVO createNewScene(String name) {

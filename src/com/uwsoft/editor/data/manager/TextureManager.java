@@ -255,7 +255,7 @@ public class TextureManager {
         FontSizePair[] tmp = new FontSizePair[1];
         tmp[0] = pair;
 
-        if (!bitmapFonts.containsKey(pair)) loadBitmapFonts(tmp, DataManager.getInstance().getCurrentMul());
+        if (!bitmapFonts.containsKey(pair)) loadBitmapFonts(tmp, DataManager.getInstance().resolutionManager.getCurrentMul());
 
         return bitmapFonts.get(pair);
     }

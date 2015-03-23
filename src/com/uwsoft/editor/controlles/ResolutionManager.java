@@ -25,7 +25,7 @@ import java.util.concurrent.Executors;
 public class ResolutionManager {
     private static final String EXTENSION_9PATCH = ".9.png";
     private final DataManager dataManager;
-
+    public String curResolution;
     private float currentPercent = 0.0f;
 
     private ProgressHandler handler;
@@ -404,18 +404,18 @@ public class ResolutionManager {
         return 4096;
     }
 
-
-    private void copyOnlyImageFilesIntoTmpFolder(File imagesFolder, File sourceFolder) throws IOException {
-        File[] children = imagesFolder.listFiles();
-        for (File child : children) {
-            if (child.getName().toLowerCase().endsWith(".png")) {
-                if (!sourceFolder.exists()) {
-                    sourceFolder.mkdirs();
-                    System.out.println("hre");
-                }
-                FileUtils.copyFileToDirectory(child, sourceFolder);
+    public float getCurrentMul() {
+        ResolutionEntryVO curRes = dataManager.getCurrentProjectInfoVO().getResolution(curResolution);
+        float mul = 1f;
+        if (!curResolution.equals("orig")) {
+            if (curRes.base == 0) {
+                mul = (float) curRes.width / (float) dataManager.getCurrentProjectInfoVO().originalResolution.width;
+            } else {
+                mul = (float) curRes.height / (float) dataManager.getCurrentProjectInfoVO().originalResolution.height;
             }
         }
+
+        return mul;
     }
 
     public void rePackProjectImagesForAllResolutions() {

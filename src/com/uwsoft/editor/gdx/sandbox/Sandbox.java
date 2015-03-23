@@ -121,7 +121,7 @@ public class Sandbox {
     }
 
     public void initData(String sceneName) {
-        DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
+        DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
 
         sceneControl.initScene(sceneName);
 
