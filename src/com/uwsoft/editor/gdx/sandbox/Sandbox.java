@@ -22,7 +22,6 @@ import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -140,7 +139,7 @@ public class Sandbox {
 	  * @param sceneName
 	  */
     public void initData(String sceneName) {
-        DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
+        DataManager.getInstance().sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
 
         sceneControl.initScene(sceneName);
 
@@ -318,7 +317,7 @@ public class Sandbox {
     }
 
     public boolean isComponentSkinAvailable() {
-        if (TextureManager.getInstance().projectSkin == null) {
+        if (DataManager.getInstance().textureManager.projectSkin == null) {
             return false;
         }
 
