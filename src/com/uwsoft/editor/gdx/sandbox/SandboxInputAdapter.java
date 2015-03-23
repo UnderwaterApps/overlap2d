@@ -26,8 +26,8 @@ public class SandboxInputAdapter extends InputAdapter {
 
     private Sandbox sandbox;
 
-	 private float lastX = 0;
-	 private float lastY = 0;
+	private float lastX = 0;
+	private float lastY = 0;
 
     public SandboxInputAdapter (Sandbox sandbox) {
         this.sandbox = sandbox;
@@ -45,25 +45,25 @@ public class SandboxInputAdapter extends InputAdapter {
 
 		  // if shift is pressed we are in add/remove selection mode
 		  if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-				if(sandbox.getCurrentSelection().get(item) != null) {
+				if(sandbox.getSelector().getCurrentSelection().get(item) != null) {
 					 // item was selected, so we need to release it
-					 sandbox.releaseSelection(item);
+					 sandbox.getSelector().releaseSelection(item);
 				} else {
 					 // item was not selected, adding it to selection
-					 sandbox.setSelection(item, false);
+					 sandbox.getSelector().setSelection(item, false);
 				}
 		  } else {
 				if (item.isLockedByLayer()) {
 					 // this is considered empty space click and thus should release all selections
-					 sandbox.clearSelections();
+					 sandbox.getSelector().clearSelections();
 				} else {
 					 // select this item and remove others from selection
-					 sandbox.setSelection(item, true);
+					 sandbox.getSelector().setSelection(item, true);
 				}
 		  }
 
 		  // remembering local touch position for each of selected items, if planning to drag
-		  for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+		  for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 				value.setTouchDiff(event.getStageX() - value.getHostAsActor().getX(), event.getStageY() - value.getHostAsActor().getY());
 		  }
 
@@ -78,7 +78,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
 	 private void itemTouchUp(IBaseItem item, InputEvent event, float x, float y, int button) {
 
-		  sandbox.flushAllSelectedItems();
+		  sandbox.getSelector().flushAllSelectedItems();
 
 		  // if panning was taking place - do nothing else. (other touch up got this)
 		  if (sandbox.cameraPanOn) {
@@ -91,7 +91,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  }
 
 		  // re-show all selection rectangles as clicking/dragging is finished
-		  for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+		  for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 				value.show();
 		  }
 
@@ -119,7 +119,7 @@ public class SandboxInputAdapter extends InputAdapter {
 				sandbox.dirty = true;
 
 				// Selection rectangles should move and follow along
-				for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+				for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 					 float[] diff = value.getTouchDiff();
 					 value.getHostAsActor().setX(event.getStageX() - diff[0]);
 					 value.getHostAsActor().setY(event.getStageY() - diff[1]);
@@ -138,7 +138,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // if item is currently being held with mouse (touched in but not touched out)
 		  // mouse scroll should rotate the selection around it's origin
 		  if (sandbox.isItemTouched) {
-				for (SelectionRectangle value : sandbox.getCurrentSelection().values()) {
+				for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 					 float degreeAmmount = 1;
 					 if (amount < 0) degreeAmmount = -1;
 					 // And if shift is pressed, the rotation amount is bigger
@@ -191,7 +191,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
 		  if (button == Input.Buttons.RIGHT) {
 				// if clicked on empty space, selections need to be cleared
-				sandbox.clearSelections();
+				sandbox.getSelector().clearSelections();
 
 				// show default dropdown
 				if(sandbox.showDropDown(x, y)) {
@@ -250,28 +250,28 @@ public class SandboxInputAdapter extends InputAdapter {
 		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0)) {
 				if (keycode == Input.Keys.UP) {
 					 // going to front of next item in z-index ladder
-					 sandbox.itemControl.itemZIndexChange(sandbox.getCurrentSelection(), true);
+					 sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), true);
 				}
 				if (keycode == Input.Keys.DOWN) {
 					 // going behind the next item in z-index ladder
-					 sandbox.itemControl.itemZIndexChange(sandbox.getCurrentSelection(), false);
+					 sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), false);
 				}
 				if (keycode == Input.Keys.A) {
 					 // Ctrl+A means select all
-					 sandbox.selectAllItems();
+					 sandbox.getSelector().selectAllItems();
 				}
 				// Aligning Selections
 				if (keycode == Input.Keys.NUM_1 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-					 sandbox.alignSelections(Align.top);
+					 sandbox.getSelector().alignSelections(Align.top);
 				}
 				if (keycode == Input.Keys.NUM_2 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-					 sandbox.alignSelections(Align.left);
+					 sandbox.getSelector().alignSelections(Align.left);
 				}
 				if (keycode == Input.Keys.NUM_3 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-					 sandbox.alignSelections(Align.bottom);
+					 sandbox.getSelector().alignSelections(Align.bottom);
 				}
 				if (keycode == Input.Keys.NUM_4 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
-					 sandbox.alignSelections(Align.right);
+					 sandbox.getSelector().alignSelections(Align.right);
 				}
 
 				return true;
@@ -284,19 +284,19 @@ public class SandboxInputAdapter extends InputAdapter {
 
 		  if (keycode == Input.Keys.UP) {
 				// moving UP
-				sandbox.moveSelectedItemsBy(0, deltaMove);
+				sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
 		  }
 		  if (keycode == Input.Keys.DOWN) {
 				// moving down
-				sandbox.moveSelectedItemsBy(0, -deltaMove);
+				sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
 		  }
 		  if (keycode == Input.Keys.LEFT) {
 				// moving left
-				sandbox.moveSelectedItemsBy(-deltaMove, 0);
+				sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
 		  }
 		  if (keycode == Input.Keys.RIGHT) {
 				//moving right
-				sandbox.moveSelectedItemsBy(deltaMove, 0);
+				sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
 		  }
 
 		  // if space is pressed, that means we are going to pan, so set cursor accordingly
@@ -312,7 +312,7 @@ public class SandboxInputAdapter extends InputAdapter {
 	 private boolean sandboxKeyUp(int keycode) {
 		  if (keycode == Input.Keys.DEL) {
 				// delete selected item
-				sandbox.removeCurrentSelectedItems();
+				sandbox.getSelector().removeCurrentSelectedItems();
 		  }
 		  if (keycode == Input.Keys.SPACE) {
 				// if pan mode is disabled set cursor back
@@ -438,7 +438,8 @@ public class SandboxInputAdapter extends InputAdapter {
 					 sandbox.transformationHandler.touchDragged(event, x, y);
 
                 sandbox.getUIStage().updateCurrentItemState();
-                SelectionRectangle selectionRectangle = sandbox.getCurrentSelection().get(sandbox.transformationHandler.getHost());
+
+                SelectionRectangle selectionRectangle = sandbox.getSelector().getCurrentSelection().get(sandbox.transformationHandler.getHost());
 
                 //TODO: sometimes it is null, find out why
                 if (selectionRectangle != null) {

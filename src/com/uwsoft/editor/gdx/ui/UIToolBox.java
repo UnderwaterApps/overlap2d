@@ -46,28 +46,28 @@ public class UIToolBox extends UIBox {
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().alignSelections(Align.top);
+                stage.getSandbox().getSelector().alignSelections(Align.top);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         leftIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().alignSelections(Align.left);
+                stage.getSandbox().getSelector().alignSelections(Align.left);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         bottomIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().alignSelections(Align.bottom);
+                stage.getSandbox().getSelector().alignSelections(Align.bottom);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         rightIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().alignSelections(Align.right);
+                stage.getSandbox().getSelector().alignSelections(Align.right);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
