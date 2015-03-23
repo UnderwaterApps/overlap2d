@@ -1,6 +1,5 @@
 package com.uwsoft.editor.gdx.ui;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -17,6 +16,7 @@ import java.util.Map;
 
 /**
  * DropDown element with list of clickable items
+ * It requires listener being given from outside
  */
 public class DropDown extends Group {
 

@@ -294,12 +294,15 @@ public class Sandbox {
         initSceneView(vo);
     }
 
-
+	 /**
+	  * TODO: what does this do? seems to be saving as checkpoint of Flow? it so it should be renamed
+	  */
     public void saveSceneCurrentSceneData() {
         sceneControl.getCurrentScene().updateDataVO();
         flow.setPendingHistory(sceneControl.getCurrentScene().dataVO);
         flow.applyPendingAction();
     }
+
 
     public void setSceneAmbientColor(Color color) {
         sceneControl.getCurrentSceneVO().ambientColor[0] = color.r;
@@ -384,6 +387,12 @@ public class Sandbox {
 		  }
 	 }
 
+	 /**
+	  * Configures and shows drop down for currently selected items list
+	  *
+	  * @param x coordinate
+	  * @param y coordinate
+	  */
 	 public void showDropDownForSelection(final float x, final float y) {
 		  DropDown dropDown = uiStage.mainDropDown;
 		  dropDown.clearItems();
@@ -423,6 +432,7 @@ public class Sandbox {
 						  saveSceneCurrentSceneData();
 						  break;
 					 case SelectionActions.CONVERT_TO_BUTTON:
+						  // TODO: this should go to UAC
 						  CompositeItem btn = getItemFactory().groupItemsIntoComposite();
 						  btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
 						  btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
