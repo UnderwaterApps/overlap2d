@@ -10,7 +10,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.gdx.Config;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -59,13 +58,13 @@ public class UIItemsBox extends ExpandableUIBox {
         }
 
         Table scrolltable = new Table();
-        scrolltable.padBottom(20 * Config.mulY);
+        scrolltable.padBottom(20);
         scrolltable.add(tree).fill().expand();
         final ScrollPane scroller = new ScrollPane(scrolltable, skin);
         scroller.setFlickScroll(false);
         final Table table = new Table();
         table.setFillParent(true);
-        table.padTop(10 * Config.mulY);
+        table.padTop(10);
         table.add(scroller).fill().expand();
         table.setName("treeTable");
         addActor(table);
