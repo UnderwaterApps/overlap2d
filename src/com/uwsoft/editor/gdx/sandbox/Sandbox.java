@@ -55,7 +55,7 @@ public class Sandbox {
 	 public TransformationHandler transformationHandler;
 
     /**
-     * this part is to be modified
+     * this part contains legacy params that need to be removed one by one
      */
     public int currTransformType = -1;
     public IBaseItem currTransformHost;
@@ -70,6 +70,12 @@ public class Sandbox {
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
 
+	 /**
+	  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
+	  * user drops all items, moves them around, and composes the scene. sandbox is responsible for using runtime to render the visual scene,
+	  * it is responsible to listen for all the events, item resizing, selecting, aligning, removing and things like that.
+	  * @author azakhary
+	  */
     public Sandbox() {
 
         inputMultiplexer = new InputMultiplexer();
@@ -90,6 +96,9 @@ public class Sandbox {
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
     }
+
+
+	 /** Getters **/
 
     public UserActionController getUac() {
         return uac;
@@ -120,6 +129,7 @@ public class Sandbox {
 	 }
 
 
+	 /** Initializers **/
 
     public void initData(String sceneName) {
         DataManager.getInstance().preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().curResolution);
@@ -128,7 +138,6 @@ public class Sandbox {
 
         flow = new FlowManager(sceneControl.getRootSceneVO());
     }
-
 
 	 public void loadCurrentProject(String name) {
 		  rm = new SandboxResourceManager();
@@ -149,7 +158,7 @@ public class Sandbox {
 		  sandboxStage.initView();
 		  uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
 		  initSceneView(sceneControl.getRootSceneVO());
-		  initEvents();
+		  sandboxInputAdapter.initSandboxEvents();
 
 		  ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
 		  projectVO.lastOpenScene = sceneName;
@@ -180,18 +189,19 @@ public class Sandbox {
         forceContinuousParticles(composite);
     }
 
-
-
-
-
+	 /**
+	  * if user is currently viewing a composite item, this will go one step up to previous composite in hierarchy
+	  */
 	 public void enterIntoPrevComposite () {
 		  sandboxStage.getCamera().position.set(0, 0, 0);
 		  uiStage.getCompositePanel().stepUp();
 		  uiStage.getItemsBox().initContent();
 	 }
 
-
-
+	 /**
+	  * If current selection contains only one item that is a composite item,
+	  * it will call enterIntoComposite with that time as parameter
+	  */
 	 public void enterIntoComposite () {
 		  CompositeItem item = null;
 		  sceneControl.getCurrentScene().updateDataVO();
@@ -207,6 +217,10 @@ public class Sandbox {
 		  enterIntoComposite(item.getDataVO());
 	 }
 
+	 /**
+	  * Opens up provided composite item, sets it as a main view, and focuses editing on it's contents.
+	  * @param compositeItemVO data object of composite to enter into
+	  */
 	 public void enterIntoComposite (CompositeItemVO compositeItemVO) {
 		  //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
 		  sandboxStage.getCamera().position.set(0, 0, 0);
@@ -217,8 +231,12 @@ public class Sandbox {
 		  uiStage.getItemsBox().initContent();
 	 }
 
-
-
+	 /**
+	  * Some particle items might not be continuous, so they will stop after first iteration, which is ok
+	  * This method will make sure they look continuous while in editor, so user will find and see them easily.
+	  *
+	  * @param composite composite on screen with particles to be forced to be continuous
+	  */
 	 private void forceContinuousParticles(CompositeItem composite) {
 		  ArrayList<IBaseItem> asd = composite.getItems();
 		  for (int i = 0; i < asd.size(); i++) {
@@ -234,7 +252,11 @@ public class Sandbox {
 		  }
 	 }
 
-
+	 /**
+	  * sets current editing mode, and messages all selection rectangles about it.
+	  *
+	  * @param currentMode
+	  */
     public void setCurrentMode(EditingMode currentMode) {
         this.editingMode = currentMode;
         for (SelectionRectangle value : selector.getCurrentSelection().values()) {
@@ -242,127 +264,28 @@ public class Sandbox {
         }
     }
 
-
+	 /**
+	  * Well... that's a bummer, I cannot remember why this was for.
+	  * TODO: figure this out
+	  *
+	  * @return SceneVO
+	  */
     public SceneVO sceneVoFromItems() {
         CompositeItemVO itemVo = sceneControl.getRootSceneVO();
-        itemFactory.cleanComposite(itemVo.composite);
+		  itemFactory.cleanComposite(itemVo.composite);
         sceneControl.getCurrentSceneVO().composite = itemVo.composite;
         return sceneControl.getCurrentSceneVO();
     }
 
+	 /**
+	  * Initializes current scene on screen from a data object.
+	  *
+	  * @param vo CompositeItemVO data
+	  */
     public void reconstructFromSceneVo(CompositeItemVO vo) {
         initSceneView(vo);
     }
 
-    public void undo() {
-        FlowActionEnum lastFlowAction = flow.getFlowLastAction();
-        CompositeItemVO compositeItemVO = flow.undo();
-        switch (lastFlowAction) {
-            case GET_INTO_COMPOSITE:
-                enterIntoPrevComposite();
-                break;
-            case GET_OUT_COMPOSITE:
-                enterIntoComposite(compositeItemVO);
-                break;
-            default:
-                reconstructFromSceneVo(compositeItemVO);
-                break;
-        }
-        sceneControl.getCurrentScene().updateDataVO();
-    }
-
-    public void redo() {
-        CompositeItemVO compositeItemVO = flow.redo();
-        FlowActionEnum lastFlowAction = flow.getFlowLastAction();
-        switch (lastFlowAction) {
-            case GET_INTO_COMPOSITE:
-                enterIntoComposite(compositeItemVO);
-                break;
-            case GET_OUT_COMPOSITE:
-                enterIntoPrevComposite();
-                break;
-            default:
-                reconstructFromSceneVo(compositeItemVO);
-                break;
-        }
-        sceneControl.getCurrentScene().updateDataVO();
-    }
-
-
-    public void cutAction() {
-        ArrayList<IBaseItem> items = selector.getSelectedItems();
-        putItemsToClipboard(items);
-        selector.removeCurrentSelectedItems();
-    }
-
-    public void copyAction() {
-        sceneControl.getCurrentScene().updateDataVO();
-        ArrayList<IBaseItem> items = selector.getSelectedItems();
-        putItemsToClipboard(items);
-    }
-
-    public void pasteAction(float x, float y, boolean ignoreCameraPos) {
-        CompositeVO tempHolder;
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-        tempHolder = json.fromJson(CompositeVO.class, fakeClipboard);
-
-        if (tempHolder == null) return;
-
-        CompositeItemVO fakeVO = new CompositeItemVO();
-
-        fakeVO.composite = tempHolder;
-        CompositeItem fakeItem = new CompositeItem(fakeVO, sceneControl.getEssentials());
-
-        ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
-        Actor firstItem = (Actor) fakeItem.getItems().get(0);
-        float offsetX = firstItem.getX()*sceneControl.getCurrentScene().mulX;
-        float offsetY = firstItem.getY()*sceneControl.getCurrentScene().mulY;
-        for (int i = 1; i < fakeItem.getItems().size(); i++) {
-            Actor item = (Actor) fakeItem.getItems().get(i);
-            if (item.getX()*sceneControl.getCurrentScene().mulX < offsetX) {
-                offsetX = item.getX()*sceneControl.getCurrentScene().mulX;
-            }
-            if (item.getY()*sceneControl.getCurrentScene().mulY < offsetY) {
-                offsetY = item.getY()*sceneControl.getCurrentScene().mulY;
-            }
-        }
-        Vector3 cameraPos = ignoreCameraPos ? new Vector3(0, 0, 0) : ((OrthographicCamera) sandboxStage.getCamera()).position;
-        for (int i = 0; i < fakeItem.getItems().size(); i++) {
-            IBaseItem itm = fakeItem.getItems().get(i);
-            itm.getDataVO().layerName = uiStage.getCurrentSelectedLayer().layerName;
-            sceneControl.getCurrentScene().addItem(itm);
-            ((Actor) itm).setX(x + ((Actor) itm).getX() - offsetX + (cameraPos.x + copedItemCameraOffset.x));
-            ((Actor) itm).setY(y + ((Actor) itm).getY() - offsetY + (cameraPos.y + copedItemCameraOffset.y));
-            itm.updateDataVO();
-            sandboxInputAdapter.initItemListeners(itm);
-            finalItems.add(itm);
-        }
-
-        selector.setSelections(finalItems, true);
-        uiStage.getItemsBox().initContent();
-    }
-
-    private void putItemsToClipboard(ArrayList<IBaseItem> items) {
-        CompositeVO tempHolder = new CompositeVO();
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-        Actor actor = (Actor) items.get(0);
-        Vector3 cameraPos = ((OrthographicCamera) sandboxStage.getCamera()).position;
-        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
-        for (IBaseItem item : items) {
-            tempHolder.addItem(item.getDataVO());
-            actor = (Actor) item;
-            if (actor.getX() - cameraPos.x < vector3.x) {
-                vector3.x = actor.getX() - cameraPos.x;
-            }
-            if (actor.getY() - cameraPos.y < vector3.y) {
-                vector3.y = actor.getY() - cameraPos.y;
-            }
-        }
-        fakeClipboard = json.toJson(tempHolder);
-        copedItemCameraOffset = vector3;
-    }
 
     public void saveSceneCurrentSceneData() {
         sceneControl.getCurrentScene().updateDataVO();
@@ -395,11 +318,6 @@ public class Sandbox {
     public LayerItemVO getSelectedLayer() {
         return uiStage.getCurrentSelectedLayer();
     }
-
-    public void initEvents() {
-        sandboxInputAdapter.initSandboxEvents();
-    }
-
 
     public void setCurrentlyTransforming(IBaseItem item, int transformType) {
         if (item == null || item.getClass().getSimpleName().equals("LabelItem")) return;

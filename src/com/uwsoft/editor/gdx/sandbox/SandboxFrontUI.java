@@ -112,14 +112,14 @@ public class SandboxFrontUI extends Group {
                         sandbox.flow.applyPendingAction();
                         break;
                     case SelectionActions.COPY:
-                        sandbox.copyAction();
+                        sandbox.getUac().copyAction();
                         break;
                     case SelectionActions.CUT:
-                        sandbox.cutAction();
+                        sandbox.getUac().cutAction();
                         sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.PASTE:
-                        sandbox.pasteAction(x, y, true);
+                        sandbox.getUac().pasteAction(x, y, true);
                         sandbox.saveSceneCurrentSceneData();
                         break;
                     case SelectionActions.DELETE:
