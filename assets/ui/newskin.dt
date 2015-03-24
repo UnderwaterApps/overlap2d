@@ -1,0 +1,55 @@
+{
+com.badlogic.gdx.graphics.g2d.BitmapFont: { default-font: { file: arial.fnt } },
+com.badlogic.gdx.graphics.Color: {
+	green: { a: 1, b: 0, g: 1, r: 0 },
+	white: { a: 1, b: 1, g: 1, r: 1 },
+	red: { a: 1, b: 0, g: 0, r: 1 },
+	black: { a: 1, b: 0, g: 0, r: 0 }
+},
+
+  com.gdx.extension.ui.panel.Panel$PanelStyle:{
+    default:{
+      background:bg1
+    }
+  },
+  com.gdx.extension.ui.menu.MenuBar$MenuBarStyle:{
+  		default:{
+  			background:bg1
+  		}
+
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+      	default: { down: bgBlue, up: bg, font: default-font, fontColor: white },
+      	toggle: { down: bgBlue, up: bg, checked: bg1selected, font: default-font, fontColor: white, downFontColor: red },
+      	menu: { down: bg1, up: bg1, font: default-font, fontColor: white }
+  },
+  com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+  	default: { font: default-font, fontColor: white }
+  },
+com.badlogic.gdx.scenes.scene2d.ui.ImageButton$ImageButtonStyle:{
+    default:{
+        down:bgBlue,
+        up:bg,
+        over:bg
+    }
+  },
+  com.gdx.extension.ui.menu.MenuItem$MenuItemStyle:{
+  		default:{
+  			buttonStyle:menu
+  		},
+  		default-sub:{
+  			buttonStyle:menu,
+  			sub:arrowRight
+  		}
+  },
+  com.gdx.extension.ui.tab.TabContainer$TabContainerStyle:{
+  		default:{
+  			background: bg1
+  		}
+  },
+  com.gdx.extension.ui.menu.ToolBar$ToolBarStyle:{
+  		default:{
+  			background:bg1
+  		}
+  }
+}
