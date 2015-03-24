@@ -1,19 +1,12 @@
 package com.uwsoft.editor.view;
 
-import java.awt.Toolkit;
+import com.uwsoft.editor.data.manager.DataManager;
+
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
-
-import javax.swing.JFileChooser;
-import javax.swing.JMenu;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.KeyStroke;
-
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
-import com.uwsoft.editor.data.manager.DataManager;
 
 public class MenuToolbar extends JMenuBar {
 
@@ -101,35 +94,35 @@ public class MenuToolbar extends JMenuBar {
 
         undoBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.UNDO);
+                //UIController.instance.sendNotification(NameConstants.UNDO);
             }
 
         });
 
         redoBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.REDO);
+                //UIController.instance.sendNotification(NameConstants.REDO);
             }
 
         });
 
         cutBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.CUT_ACTION);
+                //UIController.instance.sendNotification(NameConstants.CUT_ACTION);
             }
 
         });
 
         copyBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.COPY_ACTION);
+                //UIController.instance.sendNotification(NameConstants.COPY_ACTION);
             }
 
         });
 
         pasteBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.PASTE_ACTION);
+                //UIController.instance.sendNotification(NameConstants.PASTE_ACTION);
             }
 
         });
@@ -137,7 +130,7 @@ public class MenuToolbar extends JMenuBar {
 
         createProjectBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.CREATE_PROJECT);
+                // UIController.instance.sendNotification(NameConstants.CREATE_PROJECT);
             }
 
         });
@@ -146,13 +139,13 @@ public class MenuToolbar extends JMenuBar {
             public void actionPerformed(ActionEvent event) {
                 //Create a file chooser
                 final JFileChooser fc = new JFileChooser(DataManager.getInstance().getWorkspacePath());
-                fc.showOpenDialog(UIController.instance.frame);
+                // fc.showOpenDialog(UIController.instance.frame);
                 if (fc.getSelectedFile() == null) {
                     return;
                 }
                 String dirpath = fc.getSelectedFile().getAbsolutePath().toString();
                 if (dirpath != null && dirpath.length() > 0) {
-                    UIController.instance.sendNotification(NameConstants.OPEN_PROJECT, dirpath);
+                    //UIController.instance.sendNotification(NameConstants.OPEN_PROJECT, dirpath);
                 }
             }
 
@@ -160,14 +153,14 @@ public class MenuToolbar extends JMenuBar {
 
         saveProjectBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.SAVE_PROJECT);
+                //UIController.instance.sendNotification(NameConstants.SAVE_PROJECT);
             }
 
         });
 
         importBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.IMPORT_DIALOG_SHOW);
+                //UIController.instance.sendNotification(NameConstants.IMPORT_DIALOG_SHOW);
             }
 
         });
@@ -175,14 +168,14 @@ public class MenuToolbar extends JMenuBar {
 
         exportSettingsBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.SHOW_BUILD_SETTING);
+                //UIController.instance.sendNotification(NameConstants.SHOW_BUILD_SETTING);
             }
 
         });
 
         exportBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.BUILD_PROJECT);
+                //UIController.instance.sendNotification(NameConstants.BUILD_PROJECT);
             }
 
         });
@@ -225,7 +218,7 @@ public class MenuToolbar extends JMenuBar {
         sceneMenu.add(sceneMenuItem);
         sceneMenuItem.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.LOAD_SCENE, sceneName);
+                //UIController.instance.sendNotification(NameConstants.LOAD_SCENE, sceneName);
             }
         });
     }
@@ -236,12 +229,12 @@ public class MenuToolbar extends JMenuBar {
         deleteCurrentSceneBtn = new JMenuItem("Delete Current Scene");
         createNewSceneBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.CRATE_NEW_SCENE);
+                // UIController.instance.sendNotification(NameConstants.CRATE_NEW_SCENE);
             }
         });
         deleteCurrentSceneBtn.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent event) {
-                UIController.instance.sendNotification(NameConstants.DELETE_CURRENT_SCENE);
+                //UIController.instance.sendNotification(NameConstants.DELETE_CURRENT_SCENE);
             }
         });
         sceneMenu.add(createNewSceneBtn);

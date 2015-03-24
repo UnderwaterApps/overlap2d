@@ -1,21 +1,18 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import java.io.File;
-import java.util.HashMap;
-
-import javax.swing.JFileChooser;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.FileChooserHandler;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
+
+import javax.swing.*;
+import java.io.File;
+import java.util.HashMap;
 
 /**
  * Created by sargis on 7/31/14.
@@ -33,13 +30,13 @@ public class DlgExport extends CompositeDialog {
 
         setTitle("Export settings");
 
-       
+
         projectVO = DataManager.getInstance().getCurrentProjectVO();
-        packerWidth 	= ui.getTextBoxById("packerWidth");
+        packerWidth = ui.getTextBoxById("packerWidth");
         packerWidth.setText(projectVO.texturepackerWidth);
-        packerHeight 	= ui.getTextBoxById("packerHeight");
+        packerHeight = ui.getTextBoxById("packerHeight");
         packerHeight.setText(projectVO.texturepackerHeight);
-        projectAssets 	= ui.getTextBoxById("projectAssetsPath");
+        projectAssets = ui.getTextBoxById("projectAssetsPath");
         projectAssets.setDisabled(true);
         projectAssets.setText(projectVO.projectMainExportPath);
         paths.put("global", new File(projectVO.projectMainExportPath));
@@ -105,16 +102,16 @@ public class DlgExport extends CompositeDialog {
 
     private void saveNewExportPaths() {
         // save before importing
-    	int width	=	Integer.parseInt(packerWidth.getText());
-    	int height	=	Integer.parseInt(packerHeight.getText());
-    	if(! ((width > 0) && ((width & (width - 1)) == 0) && (width > 0) && ((height & (height - 1)) == 0))){    		
-    		stage.dialogs().showInfoDialogNavigateBack("Width and height must be power of 2");
-    		return;
-    	}
-    	if(width!=Integer.parseInt(projectVO.texturepackerWidth) || height!=Integer.parseInt(projectVO.texturepackerHeight)){
-    		DataManager.getInstance().setTexturePackerSizes(Integer.toString(width),Integer.toString(height));    		
-    		DataManager.getInstance().resolutionManager.rePackProjectImagesForAllResolutions();
-    	}
+        int width = Integer.parseInt(packerWidth.getText());
+        int height = Integer.parseInt(packerHeight.getText());
+        if (!((width > 0) && ((width & (width - 1)) == 0) && (width > 0) && ((height & (height - 1)) == 0))) {
+            stage.dialogs().showInfoDialogNavigateBack("Width and height must be power of 2");
+            return;
+        }
+        if (width != Integer.parseInt(projectVO.texturepackerWidth) || height != Integer.parseInt(projectVO.texturepackerHeight)) {
+            DataManager.getInstance().setTexturePackerSizes(Integer.toString(width), Integer.toString(height));
+            DataManager.getInstance().resolutionManager.rePackProjectImagesForAllResolutions();
+        }
         DataManager.getInstance().setExportPaths(paths.get("global"));
         DataManager.getInstance().saveCurrentProject();
 
@@ -134,7 +131,7 @@ public class DlgExport extends CompositeDialog {
                         }
 
                         textField.setText(selectedFile.getPath());
-                        if(type.equals("global")) {
+                        if (type.equals("global")) {
                             setMiniPaths();
                         }
                         paths.put(type, selectedFile);
@@ -156,7 +153,7 @@ public class DlgExport extends CompositeDialog {
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
             }
         });
     }

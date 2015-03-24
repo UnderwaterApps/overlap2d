@@ -3,9 +3,8 @@ package com.uwsoft.editor.gdx.screen;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.gdx.Overlap2DListener;
+import com.uwsoft.editor.gdx.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -24,7 +23,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     private Sandbox sandbox;
 
-    public LevelEditorScreen(Overlap2DListener game) {
+    public LevelEditorScreen(Overlap2D game) {
         super(game);
 
         sandbox = new Sandbox();
@@ -167,7 +166,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                                 SceneVO sceneVO = DataManager.getInstance().sceneDataManager.createNewScene(input);
                                 sandboxStage.loadScene(input);
                                 uiStage.reInitLibrary();
-                                UIController.instance.sendNotification(NameConstants.NEW_SCENE_CRATED, sceneVO);
+                                //UIController.instance.sendNotification(NameConstants.NEW_SCENE_CRATED, sceneVO);
                             }
                         });
                         break;
@@ -181,7 +180,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                                 DataManager.getInstance().sceneDataManager.deleteCurrentScene();
                                 sandboxStage.loadScene("MainScene");
                                 uiStage.reInitLibrary();
-                                UIController.instance.sendNotification(NameConstants.SCENE_DELETED, DataManager.getInstance().getCurrentProjectInfoVO());
+                                //UIController.instance.sendNotification(NameConstants.SCENE_DELETED, DataManager.getInstance().getCurrentProjectInfoVO());
                             }
 
                             @Override

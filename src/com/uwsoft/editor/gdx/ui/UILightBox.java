@@ -7,10 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.controlles.ColorPickerHandler;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPicker;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -76,7 +73,7 @@ public class UILightBox extends ExpandableUIBox {
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
             }
         });
 
@@ -94,7 +91,7 @@ public class UILightBox extends ExpandableUIBox {
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
             }
         });
 

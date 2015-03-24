@@ -68,7 +68,7 @@ project(":spine-runtime-libgdx") {
 sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = ["src/"]
 
-project.ext.mainClassName = "com.uwsoft.editor.Overlap2D"
+project.ext.mainClassName = "com.uwsoft.editor.Main"
 project.ext.assetsDir = new File("assets/");
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -108,6 +108,12 @@ eclipse {
     project {
         name = appName
         linkedResource name: 'assets', type: '2', location: 'assets'
+    }
+}
+
+idea {
+    project {
+        languageLevel = sourceCompatibility
     }
 }
 

@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.uwsoft.editor.controlles.ColorPickerHandler;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPicker;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -341,7 +338,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
             }
         });
 

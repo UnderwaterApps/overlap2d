@@ -5,8 +5,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.FileChooserHandler;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 
@@ -69,7 +67,7 @@ public class DlgNewProject extends CompositeDialog {
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
             }
         });
     }
