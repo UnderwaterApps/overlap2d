@@ -1,10 +1,10 @@
 package com.uwsoft.editor.gdx.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.uwsoft.editor.controlles.NameConstants;
 import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.gdx.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -15,7 +15,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.File;
 
-public class LevelEditorScreen extends Screen implements IObserver {
+public class Overlap2DScreen implements IObserver, Screen {
 
     public SandboxStage sandboxStage;
     public UIStage uiStage;
@@ -23,8 +23,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     private Sandbox sandbox;
 
-    public LevelEditorScreen(Overlap2D game) {
-        super(game);
+    public Overlap2DScreen() {
 
         sandbox = new Sandbox();
         sandboxStage = sandbox.getSandboxStage();
@@ -59,31 +58,25 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
-    public void resume(boolean b) {
-        // TODO Auto-generated method stub
+    public void resume() {
 
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -211,23 +204,5 @@ public class LevelEditorScreen extends Screen implements IObserver {
         uiStage.resize(width, height);//getViewport().update(width, height, true);
         sandboxStage.resize(width, height);//getViewport().update(width, height, true);
     }
-
-	
-	
-	/*
-    public void updateSelectedObject(Actor body) {
-		gameStage.updateSelectedObject(body);
-	}
-	
-	public void updateCustomVars(String str) {
-		gameStage.updateCustomVars(str);
-	}
-	
-
-	@Override
-	public void handleNotification(String notificationName, Object body) {
-		// TODO Auto-generated method stub
-		
-	}*/
 
 }

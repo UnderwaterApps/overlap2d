@@ -2,9 +2,10 @@ package com.uwsoft.editor.gdx;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
+import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.data.manager.TextureManager;
-import com.uwsoft.editor.gdx.screen.LevelEditorScreen;
-import com.uwsoft.editor.gdx.screen.Screen;
+import com.uwsoft.editor.gdx.screen.Overlap2DScreen;
 
 import java.util.ArrayList;
 
@@ -23,9 +24,9 @@ public class Overlap2D extends ApplicationAdapter {
     }
 
     public void create() {
-        //try {
-        LevelEditorScreen editor = new LevelEditorScreen(Overlap2D.this);
-        currentScreen = editor;
+        VisUI.load();
+        currentScreen = new Overlap2DScreen();
+
 //        UIController.instance.addObserver(editor);
 //		} catch (final Exception e) {
 //			SwingUtilities.invokeLater(new Runnable() {
@@ -64,7 +65,7 @@ public class Overlap2D extends ApplicationAdapter {
         if (currentScreen == null) {
             return;
         }
-        currentScreen.resume(false);
+        currentScreen.resume();
     }
 
     public void render() {
@@ -86,6 +87,7 @@ public class Overlap2D extends ApplicationAdapter {
     }
 
     public void dispose() {
+        VisUI.dispose();
         if (currentScreen == null) {
             return;
         }

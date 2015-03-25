@@ -1,16 +1,10 @@
 package com.uwsoft.editor.gdx.ui;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.gdx.extension.ui.menu.ContextMenu;
-import com.gdx.extension.ui.menu.MenuBar;
-import com.gdx.extension.ui.menu.MenuItem;
-import com.uwsoft.editor.data.manager.EditorResourceManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
-import com.uwsoft.editor.view.MenuToolbar;
+import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBar;
+import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBarMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -21,8 +15,7 @@ public class UIMainTable extends Table {
     public UILayerBox layerPanel;
     public UILightBox lightBox;
     public UIItemsBox itemsBox;
-	 private UIMenuContainer menu;
-	 public UIPropertiesBox propertiesPanel;
+    public UIPropertiesBox propertiesPanel;
     public UILibraryBox libraryPanel;
     public Table rightTable;
     public Table leftTable;
@@ -42,7 +35,7 @@ public class UIMainTable extends Table {
         initLeft();
         initRight();
 
-		  menu.setZIndex(9999);
+        //menu.setZIndex(9999);
     }
 
     private void initRight() {
@@ -95,19 +88,13 @@ public class UIMainTable extends Table {
     }
 
     private void initTop() {
-		  // init menu bar
-		  Skin skin = ((EditorResourceManager)uiStage.essentials.rm).getNewEditorSkin();
-
-		  menu = new UIMenuContainer(uiStage, skin);
-
-		  add(menu).left().expandX();
-
-		  row();
-
+        // init menu bar
+        Overlap2DMenuBar menuBar = new Overlap2DMenuBar(new Overlap2DMenuBarMediator());
+        add(menuBar.getTable()).fillX().expandX().row();
+        //
         compositePanel = new UICompositePanel(uiStage);
         compositePanel.initPanel();
         add(compositePanel).left().expandX();
-
         add();
     }
 }
