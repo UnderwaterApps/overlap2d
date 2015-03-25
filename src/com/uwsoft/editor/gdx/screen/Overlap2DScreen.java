@@ -25,7 +25,7 @@ public class Overlap2DScreen implements IObserver, Screen {
 
     public Overlap2DScreen() {
 
-        sandbox = new Sandbox();
+        sandbox =  Sandbox.getInstance();
         sandboxStage = sandbox.getSandboxStage();
         uiStage = sandbox.getUIStage();
         sandboxStage.sandbox = sandbox;

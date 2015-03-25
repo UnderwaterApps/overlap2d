@@ -2,7 +2,6 @@ package com.uwsoft.editor.gdx.ui.menubar;
 
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.Menu;
@@ -29,11 +28,11 @@ public class Overlap2DMenuBar extends MenuBar {
         public EditMenu() {
             super("Edit");
             pad(5);
-            addItem(new MenuItem("Cut", new EditMenuListener(EditMenuCommand.CUT)).setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.X));
-            addItem(new MenuItem("Copy", new EditMenuListener(EditMenuCommand.COPY)).setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.C));
-            addItem(new MenuItem("Paste", new EditMenuListener(EditMenuCommand.PAST)).setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.V));
-            addItem(new MenuItem("Undo", new EditMenuListener(EditMenuCommand.UNDO)).setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.Z));
-            addItem(new MenuItem("Redo", new EditMenuListener(EditMenuCommand.REDO)).setShortcut(Input.Keys.CONTROL_LEFT, Input.Keys.Y));
+            addItem(new MenuItem("Cut", new EditMenuListener(EditMenuCommand.CUT)));
+            addItem(new MenuItem("Copy", new EditMenuListener(EditMenuCommand.COPY)));
+            addItem(new MenuItem("Paste", new EditMenuListener(EditMenuCommand.PAST)));
+            addItem(new MenuItem("Undo", new EditMenuListener(EditMenuCommand.UNDO)));
+            addItem(new MenuItem("Redo", new EditMenuListener(EditMenuCommand.REDO)));
         }
 
         private class EditMenuListener extends ChangeListener {

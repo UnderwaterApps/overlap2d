@@ -21,6 +21,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -40,11 +41,11 @@ public class DataManager {
     public final ResolutionManager resolutionManager;
     public final SceneDataManager sceneDataManager;
     public final TextureManager textureManager;
+    public ProjectVO currentProjectVO;
+    public ProjectInfoVO currentProjectInfoVO;
     private String currentWorkingPath;
     private String workspacePath;
     private String DEFAULT_FOLDER = "Overlap2D";
-    public ProjectVO currentProjectVO;
-    public ProjectInfoVO currentProjectInfoVO;
     private float currentPercent = 0.0f;
     private ProgressHandler handler;
     private EditorConfigVO editorConfigVO;

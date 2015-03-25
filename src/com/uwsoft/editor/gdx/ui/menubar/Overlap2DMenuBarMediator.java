@@ -1,6 +1,9 @@
 package com.uwsoft.editor.gdx.ui.menubar;
 
+import com.badlogic.gdx.Gdx;
 import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 
@@ -10,6 +13,14 @@ import javax.swing.*;
  * Created by sargis on 3/25/15.
  */
 public class Overlap2DMenuBarMediator {
+    private final DataManager dataManager;
+    private final Sandbox sandbox;
+
+    public Overlap2DMenuBarMediator() {
+        dataManager = DataManager.getInstance();
+        sandbox = Sandbox.getInstance();
+    }
+
     public void editMenuItemClicked(EditMenuCommand command) {
         switch (command) {
             case CUT:
@@ -30,15 +41,26 @@ public class Overlap2DMenuBarMediator {
             case NEW_PROJECT:
                 break;
             case OPEN_PROJECT:
-                final JFileChooser fc = new JFileChooser(DataManager.getInstance().getWorkspacePath());
-                fc.showOpenDialog(null);
-                if (fc.getSelectedFile() == null) {
-                    return;
-                }
-                String dirpath = fc.getSelectedFile().getAbsolutePath().toString();
-                if (dirpath != null && dirpath.length() > 0) {
-                    //UIController.instance.sendNotification(NameConstants.OPEN_PROJECT, dirpath);
-                }
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        final JFileChooser fileChooser = new JFileChooser(DataManager.getInstance().getWorkspacePath());
+                        fileChooser.showOpenDialog(null);
+                        if (fileChooser.getSelectedFile() == null) {
+                            return;
+                        }
+                        final String path = fileChooser.getSelectedFile().getAbsolutePath();
+                        if (path.length() > 0) {
+                            Gdx.app.postRunnable(new Runnable() {
+                                @Override
+                                public void run() {
+                                    dataManager.openProjectFromPath(path);
+                                    sandbox.loadCurrentProject();
+                                }
+                            });
+                        }
+                    }
+                });
                 break;
             case SAVE_PROJECT:
                 break;
