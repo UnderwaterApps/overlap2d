@@ -21,7 +21,6 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 import javax.imageio.ImageIO;
-import javax.swing.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -303,6 +302,11 @@ public class DataManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void saveCurrentProject(SceneVO vo) {
+        saveCurrentProject();
+        sceneDataManager.saveScene(vo);
     }
 
 
@@ -779,26 +783,26 @@ public class DataManager {
         return currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/freetypefonts";
     }
 
-    public void buildProject() {
+    public void exportProject() {
 
         String defaultBuildPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/export";
-        buildPacks(defaultBuildPath);
+        exportPacks(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
-            buildPacks(currentProjectVO.projectMainExportPath);
+            exportPacks(currentProjectVO.projectMainExportPath);
         }
-        buildAnimations(defaultBuildPath);
+        exportAnimations(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
-            buildAnimations(currentProjectVO.projectMainExportPath);
+            exportAnimations(currentProjectVO.projectMainExportPath);
         }
-        buildParticles(defaultBuildPath);
+        exportParticles(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
-            buildParticles(currentProjectVO.projectMainExportPath);
+            exportParticles(currentProjectVO.projectMainExportPath);
         }
-        buildFonts(defaultBuildPath);
+        exportFonts(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
-            buildFonts(currentProjectVO.projectMainExportPath);
+            exportFonts(currentProjectVO.projectMainExportPath);
         }
-        buildStyles(defaultBuildPath);
+        exportStyles(defaultBuildPath);
         sceneDataManager.buildScenes(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             sceneDataManager.buildScenes(currentProjectVO.projectMainExportPath);
@@ -806,7 +810,7 @@ public class DataManager {
     }
 
 
-    private void buildStyles(String targetPath) {
+    private void exportStyles(String targetPath) {
         String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig";
         FileHandle origDirectoryHandle = Gdx.files.absolute(srcPath);
         FileHandle stylesDirectory = origDirectoryHandle.child("styles");
@@ -818,7 +822,7 @@ public class DataManager {
         }
     }
 
-    private void buildParticles(String targetPath) {
+    private void exportParticles(String targetPath) {
         String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig";
         FileHandle origDirectoryHandle = Gdx.files.absolute(srcPath);
         FileHandle particlesDirectory = origDirectoryHandle.child("particles");
@@ -830,7 +834,7 @@ public class DataManager {
         }
     }
 
-    private void buildFonts(String targetPath) {
+    private void exportFonts(String targetPath) {
         String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig";
         FileHandle origDirectoryHandle = Gdx.files.absolute(srcPath);
         FileHandle fontsDirectory = origDirectoryHandle.child("freetypefonts");
@@ -843,7 +847,7 @@ public class DataManager {
     }
 
 
-    private void buildAnimations(String targetPath) {
+    private void exportAnimations(String targetPath) {
         exportSpineAnimationForResolution("orig", targetPath);
         exportSpriteAnimationForResolution("orig", targetPath);
         exportSpriterAnimationForResolution("orig", targetPath);
@@ -897,7 +901,7 @@ public class DataManager {
         }
     }
 
-    private void buildPacks(String targetPath) {
+    private void exportPacks(String targetPath) {
         String srcPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets";
         FileHandle assetDirectoryHandle = Gdx.files.absolute(srcPath);
         FileHandle[] assetDirectories = assetDirectoryHandle.list();

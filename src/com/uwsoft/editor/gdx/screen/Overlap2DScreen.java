@@ -117,7 +117,7 @@ public class Overlap2DScreen implements IObserver, Screen {
                         Gdx.app.exit();
                         break;
                     case NameConstants.CREATE_PROJECT:
-                        uiStage.dialogs().createNewProjectDialg();
+                        uiStage.dialogs().createNewProjectDialog();
                         break;
                     case NameConstants.OPEN_PROJECT:
                         DataManager.getInstance().openProjectFromPath((String) body);
@@ -190,7 +190,7 @@ public class Overlap2DScreen implements IObserver, Screen {
                         uiStage.dialogs().showExportDialog();
                         break;
                     case NameConstants.BUILD_PROJECT:
-                        DataManager.getInstance().buildProject();
+                        DataManager.getInstance().exportProject();
                         break;
                 }
 

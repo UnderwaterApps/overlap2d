@@ -15,11 +15,19 @@ import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 public class Overlap2DMenuBar extends MenuBar {
     private static final String TAG = Overlap2DMenuBar.class.getCanonicalName();
     private final Overlap2DMenuBarMediator mediator;
+    private final FileMenu fileMenu;
+
 
     public Overlap2DMenuBar(Overlap2DMenuBarMediator mediator) {
         this.mediator = mediator;
-        addMenu(new FileMenu());
+        fileMenu = new FileMenu();
+        addMenu(fileMenu);
         addMenu(new EditMenu());
+        mediator.setTarget(this);
+    }
+
+    public PopupMenu getScenesPopupMenu() {
+        return fileMenu.scenesPopupMenu;
     }
 
     class EditMenu extends Menu {
@@ -52,6 +60,8 @@ public class Overlap2DMenuBar extends MenuBar {
 
     class FileMenu extends Menu {
 
+        public final PopupMenu scenesPopupMenu;
+
         public FileMenu() {
             super("File");
             pad(5);
@@ -60,7 +70,7 @@ public class Overlap2DMenuBar extends MenuBar {
             addItem(new MenuItem("Save Project", new FileMenuListener(FileMenuCommand.SAVE_PROJECT)));
             //
             MenuItem scenesMenuItem = new MenuItem("Scenes");
-            PopupMenu scenesPopupMenu = new PopupMenu();
+            scenesPopupMenu = new PopupMenu();
             scenesPopupMenu.addItem(new MenuItem("Create New Scene"));
             scenesPopupMenu.addItem(new MenuItem("Delete Current Scene"));
             scenesPopupMenu.addSeparator();
