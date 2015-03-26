@@ -12,6 +12,7 @@ import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.lang3.SystemUtils;
 
 import java.util.ArrayList;
 
@@ -20,10 +21,12 @@ public class Overlap2DMenuBar extends MenuBar {
     private static final String TAG = Overlap2DMenuBar.class.getCanonicalName();
     private final Overlap2DMenuBarMediator mediator;
     private final FileMenu fileMenu;
+    private final String maskKey;
 
 
     public Overlap2DMenuBar(Overlap2DMenuBarMediator mediator) {
         this.mediator = mediator;
+        maskKey = SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC ? "Cmd" : "Ctrl";
         fileMenu = new FileMenu();
         addMenu(fileMenu);
         addMenu(new EditMenu());
@@ -45,11 +48,11 @@ public class Overlap2DMenuBar extends MenuBar {
         public EditMenu() {
             super("Edit");
             pad(5);
-            addItem(new MenuItem("Cut", new EditMenuListener(EditMenuCommand.CUT)));
-            addItem(new MenuItem("Copy", new EditMenuListener(EditMenuCommand.COPY)));
-            addItem(new MenuItem("Paste", new EditMenuListener(EditMenuCommand.PAST)));
-            addItem(new MenuItem("Undo", new EditMenuListener(EditMenuCommand.UNDO)));
-            addItem(new MenuItem("Redo", new EditMenuListener(EditMenuCommand.REDO)));
+            addItem(new MenuItem("Cut", new EditMenuListener(EditMenuCommand.CUT)).setShortcut(maskKey + " + X"));
+            addItem(new MenuItem("Copy", new EditMenuListener(EditMenuCommand.COPY)).setShortcut(maskKey + " + C"));
+            addItem(new MenuItem("Paste", new EditMenuListener(EditMenuCommand.PAST)).setShortcut(maskKey + " + P"));
+            addItem(new MenuItem("Undo", new EditMenuListener(EditMenuCommand.UNDO)).setShortcut(maskKey + " + Z"));
+            addItem(new MenuItem("Redo", new EditMenuListener(EditMenuCommand.REDO)).setShortcut(maskKey + " + Y"));
         }
 
         private class EditMenuListener extends ChangeListener {

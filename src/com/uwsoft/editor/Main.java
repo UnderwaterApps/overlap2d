@@ -6,7 +6,7 @@ import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.uwsoft.editor.gdx.Overlap2D;
 import com.uwsoft.editor.utils.AppConfig;
-import com.uwsoft.editor.utils.OSType;
+import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,7 +18,7 @@ public class Main {
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
         Overlap2D overlap2D = new Overlap2D();
-        if (OSType.getOS_Type() == OSType.MacOS) {
+        if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();

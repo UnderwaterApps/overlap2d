@@ -31,14 +31,19 @@ public class Overlap2DMenuBarMediator {
     public void editMenuItemClicked(EditMenuCommand command) {
         switch (command) {
             case CUT:
+                sandbox.getUac().cutAction();
                 break;
             case COPY:
+                sandbox.getUac().copyAction();
                 break;
             case PAST:
+                sandbox.getUac().pasteAction(0, 0, false);
                 break;
             case UNDO:
+                sandbox.getUac().undo();
                 break;
             case REDO:
+                sandbox.getUac().redo();
                 break;
         }
     }
