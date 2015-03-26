@@ -14,9 +14,9 @@ import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
-import com.uwsoft.editor.utils.OSType;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -70,10 +70,10 @@ public class DataManager {
 
 
         try {
-            if (OSType.getOS_Type() == OSType.MacOS) {
+            if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
                 myDocuments = System.getProperty("user.home") + File.separator + "Documents";
             }
-            if (OSType.getOS_Type() == OSType.Windows) {
+            if (SystemUtils.IS_OS_WINDOWS) {
                 Process p = Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\" /v personal");
                 p.waitFor();
 
@@ -85,7 +85,7 @@ public class DataManager {
                 myDocuments = new String(b);
                 myDocuments = myDocuments.split("\\s\\s+")[4];
             }
-            if (OSType.getOS_Type() == OSType.Linux) {
+            if (SystemUtils.IS_OS_LINUX) {
                 myDocuments = System.getProperty("user.home") + File.separator + "Documents";
             }
 
