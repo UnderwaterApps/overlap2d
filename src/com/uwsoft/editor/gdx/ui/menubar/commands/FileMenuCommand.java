@@ -10,5 +10,7 @@ public enum FileMenuCommand {
     IMPORT_TO_LIBRARY,
     EXPORT ,
     EXPORT_SETTINGS,
-    EXIT
+    EXIT,
+    CRATE_NEW_SCENE,
+    DELETE_CURRENT_SCENE
 }

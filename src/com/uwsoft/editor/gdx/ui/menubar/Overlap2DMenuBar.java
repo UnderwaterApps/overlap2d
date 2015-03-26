@@ -4,12 +4,16 @@ package com.uwsoft.editor.gdx.ui.menubar;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
+import com.uwsoft.editor.renderer.data.SceneVO;
+
+import java.util.ArrayList;
 
 
 public class Overlap2DMenuBar extends MenuBar {
@@ -26,8 +30,13 @@ public class Overlap2DMenuBar extends MenuBar {
         mediator.setTarget(this);
     }
 
-    public PopupMenu getScenesPopupMenu() {
-        return fileMenu.scenesPopupMenu;
+
+    public void addScenes(ArrayList<SceneVO> scenes) {
+        fileMenu.addScenes(scenes);
+    }
+
+    public void reInitScenes(ArrayList<SceneVO> scenes) {
+        fileMenu.reInitScenes(scenes);
     }
 
     class EditMenu extends Menu {
@@ -60,7 +69,8 @@ public class Overlap2DMenuBar extends MenuBar {
 
     class FileMenu extends Menu {
 
-        public final PopupMenu scenesPopupMenu;
+        private final PopupMenu scenesPopupMenu;
+        private final Array<MenuItem> sceneMenuItems;
 
         public FileMenu() {
             super("File");
@@ -71,8 +81,8 @@ public class Overlap2DMenuBar extends MenuBar {
             //
             MenuItem scenesMenuItem = new MenuItem("Scenes");
             scenesPopupMenu = new PopupMenu();
-            scenesPopupMenu.addItem(new MenuItem("Create New Scene"));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene"));
+            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new FileMenuListener(FileMenuCommand.CRATE_NEW_SCENE)));
+            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new FileMenuListener(FileMenuCommand.DELETE_CURRENT_SCENE)));
             scenesPopupMenu.addSeparator();
             scenesMenuItem.setSubMenu(scenesPopupMenu);
             addItem(scenesMenuItem);
@@ -82,6 +92,37 @@ public class Overlap2DMenuBar extends MenuBar {
             addItem(new MenuItem("Export", new FileMenuListener(FileMenuCommand.EXPORT)));
             addItem(new MenuItem("Export Settings", new FileMenuListener(FileMenuCommand.EXPORT_SETTINGS)));
             addItem(new MenuItem("Exit", new FileMenuListener(FileMenuCommand.EXIT)));
+            sceneMenuItems = new Array<>();
+        }
+
+        public void addScenes(ArrayList<SceneVO> scenes) {
+            for (SceneVO sceneVO : scenes) {
+                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new SceneMenuItemListener(sceneVO.sceneName));
+                sceneMenuItems.add(menuItem);
+                scenesPopupMenu.addItem(menuItem);
+            }
+        }
+
+        public void reInitScenes(ArrayList<SceneVO> scenes) {
+            for (MenuItem menuItem : sceneMenuItems) {
+                menuItem.remove();
+            }
+            sceneMenuItems.clear();
+            addScenes(scenes);
+        }
+
+        private class SceneMenuItemListener extends ChangeListener {
+            private final String sceneName;
+
+            public SceneMenuItemListener(String sceneName) {
+                this.sceneName = sceneName;
+            }
+
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                Gdx.app.log(TAG, "sceneName : " + sceneName);
+                mediator.sceneMenuItemClicked(sceneName);
+            }
         }
 
         private class FileMenuListener extends ChangeListener {

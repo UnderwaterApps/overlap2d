@@ -10,8 +10,8 @@ import com.uwsoft.editor.gdx.stage.UIStage;
 public class ConfirmDialog extends CompositeDialog {
 
 	public interface ConfirmDialogListener extends DialogListener {
-        public void onConfirm();
-        public void onCancel();
+        void onConfirm();
+        void onCancel();
     }
 
     private ConfirmDialogListener listener;
@@ -48,4 +48,8 @@ public class ConfirmDialog extends CompositeDialog {
 		bodyLabel.setWidth(getWidth());
 		bodyLabel.setText(text);
 	}
+
+    public void setListener(ConfirmDialogListener listener) {
+        this.listener = listener;
+    }
 }

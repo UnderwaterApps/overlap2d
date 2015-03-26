@@ -10,8 +10,6 @@ import com.uwsoft.editor.renderer.actor.CompositeItem;
 public class CompositeDialog extends SimpleDialog {
 
 	protected CompositeItem ui;
-
-    protected DialogListener listener = null;
 	
 	public CompositeDialog(UIStage s, String compositeId, float width, float height) {
 		super(s, width, height);
@@ -36,7 +34,4 @@ public class CompositeDialog extends SimpleDialog {
 		addAction(scaleIn);
 	}
 
-    public void setListener(DialogListener listener) {
-        this.listener = listener;
-    }
 }

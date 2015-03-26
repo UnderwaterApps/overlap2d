@@ -197,7 +197,7 @@ public class Sandbox {
         projectVO.lastOpenScene = sceneName;
         DataManager.getInstance().saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
-
+        uiStage.reInitLibrary();
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
