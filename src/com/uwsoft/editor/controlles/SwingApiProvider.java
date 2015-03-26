@@ -42,7 +42,7 @@ public class SwingApiProvider implements IObserver {
                         initScenesMenu((ProjectInfoVO) body);
                         break;
                     case NameConstants.SET_CURSOR:
-                        UIController.instance.frame.setCursor(new Cursor((int) body));
+                        //UIController.instance.frame.setCursor(new Cursor((int) body));
                         break;
                     case NameConstants.SHOW_FILE_CHOOSER:
                         SwingUtilities.invokeLater(new Runnable() {
@@ -53,7 +53,7 @@ public class SwingApiProvider implements IObserver {
                                 JFileChooser jfc = new JFileChooser();
                                 jfc.setMultiSelectionEnabled(handler.isMultiple());
                                 jfc.setFileSelectionMode(handler.getFileSelectionMode());
-                                jfc.showOpenDialog(UIController.instance.frame.getContentPane());
+                                //jfc.showOpenDialog(UIController.instance.frame.getContentPane());
                                 handler.FileChoosen(jfc);
                             }
                         });
@@ -70,7 +70,7 @@ public class SwingApiProvider implements IObserver {
                         break;
                     case NameConstants.NEW_SCENE_CRATED:
                         SceneVO sceneVO = (SceneVO) body;
-                        UIController.instance.menuTooolbar.addScene(sceneVO.sceneName);
+                        //UIController.instance.menuTooolbar.addScene(sceneVO.sceneName);
                         break;
                     case NameConstants.SCENE_DELETED:
                         initScenesMenu((ProjectInfoVO) body);
@@ -81,19 +81,19 @@ public class SwingApiProvider implements IObserver {
     }
 
     private void initScenesMenu(ProjectInfoVO projectInfoVO) {
-        UIController.instance.menuTooolbar.initScenesMenu();
-        for (SceneVO sceneVO : projectInfoVO.scenes) {
-            UIController.instance.menuTooolbar.addScene(sceneVO.sceneName);
-        }
+//        UIController.instance.menuTooolbar.initScenesMenu();
+//        for (SceneVO sceneVO : projectInfoVO.scenes) {
+//            UIController.instance.menuTooolbar.addScene(sceneVO.sceneName);
+//        }
     }
 
     public void projectOpened() {
-        UIController.instance.menuTooolbar.saveProjectBtn.setEnabled(true);
-        UIController.instance.menuTooolbar.importBtn.setEnabled(true);
-        UIController.instance.menuTooolbar.exportBtn.setEnabled(true);
-        UIController.instance.menuTooolbar.exportSettingsBtn.setEnabled(true);
-        UIController.instance.menuTooolbar.editItems.setEnabled(true);
-        UIController.instance.menuTooolbar.sceneMenu.setEnabled(true);
+//        UIController.instance.menuTooolbar.saveProjectBtn.setEnabled(true);
+//        UIController.instance.menuTooolbar.importBtn.setEnabled(true);
+//        UIController.instance.menuTooolbar.exportBtn.setEnabled(true);
+//        UIController.instance.menuTooolbar.exportSettingsBtn.setEnabled(true);
+//        UIController.instance.menuTooolbar.editItems.setEnabled(true);
+//        UIController.instance.menuTooolbar.sceneMenu.setEnabled(true);
     }
 
 }

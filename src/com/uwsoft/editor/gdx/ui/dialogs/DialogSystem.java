@@ -14,7 +14,7 @@ public class DialogSystem {
         this.stage = stage;
     }
 
-    public DlgNewProject createNewProjectDialg() {
+    public DlgNewProject createNewProjectDialog() {
         DlgNewProject dlg = new DlgNewProject(stage);
         return (DlgNewProject)initiateDialog(dlg);
     }

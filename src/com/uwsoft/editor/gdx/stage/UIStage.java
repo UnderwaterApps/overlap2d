@@ -3,13 +3,11 @@ package com.uwsoft.editor.gdx.stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.EditorResourceManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.*;
-import com.uwsoft.editor.gdx.ui.dialogs.*;
+import com.uwsoft.editor.gdx.ui.dialogs.DialogSystem;
+import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -27,7 +25,7 @@ public class UIStage extends BaseStage {
 
     public DialogSystem dlgSystem;
 
-	 public DropDown mainDropDown;
+    public DropDown mainDropDown;
 
     public UIStage(SandboxStage sandboxStage) {
         super();
@@ -57,11 +55,11 @@ public class UIStage extends BaseStage {
         addActor(uiMainTable);
         addActor(contextMenuContainer);
         setListeners();
-        
+
 
         initDialogSystem();
 
-		  mainDropDown = new DropDown(contextMenuContainer);
+        mainDropDown = new DropDown(contextMenuContainer);
     }
 
     public Sandbox getSandbox() {
@@ -75,18 +73,18 @@ public class UIStage extends BaseStage {
     public void initDialogSystem() {
         dlgSystem = new DialogSystem(this);
     }
-    
-    public void editPhysics(String assetName){
-    	ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-        addActor(dlg);        
-		dlg.editAsset(assetName);
-    }
-    
-    public void editPhysics(IBaseItem item) {
-    	ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+
+    public void editPhysics(String assetName) {
+        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         addActor(dlg);
-		dlg.editItem(item);
-	}
+        dlg.editAsset(assetName);
+    }
+
+    public void editPhysics(IBaseItem item) {
+        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+        addActor(dlg);
+        dlg.editItem(item);
+    }
 
     public void setKeyboardFocus() {
         setKeyboardFocus(dummyTarget);
@@ -110,7 +108,7 @@ public class UIStage extends BaseStage {
 
         uiMainTable.layerPanel.initContent();
 
-        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
+//        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
     }
 
     public void reInitLibrary() {
@@ -134,7 +132,7 @@ public class UIStage extends BaseStage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-					 mainDropDown.hide();
+                mainDropDown.hide();
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
         });
@@ -175,10 +173,10 @@ public class UIStage extends BaseStage {
         return uiMainTable.layerPanel;
     }
 
-	@Override
-	public boolean keyDown(int keyCode) {
-		return super.keyDown(keyCode);
-	}
+    @Override
+    public boolean keyDown(int keyCode) {
+        return super.keyDown(keyCode);
+    }
 
 
 }

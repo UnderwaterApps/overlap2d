@@ -1,11 +1,10 @@
 package com.uwsoft.editor.gdx.screen;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.gdx.Overlap2DListener;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -16,7 +15,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.File;
 
-public class LevelEditorScreen extends Screen implements IObserver {
+public class Overlap2DScreen implements IObserver, Screen {
 
     public SandboxStage sandboxStage;
     public UIStage uiStage;
@@ -24,10 +23,9 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     private Sandbox sandbox;
 
-    public LevelEditorScreen(Overlap2DListener game) {
-        super(game);
+    public Overlap2DScreen() {
 
-        sandbox = new Sandbox();
+        sandbox =  Sandbox.getInstance();
         sandboxStage = sandbox.getSandboxStage();
         uiStage = sandbox.getUIStage();
         sandboxStage.sandbox = sandbox;
@@ -60,31 +58,25 @@ public class LevelEditorScreen extends Screen implements IObserver {
 
     @Override
     public void pause() {
-        // TODO Auto-generated method stub
-
     }
 
     @Override
-    public void resume(boolean b) {
-        // TODO Auto-generated method stub
+    public void resume() {
 
     }
 
     @Override
     public void dispose() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void show() {
-        // TODO Auto-generated method stub
 
     }
 
     @Override
     public void hide() {
-        // TODO Auto-generated method stub
 
     }
 
@@ -125,7 +117,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                         Gdx.app.exit();
                         break;
                     case NameConstants.CREATE_PROJECT:
-                        uiStage.dialogs().createNewProjectDialg();
+                        uiStage.dialogs().createNewProjectDialog();
                         break;
                     case NameConstants.OPEN_PROJECT:
                         DataManager.getInstance().openProjectFromPath((String) body);
@@ -167,7 +159,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                                 SceneVO sceneVO = DataManager.getInstance().sceneDataManager.createNewScene(input);
                                 sandboxStage.loadScene(input);
                                 uiStage.reInitLibrary();
-                                UIController.instance.sendNotification(NameConstants.NEW_SCENE_CRATED, sceneVO);
+                                //UIController.instance.sendNotification(NameConstants.NEW_SCENE_CRATED, sceneVO);
                             }
                         });
                         break;
@@ -181,7 +173,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                                 DataManager.getInstance().sceneDataManager.deleteCurrentScene();
                                 sandboxStage.loadScene("MainScene");
                                 uiStage.reInitLibrary();
-                                UIController.instance.sendNotification(NameConstants.SCENE_DELETED, DataManager.getInstance().getCurrentProjectInfoVO());
+                                //UIController.instance.sendNotification(NameConstants.SCENE_DELETED, DataManager.getInstance().getCurrentProjectInfoVO());
                             }
 
                             @Override
@@ -198,7 +190,7 @@ public class LevelEditorScreen extends Screen implements IObserver {
                         uiStage.dialogs().showExportDialog();
                         break;
                     case NameConstants.BUILD_PROJECT:
-                        DataManager.getInstance().buildProject();
+                        DataManager.getInstance().exportProject();
                         break;
                 }
 
@@ -212,23 +204,5 @@ public class LevelEditorScreen extends Screen implements IObserver {
         uiStage.resize(width, height);//getViewport().update(width, height, true);
         sandboxStage.resize(width, height);//getViewport().update(width, height, true);
     }
-
-	
-	
-	/*
-    public void updateSelectedObject(Actor body) {
-		gameStage.updateSelectedObject(body);
-	}
-	
-	public void updateCustomVars(String str) {
-		gameStage.updateCustomVars(str);
-	}
-	
-
-	@Override
-	public void handleNotification(String notificationName, Object body) {
-		// TODO Auto-generated method stub
-		
-	}*/
 
 }

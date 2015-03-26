@@ -3,6 +3,8 @@ package com.uwsoft.editor.gdx.ui;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBar;
+import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBarMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -21,9 +23,10 @@ public class UIMainTable extends Table {
 
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
-//        debug(); // turn on all debug lines (uiMainTable, cell, and widget)
-//        debugTable(); // turn on only uiMainTable lines
-//        debugCell();
+        //debug(); // turn on all debug lines (uiMainTable, cell, and widget)
+        //debugTable(); // turn on only uiMainTable lines
+        //debugCell();
+
         top();
         setFillParent(true);
         //
@@ -32,6 +35,7 @@ public class UIMainTable extends Table {
         initLeft();
         initRight();
 
+        //menu.setZIndex(9999);
     }
 
     private void initRight() {
@@ -84,6 +88,10 @@ public class UIMainTable extends Table {
     }
 
     private void initTop() {
+        // init menu bar
+        Overlap2DMenuBar menuBar = new Overlap2DMenuBar(new Overlap2DMenuBarMediator());
+        add(menuBar.getTable()).fillX().expandX().row();
+        //
         compositePanel = new UICompositePanel(uiStage);
         compositePanel.initPanel();
         add(compositePanel).left().expandX();

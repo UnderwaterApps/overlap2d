@@ -14,6 +14,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
@@ -34,6 +35,7 @@ public class TextureManager {
     public AssetManager assetsManager;
 
     public String labelStylePath;
+	 public Skin newEditorSkin;
     public MySkin editorSkin;
     public MySkin projectSkin;
     public HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>(1);
@@ -56,6 +58,7 @@ public class TextureManager {
         editorAtlas = new TextureAtlas(Gdx.files.getFileHandle("imgs/pack.atlas", FileType.Internal));
         editorSkin = new MySkin(Gdx.files.internal("ui/styles.dt"));
 
+//		  newEditorSkin = new Skin(Gdx.files.internal("ui/newskin.dt"));
 		/*
         Texture fntTexture = new Texture("ui/arial.png");
 		fntTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);

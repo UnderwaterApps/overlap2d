@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
@@ -103,6 +104,10 @@ public class EditorResourceManager implements IResourceRetriever {
 
         return sceneVO;
     }
+
+	 public Skin getNewEditorSkin() {
+		  return textureManager.newEditorSkin;
+	 }
 
     @Override
     public FileHandle getSCMLFile(String name) {

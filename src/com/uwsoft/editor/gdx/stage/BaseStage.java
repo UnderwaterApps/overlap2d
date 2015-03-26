@@ -1,12 +1,7 @@
 package com.uwsoft.editor.gdx.stage;
 
-import box2dLight.Light;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
@@ -22,8 +17,7 @@ public class BaseStage extends Overlap2DStage {
         dataManager = DataManager.getInstance();
         textureManager = dataManager.textureManager;
         initLightsConfiguration();
-        
-        
+
 
     }
 
@@ -51,7 +45,7 @@ public class BaseStage extends Overlap2DStage {
     }
 
     public void setCursor(int cursor) {
-        UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
+        //UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
     }
 
     public void disableAmbience(boolean disable) {

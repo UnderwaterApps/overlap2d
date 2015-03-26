@@ -1,11 +1,5 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import javax.swing.JFileChooser;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -13,15 +7,17 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.FileChooserHandler;
-import com.uwsoft.editor.controlles.NameConstants;
-import com.uwsoft.editor.controlles.UIController;
 import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
 import com.uwsoft.editor.renderer.data.SceneVO;
+
+import javax.swing.*;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class DlgImport extends CompositeDialog implements ProgressHandler {
 
@@ -50,7 +46,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
 
         stylePath = ui.getTextBoxById("stylePath");
         stylePath.setDisabled(true);
-        
+
         fontPath = ui.getTextBoxById("fontPath");
         fontPath.setDisabled(true);
 
@@ -79,7 +75,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                     DataManager.getInstance().importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
                 }
                 if (paths.get("styles") != null) {
-                	DataManager.getInstance().importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
+                    DataManager.getInstance().importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
                 }
                 if (paths.get("font") != null) {
                     DataManager.getInstance().importExternalFontIntoProject(paths.get("font"), progressHandler);
@@ -167,7 +163,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                     }
                 };
 
-                UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
             }
         });
     }
