@@ -22,8 +22,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     private Sandbox sandbox;
 
     public Overlap2DScreen() {
-
-
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -62,7 +61,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         sandboxStage = sandbox.getSandboxStage();
         uiStage = sandbox.getUIStage();
         sandboxStage.sandbox = sandbox;
-        facade = Overlap2DFacade.getInstance();
+
         dataManager = facade.retrieveProxy(DataManager.NAME);
         // check for demo project
         File demoDir = new File(dataManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");

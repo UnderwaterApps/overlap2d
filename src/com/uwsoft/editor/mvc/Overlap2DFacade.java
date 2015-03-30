@@ -57,6 +57,6 @@ public class Overlap2DFacade extends SimpleFacade {
     @Override
     protected void initializeView() {
         super.initializeView();
-        registerMediator(new Overlap2DScreenMediator(new Overlap2DScreen()));
+        registerMediator(new Overlap2DScreenMediator());
     }
 }

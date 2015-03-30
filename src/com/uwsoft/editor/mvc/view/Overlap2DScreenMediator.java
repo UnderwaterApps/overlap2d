@@ -12,13 +12,8 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
     private static final String TAG = Overlap2DScreenMediator.class.getCanonicalName();
     private static final String NAME = TAG;
 
-    /**
-     * Constructor.
-     *
-     * @param viewComponent
-     */
-    public Overlap2DScreenMediator(Overlap2DScreen viewComponent) {
-        super(NAME, viewComponent);
+    public Overlap2DScreenMediator() {
+        super(NAME, null);
     }
 
     @Override
@@ -38,6 +33,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case Overlap2D.CREATE:
+                setViewComponent(new Overlap2DScreen());
                 viewComponent.show();
                 break;
             case Overlap2D.PAUSE:
