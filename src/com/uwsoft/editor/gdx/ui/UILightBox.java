@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.uwsoft.editor.controlles.ColorPickerHandler;
+import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPicker;

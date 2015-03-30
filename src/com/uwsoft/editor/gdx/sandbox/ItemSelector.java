@@ -13,6 +13,7 @@ import java.util.HashMap;
 
 /**
  * Managing item selections, selecting by criteria and so on
+ *
  * @author azakhary
  */
 public class ItemSelector {

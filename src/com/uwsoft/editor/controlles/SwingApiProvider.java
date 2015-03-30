@@ -1,11 +1,11 @@
 package com.uwsoft.editor.controlles;
 
-import java.awt.Cursor;
-
 import javax.swing.JFileChooser;
 import javax.swing.SwingUtilities;
 
 import com.badlogic.gdx.Gdx;
+import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
+import com.uwsoft.editor.controlles.handlers.FileChooserHandler;
 import com.uwsoft.editor.interfaces.IObserver;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;

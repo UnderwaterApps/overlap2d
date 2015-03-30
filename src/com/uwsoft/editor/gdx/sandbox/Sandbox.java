@@ -287,7 +287,7 @@ public class Sandbox {
     }
 
     /**
-     * Well... that's a bummer, I cannot remember why this was for.
+     * Well... that's a bummer, I cannot remember why this was for. but the name speaks for itself sort of.
      * TODO: figure this out
      *
      * @return SceneVO

@@ -1,5 +1,7 @@
 package com.uwsoft.editor.controlles;
 
+import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
+
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;

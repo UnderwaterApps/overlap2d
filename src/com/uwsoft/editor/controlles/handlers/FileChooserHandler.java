@@ -1,4 +1,4 @@
-package com.uwsoft.editor.controlles;
+package com.uwsoft.editor.controlles.handlers;
 
 import javax.swing.JFileChooser;
 

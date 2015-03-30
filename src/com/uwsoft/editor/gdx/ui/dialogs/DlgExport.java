@@ -3,7 +3,7 @@ package com.uwsoft.editor.gdx.ui.dialogs;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.controlles.FileChooserHandler;
+import com.uwsoft.editor.controlles.handlers.FileChooserHandler;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
