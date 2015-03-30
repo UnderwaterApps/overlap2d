@@ -36,6 +36,7 @@ dependencies {
     compile project(":spine-runtime-libgdx")
     compile fileTree(dir: 'libs', include: '*.jar')
     compile "org.apache.commons:commons-io:1.3.2"
+    compile "org.apache.commons:commons-lang3:3.3.2"
     compile "com.badlogicgames.gdx:gdx-backend-lwjgl:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-backend-jglfw:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
