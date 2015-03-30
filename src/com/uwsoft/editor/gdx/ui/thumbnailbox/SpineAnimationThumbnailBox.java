@@ -5,8 +5,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.renderer.actor.SpineActor;
@@ -18,6 +18,8 @@ import com.uwsoft.editor.renderer.data.SpineVO;
 public class SpineAnimationThumbnailBox extends DraggableThumbnailBox {
 
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private AssetPayloadObject payload;
 
     private float scaleSize = 1;
@@ -26,7 +28,8 @@ public class SpineAnimationThumbnailBox extends DraggableThumbnailBox {
 
     public SpineAnimationThumbnailBox(UIStage s, SpineAnimData animData) {
         super(s);
-
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         SpineVO vo = new SpineVO();
         vo.animationName = animData.animName;
         final SpineActor animThumb = new SpineActor(vo, s.sceneLoader.essentials);
@@ -68,7 +71,7 @@ public class SpineAnimationThumbnailBox extends DraggableThumbnailBox {
 
         addActor(animThumb);
 
-        Image payloadImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("resizeIconChecked"));
+        Image payloadImg = new Image(dataManager.textureManager.getEditorAsset("resizeIconChecked"));
         payload = new AssetPayloadObject();
         payload.assetName = animData.animName;
         payload.type = AssetPayloadObject.AssetType.Sprite;

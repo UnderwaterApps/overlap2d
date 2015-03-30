@@ -5,8 +5,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.ParticleActor;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -18,6 +18,8 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
  */
 public class ParticleItemProperties extends Group implements IPropertyBox<ParticleItem> {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private Group mainGroup;
 
     private IResourceRetriever rm;
@@ -25,12 +27,14 @@ public class ParticleItemProperties extends Group implements IPropertyBox<Partic
     public ParticleItemProperties(SceneLoader scene) {
         rm = scene.getRm();
         initView();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     @Override
     public void initView() {
         clear();
-        Image bgImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("pixel"));
+        Image bgImg = new Image(dataManager.textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0, 0, 0, 1.0f);
         bgImg.setScale(230, 100);
         addActor(bgImg);

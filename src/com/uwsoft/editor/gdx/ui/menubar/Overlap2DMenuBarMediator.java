@@ -1,7 +1,8 @@
 package com.uwsoft.editor.gdx.ui.menubar;
 
 import com.badlogic.gdx.Gdx;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
@@ -21,10 +22,12 @@ public class Overlap2DMenuBarMediator {
     private static final String TAG = Overlap2DMenuBarMediator.class.getCanonicalName();
     private final DataManager dataManager;
     private final Sandbox sandbox;
+    private final Overlap2DFacade facade;
     private Overlap2DMenuBar overlap2DMenuBar;
 
     public Overlap2DMenuBarMediator() {
-        dataManager = DataManager.getInstance();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         sandbox = Sandbox.getInstance();
     }
 
@@ -57,7 +60,7 @@ public class Overlap2DMenuBarMediator {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        final JFileChooser fileChooser = new JFileChooser(DataManager.getInstance().getWorkspacePath());
+                        final JFileChooser fileChooser = new JFileChooser(dataManager.getWorkspacePath());
                         fileChooser.showOpenDialog(null);
                         if (fileChooser.getSelectedFile() == null) {
                             return;

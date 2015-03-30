@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -16,9 +18,11 @@ import com.uwsoft.editor.renderer.utils.MySkin;
 public class SandboxResourceManager implements IResourceRetriever {
     private final DataManager dataManager;
     private final TextureManager textureManager;
+    private final Overlap2DFacade facade;
 
     public SandboxResourceManager() {
-        dataManager = DataManager.getInstance();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         textureManager = dataManager.textureManager;
     }
 
@@ -39,7 +43,7 @@ public class SandboxResourceManager implements IResourceRetriever {
 
     @Override
     public ProjectInfoVO getProjectVO() {
-        return DataManager.getInstance().getCurrentProjectInfoVO();
+        return dataManager.getCurrentProjectInfoVO();
     }
 
     @Override
@@ -72,7 +76,7 @@ public class SandboxResourceManager implements IResourceRetriever {
 
     @Override
     public SceneVO getSceneVO(String name) {
-        FileHandle file = Gdx.files.internal(DataManager.getInstance().sceneDataManager.getCurrProjectScenePathByName(name));
+        FileHandle file = Gdx.files.internal(dataManager.sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
         SceneVO sceneVO = json.fromJson(SceneVO.class, file.readString());
 

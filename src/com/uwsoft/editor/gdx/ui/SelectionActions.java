@@ -1,8 +1,5 @@
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -10,9 +7,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class SelectionActions extends Group {
 
@@ -27,6 +27,8 @@ public class SelectionActions extends Group {
     public static final int EDIT_PHYSICS = 9;
     public static final int EDIT_ASSET_PHYSICS = 10;
     public static final int DO_NOTHING = 99;
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
 
     private Group instance;
     private HashMap<Integer, String> listEntries = new HashMap<Integer, String>();
@@ -34,6 +36,8 @@ public class SelectionActions extends Group {
 
     public SelectionActions() {
         instance = this;
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     public SelectionEvent getEventListener() {
@@ -58,7 +62,7 @@ public class SelectionActions extends Group {
 
             addActor(rct);
 
-            Label lbl = new Label(name, DataManager.getInstance().textureManager.editorSkin);
+            Label lbl = new Label(name, dataManager.textureManager.editorSkin);
             lbl.setX(3);
             lbl.setY(rct.getY() + 3);
             lbl.setColor(new Color(1, 1, 1, 0.65f));

@@ -2,19 +2,22 @@ package com.uwsoft.editor.gdx.stage;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
 
 public class BaseStage extends Overlap2DStage {
 
+    private final Overlap2DFacade facade;
     public DataManager dataManager;
     public TextureManager textureManager;
 
 
     public BaseStage() {
         super(new ScreenViewport());
-        dataManager = DataManager.getInstance();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         textureManager = dataManager.textureManager;
         initLightsConfiguration();
 

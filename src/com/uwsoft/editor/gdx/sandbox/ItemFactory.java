@@ -1,12 +1,13 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -18,6 +19,8 @@ import java.util.Iterator;
  */
 public class ItemFactory {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private Sandbox sandbox;
     private SandboxStage sandboxStage;
     private SceneControlMediator sceneControl;
@@ -27,6 +30,8 @@ public class ItemFactory {
         this.sandbox = sandbox;
         sandboxStage = sandbox.getSandboxStage();
         sceneControl = sandbox.getSceneControl();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     private void prepareVO(MainItemVO vo, String layerName, float x, float y) {
@@ -47,12 +52,12 @@ public class ItemFactory {
 
     private void initSpritePhysicsData(SimpleImageVO vo) {
         String regionName = vo.imageName;
-        if (DataManager.getInstance().getCurrentProjectInfoVO().assetMeshMap.containsKey(regionName)) {
-            vo.meshId = DataManager.getInstance().getCurrentProjectInfoVO().assetMeshMap.get(regionName);
-            PhysicsBodyDataVO data = DataManager.getInstance().getCurrentProjectInfoVO().meshes.get(vo.meshId).initialProperties;
-            if(data != null){
+        if (dataManager.getCurrentProjectInfoVO().assetMeshMap.containsKey(regionName)) {
+            vo.meshId = dataManager.getCurrentProjectInfoVO().assetMeshMap.get(regionName);
+            PhysicsBodyDataVO data = dataManager.getCurrentProjectInfoVO().meshes.get(vo.meshId).initialProperties;
+            if (data != null) {
                 vo.physicsBodyData = new PhysicsBodyDataVO(data);
-            }else{
+            } else {
                 vo.physicsBodyData = new PhysicsBodyDataVO();
             }
         }
@@ -187,7 +192,7 @@ public class ItemFactory {
         }
         if (type.equals("Label")) {
             vo = new LabelVO();
-            File folder = new File(DataManager.getInstance().getFreeTypeFontPath());
+            File folder = new File(dataManager.getFreeTypeFontPath());
             String fontName = folder.listFiles()[0].getName();
             fontName = fontName.substring(0, fontName.lastIndexOf('.'));
             ((LabelVO) vo).style = fontName;
@@ -205,125 +210,125 @@ public class ItemFactory {
         addItem(itm, vo);
     }
 
-	 public void addCompositeToLibrary() {
-		  CompositeItem item = null;
-		  if (sandbox.getSelector().getCurrentSelection().size() == 1) {
-				for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-					 if (value.getHost().isComposite()) {
-						  item = (CompositeItem) value.getHost();
-					 }
-				}
-		  }
+    public void addCompositeToLibrary() {
+        CompositeItem item = null;
+        if (sandbox.getSelector().getCurrentSelection().size() == 1) {
+            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+                if (value.getHost().isComposite()) {
+                    item = (CompositeItem) value.getHost();
+                }
+            }
+        }
 
-		  if (item == null) return;
+        if (item == null) return;
 
-		  InputDialog dlg = sandbox.getUIStage().dialogs().showInputDialog();
+        InputDialog dlg = sandbox.getUIStage().dialogs().showInputDialog();
 
-		  dlg.setDescription("Please set unique name for your component");
+        dlg.setDescription("Please set unique name for your component");
 
-		  final CompositeItem itemToAdd = item;
+        final CompositeItem itemToAdd = item;
 
-		  dlg.setListener(new InputDialog.InputDialogListener() {
+        dlg.setListener(new InputDialog.InputDialogListener() {
 
-				@Override
-				public void onConfirm(String input) {
-					 sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
-					 sandbox.getUIStage().reInitLibrary();
-				}
-		  });
-
-
-	 }
-
-	 public CompositeItem groupItemsIntoComposite() {
-		  sceneControl.getCurrentScene().updateDataVO();
-		  CompositeItemVO vo = new CompositeItemVO();
-
-		  // Calculating lower left and upper values
-		  float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
-		  int iter = 0;
-		  for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-				if (iter++ == 0) {
-					 if (value.getScaleX() > 0 && value.getWidth() > 0) {
-						  lowerX = value.getX();
-						  upperX = value.getX() + value.getWidth();
-					 } else {
-						  upperX = value.getX();
-						  lowerX = value.getX() + value.getWidth();
-					 }
-
-					 if (value.getScaleY() > 0 && value.getHeight() > 0) {
-						  lowerY = value.getY();
-						  upperY = value.getY() + value.getHeight();
-					 } else {
-						  upperY = value.getY();
-						  lowerY = value.getY() + value.getHeight();
-					 }
-				}
-				if (value.getScaleX() > 0 && value.getWidth() > 0) {
-					 if (lowerX > value.getX()) lowerX = value.getX();
-					 if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
-				} else {
-					 if (upperX < value.getX()) upperX = value.getX();
-					 if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
-				}
-				if (value.getScaleY() > 0 && value.getHeight() > 0) {
-					 if (lowerY > value.getY()) lowerY = value.getY();
-					 if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
-				} else {
-					 if (upperY < value.getY()) upperY = value.getY();
-					 if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
-				}
-		  }
-
-		  float width = upperX - lowerX;
-		  float height = upperY - lowerY;
-
-		  for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-				MainItemVO itemVo = value.getHost().getDataVO();
-				//System.out.println("ASSSDDD " + itemVo.x + " BASDDD " + lowerX);
-				itemVo.x = itemVo.x - lowerX;
-				itemVo.y = itemVo.y - lowerY;
-				//System.out.println("adddd " + itemVo.x );
-				vo.composite.addItem(itemVo);
-		  }
-		  vo.x = lowerX;
-		  vo.y = lowerY;
-		  vo.layerName = sandbox.getUIStage().getCurrentSelectedLayer().layerName;
-
-		  CompositeItem item = sceneControl.getCompositeElement(vo);
-
-		  item.setWidth(width);
-		  item.setHeight(height);
-
-		  sandbox.getSelector().removeCurrentSelectedItems();
-
-		  sceneControl.getCurrentScene().addItem(item);
-
-		  sandbox.getSandboxInputAdapter().initItemListeners(item);
-		  sandbox.getUIStage().getItemsBox().initContent();
-		  sandbox.getSelector().setSelection(item, true);
-
-		  return item;
-	 }
+            @Override
+            public void onConfirm(String input) {
+                sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
+                sandbox.getUIStage().reInitLibrary();
+            }
+        });
 
 
-	 public void cleanComposite(CompositeVO compositeVO) {
-		  Iterator<CompositeItemVO> compositeItemVOIterator = compositeVO.sComposites.iterator();
-		  while (compositeItemVOIterator.hasNext()) {
-				CompositeItemVO next = compositeItemVOIterator.next();
-				if (isCompositeEmpty(next.composite)) {
-					 compositeItemVOIterator.remove();
-				}
-		  }
-	 }
+    }
+
+    public CompositeItem groupItemsIntoComposite() {
+        sceneControl.getCurrentScene().updateDataVO();
+        CompositeItemVO vo = new CompositeItemVO();
+
+        // Calculating lower left and upper values
+        float lowerX = 0, lowerY = 0, upperX = 0, upperY = 0;
+        int iter = 0;
+        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+            if (iter++ == 0) {
+                if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                    lowerX = value.getX();
+                    upperX = value.getX() + value.getWidth();
+                } else {
+                    upperX = value.getX();
+                    lowerX = value.getX() + value.getWidth();
+                }
+
+                if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                    lowerY = value.getY();
+                    upperY = value.getY() + value.getHeight();
+                } else {
+                    upperY = value.getY();
+                    lowerY = value.getY() + value.getHeight();
+                }
+            }
+            if (value.getScaleX() > 0 && value.getWidth() > 0) {
+                if (lowerX > value.getX()) lowerX = value.getX();
+                if (upperX < value.getX() + value.getWidth()) upperX = value.getX() + value.getWidth();
+            } else {
+                if (upperX < value.getX()) upperX = value.getX();
+                if (lowerX > value.getX() + value.getWidth()) lowerX = value.getX() + value.getWidth();
+            }
+            if (value.getScaleY() > 0 && value.getHeight() > 0) {
+                if (lowerY > value.getY()) lowerY = value.getY();
+                if (upperY < value.getY() + value.getHeight()) upperY = value.getY() + value.getHeight();
+            } else {
+                if (upperY < value.getY()) upperY = value.getY();
+                if (lowerY > value.getY() + value.getHeight()) lowerY = value.getY() + value.getHeight();
+            }
+        }
+
+        float width = upperX - lowerX;
+        float height = upperY - lowerY;
+
+        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+            MainItemVO itemVo = value.getHost().getDataVO();
+            //System.out.println("ASSSDDD " + itemVo.x + " BASDDD " + lowerX);
+            itemVo.x = itemVo.x - lowerX;
+            itemVo.y = itemVo.y - lowerY;
+            //System.out.println("adddd " + itemVo.x );
+            vo.composite.addItem(itemVo);
+        }
+        vo.x = lowerX;
+        vo.y = lowerY;
+        vo.layerName = sandbox.getUIStage().getCurrentSelectedLayer().layerName;
+
+        CompositeItem item = sceneControl.getCompositeElement(vo);
+
+        item.setWidth(width);
+        item.setHeight(height);
+
+        sandbox.getSelector().removeCurrentSelectedItems();
+
+        sceneControl.getCurrentScene().addItem(item);
+
+        sandbox.getSandboxInputAdapter().initItemListeners(item);
+        sandbox.getUIStage().getItemsBox().initContent();
+        sandbox.getSelector().setSelection(item, true);
+
+        return item;
+    }
 
 
-	 public boolean isCompositeEmpty(CompositeVO composite) {
-		  if (composite.isEmpty()) {
-				return true;
-		  }
-		  cleanComposite(composite);
-		  return composite.isEmpty();
-	 }
+    public void cleanComposite(CompositeVO compositeVO) {
+        Iterator<CompositeItemVO> compositeItemVOIterator = compositeVO.sComposites.iterator();
+        while (compositeItemVOIterator.hasNext()) {
+            CompositeItemVO next = compositeItemVOIterator.next();
+            if (isCompositeEmpty(next.composite)) {
+                compositeItemVOIterator.remove();
+            }
+        }
+    }
+
+
+    public boolean isCompositeEmpty(CompositeVO composite) {
+        if (composite.isEmpty()) {
+            return true;
+        }
+        cleanComposite(composite);
+        return composite.isEmpty();
+    }
 }

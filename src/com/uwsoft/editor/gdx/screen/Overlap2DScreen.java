@@ -2,42 +2,28 @@ package com.uwsoft.editor.gdx.screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 
 import java.io.File;
 
 public class Overlap2DScreen implements Screen, InputProcessor {
     private static final String TAG = Overlap2DScreen.class.getCanonicalName();
-    private final InputMultiplexer multiplexer;
     public SandboxStage sandboxStage;
     public UIStage uiStage;
+    private InputMultiplexer multiplexer;
+    private Overlap2DFacade facade;
+    private DataManager dataManager;
     private boolean paused = false;
 
     private Sandbox sandbox;
 
     public Overlap2DScreen() {
 
-        sandbox = Sandbox.getInstance();
-        sandboxStage = sandbox.getSandboxStage();
-        uiStage = sandbox.getUIStage();
-        sandboxStage.sandbox = sandbox;
 
-        // check for demo project
-        File demoDir = new File(DataManager.getInstance().getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
-        if (demoDir.isDirectory() && demoDir.exists()) {
-            DataManager.getInstance().openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
-            sandbox.loadCurrentProject();
-            uiStage.loadCurrentProject();
-            sandboxStage.getCamera().position.set(400, 200, 0);
-        }
-        multiplexer = new InputMultiplexer();
-        multiplexer.addProcessor(this);
-        multiplexer.addProcessor(uiStage);
-        multiplexer.addProcessor(sandboxStage);
-        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override
@@ -72,7 +58,25 @@ public class Overlap2DScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-
+        sandbox = Sandbox.getInstance();
+        sandboxStage = sandbox.getSandboxStage();
+        uiStage = sandbox.getUIStage();
+        sandboxStage.sandbox = sandbox;
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
+        // check for demo project
+        File demoDir = new File(dataManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
+        if (demoDir.isDirectory() && demoDir.exists()) {
+            dataManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
+            sandbox.loadCurrentProject();
+            uiStage.loadCurrentProject();
+            sandboxStage.getCamera().position.set(400, 200, 0);
+        }
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(this);
+        multiplexer.addProcessor(uiStage);
+        multiplexer.addProcessor(sandboxStage);
+        Gdx.input.setInputProcessor(multiplexer);
     }
 
     @Override

@@ -7,9 +7,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.controlles.ColorPickerHandler;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPicker;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CheckBoxItem;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -19,6 +20,8 @@ import com.uwsoft.editor.renderer.data.LightVO.LightType;
 
 public class UILightBox extends ExpandableUIBox {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     public CheckBoxItem disableAmbiance;
     private ColorPicker cPicker;
     private ColorPicker cPickerElems;
@@ -26,6 +29,8 @@ public class UILightBox extends ExpandableUIBox {
 
     public UILightBox(UIStage s) {
         super(s, 160, 300);
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     public void initContent() {
@@ -101,7 +106,7 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image bulbThumb = new Image(DataManager.getInstance().textureManager.getEditorAsset("bulb"));
+                Image bulbThumb = new Image(dataManager.textureManager.getEditorAsset("bulb"));
                 payload.setDragActor(bulbThumb);
                 dragAndDropBulb.setDragActorPosition(-bulbThumb.getWidth() / 2, bulbThumb.getHeight() / 2);
 
@@ -141,7 +146,7 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image coneThumb = new Image(DataManager.getInstance().textureManager.getEditorAsset("cone"));
+                Image coneThumb = new Image(dataManager.textureManager.getEditorAsset("cone"));
                 payload.setDragActor(coneThumb);
                 dragAndDropCone.setDragActorPosition(-coneThumb.getWidth() / 2, coneThumb.getHeight() / 2);
 

@@ -7,7 +7,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.FileChooserHandler;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
@@ -24,6 +25,8 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
     private final ProgressBar progressBar;
     private final Label progressLbl;
     private final TextBoxItem spriteAnimationPath;
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private TextField imagesPath;
     private TextField particlePath;
     private TextField stylePath;
@@ -63,51 +66,52 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
         setPathProvider("spine", spinePath, ui.getTextButtonById("spineBtn"), "");
         setPathProvider("spriteAnimation", spriteAnimationPath, ui.getTextButtonById("spriteAnimationBtn"), "");
 
-
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         ui.getTextButtonById("startBtn").addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
                 if (paths.get("images") != null) {
-                    DataManager.getInstance().importExternalImagesIntoProject(paths.get("images"), progressHandler);
+                    dataManager.importExternalImagesIntoProject(paths.get("images"), progressHandler);
                 }
                 if (paths.get("particles") != null) {
-                    DataManager.getInstance().importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
+                    dataManager.importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
                 }
                 if (paths.get("styles") != null) {
-                    DataManager.getInstance().importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
+                    dataManager.importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
                 }
                 if (paths.get("font") != null) {
-                    DataManager.getInstance().importExternalFontIntoProject(paths.get("font"), progressHandler);
+                    dataManager.importExternalFontIntoProject(paths.get("font"), progressHandler);
                 }
 
                 if (paths.get("spine") != null) {
-                    DataManager.getInstance().importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
+                    dataManager.importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
                 }
 
                 if (paths.get("spriteAnimation") != null) {
-                    DataManager.getInstance().importExternalSpriteAnimationsIntoProject(paths.get("spriteAnimation"), progressHandler);
+                    dataManager.importExternalSpriteAnimationsIntoProject(paths.get("spriteAnimation"), progressHandler);
                 }
 
 
                 // save before importing
                 SceneVO vo = stage.getSandbox().sceneVoFromItems();
                 stage.getCompositePanel().updateOriginalItem();
-                DataManager.getInstance().sceneDataManager.saveScene(vo);
-                DataManager.getInstance().saveCurrentProject();
+                dataManager.sceneDataManager.saveScene(vo);
+                dataManager.saveCurrentProject();
             }
         });
 
 
         // adding progress bar
 
-        progressBar = new ProgressBar(0, 100, 1, false, DataManager.getInstance().textureManager.editorSkin);
+        progressBar = new ProgressBar(0, 100, 1, false, dataManager.textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(33);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", DataManager.getInstance().textureManager.editorSkin);
+        progressLbl = new Label("0%", dataManager.textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(38);
         mainLayer.addActor(progressLbl);
@@ -186,7 +190,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
         Gdx.app.postRunnable(new Runnable() {
             @Override
             public void run() {
-                DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName);
+                dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName);
                 stage.getCompositePanel().initResolutionBox();
                 remove();
                 stage.loadCurrentProject();

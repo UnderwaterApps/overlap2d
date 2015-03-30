@@ -1,12 +1,15 @@
-package com.uwsoft.editor.data.manager;
+package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
+import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
+import com.uwsoft.editor.data.manager.SceneDataManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
@@ -34,12 +37,12 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class DataManager {
-
-    private static DataManager instance = null;
-    public final ResolutionManager resolutionManager;
-    public final SceneDataManager sceneDataManager;
-    public final TextureManager textureManager;
+public class DataManager extends BaseProxy {
+    private static final String TAG = DataManager.class.getCanonicalName();
+    public static final String NAME = TAG;
+    public ResolutionManager resolutionManager;
+    public SceneDataManager sceneDataManager;
+    public TextureManager textureManager;
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
     private String currentWorkingPath;
@@ -51,24 +54,11 @@ public class DataManager {
 
 
     public DataManager() {
-        initWorkspace();
-        resolutionManager = new ResolutionManager(this);
-        sceneDataManager = new SceneDataManager(this);
-        textureManager = new TextureManager(this);
-    }
-
-    public static DataManager getInstance() {
-        if (instance == null) {
-            instance = new DataManager();
-        }
-
-        return instance;
+        super(NAME);
     }
 
     public static String getMyDocumentsLocation() {
         String myDocuments = null;
-
-
         try {
             if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
                 myDocuments = System.getProperty("user.home") + File.separator + "Documents";
@@ -95,6 +85,20 @@ public class DataManager {
         }
 
         return myDocuments;
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        initWorkspace();
+        resolutionManager = new ResolutionManager(this);
+        sceneDataManager = new SceneDataManager(this);
+        textureManager = new TextureManager(this);
+    }
+
+    @Override
+    public void onRemove() {
+        super.onRemove();
     }
 
     public ProjectVO getCurrentProjectVO() {

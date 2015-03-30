@@ -6,7 +6,7 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpParametersUtils;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -89,7 +89,7 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
     private void writeToFile(String stacktrace, String filename) {
         try {
             //String localPath = DataManager.getMyDocumentsLocation();
-            String localPath = DataManager.getInstance().getRootPath();
+            String localPath = "";//DataManager.getInstance().getRootPath();
             System.out.println(localPath + File.separator + filename);
             BufferedWriter bos = new BufferedWriter(new FileWriter(localPath + File.separator + filename));
             bos.write(stacktrace);

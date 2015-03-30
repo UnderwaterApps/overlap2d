@@ -5,7 +5,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.mortennobel.imagescaling.ResampleOp;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
@@ -131,7 +131,7 @@ public class ResolutionManager {
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
-                DataManager.getInstance().saveCurrentProject();
+                dataManager.saveCurrentProject();
                 handler.progressComplete();
             }
         });

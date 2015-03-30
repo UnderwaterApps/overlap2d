@@ -7,16 +7,19 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog.ConfirmDialogListener;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 public class UIResolutionBox extends Group {
 
     private final String curResolution;
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
 
     private UIStage stage;
 
@@ -31,7 +34,8 @@ public class UIResolutionBox extends Group {
         this.projectInfoVO = prjVo;
 
         this.curResolution = curResolution;
-
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         int padding = 5;
 
         String[] arr = new String[projectInfoVO.resolutions.size() + 1];
@@ -125,7 +129,7 @@ public class UIResolutionBox extends Group {
 
                     @Override
                     public void onConfirm() {
-                        DataManager.getInstance().resolutionManager.deleteResolution(index - 1);
+                        dataManager.resolutionManager.deleteResolution(index - 1);
                         String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
                         stage.getSandbox().loadCurrentProject(name);
                         stage.getSandbox().loadCurrentProject();
@@ -143,7 +147,7 @@ public class UIResolutionBox extends Group {
 
         repackBtn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                DataManager.getInstance().resolutionManager.rePackProjectImagesForAllResolutions();
+                dataManager.resolutionManager.rePackProjectImagesForAllResolutions();
                 loadCurrentResolution();
             }
         });
@@ -158,7 +162,7 @@ public class UIResolutionBox extends Group {
             res = projectInfoVO.resolutions.get(index - 1).name;
         }
         String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
-        DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName, res);
+        dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName, res);
         stage.getSandbox().loadCurrentProject(name);
         stage.loadCurrentProject();
     }

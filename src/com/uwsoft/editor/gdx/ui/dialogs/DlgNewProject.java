@@ -5,8 +5,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.controlles.FileChooserHandler;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 
 import javax.swing.*;
 import java.io.File;
@@ -14,6 +15,8 @@ import java.io.IOException;
 
 public class DlgNewProject extends CompositeDialog {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private TextButton createBtn;
     private TextButton fileChooserBtn;
     private TextField projectPathTextBox;
@@ -39,7 +42,8 @@ public class DlgNewProject extends CompositeDialog {
         origHeight.setText("1440");
 
         crateBtnCrateProject();
-
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         fileChooserBtn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
@@ -96,8 +100,8 @@ public class DlgNewProject extends CompositeDialog {
 
         String workSpacePath = projectPath.substring(0, projectPath.lastIndexOf(projectName));
         if (workSpacePath.length() > 0) {
-            DataManager.getInstance().setLastOpenedPath(workSpacePath);
-            DataManager.getInstance().setWorkspacePath(workSpacePath);
+            dataManager.setLastOpenedPath(workSpacePath);
+            dataManager.setWorkspacePath(workSpacePath);
         }
 
         int origWidthValue = 0;
@@ -110,8 +114,8 @@ public class DlgNewProject extends CompositeDialog {
         }
 
         try {
-            DataManager.getInstance().createEmptyProject(projectName, origWidthValue, origHeightValue);
-            DataManager.getInstance().openProjectAndLoadAllData(projectName);
+            dataManager.createEmptyProject(projectName, origWidthValue, origHeightValue);
+            dataManager.openProjectAndLoadAllData(projectName);
             stage.getSandbox().loadCurrentProject();
             stage.loadCurrentProject();
         } catch (IOException e) {

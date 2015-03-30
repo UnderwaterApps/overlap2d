@@ -4,7 +4,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -13,6 +14,8 @@ import java.util.ArrayList;
 
 public class UICompositePanel extends UIBox {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     private ArrayList<CompositeItemVO> scenes = new ArrayList<CompositeItemVO>();
 
     private UIStage uiStage;
@@ -22,6 +25,8 @@ public class UICompositePanel extends UIBox {
     public UICompositePanel(UIStage s) {
         super(s, s.getWidth(), 36.0f);
         uiStage = s;
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     @Override
@@ -150,7 +155,7 @@ public class UICompositePanel extends UIBox {
             resolutionBox.remove();
         }
 
-        resolutionBox = new UIResolutionBox(stage, DataManager.getInstance().getCurrentProjectInfoVO(), stage.dataManager.resolutionManager.curResolution);
+        resolutionBox = new UIResolutionBox(stage, dataManager.getCurrentProjectInfoVO(), stage.dataManager.resolutionManager.curResolution);
         addActor(resolutionBox);
         resolutionBox.setX(getWidth() - resolutionBox.getWidth());
     }

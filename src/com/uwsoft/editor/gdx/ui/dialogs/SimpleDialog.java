@@ -10,14 +10,16 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 
 public class SimpleDialog extends UIBox {
 
     static private final int MOVE = 1 << 5;
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     public SimpleDialog instance = this;
     boolean isMovable = true, isModal, isResizable;
     int resizeBorder = 8;
@@ -30,6 +32,8 @@ public class SimpleDialog extends UIBox {
         super(s, width, height);
         topImgName = "tab";
         this.initPanel();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     @Override
@@ -38,9 +42,9 @@ public class SimpleDialog extends UIBox {
 
 
         ButtonStyle stl = new ButtonStyle();
-        stl.down = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeBtnClicked"));
-        stl.up = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeBtn"));
-        stl.over = new TextureRegionDrawable(DataManager.getInstance().textureManager.getEditorAsset("closeHoverBtn"));
+        stl.down = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeBtnClicked"));
+        stl.up = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeBtn"));
+        stl.over = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeHoverBtn"));
 
         Button closeBtn = new Button(stl);
         addActor(closeBtn);
@@ -56,7 +60,7 @@ public class SimpleDialog extends UIBox {
             }
         });
 
-        titleLabel = new Label("Default Title", DataManager.getInstance().textureManager.editorSkin);
+        titleLabel = new Label("Default Title", dataManager.textureManager.editorSkin);
         titleLabel.setX(6);
         titleLabel.setY(topImg.getY() + 2);
         titleLabel.setColor(new Color(1, 1, 1, 0.6f));

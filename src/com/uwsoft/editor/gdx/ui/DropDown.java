@@ -8,9 +8,9 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,90 +21,92 @@ import java.util.Map;
  */
 public class DropDown extends Group {
 
-	 private Group container;
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
+    private Group container;
+    private HashMap<Integer, String> listEntries = new HashMap<Integer, String>();
+    private SelectionEvent eventListener;
 
-	 public DropDown (Group container) {
+    public DropDown(Group container) {
+        this.container = container;
+        container.addActor(this);
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
+    }
 
-		this.container = container;
-		container.addActor(this);
+    public SelectionEvent getEventListener() {
+        return eventListener;
+    }
 
-	 }
+    public void setEventListener(SelectionEvent eventListener) {
+        this.eventListener = eventListener;
+    }
 
-	 private HashMap<Integer, String> listEntries = new HashMap<Integer, String>();
-	 private SelectionEvent eventListener;
+    public void clearItems() {
+        listEntries.clear();
+    }
 
-	 public SelectionEvent getEventListener () {
-		  return eventListener;
-	 }
+    public void initView(float x, float y) {
+        super.clear();
+        setVisible(true);
 
-	 public void setEventListener (SelectionEvent eventListener) {
-		  this.eventListener = eventListener;
-	 }
+        int iterator = 0;
+        for (Map.Entry<Integer, String> entry : listEntries.entrySet()) {
+            final Integer action = entry.getKey();
+            String name = entry.getValue();
 
-	 public void clearItems() {
-			listEntries.clear();
-	 }
+            final PixelRect rct = new PixelRect(130, 20);
+            rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
+            rct.setBorderColor(new Color(0.22f, 0.22f, 0.22f, 1));
 
-	 public void initView (float x, float y) {
-		  super.clear();
-		  setVisible(true);
+            rct.setY(-(iterator + 1) * rct.getHeight());
 
-		  int iterator = 0;
-		  for (Map.Entry<Integer, String> entry : listEntries.entrySet()) {
-				final Integer action = entry.getKey();
-				String name = entry.getValue();
+            addActor(rct);
 
-				final PixelRect rct = new PixelRect(130, 20);
-				rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
-				rct.setBorderColor(new Color(0.22f, 0.22f, 0.22f, 1));
+            Label lbl = new Label(name, dataManager.textureManager.editorSkin);
+            lbl.setX(3);
+            lbl.setY(rct.getY() + 3);
+            lbl.setColor(new Color(1, 1, 1, 0.65f));
+            lbl.setTouchable(Touchable.disabled);
+            addActor(lbl);
 
-				rct.setY(-(iterator + 1) * rct.getHeight());
+            rct.addListener(new ClickListener() {
+                @Override
+                public boolean mouseMoved(InputEvent event, float x, float y) {
+                    rct.setFillColor(new Color(0.26f, 0.26f, 0.26f, 1));
+                    return true;
+                }
 
-				addActor(rct);
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
+                }
 
-				Label lbl = new Label(name,DataManager.getInstance().textureManager.editorSkin);
-				lbl.setX(3);
-				lbl.setY(rct.getY() + 3);
-				lbl.setColor(new Color(1, 1, 1, 0.65f));
-				lbl.setTouchable(Touchable.disabled);
-				addActor(lbl);
+                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                    if (eventListener != null) {
+                        eventListener.doAction(action);
+                    }
+                    hide();
+                }
+            });
 
-				rct.addListener(new ClickListener() {
-					 @Override public boolean mouseMoved (InputEvent event, float x, float y) {
-						  rct.setFillColor(new Color(0.26f, 0.26f, 0.26f, 1));
-						  return true;
-					 }
+            iterator++;
+        }
 
-					 public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-						  rct.setFillColor(new Color(0.32f, 0.32f, 0.32f, 1));
-					 }
+        Vector2 vector2 = container.stageToLocalCoordinates(new Vector2(x, y));
+        setX(vector2.x);
+        setY(container.getStage().getHeight() - vector2.y);
+    }
 
-					 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-						  if (eventListener != null) {
-								eventListener.doAction(action);
-						  }
-						  hide();
-					 }
-				});
+    public void addItem(int action, String name) {
+        listEntries.put(action, name);
+    }
 
-				iterator++;
-		  }
+    public void hide() {
+        setVisible(false);
+    }
 
-		  Vector2 vector2 = container.stageToLocalCoordinates(new Vector2(x, y));
-		  setX(vector2.x);
-		  setY(container.getStage().getHeight() - vector2.y);
-	 }
+    public interface SelectionEvent {
+        public void doAction(int action);
 
-	 public void addItem (int action, String name) {
-		  listEntries.put(action, name);
-	 }
-
-	 public interface SelectionEvent {
-		  public void doAction (int action);
-
-	 }
-
-	 public void hide() {
-		  setVisible(false);
-	 }
+    }
 }

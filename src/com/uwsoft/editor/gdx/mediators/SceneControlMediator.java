@@ -2,13 +2,14 @@ package com.uwsoft.editor.gdx.mediators;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.data.manager.DataManager;
+import com.puremvc.patterns.proxy.Proxy;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LightActor;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -21,6 +22,8 @@ import java.util.ArrayList;
  */
 public class SceneControlMediator {
 
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
     /** main holder of the scene */
     private SceneLoader sceneLoader;
 
@@ -39,6 +42,8 @@ public class SceneControlMediator {
     public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
         this.sceneLoader = sceneLoader;
         this.essentials = essentials;
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
     }
 
     public void initScene(String sceneName) {
@@ -48,7 +53,7 @@ public class SceneControlMediator {
 
         essentials.physicsStopped = true;
         sceneLoader = new SceneLoader(essentials);
-        sceneLoader.setResolution(DataManager.getInstance().resolutionManager.curResolution);
+        sceneLoader.setResolution(dataManager.resolutionManager.curResolution);
 
         currentSceneVo = sceneLoader.loadScene(sceneName, false);
         essentials.world = new World(new Vector2(currentSceneVo.physicsPropertiesVO.gravityX, currentSceneVo.physicsPropertiesVO.gravityY), true);
@@ -73,7 +78,7 @@ public class SceneControlMediator {
 
     public void initSceneView(CompositeItem composite, boolean isRootScene) {
 
-        composite.applyResolution(DataManager.getInstance().resolutionManager.curResolution);
+        composite.applyResolution(dataManager.resolutionManager.curResolution);
         currentScene = composite;
 
         if (isRootScene) {

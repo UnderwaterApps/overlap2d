@@ -1,8 +1,8 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 
@@ -10,10 +10,14 @@ import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
  * Created by azakhary on 7/3/2014.
  */
 public class ParticleThumbnailBox extends DraggableThumbnailBox {
+    private final Overlap2DFacade facade;
+    private final DataManager dataManager;
+
     public ParticleThumbnailBox(UIStage s, String particleName) {
         super(s);
-
-        Image img = new Image(DataManager.getInstance().textureManager.getEditorAsset("resizeIconChecked"));
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
+        Image img = new Image(dataManager.textureManager.getEditorAsset("resizeIconChecked"));
 
         this.setWidth(thumbnailSize);
         this.setHeight(thumbnailSize);
@@ -24,7 +28,7 @@ public class ParticleThumbnailBox extends DraggableThumbnailBox {
         addActor(img);
 
 
-        Image payloadImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("resizeIconChecked"));
+        Image payloadImg = new Image(dataManager.textureManager.getEditorAsset("resizeIconChecked"));
         AssetPayloadObject payload = new AssetPayloadObject();
         payload.assetName = particleName;
         payload.type = AssetPayloadObject.AssetType.Particle;

@@ -11,6 +11,8 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFont
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -24,10 +26,12 @@ public class EditorResourceManager implements IResourceRetriever {
 
     private final DataManager dataManager;
     private final TextureManager textureManager;
+    private final Overlap2DFacade facade;
     private HashMap<String, BitmapFont> bitmapFonts = new HashMap<String, BitmapFont>();
 
     public EditorResourceManager() {
-        dataManager = DataManager.getInstance();
+        facade = Overlap2DFacade.getInstance();
+        dataManager = facade.retrieveProxy(DataManager.NAME);
         textureManager = dataManager.textureManager;
     }
 
@@ -48,7 +52,7 @@ public class EditorResourceManager implements IResourceRetriever {
 
     @Override
     public ProjectInfoVO getProjectVO() {
-        return DataManager.getInstance().getCurrentProjectInfoVO();
+        return dataManager.getCurrentProjectInfoVO();
     }
 
     @Override
@@ -105,9 +109,9 @@ public class EditorResourceManager implements IResourceRetriever {
         return sceneVO;
     }
 
-	 public Skin getNewEditorSkin() {
-		  return textureManager.newEditorSkin;
-	 }
+    public Skin getNewEditorSkin() {
+        return textureManager.newEditorSkin;
+    }
 
     @Override
     public FileHandle getSCMLFile(String name) {

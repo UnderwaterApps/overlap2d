@@ -19,6 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FilenameUtils;
@@ -35,7 +36,7 @@ public class TextureManager {
     public AssetManager assetsManager;
 
     public String labelStylePath;
-	 public Skin newEditorSkin;
+    public Skin newEditorSkin;
     public MySkin editorSkin;
     public MySkin projectSkin;
     public HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>(1);
@@ -59,7 +60,7 @@ public class TextureManager {
         editorSkin = new MySkin(Gdx.files.internal("ui/styles.dt"));
 
 //		  newEditorSkin = new Skin(Gdx.files.internal("ui/newskin.dt"));
-		/*
+        /*
         Texture fntTexture = new Texture("ui/arial.png");
 		fntTexture.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		TextureRegion tmpRegion = new TextureRegion(fntTexture, 0, 0, 512, 512);
@@ -223,7 +224,7 @@ public class TextureManager {
     }
 
     public boolean checkFontExistence() {
-        File folder = new File(DataManager.getInstance().getFreeTypeFontPath());
+        File folder = new File(dataManager.getFreeTypeFontPath());
         if (!folder.exists()) return false;
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.getName().toLowerCase().endsWith(".ttf")) {
@@ -237,7 +238,7 @@ public class TextureManager {
         bitmapFonts.clear();
         for (FontSizePair pair : fonts) {
             FileHandle fontFile;
-            fontFile = Gdx.files.internal(DataManager.getInstance().getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
+            fontFile = Gdx.files.internal(dataManager.getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = Math.round(pair.fontSize * mulX);
@@ -252,13 +253,13 @@ public class TextureManager {
         tmp[0] = pair;
 
         if (!bitmapFonts.containsKey(pair))
-            loadBitmapFonts(tmp, DataManager.getInstance().resolutionManager.getCurrentMul());
+            loadBitmapFonts(tmp, dataManager.resolutionManager.getCurrentMul());
 
         return bitmapFonts.get(pair);
     }
 
     public Texture getRegionOriginalImage(String regionName) {
-        String sourcePath = DataManager.getInstance().getCurrentWorkingPath() + "/" + DataManager.getInstance().getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
+        String sourcePath = dataManager.getCurrentWorkingPath() + "/" + dataManager.getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
         return new Texture(Gdx.files.absolute(sourcePath));
     }
 
