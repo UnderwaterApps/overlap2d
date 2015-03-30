@@ -1,16 +1,53 @@
-bin/
-.settings/
-.DS_STORE
+## Java
+
+*.class
+*.war
+*.ear
+hs_err_pid*
+*.pit
+
+
+## Android Studio and Intellij and Android in general
+android/libs/armeabi/
+android/libs/armeabi-v7a/
+android/libs/x86/
+android/gen/
 .idea/
-.gradle/
-build/
-target/
-*.iml
 *.ipr
 *.iws
+*.iml
+out/
+com_crashlytics_export_strings.xml
+
+## Eclipse
 .classpath
 .project
-config.pit
-contributors.txt
-assets/app.properties
-/overlog.txt
+.metadata
+**/bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+local.properties
+.settings/
+.loadpath
+.externalToolBuilders/
+*.launch
+
+## NetBeans
+**/nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+## Gradle
+
+.gradle
+build/
+
+## OS Specific
+.DS_Store
