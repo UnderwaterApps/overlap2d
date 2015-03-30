@@ -1,10 +1,13 @@
 Overlap2D - 0.0.8
+------------------------------
 
+Ditched swing JFrame and Menu, using libGDX widgets instead.
 Tons of refactorings.
 
 
 Overlap2D - 0.0.7
 ------------------------------
+
 Spriter Animations importing
 Spriter animations runtime support
 Labels are now multiline and alignable

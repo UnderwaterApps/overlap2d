@@ -17,7 +17,7 @@ allprojects {
         appName = 'Overlap2D'
         gdxVersion = '1.5.5'
         box2DLightsVersion = '1.3'
-        visuiVersion = '0.7.0-SNAPSHOT'
+        visuiVersion = '0.7.1'
     }
 
     repositories {
