@@ -49,7 +49,8 @@ public class AppConfig  {
     }
 
     private void loadProperties() {
-
+			// this thing just refused to work so I gave up, fuck it.
+		  
         /*
         properties = new Properties();
        // Gdx.files
@@ -65,7 +66,6 @@ public class AppConfig  {
             FileInputStream fileInput = new FileInputStream(file);
             properties.load(fileInput);
             version = properties.getProperty("version");
-            System.out.println("PUTAAN " +properties.toString());
         } catch (IOException e) {
             e.printStackTrace();
         }
