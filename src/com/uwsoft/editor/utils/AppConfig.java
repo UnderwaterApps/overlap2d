@@ -50,7 +50,7 @@ public class AppConfig  {
 
     private void loadProperties() {
 			// this thing just refused to work so I gave up, fuck it.
-		  
+
         /*
         properties = new Properties();
        // Gdx.files

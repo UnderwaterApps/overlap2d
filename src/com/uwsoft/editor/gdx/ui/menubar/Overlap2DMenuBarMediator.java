@@ -29,6 +29,8 @@ import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -76,7 +78,9 @@ public class Overlap2DMenuBarMediator {
                     @Override
                     public void run() {
                         final JFileChooser fileChooser = new JFileChooser(DataManager.getInstance().getWorkspacePath());
-                        fileChooser.showOpenDialog(null);
+								//FileFilter filter = new FileNameExtensionFilter("Overlap2D project file",".pit");
+								fileChooser.showOpenDialog(null);
+
                         if (fileChooser.getSelectedFile() == null) {
                             return;
                         }
