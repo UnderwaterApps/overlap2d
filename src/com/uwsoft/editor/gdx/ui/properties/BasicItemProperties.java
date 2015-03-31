@@ -354,6 +354,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                         sandbox.saveSceneCurrentSceneData();
                     }
                 });
+					 sandbox.getUIStage().addActor(picker.fadeIn());
             }
         });
 
