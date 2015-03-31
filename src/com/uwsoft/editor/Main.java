@@ -22,12 +22,15 @@ import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.uwsoft.editor.gdx.Overlap2D;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowStateListener;
 
 public class Main {
 
@@ -49,7 +52,8 @@ public class Main {
             config.width = (int) width;
             config.height = (int) height;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
-            new LwjglApplication(overlap2D, config);
+				LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
+				mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH );
         }
 
     }
