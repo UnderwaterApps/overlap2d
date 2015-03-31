@@ -18,15 +18,16 @@
 
 package com.uwsoft.editor.gdx.ui.dialogs;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.controlles.handlers.FileChooserHandler;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.IOException;
 
@@ -61,31 +62,18 @@ public class DlgNewProject extends CompositeDialog {
         fileChooserBtn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-
-                FileChooserHandler chooseHandler = new FileChooserHandler() {
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+                fileChooser.setMultiselectionEnabled(false);
+                fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void FileChoosen(JFileChooser jfc) {
-                        if (jfc.getSelectedFile() == null) return;
-                        projectPathTextBox.setText(jfc.getSelectedFile().getAbsolutePath());
+                    public void selected(FileHandle file) {
+                        super.selected(file);
+                        projectPathTextBox.setText(file.path());
                     }
 
-                    @Override
-                    public boolean isMultiple() {
-                        return false;
-                    }
-
-                    @Override
-                    public String getDefaultPath() {
-                        return "";
-                    }
-
-                    @Override
-                    public int getFileSelectionMode() {
-                        return JFileChooser.DIRECTORIES_ONLY;
-                    }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                });
+                stage.addActor(fileChooser.fadeIn());
             }
         });
     }
