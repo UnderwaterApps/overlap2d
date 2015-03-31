@@ -19,6 +19,9 @@
 package com.uwsoft.editor.gdx.ui.menubar;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -27,10 +30,8 @@ import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileFilter;
-import javax.swing.filechooser.FileNameExtensionFilter;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -74,29 +75,23 @@ public class Overlap2DMenuBarMediator {
                 showDialog("createNewProjectDialog");
                 break;
             case OPEN_PROJECT:
-                SwingUtilities.invokeLater(new Runnable() {
+                //chooser creation
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+                fileChooser.setMultiselectionEnabled(false);
+                fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
+                fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void run() {
-                        final JFileChooser fileChooser = new JFileChooser(DataManager.getInstance().getWorkspacePath());
-								//FileFilter filter = new FileNameExtensionFilter("Overlap2D project file",".pit");
-								fileChooser.showOpenDialog(null);
-
-                        if (fileChooser.getSelectedFile() == null) {
-                            return;
-                        }
-                        final String path = fileChooser.getSelectedFile().getAbsolutePath();
+                    public void selected(FileHandle file) {
+                        String path = file.file().getAbsolutePath();
                         if (path.length() > 0) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dataManager.openProjectFromPath(path);
-                                    sandbox.loadCurrentProject();
-                                    onProjectOpened();
-                                }
-                            });
+                            dataManager.openProjectFromPath(path);
+                            sandbox.loadCurrentProject();
+                            onProjectOpened();
                         }
                     }
                 });
+                sandbox.getUIStage().addActor(fileChooser.fadeIn());
                 break;
             case SAVE_PROJECT:
                 SceneVO vo = sandbox.sceneVoFromItems();
