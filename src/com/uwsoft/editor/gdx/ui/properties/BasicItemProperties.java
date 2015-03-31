@@ -27,9 +27,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
-import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.components.ColorPicker;
+import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;
@@ -57,7 +58,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
 
     private TextButton customVarsBtn;
 
-    private ColorPicker tintColorComponent;
+    private ColorPickerButton tintColorComponent;
 
     private Actor itemActor;
     private TextBoxItem rotationVal;
@@ -65,7 +66,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
     public BasicItemProperties(Sandbox sandbox, SceneLoader scene) {
         super(scene, "BasicItemProperties");
         this.sandbox = sandbox;
-        tintColorComponent = new ColorPicker();
+        tintColorComponent = new ColorPickerButton();
         LabelItem tintLbl = ui.getLabelById("tintLbl");
         tintColorComponent.setX(tintLbl.getX() + tintLbl.getWidth() + 5);
         tintColorComponent.setY(tintLbl.getY() - 3);
@@ -341,22 +342,18 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
         tintColorComponent.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-
-                ColorPickerHandler chooseHandler = new ColorPickerHandler() {
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void ColorChoosen(java.awt.Color javaColor) {
-                        Color color = new Color(javaColor.getRed() / 255f, javaColor.getGreen() / 255f, javaColor.getBlue() / 255f, javaColor.getAlpha() / 255f);
-                        tintColorComponent.setColorValue(color);
-                        item.getDataVO().tint[0] = javaColor.getRed() / 255f;
-                        item.getDataVO().tint[1] = javaColor.getGreen() / 255f;
-                        item.getDataVO().tint[2] = javaColor.getBlue() / 255f;
-                        item.getDataVO().tint[3] = javaColor.getAlpha() / 255f;
+                    public void finished(Color newColor) {
+                        tintColorComponent.setColorValue(newColor);
+                        item.getDataVO().tint[0] = newColor.r;
+                        item.getDataVO().tint[1] = newColor.g;
+                        item.getDataVO().tint[2] = newColor.b;
+                        item.getDataVO().tint[3] = newColor.a;
                         item.renew();
                         sandbox.saveSceneCurrentSceneData();
                     }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                });
             }
         });
 
