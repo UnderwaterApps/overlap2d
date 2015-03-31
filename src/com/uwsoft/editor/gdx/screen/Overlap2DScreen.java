@@ -125,6 +125,11 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     break;
             }
         }
+		  
+		  if(Gdx.input.isKeyPressed(Input.Keys.DEL) || Gdx.input.isKeyPressed(Input.Keys.FORWARD_DEL)) {
+				sandbox.getUac().deleteAction();
+		  }
+
         Gdx.app.log(TAG, "keyDown : " + keycode);
         return false;
     }

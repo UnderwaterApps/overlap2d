@@ -181,6 +181,10 @@ public class UserActionController {
 		  putItemsToClipboard(items);
 	 }
 
+	 public void deleteAction() {
+		  sandbox.getSelector().removeCurrentSelectedItems();
+	 }
+
 	 public void pasteAction(float x, float y, boolean ignoreCameraPos) {
 		  CompositeVO tempHolder;
 		  Json json = new Json();
