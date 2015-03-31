@@ -19,12 +19,15 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.controlles.handlers.FileChooserHandler;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
@@ -32,7 +35,6 @@ import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -49,7 +51,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
     private TextField spinePath;
     private ProgressHandler progressHandler;
 
-    private HashMap<String, ArrayList<File>> paths = new HashMap<String, ArrayList<File>>();
+    private HashMap<String, ArrayList<File>> paths = new HashMap<>();
 
     public DlgImport(UIStage s) {
         super(s, "ImportDlg", 540, 250);
@@ -147,41 +149,28 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-                FileChooserHandler chooseHandler = new FileChooserHandler() {
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+                fileChooser.setMultiselectionEnabled(true);
+                fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void FileChoosen(JFileChooser jfc) {
-                        File[] resultHolderCopy = jfc.getSelectedFiles();
-                        ArrayList<File> result = new ArrayList<>();
-
+                    public void selected(Array<FileHandle> result) {
+                        ArrayList<File> files = new ArrayList<>();
                         String fileNames = "";
-                        for (int i = 0; i < resultHolderCopy.length; i++) {
+                        for (int i = 0; i < result.size; i++) {
                             if (i > 0) fileNames = fileNames + ", ";
-                            fileNames = fileNames + resultHolderCopy[i].getName();
-                            result.add(resultHolderCopy[i]);
+                            fileNames = fileNames + result.get(i).name();
+                            files.add(result.get(i).file());
                         }
 
                         textField.setText(fileNames);
 
-                        paths.put(type, result);
+                        paths.put(type, files);
                     }
 
-                    @Override
-                    public boolean isMultiple() {
-                        return true;
-                    }
 
-                    @Override
-                    public String getDefaultPath() {
-                        return defaultPath;
-                    }
-
-                    @Override
-                    public int getFileSelectionMode() {
-                        return JFileChooser.FILES_ONLY;
-                    }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                });
+                stage.addActor(fileChooser.fadeIn());
             }
         });
     }
