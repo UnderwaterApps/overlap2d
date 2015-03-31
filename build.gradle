@@ -88,10 +88,13 @@ task dist(type: Jar) {
     from { configurations.compile.collect { zipTree(it) } }
     from files(project.assetsDir);
 
+    /**
+     * TODO: This was not working well
     ant.propertyfile(
             file: "assets/app.properties") {
         entry(key: "version", value: project.version)
     }
+    */
 
     manifest {
         attributes 'Main-Class': project.mainClassName
