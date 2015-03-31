@@ -66,14 +66,6 @@ public class BaseStage extends Overlap2DStage {
         //UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
     }
 
-    public void disableAmbience(boolean disable) {
-        if (disable) {
-            essentials.rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 1f);
-        } else {
-            setAmbienceInfo(sceneLoader.getSceneVO());
-        }
-    }
-
     public void resize(int width, int height) {
         getViewport().update(width, height, true);
     }

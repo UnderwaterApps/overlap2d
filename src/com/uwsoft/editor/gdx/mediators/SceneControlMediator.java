@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.mediators;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.data.manager.DataManager;
@@ -119,6 +120,19 @@ public class SceneControlMediator {
 
         }
     }
+
+	 public void setAmbienceInfo(SceneVO vo) {
+		  Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1], vo.ambientColor[2], vo.ambientColor[3]);
+		  essentials.rayHandler.setAmbientLight(clr);
+	 }
+
+	 public void disableAmbience(boolean disable) {
+		  if (disable) {
+				essentials.rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 1f);
+		  } else {
+				setAmbienceInfo(sceneLoader.getSceneVO());
+		  }
+	 }
 
     private ArrayList<LightActor> getAllLights(CompositeItem curComposite){
 
