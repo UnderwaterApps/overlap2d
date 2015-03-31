@@ -29,11 +29,11 @@ import com.uwsoft.editor.data.manager.TextureManager;
 /**
  * Created by azakhary on 7/8/2014.
  */
-public class ColorPicker extends Group {
+public class ColorPickerButton extends Group {
 
     private Image colorImg;
 
-    public ColorPicker() {
+    public ColorPickerButton() {
         colorImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("pixel"));
         Image borderImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("colorBox"));
 

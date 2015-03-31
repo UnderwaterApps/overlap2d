@@ -151,6 +151,7 @@ public class Overlap2DMenuBarMediator {
 
     private void onProjectOpened() {
         overlap2DMenuBar.addScenes(dataManager.currentProjectInfoVO.scenes);
+        overlap2DMenuBar.setProjectOpen(true);
     }
 
     private void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
@@ -178,6 +179,7 @@ public class Overlap2DMenuBarMediator {
 
     public void setTarget(Overlap2DMenuBar overlap2DMenuBar) {
         this.overlap2DMenuBar = overlap2DMenuBar;
+        overlap2DMenuBar.setProjectOpen(false);
     }
 
     public void sceneMenuItemClicked(String sceneName) {
