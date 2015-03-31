@@ -77,9 +77,12 @@ public class Overlap2DMenuBarMediator {
             case OPEN_PROJECT:
                 //chooser creation
                 FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+
+                // TODO: does not show folders on Windows
+                //fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+					 //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
+
                 fileChooser.setMultiselectionEnabled(false);
-                fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
                 fileChooser.setListener(new FileChooserAdapter() {
                     @Override
                     public void selected(FileHandle file) {
