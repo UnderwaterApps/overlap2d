@@ -128,7 +128,7 @@ public class UICompositePanel extends UIBox {
             loadScene(scn);
             if (currIndex == 1) {
                 stage.getLightBox().disableAmbiance.setChecked(false);
-                stage.sandboxStage.disableAmbience(false);
+					 stage.getSandbox().getSceneControl().disableAmbience(false);
             }
         }
     }

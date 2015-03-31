@@ -214,7 +214,7 @@ public class UILightBox extends ExpandableUIBox {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                stage.sandboxStage.disableAmbience(disableAmbiance.isChecked());
+                stage.getSandbox().getSceneControl().disableAmbience(disableAmbiance.isChecked());
             }
 
         });

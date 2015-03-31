@@ -276,7 +276,7 @@ public class Sandbox {
     public void enterIntoComposite(CompositeItemVO compositeItemVO) {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
         sandboxStage.getCamera().position.set(0, 0, 0);
-        sandboxStage.disableAmbience(true);
+        getSceneControl().disableAmbience(true);
         uiStage.getLightBox().disableAmbiance.setChecked(true);
         uiStage.getCompositePanel().addScene(compositeItemVO);
         initSceneView(compositeItemVO);
