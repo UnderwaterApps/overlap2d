@@ -128,7 +128,7 @@ public class SceneControlMediator {
 
 	 public void disableAmbience(boolean disable) {
 		  if (disable) {
-				essentials.rayHandler.setAmbientLight(0.5f, 0.5f, 0.5f, 1f);
+				essentials.rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
 		  } else {
 				setAmbienceInfo(sceneLoader.getSceneVO());
 		  }
