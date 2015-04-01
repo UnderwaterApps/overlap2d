@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.data.manager;
+package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -25,34 +25,37 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.utils.Json;
+import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
 
-public class SandboxResourceManager implements IResourceRetriever {
-    private final DataManager dataManager;
-    private final TextureManager textureManager;
-    private final Overlap2DFacade facade;
+public class SandboxResourceManager extends BaseProxy implements IResourceRetriever {
+    private static final String TAG = SandboxResourceManager.class.getCanonicalName();
+    public static final String NAME = TAG;
 
     public SandboxResourceManager() {
-        facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        super(NAME);
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+
+
     }
 
     @Override
     public MySkin getSkin() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.projectSkin;
     }
 
     @Override
     public TextureRegion getTextureRegion(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         TextureAtlas atl = textureManager.getProjectAssetsList();
         TextureRegion reg = atl.findRegion(name);
         if (reg == null) {
@@ -63,27 +66,32 @@ public class SandboxResourceManager implements IResourceRetriever {
 
     @Override
     public ProjectInfoVO getProjectVO() {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         return dataManager.getCurrentProjectInfoVO();
     }
 
     @Override
     public ParticleEffect getParticleEffect(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getParticle(name);
     }
 
     @Override
     public TextureAtlas getSkeletonAtlas(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
         return animData.atlas;
     }
 
     @Override
     public TextureAtlas getSpriteAnimation(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriteAnimationsList().get(animationName);
     }
 
     @Override
     public FileHandle getSkeletonJSON(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
         return animData.jsonFile;
     }
@@ -91,6 +99,7 @@ public class SandboxResourceManager implements IResourceRetriever {
 
     @Override
     public BitmapFont getBitmapFont(String fontName, int fontSize) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getBitmapFont(fontName, fontSize);
     }
 
@@ -99,13 +108,12 @@ public class SandboxResourceManager implements IResourceRetriever {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
-        SceneVO sceneVO = json.fromJson(SceneVO.class, file.readString());
-
-        return sceneVO;
+        return json.fromJson(SceneVO.class, file.readString());
     }
 
     @Override
     public FileHandle getSCMLFile(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriterAnimationsList().get(name);
     }
 

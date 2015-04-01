@@ -22,10 +22,11 @@ import com.puremvc.patterns.facade.SimpleFacade;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.controller.StartupCommand;
 import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.SandboxResourceManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 
 /**
@@ -75,6 +76,7 @@ public class Overlap2DFacade extends SimpleFacade {
         registerProxy(new ResolutionManager());
         registerProxy(new SceneDataManager());
         registerProxy(new TextureManager());
+        registerProxy(new SandboxResourceManager());
     }
 
     @Override
