@@ -3,7 +3,6 @@ package com.uwsoft.editor.mvc;
 import com.puremvc.patterns.facade.SimpleFacade;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.screen.Overlap2DScreen;
 import com.uwsoft.editor.mvc.controller.StartupCommand;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;

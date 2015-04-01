@@ -18,9 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,6 +31,9 @@ import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LibraryList extends Group {
 

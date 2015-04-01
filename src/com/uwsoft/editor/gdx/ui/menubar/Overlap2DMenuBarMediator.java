@@ -19,16 +19,18 @@
 package com.uwsoft.editor.gdx.ui.menubar;
 
 import com.badlogic.gdx.Gdx;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.badlogic.gdx.files.FileHandle;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -79,19 +81,14 @@ public class Overlap2DMenuBarMediator {
                 FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
 
                 // TODO: does not show folders on Windows
-                //fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-					 //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+                //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
 
                 fileChooser.setMultiselectionEnabled(false);
                 fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void run() {
-                        final JFileChooser fileChooser = new JFileChooser(dataManager.getWorkspacePath());
-                        fileChooser.showOpenDialog(null);
-                        if (fileChooser.getSelectedFile() == null) {
-                            return;
-                        }
-                        final String path = fileChooser.getSelectedFile().getAbsolutePath();
+                    public void selected(FileHandle file) {
+                        final String path = file.path();
                         if (path.length() > 0) {
                             dataManager.openProjectFromPath(path);
                             sandbox.loadCurrentProject();

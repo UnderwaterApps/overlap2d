@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.controlles.handlers;
 
-import javax.swing.JFileChooser;
+import javax.swing.*;
 
 public interface FileChooserHandler {
 

@@ -22,10 +22,9 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.puremvc.patterns.proxy.Proxy;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 
 public class PixelRect extends Group {
 

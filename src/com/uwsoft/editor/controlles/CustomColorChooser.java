@@ -20,17 +20,10 @@ package com.uwsoft.editor.controlles;
 
 import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
 
-import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Toolkit;
-
-import javax.swing.JColorChooser;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.WindowConstants;
+import javax.swing.*;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import java.awt.*;
 
 public class CustomColorChooser extends JFrame {
     private JColorChooser jcc = null;

@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -31,6 +29,8 @@ import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
+
+import java.util.Map;
 
 /**
  * Created by azakhary on 8/28/2014.

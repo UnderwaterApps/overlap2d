@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.controlles.handlers;
 
-import java.awt.Color;
+import java.awt.*;
 
 /**
  * handler for swing Color Picker

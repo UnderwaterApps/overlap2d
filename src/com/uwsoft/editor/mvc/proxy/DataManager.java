@@ -16,7 +16,6 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.data.manager;
 package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;

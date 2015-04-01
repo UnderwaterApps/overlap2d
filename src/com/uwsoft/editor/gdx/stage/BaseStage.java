@@ -20,9 +20,9 @@ package com.uwsoft.editor.gdx.stage;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
 
 public class BaseStage extends Overlap2DStage {

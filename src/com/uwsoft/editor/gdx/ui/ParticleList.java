@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ParticleThumbnailBox;
+
+import java.util.HashMap;
 
 public class ParticleList extends Group {
 

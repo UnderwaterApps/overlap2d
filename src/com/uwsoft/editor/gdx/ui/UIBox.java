@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.stage.UIStage;

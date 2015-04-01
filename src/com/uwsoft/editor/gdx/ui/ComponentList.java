@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -28,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ComponentThumbnailBox;
+
+import java.util.HashMap;
 
 public class ComponentList extends Group {
 

@@ -24,11 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.actor.CheckBoxItem;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.LightActor;
-import com.uwsoft.editor.renderer.actor.SelectBoxItem;
-import com.uwsoft.editor.renderer.actor.TextBoxItem;
+import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.LightVO;
 
 /**

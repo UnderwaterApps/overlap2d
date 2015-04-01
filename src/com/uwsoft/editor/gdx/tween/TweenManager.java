@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.gdx.tween;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.uwsoft.editor.gdx.stage.BaseStage;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
-
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.gdx.stage.BaseStage;
 
 public class TweenManager {
 	//public GameStage stage;

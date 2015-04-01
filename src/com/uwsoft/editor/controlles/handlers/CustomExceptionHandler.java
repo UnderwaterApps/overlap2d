@@ -24,7 +24,6 @@ import com.badlogic.gdx.Net.HttpRequest;
 import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpParametersUtils;
-import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 

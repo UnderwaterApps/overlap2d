@@ -18,14 +18,14 @@
 
 package com.uwsoft.editor.gdx.actors;
 
-import java.util.ArrayList;
-
 import com.badlogic.gdx.graphics.g2d.ParticleEffectPool.PooledEffect;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.gdx.stage.BaseStage;
 import com.uwsoft.editor.utils.UpdatebleTimer;
 import com.uwsoft.editor.utils.UpdatebleTimer.TimerCompleteHandler;
+
+import java.util.ArrayList;
 
 public class ParticleActor extends Actor {
 

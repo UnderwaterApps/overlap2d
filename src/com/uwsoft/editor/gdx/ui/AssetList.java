@@ -18,24 +18,18 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.*;
+
+import java.util.HashMap;
 
 public class AssetList extends Group {
 
