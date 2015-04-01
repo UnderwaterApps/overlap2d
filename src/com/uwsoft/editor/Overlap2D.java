@@ -22,7 +22,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.observer.Notifier;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 public class Overlap2D extends ApplicationAdapter implements Notifier {

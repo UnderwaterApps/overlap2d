@@ -21,7 +21,7 @@ package com.uwsoft.editor.gdx.actors;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.controlles.ResolutionManager;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.stage.BaseStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;

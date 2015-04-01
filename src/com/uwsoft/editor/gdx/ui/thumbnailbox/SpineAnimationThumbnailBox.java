@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;

@@ -16,13 +16,12 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.data.manager;
+package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.controlles.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import org.apache.commons.io.FileUtils;

@@ -26,8 +26,6 @@ import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
-import com.uwsoft.editor.data.manager.SceneDataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;

@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.data.manager;
+package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Files.FileType;
 import com.badlogic.gdx.Gdx;
@@ -39,7 +39,6 @@ import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FilenameUtils;
