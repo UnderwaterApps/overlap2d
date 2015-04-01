@@ -131,7 +131,7 @@ public class Overlap2DMenuBarMediator {
     }
 
     private void onProjectOpened() {
-        overlap2DMenuBar.addScenes(dataManager.currentProjectInfoVO.scenes);
+		  overlap2DMenuBar.reInitScenes(dataManager.currentProjectInfoVO.scenes);
         overlap2DMenuBar.setProjectOpen(true);
     }
 
