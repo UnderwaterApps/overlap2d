@@ -115,7 +115,7 @@ public class UserActionController {
         if (layer == null) return;
 
         // creating component requires skin
-        if (!sandbox.isComponentSkinAvailable()) {
+        if(!sandbox.isComponentSkinAvailable() && !name.equals("Label")) {
             ConfirmDialog confirmDialog = sandbox.getUIStage().dialogs().showConfirmDialog();
 
             confirmDialog.setDescription("There is no style imported yet. Do you want to add default style instead to make this work?");

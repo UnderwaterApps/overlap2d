@@ -78,26 +78,7 @@ public class Overlap2DMenuBarMediator {
                 showDialog("createNewProjectDialog");
                 break;
             case OPEN_PROJECT:
-                //chooser creation
-                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-
-                // TODO: does not show folders on Windows
-                fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
-                //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
-
-                fileChooser.setMultiselectionEnabled(false);
-                fileChooser.setListener(new FileChooserAdapter() {
-                    @Override
-                    public void selected(FileHandle file) {
-                        final String path = file.path();
-                        if (path.length() > 0) {
-                            dataManager.openProjectFromPath(path);
-                            sandbox.loadCurrentProject();
-                            onProjectOpened();
-                        }
-                    }
-                });
-                sandbox.getUIStage().addActor(fileChooser.fadeIn());
+                showOpenProject();
                 break;
             case SAVE_PROJECT:
                 SceneVO vo = sandbox.sceneVoFromItems();
@@ -159,13 +140,36 @@ public class Overlap2DMenuBarMediator {
         overlap2DMenuBar.setProjectOpen(true);
     }
 
-    private void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
+	 public void showOpenProject() {
+		  //chooser creation
+		  FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+
+		  // TODO: does not show folders on Windows
+		  //fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+		  //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
+
+		  fileChooser.setMultiselectionEnabled(false);
+		  fileChooser.setListener(new FileChooserAdapter() {
+				@Override
+				public void selected(FileHandle file) {
+					 String path = file.file().getAbsolutePath();
+					 if (path.length() > 0) {
+						  dataManager.openProjectFromPath(path);
+						  sandbox.loadCurrentProject();
+						  onProjectOpened();
+					 }
+				}
+		  });
+		  sandbox.getUIStage().addActor(fileChooser.fadeIn());
+	 }
+
+	 public void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
         UIStage uiStage = sandbox.getUIStage();
         InputDialog inputDialog = uiStage.dialogs().showInputDialog();
         inputDialog.setListener(inputDialogListener);
     }
 
-    private void showDialog(String dialog) {
+    public void showDialog(String dialog) {
         try {
             UIStage uiStage = sandbox.getUIStage();
             Method method = uiStage.dialogs().getClass().getMethod(dialog);
@@ -175,7 +179,7 @@ public class Overlap2DMenuBarMediator {
         }
     }
 
-    private void showConfirmDialog(String description, ConfirmDialog.ConfirmDialogListener confirmDialogListener) {
+	 public void showConfirmDialog(String description, ConfirmDialog.ConfirmDialogListener confirmDialogListener) {
         final UIStage uiStage = sandbox.getUIStage();
         ConfirmDialog confirmDialog = uiStage.dialogs().showConfirmDialog();
         confirmDialog.setDescription(description);

@@ -39,6 +39,8 @@ public class UIMainTable extends Table {
     public Table leftTable;
     private UIToolBox toolPanel;
 
+	 public Overlap2DMenuBarMediator menuMediator;
+
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
         //debug(); // turn on all debug lines (uiMainTable, cell, and widget)
@@ -107,7 +109,9 @@ public class UIMainTable extends Table {
 
     private void initTop() {
         // init menu bar
-        Overlap2DMenuBar menuBar = new Overlap2DMenuBar(new Overlap2DMenuBarMediator());
+		  menuMediator = new Overlap2DMenuBarMediator();
+		  Overlap2DMenuBar menuBar = new Overlap2DMenuBar(menuMediator);
+
         add(menuBar.getTable()).fillX().expandX().row();
         //
         compositePanel = new UICompositePanel(uiStage);

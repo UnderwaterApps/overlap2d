@@ -195,22 +195,23 @@ public class ItemFactory {
 
         MainItemVO vo = new MainItemVO();
 
-        prepareVO(vo, layer.layerName, x, y);
-
         IBaseItem itm = null;
         if (type.equals("Text Field")) {
             vo = new TextBoxVO();
+				prepareVO(vo, layer.layerName, x, y);
             itm = new TextBoxItem((TextBoxVO) vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
             ((TextBoxItem) itm).setDisabled(true);
         }
         if (type.equals("Text Button")) {
             vo = new ButtonVO();
+				prepareVO(vo, layer.layerName, x, y);
             itm = new TextButtonItem((ButtonVO) vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
             ((TextButtonItem) itm).setDisabled(true);
         }
         if (type.equals("Label")) {
             vo = new LabelVO();
-            File folder = new File(dataManager.getFreeTypeFontPath());
+				prepareVO(vo, layer.layerName, x, y);
+            File folder = new File(DataManager.getInstance().getFreeTypeFontPath());
             String fontName = folder.listFiles()[0].getName();
             fontName = fontName.substring(0, fontName.lastIndexOf('.'));
             ((LabelVO) vo).style = fontName;
@@ -218,10 +219,12 @@ public class ItemFactory {
         }
         if (type.equals("CheckBox")) {
             vo = new CheckBoxVO();
+				prepareVO(vo, layer.layerName, x, y);
             itm = new CheckBoxItem((CheckBoxVO) vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
         }
         if (type.equals("SelectBox")) {
             vo = new SelectBoxVO();
+				prepareVO(vo, layer.layerName, x, y);
             itm = new SelectBoxItem((SelectBoxVO) vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
         }
 
