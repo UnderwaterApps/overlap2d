@@ -29,6 +29,7 @@ import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.utils.NinePatchUtils;
+import com.uwsoft.editor.utils.Overlap2DUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -354,7 +355,7 @@ public class ResolutionManager extends BaseProxy {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         float ratio = getResolutionRatio(resolution, projectManager.getCurrentProjectInfoVO().originalResolution);
         FileHandle targetDir = new FileHandle(path);
-        FileHandle[] entries = targetDir.list(new ProjectManager.PngFilenameFilter());
+        FileHandle[] entries = targetDir.list(Overlap2DUtils.PNG_FILTER);
         float perResizePercent = 95.0f / entries.length;
         for (FileHandle entry : entries) {
             try {
@@ -371,7 +372,7 @@ public class ResolutionManager extends BaseProxy {
 
     private void copyTexturesFromTo(String fromPath, String toPath) {
         FileHandle sourceDir = new FileHandle(fromPath);
-        FileHandle[] entries = sourceDir.list(new ProjectManager.PngFilenameFilter());
+        FileHandle[] entries = sourceDir.list(Overlap2DUtils.PNG_FILTER);
         float perCopyPercent = 10.0f / entries.length;
         for (FileHandle entry : entries) {
             File file = entry.file();

@@ -38,6 +38,7 @@ import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
+import com.uwsoft.editor.utils.Overlap2DUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
@@ -75,35 +76,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         super(NAME);
     }
 
-    public static String getMyDocumentsLocation() {
-        String myDocuments = null;
-        try {
-            if (SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_MAC_OSX) {
-                myDocuments = System.getProperty("user.home") + File.separator + "Documents";
-            }
-            if (SystemUtils.IS_OS_WINDOWS) {
-                Process p = Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\" /v personal");
-                p.waitFor();
 
-                InputStream in = p.getInputStream();
-                byte[] b = new byte[in.available()];
-                in.read(b);
-                in.close();
-
-                myDocuments = new String(b);
-                myDocuments = myDocuments.split("\\s\\s+")[4];
-            }
-            if (SystemUtils.IS_OS_LINUX) {
-                myDocuments = System.getProperty("user.home") + File.separator + "Documents";
-            }
-
-
-        } catch (Throwable t) {
-            t.printStackTrace();
-        }
-
-        return myDocuments;
-    }
 
     @Override
     public void onRegister() {
@@ -127,7 +100,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     private void initWorkspace() {
         try {
             editorConfigVO = getEditorConfig();
-            String myDocPath = getMyDocumentsLocation();
+            String myDocPath = Overlap2DUtils.MY_DOCUMENTS_PATH;
             workspacePath = myDocPath + "/" + DEFAULT_FOLDER;
             FileUtils.forceMkdir(new File(workspacePath));
             currentWorkingPath = workspacePath;
@@ -258,7 +231,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         // 1. open all scenes make list of mesh_id's and then remove all unused meshes
         HashSet<String> uniqueMeshIds = new HashSet<String>();
         FileHandle sourceDir = new FileHandle(currentWorkingPath + "/" + currentProjectVO.projectName + "/scenes/");
-        for (FileHandle entry : sourceDir.list(new DTFilenameFilter())) {
+        for (FileHandle entry : sourceDir.list(Overlap2DUtils.DT_FILTER)) {
             if (!entry.file().isDirectory()) {
                 Json json = new Json();
                 SceneVO sceneVO = json.fromJson(SceneVO.class, entry);
@@ -406,17 +379,14 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
             }
         });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                changePercentBy(100 - currentPercent);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.progressComplete();
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            handler.progressComplete();
         });
         executor.shutdown();
 
@@ -424,11 +394,8 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
     public File importExternalAnimationIntoProject(File animationFileSource) {
         try {
-            JsonFilenameFilter jsonFilenameFilter = new JsonFilenameFilter();
-            ScmlFilenameFilter scmlFilenameFilter = new ScmlFilenameFilter();
-            if (!jsonFilenameFilter.accept(null, animationFileSource.getName()) && !scmlFilenameFilter.accept(null, animationFileSource.getName())) {
+            if (!Overlap2DUtils.JSON_FILTER.accept(null, animationFileSource.getName()) && !Overlap2DUtils.SCML_FILTER.accept(null, animationFileSource.getName())) {
                 //showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
-
                 return null;
             }
 
@@ -436,7 +403,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             String sourcePath;
             String animationDataPath;
             String targetPath;
-            if (jsonFilenameFilter.accept(null, animationFileSource.getName())) {
+            if (Overlap2DUtils.JSON_FILTER.accept(null, animationFileSource.getName())) {
                 sourcePath = animationFileSource.getAbsolutePath();
                 animationDataPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator)) + File.separator;
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
@@ -463,7 +430,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                 return atlasFileTarget;
 
 
-            } else if (scmlFilenameFilter.accept(null, animationFileSource.getName())) {
+            } else if (Overlap2DUtils.SCML_FILTER.accept(null, animationFileSource.getName())) {
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt;
                 File scmlFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".scml");
                 ArrayList<File> imageFiles = getScmlFileImagesList(animationFileSource);
@@ -507,7 +474,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
                     TexturePacker texturePacker = new TexturePacker(settings);
                     FileHandle pngsDir = new FileHandle(files.get(0).getParentFile().getAbsolutePath());
-                    for (FileHandle entry : pngsDir.list(new PngFilenameFilter())) {
+                    for (FileHandle entry : pngsDir.list(Overlap2DUtils.PNG_FILTER)) {
                         texturePacker.addImage(entry.file());
                     }
                     String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
@@ -668,10 +635,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     private void copyImageFilesIntoProject(ArrayList<File> files, ResolutionEntryVO resolution, Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resolution.name + "/images";
-        PngFilenameFilter pngFilenameFilter = new PngFilenameFilter();
         float perCopyPercent = 95.0f / files.size();
         for (File file : files) {
-            if (!pngFilenameFilter.accept(null, file.getName())) {
+            if (!Overlap2DUtils.PNG_FILTER.accept(null, file.getName())) {
                 continue;
             }
             try {
@@ -693,11 +659,10 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
     public void importExternalFontIntoProject(ArrayList<File> externalfiles, ProgressHandler progressHandler) {
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/freetypefonts";
-        TffFilenameFilter ttfFilenameFilter = new TffFilenameFilter();
         handler = progressHandler;
         float perCopyPercent = 95.0f / externalfiles.size();
         for (File file : externalfiles) {
-            if (!ttfFilenameFilter.accept(null, file.getName())) {
+            if (!Overlap2DUtils.TTF_FILTER.accept(null, file.getName())) {
                 continue;
             }
             try {
@@ -1051,46 +1016,5 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     public FileHandle getSCMLFile(String name) {
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriterAnimationsList().get(name);
-    }
-
-    public static class PngFilenameFilter implements FilenameFilter {
-
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".png");
-        }
-    }
-
-    public static class TffFilenameFilter implements FilenameFilter {
-
-        @Override
-        public boolean accept(File dir, String name) {
-            System.out.println(name + "   " + name.toLowerCase().endsWith(".ttf"));
-            return name.toLowerCase().endsWith(".ttf");
-        }
-    }
-
-    public static class JsonFilenameFilter implements FilenameFilter {
-
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".json");
-        }
-    }
-
-    public static class ScmlFilenameFilter implements FilenameFilter {
-
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".scml");
-        }
-    }
-
-    public static class DTFilenameFilter implements FilenameFilter {
-
-        @Override
-        public boolean accept(File dir, String name) {
-            return name.toLowerCase().endsWith(".dt");
-        }
     }
 }
