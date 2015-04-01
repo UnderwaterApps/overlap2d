@@ -25,7 +25,7 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -38,7 +38,7 @@ import java.util.Iterator;
 public class ItemFactory {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private Sandbox sandbox;
     private SandboxStage sandboxStage;
     private SceneControlMediator sceneControl;
@@ -49,7 +49,7 @@ public class ItemFactory {
         sandboxStage = sandbox.getSandboxStage();
         sceneControl = sandbox.getSceneControl();
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     private void prepareVO(MainItemVO vo, String layerName, float x, float y) {
@@ -70,9 +70,9 @@ public class ItemFactory {
 
     private void initSpritePhysicsData(SimpleImageVO vo) {
         String regionName = vo.imageName;
-        if (dataManager.getCurrentProjectInfoVO().assetMeshMap.containsKey(regionName)) {
-            vo.meshId = dataManager.getCurrentProjectInfoVO().assetMeshMap.get(regionName);
-            PhysicsBodyDataVO data = dataManager.getCurrentProjectInfoVO().meshes.get(vo.meshId).initialProperties;
+        if (projectManager.getCurrentProjectInfoVO().assetMeshMap.containsKey(regionName)) {
+            vo.meshId = projectManager.getCurrentProjectInfoVO().assetMeshMap.get(regionName);
+            PhysicsBodyDataVO data = projectManager.getCurrentProjectInfoVO().meshes.get(vo.meshId).initialProperties;
             if (data != null) {
                 vo.physicsBodyData = new PhysicsBodyDataVO(data);
             } else {
@@ -211,7 +211,7 @@ public class ItemFactory {
         if (type.equals("Label")) {
             vo = new LabelVO();
             prepareVO(vo, layer.layerName, x, y);
-            File folder = new File(dataManager.getFreeTypeFontPath());
+            File folder = new File(projectManager.getFreeTypeFontPath());
             String fontName = folder.listFiles()[0].getName();
             fontName = fontName.substring(0, fontName.lastIndexOf('.'));
             ((LabelVO) vo).style = fontName;

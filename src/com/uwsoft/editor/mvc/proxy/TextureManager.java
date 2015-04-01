@@ -37,7 +37,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
@@ -245,8 +244,8 @@ public class TextureManager extends BaseProxy {
     }
 
     public boolean checkFontExistence() {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        File folder = new File(dataManager.getFreeTypeFontPath());
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        File folder = new File(projectManager.getFreeTypeFontPath());
         if (!folder.exists()) return false;
         for (final File fileEntry : folder.listFiles()) {
             if (fileEntry.getName().toLowerCase().endsWith(".ttf")) {
@@ -258,10 +257,10 @@ public class TextureManager extends BaseProxy {
 
     public void loadBitmapFonts(FontSizePair[] fonts, float mulX) {
         bitmapFonts.clear();
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         for (FontSizePair pair : fonts) {
             FileHandle fontFile;
-            fontFile = Gdx.files.internal(dataManager.getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
+            fontFile = Gdx.files.internal(projectManager.getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
             FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
             parameter.size = Math.round(pair.fontSize * mulX);
@@ -284,8 +283,8 @@ public class TextureManager extends BaseProxy {
     }
 
     public Texture getRegionOriginalImage(String regionName) {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        String sourcePath = dataManager.getCurrentWorkingPath() + "/" + dataManager.getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        String sourcePath = projectManager.getCurrentWorkingPath() + "/" + projectManager.getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
         return new Texture(Gdx.files.absolute(sourcePath));
     }
 

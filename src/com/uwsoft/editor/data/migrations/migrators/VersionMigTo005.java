@@ -23,10 +23,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import org.apache.commons.io.FileUtils;
@@ -44,12 +44,12 @@ public class VersionMigTo005 implements IVersionMigrator {
     private Json json = new Json();
     private JsonReader jsonReader = new JsonReader();
     private Overlap2DFacade facade;
-    private DataManager dataManager;
+    private ProjectManager projectManager;
 
     @Override
     public void setProject(String path) {
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         projectPath = path;
         json.setOutputType(JsonWriter.OutputType.json);
     }
@@ -71,7 +71,7 @@ public class VersionMigTo005 implements IVersionMigrator {
         try {
             projectInfoContents = FileUtils.readFileToString(projectInfoFile.file());
             ProjectInfoVO currentProjectInfoVO = json.fromJson(ProjectInfoVO.class, projectInfoContents);
-            dataManager.currentProjectInfoVO = currentProjectInfoVO;
+            projectManager.currentProjectInfoVO = currentProjectInfoVO;
 
             // run through all resolutions and remake animations for all
             for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {

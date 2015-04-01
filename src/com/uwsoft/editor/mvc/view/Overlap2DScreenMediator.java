@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.view;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.screen.Overlap2DScreen;
 
 /**
  * Created by sargis on 3/30/15.

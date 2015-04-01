@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
@@ -38,7 +38,7 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
 
     private final Sandbox sandbox;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private TextField lblTxtBox;
     private SelectBox<String> selectBox;
     private SelectBox<String> alignSelectBox;
@@ -52,7 +52,7 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
         super(scene, "LabelItemProperties");
         this.sandbox = sandbox;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     @Override
@@ -79,7 +79,7 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
         int selectedIndex = -1;
         int sizeIndex 	= labelDefaultSize;
         int alignIndex 	= labelDefaultAlign;
-        File folder = new File(dataManager.getFreeTypeFontPath());
+        File folder = new File(projectManager.getFreeTypeFontPath());
         if (folder.exists()) {
             String[] strArray = new String[folder.listFiles().length];
             for (final File fileEntry : folder.listFiles()) {

@@ -32,13 +32,13 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 public class SimpleDialog extends UIBox {
 
     static private final int MOVE = 1 << 5;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     public SimpleDialog instance = this;
     boolean isMovable = true, isModal, isResizable;
     int resizeBorder = 8;
@@ -52,7 +52,7 @@ public class SimpleDialog extends UIBox {
         topImgName = "tab";
         this.initPanel();
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     @Override

@@ -29,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -41,7 +41,7 @@ import java.util.Map;
 public class DropDown extends Group {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private Group container;
     private HashMap<Integer, String> listEntries = new HashMap<Integer, String>();
     private SelectionEvent eventListener;
@@ -50,7 +50,7 @@ public class DropDown extends Group {
         this.container = container;
         container.addActor(this);
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public SelectionEvent getEventListener() {

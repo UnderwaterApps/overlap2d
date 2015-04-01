@@ -25,12 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog.ConfirmDialogListener;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
@@ -38,7 +38,7 @@ public class UIResolutionBox extends Group {
 
     private final String curResolution;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
 
     private UIStage stage;
 
@@ -54,7 +54,7 @@ public class UIResolutionBox extends Group {
 
         this.curResolution = curResolution;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         int padding = 5;
 
         String[] arr = new String[projectInfoVO.resolutions.size() + 1];
@@ -183,7 +183,7 @@ public class UIResolutionBox extends Group {
             res = projectInfoVO.resolutions.get(index - 1).name;
         }
         String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
-        dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName, res);
+        projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName, res);
         stage.getSandbox().loadCurrentProject(name);
         stage.loadCurrentProject();
     }

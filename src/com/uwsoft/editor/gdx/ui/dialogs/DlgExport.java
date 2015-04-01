@@ -24,11 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
 
@@ -44,7 +44,7 @@ public class DlgExport extends CompositeDialog {
     private final TextBoxItem packerWidth;
     private final TextBoxItem packerHeight;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private ProjectVO projectVO;
     private HashMap<String, File> paths = new HashMap<>();
 
@@ -54,8 +54,8 @@ public class DlgExport extends CompositeDialog {
         setTitle("Export settings");
 
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
-        projectVO = dataManager.getCurrentProjectVO();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        projectVO = projectManager.getCurrentProjectVO();
         packerWidth = ui.getTextBoxById("packerWidth");
         packerWidth.setText(projectVO.texturepackerWidth);
         packerHeight = ui.getTextBoxById("packerHeight");
@@ -79,7 +79,7 @@ public class DlgExport extends CompositeDialog {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 saveNewExportPaths();
-                dataManager.exportProject();
+                projectManager.exportProject();
                 remove();
             }
         });
@@ -104,12 +104,12 @@ public class DlgExport extends CompositeDialog {
             return;
         }
         if (width != Integer.parseInt(projectVO.texturepackerWidth) || height != Integer.parseInt(projectVO.texturepackerHeight)) {
-            dataManager.setTexturePackerSizes(Integer.toString(width), Integer.toString(height));
+            projectManager.setTexturePackerSizes(Integer.toString(width), Integer.toString(height));
             ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
             resolutionManager.rePackProjectImagesForAllResolutions();
         }
-        dataManager.setExportPaths(paths.get("global"));
-        dataManager.saveCurrentProject();
+        projectManager.setExportPaths(paths.get("global"));
+        projectManager.saveCurrentProject();
 
     }
 

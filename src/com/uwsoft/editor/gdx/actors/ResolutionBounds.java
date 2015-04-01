@@ -20,7 +20,7 @@ package com.uwsoft.editor.gdx.actors;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.stage.BaseStage;
@@ -45,9 +45,9 @@ public class ResolutionBounds extends Group {
     private void detectDimensions(BaseStage baseStage) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        ResolutionEntryVO resolutionEntryVO = baseStage.dataManager.getCurrentProjectInfoVO().getResolution(resolutionManager.curResolution);
+        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.curResolution);
         if (resolutionEntryVO == null) {
-            resolutionEntryVO = baseStage.dataManager.getCurrentProjectInfoVO().originalResolution;
+            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
         }
         width = resolutionEntryVO.width;
         height = resolutionEntryVO.height;

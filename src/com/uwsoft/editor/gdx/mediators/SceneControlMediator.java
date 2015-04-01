@@ -21,9 +21,9 @@ package com.uwsoft.editor.gdx.mediators;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -42,7 +42,7 @@ import java.util.ArrayList;
 public class SceneControlMediator {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     /**
      * main holder of the scene
      */
@@ -72,7 +72,7 @@ public class SceneControlMediator {
         this.sceneLoader = sceneLoader;
         this.essentials = essentials;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public void initScene(String sceneName) {

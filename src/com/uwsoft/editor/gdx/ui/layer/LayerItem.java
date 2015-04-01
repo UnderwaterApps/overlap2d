@@ -26,12 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class LayerItem extends Group {
 
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private final Overlap2DFacade facade;
     private Image bgImg;
 
@@ -47,7 +47,7 @@ public class LayerItem extends Group {
         this.layerItemVo = vo;
         this.sandbox = sandbox;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         setWidth(247);
         setHeight(20);

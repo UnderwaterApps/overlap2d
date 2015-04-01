@@ -20,17 +20,22 @@ package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
+import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.io.FileUtils;
@@ -53,14 +58,11 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class DataManager extends BaseProxy {
-    private static final String TAG = DataManager.class.getCanonicalName();
+public class ProjectManager extends BaseProxy implements IResourceRetriever {
+    private static final String TAG = ProjectManager.class.getCanonicalName();
     public static final String NAME = TAG;
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
-    //    private ResolutionManager resolutionManager;
-//    private SceneDataManager sceneDataManager;
-//    private TextureManager textureManager;
     private String currentWorkingPath;
     private String workspacePath;
     private String DEFAULT_FOLDER = "Overlap2D";
@@ -69,7 +71,7 @@ public class DataManager extends BaseProxy {
     private EditorConfigVO editorConfigVO;
 
 
-    public DataManager() {
+    public ProjectManager() {
         super(NAME);
     }
 
@@ -107,9 +109,6 @@ public class DataManager extends BaseProxy {
     public void onRegister() {
         super.onRegister();
         initWorkspace();
-//        resolutionManager = new ResolutionManager(this);
-//        sceneDataManager = new SceneDataManager(this);
-//        textureManager = new TextureManager(this);
     }
 
     @Override
@@ -985,6 +984,74 @@ public class DataManager extends BaseProxy {
         return editorConfig;
     }
 
+    @Override
+    public MySkin getSkin() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.projectSkin;
+    }
+
+    @Override
+    public TextureRegion getTextureRegion(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        TextureAtlas atl = textureManager.getProjectAssetsList();
+        TextureRegion reg = atl.findRegion(name);
+        if (reg == null) {
+            reg = textureManager.getEditorAsset(name);
+        }
+        return reg;
+    }
+
+    @Override
+    public ProjectInfoVO getProjectVO() {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        return projectManager.getCurrentProjectInfoVO();
+    }
+
+    @Override
+    public ParticleEffect getParticleEffect(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.getParticle(name);
+    }
+
+    @Override
+    public TextureAtlas getSkeletonAtlas(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
+        return animData.atlas;
+    }
+
+    @Override
+    public TextureAtlas getSpriteAnimation(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.getProjectSpriteAnimationsList().get(animationName);
+    }
+
+    @Override
+    public FileHandle getSkeletonJSON(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
+        return animData.jsonFile;
+    }
+
+    @Override
+    public BitmapFont getBitmapFont(String fontName, int fontSize) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.getBitmapFont(fontName, fontSize);
+    }
+
+    @Override
+    public SceneVO getSceneVO(String name) {
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
+        Json json = new Json();
+        return json.fromJson(SceneVO.class, file.readString());
+    }
+
+    @Override
+    public FileHandle getSCMLFile(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.getProjectSpriterAnimationsList().get(name);
+    }
 
     public static class PngFilenameFilter implements FilenameFilter {
 
@@ -1026,6 +1093,4 @@ public class DataManager extends BaseProxy {
             return name.toLowerCase().endsWith(".dt");
         }
     }
-
-
 }

@@ -31,7 +31,7 @@ import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
 
@@ -48,7 +48,7 @@ public class SelectionRectangle extends PixelRect {
     public static final int LB = 6;
     public static final int L = 7;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private IBaseItem host;
     private TextureManager tm;
     private Sandbox sandbox;
@@ -60,7 +60,7 @@ public class SelectionRectangle extends PixelRect {
     public SelectionRectangle(Sandbox sandbox) {
         super(0, 0);
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         this.tm = facade.retrieveProxy(TextureManager.NAME);
         this.sandbox = sandbox;
         setTouchable(Touchable.disabled);

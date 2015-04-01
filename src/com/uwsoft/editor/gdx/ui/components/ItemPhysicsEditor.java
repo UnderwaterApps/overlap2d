@@ -39,7 +39,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MeshVO;
 import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
@@ -63,7 +63,7 @@ public class ItemPhysicsEditor extends Group {
     public static boolean autoTraceMultiPartDetection = false;
     public static boolean autoTraceHoleDetection = false;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     public IBaseItem originalItem;
     public EditMode currentMode;
     public PhysicsBodyDataVO physicsBodyDataVO = new PhysicsBodyDataVO();
@@ -115,7 +115,7 @@ public class ItemPhysicsEditor extends Group {
         box2dRenderer = new Box2DDebugRenderer();
         resVec = new Vector2(stage.getSandbox().getCurrentScene().mulX, stage.getSandbox().getCurrentScene().mulY);
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public void startTest() {
@@ -218,7 +218,7 @@ public class ItemPhysicsEditor extends Group {
         addActor(currentActor);
 
 
-        ProjectInfoVO projectInfo = dataManager.getCurrentProjectInfoVO();
+        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
         if (projectInfo.assetMeshMap.containsKey(assetName)) {
             mesh = projectInfo.meshes.get(projectInfo.assetMeshMap.get(assetName));
@@ -279,7 +279,7 @@ public class ItemPhysicsEditor extends Group {
             physicsBodyDataVO = new PhysicsBodyDataVO(currentItem.getDataVO().physicsBodyData);
         }
 
-        ProjectInfoVO projectInfo = dataManager.getCurrentProjectInfoVO();
+        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {
             Vector2 localToGlobal = new Vector2();
             currentActor.localToStageCoordinates(localToGlobal);
@@ -339,7 +339,7 @@ public class ItemPhysicsEditor extends Group {
     }
 
     public void save() {
-        ProjectInfoVO projectInfo = dataManager.getCurrentProjectInfoVO();
+        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
         if (assetName != null && !assetName.isEmpty()) {
             if (projectInfo.assetMeshMap.containsKey(assetName)) {
@@ -398,7 +398,7 @@ public class ItemPhysicsEditor extends Group {
 
             System.out.println("asd");
         }
-        dataManager.saveCurrentProject();
+        projectManager.saveCurrentProject();
 
     }
 
@@ -786,7 +786,7 @@ public class ItemPhysicsEditor extends Group {
 
     public void clearMesh() {
         if (assetName != null && !assetName.isEmpty()) {
-            ProjectInfoVO projectInfo = dataManager.getCurrentProjectInfoVO();
+            ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
             if (projectInfo.assetMeshMap.containsKey(assetName)) {
                 projectInfo.assetMeshMap.remove(assetName);
             }
@@ -803,7 +803,7 @@ public class ItemPhysicsEditor extends Group {
     public void duplicateMesh() {
         // start a fresh copy;
         if (currentItem != null) {
-            ProjectInfoVO projectInfo = dataManager.getCurrentProjectInfoVO();
+            ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
             currentItem.getDataVO().meshId = projectInfo.cloneMesh(currentItem.getDataVO().meshId);
         }
     }

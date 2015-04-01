@@ -22,20 +22,20 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
 
 public class BaseStage extends Overlap2DStage {
 
     private final Overlap2DFacade facade;
-    public DataManager dataManager;
+    public ProjectManager projectManager;
     public TextureManager textureManager;
 
 
     public BaseStage() {
         super(new ScreenViewport());
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         textureManager = facade.retrieveProxy(TextureManager.NAME);
         initLightsConfiguration();
 
@@ -61,8 +61,8 @@ public class BaseStage extends Overlap2DStage {
         super.act(delta);
     }
 
-    public DataManager getDataManager() {
-        return dataManager;
+    public ProjectManager getProjectManager() {
+        return projectManager;
     }
 
     public void setCursor(int cursor) {

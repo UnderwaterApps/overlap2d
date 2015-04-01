@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.proxy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import org.apache.commons.io.FileUtils;
@@ -44,12 +43,12 @@ public class SceneDataManager extends BaseProxy {
     public SceneVO createNewScene(String name) {
         SceneVO vo = new SceneVO();
         vo.sceneName = name;
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         try {
-            String projPath = dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName;
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), dataManager.currentProjectInfoVO.constructJsonString(), "utf-8");
+            String projPath = projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName;
+            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
             FileUtils.writeStringToFile(new File(projPath + "/scenes/" + vo.sceneName + ".dt"), vo.constructJsonString(), "utf-8");
-            dataManager.currentProjectInfoVO.scenes.add(vo);
+            projectManager.currentProjectInfoVO.scenes.add(vo);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -66,14 +65,14 @@ public class SceneDataManager extends BaseProxy {
     }
 
     public String getCurrProjectScenePathByName(String sceneName) {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        return dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        return projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
     }
 
     public void saveScene(SceneVO vo) {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         try {
-            FileUtils.writeStringToFile(new File(dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes/" + vo.sceneName + ".dt"),
+            FileUtils.writeStringToFile(new File(projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName + "/scenes/" + vo.sceneName + ".dt"),
                     vo.constructJsonString(), "utf-8");
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,16 +81,16 @@ public class SceneDataManager extends BaseProxy {
 
 
     public void deleteCurrentScene() {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        if (dataManager.currentProjectVO.lastOpenScene.equals("MainScene")) {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        if (projectManager.currentProjectVO.lastOpenScene.equals("MainScene")) {
             return;
         }
-        deleteScene(dataManager.currentProjectVO.lastOpenScene);
+        deleteScene(projectManager.currentProjectVO.lastOpenScene);
     }
 
     private void deleteScene(String sceneName) {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        ArrayList<SceneVO> scenes = dataManager.currentProjectInfoVO.scenes;
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        ArrayList<SceneVO> scenes = projectManager.currentProjectInfoVO.scenes;
         SceneVO sceneToDelete = null;
         for (SceneVO scene : scenes) {
             if (scene.sceneName.equals(sceneName)) {
@@ -102,10 +101,10 @@ public class SceneDataManager extends BaseProxy {
         if (sceneToDelete != null) {
             scenes.remove(sceneToDelete);
         }
-        dataManager.currentProjectInfoVO.scenes = scenes;
-        String projPath = dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName;
+        projectManager.currentProjectInfoVO.scenes = scenes;
+        String projPath = projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName;
         try {
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), dataManager.currentProjectInfoVO.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
             FileUtils.forceDelete(new File(projPath + "/scenes/" + sceneName + ".dt"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -113,8 +112,8 @@ public class SceneDataManager extends BaseProxy {
     }
 
     public void buildScenes(String targetPath) {
-        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
-        String srcPath = dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes";
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        String srcPath = projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName + "/scenes";
         FileHandle scenesDirectoryHandle = Gdx.files.absolute(srcPath);
         File fileTarget = new File(targetPath + "/" + scenesDirectoryHandle.name());
         try {
@@ -124,7 +123,7 @@ public class SceneDataManager extends BaseProxy {
         }
         //copy project dt
         try {
-            FileUtils.copyFile(new File(dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/project.dt"), new File(targetPath + "/project.dt"));
+            FileUtils.copyFile(new File(projectManager.getCurrentWorkingPath() + "/" + projectManager.currentProjectVO.projectName + "/project.dt"), new File(targetPath + "/project.dt"));
         } catch (IOException e) {
             e.printStackTrace();
         }

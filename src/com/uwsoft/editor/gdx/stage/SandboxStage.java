@@ -22,12 +22,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.uwsoft.editor.data.TypeConstants;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.SandboxUI;
 
-public class SandboxStage extends BaseStage implements TypeConstants {
+public class SandboxStage extends BaseStage {
     public static SandboxStage instance;
 
     public UIStage uiStage;
@@ -35,12 +34,9 @@ public class SandboxStage extends BaseStage implements TypeConstants {
     public Group frontUI;
 
     public PixelRect selectionRec;
-    private FPSLogger fpsLogger;
-
-
     public Group mainBox = new Group();
-
     public Sandbox sandbox;
+    private FPSLogger fpsLogger;
 
     public SandboxStage() {
         super();

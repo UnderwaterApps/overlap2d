@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.screen;
+package com.uwsoft.editor.mvc.view;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
@@ -24,7 +24,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.File;
@@ -35,7 +35,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public UIStage uiStage;
     private InputMultiplexer multiplexer;
     private Overlap2DFacade facade;
-    private DataManager dataManager;
+    private ProjectManager projectManager;
     private boolean paused = false;
 
     private Sandbox sandbox;
@@ -81,11 +81,11 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         uiStage = sandbox.getUIStage();
         sandboxStage.sandbox = sandbox;
 
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         // check for demo project
-        File demoDir = new File(dataManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
+        File demoDir = new File(projectManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
         if (demoDir.isDirectory() && demoDir.exists()) {
-            dataManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
+            projectManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
             sandbox.loadCurrentProject();
             uiStage.loadCurrentProject();
             sandboxStage.getCamera().position.set(400, 200, 0);
@@ -139,10 +139,10 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     break;
                 case Input.Keys.S:
                     SceneVO vo = sandbox.sceneVoFromItems();
-                    dataManager.saveCurrentProject(vo);
+                    projectManager.saveCurrentProject(vo);
                     break;
                 case Input.Keys.E:
-                    dataManager.exportProject();
+                    projectManager.exportProject();
                     break;
             }
         }

@@ -30,7 +30,7 @@ import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.lang.reflect.InvocationTargetException;
@@ -41,14 +41,14 @@ import java.lang.reflect.Method;
  */
 public class Overlap2DMenuBarMediator {
     private static final String TAG = Overlap2DMenuBarMediator.class.getCanonicalName();
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private final Sandbox sandbox;
     private final Overlap2DFacade facade;
     private Overlap2DMenuBar overlap2DMenuBar;
 
     public Overlap2DMenuBarMediator() {
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         sandbox = Sandbox.getInstance();
     }
 
@@ -82,13 +82,13 @@ public class Overlap2DMenuBarMediator {
                 break;
             case SAVE_PROJECT:
                 SceneVO vo = sandbox.sceneVoFromItems();
-                dataManager.saveCurrentProject(vo);
+                projectManager.saveCurrentProject(vo);
                 break;
             case IMPORT_TO_LIBRARY:
                 showDialog("showImportDialog");
                 break;
             case EXPORT:
-                dataManager.exportProject();
+                projectManager.exportProject();
                 break;
             case EXPORT_SETTINGS:
                 showDialog("showExportDialog");
@@ -132,11 +132,11 @@ public class Overlap2DMenuBarMediator {
     }
 
     private void onScenesChanged() {
-        overlap2DMenuBar.reInitScenes(dataManager.currentProjectInfoVO.scenes);
+        overlap2DMenuBar.reInitScenes(projectManager.currentProjectInfoVO.scenes);
     }
 
     private void onProjectOpened() {
-        overlap2DMenuBar.addScenes(dataManager.currentProjectInfoVO.scenes);
+        overlap2DMenuBar.addScenes(projectManager.currentProjectInfoVO.scenes);
         overlap2DMenuBar.setProjectOpen(true);
     }
 
@@ -154,7 +154,7 @@ public class Overlap2DMenuBarMediator {
 				public void selected(FileHandle file) {
 					 String path = file.file().getAbsolutePath();
 					 if (path.length() > 0) {
-						  dataManager.openProjectFromPath(path);
+						  projectManager.openProjectFromPath(path);
 						  sandbox.loadCurrentProject();
 						  onProjectOpened();
 					 }

@@ -25,7 +25,6 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
@@ -37,8 +36,8 @@ import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
-import com.uwsoft.editor.mvc.proxy.SandboxResourceManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -48,7 +47,6 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
 
@@ -81,7 +79,6 @@ public class Sandbox {
     public boolean isItemTouched = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
-    public IResourceRetriever rm;
     public ArrayList<MainItemVO> tempClipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
@@ -94,7 +91,7 @@ public class Sandbox {
     private ItemSelector selector;
     private InputMultiplexer inputMultiplexer;
     private Overlap2DFacade facade;
-    private DataManager dataManager;
+    private ProjectManager projectManager;
 
 
     private Sandbox() {
@@ -135,7 +132,7 @@ public class Sandbox {
         selector = new ItemSelector(this);
         itemFactory = new ItemFactory(this);
 
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     /**
@@ -203,13 +200,12 @@ public class Sandbox {
     }
 
     public void loadCurrentProject(String name) {
-        rm = facade.retrieveProxy(SandboxResourceManager.NAME);
-        sceneControl.getEssentials().rm = rm;
+        sceneControl.getEssentials().rm = projectManager;
         loadScene(name);
     }
 
     public void loadCurrentProject() {
-        ProjectVO projectVO = dataManager.getCurrentProjectVO();
+        ProjectVO projectVO = projectManager.getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
         uiStage.loadCurrentProject();
     }
@@ -224,9 +220,9 @@ public class Sandbox {
         initSceneView(sceneControl.getRootSceneVO());
         sandboxInputAdapter.initSandboxEvents();
 
-        ProjectVO projectVO = dataManager.getCurrentProjectVO();
+        ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
-        dataManager.saveCurrentProject();
+        projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
         uiStage.reInitLibrary();
     }

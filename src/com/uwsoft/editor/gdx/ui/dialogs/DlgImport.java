@@ -33,7 +33,7 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -48,7 +48,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
     private final Label progressLbl;
     private final TextBoxItem spriteAnimationPath;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private TextField imagesPath;
     private TextField particlePath;
     private TextField stylePath;
@@ -89,30 +89,30 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
         setPathProvider("spriteAnimation", spriteAnimationPath, ui.getTextButtonById("spriteAnimationBtn"), "");
 
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         ui.getTextButtonById("startBtn").addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
                 if (paths.get("images") != null) {
-                    dataManager.importExternalImagesIntoProject(paths.get("images"), progressHandler);
+                    projectManager.importExternalImagesIntoProject(paths.get("images"), progressHandler);
                 }
                 if (paths.get("particles") != null) {
-                    dataManager.importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
+                    projectManager.importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
                 }
                 if (paths.get("styles") != null) {
-                    dataManager.importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
+                    projectManager.importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
                 }
                 if (paths.get("font") != null) {
-                    dataManager.importExternalFontIntoProject(paths.get("font"), progressHandler);
+                    projectManager.importExternalFontIntoProject(paths.get("font"), progressHandler);
                 }
 
                 if (paths.get("spine") != null) {
-                    dataManager.importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
+                    projectManager.importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
                 }
 
                 if (paths.get("spriteAnimation") != null) {
-                    dataManager.importExternalSpriteAnimationsIntoProject(paths.get("spriteAnimation"), progressHandler);
+                    projectManager.importExternalSpriteAnimationsIntoProject(paths.get("spriteAnimation"), progressHandler);
                 }
 
 
@@ -121,7 +121,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                 stage.getCompositePanel().updateOriginalItem();
                 SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
                 sceneDataManager.saveScene(vo);
-                dataManager.saveCurrentProject();
+                projectManager.saveCurrentProject();
             }
         });
 
@@ -198,7 +198,7 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
     public void progressComplete() {
         closeDialog();
         Gdx.app.postRunnable(() -> {
-            dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName);
+            projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
             stage.getCompositePanel().initResolutionBox();
             remove();
             stage.loadCurrentProject();

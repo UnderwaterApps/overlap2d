@@ -23,7 +23,7 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
@@ -34,7 +34,7 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
 
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private AssetPayloadObject payload;
 
     private float scaleSize = 1;
@@ -44,7 +44,7 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
     public SpriterAnimationThumbnailBox(UIStage s, String animationName) {
         super(s);
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
         SpriterActor animThumb = new SpriterActor(vo, s.sceneLoader.essentials);

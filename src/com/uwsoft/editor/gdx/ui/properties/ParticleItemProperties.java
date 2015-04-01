@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.ParticleActor;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -38,7 +38,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 public class ParticleItemProperties extends Group implements IPropertyBox<ParticleItem> {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private Group mainGroup;
 
     private IResourceRetriever rm;
@@ -47,7 +47,7 @@ public class ParticleItemProperties extends Group implements IPropertyBox<Partic
         rm = scene.getRm();
         initView();
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     @Override

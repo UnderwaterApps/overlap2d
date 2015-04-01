@@ -30,7 +30,7 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CheckBoxItem;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -41,7 +41,7 @@ import com.uwsoft.editor.renderer.data.LightVO.LightType;
 public class UILightBox extends ExpandableUIBox {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     public CheckBoxItem disableAmbiance;
     private ColorPickerButton cPicker;
     private ColorPickerButton cPickerElems;
@@ -50,7 +50,7 @@ public class UILightBox extends ExpandableUIBox {
     public UILightBox(UIStage s) {
         super(s, 160, 300);
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public void initContent() {

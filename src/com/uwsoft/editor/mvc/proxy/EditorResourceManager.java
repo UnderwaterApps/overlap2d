@@ -30,8 +30,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -43,13 +41,13 @@ import java.util.HashMap;
 
 public class EditorResourceManager implements IResourceRetriever {
 
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private final Overlap2DFacade facade;
     private HashMap<String, BitmapFont> bitmapFonts = new HashMap<String, BitmapFont>();
 
     public EditorResourceManager() {
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public TextureAtlas getAtlas() {
@@ -72,7 +70,7 @@ public class EditorResourceManager implements IResourceRetriever {
 
     @Override
     public ProjectInfoVO getProjectVO() {
-        return dataManager.getCurrentProjectInfoVO();
+        return projectManager.getCurrentProjectInfoVO();
     }
 
     @Override

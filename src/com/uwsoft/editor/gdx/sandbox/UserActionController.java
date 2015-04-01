@@ -26,7 +26,7 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -43,13 +43,13 @@ import java.util.ArrayList;
 public class UserActionController {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private Sandbox sandbox;
 
     public UserActionController(Sandbox sandbox) {
         this.sandbox = sandbox;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     public void createImage(String regionName, float x, float y) {
@@ -122,7 +122,7 @@ public class UserActionController {
             confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
                 @Override
                 public void onConfirm() {
-                    dataManager.copyDefaultStyleIntoProject();
+                    projectManager.copyDefaultStyleIntoProject();
                     sandbox.getItemFactory().createComponent(layer, name, x, y);
                 }
 

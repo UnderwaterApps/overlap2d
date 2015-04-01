@@ -24,7 +24,7 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
@@ -38,7 +38,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
     private final AssetPayloadObject payload;
     private final CompositeItemVO compositeItemVO;
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
+    private final ProjectManager projectManager;
     private String key;
 
     public LibraryItemThumbnailBox(UIStage s, float width, String key, CompositeItemVO compositeItemVO) {
@@ -46,7 +46,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         this.key = key;
         this.compositeItemVO = compositeItemVO;
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         setWidth(width);
         bgImg = new Image(textureManager.getEditorAsset("pixel"));
