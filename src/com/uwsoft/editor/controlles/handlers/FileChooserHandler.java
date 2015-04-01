@@ -16,19 +16,18 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui;
+package com.uwsoft.editor.controlles.handlers;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.gdx.actors.GridView;
-import com.uwsoft.editor.gdx.actors.ResolutionBounds;
-import com.uwsoft.editor.gdx.stage.BaseStage;
+import javax.swing.JFileChooser;
 
-public class SandboxUI extends Group {
+public interface FileChooserHandler {
 
-    public SandboxUI(BaseStage s) {
-        GridView gridView = new GridView(s);
-        addActor(gridView);
-        ResolutionBounds resolutionBounds = new ResolutionBounds(s);
-        addActor(resolutionBounds);
-    }
+    public boolean isMultiple();
+
+    public String getDefaultPath();
+
+    public int getFileSelectionMode();
+
+    public void FileChoosen(JFileChooser jfc);
+
 }

@@ -1,3 +1,21 @@
+/*
+ * ******************************************************************************
+ *  * Copyright 2015 See AUTHORS file.
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *   http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  *****************************************************************************
+ */
+
 package com.uwsoft.editor.gdx.screen;
 
 import com.badlogic.gdx.*;
@@ -91,7 +109,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SYM)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
             switch (keycode) {
                 case Input.Keys.X:
                     sandbox.getUac().cutAction();
@@ -100,7 +118,11 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     sandbox.getUac().copyAction();
                     break;
                 case Input.Keys.V:
-                    sandbox.getUac().pasteAction(0, 0, false);
+                    try {
+                        sandbox.getUac().pasteAction(0, 0, false);
+                    } catch (Exception e) {
+                        //TODO: need to be fixed!
+                    }
                     break;
                 case Input.Keys.Z:
                     sandbox.getUac().undo();
@@ -109,6 +131,10 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     sandbox.getUac().redo();
                     break;
             }
+        }
+
+        if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
+            sandbox.getUac().deleteAction();
         }
         Gdx.app.log(TAG, "keyDown : " + keycode);
         return false;

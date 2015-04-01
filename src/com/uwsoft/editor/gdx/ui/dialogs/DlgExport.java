@@ -1,8 +1,30 @@
+/*
+ * ******************************************************************************
+ *  * Copyright 2015 See AUTHORS file.
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *   http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  *****************************************************************************
+ */
+
 package com.uwsoft.editor.gdx.ui.dialogs;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.controlles.FileChooserHandler;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -11,7 +33,6 @@ import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.actor.TextButtonItem;
 
-import javax.swing.*;
 import java.io.File;
 import java.util.HashMap;
 
@@ -45,35 +66,6 @@ public class DlgExport extends CompositeDialog {
         projectAssets.setText(projectVO.projectMainExportPath);
         paths.put("global", new File(projectVO.projectMainExportPath));
 
-        /*
-        sceneFilesPath = ui.getTextBoxById("sceneFilesPath");
-        sceneFilesPath.setDisabled(true);
-        sceneFilesPath.setText(projectVO.projectSceneExportPath);
-
-        atlasPath = ui.getTextBoxById("atlasPath");
-        atlasPath.setDisabled(true);
-        atlasPath.setText(projectVO.projectAtlasExportPath);
-
-        effectsPath = ui.getTextBoxById("effectsPath");
-        effectsPath.setDisabled(true);
-        effectsPath.setText(projectVO.projectEffectsExportPath);
-
-        spineAnimationsPath = ui.getTextBoxById("spineAnimationsPath");
-        spineAnimationsPath.setDisabled(true);
-        spineAnimationsPath.setText(projectVO.projectSpineExportPath);
-        
-        fontsPath = ui.getTextBoxById("fontsPath");
-        fontsPath.setDisabled(true);
-        fontsPath.setText(projectVO.projectFontsExportPath);
-
-
-
-        setPathProvider("scene", sceneFilesPath, ui.getTextButtonById("sceneFilesBtn"), "");
-        setPathProvider("atlas", atlasPath, ui.getTextButtonById("atlasBtn"), "");
-        setPathProvider("effects", effectsPath, ui.getTextButtonById("effectsBtn"), "");
-        setPathProvider("spine", spineAnimationsPath, ui.getTextButtonById("spineAnimationsBtn"), "");
-        setPathProvider("fonts", fontsPath, ui.getTextButtonById("fontsBtn"), "");
-        */
         setPathProvider("global", projectAssets, ui.getTextButtonById("projectAssetsBtn"), "");
 
         ui.getTextButtonById("saveBtn").addListener(new ClickListener() {
@@ -125,39 +117,21 @@ public class DlgExport extends CompositeDialog {
         btn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-
-                FileChooserHandler chooseHandler = new FileChooserHandler() {
+                //chooser creation
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+                fileChooser.setMultiselectionEnabled(false);
+                fileChooser.setListener(new FileChooserAdapter() {
                     @Override
-                    public void FileChoosen(JFileChooser jfc) {
-                        File selectedFile = jfc.getSelectedFile();
-                        if (selectedFile == null || !selectedFile.isDirectory()) {
-                            return;
-                        }
-
-                        textField.setText(selectedFile.getPath());
+                    public void selected(FileHandle file) {
+                        textField.setText(file.path());
                         if (type.equals("global")) {
                             setMiniPaths();
                         }
-                        paths.put(type, selectedFile);
+                        paths.put(type, file.file());
                     }
-
-                    @Override
-                    public boolean isMultiple() {
-                        return false;
-                    }
-
-                    @Override
-                    public String getDefaultPath() {
-                        return defaultPath;
-                    }
-
-                    @Override
-                    public int getFileSelectionMode() {
-                        return JFileChooser.DIRECTORIES_ONLY;
-                    }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_FILE_CHOOSER, chooseHandler);
+                });
+                stage.addActor(fileChooser.fadeIn());
             }
         });
     }

@@ -16,19 +16,16 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui;
+package com.uwsoft.editor.controlles.handlers;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.gdx.actors.GridView;
-import com.uwsoft.editor.gdx.actors.ResolutionBounds;
-import com.uwsoft.editor.gdx.stage.BaseStage;
+import java.awt.Color;
 
-public class SandboxUI extends Group {
+/**
+ * handler for swing Color Picker
+ *
+ * Created by azakhary on 7/8/2014.
+ */
+public interface ColorPickerHandler {
+    public void ColorChoosen(Color color);
 
-    public SandboxUI(BaseStage s) {
-        GridView gridView = new GridView(s);
-        addActor(gridView);
-        ResolutionBounds resolutionBounds = new ResolutionBounds(s);
-        addActor(resolutionBounds);
-    }
 }

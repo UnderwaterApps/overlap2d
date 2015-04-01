@@ -1,3 +1,21 @@
+/*
+ * ******************************************************************************
+ *  * Copyright 2015 See AUTHORS file.
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *   http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  *****************************************************************************
+ */
+
 package com.uwsoft.editor.gdx.ui.menubar;
 
 import com.badlogic.gdx.Gdx;
@@ -10,8 +28,8 @@ import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.io.filefilter.SuffixFileFilter;
 
-import javax.swing.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -57,7 +75,15 @@ public class Overlap2DMenuBarMediator {
                 showDialog("createNewProjectDialog");
                 break;
             case OPEN_PROJECT:
-                SwingUtilities.invokeLater(new Runnable() {
+                //chooser creation
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+
+                // TODO: does not show folders on Windows
+                //fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
+					 //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
+
+                fileChooser.setMultiselectionEnabled(false);
+                fileChooser.setListener(new FileChooserAdapter() {
                     @Override
                     public void run() {
                         final JFileChooser fileChooser = new JFileChooser(dataManager.getWorkspacePath());
@@ -67,17 +93,13 @@ public class Overlap2DMenuBarMediator {
                         }
                         final String path = fileChooser.getSelectedFile().getAbsolutePath();
                         if (path.length() > 0) {
-                            Gdx.app.postRunnable(new Runnable() {
-                                @Override
-                                public void run() {
-                                    dataManager.openProjectFromPath(path);
-                                    sandbox.loadCurrentProject();
-                                    onProjectOpened();
-                                }
-                            });
+                            dataManager.openProjectFromPath(path);
+                            sandbox.loadCurrentProject();
+                            onProjectOpened();
                         }
                     }
                 });
+                sandbox.getUIStage().addActor(fileChooser.fadeIn());
                 break;
             case SAVE_PROJECT:
                 SceneVO vo = sandbox.sceneVoFromItems();
@@ -134,6 +156,7 @@ public class Overlap2DMenuBarMediator {
 
     private void onProjectOpened() {
         overlap2DMenuBar.addScenes(dataManager.currentProjectInfoVO.scenes);
+        overlap2DMenuBar.setProjectOpen(true);
     }
 
     private void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
@@ -161,6 +184,7 @@ public class Overlap2DMenuBarMediator {
 
     public void setTarget(Overlap2DMenuBar overlap2DMenuBar) {
         this.overlap2DMenuBar = overlap2DMenuBar;
+        overlap2DMenuBar.setProjectOpen(false);
     }
 
     public void sceneMenuItemClicked(String sceneName) {

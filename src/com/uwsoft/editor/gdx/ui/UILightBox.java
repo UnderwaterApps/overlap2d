@@ -1,3 +1,21 @@
+/*
+ * ******************************************************************************
+ *  * Copyright 2015 See AUTHORS file.
+ *  *
+ *  * Licensed under the Apache License, Version 2.0 (the "License");
+ *  * you may not use this file except in compliance with the License.
+ *  * You may obtain a copy of the License at
+ *  *
+ *  *   http://www.apache.org/licenses/LICENSE-2.0
+ *  *
+ *  * Unless required by applicable law or agreed to in writing, software
+ *  * distributed under the License is distributed on an "AS IS" BASIS,
+ *  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *  * See the License for the specific language governing permissions and
+ *  * limitations under the License.
+ *  *****************************************************************************
+ */
+
 package com.uwsoft.editor.gdx.ui;
 
 import com.badlogic.gdx.graphics.Color;
@@ -6,11 +24,12 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.uwsoft.editor.controlles.ColorPickerHandler;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
+import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
+import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.components.ColorPicker;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.DataManager;
+import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CheckBoxItem;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -23,8 +42,8 @@ public class UILightBox extends ExpandableUIBox {
     private final Overlap2DFacade facade;
     private final DataManager dataManager;
     public CheckBoxItem disableAmbiance;
-    private ColorPicker cPicker;
-    private ColorPicker cPickerElems;
+    private ColorPickerButton cPicker;
+    private ColorPickerButton cPickerElems;
     private CheckBoxItem disableLights;
 
     public UILightBox(UIStage s) {
@@ -41,7 +60,7 @@ public class UILightBox extends ExpandableUIBox {
         ui.setY(getHeight() - ui.getHeight() - 14);
         mainLayer.addActor(ui);
 
-        cPicker = new ColorPicker();
+        cPicker = new ColorPickerButton();
         cPicker.setX(100);
         cPicker.setY(getHeight() - 92);
         mainLayer.addActor(cPicker);
@@ -55,7 +74,7 @@ public class UILightBox extends ExpandableUIBox {
         ImageItem cone = ui.getImageById("coneBtn");
 
 
-        cPickerElems = new ColorPicker();
+        cPickerElems = new ColorPickerButton();
         cPickerElems.setX(85);
         cPickerElems.setY(getHeight() - 196);
         mainLayer.addActor(cPickerElems);
@@ -67,36 +86,29 @@ public class UILightBox extends ExpandableUIBox {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-                ColorPickerHandler chooseHandler = new ColorPickerHandler() {
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void ColorChoosen(java.awt.Color javaColor) {
-                        Color color = new Color(javaColor.getRed() / 255f, javaColor.getGreen() / 255f, javaColor.getBlue() / 255f, javaColor.getAlpha() / 255f);
-                        cPicker.setColorValue(color);
+                    public void finished (Color newColor) {
+                        cPicker.setColorValue(newColor);
 
                         // change scene ambient light
-                        stage.getSandbox().setSceneAmbientColor(color);
+                        stage.getSandbox().setSceneAmbientColor(newColor);
                     }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                });
+                stage.addActor(picker.fadeIn());
             }
         });
 
         cPickerElems.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-
-                ColorPickerHandler chooseHandler = new ColorPickerHandler() {
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void ColorChoosen(java.awt.Color javaColor) {
-                        Color color = new Color(javaColor.getRed() / 255f, javaColor.getGreen() / 255f, javaColor.getBlue() / 255f, javaColor.getAlpha() / 255f);
-                        cPickerElems.setColorValue(color);
-
-                        // todo: set default color for lights
+                    public void finished (Color newColor) {
+                        cPickerElems.setColorValue(newColor);
                     }
-                };
-
-                //UIController.instance.sendNotification(NameConstants.SHOW_COLOR_PICKER, chooseHandler);
+                });
+                stage.addActor(picker.fadeIn());
             }
         });
 
@@ -206,7 +218,7 @@ public class UILightBox extends ExpandableUIBox {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                stage.sandboxStage.disableAmbience(disableAmbiance.isChecked());
+                stage.getSandbox().getSceneControl().disableAmbience(disableAmbiance.isChecked());
             }
 
         });

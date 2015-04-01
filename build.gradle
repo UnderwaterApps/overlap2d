@@ -17,7 +17,7 @@ allprojects {
         appName = 'Overlap2D'
         gdxVersion = '1.5.5'
         box2DLightsVersion = '1.3'
-        visuiVersion = '0.7.0-SNAPSHOT'
+        visuiVersion = '0.7.1'
     }
 
     repositories {
@@ -88,10 +88,13 @@ task dist(type: Jar) {
     from { configurations.compile.collect { zipTree(it) } }
     from files(project.assetsDir);
 
+    /**
+     * TODO: This was not working well
     ant.propertyfile(
             file: "assets/app.properties") {
         entry(key: "version", value: project.version)
     }
+    */
 
     manifest {
         attributes 'Main-Class': project.mainClassName
@@ -133,4 +136,8 @@ task afterEclipseImport(description: "Post processing after project generation",
 
 tasks.eclipse.doLast {
     delete ".project"
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
 }
