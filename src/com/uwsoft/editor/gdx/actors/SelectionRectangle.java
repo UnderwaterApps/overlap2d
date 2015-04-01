@@ -61,7 +61,7 @@ public class SelectionRectangle extends PixelRect {
         super(0, 0);
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        this.tm = dataManager.textureManager;
+        this.tm = facade.retrieveProxy(TextureManager.NAME);
         this.sandbox = sandbox;
         setTouchable(Touchable.disabled);
         setVisible(false);

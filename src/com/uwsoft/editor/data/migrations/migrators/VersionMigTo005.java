@@ -23,6 +23,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
@@ -74,7 +75,8 @@ public class VersionMigTo005 implements IVersionMigrator {
 
             // run through all resolutions and remake animations for all
             for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-                dataManager.resolutionManager.createResizedAnimations(resolutionEntryVO);
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                resolutionManager.createResizedAnimations(resolutionEntryVO);
             }
         } catch (IOException e) {
             e.printStackTrace();

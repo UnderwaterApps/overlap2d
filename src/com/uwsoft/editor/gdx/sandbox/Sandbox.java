@@ -25,9 +25,12 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.manager.SandboxResourceManager;
+import com.uwsoft.editor.data.manager.SceneDataManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
@@ -190,7 +193,9 @@ public class Sandbox {
      * @param sceneName
      */
     public void initData(String sceneName) {
-        dataManager.sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), dataManager.resolutionManager.curResolution);
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.curResolution);
 
         sceneControl.initScene(sceneName);
 
@@ -356,7 +361,8 @@ public class Sandbox {
     }
 
     public boolean isComponentSkinAvailable() {
-        return dataManager.textureManager.projectSkin != null;
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.projectSkin != null;
 
     }
 

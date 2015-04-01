@@ -28,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import com.uwsoft.editor.data.manager.SceneDataManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -117,21 +119,22 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
                 // save before importing
                 SceneVO vo = stage.getSandbox().sceneVoFromItems();
                 stage.getCompositePanel().updateOriginalItem();
-                dataManager.sceneDataManager.saveScene(vo);
+                SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                sceneDataManager.saveScene(vo);
                 dataManager.saveCurrentProject();
             }
         });
 
 
         // adding progress bar
-
-        progressBar = new ProgressBar(0, 100, 1, false, dataManager.textureManager.editorSkin);
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        progressBar = new ProgressBar(0, 100, 1, false, textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(33);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", dataManager.textureManager.editorSkin);
+        progressLbl = new Label("0%", textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(38);
         mainLayer.addActor(progressLbl);
@@ -194,15 +197,12 @@ public class DlgImport extends CompositeDialog implements ProgressHandler {
     @Override
     public void progressComplete() {
         closeDialog();
-        Gdx.app.postRunnable(new Runnable() {
-            @Override
-            public void run() {
-                dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName);
-                stage.getCompositePanel().initResolutionBox();
-                remove();
-                stage.loadCurrentProject();
-                stage.getSandbox().loadCurrentProject(stage.getSandbox().currentLoadedSceneFileName);
-            }
+        Gdx.app.postRunnable(() -> {
+            dataManager.openProjectAndLoadAllData(dataManager.getCurrentProjectVO().projectName);
+            stage.getCompositePanel().initResolutionBox();
+            remove();
+            stage.loadCurrentProject();
+            stage.getSandbox().loadCurrentProject(stage.getSandbox().currentLoadedSceneFileName);
         });
     }
 }

@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
@@ -172,8 +174,8 @@ public class UICompositePanel extends UIBox {
         if (resolutionBox != null) {
             resolutionBox.remove();
         }
-
-        resolutionBox = new UIResolutionBox(stage, dataManager.getCurrentProjectInfoVO(), stage.dataManager.resolutionManager.curResolution);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        resolutionBox = new UIResolutionBox(stage, dataManager.getCurrentProjectInfoVO(), resolutionManager.curResolution);
         addActor(resolutionBox);
         resolutionBox.setX(getWidth() - resolutionBox.getWidth());
     }

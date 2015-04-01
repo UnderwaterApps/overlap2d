@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.ProgressBar;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -32,7 +34,6 @@ import com.uwsoft.editor.mvc.proxy.DataManager;
 public class CreateNewResolutionDialog extends CompositeDialog implements ProgressHandler {
 
     private final Overlap2DFacade facade;
-    private final DataManager dataManager;
     private TextField resName;
     private TextField resWidth;
     private TextField resHeight;
@@ -62,25 +63,25 @@ public class CreateNewResolutionDialog extends CompositeDialog implements Progre
         resWidth.setText(800 + "");
         resHeight.setText(480 + "");
         facade = Overlap2DFacade.getInstance();
-        dataManager = facade.retrieveProxy(DataManager.NAME);
+//        dataManager = facade.retrieveProxy(DataManager.NAME);
         ui.getTextButtonById("createBtn").addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (resName.getText().length() == 0) return;
-
-                dataManager.resolutionManager.createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                resolutionManager.createNewResolution(resName.getText(), Integer.parseInt(resWidth.getText()), Integer.parseInt(resHeight.getText()), (String) selectBox.getSelected(), progressHandler);
             }
         });
 
         // adding progress bar
-
-        progressBar = new ProgressBar(0, 100, 1, false, dataManager.textureManager.editorSkin);
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        progressBar = new ProgressBar(0, 100, 1, false, textureManager.editorSkin);
         progressBar.setWidth(getWidth() - 60);
         progressBar.setX(10);
         progressBar.setY(55);
         mainLayer.addActor(progressBar);
 
-        progressLbl = new Label("0%", dataManager.textureManager.editorSkin);
+        progressLbl = new Label("0%", textureManager.editorSkin);
         progressLbl.setX(progressBar.getX() + progressBar.getWidth() + 4);
         progressLbl.setY(58);
         mainLayer.addActor(progressLbl);

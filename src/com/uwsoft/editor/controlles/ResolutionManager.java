@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.mortennobel.imagescaling.ResampleOp;
+import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
@@ -40,17 +41,18 @@ import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-public class ResolutionManager {
+public class ResolutionManager extends BaseProxy {
+    private static final String TAG = ResolutionManager.class.getCanonicalName();
+    public static final String NAME = TAG;
     private static final String EXTENSION_9PATCH = ".9.png";
-    private final DataManager dataManager;
     public String curResolution;
     private float currentPercent = 0.0f;
 
     private ProgressHandler handler;
 
 
-    public ResolutionManager(DataManager dataManager) {
-        this.dataManager = dataManager;
+    public ResolutionManager() {
+        super(NAME);
     }
 
     public static BufferedImage imageResize(File file, float ratio) {
@@ -116,6 +118,22 @@ public class ResolutionManager {
         return a / b;
     }
 
+    public static int getMinSquareNum(int num) {
+
+        // if (num < 1024) return 1024;
+
+        // if (num < 2048) return 2048;
+
+        // if (num < 4096) return 4096;
+
+
+        return 4096;
+    }
+
+//    private static BufferedImage convertTo9Patch(BufferedImage image) {
+
+//    }
+
     public void createNewResolution(String name, int width, int height, final String resolutionBase, final ProgressHandler handler) {
         this.handler = handler;
         final ResolutionEntryVO newResolution = new ResolutionEntryVO();
@@ -123,6 +141,7 @@ public class ResolutionManager {
         newResolution.width = width;
         newResolution.height = height;
         newResolution.base = resolutionBase.equals("width") ? 0 : 1;
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         dataManager.getCurrentProjectInfoVO().resolutions.add(newResolution);
         ExecutorService executor = Executors.newSingleThreadExecutor();
         executor.execute(new Runnable() {
@@ -156,17 +175,13 @@ public class ResolutionManager {
         executor.shutdown();
     }
 
-//    private static BufferedImage convertTo9Patch(BufferedImage image) {
-
-//    }
-
     private void changePercentBy(float value) {
         currentPercent += value;
         handler.progressChanged(currentPercent);
     }
 
-
     public void createResizedAnimations(ResolutionEntryVO resolution) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String currProjectPath = dataManager.getCurrentWorkingPath() + File.separator + dataManager.getCurrentProjectVO().projectName;
 
         // Unpack spine orig
@@ -193,6 +208,7 @@ public class ResolutionManager {
     }
 
     public void createResizedSpriteAnimation(String animName, ResolutionEntryVO resolution) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String currProjectPath = dataManager.getCurrentWorkingPath() + File.separator + dataManager.getCurrentProjectVO().projectName;
         File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/" + animName + ".atlas");
 
@@ -223,6 +239,7 @@ public class ResolutionManager {
     }
 
     public void createResizedSpineAnimation(String animName, ResolutionEntryVO resolution) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String currProjectPath = dataManager.getCurrentWorkingPath() + File.separator + dataManager.getCurrentProjectVO().projectName;
 
         File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/" + animName + ".atlas");
@@ -246,6 +263,7 @@ public class ResolutionManager {
     }
 
     public void resizeSpriteAnimationForAllResolutions(String animName, ProjectInfoVO currentProjectInfoVO) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String currProjectPath = dataManager.getCurrentWorkingPath() + File.separator + dataManager.getCurrentProjectVO().projectName;
 
         File atlasFile = new File(currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + animName + ".atlas");
@@ -273,6 +291,7 @@ public class ResolutionManager {
     public void resizeSpineAnimationForAllResolutions(File atlasFile, ProjectInfoVO currentProjectInfoVO) {
 
         String fileNameWithOutExt = FilenameUtils.removeExtension(atlasFile.getName());
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String tmpDir = dataManager.getCurrentWorkingPath() + File.separator + dataManager.getCurrentProjectVO().projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt + File.separator + "tmp";
         File sourceFolder = new File(tmpDir);
 
@@ -294,6 +313,7 @@ public class ResolutionManager {
     }
 
     public void rePackProjectImages(ResolutionEntryVO resEntry) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         TexturePacker.Settings settings = new TexturePacker.Settings();
 
         settings.flattenPaths = true;
@@ -332,6 +352,7 @@ public class ResolutionManager {
     }
 
     private void resizeTextures(String path, ResolutionEntryVO resolution) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         float ratio = getResolutionRatio(resolution, dataManager.getCurrentProjectInfoVO().originalResolution);
         FileHandle targetDir = new FileHandle(path);
         FileHandle[] entries = targetDir.list(new DataManager.PngFilenameFilter());
@@ -379,8 +400,8 @@ public class ResolutionManager {
         else return null;
     }
 
-
     public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         float ratio = ResolutionManager.getResolutionRatio(resolution, dataManager.getCurrentProjectInfoVO().originalResolution);
 
         if (targetFolder.exists()) {
@@ -410,19 +431,8 @@ public class ResolutionManager {
         tp.pack(targetFolder, packName);
     }
 
-    public static int getMinSquareNum(int num) {
-
-        // if (num < 1024) return 1024;
-
-        // if (num < 2048) return 2048;
-
-        // if (num < 4096) return 4096;
-
-
-        return 4096;
-    }
-
     public float getCurrentMul() {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         ResolutionEntryVO curRes = dataManager.getCurrentProjectInfoVO().getResolution(curResolution);
         float mul = 1f;
         if (!curResolution.equals("orig")) {
@@ -437,6 +447,7 @@ public class ResolutionManager {
     }
 
     public void rePackProjectImagesForAllResolutions() {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         rePackProjectImages(dataManager.getCurrentProjectInfoVO().originalResolution);
         for (ResolutionEntryVO resolutionEntryVO : dataManager.getCurrentProjectInfoVO().resolutions) {
             rePackProjectImages(resolutionEntryVO);
@@ -444,6 +455,7 @@ public class ResolutionManager {
     }
 
     public void deleteResolution(int index) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().resolutions.remove(index);
         try {
             FileUtils.deleteDirectory(new File(dataManager.getWorkspacePath() + "/" + dataManager.currentProjectVO.projectName + "/assets/" + resolutionEntryVO.name));

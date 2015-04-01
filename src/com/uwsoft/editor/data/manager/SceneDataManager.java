@@ -20,6 +20,8 @@ package com.uwsoft.editor.data.manager;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
@@ -32,16 +34,18 @@ import java.util.ArrayList;
 /**
  * Created by sargis on 3/23/15.
  */
-public class SceneDataManager {
-    private final DataManager dataManager;
+public class SceneDataManager extends BaseProxy {
+    private static final String TAG = SceneDataManager.class.getCanonicalName();
+    public static final String NAME = TAG;
 
-    public SceneDataManager(DataManager dataManager) {
-        this.dataManager = dataManager;
+    public SceneDataManager() {
+        super(NAME);
     }
 
     public SceneVO createNewScene(String name) {
         SceneVO vo = new SceneVO();
         vo.sceneName = name;
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         try {
             String projPath = dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName;
             FileUtils.writeStringToFile(new File(projPath + "/project.dt"), dataManager.currentProjectInfoVO.constructJsonString(), "utf-8");
@@ -57,15 +61,18 @@ public class SceneDataManager {
         if (sceneVO == null || sceneVO.composite == null) return;
 
         FontSizePair[] fonts = sceneVO.composite.getRecursiveFontList();
-
-        dataManager.textureManager.loadBitmapFonts(fonts, dataManager.resolutionManager.getCurrentMul());
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        textureManager.loadBitmapFonts(fonts, resolutionManager.getCurrentMul());
     }
 
     public String getCurrProjectScenePathByName(String sceneName) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         return dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes/" + sceneName + ".dt";
     }
 
     public void saveScene(SceneVO vo) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         try {
             FileUtils.writeStringToFile(new File(dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes/" + vo.sceneName + ".dt"),
                     vo.constructJsonString(), "utf-8");
@@ -76,6 +83,7 @@ public class SceneDataManager {
 
 
     public void deleteCurrentScene() {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         if (dataManager.currentProjectVO.lastOpenScene.equals("MainScene")) {
             return;
         }
@@ -83,6 +91,7 @@ public class SceneDataManager {
     }
 
     private void deleteScene(String sceneName) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         ArrayList<SceneVO> scenes = dataManager.currentProjectInfoVO.scenes;
         SceneVO sceneToDelete = null;
         for (SceneVO scene : scenes) {
@@ -105,6 +114,7 @@ public class SceneDataManager {
     }
 
     public void buildScenes(String targetPath) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String srcPath = dataManager.getCurrentWorkingPath() + "/" + dataManager.currentProjectVO.projectName + "/scenes";
         FileHandle scenesDirectoryHandle = Gdx.files.absolute(srcPath);
         File fileTarget = new File(targetPath + "/" + scenesDirectoryHandle.name());

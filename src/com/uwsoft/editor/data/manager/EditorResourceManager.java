@@ -43,27 +43,28 @@ import java.util.HashMap;
 public class EditorResourceManager implements IResourceRetriever {
 
     private final DataManager dataManager;
-    private final TextureManager textureManager;
     private final Overlap2DFacade facade;
     private HashMap<String, BitmapFont> bitmapFonts = new HashMap<String, BitmapFont>();
 
     public EditorResourceManager() {
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        textureManager = dataManager.textureManager;
     }
 
     public TextureAtlas getAtlas() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getEditorAssetsList();
     }
 
     @Override
     public MySkin getSkin() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.editorSkin;
     }
 
     @Override
     public TextureRegion getTextureRegion(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         TextureAtlas atl = textureManager.getEditorAssetsList();
         return atl.findRegion(name);
     }
@@ -75,26 +76,31 @@ public class EditorResourceManager implements IResourceRetriever {
 
     @Override
     public ParticleEffect getParticleEffect(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getParticle(name);
     }
 
     public ArrayList<ParticleEffect> getParticles() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getParticles();
     }
 
     @Override
     public TextureAtlas getSkeletonAtlas(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
         return animData.atlas;
     }
 
     @Override
     public TextureAtlas getSpriteAnimation(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriteAnimationsList().get(animationName);
     }
 
     @Override
     public FileHandle getSkeletonJSON(String animationName) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
         return animData.jsonFile;
     }
@@ -128,11 +134,13 @@ public class EditorResourceManager implements IResourceRetriever {
     }
 
     public Skin getNewEditorSkin() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.newEditorSkin;
     }
 
     @Override
     public FileHandle getSCMLFile(String name) {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriterAnimationsList().get(name);
     }
 }

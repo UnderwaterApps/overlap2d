@@ -36,7 +36,7 @@ public class BaseStage extends Overlap2DStage {
         super(new ScreenViewport());
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        textureManager = dataManager.textureManager;
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         initLightsConfiguration();
 
 

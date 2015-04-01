@@ -28,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.uwsoft.editor.controlles.ResolutionManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -60,9 +62,10 @@ public class SimpleDialog extends UIBox {
 
 
         ButtonStyle stl = new ButtonStyle();
-        stl.down = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeBtnClicked"));
-        stl.up = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeBtn"));
-        stl.over = new TextureRegionDrawable(dataManager.textureManager.getEditorAsset("closeHoverBtn"));
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        stl.down = new TextureRegionDrawable(textureManager.getEditorAsset("closeBtnClicked"));
+        stl.up = new TextureRegionDrawable(textureManager.getEditorAsset("closeBtn"));
+        stl.over = new TextureRegionDrawable(textureManager.getEditorAsset("closeHoverBtn"));
 
         Button closeBtn = new Button(stl);
         addActor(closeBtn);
@@ -78,7 +81,7 @@ public class SimpleDialog extends UIBox {
             }
         });
 
-        titleLabel = new Label("Default Title", dataManager.textureManager.editorSkin);
+        titleLabel = new Label("Default Title", textureManager.editorSkin);
         titleLabel.setX(6);
         titleLabel.setY(topImg.getY() + 2);
         titleLabel.setColor(new Color(1, 1, 1, 0.6f));

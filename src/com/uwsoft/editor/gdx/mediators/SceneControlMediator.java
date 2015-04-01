@@ -21,6 +21,7 @@ package com.uwsoft.editor.gdx.mediators;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -42,19 +43,29 @@ public class SceneControlMediator {
 
     private final Overlap2DFacade facade;
     private final DataManager dataManager;
-    /** main holder of the scene */
+    /**
+     * main holder of the scene
+     */
     private SceneLoader sceneLoader;
 
-    /** runtime essentials */
+    /**
+     * runtime essentials
+     */
     private Essentials essentials;
 
-    /** current scene data */
+    /**
+     * current scene data
+     */
     private SceneVO currentSceneVo;
 
-    /** data object of the root element of the scene */
+    /**
+     * data object of the root element of the scene
+     */
     private CompositeItemVO rootSceneVO;
 
-    /** current scene rendering item */
+    /**
+     * current scene rendering item
+     */
     private CompositeItem currentScene;
 
     public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
@@ -71,7 +82,8 @@ public class SceneControlMediator {
 
         essentials.physicsStopped = true;
         sceneLoader = new SceneLoader(essentials);
-        sceneLoader.setResolution(dataManager.resolutionManager.curResolution);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        sceneLoader.setResolution(resolutionManager.curResolution);
 
         currentSceneVo = sceneLoader.loadScene(sceneName, false);
         essentials.world = new World(new Vector2(currentSceneVo.physicsPropertiesVO.gravityX, currentSceneVo.physicsPropertiesVO.gravityY), true);
@@ -95,8 +107,8 @@ public class SceneControlMediator {
     }
 
     public void initSceneView(CompositeItem composite, boolean isRootScene) {
-
-        composite.applyResolution(dataManager.resolutionManager.curResolution);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        composite.applyResolution(resolutionManager.curResolution);
         currentScene = composite;
 
         if (isRootScene) {
@@ -118,31 +130,31 @@ public class SceneControlMediator {
 
         for (int i = lights.size() - 1; i >= 0; i--) {
             LightActor lightActor = lights.get(i);
-            if(lightActor.lightObject !=null){
+            if (lightActor.lightObject != null) {
                 lightActor.lightObject.setActive(!disable);
             }
 
         }
     }
 
-	 public void setAmbienceInfo(SceneVO vo) {
-		  Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1], vo.ambientColor[2], vo.ambientColor[3]);
-		  essentials.rayHandler.setAmbientLight(clr);
-	 }
+    public void setAmbienceInfo(SceneVO vo) {
+        Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1], vo.ambientColor[2], vo.ambientColor[3]);
+        essentials.rayHandler.setAmbientLight(clr);
+    }
 
-	 public void disableAmbience(boolean disable) {
-		  if (disable) {
-				essentials.rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
-		  } else {
-				setAmbienceInfo(sceneLoader.getSceneVO());
-		  }
-	 }
+    public void disableAmbience(boolean disable) {
+        if (disable) {
+            essentials.rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
+        } else {
+            setAmbienceInfo(sceneLoader.getSceneVO());
+        }
+    }
 
-    private ArrayList<LightActor> getAllLights(CompositeItem curComposite){
+    private ArrayList<LightActor> getAllLights(CompositeItem curComposite) {
 
         ArrayList<LightActor> lights = new ArrayList<LightActor>();
 
-        if(curComposite == null){
+        if (curComposite == null) {
             return lights;
         }
 
@@ -151,19 +163,19 @@ public class SceneControlMediator {
         ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
 
 
-        for(int i=0;i<items.size();i++){
+        for (int i = 0; i < items.size(); i++) {
             IBaseItem item = items.get(i);
-            if(item instanceof LightActor){
+            if (item instanceof LightActor) {
                 lights.add((LightActor) item);
             }
 
-            if( item instanceof CompositeItem){
+            if (item instanceof CompositeItem) {
                 nestedComposites.add((CompositeItem) item);
             }
 
         }
 
-        for(int i=0;i<nestedComposites.size();i++){
+        for (int i = 0; i < nestedComposites.size(); i++) {
             lights.addAll(getAllLights(nestedComposites.get(i)));
         }
 

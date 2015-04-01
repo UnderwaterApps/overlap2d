@@ -22,6 +22,7 @@ package com.uwsoft.editor.gdx.ui.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 
@@ -38,8 +39,9 @@ public class ColorPickerButton extends Group {
     public ColorPickerButton() {
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        colorImg = new Image(dataManager.textureManager.getEditorAsset("pixel"));
-        Image borderImg = new Image(dataManager.textureManager.getEditorAsset("colorBox"));
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        colorImg = new Image(textureManager.getEditorAsset("pixel"));
+        Image borderImg = new Image(textureManager.getEditorAsset("colorBox"));
 
         colorImg.setScale(16);
         colorImg.setX(2);

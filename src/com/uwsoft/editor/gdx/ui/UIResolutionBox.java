@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog.ConfirmDialogListener;
@@ -147,7 +148,8 @@ public class UIResolutionBox extends Group {
 
                     @Override
                     public void onConfirm() {
-                        dataManager.resolutionManager.deleteResolution(index - 1);
+                        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                        resolutionManager.deleteResolution(index - 1);
                         String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
                         stage.getSandbox().loadCurrentProject(name);
                         stage.getSandbox().loadCurrentProject();
@@ -165,7 +167,8 @@ public class UIResolutionBox extends Group {
 
         repackBtn.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                dataManager.resolutionManager.rePackProjectImagesForAllResolutions();
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                resolutionManager.rePackProjectImagesForAllResolutions();
                 loadCurrentResolution();
             }
         });

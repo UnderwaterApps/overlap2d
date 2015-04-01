@@ -41,7 +41,7 @@ public class SandboxResourceManager implements IResourceRetriever {
     public SandboxResourceManager() {
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        textureManager = dataManager.textureManager;
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     @Override
@@ -94,7 +94,8 @@ public class SandboxResourceManager implements IResourceRetriever {
 
     @Override
     public SceneVO getSceneVO(String name) {
-        FileHandle file = Gdx.files.internal(dataManager.sceneDataManager.getCurrProjectScenePathByName(name));
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
         SceneVO sceneVO = json.fromJson(SceneVO.class, file.readString());
 

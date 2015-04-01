@@ -36,7 +36,7 @@ public class PixelRect extends Group {
     public PixelRect(float width, float height) {
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
-        TextureManager tm = dataManager.textureManager;
+        TextureManager tm = facade.retrieveProxy(TextureManager.NAME);
         lines[0] = new PixelLine(tm, 0, 0, width, 0);
         lines[1] = new PixelLine(tm, 0, 0, 0, height);
         lines[2] = new PixelLine(tm, width, 0, width, height);

@@ -58,11 +58,11 @@ import java.util.concurrent.Executors;
 public class DataManager extends BaseProxy {
     private static final String TAG = DataManager.class.getCanonicalName();
     public static final String NAME = TAG;
-    public ResolutionManager resolutionManager;
-    public SceneDataManager sceneDataManager;
-    public TextureManager textureManager;
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
+    //    private ResolutionManager resolutionManager;
+//    private SceneDataManager sceneDataManager;
+//    private TextureManager textureManager;
     private String currentWorkingPath;
     private String workspacePath;
     private String DEFAULT_FOLDER = "Overlap2D";
@@ -109,9 +109,9 @@ public class DataManager extends BaseProxy {
     public void onRegister() {
         super.onRegister();
         initWorkspace();
-        resolutionManager = new ResolutionManager(this);
-        sceneDataManager = new SceneDataManager(this);
-        textureManager = new TextureManager(this);
+//        resolutionManager = new ResolutionManager(this);
+//        sceneDataManager = new SceneDataManager(this);
+//        textureManager = new TextureManager(this);
     }
 
     @Override
@@ -178,7 +178,7 @@ public class DataManager extends BaseProxy {
         //TODO: add project orig resolution setting
         currentProjectVO = projVo;
         currentProjectInfoVO = projInfoVo;
-
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.createNewScene("MainScene");
         FileUtils.writeStringToFile(new File(projPath + "/project.pit"), projVo.constructJsonString(), "utf-8");
         FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projInfoVo.constructJsonString(), "utf-8");
@@ -236,7 +236,7 @@ public class DataManager extends BaseProxy {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
             if (resolution == null) {
                 resolutionManager.curResolution = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
             } else {
@@ -301,6 +301,8 @@ public class DataManager extends BaseProxy {
 
     private void loadProjectData(String projectName) {
         // All legit loading assets
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         textureManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.curResolution);
     }
 
@@ -328,6 +330,7 @@ public class DataManager extends BaseProxy {
 
     public void saveCurrentProject(SceneVO vo) {
         saveCurrentProject();
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.saveScene(vo);
     }
 
@@ -397,6 +400,7 @@ public class DataManager extends BaseProxy {
                 for (File file : files) {
                     File copiedFile = importExternalAnimationIntoProject(file);
                     if (copiedFile.getName().toLowerCase().endsWith(".atlas")) {
+                        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
                         resolutionManager.resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                     } else if (copiedFile.getName().toLowerCase().endsWith(".scml")) {
                         //resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
@@ -544,6 +548,7 @@ public class DataManager extends BaseProxy {
                 }
 
                 if (newAnimName != null) {
+                    ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
                     resolutionManager.resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
                 }
             }
@@ -609,6 +614,7 @@ public class DataManager extends BaseProxy {
                         }
                     }
                 }
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
                 resolutionManager.rePackProjectImagesForAllResolutions();
             }
         });
@@ -635,6 +641,7 @@ public class DataManager extends BaseProxy {
             @Override
             public void run() {
                 copyImageFilesForAllResolutionsIntoProject(files, true);
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
                 resolutionManager.rePackProjectImagesForAllResolutions();
             }
         });
@@ -775,9 +782,8 @@ public class DataManager extends BaseProxy {
     }
 
     public void copyDefaultStyleIntoProject() {
-
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/styles";
-
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         File source = new File("assets/ui");
         if (!(source.exists() && source.isDirectory())) {
             try {
@@ -788,7 +794,6 @@ public class DataManager extends BaseProxy {
                 e.printStackTrace();
             }
         }
-
         File fileTarget = new File(targetPath);
         try {
             FileUtils.copyDirectory(source, fileTarget);
@@ -825,6 +830,7 @@ public class DataManager extends BaseProxy {
             exportFonts(currentProjectVO.projectMainExportPath);
         }
         exportStyles(defaultBuildPath);
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.buildScenes(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             sceneDataManager.buildScenes(currentProjectVO.projectMainExportPath);

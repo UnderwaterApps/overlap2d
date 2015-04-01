@@ -36,6 +36,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
@@ -47,12 +49,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 
-public class TextureManager {
-
-
-    private final DataManager dataManager;
+public class TextureManager extends BaseProxy {
+    private static final String TAG = TextureManager.class.getCanonicalName();
+    public static final String NAME = TAG;
     public AssetManager assetsManager;
-
     public String labelStylePath;
     public Skin newEditorSkin;
     public MySkin editorSkin;
@@ -66,10 +66,14 @@ public class TextureManager {
 
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
 
-    public TextureManager(DataManager dataManager) {
-        this.dataManager = dataManager;
-        assetsManager = new AssetManager();
+    public TextureManager() {
+        super(NAME);
+    }
 
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        assetsManager = new AssetManager();
         loadEditorAssets();
     }
 
@@ -242,6 +246,7 @@ public class TextureManager {
     }
 
     public boolean checkFontExistence() {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         File folder = new File(dataManager.getFreeTypeFontPath());
         if (!folder.exists()) return false;
         for (final File fileEntry : folder.listFiles()) {
@@ -254,6 +259,7 @@ public class TextureManager {
 
     public void loadBitmapFonts(FontSizePair[] fonts, float mulX) {
         bitmapFonts.clear();
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         for (FontSizePair pair : fonts) {
             FileHandle fontFile;
             fontFile = Gdx.files.internal(dataManager.getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
@@ -270,13 +276,16 @@ public class TextureManager {
         FontSizePair[] tmp = new FontSizePair[1];
         tmp[0] = pair;
 
-        if (!bitmapFonts.containsKey(pair))
-            loadBitmapFonts(tmp, dataManager.resolutionManager.getCurrentMul());
+        if (!bitmapFonts.containsKey(pair)) {
+            ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+            loadBitmapFonts(tmp, resolutionManager.getCurrentMul());
+        }
 
         return bitmapFonts.get(pair);
     }
 
     public Texture getRegionOriginalImage(String regionName) {
+        DataManager dataManager = facade.retrieveProxy(DataManager.NAME);
         String sourcePath = dataManager.getCurrentWorkingPath() + "/" + dataManager.getCurrentProjectVO().projectName + "/assets/orig/images/" + regionName + ".png";
         return new Texture(Gdx.files.absolute(sourcePath));
     }

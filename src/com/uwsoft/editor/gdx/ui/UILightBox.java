@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -88,7 +89,7 @@ public class UILightBox extends ExpandableUIBox {
 
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void finished (Color newColor) {
+                    public void finished(Color newColor) {
                         cPicker.setColorValue(newColor);
 
                         // change scene ambient light
@@ -104,7 +105,7 @@ public class UILightBox extends ExpandableUIBox {
                 super.touchUp(event, x, y, pointer, button);
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void finished (Color newColor) {
+                    public void finished(Color newColor) {
                         cPickerElems.setColorValue(newColor);
                     }
                 });
@@ -118,7 +119,8 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image bulbThumb = new Image(dataManager.textureManager.getEditorAsset("bulb"));
+                TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+                Image bulbThumb = new Image(textureManager.getEditorAsset("bulb"));
                 payload.setDragActor(bulbThumb);
                 dragAndDropBulb.setDragActorPosition(-bulbThumb.getWidth() / 2, bulbThumb.getHeight() / 2);
 
@@ -158,7 +160,8 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image coneThumb = new Image(dataManager.textureManager.getEditorAsset("cone"));
+                TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+                Image coneThumb = new Image(textureManager.getEditorAsset("cone"));
                 payload.setDragActor(coneThumb);
                 dragAndDropCone.setDragActorPosition(-coneThumb.getWidth() / 2, coneThumb.getHeight() / 2);
 

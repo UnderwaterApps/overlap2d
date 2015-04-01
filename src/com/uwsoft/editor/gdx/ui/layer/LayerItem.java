@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
@@ -47,42 +48,43 @@ public class LayerItem extends Group {
         this.sandbox = sandbox;
         facade = Overlap2DFacade.getInstance();
         dataManager = facade.retrieveProxy(DataManager.NAME);
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         setWidth(247);
         setHeight(20);
-        bgImg = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+        bgImg = new Image(textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0.425f, 0.425f, 0.425f, 1.0f);
         bgImg.setScaleX(getWidth());
         bgImg.setScaleY(getHeight());
         addActor(bgImg);
 
-        Image bottom = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+        Image bottom = new Image(textureManager.getEditorAsset("pixel"));
         bottom.setColor(0.125f, 0.125f, 0.125f, 1.0f);
         bottom.setScaleX(getWidth());
         addActor(bottom);
 
-        Image sep1 = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+        Image sep1 = new Image(textureManager.getEditorAsset("pixel"));
         sep1.setColor(0.225f, 0.225f, 0.225f, 1.0f);
         sep1.setScaleY(getHeight());
         sep1.setX(20);
         addActor(sep1);
 
-        Image sep2 = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+        Image sep2 = new Image(textureManager.getEditorAsset("pixel"));
         sep2.setColor(0.225f, 0.225f, 0.225f, 1.0f);
         sep2.setScaleY(getHeight());
         sep2.setX(40);
         addActor(sep2);
 
-        lock = new Image(dataManager.textureManager.getEditorAsset("lock"));
+        lock = new Image(textureManager.getEditorAsset("lock"));
         lock.setX(4);
         lock.setY(4);
         addActor(lock);
 
-        eye = new Image(dataManager.textureManager.getEditorAsset("eye"));
+        eye = new Image(textureManager.getEditorAsset("eye"));
         eye.setX(24);
         eye.setY(5);
         addActor(eye);
 
-        Label lbl = new Label(layerItemVo.layerName, dataManager.textureManager.editorSkin);
+        Label lbl = new Label(layerItemVo.layerName, textureManager.editorSkin);
         lbl.setX(44);
         lbl.setY(4);
         addActor(lbl);
@@ -122,7 +124,8 @@ public class LayerItem extends Group {
 
     public void showLayerRowSeparator() {
         if (rowSeparator == null) {
-            rowSeparator = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+            TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+            rowSeparator = new Image(textureManager.getEditorAsset("pixel"));
             rowSeparator.setColor(0.97f, 0.97f, 0.98f, 1.0f);
             rowSeparator.setScaleX(getWidth());
             rowSeparator.setScaleY(2);

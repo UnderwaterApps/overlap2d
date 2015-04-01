@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
+import com.uwsoft.editor.data.manager.SceneDataManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
@@ -122,7 +123,8 @@ public class Overlap2DMenuBarMediator {
                         if (input == null || input.equals("")) {
                             return;
                         }
-                        dataManager.sceneDataManager.createNewScene(input);
+                        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                        sceneDataManager.createNewScene(input);
                         sandbox.loadScene(input);
                         onScenesChanged();
                     }
@@ -133,7 +135,8 @@ public class Overlap2DMenuBarMediator {
                         new ConfirmDialog.ConfirmDialogListener() {
                             @Override
                             public void onConfirm() {
-                                dataManager.sceneDataManager.deleteCurrentScene();
+                                SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                                sceneDataManager.deleteCurrentScene();
                                 sandbox.loadScene("MainScene");
                                 onScenesChanged();
                             }

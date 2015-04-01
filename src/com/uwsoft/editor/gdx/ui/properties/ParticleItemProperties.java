@@ -23,6 +23,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.data.manager.SceneDataManager;
+import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.DataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -52,7 +54,8 @@ public class ParticleItemProperties extends Group implements IPropertyBox<Partic
     @Override
     public void initView() {
         clear();
-        Image bgImg = new Image(dataManager.textureManager.getEditorAsset("pixel"));
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        Image bgImg = new Image(textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0, 0, 0, 1.0f);
         bgImg.setScale(230, 100);
         addActor(bgImg);
