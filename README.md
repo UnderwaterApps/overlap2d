@@ -34,7 +34,7 @@ Here are the steps you need to do in order to run this project from sources
 * Fork this repo
 * Clone your fork to your local
 * Overlap2D requires for it to be in same folder in which o2d runtime and spine runtime are located so you need to clone them separately
-* Clone overlap2d-runtime from [here](https://github.com/UnderwaterApps/overlap2d-runtime-libgdx)
+* Clone overlap2d-runtime from [here](https://github.com/UnderwaterApps/overlap2d-runtime-libgdx) (and switch it to dev branch)
 * Clone spine runtimes from [here](https://github.com/EsotericSoftware/spine-runtimes)
 * Make sure that paths are correct by taking a look (not modifying) settigs.gradle of overlap2d project
 * Open your favorite IDE (Eclipse/IntelliJ) and import overlap2d as gradle project
