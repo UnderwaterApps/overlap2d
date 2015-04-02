@@ -21,8 +21,9 @@ package com.uwsoft.editor.gdx.ui;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
-import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBar;
-import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBarMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
+import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -37,9 +38,8 @@ public class UIMainTable extends Table {
     public UILibraryBox libraryPanel;
     public Table rightTable;
     public Table leftTable;
+    public Overlap2DMenuBarMediator menuMediator;
     private UIToolBox toolPanel;
-
-	 public Overlap2DMenuBarMediator menuMediator;
 
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
@@ -109,9 +109,8 @@ public class UIMainTable extends Table {
 
     private void initTop() {
         // init menu bar
-		  menuMediator = new Overlap2DMenuBarMediator();
-		  Overlap2DMenuBar menuBar = new Overlap2DMenuBar(menuMediator);
-
+        //TODO: need to be changed!
+        Overlap2DMenuBar menuBar = (Overlap2DMenuBar) Overlap2DFacade.getInstance().retrieveMediator(Overlap2DMenuBarMediator.NAME).getViewComponent();
         add(menuBar.getTable()).fillX().expandX().row();
         //
         compositePanel = new UICompositePanel(uiStage);

@@ -16,19 +16,31 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.menubar.commands;
+package com.uwsoft.editor.mvc.view.dialog;
+
+import com.puremvc.patterns.mediator.SimpleMediator;
+import com.uwsoft.editor.Overlap2D;
 
 /**
- * Created by sargis on 3/25/15.
+ * Created by sargis on 4/1/15.
  */
-public enum FileMenuCommand {
-    NEW_PROJECT ,
-    OPEN_PROJECT,
-    SAVE_PROJECT,
-    IMPORT_TO_LIBRARY,
-    EXPORT ,
-    EXPORT_SETTINGS,
-    EXIT,
-    CRATE_NEW_SCENE,
-    DELETE_CURRENT_SCENE
+public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
+    private static final String TAG = NewProjectDialogMediator.class.getCanonicalName();
+    private static final String NAME = TAG;
+
+    public NewProjectDialogMediator() {
+        super(NAME, null);
+    }
+
+    @Override
+    public String[] listNotificationInterests() {
+        return new String[]{
+                Overlap2D.CREATE,
+                Overlap2D.PAUSE,
+                Overlap2D.RESUME,
+                Overlap2D.RENDER,
+                Overlap2D.RESIZE,
+                Overlap2D.DISPOSE,
+        };
+    }
 }

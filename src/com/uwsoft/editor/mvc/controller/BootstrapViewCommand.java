@@ -16,15 +16,21 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.menubar.commands;
+package com.uwsoft.editor.mvc.controller;
+
+import com.puremvc.patterns.command.SimpleCommand;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 
 /**
- * Created by sargis on 3/25/15.
+ * Created by sargis on 4/1/15.
  */
-public enum EditMenuCommand {
-    CUT,
-    COPY,
-    PAST,
-    UNDO,
-    REDO
+public class BootstrapViewCommand extends SimpleCommand {
+    @Override
+    public void execute(Notification notification) {
+        super.execute(notification);
+        facade = Overlap2DFacade.getInstance();
+        facade.registerMediator(new Overlap2DScreenMediator());
+    }
 }

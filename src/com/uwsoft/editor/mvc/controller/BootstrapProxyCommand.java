@@ -18,16 +18,25 @@
 
 package com.uwsoft.editor.mvc.controller;
 
-import com.puremvc.patterns.command.MacroCommand;
+import com.puremvc.patterns.command.SimpleCommand;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 
 /**
- * Created by sargis on 3/30/15.
+ * Created by sargis on 4/1/15.
  */
-public class StartupCommand extends MacroCommand {
+public class BootstrapProxyCommand extends SimpleCommand {
     @Override
-    protected void initializeMacroCommand() {
-        super.initializeMacroCommand();
-        addSubCommand(BootstrapProxyCommand.class);
-        addSubCommand(BootstrapViewCommand.class);
+    public void execute(Notification notification) {
+        super.execute(notification);
+        facade = Overlap2DFacade.getInstance();
+        facade.registerProxy(new ProjectManager());
+        facade.registerProxy(new ResolutionManager());
+        facade.registerProxy(new SceneDataManager());
+        facade.registerProxy(new TextureManager());
     }
 }

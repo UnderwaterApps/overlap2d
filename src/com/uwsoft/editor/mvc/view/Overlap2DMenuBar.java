@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.menubar;
+package com.uwsoft.editor.mvc.view;
 
 
 import com.badlogic.gdx.Gdx;
@@ -27,8 +27,7 @@ import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
-import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -36,21 +35,37 @@ import java.util.ArrayList;
 
 
 public class Overlap2DMenuBar extends MenuBar {
+    public static final String FILE_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".FILE_MENU";
+    public static final String NEW_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".NEW_PROJECT";
+    public static final String OPEN_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".OPEN_PROJECT";
+    public static final String SAVE_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SAVE_PROJECT";
+    public static final String IMPORT_TO_LIBRARY = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".IMPORT_TO_LIBRARY";
+    public static final String EXPORT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT";
+    public static final String EXPORT_SETTINGS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT_SETTINGS";
+    public static final String EXIT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXIT";
+    public static final String CRATE_NEW_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CRATE_NEW_SCENE";
+    public static final String DELETE_CURRENT_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".DELETE_CURRENT_SCENE";
+    //
+    public static final String EDIT_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EDIT_MENU";
+    public static final String CUT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CUT";
+    public static final String COPY = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".COPY";
+    public static final String PAST = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".PAST";
+    public static final String UNDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".UNDO";
+    public static final String REDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".REDO";
+    //
     private static final String TAG = Overlap2DMenuBar.class.getCanonicalName();
-    private final Overlap2DMenuBarMediator mediator;
     private final FileMenu fileMenu;
     private final String maskKey;
     private final EditMenu editMenu;
+    private final Overlap2DFacade facade;
 
-
-    public Overlap2DMenuBar(Overlap2DMenuBarMediator mediator) {
-        this.mediator = mediator;
+    public Overlap2DMenuBar() {
+        facade = Overlap2DFacade.getInstance();
         maskKey = SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC ? "Cmd" : "Ctrl";
         fileMenu = new FileMenu();
         editMenu = new EditMenu();
         addMenu(fileMenu);
         addMenu(editMenu);
-        mediator.setTarget(this);
     }
 
 
@@ -79,11 +94,11 @@ public class Overlap2DMenuBar extends MenuBar {
         public EditMenu() {
             super("Edit");
             pad(5);
-            cut = new MenuItem("Cut", new EditMenuListener(EditMenuCommand.CUT)).setShortcut(maskKey + " + X");
-            copy = new MenuItem("Copy", new EditMenuListener(EditMenuCommand.COPY)).setShortcut(maskKey + " + C");
-            paste = new MenuItem("Paste", new EditMenuListener(EditMenuCommand.PAST)).setShortcut(maskKey + " + P");
-            undo = new MenuItem("Undo", new EditMenuListener(EditMenuCommand.UNDO)).setShortcut(maskKey + " + Z");
-            redo = new MenuItem("Redo", new EditMenuListener(EditMenuCommand.REDO)).setShortcut(maskKey + " + Y");
+            cut = new MenuItem("Cut", new EditMenuListener(CUT)).setShortcut(maskKey + " + X");
+            copy = new MenuItem("Copy", new EditMenuListener(COPY)).setShortcut(maskKey + " + C");
+            paste = new MenuItem("Paste", new EditMenuListener(PAST)).setShortcut(maskKey + " + P");
+            undo = new MenuItem("Undo", new EditMenuListener(UNDO)).setShortcut(maskKey + " + Z");
+            redo = new MenuItem("Redo", new EditMenuListener(REDO)).setShortcut(maskKey + " + Y");
             addItem(cut);
             addItem(copy);
             addItem(paste);
@@ -101,15 +116,15 @@ public class Overlap2DMenuBar extends MenuBar {
 
         private class EditMenuListener extends ChangeListener {
 
-            private final EditMenuCommand menuCommand;
+            private final String menuCommand;
 
-            public EditMenuListener(EditMenuCommand menuCommand) {
+            public EditMenuListener(String menuCommand) {
                 this.menuCommand = menuCommand;
             }
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                mediator.editMenuItemClicked(menuCommand);
+                facade.sendNotification(menuCommand, null, EDIT_MENU);
             }
         }
     }
@@ -127,27 +142,27 @@ public class Overlap2DMenuBar extends MenuBar {
         public FileMenu() {
             super("File");
             pad(5);
-            saveProject = new MenuItem("Save Project", new FileMenuListener(FileMenuCommand.SAVE_PROJECT));
-            addItem(new MenuItem("New Project", new FileMenuListener(FileMenuCommand.NEW_PROJECT)));
-            addItem(new MenuItem("Open Project", new FileMenuListener(FileMenuCommand.OPEN_PROJECT)));
+            saveProject = new MenuItem("Save Project", new FileMenuListener(SAVE_PROJECT));
+            addItem(new MenuItem("New Project", new FileMenuListener(NEW_PROJECT)));
+            addItem(new MenuItem("Open Project", new FileMenuListener(OPEN_PROJECT)));
             addItem(saveProject);
             //
             scenesMenuItem = new MenuItem("Scenes");
             scenesPopupMenu = new PopupMenu();
-            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new FileMenuListener(FileMenuCommand.CRATE_NEW_SCENE)));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new FileMenuListener(FileMenuCommand.DELETE_CURRENT_SCENE)));
+            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new FileMenuListener(CRATE_NEW_SCENE)));
+            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new FileMenuListener(DELETE_CURRENT_SCENE)));
             scenesPopupMenu.addSeparator();
             scenesMenuItem.setSubMenu(scenesPopupMenu);
             addItem(scenesMenuItem);
             //
             addSeparator();
-            importToLibrary = new MenuItem("Import to Library", new FileMenuListener(FileMenuCommand.IMPORT_TO_LIBRARY));
-            export = new MenuItem("Export", new FileMenuListener(FileMenuCommand.EXPORT));
-            exportSettings = new MenuItem("Export Settings", new FileMenuListener(FileMenuCommand.EXPORT_SETTINGS));
+            importToLibrary = new MenuItem("Import to Library", new FileMenuListener(IMPORT_TO_LIBRARY));
+            export = new MenuItem("Export", new FileMenuListener(EXPORT));
+            exportSettings = new MenuItem("Export Settings", new FileMenuListener(EXPORT_SETTINGS));
             addItem(importToLibrary);
             addItem(export);
             addItem(exportSettings);
-            addItem(new MenuItem("Exit", new FileMenuListener(FileMenuCommand.EXIT)));
+            addItem(new MenuItem("Exit", new FileMenuListener(EXIT)));
             sceneMenuItems = new Array<>();
         }
 
@@ -190,16 +205,15 @@ public class Overlap2DMenuBar extends MenuBar {
         }
 
         private class FileMenuListener extends ChangeListener {
-            private final FileMenuCommand menuCommand;
+            private final String menuCommand;
 
-            public FileMenuListener(FileMenuCommand menuCommand) {
+            public FileMenuListener(String menuCommand) {
                 this.menuCommand = menuCommand;
             }
 
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log(TAG, "menuCommand : " + menuCommand);
-                mediator.fileMenuItemClicked(menuCommand);
+                facade.sendNotification(menuCommand, null, FILE_MENU);
             }
         }
     }

@@ -71,15 +71,10 @@ public class Overlap2DFacade extends SimpleFacade {
     @Override
     protected void initializeModel() {
         super.initializeModel();
-        registerProxy(new ProjectManager());
-        registerProxy(new ResolutionManager());
-        registerProxy(new SceneDataManager());
-        registerProxy(new TextureManager());
     }
 
     @Override
     protected void initializeView() {
         super.initializeView();
-        registerMediator(new Overlap2DScreenMediator());
     }
 }

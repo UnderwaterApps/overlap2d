@@ -19,6 +19,7 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
 import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.dialog.NewProjectDialog;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -32,29 +33,30 @@ public class DialogSystem {
         this.stage = stage;
     }
 
-    public DlgNewProject createNewProjectDialog() {
-        DlgNewProject dlg = new DlgNewProject(stage);
-        return (DlgNewProject)initiateDialog(dlg);
+    public NewProjectDialog createNewProjectDialog() {
+        NewProjectDialog dlg = new NewProjectDialog(stage);
+        dlg.show(stage);
+        return dlg;
     }
 
     public DlgImport showImportDialog() {
         DlgImport dlg = new DlgImport(stage);
-        return (DlgImport)initiateDialog(dlg);
+        return (DlgImport) initiateDialog(dlg);
     }
 
     public CreateNewResolutionDialog showCreateNewResolutionDialog() {
         CreateNewResolutionDialog dlg = new CreateNewResolutionDialog(stage);
-        return (CreateNewResolutionDialog)initiateDialog(dlg);
+        return (CreateNewResolutionDialog) initiateDialog(dlg);
     }
 
     public ConfirmDialog showConfirmDialog() {
         ConfirmDialog dlg = new ConfirmDialog(stage);
-        return (ConfirmDialog)initiateDialog(dlg);
+        return (ConfirmDialog) initiateDialog(dlg);
     }
 
     public InputDialog showInputDialog() {
         InputDialog dlg = new InputDialog(stage);
-        return (InputDialog)initiateDialog(dlg);
+        return (InputDialog) initiateDialog(dlg);
     }
 
 
@@ -62,19 +64,20 @@ public class DialogSystem {
         InfoDialog dlg = new InfoDialog(stage);
         dlg.setDescription(desc);
 
-        return (InfoDialog)initiateDialog(dlg);
+        return (InfoDialog) initiateDialog(dlg);
     }
+
     public InfoDialog showInfoDialogNavigateBack(String desc) {
         InfoDialog dlg = new InfoDialog(stage);
         dlg.setDescription(desc);
 
-        return (InfoDialog)initiateDialog(dlg);
+        return (InfoDialog) initiateDialog(dlg);
     }
 
     public DlgExport showExportDialog() {
         DlgExport dlg = new DlgExport(stage);
 
-        return (DlgExport)initiateDialog(dlg);
+        return (DlgExport) initiateDialog(dlg);
     }
 
     public CompositeDialog initiateDialog(CompositeDialog dialog) {
