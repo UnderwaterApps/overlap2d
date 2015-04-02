@@ -24,6 +24,9 @@ import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.data.manager.TextureManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
 
+/**
+ * This class will be removed after changes in runtime.
+ */
 public class BaseStage extends Overlap2DStage {
 
     public DataManager dataManager;
