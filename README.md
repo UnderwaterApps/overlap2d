@@ -26,7 +26,7 @@ There is also [forum](http://overlap2d.com/forums) for all discussions.
 
 ### Contributing
 Overlap2D is growing really fast, and any help from community, be that just a small tweet or a code contribution is a huge help.
-Pull requests to this repo are very welcome!
+Pull requests to this repo are very welcome! And you are also welcome to explore [javadocs](http://overlap2d.com/javadoc/)
 
 ### Reporting Issues
 Because the editor is now open source, you can use the [issue tracker](https://github.com/UnderwaterApps/overlap2d/issues?page=1&state=open) here on GitHub to report issues.
