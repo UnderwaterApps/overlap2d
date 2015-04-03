@@ -1043,4 +1043,27 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         return textureManager.getProjectSpriterAnimationsList().get(name);
     }
+
+    public void createNewProject(String projectPath, int originWidth, int originHeight) {
+        if (projectPath == null || projectPath.equals("")) {
+            return;
+        }
+        String projectName = new File(projectPath).getName();
+
+        if (projectName.equals("")) {
+            return;
+        }
+        
+        try {
+            createEmptyProject(projectName, originWidth, originHeight);
+            openProjectAndLoadAllData(projectName);
+            String workSpacePath = projectPath.substring(0, projectPath.lastIndexOf(projectName));
+            if (workSpacePath.length() > 0) {
+                setLastOpenedPath(workSpacePath);
+                setWorkspacePath(workSpacePath);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }

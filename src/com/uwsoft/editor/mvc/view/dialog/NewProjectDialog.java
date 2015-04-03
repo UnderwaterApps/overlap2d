@@ -18,168 +18,100 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
+import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
-import com.puremvc.patterns.observer.Notifier;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
-public class NewProjectDialog extends VisDialog implements Notifier {
-
-    private Overlap2DFacade facade;
-    private ProjectManager projectManager;
-    private VisTextButton createBtn;
-    private TextButton fileChooserBtn;
-    private TextField projectPathTextBox;
-    private TextField origWidth;
-    private TextField origHeight;
+public class NewProjectDialog extends VisDialog {
+    public static final String CREATE = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".CREATE";
+    public static final String BROWS = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".BROWS";
+    private static final String DEFAULT_ORIGIN_WITH = "2400";
+    private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
+    private final VisTextField projectPathTextField;
+    private final VisTextField originWithTextField;
+    private final VisTextField originHeightTextField;
 
     public NewProjectDialog() {
         super("Create New Project");
-        facade = Overlap2DFacade.getInstance();
+
         setModal(true);
         addCloseButton();
         VisTable mainTable = new VisTable();
 //        mainTable.debug();
         VisTable projectPathTable = new VisTable();
         projectPathTable.add(new VisLabel("Project Folder:")).right().padRight(5);
-        projectPathTable.add(new VisTextField("")).padRight(3);
+        projectPathTextField = new VisTextField("");
+        projectPathTable.add(projectPathTextField).padRight(3);
         VisTextButton browsBtn = new VisTextButton("...");
-        browsBtn.addListener(new BrowsBtnClickListener());
+
         projectPathTable.add(browsBtn).left();
         mainTable.add(projectPathTable).padBottom(15);
         //
         mainTable.row();
         //
+        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
         VisTable projectResolutionTable = new VisTable();
         projectResolutionTable.add(new VisLabel("Original Resolution:")).right().padRight(5);
-        projectResolutionTable.add(new VisTextField("2400")).width(50).padRight(3);
+        originWithTextField = new VisTextField(DEFAULT_ORIGIN_WITH);
+        originWithTextField.setTextFieldFilter(digitsOnlyFilter);
+        projectResolutionTable.add(originWithTextField).width(50).padRight(3);
         projectResolutionTable.add(new VisLabel("X")).left().padRight(3);
-        projectResolutionTable.add(new VisTextField("1140")).width(50).left();
+        originHeightTextField = new VisTextField(DEFAULT_ORIGIN_HEIGHT);
+        originHeightTextField.setTextFieldFilter(digitsOnlyFilter);
+        projectResolutionTable.add(originHeightTextField).width(50).left();
         mainTable.add(projectResolutionTable).padBottom(15);
         //
         mainTable.row();
         //
         VisTextButton createBtn = new VisTextButton("Create New Project");
-        createBtn.addListener(new CreateBtnClickListener());
+
         mainTable.add(createBtn).right();
         //
         add(mainTable).pad(15);
-//        uiStage.setKeyboardFocus(ui.getTextBoxById("projectPath"));
-//
-//        projectPathTextBox = ui.getTextBoxById("projectPath");
-//        projectPathTextBox.getOnscreenKeyboard().show(true); //why not working this is :( benbenutta!
-//
-//        fileChooserBtn = ui.getTextButtonById("directoryChooseBtn");
-//
-//        origWidth = ui.getTextBoxById("width");
-//        origHeight = ui.getTextBoxById("height");
-//
-//        origWidth.setText("2400");
-//        origHeight.setText("1440");
-//
-//        crateBtnCrateProject();
-//        facade = Overlap2DFacade.getInstance();
-//        projectManager = facade.retrieveProxy(ProjectManager.NAME);
-//        fileChooserBtn.addListener(new ClickListener() {
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                super.touchUp(event, x, y, pointer, button);
-//                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-//                fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-//                fileChooser.setMultiselectionEnabled(false);
-//                fileChooser.setListener(new FileChooserAdapter() {
-//                    @Override
-//                    public void selected(FileHandle file) {
-//                        super.selected(file);
-//                        projectPathTextBox.setText(file.path());
-//                    }
-//
-//                });
-//                stage.addActor(fileChooser.fadeIn());
-//            }
-//        });
-    }
-
-    private void crateBtnCrateProject() {
-//        createBtn = ui.getTextButtonById("createBtn");
-//        createBtn.addListener(new ClickListener() {
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                super.touchUp(event, x, y, pointer, button);
-//                createProject();
-//            }
-//        });
-    }
-
-    private void createProject() {
-//        String projectPath = projectPathTextBox.getText();
-//        if (projectPath == null || projectPath.equals("")) {
-//            return;
-//        }
-//
-//        String projectName = new File(projectPath).getName();
-//
-//        if (projectName == null || projectName.equals("")) {
-//            return;
-//        }
-//
-//        String workSpacePath = projectPath.substring(0, projectPath.lastIndexOf(projectName));
-//        if (workSpacePath.length() > 0) {
-//            projectManager.setLastOpenedPath(workSpacePath);
-//            projectManager.setWorkspacePath(workSpacePath);
-//        }
-//
-//        int origWidthValue = 0;
-//        int origHeightValue = 0;
-//
-//        try {
-//            origWidthValue = Integer.parseInt(origWidth.getText());
-//            origHeightValue = Integer.parseInt(origHeight.getText());
-//        } catch (Exception ignored) {
-//        }
-//
-//        try {
-//            projectManager.createEmptyProject(projectName, origWidthValue, origHeightValue);
-//            projectManager.openProjectAndLoadAllData(projectName);
-//            stage.getSandbox().loadCurrentProject();
-//            stage.loadCurrentProject();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//
-//        remove();
+        //
+        browsBtn.addListener(new BtnClickListener(BROWS));
+        createBtn.addListener(new BtnClickListener(CREATE));
     }
 
     @Override
-    public void sendNotification(String notificationName, Object body, String type) {
-
+    public VisDialog show(Stage stage, Action action) {
+        originWithTextField.setText(DEFAULT_ORIGIN_WITH);
+        originHeightTextField.setText(DEFAULT_ORIGIN_HEIGHT);
+        projectPathTextField.setText("");
+        return super.show(stage, action);
     }
 
-    @Override
-    public void sendNotification(String notificationName, Object body) {
-
+    public String getProjectPath() {
+        return projectPathTextField.getText();
     }
 
-    @Override
-    public void sendNotification(String notificationName) {
-
+    public void setProjectPath(String path) {
+        projectPathTextField.setText(path);
     }
 
-    private class CreateBtnClickListener extends ClickListener {
-        @Override
-        public void clicked(InputEvent event, float x, float y) {
-            super.clicked(event, x, y);
-            createProject();
+    public String getOriginWidth() {
+        return originWithTextField.getText();
+    }
+
+    public String getOriginHeight() {
+        return originHeightTextField.getText();
+    }
+
+    private class BtnClickListener extends ClickListener {
+        private final String command;
+
+        public BtnClickListener(String command) {
+            this.command = command;
         }
-    }
 
-    private class BrowsBtnClickListener extends ClickListener {
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
-            createProject();
+            Overlap2DFacade facade = Overlap2DFacade.getInstance();
+            facade.sendNotification(command);
         }
     }
 }

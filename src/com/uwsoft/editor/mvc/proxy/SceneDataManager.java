@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.proxy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import org.apache.commons.io.FileUtils;
@@ -38,6 +39,12 @@ public class SceneDataManager extends BaseProxy {
 
     public SceneDataManager() {
         super(NAME);
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        facade = Overlap2DFacade.getInstance();
     }
 
     public SceneVO createNewScene(String name) {

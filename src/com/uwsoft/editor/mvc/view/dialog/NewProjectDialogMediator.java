@@ -18,11 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 
 /**
@@ -39,7 +43,9 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2DMenuBar.NEW_PROJECT
+                Overlap2DMenuBar.NEW_PROJECT,
+                NewProjectDialog.BROWS,
+                NewProjectDialog.CREATE
         };
     }
 
@@ -52,11 +58,34 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
+        Sandbox sandbox = Sandbox.getInstance();
+        UIStage uiStage = sandbox.getUIStage();
         switch (notification.getName()) {
             case Overlap2DMenuBar.NEW_PROJECT:
-                Sandbox sandbox = Sandbox.getInstance();
-                UIStage uiStage = sandbox.getUIStage();
                 viewComponent.show(uiStage);
+                break;
+            case NewProjectDialog.CREATE:
+                ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+                String projectPath = viewComponent.getProjectPath();
+                int originWidth = Integer.parseInt(viewComponent.getOriginWidth());
+                int originHeight = Integer.parseInt(viewComponent.getOriginHeight());
+                projectManager.createNewProject(projectPath, originWidth, originHeight);
+                //TODO: this should be not hear
+                sandbox.loadCurrentProject();
+                break;
+            case NewProjectDialog.BROWS:
+                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+                fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
+                fileChooser.setMultiselectionEnabled(false);
+                fileChooser.setListener(new FileChooserAdapter() {
+                    @Override
+                    public void selected(FileHandle file) {
+                        super.selected(file);
+                        viewComponent.setProjectPath(file.path());
+                    }
+
+                });
+                uiStage.addActor(fileChooser.fadeIn());
                 break;
         }
 
