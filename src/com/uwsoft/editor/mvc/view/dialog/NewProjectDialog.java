@@ -24,13 +24,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.ui.widget.InputFileWidget;
 
 public class NewProjectDialog extends VisDialog {
     public static final String CREATE = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".CREATE";
     public static final String BROWS = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".BROWS";
     private static final String DEFAULT_ORIGIN_WITH = "2400";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
-    private final VisTextField projectPathTextField;
+    private final InputFileWidget inputFile;
     private final VisTextField originWithTextField;
     private final VisTextField originHeightTextField;
 
@@ -43,11 +44,8 @@ public class NewProjectDialog extends VisDialog {
 //        mainTable.debug();
         VisTable projectPathTable = new VisTable();
         projectPathTable.add(new VisLabel("Project Folder:")).right().padRight(5);
-        projectPathTextField = new VisTextField("");
-        projectPathTable.add(projectPathTextField).padRight(3);
-        VisTextButton browsBtn = new VisTextButton("...");
-
-        projectPathTable.add(browsBtn).left();
+        inputFile = new InputFileWidget();
+        projectPathTable.add(inputFile);
         mainTable.add(projectPathTable).padBottom(15);
         //
         mainTable.row();
@@ -72,7 +70,7 @@ public class NewProjectDialog extends VisDialog {
         //
         add(mainTable).pad(15);
         //
-        browsBtn.addListener(new BtnClickListener(BROWS));
+        inputFile.addListener(new BtnClickListener(BROWS));
         createBtn.addListener(new BtnClickListener(CREATE));
     }
 
@@ -80,16 +78,16 @@ public class NewProjectDialog extends VisDialog {
     public VisDialog show(Stage stage, Action action) {
         originWithTextField.setText(DEFAULT_ORIGIN_WITH);
         originHeightTextField.setText(DEFAULT_ORIGIN_HEIGHT);
-        projectPathTextField.setText("");
+        inputFile.setValue("");
         return super.show(stage, action);
     }
 
     public String getProjectPath() {
-        return projectPathTextField.getText();
+        return inputFile.getValue();
     }
 
     public void setProjectPath(String path) {
-        projectPathTextField.setText(path);
+        inputFile.setValue(path);
     }
 
     public String getOriginWidth() {
