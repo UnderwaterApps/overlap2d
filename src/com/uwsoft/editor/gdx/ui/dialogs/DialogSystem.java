@@ -33,12 +33,6 @@ public class DialogSystem {
         this.stage = stage;
     }
 
-    public NewProjectDialog createNewProjectDialog() {
-        NewProjectDialog dlg = new NewProjectDialog(stage);
-        dlg.show(stage);
-        return dlg;
-    }
-
     public DlgImport showImportDialog() {
         DlgImport dlg = new DlgImport(stage);
         return (DlgImport) initiateDialog(dlg);

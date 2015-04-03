@@ -19,7 +19,6 @@
 package com.uwsoft.editor.mvc.view;
 
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
@@ -43,7 +42,8 @@ public class Overlap2DMenuBar extends MenuBar {
     public static final String EXPORT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT";
     public static final String EXPORT_SETTINGS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT_SETTINGS";
     public static final String EXIT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXIT";
-    public static final String CRATE_NEW_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CRATE_NEW_SCENE";
+    public static final String NEW_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".NEW_SCENE";
+    public static final String SELECT_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SELECT_SCENE";
     public static final String DELETE_CURRENT_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".DELETE_CURRENT_SCENE";
     //
     public static final String EDIT_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EDIT_MENU";
@@ -82,7 +82,7 @@ public class Overlap2DMenuBar extends MenuBar {
         editMenu.setProjectOpen(open);
     }
 
-    class EditMenu extends Menu {
+    private class EditMenu extends Menu {
 
 
         private final MenuItem cut;
@@ -94,11 +94,11 @@ public class Overlap2DMenuBar extends MenuBar {
         public EditMenu() {
             super("Edit");
             pad(5);
-            cut = new MenuItem("Cut", new EditMenuListener(CUT)).setShortcut(maskKey + " + X");
-            copy = new MenuItem("Copy", new EditMenuListener(COPY)).setShortcut(maskKey + " + C");
-            paste = new MenuItem("Paste", new EditMenuListener(PAST)).setShortcut(maskKey + " + P");
-            undo = new MenuItem("Undo", new EditMenuListener(UNDO)).setShortcut(maskKey + " + Z");
-            redo = new MenuItem("Redo", new EditMenuListener(REDO)).setShortcut(maskKey + " + Y");
+            cut = new MenuItem("Cut", new MenuItemListener(CUT, EDIT_MENU)).setShortcut(maskKey + " + X");
+            copy = new MenuItem("Copy", new MenuItemListener(COPY, EDIT_MENU)).setShortcut(maskKey + " + C");
+            paste = new MenuItem("Paste", new MenuItemListener(PAST, EDIT_MENU)).setShortcut(maskKey + " + P");
+            undo = new MenuItem("Undo", new MenuItemListener(UNDO, EDIT_MENU)).setShortcut(maskKey + " + Z");
+            redo = new MenuItem("Redo", new MenuItemListener(REDO, EDIT_MENU)).setShortcut(maskKey + " + Y");
             addItem(cut);
             addItem(copy);
             addItem(paste);
@@ -114,22 +114,10 @@ public class Overlap2DMenuBar extends MenuBar {
             redo.setDisabled(!open);
         }
 
-        private class EditMenuListener extends ChangeListener {
-
-            private final String menuCommand;
-
-            public EditMenuListener(String menuCommand) {
-                this.menuCommand = menuCommand;
-            }
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                facade.sendNotification(menuCommand, null, EDIT_MENU);
-            }
-        }
     }
 
-    class FileMenu extends Menu {
+
+    private class FileMenu extends Menu {
 
         private final PopupMenu scenesPopupMenu;
         private final Array<MenuItem> sceneMenuItems;
@@ -142,33 +130,33 @@ public class Overlap2DMenuBar extends MenuBar {
         public FileMenu() {
             super("File");
             pad(5);
-            saveProject = new MenuItem("Save Project", new FileMenuListener(SAVE_PROJECT));
-            addItem(new MenuItem("New Project", new FileMenuListener(NEW_PROJECT)));
-            addItem(new MenuItem("Open Project", new FileMenuListener(OPEN_PROJECT)));
+            saveProject = new MenuItem("Save Project", new MenuItemListener(SAVE_PROJECT, FILE_MENU));
+            addItem(new MenuItem("New Project", new MenuItemListener(NEW_PROJECT, FILE_MENU)));
+            addItem(new MenuItem("Open Project", new MenuItemListener(OPEN_PROJECT, FILE_MENU)));
             addItem(saveProject);
             //
             scenesMenuItem = new MenuItem("Scenes");
             scenesPopupMenu = new PopupMenu();
-            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new FileMenuListener(CRATE_NEW_SCENE)));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new FileMenuListener(DELETE_CURRENT_SCENE)));
+            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new MenuItemListener(NEW_SCENE, FILE_MENU)));
+            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, FILE_MENU)));
             scenesPopupMenu.addSeparator();
             scenesMenuItem.setSubMenu(scenesPopupMenu);
             addItem(scenesMenuItem);
             //
             addSeparator();
-            importToLibrary = new MenuItem("Import to Library", new FileMenuListener(IMPORT_TO_LIBRARY));
-            export = new MenuItem("Export", new FileMenuListener(EXPORT));
-            exportSettings = new MenuItem("Export Settings", new FileMenuListener(EXPORT_SETTINGS));
+            importToLibrary = new MenuItem("Import to Library", new MenuItemListener(IMPORT_TO_LIBRARY, FILE_MENU));
+            export = new MenuItem("Export", new MenuItemListener(EXPORT, FILE_MENU));
+            exportSettings = new MenuItem("Export Settings", new MenuItemListener(EXPORT_SETTINGS, FILE_MENU));
             addItem(importToLibrary);
             addItem(export);
             addItem(exportSettings);
-            addItem(new MenuItem("Exit", new FileMenuListener(EXIT)));
+            addItem(new MenuItem("Exit", new MenuItemListener(EXIT, FILE_MENU)));
             sceneMenuItems = new Array<>();
         }
 
         public void addScenes(ArrayList<SceneVO> scenes) {
             for (SceneVO sceneVO : scenes) {
-                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new SceneMenuItemListener(sceneVO.sceneName));
+                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new MenuItemListener(SELECT_SCENE, FILE_MENU, sceneVO.sceneName));
                 sceneMenuItems.add(menuItem);
                 scenesPopupMenu.addItem(menuItem);
             }
@@ -189,32 +177,27 @@ public class Overlap2DMenuBar extends MenuBar {
             export.setDisabled(!open);
             exportSettings.setDisabled(!open);
         }
+    }
 
-        private class SceneMenuItemListener extends ChangeListener {
-            private final String sceneName;
+    private class MenuItemListener extends ChangeListener {
 
-            public SceneMenuItemListener(String sceneName) {
-                this.sceneName = sceneName;
-            }
+        private final String menuCommand;
+        private final String menuType;
+        private final Object data;
 
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                Gdx.app.log(TAG, "sceneName : " + sceneName);
-                mediator.sceneMenuItemClicked(sceneName);
-            }
+        public MenuItemListener(String menuCommand, String menuType) {
+            this(menuCommand, menuType, null);
         }
 
-        private class FileMenuListener extends ChangeListener {
-            private final String menuCommand;
+        public MenuItemListener(String menuCommand, String menuType, Object data) {
+            this.menuCommand = menuCommand;
+            this.menuType = menuType;
+            this.data = data;
+        }
 
-            public FileMenuListener(String menuCommand) {
-                this.menuCommand = menuCommand;
-            }
-
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                facade.sendNotification(menuCommand, null, FILE_MENU);
-            }
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            facade.sendNotification(menuCommand, data, menuType);
         }
     }
 

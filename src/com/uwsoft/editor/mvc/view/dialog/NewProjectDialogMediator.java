@@ -19,7 +19,11 @@
 package com.uwsoft.editor.mvc.view.dialog;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
-import com.uwsoft.editor.Overlap2D;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 
 /**
  * Created by sargis on 4/1/15.
@@ -29,18 +33,32 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
     private static final String NAME = TAG;
 
     public NewProjectDialogMediator() {
-        super(NAME, null);
+        super(NAME, new NewProjectDialog());
     }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.CREATE,
-                Overlap2D.PAUSE,
-                Overlap2D.RESUME,
-                Overlap2D.RENDER,
-                Overlap2D.RESIZE,
-                Overlap2D.DISPOSE,
+                Overlap2DMenuBar.NEW_PROJECT
         };
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        facade = Overlap2DFacade.getInstance();
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+        switch (notification.getName()) {
+            case Overlap2DMenuBar.NEW_PROJECT:
+                Sandbox sandbox = Sandbox.getInstance();
+                UIStage uiStage = sandbox.getUIStage();
+                viewComponent.show(uiStage);
+                break;
+        }
+
     }
 }

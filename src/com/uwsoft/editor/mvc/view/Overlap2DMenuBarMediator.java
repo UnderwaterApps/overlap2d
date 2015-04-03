@@ -28,8 +28,6 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
-import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
-import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -44,12 +42,10 @@ import java.lang.reflect.Method;
 public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     private static final String TAG = Overlap2DMenuBarMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-    private final Sandbox sandbox;
     private ProjectManager projectManager;
 
     public Overlap2DMenuBarMediator() {
         super(NAME, new Overlap2DMenuBar());
-        sandbox = Sandbox.getInstance();
     }
 
     @Override
@@ -70,7 +66,8 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Overlap2DMenuBar.EXPORT,
                 Overlap2DMenuBar.EXPORT_SETTINGS,
                 Overlap2DMenuBar.EXIT,
-                Overlap2DMenuBar.CRATE_NEW_SCENE,
+                Overlap2DMenuBar.NEW_SCENE,
+                Overlap2DMenuBar.SELECT_SCENE,
                 Overlap2DMenuBar.DELETE_CURRENT_SCENE,
                 //EDIT
                 Overlap2DMenuBar.CUT,
@@ -85,72 +82,74 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getType()) {
-            case:
-            break;
+            case Overlap2DMenuBar.FILE_MENU:
+                handleFileMenuNotification(notification);
+                break;
+            case Overlap2DMenuBar.EDIT_MENU:
+                handleEditMenuNotification(notification);
+                break;
         }
     }
 
-    public void editMenuItemClicked(EditMenuCommand command) {
-
-        switch (command) {
-            case CUT:
+    private void handleEditMenuNotification(Notification notification) {
+        Sandbox sandbox = Sandbox.getInstance();
+        switch (notification.getName()) {
+            case Overlap2DMenuBar.CUT:
                 sandbox.getUac().cutAction();
                 break;
-            case COPY:
+            case Overlap2DMenuBar.COPY:
                 sandbox.getUac().copyAction();
                 break;
-            case PAST:
+            case Overlap2DMenuBar.PAST:
                 sandbox.getUac().pasteAction(0, 0, false);
                 break;
-            case UNDO:
+            case Overlap2DMenuBar.UNDO:
                 sandbox.getUac().undo();
                 break;
-            case REDO:
+            case Overlap2DMenuBar.REDO:
                 sandbox.getUac().redo();
                 break;
         }
     }
 
-    public void fileMenuItemClicked(FileMenuCommand command) {
-        switch (command) {
-            case NEW_PROJECT:
-                showDialog("createNewProjectDialog");
+    private void handleFileMenuNotification(Notification notification) {
+        Sandbox sandbox = Sandbox.getInstance();
+        switch (notification.getName()) {
+            case Overlap2DMenuBar.NEW_PROJECT:
+//                showDialog("createNewProjectDialog");
+
                 break;
-            case OPEN_PROJECT:
+            case Overlap2DMenuBar.OPEN_PROJECT:
                 showOpenProject();
                 break;
-            case SAVE_PROJECT:
+            case Overlap2DMenuBar.SAVE_PROJECT:
                 SceneVO vo = sandbox.sceneVoFromItems();
                 projectManager.saveCurrentProject(vo);
                 break;
-            case IMPORT_TO_LIBRARY:
+            case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 showDialog("showImportDialog");
                 break;
-            case EXPORT:
+            case Overlap2DMenuBar.EXPORT:
                 projectManager.exportProject();
                 break;
-            case EXPORT_SETTINGS:
+            case Overlap2DMenuBar.EXPORT_SETTINGS:
                 showDialog("showExportDialog");
                 break;
-            case EXIT:
+            case Overlap2DMenuBar.EXIT:
                 Gdx.app.exit();
                 break;
-            case CRATE_NEW_SCENE:
-
-                showInputDialog(new InputDialog.InputDialogListener() {
-                    @Override
-                    public void onConfirm(String input) {
-                        if (input == null || input.equals("")) {
-                            return;
-                        }
-                        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-                        sceneDataManager.createNewScene(input);
-                        sandbox.loadScene(input);
-                        onScenesChanged();
+            case Overlap2DMenuBar.NEW_SCENE:
+                showInputDialog(input -> {
+                    if (input == null || input.equals("")) {
+                        return;
                     }
+                    SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                    sceneDataManager.createNewScene(input);
+                    sandbox.loadScene(input);
+                    onScenesChanged();
                 });
                 break;
-            case DELETE_CURRENT_SCENE:
+            case Overlap2DMenuBar.DELETE_CURRENT_SCENE:
                 showConfirmDialog("Are you sure you want to delete current scene?",
                         new ConfirmDialog.ConfirmDialogListener() {
                             @Override
@@ -172,15 +171,16 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
 
     private void onScenesChanged() {
 
-        overlap2DMenuBar.reInitScenes(projectManager.currentProjectInfoVO.scenes);
+        viewComponent.reInitScenes(projectManager.currentProjectInfoVO.scenes);
     }
 
     private void onProjectOpened() {
-        overlap2DMenuBar.addScenes(projectManager.currentProjectInfoVO.scenes);
-        overlap2DMenuBar.setProjectOpen(true);
+        viewComponent.addScenes(projectManager.currentProjectInfoVO.scenes);
+        viewComponent.setProjectOpen(true);
     }
 
     public void showOpenProject() {
+        Sandbox sandbox = Sandbox.getInstance();
         //chooser creation
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
 
@@ -204,6 +204,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     }
 
     public void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
+        Sandbox sandbox = Sandbox.getInstance();
         UIStage uiStage = sandbox.getUIStage();
         InputDialog inputDialog = uiStage.dialogs().showInputDialog();
         inputDialog.setListener(inputDialogListener);
@@ -211,6 +212,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
 
     public void showDialog(String dialog) {
         try {
+            Sandbox sandbox = Sandbox.getInstance();
             UIStage uiStage = sandbox.getUIStage();
             Method method = uiStage.dialogs().getClass().getMethod(dialog);
             method.invoke(uiStage.dialogs());
@@ -220,6 +222,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     }
 
     public void showConfirmDialog(String description, ConfirmDialog.ConfirmDialogListener confirmDialogListener) {
+        Sandbox sandbox = Sandbox.getInstance();
         final UIStage uiStage = sandbox.getUIStage();
         ConfirmDialog confirmDialog = uiStage.dialogs().showConfirmDialog();
         confirmDialog.setDescription(description);
@@ -227,6 +230,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     }
 
     public void sceneMenuItemClicked(String sceneName) {
+        Sandbox sandbox = Sandbox.getInstance();
         sandbox.loadScene(sceneName);
     }
 }

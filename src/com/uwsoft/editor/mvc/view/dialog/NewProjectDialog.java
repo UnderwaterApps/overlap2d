@@ -24,13 +24,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
 import com.puremvc.patterns.observer.Notifier;
-import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 public class NewProjectDialog extends VisDialog implements Notifier {
 
-    private final UIStage uiStage;
     private Overlap2DFacade facade;
     private ProjectManager projectManager;
     private VisTextButton createBtn;
@@ -39,11 +37,9 @@ public class NewProjectDialog extends VisDialog implements Notifier {
     private TextField origWidth;
     private TextField origHeight;
 
-    public NewProjectDialog(UIStage uiStage) {
+    public NewProjectDialog() {
         super("Create New Project");
         facade = Overlap2DFacade.getInstance();
-        this.uiStage = uiStage;
-
         setModal(true);
         addCloseButton();
         VisTable mainTable = new VisTable();
