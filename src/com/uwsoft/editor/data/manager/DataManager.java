@@ -23,11 +23,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.uwsoft.editor.controlles.ResolutionManager;
 import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.utils.MySkin;
@@ -652,22 +654,45 @@ public class DataManager {
 
     private void copyImageFilesForAllResolutionsIntoProject(ArrayList<File> files, Boolean performResize) {
         copyImageFilesIntoProject(files, currentProjectInfoVO.originalResolution, performResize);
+		  int totalWarnings = 0;
         for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-            copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
+				totalWarnings+=copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
         }
+		  if(totalWarnings > 0) {
+				DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+		  }
     }
 
-    private void copyImageFilesIntoProject(ArrayList<File> files, ResolutionEntryVO resolution, Boolean performResize) {
+	 /**
+	  *
+	  * @param files
+	  * @param resolution
+	  * @param performResize
+	  * @return number of images that did needed to be resized but failed
+	  */
+    private int copyImageFilesIntoProject(ArrayList<File> files, ResolutionEntryVO resolution, Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resolution.name + "/images";
         PngFilenameFilter pngFilenameFilter = new PngFilenameFilter();
         float perCopyPercent = 95.0f / files.size();
+
+		  int resizeWarningsCount = 0;
+
         for (File file : files) {
             if (!pngFilenameFilter.accept(null, file.getName())) {
                 continue;
             }
             try {
-                BufferedImage bufferedImage = performResize ? ResolutionManager.imageResize(file, ratio) : ImageIO.read(file);
+					 BufferedImage bufferedImage;
+					 if(performResize) {
+						  bufferedImage = ResolutionManager.imageResize(file, ratio);
+						  if(bufferedImage == null) {
+								bufferedImage = ImageIO.read(file);
+								resizeWarningsCount++;
+						  }
+					 } else {
+						  bufferedImage = ImageIO.read(file);
+					 }
 
                 File target = new File(targetPath);
                 if (!target.exists()) {
@@ -681,6 +706,8 @@ public class DataManager {
             }
             changePercentBy(perCopyPercent);
         }
+
+		  return resizeWarningsCount;
     }
 
     public void importExternalFontIntoProject(ArrayList<File> externalfiles, ProgressHandler progressHandler) {
