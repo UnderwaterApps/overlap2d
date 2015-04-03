@@ -53,7 +53,7 @@ public class BaseNotifier {
     /**
      * Local reference to the Facade Singleton
      */
-    protected SimpleFacade facade = SimpleFacade.getInstance();
+    protected SimpleFacade facade;
 
     /**
      * Send an <code>Notification</code>s.

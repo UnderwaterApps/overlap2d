@@ -21,12 +21,13 @@ package com.uwsoft.editor.gdx.stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.*;
 import com.uwsoft.editor.gdx.ui.dialogs.DialogSystem;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -36,6 +37,7 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends BaseStage {
 
+    private final Overlap2DFacade facade;
     public SandboxStage sandboxStage;
     public Group dummyTarget;
     public CompositeItem sceneUI;
@@ -46,13 +48,12 @@ public class UIStage extends BaseStage {
 
     public DropDown mainDropDown;
 
-	 public Overlap2DMenuBarMediator menuMediator;
+    public Overlap2DMenuBarMediator menuMediator;
 
     public UIStage(SandboxStage sandboxStage) {
         super();
-
-        EditorResourceManager edRm = new EditorResourceManager();
-        essentials.rm = edRm;
+        facade = Overlap2DFacade.getInstance();
+        essentials.rm = facade.retrieveProxy(EditorResourceManager.NAME);
 
         SceneLoader sceneLoader = new SceneLoader(essentials);
         sceneLoader.loadScene("MainScene");
@@ -72,7 +73,7 @@ public class UIStage extends BaseStage {
 
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable(this);
-		  menuMediator = uiMainTable.menuMediator;
+        menuMediator = uiMainTable.menuMediator;
 
         addActor(uiMainTable);
         addActor(contextMenuContainer);

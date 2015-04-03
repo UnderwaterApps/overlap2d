@@ -28,7 +28,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.uwsoft.editor.controlles.ResolutionManager;
+import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.JarUtils;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
@@ -36,6 +36,7 @@ import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
@@ -43,7 +44,6 @@ import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.Overlap2DUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.SystemUtils;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -79,10 +79,10 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
 
-
     @Override
     public void onRegister() {
         super.onRegister();
+        facade = Overlap2DFacade.getInstance();
         initWorkspace();
     }
 
@@ -629,44 +629,43 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
     private void copyImageFilesForAllResolutionsIntoProject(ArrayList<File> files, Boolean performResize) {
         copyImageFilesIntoProject(files, currentProjectInfoVO.originalResolution, performResize);
-		  int totalWarnings = 0;
+        int totalWarnings = 0;
         for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-				totalWarnings+=copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
+            totalWarnings += copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
         }
-		  if(totalWarnings > 0) {
-				DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
-		  }
+        if (totalWarnings > 0) {
+            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+        }
     }
 
-	 /**
-	  *
-	  * @param files
-	  * @param resolution
-	  * @param performResize
-	  * @return number of images that did needed to be resized but failed
-	  */
+    /**
+     * @param files
+     * @param resolution
+     * @param performResize
+     * @return number of images that did needed to be resized but failed
+     */
     private int copyImageFilesIntoProject(ArrayList<File> files, ResolutionEntryVO resolution, Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resolution.name + "/images";
         float perCopyPercent = 95.0f / files.size();
 
-		  int resizeWarningsCount = 0;
+        int resizeWarningsCount = 0;
 
         for (File file : files) {
             if (!Overlap2DUtils.PNG_FILTER.accept(null, file.getName())) {
                 continue;
             }
             try {
-					 BufferedImage bufferedImage;
-					 if(performResize) {
-						  bufferedImage = ResolutionManager.imageResize(file, ratio);
-						  if(bufferedImage == null) {
-								bufferedImage = ImageIO.read(file);
-								resizeWarningsCount++;
-						  }
-					 } else {
-						  bufferedImage = ImageIO.read(file);
-					 }
+                BufferedImage bufferedImage;
+                if (performResize) {
+                    bufferedImage = ResolutionManager.imageResize(file, ratio);
+                    if (bufferedImage == null) {
+                        bufferedImage = ImageIO.read(file);
+                        resizeWarningsCount++;
+                    }
+                } else {
+                    bufferedImage = ImageIO.read(file);
+                }
 
                 File target = new File(targetPath);
                 if (!target.exists()) {
@@ -681,7 +680,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             changePercentBy(perCopyPercent);
         }
 
-		  return resizeWarningsCount;
+        return resizeWarningsCount;
     }
 
     public void importExternalFontIntoProject(ArrayList<File> externalfiles, ProgressHandler progressHandler) {

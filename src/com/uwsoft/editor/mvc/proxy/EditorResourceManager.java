@@ -28,6 +28,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Json;
+import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
@@ -39,13 +40,20 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class EditorResourceManager implements IResourceRetriever {
-
-    private final ProjectManager projectManager;
-    private final Overlap2DFacade facade;
+public class EditorResourceManager extends BaseProxy implements IResourceRetriever {
+    private static final String TAG = EditorResourceManager.class.getCanonicalName();
+    public static final String NAME = TAG;
+    private Overlap2DFacade facade;
     private HashMap<String, BitmapFont> bitmapFonts = new HashMap<String, BitmapFont>();
+    private ProjectManager projectManager;
 
     public EditorResourceManager() {
+        super(NAME);
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
