@@ -25,6 +25,9 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
 
+/**
+ * This class will be removed after changes in runtime.
+ */
 public class BaseStage extends Overlap2DStage {
 
     private final Overlap2DFacade facade;

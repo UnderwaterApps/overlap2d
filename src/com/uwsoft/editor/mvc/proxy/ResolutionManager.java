@@ -22,9 +22,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.tools.texturepacker.TextureUnpacker;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.mortennobel.imagescaling.ResampleOp;
-import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
@@ -60,8 +61,13 @@ public class ResolutionManager extends BaseProxy {
         try {
             BufferedImage sourceBufferedImage = ImageIO.read(file);
             if (ratio == 1.0) {
-                return sourceBufferedImage;
+                return null;
             }
+				// When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
+				// But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
+				if(sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
+					 return null;
+				}
             int newWidth = Math.max(3, Math.round(sourceBufferedImage.getWidth() * ratio));
             int newHeight = Math.max(3, Math.round(sourceBufferedImage.getHeight() * ratio));
             String name = file.getName();
@@ -154,10 +160,11 @@ public class ResolutionManager extends BaseProxy {
                 createIfNotExist(sourcePath);
                 createIfNotExist(projPath + "/" + "assets/" + newResolution.name + "/pack");
                 copyTexturesFromTo(sourcePath, targetPath);
-                resizeTextures(targetPath, newResolution);
+                int resizeWarnings = resizeTextures(targetPath, newResolution);
                 rePackProjectImages(newResolution);
                 createResizedAnimations(newResolution);
                 changePercentBy(5);
+					 DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
             }
         });
         executor.execute(new Runnable() {
@@ -351,23 +358,33 @@ public class ResolutionManager extends BaseProxy {
         tp.pack(outputDir, "pack");
     }
 
-    private void resizeTextures(String path, ResolutionEntryVO resolution) {
+    private int resizeTextures(String path, ResolutionEntryVO resolution) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         float ratio = getResolutionRatio(resolution, projectManager.getCurrentProjectInfoVO().originalResolution);
         FileHandle targetDir = new FileHandle(path);
         FileHandle[] entries = targetDir.list(Overlap2DUtils.PNG_FILTER);
         float perResizePercent = 95.0f / entries.length;
+
+		  int resizeWarnings = 0;
+
         for (FileHandle entry : entries) {
             try {
                 File file = entry.file();
                 File destinationFile = new File(path + "/" + file.getName());
-                System.out.println(destinationFile);
-                ImageIO.write(ResolutionManager.imageResize(file, ratio), "png", destinationFile);
+					 BufferedImage resizedImage = ResolutionManager.imageResize(file, ratio);
+					 if(resizedImage == null) {
+						  resizeWarnings++;
+						  ImageIO.write(ImageIO.read(file), "png", destinationFile);
+					 } else {
+						  ImageIO.write(ResolutionManager.imageResize(file, ratio), "png", destinationFile);
+					 }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             changePercentBy(perResizePercent);
         }
+
+		  return resizeWarnings;
     }
 
     private void copyTexturesFromTo(String fromPath, String toPath) {

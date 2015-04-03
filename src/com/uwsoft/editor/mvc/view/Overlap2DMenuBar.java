@@ -137,9 +137,7 @@ public class Overlap2DMenuBar extends MenuBar {
             //
             scenesMenuItem = new MenuItem("Scenes");
             scenesPopupMenu = new PopupMenu();
-            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new MenuItemListener(NEW_SCENE, FILE_MENU)));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, FILE_MENU)));
-            scenesPopupMenu.addSeparator();
+
             scenesMenuItem.setSubMenu(scenesPopupMenu);
             addItem(scenesMenuItem);
             //
@@ -163,10 +161,14 @@ public class Overlap2DMenuBar extends MenuBar {
         }
 
         public void reInitScenes(ArrayList<SceneVO> scenes) {
-            for (MenuItem menuItem : sceneMenuItems) {
-                menuItem.remove();
-            }
             sceneMenuItems.clear();
+				scenesPopupMenu.clear();
+
+				scenesPopupMenu.addItem(new MenuItem("Create New Scene", new FileMenuListener(FileMenuCommand.CRATE_NEW_SCENE)));
+				scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new FileMenuListener(FileMenuCommand.DELETE_CURRENT_SCENE)));
+
+				scenesPopupMenu.addSeparator();
+
             addScenes(scenes);
         }
 

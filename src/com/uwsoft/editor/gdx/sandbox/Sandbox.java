@@ -75,7 +75,7 @@ public class Sandbox {
     public int currTransformType = -1;
     public IBaseItem currTransformHost;
     public boolean isResizing = false;
-    public boolean isUsingSelectionTool = true;
+    public boolean isUsingSelectionTool = false;
     public boolean isItemTouched = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
