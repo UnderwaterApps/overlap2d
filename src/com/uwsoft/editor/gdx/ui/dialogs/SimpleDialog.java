@@ -50,10 +50,11 @@ public class SimpleDialog extends UIBox {
     public SimpleDialog(UIStage s, float width, float height) {
         super(s, width, height);
         topImgName = "tab";
-        this.initPanel();
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        this.initPanel();
     }
+
 
     @Override
     public void initPanel() {

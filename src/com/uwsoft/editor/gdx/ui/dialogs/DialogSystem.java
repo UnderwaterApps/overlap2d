@@ -29,7 +29,6 @@ public class DialogSystem {
     private UIStage stage;
 
     public DialogSystem(UIStage stage) {
-
         this.stage = stage;
     }
 
