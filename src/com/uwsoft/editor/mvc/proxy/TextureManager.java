@@ -38,6 +38,7 @@ import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FilenameUtils;
@@ -71,6 +72,7 @@ public class TextureManager extends BaseProxy {
     @Override
     public void onRegister() {
         super.onRegister();
+        facade = Overlap2DFacade.getInstance();
         assetsManager = new AssetManager();
         loadEditorAssets();
     }
