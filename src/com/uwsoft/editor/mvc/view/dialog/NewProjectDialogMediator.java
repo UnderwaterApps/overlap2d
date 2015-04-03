@@ -72,6 +72,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
                 projectManager.createNewProject(projectPath, originWidth, originHeight);
                 //TODO: this should be not hear
                 sandbox.loadCurrentProject();
+                viewComponent.hide();
                 break;
             case NewProjectDialog.BROWS:
                 FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
