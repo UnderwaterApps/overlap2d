@@ -116,8 +116,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case Overlap2DMenuBar.NEW_PROJECT:
-//                showDialog("createNewProjectDialog");
-
                 break;
             case Overlap2DMenuBar.OPEN_PROJECT:
                 showOpenProject();
@@ -148,6 +146,9 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                     sandbox.loadScene(input);
                     onScenesChanged();
                 });
+                break;
+            case Overlap2DMenuBar.SELECT_SCENE:
+                sceneMenuItemClicked(notification.getBody());
                 break;
             case Overlap2DMenuBar.DELETE_CURRENT_SCENE:
                 showConfirmDialog("Are you sure you want to delete current scene?",
