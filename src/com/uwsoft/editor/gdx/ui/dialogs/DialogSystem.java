@@ -19,7 +19,7 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.mvc.view.dialog.NewProjectDialog;
+import com.uwsoft.editor.mvc.view.dialog.AssetsImportDialog;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -32,10 +32,10 @@ public class DialogSystem {
         this.stage = stage;
     }
 
-    public DlgImport showImportDialog() {
-        DlgImport dlg = new DlgImport(stage);
-        return (DlgImport) initiateDialog(dlg);
-    }
+//    public AssetsImportDialog showImportDialog() {
+//        AssetsImportDialog dlg = new AssetsImportDialog(stage);
+//        return (AssetsImportDialog) initiateDialog(dlg);
+//    }
 
     public CreateNewResolutionDialog showCreateNewResolutionDialog() {
         CreateNewResolutionDialog dlg = new CreateNewResolutionDialog(stage);

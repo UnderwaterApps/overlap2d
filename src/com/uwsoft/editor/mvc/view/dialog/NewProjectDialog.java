@@ -35,7 +35,7 @@ public class NewProjectDialog extends VisDialog {
     private final VisTextField originWithTextField;
     private final VisTextField originHeightTextField;
 
-    public NewProjectDialog() {
+     NewProjectDialog() {
         super("Create New Project");
 
         setModal(true);

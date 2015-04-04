@@ -125,7 +125,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 projectManager.saveCurrentProject(vo);
                 break;
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
-                showDialog("showImportDialog");
+                //showDialog("showImportDialog");
                 break;
             case Overlap2DMenuBar.EXPORT:
                 projectManager.exportProject();
