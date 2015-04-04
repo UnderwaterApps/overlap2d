@@ -18,27 +18,51 @@
 
 package com.uwsoft.editor.ui.widget;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserListener;
 
 /**
  * Created by sargis on 4/3/15.
  */
 public class InputFileWidget extends VisTable {
-    private final VisTextField textField;
-    private final VisTextButton browsBtn;
+    private VisTextField textField;
+    private VisTextButton browsBtn;
+    private Cell<VisTextField> textFieldCell;
+    private int textFieldWidth;
+    private FileChooser fileChooser;
 
-    public InputFileWidget(boolean setVisDefaults) {
+    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled, boolean setVisDefaults) {
         super(setVisDefaults);
-        textField = new VisTextField("");
-        add(textField).padRight(3);
-        browsBtn = new VisTextButton("...");
-        add(browsBtn);
+        initWidget();
+        initFileChooser(mode, selectionMode, multiselectionEnabled);
     }
 
-    public InputFileWidget() {
-        this(true);
+    private void initFileChooser(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
+        fileChooser = new FileChooser(mode);
+        fileChooser.setSelectionMode(selectionMode);
+        fileChooser.setMultiselectionEnabled(multiselectionEnabled);
+        fileChooser.setListener(new InputFileWidgetFileChooserListener());
+    }
+
+    private void initWidget() {
+        textField = new VisTextField("");
+        textFieldCell = add(textField).fillX().padRight(3);
+        browsBtn = new VisTextButton(" ... ");
+        add(browsBtn);
+        addListener(new InputFileWidgetClickListener());
+
+    }
+
+    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
+        this(mode, selectionMode, multiselectionEnabled, true);
     }
 
     public String getValue() {
@@ -47,5 +71,36 @@ public class InputFileWidget extends VisTable {
 
     public void setValue(String value) {
         textField.setText(value);
+    }
+
+
+    public void setTextFieldWidth(int textFieldWidth) {
+        textFieldCell.width(textFieldWidth);
+    }
+
+    private class InputFileWidgetClickListener extends ClickListener {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            super.clicked(event, x, y);
+            InputFileWidget.this.getStage().addActor(fileChooser.fadeIn());
+        }
+    }
+
+    private class InputFileWidgetFileChooserListener implements FileChooserListener {
+
+        @Override
+        public void selected(Array<FileHandle> files) {
+
+        }
+
+        @Override
+        public void selected(FileHandle file) {
+            setValue(file.path());
+        }
+
+        @Override
+        public void canceled() {
+
+        }
     }
 }

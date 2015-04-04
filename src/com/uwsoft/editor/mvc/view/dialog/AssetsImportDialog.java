@@ -18,8 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.ui.widget.InputFileWidget;
 
 import java.io.File;
@@ -27,6 +33,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AssetsImportDialog extends VisDialog {
+    public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".START_IMPORTING_BTN_CLICKED";
+    private final AssetsImportInputFileWidget imagesInputFileWidget;
+    private final AssetsImportInputFileWidget fontsInputFileWidget;
+    private final AssetsImportInputFileWidget spineSpriterInputFileWidget;
+    private final AssetsImportInputFileWidget spriteAnimationInputFileWidget;
+    private final AssetsImportInputFileWidget particleEffectInputFileWidget;
+    private final AssetsImportInputFileWidget stylesInputFileWidget;
+    private final VisProgressBar progressBar;
 
 //    private final ProgressBar progressBar;
 //    private final Label progressLbl;
@@ -34,7 +48,6 @@ public class AssetsImportDialog extends VisDialog {
 //    private final Overlap2DFacade facade;
 //    private final ProjectManager projectManager;
 //    private TextField imagesPath;
-//    private TextField particlePath;
 //    private TextField stylePath;
 //    private TextField fontPath;
 //    private TextField spinePath;
@@ -46,8 +59,28 @@ public class AssetsImportDialog extends VisDialog {
         super("Import new Assets");
         addCloseButton();
         VisTable mainTable = new VisTable();
-        mainTable.add(new InputFileWidget()).padRight(50);
-        mainTable.add(new InputFileWidget());
+        mainTable.debug();
+        imagesInputFileWidget = new AssetsImportInputFileWidget("Multiple images");
+        mainTable.add(imagesInputFileWidget).padRight(50);
+        fontsInputFileWidget = new AssetsImportInputFileWidget("Fonts");
+        mainTable.add(fontsInputFileWidget);
+        mainTable.row().padTop(15);
+        spineSpriterInputFileWidget = new AssetsImportInputFileWidget("Spine / Spriter");
+        mainTable.add(spineSpriterInputFileWidget).padRight(50);
+        spriteAnimationInputFileWidget = new AssetsImportInputFileWidget("Sprite animation");
+        mainTable.add(spriteAnimationInputFileWidget);
+        mainTable.row().padTop(15);
+        particleEffectInputFileWidget = new AssetsImportInputFileWidget("Particle effect");
+        mainTable.add(particleEffectInputFileWidget).padRight(50);
+        stylesInputFileWidget = new AssetsImportInputFileWidget("Styles (not working yet)");
+        mainTable.add(stylesInputFileWidget);
+        mainTable.row().padTop(15);
+        VisTextButton importBtn = new VisTextButton("Start Importing");
+        importBtn.addListener(new StartImportingBtnClickListener());
+        mainTable.add(importBtn).colspan(2).right();
+        mainTable.row().padTop(15);
+        progressBar = new VisProgressBar(0, 100, 1, false);
+        mainTable.add(progressBar).colspan(2).fillX();
         mainTable.pad(15);
 
         add(mainTable);
@@ -193,4 +226,27 @@ public class AssetsImportDialog extends VisDialog {
 //            stage.getSandbox().loadCurrentProject(stage.getSandbox().currentLoadedSceneFileName);
 //        });
 //    }
+
+    private class AssetsImportInputFileWidget extends VisTable {
+        private final String title;
+        private final InputFileWidget inputFileWidget;
+
+        public AssetsImportInputFileWidget(String title) {
+            this.title = title;
+            inputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, true);
+            inputFileWidget.setTextFieldWidth(300);
+            add(title).left();
+            row().padTop(2);
+            add(inputFileWidget);
+        }
+    }
+
+    private class StartImportingBtnClickListener extends ClickListener {
+        @Override
+        public void clicked(InputEvent event, float x, float y) {
+            super.clicked(event, x, y);
+            Overlap2DFacade facade = Overlap2DFacade.getInstance();
+            facade.sendNotification(START_IMPORTING_BTN_CLICKED);
+        }
+    }
 }

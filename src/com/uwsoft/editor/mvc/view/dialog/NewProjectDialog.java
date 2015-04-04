@@ -23,19 +23,19 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.ui.widget.InputFileWidget;
 
 public class NewProjectDialog extends VisDialog {
-    public static final String CREATE = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".CREATE";
-    public static final String BROWS = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".BROWS";
+    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
     private static final String DEFAULT_ORIGIN_WITH = "2400";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
     private final InputFileWidget inputFile;
     private final VisTextField originWithTextField;
     private final VisTextField originHeightTextField;
 
-     NewProjectDialog() {
+    NewProjectDialog() {
         super("Create New Project");
 
         setModal(true);
@@ -44,7 +44,7 @@ public class NewProjectDialog extends VisDialog {
 //        mainTable.debug();
         VisTable projectPathTable = new VisTable();
         projectPathTable.add(new VisLabel("Project Folder:")).right().padRight(5);
-        inputFile = new InputFileWidget();
+        inputFile = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES, false);
         projectPathTable.add(inputFile);
         mainTable.add(projectPathTable).padBottom(15);
         //
@@ -70,8 +70,7 @@ public class NewProjectDialog extends VisDialog {
         //
         add(mainTable).pad(15);
         //
-        inputFile.addListener(new BtnClickListener(BROWS));
-        createBtn.addListener(new BtnClickListener(CREATE));
+        createBtn.addListener(new BtnClickListener(CREATE_BTN_CLICKED));
     }
 
     @Override

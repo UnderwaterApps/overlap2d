@@ -45,7 +45,8 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2DMenuBar.IMPORT_TO_LIBRARY
+                Overlap2DMenuBar.IMPORT_TO_LIBRARY,
+                AssetsImportDialog.START_IMPORTING_BTN_CLICKED
         };
     }
 
@@ -57,6 +58,9 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
         switch (notification.getName()) {
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 viewComponent.show(uiStage);
+                break;
+            case AssetsImportDialog.START_IMPORTING_BTN_CLICKED:
+
                 break;
         }
     }

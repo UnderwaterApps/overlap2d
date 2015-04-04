@@ -44,8 +44,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2DMenuBar.NEW_PROJECT,
-                NewProjectDialog.BROWS,
-                NewProjectDialog.CREATE
+                NewProjectDialog.CREATE_BTN_CLICKED
         };
     }
 
@@ -64,7 +63,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
             case Overlap2DMenuBar.NEW_PROJECT:
                 viewComponent.show(uiStage);
                 break;
-            case NewProjectDialog.CREATE:
+            case NewProjectDialog.CREATE_BTN_CLICKED:
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
                 String projectPath = viewComponent.getProjectPath();
                 int originWidth = Integer.parseInt(viewComponent.getOriginWidth());
@@ -73,20 +72,6 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
                 //TODO: this should be not hear
                 sandbox.loadCurrentProject();
                 viewComponent.hide();
-                break;
-            case NewProjectDialog.BROWS:
-                FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
-                fileChooser.setSelectionMode(FileChooser.SelectionMode.DIRECTORIES);
-                fileChooser.setMultiselectionEnabled(false);
-                fileChooser.setListener(new FileChooserAdapter() {
-                    @Override
-                    public void selected(FileHandle file) {
-                        super.selected(file);
-                        viewComponent.setProjectPath(file.path());
-                    }
-
-                });
-                uiStage.addActor(fileChooser.fadeIn());
                 break;
         }
 

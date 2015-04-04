@@ -32,7 +32,7 @@ public class Overlap2D extends ApplicationAdapter implements Notifier {
     public static final String RENDER = EVENT_PREFIX + ".RENDER";
     public static final String RESIZE = EVENT_PREFIX + ".RESIZE";
     public static final String DISPOSE = EVENT_PREFIX + ".DISPOSE";
-    public static final String CREATE = EVENT_PREFIX + ".CREATE";
+    public static final String CREATE = EVENT_PREFIX + ".CREATE_BTN_CLICKED";
     //
     public TextureManager textureManager;
     private Overlap2DFacade facade;
