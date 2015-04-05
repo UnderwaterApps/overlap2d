@@ -57,6 +57,7 @@ public class CustomVariablesDialog extends VisWindow {
 	public CustomVariablesDialog(final IBaseItem item) {
 		super("Custom Variables Dialog");
 		
+		setModal(true);
 		addCloseButton();
 		closeOnEscape();
 		
@@ -153,6 +154,7 @@ public class CustomVariablesDialog extends VisWindow {
 						// Change the Variable name here.
 						vars.removeVariable(varName.getText());
 						vars.setVariable(input, varVal.getText());
+						item.updateDataVO();
 						renderNames();
 						varNames.setSelected(input);
 						varName.setText(input);
@@ -165,6 +167,7 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.setVariable(varName.getText(),varVal.getText());
+				item.updateDataVO();
 			}
 		});
 		
@@ -172,6 +175,7 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.removeVariable(varName.getText());
+				item.updateDataVO();
 				varName.setText("");
 				varVal.setText("");
 				renderNames();
@@ -183,6 +187,7 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.setVariable(keyName.getText(), keyVal.getText());
+				item.updateDataVO();
 				keyName.setText("");
 				keyVal.setText("");
 				renderNames();
