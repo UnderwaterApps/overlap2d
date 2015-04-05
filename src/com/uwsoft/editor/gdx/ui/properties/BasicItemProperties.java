@@ -32,7 +32,6 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialogOld;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.LabelVO;
