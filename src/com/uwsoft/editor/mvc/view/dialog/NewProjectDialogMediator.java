@@ -18,9 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
-import com.badlogic.gdx.files.FileHandle;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -65,10 +62,9 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
                 break;
             case NewProjectDialog.CREATE_BTN_CLICKED:
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-                String projectPath = viewComponent.getProjectPath();
                 int originWidth = Integer.parseInt(viewComponent.getOriginWidth());
                 int originHeight = Integer.parseInt(viewComponent.getOriginHeight());
-                projectManager.createNewProject(projectPath, originWidth, originHeight);
+                projectManager.createNewProject(notification.getBody(), originWidth, originHeight);
                 //TODO: this should be not hear
                 sandbox.loadCurrentProject();
                 viewComponent.hide();

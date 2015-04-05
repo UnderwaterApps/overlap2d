@@ -18,8 +18,10 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -60,19 +62,19 @@ public class AssetsImportDialog extends VisDialog {
         addCloseButton();
         VisTable mainTable = new VisTable();
         mainTable.debug();
-        imagesInputFileWidget = new AssetsImportInputFileWidget("Multiple images");
+        imagesInputFileWidget = new AssetsImportInputFileWidget("Multiple images", true);
         mainTable.add(imagesInputFileWidget).padRight(50);
-        fontsInputFileWidget = new AssetsImportInputFileWidget("Fonts");
+        fontsInputFileWidget = new AssetsImportInputFileWidget("Fonts", true);
         mainTable.add(fontsInputFileWidget);
         mainTable.row().padTop(15);
-        spineSpriterInputFileWidget = new AssetsImportInputFileWidget("Spine / Spriter");
+        spineSpriterInputFileWidget = new AssetsImportInputFileWidget("Spine / Spriter", true);
         mainTable.add(spineSpriterInputFileWidget).padRight(50);
-        spriteAnimationInputFileWidget = new AssetsImportInputFileWidget("Sprite animation");
+        spriteAnimationInputFileWidget = new AssetsImportInputFileWidget("Sprite animation", true);
         mainTable.add(spriteAnimationInputFileWidget);
         mainTable.row().padTop(15);
-        particleEffectInputFileWidget = new AssetsImportInputFileWidget("Particle effect");
+        particleEffectInputFileWidget = new AssetsImportInputFileWidget("Particle effect", true);
         mainTable.add(particleEffectInputFileWidget).padRight(50);
-        stylesInputFileWidget = new AssetsImportInputFileWidget("Styles (not working yet)");
+        stylesInputFileWidget = new AssetsImportInputFileWidget("Styles (not working yet)", false);
         mainTable.add(stylesInputFileWidget);
         mainTable.row().padTop(15);
         VisTextButton importBtn = new VisTextButton("Start Importing");
@@ -115,26 +117,7 @@ public class AssetsImportDialog extends VisDialog {
 //            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
 //                super.touchUp(event, x, y, pointer, button);
 //
-//                if (paths.get("images") != null) {
-//                    projectManager.importExternalImagesIntoProject(paths.get("images"), progressHandler);
-//                }
-//                if (paths.get("particles") != null) {
-//                    projectManager.importExternalParticlesIntoProject(paths.get("particles"), progressHandler);
-//                }
-//                if (paths.get("styles") != null) {
-//                    projectManager.importExternalStyleIntoProject(paths.get("styles").get(0), progressHandler);
-//                }
-//                if (paths.get("font") != null) {
-//                    projectManager.importExternalFontIntoProject(paths.get("font"), progressHandler);
-//                }
-//
-//                if (paths.get("spine") != null) {
-//                    projectManager.importExternalSpineAnimationsIntoProject(paths.get("spine"), progressHandler);
-//                }
-//
-//                if (paths.get("spriteAnimation") != null) {
-//                    projectManager.importExternalSpriteAnimationsIntoProject(paths.get("spriteAnimation"), progressHandler);
-//                }
+
 //
 //
 //                // save before importing
@@ -227,17 +210,49 @@ public class AssetsImportDialog extends VisDialog {
 //        });
 //    }
 
+    public Array<FileHandle> getImageFiles() {
+        return imagesInputFileWidget.getValues();
+    }
+
+    public Array<FileHandle> getFontFiles() {
+        return fontsInputFileWidget.getValues();
+    }
+
+    public Array<FileHandle> getSpineSpriterFiles() {
+        return spineSpriterInputFileWidget.getValues();
+    }
+
+    public Array<FileHandle> getSpriteAnimationFiles() {
+        return spriteAnimationInputFileWidget.getValues();
+    }
+
+    public Array<FileHandle> getParticleEffectFiles() {
+        return particleEffectInputFileWidget.getValues();
+    }
+
+    public FileHandle getStyleFiles() {
+        return stylesInputFileWidget.getValue();
+    }
+
     private class AssetsImportInputFileWidget extends VisTable {
         private final String title;
         private final InputFileWidget inputFileWidget;
 
-        public AssetsImportInputFileWidget(String title) {
+        public AssetsImportInputFileWidget(String title, boolean multiselectionEnabled) {
             this.title = title;
-            inputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, true);
+            inputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.FILES, multiselectionEnabled);
             inputFileWidget.setTextFieldWidth(300);
             add(title).left();
             row().padTop(2);
             add(inputFileWidget);
+        }
+
+        public FileHandle getValue() {
+            return inputFileWidget.getValue();
+        }
+
+        public Array<FileHandle> getValues() {
+            return inputFileWidget.getValues();
         }
     }
 

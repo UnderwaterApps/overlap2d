@@ -38,6 +38,8 @@ public class InputFileWidget extends VisTable {
     private Cell<VisTextField> textFieldCell;
     private int textFieldWidth;
     private FileChooser fileChooser;
+    private FileHandle value;
+    private Array<FileHandle> values;
 
     public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled, boolean setVisDefaults) {
         super(setVisDefaults);
@@ -65,17 +67,42 @@ public class InputFileWidget extends VisTable {
         this(mode, selectionMode, multiselectionEnabled, true);
     }
 
-    public String getValue() {
-        return textField.getText();
+    public FileHandle getValue() {
+        if (fileChooser.isMultiselectionEnabled()) {
+            throw new IllegalStateException("Multiselection is enabled, use 'getValues' instead of 'getValue'");
+        }
+        return value;
     }
 
-    public void setValue(String value) {
-        textField.setText(value);
+    private void setValue(FileHandle value) {
+        this.value = value;
+        textField.setText(value.path());
+    }
+
+    public Array<FileHandle> getValues() {
+        if (!fileChooser.isMultiselectionEnabled()) {
+            throw new IllegalStateException("Multiselection is not enabled, use 'getValue' instead of 'getValues'");
+        }
+        return values;
+    }
+
+    private void setValues(Array<FileHandle> values) {
+        this.values = values;
+        String path = "";
+        for (FileHandle handle : values) {
+            path += handle.name() + ",";
+        }
+        path = path.substring(0, path.length() - 1);
+        textField.setText(path);
     }
 
 
     public void setTextFieldWidth(int textFieldWidth) {
         textFieldCell.width(textFieldWidth);
+    }
+
+    public void resetData() {
+        textField.setText("");
     }
 
     private class InputFileWidgetClickListener extends ClickListener {
@@ -90,12 +117,12 @@ public class InputFileWidget extends VisTable {
 
         @Override
         public void selected(Array<FileHandle> files) {
-
+            setValues(files != null ? files : new Array<>());
         }
 
         @Override
         public void selected(FileHandle file) {
-            setValue(file.path());
+            setValue(file);
         }
 
         @Override

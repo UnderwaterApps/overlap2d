@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.proxy.BaseProxy;
@@ -307,25 +308,25 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
 
-    private ArrayList<File> getImageListFromAtlas(File file) throws IOException {
-        ArrayList<File> images = new ArrayList<File>();
+    private Array<FileHandle> getImageListFromAtlas(FileHandle fileHandle) throws IOException {
+        Array<FileHandle> images = new Array<>();
         BufferedReader br;
 
-        br = new BufferedReader(new FileReader(file));
+        br = new BufferedReader(new FileReader(fileHandle.file()));
         String line;
         while ((line = br.readLine()) != null) {
             if (line.equals("- Image Path -")) {
                 line = br.readLine();
-                String absolutePath = file.getAbsolutePath();
+                String absolutePath = fileHandle.path();
                 if (line.contains("/") || line.indexOf("\\") > 0) {
                     line = line.substring(line.lastIndexOf(File.separator), line.length());
                 }
                 String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + line;
-                File imgFile = new File(path);
+                FileHandle imgFile = new FileHandle(path);
                 if (imgFile.exists()) {
                     images.add(imgFile);
                 } else {
-                    throw new IOException("Particle image file missing.");
+                    throw new IOException("Particle image fileHandle missing.");
                 }
             }
         }
@@ -333,53 +334,42 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         return images;
     }
 
-    private ArrayList<File> getScmlFileImagesList(File file) {
+    private ArrayList<File> getScmlFileImagesList(FileHandle fileHandle) {
         ArrayList<File> images = new ArrayList<File>();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         DocumentBuilder db = null;
         try {
             db = dbf.newDocumentBuilder();
-            org.w3c.dom.Document document = db.parse(file);
-            NodeList nodeList = document.getElementsByTagName("file");
+            org.w3c.dom.Document document = db.parse(fileHandle.file());
+            NodeList nodeList = document.getElementsByTagName("fileHandle");
             for (int x = 0, size = nodeList.getLength(); x < size; x++) {
-                String absolutePath = file.getAbsolutePath();
+                String absolutePath = fileHandle.path();
                 String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + nodeList.item(x).getAttributes().getNamedItem("name").getNodeValue();
-
                 File imgFile = new File(path);
                 images.add(imgFile);
             }
-        } catch (SAXException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (IOException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
-        } catch (ParserConfigurationException e1) {
-            // TODO Auto-generated catch block
-            e1.printStackTrace();
+        } catch (SAXException | IOException | ParserConfigurationException e) {
+            e.printStackTrace();
         }
         return images;
     }
 
 
-    public void importExternalSpineAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    public void importSpineAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (File file : files) {
-                    File copiedFile = importExternalAnimationIntoProject(file);
-                    if (copiedFile.getName().toLowerCase().endsWith(".atlas")) {
-                        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-                        resolutionManager.resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
-                    } else if (copiedFile.getName().toLowerCase().endsWith(".scml")) {
-                        //resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
-                    }
+        executor.execute(() -> {
+            for (FileHandle handle : fileHandles) {
+                File copiedFile = importExternalAnimationIntoProject(handle);
+                if (copiedFile.getName().toLowerCase().endsWith(".atlas")) {
+                    ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                    resolutionManager.resizeSpineAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
+                } else if (copiedFile.getName().toLowerCase().endsWith(".scml")) {
+                    //resizeSpriterAnimationForAllResolutions(copiedFile, currentProjectInfoVO);
                 }
-
             }
+
         });
         executor.execute(() -> {
             changePercentBy(100 - currentPercent);
@@ -394,50 +384,51 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
     }
 
-    public File importExternalAnimationIntoProject(File animationFileSource) {
+    public File importExternalAnimationIntoProject(FileHandle animationFileSource) {
         try {
-            if (!Overlap2DUtils.JSON_FILTER.accept(null, animationFileSource.getName()) && !Overlap2DUtils.SCML_FILTER.accept(null, animationFileSource.getName())) {
+            String fileName = animationFileSource.name();
+            if (!Overlap2DUtils.JSON_FILTER.accept(null, fileName) &&
+                    !Overlap2DUtils.SCML_FILTER.accept(null, fileName)) {
                 //showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
                 return null;
             }
 
-            String fileNameWithOutExt = FilenameUtils.removeExtension(animationFileSource.getName());
+            String fileNameWithOutExt = FilenameUtils.removeExtension(fileName);
             String sourcePath;
             String animationDataPath;
             String targetPath;
-            if (Overlap2DUtils.JSON_FILTER.accept(null, animationFileSource.getName())) {
-                sourcePath = animationFileSource.getAbsolutePath();
+            if (Overlap2DUtils.JSON_FILTER.accept(null, fileName)) {
+                sourcePath = animationFileSource.path();
                 animationDataPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator)) + File.separator;
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
-                File atlasFileSource = new File(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
+                FileHandle atlasFileSource = new FileHandle(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
                 if (!atlasFileSource.exists()) {
                     //showError("the atlas file needs to have same name and location as the json file");
-
                     return null;
                 }
 
                 FileUtils.forceMkdir(new File(targetPath));
                 File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
                 File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
-                ArrayList<File> imageFiles = getImageListFromAtlas(atlasFileSource);
+                Array<FileHandle> imageFiles = getImageListFromAtlas(atlasFileSource);
 
-                FileUtils.copyFile(animationFileSource, jsonFileTarget);
-                FileUtils.copyFile(atlasFileSource, atlasFileTarget);
+                FileUtils.copyFile(animationFileSource.file(), jsonFileTarget);
+                FileUtils.copyFile(atlasFileSource.file(), atlasFileTarget);
 
-                for (File imageFile : imageFiles) {
-                    File imgFileTarget = new File(targetPath + File.separator + imageFile.getName());
-                    FileUtils.copyFile(imageFile, imgFileTarget);
+                for (FileHandle imageFile : imageFiles) {
+                    FileHandle imgFileTarget = new FileHandle(targetPath + File.separator + imageFile.name());
+                    FileUtils.copyFile(imageFile.file(), imgFileTarget.file());
                 }
 
                 return atlasFileTarget;
 
 
-            } else if (Overlap2DUtils.SCML_FILTER.accept(null, animationFileSource.getName())) {
+            } else if (Overlap2DUtils.SCML_FILTER.accept(null, fileName)) {
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt;
                 File scmlFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".scml");
                 ArrayList<File> imageFiles = getScmlFileImagesList(animationFileSource);
 
-                FileUtils.copyFile(animationFileSource, scmlFileTarget);
+                FileUtils.copyFile(animationFileSource.file(), scmlFileTarget);
                 for (File imageFile : imageFiles) {
                     File imgFileTarget = new File(targetPath + File.separator + imageFile.getName());
                     FileUtils.copyFile(imageFile, imgFileTarget);
@@ -453,99 +444,92 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
 
-    public void importExternalSpriteAnimationsIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
-        if (files.size() == 0) {
+    public void importSpriteAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
+        if (fileHandles.size == 0) {
             return;
         }
         handler = progressHandler;
 
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
+        executor.execute(() -> {
 
-                String newAnimName = null;
+            String newAnimName = null;
 
-                String rawFileName = files.get(0).getName();
-                String fileExtension = FilenameUtils.getExtension(rawFileName);
-                if (fileExtension.equals("png")) {
-                    Settings settings = new Settings();
-                    settings.square = true;
-                    settings.flattenPaths = true;
+            String rawFileName = fileHandles.get(0).name();
+            String fileExtension = FilenameUtils.getExtension(rawFileName);
+            if (fileExtension.equals("png")) {
+                Settings settings = new Settings();
+                settings.square = true;
+                settings.flattenPaths = true;
 
-                    TexturePacker texturePacker = new TexturePacker(settings);
-                    FileHandle pngsDir = new FileHandle(files.get(0).getParentFile().getAbsolutePath());
-                    for (FileHandle entry : pngsDir.list(Overlap2DUtils.PNG_FILTER)) {
-                        texturePacker.addImage(entry.file());
+                TexturePacker texturePacker = new TexturePacker(settings);
+                FileHandle pngsDir = new FileHandle(fileHandles.get(0).parent().path());
+                for (FileHandle entry : pngsDir.list(Overlap2DUtils.PNG_FILTER)) {
+                    texturePacker.addImage(entry.file());
+                }
+                String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
+                String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
+                String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
+                File targetDir = new File(targetPath);
+                if (targetDir.exists()) {
+                    try {
+                        FileUtils.deleteDirectory(targetDir);
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
-                    String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
-                    String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
-                    File targetDir = new File(targetPath);
-                    if (targetDir.exists()) {
-                        try {
+                }
+                texturePacker.pack(targetDir, fileNameWithoutFrame);
+                newAnimName = fileNameWithoutFrame;
+            } else {
+                for (FileHandle fileHandle : fileHandles) {
+                    try {
+                        ArrayList<File> imgs = getAtlasPages(fileHandle);
+                        String fileNameWithoutExt = FilenameUtils.removeExtension(fileHandle.name());
+                        String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutExt;
+                        File targetDir = new File(targetPath);
+                        if (targetDir.exists()) {
                             FileUtils.deleteDirectory(targetDir);
-                        } catch (IOException e) {
-                            e.printStackTrace();
                         }
-                    }
-                    texturePacker.pack(targetDir, fileNameWithoutFrame);
-                    newAnimName = fileNameWithoutFrame;
-                } else {
-                    for (File file : files) {
-                        try {
-                            ArrayList<File> imgs = getAtlasPages(file);
-                            String fileNameWithoutExt = FilenameUtils.removeExtension(file.getName());
-                            String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutExt;
-                            File targetDir = new File(targetPath);
-                            if (targetDir.exists()) {
-                                FileUtils.deleteDirectory(targetDir);
-                            }
-                            for (File img : imgs) {
-                                FileUtils.copyFileToDirectory(img, targetDir);
-                            }
-                            FileUtils.copyFileToDirectory(file, targetDir);
-                            newAnimName = fileNameWithoutExt;
-                        } catch (IOException e) {
-                            e.printStackTrace();
+                        for (File img : imgs) {
+                            FileUtils.copyFileToDirectory(img, targetDir);
                         }
+                        FileUtils.copyFileToDirectory(fileHandle.file(), targetDir);
+                        newAnimName = fileNameWithoutExt;
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
                 }
+            }
 
-                if (newAnimName != null) {
-                    ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-                    resolutionManager.resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
-                }
+            if (newAnimName != null) {
+                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                resolutionManager.resizeSpriteAnimationForAllResolutions(newAnimName, currentProjectInfoVO);
             }
         });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                changePercentBy(100 - currentPercent);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                handler.progressComplete();
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+            handler.progressComplete();
         });
         executor.shutdown();
     }
 
-    private ArrayList<File> getAtlasPages(File file) {
+    private ArrayList<File> getAtlasPages(FileHandle fileHandle) {
         ArrayList<File> imgs = new ArrayList<File>();
         try {
-            FileHandle fileHandle = new FileHandle(file);
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
             while (true) {
                 String line = reader.readLine();
                 if (line == null) break;
                 if (line.trim().length() == 0) {
                     line = reader.readLine();
-                    imgs.add(new FileHandle(file.getParentFile()).child(line).file());
+                    imgs.add(new FileHandle(fileHandle.path()).child(line).file());
                 }
             }
         } catch (IOException e) {
@@ -555,7 +539,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
 
-    public void importExternalParticlesIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    public void importParticlesIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
         final String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/particles";
         handler = progressHandler;
         currentPercent = 0;
@@ -563,20 +547,20 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         executor.execute(new Runnable() {
             @Override
             public void run() {
-                for (File file : files) {
-                    if (file.isFile() && file.exists()) {
+                for (FileHandle fileHandle : fileHandles) {
+                    if (!fileHandle.isDirectory() && fileHandle.exists()) {
                         try {
                             //copy images
-                            ArrayList<File> imgs = getImageListFromAtlas(file);
+                            Array<FileHandle> imgs = getImageListFromAtlas(fileHandle);
                             copyImageFilesForAllResolutionsIntoProject(imgs, false);
-                            // copy the file
-                            String newName = file.getName();
+                            // copy the fileHandle
+                            String newName = fileHandle.name();
                             File target = new File(targetPath + "/" + newName);
-                            FileUtils.copyFile(file, target);
+                            FileUtils.copyFile(fileHandle.file(), target);
                         } catch (Exception e) {
                             e.printStackTrace();
                             System.out.println("Error importing particles");
-                            //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect file in the same directory ");
+                            //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect fileHandle in the same directory ");
                         }
                     }
                 }
@@ -599,35 +583,29 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         executor.shutdown();
     }
 
-    public void importExternalImagesIntoProject(final ArrayList<File> files, ProgressHandler progressHandler) {
+    public void importImagesIntoProject(final Array<FileHandle> files, ProgressHandler progressHandler) {
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                copyImageFilesForAllResolutionsIntoProject(files, true);
-                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-                resolutionManager.rePackProjectImagesForAllResolutions();
-            }
+        executor.execute(() -> {
+            copyImageFilesForAllResolutionsIntoProject(files, true);
+            ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+            resolutionManager.rePackProjectImagesForAllResolutions();
         });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                changePercentBy(100 - currentPercent);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-
-                handler.progressComplete();
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+
+            handler.progressComplete();
         });
         executor.shutdown();
     }
 
-    private void copyImageFilesForAllResolutionsIntoProject(ArrayList<File> files, Boolean performResize) {
+    private void copyImageFilesForAllResolutionsIntoProject(Array<FileHandle> files, Boolean performResize) {
         copyImageFilesIntoProject(files, currentProjectInfoVO.originalResolution, performResize);
         int totalWarnings = 0;
         for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
@@ -644,27 +622,27 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
      * @param performResize
      * @return number of images that did needed to be resized but failed
      */
-    private int copyImageFilesIntoProject(ArrayList<File> files, ResolutionEntryVO resolution, Boolean performResize) {
+    private int copyImageFilesIntoProject(Array<FileHandle> files, ResolutionEntryVO resolution, Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/" + resolution.name + "/images";
-        float perCopyPercent = 95.0f / files.size();
+        float perCopyPercent = 95.0f / files.size;
 
         int resizeWarningsCount = 0;
 
-        for (File file : files) {
-            if (!Overlap2DUtils.PNG_FILTER.accept(null, file.getName())) {
+        for (FileHandle handle : files) {
+            if (!Overlap2DUtils.PNG_FILTER.accept(null, handle.name())) {
                 continue;
             }
             try {
                 BufferedImage bufferedImage;
                 if (performResize) {
-                    bufferedImage = ResolutionManager.imageResize(file, ratio);
+                    bufferedImage = ResolutionManager.imageResize(handle.file(), ratio);
                     if (bufferedImage == null) {
-                        bufferedImage = ImageIO.read(file);
+                        bufferedImage = ImageIO.read(handle.file());
                         resizeWarningsCount++;
                     }
                 } else {
-                    bufferedImage = ImageIO.read(file);
+                    bufferedImage = ImageIO.read(handle.file());
                 }
 
                 File target = new File(targetPath);
@@ -673,7 +651,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                     newFile.mkdir();
                 }
 
-                ImageIO.write(bufferedImage, "png", new File(targetPath + "/" + file.getName().replace("_", "")));
+                ImageIO.write(bufferedImage, "png", new File(targetPath + "/" + handle.name().replace("_", "")));
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -683,12 +661,12 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         return resizeWarningsCount;
     }
 
-    public void importExternalFontIntoProject(ArrayList<File> externalfiles, ProgressHandler progressHandler) {
+    public void importFontIntoProject(Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/freetypefonts";
         handler = progressHandler;
-        float perCopyPercent = 95.0f / externalfiles.size();
-        for (File file : externalfiles) {
-            if (!Overlap2DUtils.TTF_FILTER.accept(null, file.getName())) {
+        float perCopyPercent = 95.0f / fileHandles.size;
+        for (FileHandle fileHandle : fileHandles) {
+            if (!Overlap2DUtils.TTF_FILTER.accept(null, fileHandle.name())) {
                 continue;
             }
             try {
@@ -697,60 +675,56 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                     File newFile = new File(targetPath);
                     newFile.mkdir();
                 }
-                File fileTarget = new File(targetPath + "/" + file.getName());
-
-                FileUtils.copyFile(file, fileTarget);
+                File fileTarget = new File(targetPath + "/" + fileHandle.name());
+                FileUtils.copyFile(fileHandle.file(), fileTarget);
             } catch (IOException e) {
                 e.printStackTrace();
             }
             System.out.println(perCopyPercent);
             changePercentBy(perCopyPercent);
             ExecutorService executor = Executors.newSingleThreadExecutor();
-            executor.execute(new Runnable() {
-                @Override
-                public void run() {
-                    changePercentBy(100 - currentPercent);
-                    try {
-                        Thread.sleep(500);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    handler.progressComplete();
+            executor.execute(() -> {
+                changePercentBy(100 - currentPercent);
+                try {
+                    Thread.sleep(500);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
                 }
+                handler.progressComplete();
             });
             executor.shutdown();
         }
     }
 
-    public void importExternalStyleIntoProject(final File file, ProgressHandler progressHandler) {
+    public void importStyleIntoProject(final FileHandle handle, ProgressHandler progressHandler) {
+        if (handle == null) {
+            return;
+        }
         final String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/styles";
-        FileHandle fileHandle = Gdx.files.absolute(file.getAbsolutePath());
+        FileHandle fileHandle = Gdx.files.absolute(handle.path());
         final MySkin skin = new MySkin(fileHandle);
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (int i = 0; i < skin.fontFiles.size(); i++) {
-                    File copyFontFile = new File(file.getParentFile(), skin.fontFiles.get(i) + ".fnt");
-                    File copyImageFile = new File(file.getParentFile(), skin.fontFiles.get(i) + ".png");
-                    if (file.isFile() && file.exists() && copyFontFile.isFile() && copyFontFile.exists() && copyImageFile.isFile() && copyImageFile.exists()) {
-                        File fileTarget = new File(targetPath + "/" + file.getName());
-                        File fontTarget = new File(targetPath + "/" + copyFontFile.getName());
-                        File imageTarget = new File(targetPath + "/" + copyImageFile.getName());
-                        try {
-                            FileUtils.copyFile(file, fileTarget);
-                            FileUtils.copyFile(copyFontFile, fontTarget);
-                            FileUtils.copyFile(copyImageFile, imageTarget);
-                        } catch (IOException e) {
-                            // TODO Auto-generated catch block
-                            System.err.println(e.getMessage());
-                            e.printStackTrace();
-                        }
-                    } else {
-                        System.err.println("SOME FILES ARE MISSING");
+        executor.execute(() -> {
+            for (int i = 0; i < skin.fontFiles.size(); i++) {
+                File copyFontFile = new File(handle.path(), skin.fontFiles.get(i) + ".fnt");
+                File copyImageFile = new File(handle.path(), skin.fontFiles.get(i) + ".png");
+                if (!handle.isDirectory() && handle.exists() && copyFontFile.isFile() && copyFontFile.exists() && copyImageFile.isFile() && copyImageFile.exists()) {
+                    File fileTarget = new File(targetPath + "/" + handle.name());
+                    File fontTarget = new File(targetPath + "/" + copyFontFile.getName());
+                    File imageTarget = new File(targetPath + "/" + copyImageFile.getName());
+                    try {
+                        FileUtils.copyFile(handle.file(), fileTarget);
+                        FileUtils.copyFile(copyFontFile, fontTarget);
+                        FileUtils.copyFile(copyImageFile, imageTarget);
+                    } catch (IOException e) {
+                        // TODO Auto-generated catch block
+                        System.err.println(e.getMessage());
+                        e.printStackTrace();
                     }
+                } else {
+                    System.err.println("SOME FILES ARE MISSING");
                 }
             }
         });
@@ -1053,7 +1027,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         if (projectName.equals("")) {
             return;
         }
-        
+
         try {
             createEmptyProject(projectName, originWidth, originHeight);
             openProjectAndLoadAllData(projectName);

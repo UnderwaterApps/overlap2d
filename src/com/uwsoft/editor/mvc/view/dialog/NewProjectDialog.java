@@ -77,16 +77,8 @@ public class NewProjectDialog extends VisDialog {
     public VisDialog show(Stage stage, Action action) {
         originWithTextField.setText(DEFAULT_ORIGIN_WITH);
         originHeightTextField.setText(DEFAULT_ORIGIN_HEIGHT);
-        inputFile.setValue("");
+        inputFile.resetData();
         return super.show(stage, action);
-    }
-
-    public String getProjectPath() {
-        return inputFile.getValue();
-    }
-
-    public void setProjectPath(String path) {
-        inputFile.setValue(path);
     }
 
     public String getOriginWidth() {
@@ -108,7 +100,7 @@ public class NewProjectDialog extends VisDialog {
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(command);
+            facade.sendNotification(command, inputFile.getValue().path());
         }
     }
 }

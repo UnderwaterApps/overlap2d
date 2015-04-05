@@ -22,8 +22,11 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.gdx.ui.ProgressHandler;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by sargis on 4/3/15.
@@ -31,6 +34,7 @@ import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialog> {
     private static final String TAG = AssetsImportDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
+    private AssetsImportProgressHandler progressHandler;
 
     public AssetsImportDialogMediator() {
         super(NAME, new AssetsImportDialog());
@@ -40,6 +44,7 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
     public void onRegister() {
         super.onRegister();
         facade = Overlap2DFacade.getInstance();
+        progressHandler = new AssetsImportProgressHandler();
     }
 
     @Override
@@ -60,8 +65,36 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
                 viewComponent.show(uiStage);
                 break;
             case AssetsImportDialog.START_IMPORTING_BTN_CLICKED:
-
+                ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+                projectManager.importImagesIntoProject(viewComponent.getImageFiles(), progressHandler);
+                projectManager.importParticlesIntoProject(viewComponent.getParticleEffectFiles(), progressHandler);
+                projectManager.importStyleIntoProject(viewComponent.getStyleFiles(), progressHandler);
+                projectManager.importFontIntoProject(viewComponent.getFontFiles(), progressHandler);
+                projectManager.importSpineAnimationsIntoProject(viewComponent.getSpineSpriterFiles(), progressHandler);
+                projectManager.importSpriteAnimationsIntoProject(viewComponent.getSpriteAnimationFiles(), progressHandler);
+                // save before importing
+                SceneVO vo = sandbox.sceneVoFromItems();
+                uiStage.getCompositePanel().updateOriginalItem();
+                projectManager.saveCurrentProject(vo);
                 break;
+        }
+    }
+
+    private class AssetsImportProgressHandler implements ProgressHandler {
+
+        @Override
+        public void progressStarted() {
+
+        }
+
+        @Override
+        public void progressChanged(float value) {
+
+        }
+
+        @Override
+        public void progressComplete() {
+
         }
     }
 }
