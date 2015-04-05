@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
+import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialogOld;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.LabelVO;
@@ -174,8 +175,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                CustomVariablesDialog dlg = new CustomVariablesDialog(sandbox.getUIStage(), item);
-                sandbox.getUIStage().addActor(dlg);
+            	CustomVariablesDialog dlg = new CustomVariablesDialog(item);
+            	sandbox.getUIStage().addActor(dlg);
             }
         });
 
