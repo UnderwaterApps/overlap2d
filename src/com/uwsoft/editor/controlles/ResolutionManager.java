@@ -62,11 +62,11 @@ public class ResolutionManager {
             if (ratio == 1.0) {
                 return null;
             }
-				// When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
-				// But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
-				if(sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
-					 return null;
-				}
+            // When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
+            // But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
+            if(sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
+                return null;
+            }
             int newWidth = Math.max(3, Math.round(sourceBufferedImage.getWidth() * ratio));
             int newHeight = Math.max(3, Math.round(sourceBufferedImage.getHeight() * ratio));
             String name = file.getName();
@@ -146,7 +146,7 @@ public class ResolutionManager {
                 rePackProjectImages(newResolution);
                 createResizedAnimations(newResolution);
                 changePercentBy(5);
-					 DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
             }
         });
         executor.execute(new Runnable() {
@@ -345,26 +345,26 @@ public class ResolutionManager {
         FileHandle[] entries = targetDir.list(new DataManager.PngFilenameFilter());
         float perResizePercent = 95.0f / entries.length;
 
-		  int resizeWarnings = 0;
+        int resizeWarnings = 0;
 
         for (FileHandle entry : entries) {
             try {
                 File file = entry.file();
                 File destinationFile = new File(path + "/" + file.getName());
-					 BufferedImage resizedImage = ResolutionManager.imageResize(file, ratio);
-					 if(resizedImage == null) {
-						  resizeWarnings++;
-						  ImageIO.write(ImageIO.read(file), "png", destinationFile);
-					 } else {
-						  ImageIO.write(ResolutionManager.imageResize(file, ratio), "png", destinationFile);
-					 }
+                BufferedImage resizedImage = ResolutionManager.imageResize(file, ratio);
+                if(resizedImage == null) {
+                    resizeWarnings++;
+                    ImageIO.write(ImageIO.read(file), "png", destinationFile);
+                } else {
+                    ImageIO.write(ResolutionManager.imageResize(file, ratio), "png", destinationFile);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
             changePercentBy(perResizePercent);
         }
 
-		  return resizeWarnings;
+        return resizeWarnings;
     }
 
     private void copyTexturesFromTo(String fromPath, String toPath) {
