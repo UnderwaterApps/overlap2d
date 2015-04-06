@@ -174,8 +174,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                CustomVariablesDialog dlg = new CustomVariablesDialog(sandbox.getUIStage(), item);
-                sandbox.getUIStage().addActor(dlg);
+            	CustomVariablesDialog dlg = new CustomVariablesDialog(item);
+            	sandbox.getUIStage().addActor(dlg);
             }
         });
 
