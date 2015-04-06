@@ -47,6 +47,10 @@ public class InputFileWidget extends VisTable {
         initFileChooser(mode, selectionMode, multiselectionEnabled);
     }
 
+    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
+        this(mode, selectionMode, multiselectionEnabled, true);
+    }
+
     private void initFileChooser(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
         fileChooser = new FileChooser(mode);
         fileChooser.setSelectionMode(selectionMode);
@@ -61,10 +65,6 @@ public class InputFileWidget extends VisTable {
         add(browsBtn);
         addListener(new InputFileWidgetClickListener());
 
-    }
-
-    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
-        this(mode, selectionMode, multiselectionEnabled, true);
     }
 
     public FileHandle getValue() {
@@ -103,6 +103,8 @@ public class InputFileWidget extends VisTable {
 
     public void resetData() {
         textField.setText("");
+        value = null;
+        values = null;
     }
 
     private class InputFileWidgetClickListener extends ClickListener {
@@ -117,7 +119,7 @@ public class InputFileWidget extends VisTable {
 
         @Override
         public void selected(Array<FileHandle> files) {
-            setValues(files != null ? files : new Array<>());
+            setValues(files);
         }
 
         @Override

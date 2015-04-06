@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.dialog;
 
+import com.badlogic.gdx.Gdx;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -94,7 +95,15 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
 
         @Override
         public void progressComplete() {
-
+            Gdx.app.postRunnable(() -> {
+                Sandbox sandbox = Sandbox.getInstance();
+                UIStage uiStage = sandbox.getUIStage();
+                ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+                projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
+                uiStage.getCompositePanel().initResolutionBox();
+                sandbox.loadCurrentProject();
+                AssetsImportDialogMediator.this.viewComponent.hide();
+            });
         }
     }
 }

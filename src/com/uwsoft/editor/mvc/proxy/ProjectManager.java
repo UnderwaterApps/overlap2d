@@ -356,6 +356,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
 
     public void importSpineAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
+        if (fileHandles == null) {
+            return;
+        }
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -445,7 +448,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
 
     public void importSpriteAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
-        if (fileHandles.size == 0) {
+        if (fileHandles == null) {
             return;
         }
         handler = progressHandler;
@@ -540,6 +543,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
 
     public void importParticlesIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
+        if (fileHandles == null) {
+            return;
+        }
         final String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/particles";
         handler = progressHandler;
         currentPercent = 0;
@@ -584,6 +590,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
     public void importImagesIntoProject(final Array<FileHandle> files, ProgressHandler progressHandler) {
+        if (files == null) {
+            return;
+        }
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -662,6 +671,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
     public void importFontIntoProject(Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
+        if (fileHandles == null) {
+            return;
+        }
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/freetypefonts";
         handler = progressHandler;
         float perCopyPercent = 95.0f / fileHandles.size;
