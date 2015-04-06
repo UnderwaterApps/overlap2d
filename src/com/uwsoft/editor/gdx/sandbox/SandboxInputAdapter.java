@@ -269,7 +269,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // TODO: key pressed 0 for unckown, should be removed?
 		  // TODO: need to make sure OSX Command button works too.
 
-		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0)) {
+		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
 				if (keycode == Input.Keys.UP) {
 					 // going to front of next item in z-index ladder
 					 sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), true);
@@ -294,6 +294,9 @@ public class SandboxInputAdapter extends InputAdapter {
 				}
 				if (keycode == Input.Keys.NUM_4 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
 					 sandbox.getSelector().alignSelections(Align.right);
+				}
+				if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
+					 sandbox.setZoomPercent(100);
 				}
 
 				return true;
@@ -333,7 +336,7 @@ public class SandboxInputAdapter extends InputAdapter {
 				sandbox.zoomDevideBy(2f);
 		  }
 		  if (keycode == Input.Keys.EQUALS  && isControlPressed) {
-				sandbox.zoomDevideBy(1f/2f);
+				sandbox.zoomDevideBy(1f / 2f);
 		  }
 
 		  return true;
