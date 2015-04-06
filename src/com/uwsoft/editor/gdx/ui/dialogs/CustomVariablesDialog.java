@@ -18,181 +18,194 @@
 
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
+import java.util.Map;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.building.OneRowTableBuilder;
+import com.kotcrab.vis.ui.building.StandardTableBuilder;
+import com.kotcrab.vis.ui.building.TableBuilder;
+import com.kotcrab.vis.ui.building.utilities.CellWidget;
+import com.kotcrab.vis.ui.building.utilities.Padding;
+import com.kotcrab.vis.ui.building.utilities.layouts.ActorLayout;
+import com.kotcrab.vis.ui.util.TableUtils;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
+import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 import java.util.Map;
 
-/**
- * Created by azakhary on 8/28/2014.
- */
-public class CustomVariablesDialog extends SimpleDialog {
-
-    private Group listContainer;
-    private float maxHeight = 250;
-    private CustomVariables vars;
-    private IBaseItem item;
-
-    private ScrollPane scroll;
-
-    private Group wrapper;
-    private Group topWrapper;
-    UIStage uiStagel;
-
-    public CustomVariablesDialog(UIStage s, final IBaseItem item) {
-        super(s, 320, 310);
-              
-        this.uiStagel	=	s;
-        setX(200);
-        setY(200);
-
-        setTitle("Custom Variables Dialog");
-
-        vars = item.getCustomVariables();
-        this.item = item;
-        
-        topWrapper = new Group();
-        topWrapper.setX(5);
-        topWrapper.setY(getHeight()-maxHeight-20);
-        topWrapper.setHeight(maxHeight);        
-        topWrapper.setWidth(getWidth()-10);
-        
-
-        listContainer = new Group();                
-        wrapper = new Group();
-        
-        renderMainList();
-        scroll = new ScrollPane(wrapper, s.textureManager.editorSkin);
-        
-        scroll.setWidth(topWrapper.getWidth());
-        scroll.setHeight(maxHeight);
-        scroll.setFlickScroll(false);
-        scroll.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                event.stop();
-                return true;
-            }
-        });
-       
-          
-        
-        wrapper.addActor(listContainer);
-        scroll.setName("scroll");
-        topWrapper.addActor(scroll);        
-        addActor(topWrapper);
-        
-        
-        
-
-        final CompositeItem newRow = stage.sceneLoader.getLibraryAsActor("newKeyValuePair");
-        addActor(newRow);
-        newRow.setX(getWidth()/2 - newRow.getWidth()/2);
-        newRow.setY(topWrapper.getY() - newRow.getHeight() - 2);
-
-        TextButton addBtn = newRow.getTextButtonById("addBtn");
-
-        addBtn.addListener(new ClickListener() {
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-
-               String key = newRow.getTextBoxById("key").getText();
-               String value = newRow.getTextBoxById("value").getText();
-
-               key.replace(";", ""); key.replace(":", "");
-
-               if(key.length() > 0) {
-                   vars.setVariable(key, value);
-                   renderMainList();
-
-                   newRow.getTextBoxById("key").setText("");
-                   newRow.getTextBoxById("value").setText("");
-               }
-            }
-        });
-
-    }
-
-    public void renderMainList() {
-        item.updateDataVO();
-        listContainer.clear();
-
-        float itmHeight = 25;
-        int cnt = vars.getCount();
-
-        wrapper.setHeight(itmHeight*cnt);
-        scroll = new ScrollPane(wrapper, uiStagel.textureManager.editorSkin);        
-        scroll.setWidth(topWrapper.getWidth());
-        scroll.setHeight(maxHeight);
-        scroll.setFlickScroll(false);
-        scroll.addListener(new InputListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                event.stop();
-                return true;
-            }
-        });
-        if(topWrapper.findActor("scroll")!=null){
-        	topWrapper.findActor("scroll").remove();
-        }
-        
-        topWrapper.addActor(scroll);
-        
-        
-        if(itmHeight*cnt < maxHeight-10) {
-            listContainer.setHeight(maxHeight-10);
-        } else {
-            listContainer.setHeight(itmHeight*cnt);
-        }
-        
-        int iterator = 0;
-        for (Map.Entry<String, String> entry : vars.getHashMap().entrySet()) {
-            final String key = entry.getKey();
-            String value = entry.getValue();
-            // ...
-            final CompositeItem itm = stage.sceneLoader.getLibraryAsActor("KeyValuePairRow");
-
-            itm.getLabelById("key").setAlignment(Align.left);
-
-            itm.getLabelById("key").setText(key);
-            itm.getTextBoxById("value").setText(value);
-
-            listContainer.addActor(itm);
-            itm.setX(2);
-            itm.setY(listContainer.getHeight()-(itm.getHeight() + 3)*(iterator+1));
-            iterator++;
-
-
-            itm.getTextButtonById("updateBtn").addListener(new ClickListener() {
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    vars.setVariable(key, itm.getTextBoxById("value").getText());
-                    renderMainList();
-                }
-            });
-
-
-            itm.getTextButtonById("deleteBtn").addListener(new ClickListener() {
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    vars.removeVariable(key);
-                    renderMainList();
-                }
-            });
-        }
-    }
+public class CustomVariablesDialog extends VisWindow {
+	
+	private IBaseItem item;
+	private CustomVariables vars;
+	private VisList<String> varNames;
+	
+	private VisTextField varName;
+	private VisTextField varVal;
+	
+	private VisTextButton changeName;
+	private VisTextButton updateValue;
+	private VisTextButton deleteVar;
+	
+	private VisTextField keyName;
+	private VisTextField keyVal;
+	private VisTextButton addVar;
+	
+	public CustomVariablesDialog(final IBaseItem item) {
+		super("Custom Variables Dialog");
+		
+		setModal(true);
+		addCloseButton();
+		closeOnEscape();
+		
+		TableUtils.setSpacingDefaults(this);
+		columnDefaults(0).left();
+		this.item = item;
+		vars = item.getCustomVariables();
+		
+		buildLayout();
+		
+		setupHooks();
+		
+		pack();
+		centerWindow();
+	}
+	
+	private void buildLayout() {
+		// Left Side list of Variables
+		varNames = new VisList<String>();
+		renderNames();
+		VisScrollPane pane = new VisScrollPane(varNames);
+		pane.setFlickScroll(false);
+		pane.setFadeScrollBars(false);
+		varNames.setSelectedIndex(-1);
+		
+		// Used Labels in layout.
+		VisLabel lbl1 = new VisLabel("Variable Name:");
+		VisLabel lbl2 = new VisLabel("Variable Value:");
+		VisLabel lbl3 = new VisLabel("New Variable:");
+		VisLabel lbl4 = new VisLabel("=");
+		
+		// Text Fields in layout.
+		varName = new VisTextField("");
+		varName.setDisabled(true);
+		varVal = new VisTextField("");
+		keyName = new VisTextField("");
+		keyVal = new VisTextField("");
+		
+		// Buttons in layout.
+		changeName = new VisTextButton("Change Name");
+		updateValue = new VisTextButton("Update Value");
+		deleteVar = new VisTextButton("Delete Variable");
+		addVar = new VisTextButton("Add Variable");
+		
+		// Layout everything
+		VisTable form = new VisTable(true);
+		form.add(lbl1);
+		form.add(varName).expandX().fillX();
+		form.add(changeName);
+		form.row();
+		
+		form.add(lbl2);
+		form.add(varVal).expandX().fillX();
+		form.row();
+		
+		form.add(updateValue);
+		form.add(deleteVar);
+		
+		VisTable newKVE = new VisTable(true);
+		newKVE.add(lbl3);
+		newKVE.add(keyName);
+		newKVE.add(lbl4);
+		newKVE.add(keyVal);
+		newKVE.add(addVar);
+		
+		add(pane).expandX().expandY().fillX().fillY();
+		add(new Separator()).padTop(10).fillY().expandY();
+		add(form).row();
+		
+		add(newKVE).colspan(3).expandX().fillX().padBottom(3).padTop(3).row();
+	}
+	
+	private void setupHooks() {
+		varNames.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				if (varNames.getSelectedIndex() != -1) {
+					String val = vars.getStringVariable(varNames.getSelected());
+					varName.setText(varNames.getSelected());
+					varVal.setText(val);
+				} else {
+					varName.setText("");
+					varVal.setText("");
+				}
+			}
+		});
+		
+		changeName.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				DialogUtils.showInputDialog(getStage(), "New Name for Variable", "Name:", new InputDialogAdapter() {
+					@Override
+					public void finished(String input) {
+						// Change the Variable name here.
+						vars.removeVariable(varName.getText());
+						vars.setVariable(input, varVal.getText());
+						item.updateDataVO();
+						renderNames();
+						varNames.setSelected(input);
+						varName.setText(input);
+					}
+				});
+			}
+		});
+		
+		updateValue.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				vars.setVariable(varName.getText(),varVal.getText());
+				item.updateDataVO();
+			}
+		});
+		
+		deleteVar.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				vars.removeVariable(varName.getText());
+				item.updateDataVO();
+				varName.setText("");
+				varVal.setText("");
+				renderNames();
+				varNames.setSelectedIndex(-1);
+			}
+		});
+		
+		addVar.addListener(new ChangeListener() {
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				vars.setVariable(keyName.getText(), keyVal.getText());
+				item.updateDataVO();
+				keyName.setText("");
+				keyVal.setText("");
+				renderNames();
+				varNames.setSelectedIndex(-1);
+			}
+		});
+	}
+	
+	private void renderNames() {
+		varNames.clearItems();
+		Array<String> names = new Array<String>();
+		
+		for (Map.Entry<String, String> entry : vars.getHashMap().entrySet()) {
+			final String key = entry.getKey();
+			names.add(key);
+		}
+		varNames.setItems(names);
+	}
 }

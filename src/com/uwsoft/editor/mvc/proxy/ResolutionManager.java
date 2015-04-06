@@ -67,7 +67,7 @@ public class ResolutionManager extends BaseProxy {
             }
             // When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
             // But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
-            if (sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
+            if(sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
                 return null;
             }
             int newWidth = Math.max(3, Math.round(sourceBufferedImage.getWidth() * ratio));
@@ -379,7 +379,7 @@ public class ResolutionManager extends BaseProxy {
                 File file = entry.file();
                 File destinationFile = new File(path + "/" + file.getName());
                 BufferedImage resizedImage = ResolutionManager.imageResize(file, ratio);
-                if (resizedImage == null) {
+                if(resizedImage == null) {
                     resizeWarnings++;
                     ImageIO.write(ImageIO.read(file), "png", destinationFile);
                 } else {
