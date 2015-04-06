@@ -136,6 +136,7 @@ public class ItemFactory {
         SpriteAnimation itm = new SpriteAnimation(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 
         addItem(itm, vo);
+		  itm.start();
     }
 
     public void createSpriterAnimation(LayerItemVO layer, String animationsName, float x, float y) {
