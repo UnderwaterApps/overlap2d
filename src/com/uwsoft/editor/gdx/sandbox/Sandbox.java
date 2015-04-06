@@ -518,9 +518,18 @@ public class Sandbox {
 		  camera.zoom = 1f/(zoomPercent/100f);
 	 }
 
-	 public void zoomByScroll(float amount) {
+	 public void zoomBy(float amount) {
 		  zoomPercent+=-amount*15f;
 
+		  if(zoomPercent < 20) zoomPercent = 20;
+		  if(zoomPercent > 1000) zoomPercent = 1000;
+
+		  setZoomPercent(zoomPercent);
+	 }
+
+	 public void zoomDevideBy(float amount) {
+
+		  zoomPercent /= amount;
 		  if(zoomPercent < 20) zoomPercent = 20;
 		  if(zoomPercent > 1000) zoomPercent = 1000;
 

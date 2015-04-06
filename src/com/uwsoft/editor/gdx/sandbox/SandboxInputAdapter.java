@@ -166,9 +166,9 @@ public class SandboxInputAdapter extends InputAdapter {
 					 value.update();
 				}
 				sandbox.dirty = true;
-		  } else {
+		  } else if(Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)){
 				// if not item is touched then we can use this for zoom
-				sandbox.zoomByScroll(amount);
+				sandbox.zoomBy(amount);
 		  }
 		  return false;
 	 }
@@ -259,6 +259,9 @@ public class SandboxInputAdapter extends InputAdapter {
 	 }
 
 	 private boolean sandboxKeyDown(int keycode) {
+
+		  boolean isControlPressed = Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+
 		  // the amount of pixels by which to move item if moving
 		  float deltaMove = 1;
 
@@ -323,6 +326,14 @@ public class SandboxInputAdapter extends InputAdapter {
 		  if (keycode == Input.Keys.SPACE && !sandbox.isItemTouched && !sandbox.isUsingSelectionTool) {
 				sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
 				sandbox.cameraPanOn = true;
+		  }
+
+		  // Zoom
+		  if (keycode == Input.Keys.MINUS && isControlPressed) {
+				sandbox.zoomDevideBy(2f);
+		  }
+		  if (keycode == Input.Keys.EQUALS  && isControlPressed) {
+				sandbox.zoomDevideBy(1f/2f);
 		  }
 
 		  return true;
