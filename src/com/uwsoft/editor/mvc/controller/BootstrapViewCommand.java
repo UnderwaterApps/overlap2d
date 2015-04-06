@@ -24,6 +24,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.mvc.view.dialog.AssetsImportDialogMediator;
+import com.uwsoft.editor.mvc.view.dialog.ExportSettingsDialogMediator;
 import com.uwsoft.editor.mvc.view.dialog.NewProjectDialogMediator;
 
 /**
@@ -38,5 +39,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new Overlap2DMenuBarMediator());
         facade.registerMediator(new NewProjectDialogMediator());
         facade.registerMediator(new AssetsImportDialogMediator());
+        facade.registerMediator(new ExportSettingsDialogMediator());
     }
 }

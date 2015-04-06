@@ -928,9 +928,9 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         currentProjectVO.projectMainExportPath = path.getPath();
     }
 
-    public void setTexturePackerSizes(String width, String height) {
-        currentProjectVO.texturepackerWidth = width;
-        currentProjectVO.texturepackerHeight = height;
+    public void setTexturePackerSizes(int width, int height) {
+        currentProjectVO.texturepackerWidth = String.valueOf(width);
+        currentProjectVO.texturepackerHeight = String.valueOf(height);
     }
 
     public String getRootPath() {

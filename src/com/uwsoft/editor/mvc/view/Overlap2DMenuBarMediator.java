@@ -131,7 +131,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 projectManager.exportProject();
                 break;
             case Overlap2DMenuBar.EXPORT_SETTINGS:
-                showDialog("showExportDialog");
+                //showDialog("showExportDialog");
                 break;
             case Overlap2DMenuBar.EXIT:
                 Gdx.app.exit();
