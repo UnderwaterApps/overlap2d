@@ -19,12 +19,18 @@
 package com.uwsoft.editor.gdx.actors;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
 import com.uwsoft.editor.gdx.stage.BaseStage;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+
 public class GridView extends Group {
+
+	 private AbstractList<PixelLine> lines = new ArrayList<PixelLine>();
 
 	public GridView(BaseStage s) {
 		float gridSize = 50;
@@ -36,6 +42,8 @@ public class GridView extends Group {
 			addActor(tmp);
 			tmp.setX(tmp.getX()-(gridLinesCount/2-1)*gridSize);
 			tmp.setY(tmp.getY()-(gridLinesCount/2-1)*gridSize);
+
+			 lines.add(tmp);
 		}
 		
 		for(int i = 0; i <gridLinesCount; i++) {
@@ -44,6 +52,8 @@ public class GridView extends Group {
 			addActor(tmp);
 			tmp.setX(tmp.getX()-(gridLinesCount/2-1)*gridSize);
 			tmp.setY(tmp.getY()-(gridLinesCount/2-1)*gridSize);
+
+			 lines.add(tmp);
 		}
 		
 		this.setWidth(gridSize*gridLinesCount);
@@ -67,4 +77,13 @@ public class GridView extends Group {
 			tmp.setOpacity(0.02f); 
 		}
 	}
+
+	 @Override
+	 public void act(float delta) {
+		  super.act(delta);
+		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		  for(int i = 0; i <lines.size(); i++) {
+				lines.get(i).setThickness(camera.zoom);
+		  }
+	 }
 }

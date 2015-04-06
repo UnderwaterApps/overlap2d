@@ -21,6 +21,7 @@ package com.uwsoft.editor.gdx.sandbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -58,15 +59,16 @@ import java.util.ArrayList;
 public class Sandbox {
 
     private static Sandbox instance = null;
-    /**
-     * end of shitty part
-     */
+
 
     public EditingMode editingMode;
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
     public FlowManager flow;
     public TransformationHandler transformationHandler;
+
+	 private float zoomPercent = 100;
+
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -89,6 +91,9 @@ public class Sandbox {
     private ItemFactory itemFactory;
     private ItemSelector selector;
     private InputMultiplexer inputMultiplexer;
+	 /**
+	  * end of shitty part
+	  */
 
 
     private Sandbox() {
@@ -196,6 +201,8 @@ public class Sandbox {
     }
 
     public void loadCurrentProject() {
+		  setZoomPercent(100f);
+
         ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
         uiStage.loadCurrentProject();
@@ -504,4 +511,19 @@ public class Sandbox {
             }
         });
     }
+
+	 public void setZoomPercent(float percent) {
+		  zoomPercent = percent;
+		  OrthographicCamera camera = (OrthographicCamera)(sandboxStage.getCamera());
+		  camera.zoom = 1f/(zoomPercent/100f);
+	 }
+
+	 public void zoomByScroll(float amount) {
+		  zoomPercent+=-amount*15f;
+
+		  if(zoomPercent < 20) zoomPercent = 20;
+		  if(zoomPercent > 1000) zoomPercent = 1000;
+
+		  setZoomPercent(zoomPercent);
+	 }
 }
