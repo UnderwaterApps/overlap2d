@@ -1,6 +1,6 @@
 
 pack.png
-size: 508,62
+size: 512,64
 format: RGBA8888
 filter: Nearest,Nearest
 repeat: none
@@ -18,30 +18,58 @@ addPolygonIconChecked
   orig: 20, 20
   offset: 0, 0
   index: -1
-alignIconL
+alignIconCH
   rotate: false
   xy: 394, 42
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
-alignIconLChecked
+alignIconCHChecked
   rotate: false
   xy: 416, 42
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
+alignIconCV
+  rotate: false
+  xy: 438, 42
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+alignIconCVChecked
+  rotate: false
+  xy: 460, 42
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+alignIconL
+  rotate: false
+  xy: 482, 42
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
+alignIconLChecked
+  rotate: false
+  xy: 176, 22
+  size: 20, 20
+  orig: 20, 20
+  offset: 0, 0
+  index: -1
 boxCorner
   rotate: false
-  xy: 264, 26
+  xy: 330, 26
   size: 3, 3
   orig: 3, 3
   offset: 0, 0
   index: -1
 boxSide
   rotate: false
-  xy: 264, 23
+  xy: 368, 28
   size: 3, 1
   orig: 3, 1
   offset: 0, 0
@@ -76,7 +104,7 @@ closeBtn
   index: -1
 closeBtnClicked
   rotate: false
-  xy: 264, 31
+  xy: 330, 31
   size: 14, 11
   orig: 14, 11
   offset: 0, 0
@@ -90,7 +118,7 @@ closeHoverBtn
   index: -1
 colorBox
   rotate: false
-  xy: 438, 42
+  xy: 198, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -132,56 +160,56 @@ dltPressed
   index: -1
 editPolygonIcon
   rotate: false
-  xy: 460, 42
+  xy: 220, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 editPolygonIconChecked
   rotate: false
-  xy: 482, 42
+  xy: 242, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 expand16
   rotate: false
-  xy: 280, 33
+  xy: 368, 31
   size: 15, 9
   orig: 15, 9
   offset: 0, 0
   index: -1
 eye
   rotate: false
-  xy: 297, 32
+  xy: 385, 30
   size: 12, 10
   orig: 12, 10
   offset: 0, 0
   index: -1
 eyeEmpty
   rotate: false
-  xy: 311, 30
+  xy: 399, 28
   size: 12, 12
   orig: 12, 12
   offset: 0, 0
   index: -1
 lock
   rotate: false
-  xy: 325, 29
+  xy: 413, 27
   size: 10, 13
   orig: 10, 13
   offset: 0, 0
   index: -1
 mainIcon
   rotate: false
-  xy: 176, 22
+  xy: 264, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 mainIconChecked
   rotate: false
-  xy: 198, 22
+  xy: 286, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
@@ -223,21 +251,21 @@ panel
   index: -1
 pixel
   rotate: false
-  xy: 337, 41
+  xy: 425, 39
   size: 1, 1
   orig: 1, 1
   offset: 0, 0
   index: -1
 resizeIcon
   rotate: false
-  xy: 220, 22
+  xy: 308, 22
   size: 20, 20
   orig: 20, 20
   offset: 0, 0
   index: -1
 resizeIconChecked
   rotate: false
-  xy: 242, 22
+  xy: 346, 20
   size: 20, 20
   orig: 20, 20
   offset: 0, 0

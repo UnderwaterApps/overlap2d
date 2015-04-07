@@ -62,13 +62,9 @@ public class UIToolBox extends UIBox {
         Button rightIcon = addButton("alignIconL", false);
         rightIcon.setTransform(true);
         rightIcon.setRotation(180);
-        //TODO assign respective icons
-        Button hCenterIcon = addButton("alignIconL", false);
-        hCenterIcon.setColor(Color.YELLOW);
-        Button vCenterIcon = addButton("alignIconL", false);
-        vCenterIcon.setTransform(true);
-        vCenterIcon.setRotation(-90);
-        vCenterIcon.setColor(Color.RED);
+
+        Button hCenterIcon = addButton("alignIconCH", false);
+        Button vCenterIcon = addButton("alignIconCV", false);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
