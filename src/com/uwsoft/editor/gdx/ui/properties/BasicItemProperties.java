@@ -354,7 +354,11 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                         sandbox.saveSceneCurrentSceneData();
                     }
                 });
-					 sandbox.getUIStage().addActor(picker.fadeIn());
+                //TODO might be more wise to manage a single tmp color instead of recreating new colors
+                picker.setColor(new Color(
+                        item.getDataVO().tint[0], item.getDataVO().tint[1],
+                        item.getDataVO().tint[2], item.getDataVO().tint[3]));
+                sandbox.getUIStage().addActor(picker.fadeIn());
             }
         });
 

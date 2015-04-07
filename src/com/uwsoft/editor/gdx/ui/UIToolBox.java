@@ -19,6 +19,7 @@
 package com.uwsoft.editor.gdx.ui;
 
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
@@ -33,14 +34,14 @@ public class UIToolBox extends UIBox {
 
     private ButtonGroup btnGroup;
 
-    private int maxRows = 1;
-    private int maxCols = 6;
+    private final static int maxRows = 2;
+    private final static int maxCols = 6;
 
     private int currRow = 0;
     private int currCol = 0;
 
     public UIToolBox(UIStage s) {
-        super(s, 160, 50);
+        super(s, 160, 30 + 20 * maxRows);
 
         btnGroup = new ButtonGroup();
         btnGroup.setMaxCheckCount(1);
@@ -60,6 +61,9 @@ public class UIToolBox extends UIBox {
         Button rightIcon = addButton("alignIconL", false);
         rightIcon.setTransform(true);
         rightIcon.setRotation(180);
+
+        Button hCenterIcon = addButton("alignIconCH", false);
+        Button vCenterIcon = addButton("alignIconCV", false);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
@@ -85,6 +89,18 @@ public class UIToolBox extends UIBox {
         rightIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getSandbox().getSelector().alignSelections(Align.right);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        hCenterIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelections(Align.center | Align.left);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        vCenterIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelections(Align.center | Align.bottom);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -117,7 +133,7 @@ public class UIToolBox extends UIBox {
         btn.setOrigin(btn.getWidth() / 2, btn.getHeight() / 2);
 
         currCol++;
-        if (currCol > maxCols) {
+        if (currCol >= maxCols) {
             currCol = 0;
             currRow++;
         }
