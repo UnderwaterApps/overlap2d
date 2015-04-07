@@ -28,12 +28,16 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
+import com.uwsoft.editor.renderer.actor.LabelItem;
+import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.TextBoxVO;
 
 public class LibraryList extends Group {
 
@@ -42,7 +46,8 @@ public class LibraryList extends Group {
     private final Group listContainer;
     private ArrayList<LibraryItemThumbnailBox> libraryItems;
     private LibraryItemThumbnailBox librarySelectedItem;
-
+    private Label searchLbl;
+    private TextBoxItem searchText;
     public LibraryList(final UIStage s, float width, float height) {
         stage = s;
         libraryItems = new ArrayList<>();
@@ -72,17 +77,29 @@ public class LibraryList extends Group {
 
 
         items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
+        //-----------------Search Box
+        Group searchGroup   =   new Group();
+        container.add(searchGroup);
+        searchGroup.setWidth(200);
+        searchGroup.setHeight(30);
+        searchLbl   =   new Label("Search :", s.textureManager.editorSkin);
+        searchGroup.addActor(searchLbl);
 
-
+        searchText = new TextBoxItem(new TextBoxVO(),s.essentials);
+        searchText.setX(searchLbl.getTextBounds().width);
+        searchGroup.addActor(searchText);
+        searchText.setTextFieldListener(new TextField.TextFieldListener() {
+            public void keyTyped (TextField textField, char key) {
+                drawItems(searchText.getText());
+            }
+        });
         Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
         if (items.size() * dummyTst.getHeight() > listContainer.getHeight()) {
             listContainer.setHeight(items.size() * (dummyTst.getHeight() + 2));
         }
         drawItems();
-
         table.add(listContainer);
         table.row();
-
         addActor(container);
 
     }
@@ -90,6 +107,8 @@ public class LibraryList extends Group {
     private void drawItems() {
         listContainer.clearChildren();
         libraryItems.clear();
+
+
         int iter = 1;
         for (final String value : items.keySet()) {
             LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
@@ -101,6 +120,28 @@ public class LibraryList extends Group {
         }
         librarySelectedItem = null;
         initListeners();
+
+
+    }
+    private void drawItems(String searchText) {
+        listContainer.clearChildren();
+        libraryItems.clear();
+
+
+        int iter = 1;
+        for (final String value : items.keySet()) {
+            if(!value.contains(searchText))continue;
+            LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
+            thumb.setX(0);
+            thumb.setY(listContainer.getHeight() - thumb.getHeight() * iter - 2 * iter);
+            listContainer.addActor(thumb);
+            libraryItems.add(thumb);
+            iter++;
+        }
+        librarySelectedItem = null;
+        initListeners();
+
+
     }
 
     private void initListeners() {
