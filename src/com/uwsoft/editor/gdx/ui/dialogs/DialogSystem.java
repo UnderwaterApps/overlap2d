@@ -19,7 +19,6 @@
 package com.uwsoft.editor.gdx.ui.dialogs;
 
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.mvc.view.dialog.ExportSettingsDialog;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -36,26 +35,6 @@ public class DialogSystem {
         CreateNewResolutionDialog dlg = new CreateNewResolutionDialog(stage);
         return (CreateNewResolutionDialog) initiateDialog(dlg);
     }
-
-    public ConfirmDialog showConfirmDialog() {
-        ConfirmDialog dlg = new ConfirmDialog(stage);
-        return (ConfirmDialog) initiateDialog(dlg);
-    }
-
-    public InfoDialog showInfoDialog(String desc) {
-        InfoDialog dlg = new InfoDialog(stage);
-        dlg.setDescription(desc);
-
-        return (InfoDialog) initiateDialog(dlg);
-    }
-
-    public InfoDialog showInfoDialogNavigateBack(String desc) {
-        InfoDialog dlg = new InfoDialog(stage);
-        dlg.setDescription(desc);
-
-        return (InfoDialog) initiateDialog(dlg);
-    }
-
 //    public ExportSettingsDialog showExportDialog() {
 //        ExportSettingsDialog dlg = new ExportSettingsDialog(stage);
 //

@@ -23,8 +23,8 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -115,22 +115,18 @@ public class UserActionController {
         if (layer == null) return;
 
         // creating component requires skin
-        if(!sandbox.isComponentSkinAvailable() && !name.equals("Label")) {
-            ConfirmDialog confirmDialog = sandbox.getUIStage().dialogs().showConfirmDialog();
+        if (!sandbox.isComponentSkinAvailable() && !name.equals("Label")) {
+            DialogUtils.showConfirmDialog(sandbox.getUIStage(),
+                    "Warning",
+                    "There is no style imported yet. Do you want to add default style instead to make this work?",
+                    new String[]{"OK", "Cancel"}, new Integer[]{0, 1},
+                    result -> {
+                        if (result == 0) {
+                            projectManager.copyDefaultStyleIntoProject();
+                            sandbox.getItemFactory().createComponent(layer, name, x, y);
+                        }
 
-            confirmDialog.setDescription("There is no style imported yet. Do you want to add default style instead to make this work?");
-            confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
-                @Override
-                public void onConfirm() {
-                    projectManager.copyDefaultStyleIntoProject();
-                    sandbox.getItemFactory().createComponent(layer, name, x, y);
-                }
-
-                @Override
-                public void onCancel() {
-                    // Do nothing
-                }
-            });
+                    });
         } else {
             sandbox.getItemFactory().createComponent(layer, name, x, y);
         }
@@ -180,15 +176,15 @@ public class UserActionController {
         sandbox.getSelector().removeCurrentSelectedItems();
     }
 
-	 public void copyAction() {
-		  sandbox.getCurrentScene().updateDataVO();
-		  ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-		  putItemsToClipboard(items);
-	 }
+    public void copyAction() {
+        sandbox.getCurrentScene().updateDataVO();
+        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
+        putItemsToClipboard(items);
+    }
 
-	 public void deleteAction() {
-		  sandbox.getSelector().removeCurrentSelectedItems();
-	 }
+    public void deleteAction() {
+        sandbox.getSelector().removeCurrentSelectedItems();
+    }
 
     public void pasteAction(float x, float y, boolean ignoreCameraPos) {
         CompositeVO tempHolder;

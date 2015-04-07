@@ -28,7 +28,6 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -160,19 +159,14 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 sceneMenuItemClicked(notification.getBody());
                 break;
             case Overlap2DMenuBar.DELETE_CURRENT_SCENE:
-                showConfirmDialog("Are you sure you want to delete current scene?",
-                        new ConfirmDialog.ConfirmDialogListener() {
-                            @Override
-                            public void onConfirm() {
+                DialogUtils.showConfirmDialog(sandbox.getUIStage(),
+                        "Delete Scene", "Do you realy want to delete '" + projectManager.currentProjectVO.lastOpenScene + "' scene?",
+                        new String[]{"Delete", "Cancel"}, new Integer[]{0, 1}, result -> {
+                            if (result == 0) {
                                 SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
                                 sceneDataManager.deleteCurrentScene();
                                 sandbox.loadScene("MainScene");
                                 onScenesChanged();
-                            }
-
-                            @Override
-                            public void onCancel() {
-
                             }
                         });
                 break;
@@ -221,14 +215,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         } catch (SecurityException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
             e.printStackTrace();
         }
-    }
-
-    public void showConfirmDialog(String description, ConfirmDialog.ConfirmDialogListener confirmDialogListener) {
-        Sandbox sandbox = Sandbox.getInstance();
-        final UIStage uiStage = sandbox.getUIStage();
-        ConfirmDialog confirmDialog = uiStage.dialogs().showConfirmDialog();
-        confirmDialog.setDescription(description);
-        confirmDialog.setListener(confirmDialogListener);
     }
 
     public void sceneMenuItemClicked(String sceneName) {

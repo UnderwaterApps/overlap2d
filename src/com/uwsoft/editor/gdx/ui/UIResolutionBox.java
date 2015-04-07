@@ -25,12 +25,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog.ConfirmDialogListener;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
@@ -141,26 +140,20 @@ public class UIResolutionBox extends Group {
 
                 ResolutionEntryVO resEntry = projectInfoVO.resolutions.get(index - 1);
 
-                ConfirmDialog dlg = stage.dialogs().showConfirmDialog();
-                dlg.setDescription("Are you sure you want to delete resolution: " + resEntry.toString() + " ?");
-
-                dlg.setListener(new ConfirmDialogListener() {
-
-                    @Override
-                    public void onConfirm() {
-                        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-                        resolutionManager.deleteResolution(index - 1);
-                        String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
-                        stage.getSandbox().loadCurrentProject(name);
-                        stage.getSandbox().loadCurrentProject();
-                        stage.getCompositePanel().initResolutionBox();
-                    }
-
-                    @Override
-                    public void onCancel() {
-
-                    }
-                });
+                DialogUtils.showConfirmDialog(stage,
+                        "Delete Resolution",
+                        "Are you sure you want to delete resolution: " + resEntry.toString() + " ?",
+                        new String[]{"Delete", "Cancel"}, new Integer[]{0, 1},
+                        result -> {
+                            if (result == 0) {
+                                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+                                resolutionManager.deleteResolution(index - 1);
+                                String name = stage.getSandbox().sceneControl.getCurrentSceneVO().sceneName;
+                                stage.getSandbox().loadCurrentProject(name);
+                                stage.getSandbox().loadCurrentProject();
+                                stage.getCompositePanel().initResolutionBox();
+                            }
+                        });
 
             }
         });

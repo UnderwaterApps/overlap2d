@@ -29,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
@@ -135,21 +134,16 @@ public class LibraryList extends Group {
     }
 
     private void showConfirmDialog(final LibraryItemThumbnailBox librarySelectedItem) {
-        ConfirmDialog confirmDialog = stage.dialogs().showConfirmDialog();
-        confirmDialog.setDescription("Are you sure you want to delete library item?");
-
-        confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
-            @Override
-            public void onConfirm() {
-                items.remove(librarySelectedItem.getKey());
-                drawItems();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        DialogUtils.showConfirmDialog(stage,
+                "Delete library item",
+                "Are you sure you want to delete library item?",
+                new String[]{"Delete", "Cancel"}, new Integer[]{0, 1},
+                result -> {
+                    if (result == 0) {
+                        items.remove(librarySelectedItem.getKey());
+                        drawItems();
+                    }
+                });
     }
 
     private void showRenameDialog() {
