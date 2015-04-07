@@ -8,7 +8,7 @@ New color picker and file open dialog (check out thisL: https://github.com/kotcr
 Other UI changed to another UI system (with actual design changes to come soon)
 Ditched swing JFrame and Menu, using libGDX widgets instead.
 Vertical Center and Horizontal Center alignment buttons
-
+Search Box added to library list of you have many library items.
 
 
 Overlap2D - 0.0.7
