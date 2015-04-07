@@ -24,98 +24,103 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.mvc.view.stage.BaseStage;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 import java.util.ArrayList;
 
 public class CustomTabBar extends Group {
 
-	protected BaseStage s;
-	
-	private ArrayList<String> tabs = new ArrayList<String>();
-	
-	private int selectedTabIndex = 0;
-	
-	public interface TabBarEvent {
-		public void tabOpened(int index);
-	}
-	
-	private TabBarEvent tabEventListener;	
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
+    protected UIStage s;
 
-	public CustomTabBar(BaseStage s) {
-		this.s = s;
-	}
-	
-	public void addTab(String tabName) {
-		tabs.add(tabName);
-	}
-	
-	public void initView() {
-		clear();
-		float currPos = 0;
-		for(int i = 0; i < tabs.size(); i++) {
-			boolean isSelected = false;
-			if(i == selectedTabIndex) isSelected = true;
-			String imgName = "tab";
-			if(isSelected) {
-				imgName = "tabS";
-			}
-			Image img = new Image(s.textureManager.getEditorAsset(imgName));
-			img.setX(currPos);
-			img.setY(0);
-			
-			Label lbl = new Label(tabs.get(i), s.textureManager.editorSkin);
-			lbl.setX(currPos+6);
-			lbl.setY(2);
-			lbl.setTouchable(Touchable.disabled);
-			
-			img.setScaleX(lbl.getWidth() + 12);
-			currPos += lbl.getWidth() + 12;
-			
-			addActor(img);
-			addActor(lbl);
-			
-			Image sep = new Image(s.textureManager.getEditorAsset("tabSep"));
-			sep.setX(img.getX() + img.getScaleX());
-			addActor(sep);
-			currPos+=1;
-			
-			if(isSelected) {
-				lbl.setColor(1, 1, 1, 1);
-			} else {
-				lbl.setColor(1, 1, 1, 0.65f);
-			}
-			
-			final int currIndex = i;
-			
-			img.addListener(new ClickListener() {
-				public void clicked (InputEvent event, float x, float y) {
-					selectedTabIndex = currIndex;
-					initView();
-					if(tabEventListener != null) {
-						tabEventListener.tabOpened(currIndex);
-					}
-				}
-			});
-			
-			setHeight(img.getHeight());
-		}
-		
-		float currWidth = currPos;
-		if(getWidth() > currWidth) {
-			float diff = getWidth() - currWidth;
-			Image rest = new Image(s.textureManager.getEditorAsset("tab"));
-			rest.setX(currPos);
-			rest.setScaleX(diff);
-			addActor(rest);
-		}
-	}
-	
-	public TabBarEvent getTabEventListener() {
-		return tabEventListener;
-	}
+    private ArrayList<String> tabs = new ArrayList<String>();
 
-	public void setTabEventListener(TabBarEvent tabEventListener) {
-		this.tabEventListener = tabEventListener;
-	}
+    private int selectedTabIndex = 0;
+    private TabBarEvent tabEventListener;
+
+    public CustomTabBar(UIStage s) {
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        this.s = s;
+    }
+
+    public void addTab(String tabName) {
+        tabs.add(tabName);
+    }
+
+    public void initView() {
+        clear();
+        float currPos = 0;
+        for (int i = 0; i < tabs.size(); i++) {
+            boolean isSelected = false;
+            if (i == selectedTabIndex) isSelected = true;
+            String imgName = "tab";
+            if (isSelected) {
+                imgName = "tabS";
+            }
+            Image img = new Image(textureManager.getEditorAsset(imgName));
+            img.setX(currPos);
+            img.setY(0);
+
+            Label lbl = new Label(tabs.get(i), textureManager.editorSkin);
+            lbl.setX(currPos + 6);
+            lbl.setY(2);
+            lbl.setTouchable(Touchable.disabled);
+
+            img.setScaleX(lbl.getWidth() + 12);
+            currPos += lbl.getWidth() + 12;
+
+            addActor(img);
+            addActor(lbl);
+
+            Image sep = new Image(textureManager.getEditorAsset("tabSep"));
+            sep.setX(img.getX() + img.getScaleX());
+            addActor(sep);
+            currPos += 1;
+
+            if (isSelected) {
+                lbl.setColor(1, 1, 1, 1);
+            } else {
+                lbl.setColor(1, 1, 1, 0.65f);
+            }
+
+            final int currIndex = i;
+
+            img.addListener(new ClickListener() {
+                public void clicked(InputEvent event, float x, float y) {
+                    selectedTabIndex = currIndex;
+                    initView();
+                    if (tabEventListener != null) {
+                        tabEventListener.tabOpened(currIndex);
+                    }
+                }
+            });
+
+            setHeight(img.getHeight());
+        }
+
+        float currWidth = currPos;
+        if (getWidth() > currWidth) {
+            float diff = getWidth() - currWidth;
+            Image rest = new Image(textureManager.getEditorAsset("tab"));
+            rest.setX(currPos);
+            rest.setScaleX(diff);
+            addActor(rest);
+        }
+    }
+
+    public TabBarEvent getTabEventListener() {
+        return tabEventListener;
+    }
+
+    public void setTabEventListener(TabBarEvent tabEventListener) {
+        this.tabEventListener = tabEventListener;
+    }
+
+    public interface TabBarEvent {
+        public void tabOpened(int index);
+    }
 }

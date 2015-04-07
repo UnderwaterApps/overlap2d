@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -37,6 +39,8 @@ import java.util.Map;
 public class EditAnimationDialog extends SimpleDialog {
 
     private final Map<String, SpriteAnimation.Animation> animations;
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     UIStage uiStage;
     private Group listContainer;
     private float maxHeight = 250;
@@ -47,7 +51,8 @@ public class EditAnimationDialog extends SimpleDialog {
 
     public EditAnimationDialog(UIStage s, final SpriteAnimation item) {
         super(s, 320, 310);
-
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.uiStage = s;
         setX(200);
         setY(200);
@@ -68,7 +73,7 @@ public class EditAnimationDialog extends SimpleDialog {
         wrapper = new Group();
 
         renderMainList();
-        scroll = new ScrollPane(wrapper, s.textureManager.editorSkin);
+        scroll = new ScrollPane(wrapper, textureManager.editorSkin);
 
         scroll.setWidth(topWrapper.getWidth());
         scroll.setHeight(maxHeight);
@@ -128,7 +133,7 @@ public class EditAnimationDialog extends SimpleDialog {
         int cnt = animations.size();
 
         wrapper.setHeight(itmHeight * cnt);
-        scroll = new ScrollPane(wrapper, uiStage.textureManager.editorSkin);
+        scroll = new ScrollPane(wrapper, textureManager.editorSkin);
         scroll.setWidth(topWrapper.getWidth());
         scroll.setHeight(maxHeight);
         scroll.setFlickScroll(false);

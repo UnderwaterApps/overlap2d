@@ -27,10 +27,14 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 public class UIToolBox extends UIBox {
 
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private ButtonGroup btnGroup;
 
     private final static int maxRows = 2;
@@ -41,7 +45,8 @@ public class UIToolBox extends UIBox {
 
     public UIToolBox(UIStage s) {
         super(s, 160, 30 + 20 * maxRows);
-
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         btnGroup = new ButtonGroup();
         btnGroup.setMaxCheckCount(1);
         btnGroup.setMinCheckCount(1);
@@ -121,8 +126,8 @@ public class UIToolBox extends UIBox {
 
     private Button addButton(String img, boolean isCheckButton) {
         ButtonStyle btnStl = new ButtonStyle();
-        btnStl.up = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img));
-        btnStl.down = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img + "Checked"));
+        btnStl.up = new TextureRegionDrawable(textureManager.getEditorAsset(img));
+        btnStl.down = new TextureRegionDrawable(textureManager.getEditorAsset(img + "Checked"));
 
 
         Button btn = new Button(btnStl);
@@ -139,7 +144,7 @@ public class UIToolBox extends UIBox {
 
         if (currRow > maxRows) return null;
         if (isCheckButton) {
-            btnStl.checked = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img + "Checked"));
+            btnStl.checked = new TextureRegionDrawable(textureManager.getEditorAsset(img + "Checked"));
             btnGroup.add(btn);
         }
         addActor(btn);

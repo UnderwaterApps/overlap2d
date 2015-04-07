@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ComponentThumbnailBox;
 
@@ -31,7 +33,12 @@ import java.util.HashMap;
 
 public class ComponentList extends Group {
 
+	private final Overlap2DFacade facade;
+	private final TextureManager textureManager;
+
 	public ComponentList(final UIStage s, float width, float height) {
+		facade = Overlap2DFacade.getInstance();
+		textureManager = facade.retrieveProxy(TextureManager.NAME);
 		this.setWidth(width);
 		this.setHeight(height);
 		final Table container = new Table();
@@ -43,7 +50,7 @@ public class ComponentList extends Group {
 		container.setHeight(getHeight()-20);
 		listContainer.setWidth(getWidth()-20);
 		listContainer.setHeight(getHeight()-25);
-		final ScrollPane scroll = new ScrollPane(table, s.textureManager.editorSkin);
+		final ScrollPane scroll = new ScrollPane(table, textureManager.editorSkin);
 		container.add(scroll).colspan(4).width(getWidth());
 		container.row();
 		scroll.addListener(new InputListener() {
@@ -64,7 +71,7 @@ public class ComponentList extends Group {
 		components.put("CheckBox", "CheckBox");
 		components.put("SelectBox", "SelectBox");
 		
-		Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
+		Label dummyTst = new Label("dummy", textureManager.editorSkin);
 		if(components.size()*dummyTst.getHeight() > listContainer.getHeight()) listContainer.setHeight(components.size()*dummyTst.getHeight());
 		dummyTst = null;
 		

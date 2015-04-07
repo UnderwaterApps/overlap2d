@@ -42,6 +42,7 @@ public class UILightBox extends ExpandableUIBox {
 
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
+    private final TextureManager textureManager;
     public CheckBoxItem disableAmbiance;
     private ColorPickerButton cPicker;
     private ColorPickerButton cPickerElems;
@@ -51,6 +52,7 @@ public class UILightBox extends ExpandableUIBox {
         super(s, 160, 300);
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     public void initContent() {

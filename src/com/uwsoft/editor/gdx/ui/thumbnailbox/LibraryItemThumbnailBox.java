@@ -20,11 +20,11 @@ package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
@@ -39,13 +39,15 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
     private final CompositeItemVO compositeItemVO;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
+    private final TextureManager textureManager;
     private String key;
 
     public LibraryItemThumbnailBox(UIStage s, float width, String key, CompositeItemVO compositeItemVO) {
         super(s);
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.key = key;
         this.compositeItemVO = compositeItemVO;
-        facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         setWidth(width);
@@ -53,7 +55,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         bgImg.setColor(0.425f, 0.425f, 0.425f, 1.0f);
 
 
-        label = new Label(key, stage.textureManager.editorSkin);
+        label = new Label(key, textureManager.editorSkin);
         label.setWidth(getWidth());
         setHeight(label.getHeight());
 
@@ -64,7 +66,7 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         addActor(label);
         rc.setVisible(false);
 
-        payloadLbl = new Label(key, stage.textureManager.editorSkin);
+        payloadLbl = new Label(key, textureManager.editorSkin);
         payload = new AssetPayloadObject();
         payload.assetName = key;
         payload.type = AssetPayloadObject.AssetType.Component;

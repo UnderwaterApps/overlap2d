@@ -26,6 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.puremvc.patterns.proxy.Proxy;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -38,6 +40,7 @@ public class UIResolutionBox extends Group {
     private final String curResolution;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
+    private final TextureManager textureManager;
 
     private UIStage stage;
 
@@ -46,13 +49,13 @@ public class UIResolutionBox extends Group {
     private ProjectInfoVO projectInfoVO;
 
     public UIResolutionBox(UIStage s, ProjectInfoVO prjVo, String curResolution) {
-
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.stage = s;
 
         this.projectInfoVO = prjVo;
 
         this.curResolution = curResolution;
-        facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         int padding = 5;
 
@@ -69,7 +72,7 @@ public class UIResolutionBox extends Group {
             }
         }
 
-        dropdown = new SelectBox(stage.textureManager.editorSkin);
+        dropdown = new SelectBox(textureManager.editorSkin);
         dropdown.setItems(arr);
         dropdown.setSelectedIndex(selectedIndex);
         dropdown.setWidth(150);
@@ -87,17 +90,17 @@ public class UIResolutionBox extends Group {
             }
         });
 
-        TextButton delBtn = new TextButton("Delete", stage.textureManager.editorSkin);
+        TextButton delBtn = new TextButton("Delete", textureManager.editorSkin);
         delBtn.setX(dropdown.getX() + dropdown.getWidth() + padding);
         delBtn.setY(8);
         addActor(delBtn);
 
-        TextButton createBtn = new TextButton("Create New", stage.textureManager.editorSkin);
+        TextButton createBtn = new TextButton("Create New", textureManager.editorSkin);
         createBtn.setX(delBtn.getX() + delBtn.getWidth() + padding);
         createBtn.setY(8);
         addActor(createBtn);
 
-        TextButton repackBtn = new TextButton("Repack", stage.textureManager.editorSkin);
+        TextButton repackBtn = new TextButton("Repack", textureManager.editorSkin);
         repackBtn.setX(createBtn.getX() + createBtn.getWidth() + padding);
         repackBtn.setY(8);
         addActor(repackBtn);

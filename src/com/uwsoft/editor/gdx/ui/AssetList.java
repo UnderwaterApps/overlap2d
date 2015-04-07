@@ -26,14 +26,21 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.*;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 import java.util.HashMap;
 
 public class AssetList extends Group {
 
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
+
     public AssetList(final UIStage s, float width, float height) {
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.setWidth(width);
         this.setHeight(height);
         final Table container = new Table();
@@ -42,7 +49,7 @@ public class AssetList extends Group {
         container.setY(0);
         container.setWidth(getWidth() - 1);
         container.setHeight(getHeight() - 20);
-        final ScrollPane scroll = new ScrollPane(table, s.textureManager.editorSkin);
+        final ScrollPane scroll = new ScrollPane(table, textureManager.editorSkin);
         container.add(scroll).colspan(4).width(getWidth());
         container.row();
         scroll.addListener(new InputListener() {
@@ -53,11 +60,11 @@ public class AssetList extends Group {
         });
         scroll.setHeight(getHeight() - 20);
         scroll.setFlickScroll(false);
-        TextureAtlas atlas = s.textureManager.getProjectAssetsList();
+        TextureAtlas atlas = textureManager.getProjectAssetsList();
 
-        HashMap<String, SpineAnimData> spineAnimations = s.textureManager.getProjectSpineAnimationsList();
-        HashMap<String, TextureAtlas> spriteAnimations = s.textureManager.getProjectSpriteAnimationsList();
-        HashMap<String, FileHandle> spriterAnimations = s.textureManager.getProjectSpriterAnimationsList();
+        HashMap<String, SpineAnimData> spineAnimations = textureManager.getProjectSpineAnimationsList();
+        HashMap<String, TextureAtlas> spriteAnimations = textureManager.getProjectSpriteAnimationsList();
+        HashMap<String, FileHandle> spriterAnimations = textureManager.getProjectSpriterAnimationsList();
 
         if (atlas == null) return;
 
@@ -97,16 +104,16 @@ public class AssetList extends Group {
             }
             itemIter++;
         }
-        
+
         for (String animationName : spriterAnimations.keySet()) {
-        	final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(s, animationName);
-        	
-        	table.add(thumb).size(50, 50).pad(3);
-        	if ((itemIter - 7) % 4 == 0) {
-        		
-        		table.row();
-        	}
-        	itemIter++;
+            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(s, animationName);
+
+            table.add(thumb).size(50, 50).pad(3);
+            if ((itemIter - 7) % 4 == 0) {
+
+                table.row();
+            }
+            itemIter++;
         }
 
 

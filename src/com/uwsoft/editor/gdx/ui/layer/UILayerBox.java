@@ -26,10 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ExpandableUIBox;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemSource;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 import java.awt.*;
@@ -37,6 +39,8 @@ import java.util.ArrayList;
 
 public class UILayerBox extends ExpandableUIBox {
 
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     public int currentSelectedLayerIndex = 0;
     public Group contentGroup = new Group();
     public Group uiGroup = new Group();
@@ -47,7 +51,8 @@ public class UILayerBox extends ExpandableUIBox {
 
     public UILayerBox(UIStage s) {
         super(s, 250, 250);
-
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         addActor(contentGroup);
         addActor(uiGroup);
 
@@ -186,19 +191,19 @@ public class UILayerBox extends ExpandableUIBox {
 
     private void initBottomBar() {
 
-        Image barBg = new Image(stage.textureManager.getEditorAsset("minibar"));
+        Image barBg = new Image(textureManager.getEditorAsset("minibar"));
         barBg.setScaleX(getWidth() - 3);
         barBg.setX(3);
         barBg.setY(2);
 
         uiGroup.addActor(barBg);
 
-        Button newLayerBtn = stage.textureManager.createImageButton("nbtn", "nbtnHover", "nbtnPressed");
+        Button newLayerBtn = textureManager.createImageButton("nbtn", "nbtnHover", "nbtnPressed");
         newLayerBtn.setX(5);
         newLayerBtn.setY(3);
         uiGroup.addActor(newLayerBtn);
 
-        Button delLayerBtn = stage.textureManager.createImageButton("dlt", "dltHover", "dltPressed");
+        Button delLayerBtn = textureManager.createImageButton("dlt", "dltHover", "dltPressed");
         delLayerBtn.setX(newLayerBtn.getX() + newLayerBtn.getWidth());
         delLayerBtn.setY(3);
         uiGroup.addActor(delLayerBtn);

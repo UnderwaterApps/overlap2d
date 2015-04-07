@@ -29,6 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -40,12 +42,16 @@ import java.util.Map;
 
 public class UIItemsBox extends ExpandableUIBox {
 
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private Tree tree;
     private MySkin skin;
     private IBaseItem selectedItem;
 
     public UIItemsBox(UIStage s) {
         super(s, 160, 300);
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     public void initContent() {
@@ -55,7 +61,7 @@ public class UIItemsBox extends ExpandableUIBox {
                 break;
             }
         }
-        skin = stage.textureManager.editorSkin;
+        skin = textureManager.editorSkin;
         tree = new Tree(skin);
 
 

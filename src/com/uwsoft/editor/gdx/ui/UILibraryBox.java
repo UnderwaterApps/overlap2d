@@ -18,11 +18,15 @@
 
 package com.uwsoft.editor.gdx.ui;
 
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.CustomTabBar.TabBarEvent;
 
 public class UILibraryBox extends ExpandableUIBox {
 
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private UIStage s;
 
     private AssetList assetList;
@@ -32,6 +36,8 @@ public class UILibraryBox extends ExpandableUIBox {
 
     public UILibraryBox(final UIStage s) {
         super(s, 250, 350);
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.s = s;
     }
 

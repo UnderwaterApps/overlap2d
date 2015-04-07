@@ -28,6 +28,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -40,10 +42,14 @@ public class LibraryList extends Group {
     private final HashMap<String, CompositeItemVO> items;
     private final UIStage stage;
     private final Group listContainer;
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private ArrayList<LibraryItemThumbnailBox> libraryItems;
     private LibraryItemThumbnailBox librarySelectedItem;
 
     public LibraryList(final UIStage s, float width, float height) {
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         stage = s;
         libraryItems = new ArrayList<>();
         this.setWidth(width);
@@ -57,7 +63,7 @@ public class LibraryList extends Group {
         container.setHeight(getHeight() - 20);
         listContainer.setWidth(getWidth() - 20);
         listContainer.setHeight(getHeight() - 25);
-        final ScrollPane scroll = new ScrollPane(table, s.textureManager.editorSkin);
+        final ScrollPane scroll = new ScrollPane(table, textureManager.editorSkin);
         container.add(scroll).colspan(4).width(getWidth());
         container.row();
         scroll.addListener(new InputListener() {
@@ -74,7 +80,7 @@ public class LibraryList extends Group {
         items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
 
 
-        Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
+        Label dummyTst = new Label("dummy", textureManager.editorSkin);
         if (items.size() * dummyTst.getHeight() > listContainer.getHeight()) {
             listContainer.setHeight(items.size() * (dummyTst.getHeight() + 2));
         }

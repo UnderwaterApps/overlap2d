@@ -22,10 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
@@ -35,6 +36,7 @@ public class UICompositePanel extends UIBox {
 
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
+    private final TextureManager textureManager;
     private ArrayList<CompositeItemVO> scenes = new ArrayList<CompositeItemVO>();
 
     private UIStage uiStage;
@@ -46,11 +48,12 @@ public class UICompositePanel extends UIBox {
         uiStage = s;
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     @Override
     public void initPanel() {
-        Image bgImg = new Image(stage.textureManager.getEditorAsset("panel"));
+        Image bgImg = new Image(textureManager.getEditorAsset("panel"));
 
         bgImg.setScaleX(getWidth());
 
@@ -134,7 +137,7 @@ public class UICompositePanel extends UIBox {
             loadScene(scn);
             if (currIndex == 1) {
                 stage.getLightBox().disableAmbiance.setChecked(false);
-					 stage.getSandbox().getSceneControl().disableAmbience(false);
+                stage.getSandbox().getSceneControl().disableAmbience(false);
             }
         }
     }
@@ -145,7 +148,7 @@ public class UICompositePanel extends UIBox {
         for (int i = 0; i < scenes.size(); i++) {
             String tmpName = "root scene >";
             if (i > 0) tmpName = "Scene" + i + " >";
-            Label lbl = new Label(tmpName, stage.textureManager.editorSkin);
+            Label lbl = new Label(tmpName, textureManager.editorSkin);
             lbl.setX(pointer);
             lbl.setY(11);
             pointer += lbl.getWidth() + 10;

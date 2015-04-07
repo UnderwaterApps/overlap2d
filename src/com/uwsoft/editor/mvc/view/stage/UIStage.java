@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.stage;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.*;
 import com.uwsoft.editor.gdx.ui.dialogs.DialogSystem;
@@ -33,11 +34,14 @@ import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.Essentials;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
-public class UIStage extends BaseStage {
+public class UIStage extends Stage {
 
     private final Overlap2DFacade facade;
+    private final Essentials essentials;
+    public final SceneLoader sceneLoader;
     public SandboxStage sandboxStage;
     public Group dummyTarget;
     public CompositeItem sceneUI;
@@ -53,6 +57,7 @@ public class UIStage extends BaseStage {
     public UIStage(SandboxStage sandboxStage) {
         super();
         facade = Overlap2DFacade.getInstance();
+        essentials = new Essentials();
         essentials.rm = facade.retrieveProxy(EditorResourceManager.NAME);
 
         SceneLoader sceneLoader = new SceneLoader(essentials);
@@ -161,9 +166,9 @@ public class UIStage extends BaseStage {
         });
     }
 
-    @Override
+
     public void resize(int width, int height) {
-        super.resize(width, height);
+//        super.resize(width, height);
         getCompositePanel().resize(width, height);
     }
 

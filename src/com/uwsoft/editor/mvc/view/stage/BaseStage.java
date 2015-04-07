@@ -41,31 +41,6 @@ public class BaseStage extends Overlap2DStage {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         textureManager = facade.retrieveProxy(TextureManager.NAME);
         initLightsConfiguration();
-
-
-    }
-
-    public void addActor(Actor actor) {
-        super.addActor(actor);
-    }
-
-    public void draw() {
-        super.draw();
-
-    }
-
-    @Override
-    public void dispose() {
-        super.dispose();
-    }
-
-    @Override
-    public void act(float delta) {
-        super.act(delta);
-    }
-
-    public ProjectManager getProjectManager() {
-        return projectManager;
     }
 
     public void setCursor(int cursor) {
