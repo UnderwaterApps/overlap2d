@@ -88,9 +88,15 @@ public class UILightBox extends ExpandableUIBox {
                         cPicker.setColorValue(newColor);
 
                         // change scene ambient light
-                        stage.getSandbox().setSceneAmbientColor(newColor);
+                        stage.getSandbox().setSceneAmbientColor(newColor, !disableAmbiance.isChecked());
                     }
                 });
+
+                final float[] ambientColor = stage.getSandbox().getSceneControl().getCurrentSceneVO().ambientColor;
+                //TODO might be more wise to manage a single tmp color instead of recreating new colors
+                picker.setColor(new Color(
+                        ambientColor[0], ambientColor[1],
+                        ambientColor[2], ambientColor[3]));
                 stage.addActor(picker.fadeIn());
             }
         });
@@ -104,6 +110,7 @@ public class UILightBox extends ExpandableUIBox {
                         cPickerElems.setColorValue(newColor);
                     }
                 });
+
                 stage.addActor(picker.fadeIn());
             }
         });
