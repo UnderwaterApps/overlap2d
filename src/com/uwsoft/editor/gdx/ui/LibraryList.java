@@ -100,7 +100,6 @@ public class LibraryList extends Group {
         drawItems();
         table.add(listContainer);
         table.row();
-
         addActor(container);
 
     }
