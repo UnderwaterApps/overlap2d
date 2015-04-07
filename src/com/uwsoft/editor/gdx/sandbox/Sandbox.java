@@ -68,9 +68,6 @@ public class Sandbox {
     public ItemControlMediator itemControl;
     public FlowManager flow;
     public TransformationHandler transformationHandler;
-
-	 private float zoomPercent = 100;
-
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -85,6 +82,7 @@ public class Sandbox {
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
+    private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
     private SandboxInputAdapter sandboxInputAdapter;
@@ -94,9 +92,10 @@ public class Sandbox {
     private InputMultiplexer inputMultiplexer;
     private Overlap2DFacade facade;
     private ProjectManager projectManager;
-	 /**
-	  * end of shitty part
-	  */
+
+    /**
+     * end of shitty part
+     */
 
 
     private Sandbox() {
@@ -210,7 +209,7 @@ public class Sandbox {
     }
 
     public void loadCurrentProject() {
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
+        ProjectVO projectVO = projectManager.getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
         uiStage.loadCurrentProject();
     }
@@ -517,27 +516,27 @@ public class Sandbox {
         });
     }
 
-	 public void setZoomPercent(float percent) {
-		  zoomPercent = percent;
-		  OrthographicCamera camera = (OrthographicCamera)(sandboxStage.getCamera());
-		  camera.zoom = 1f/(zoomPercent/100f);
-	 }
+    public void setZoomPercent(float percent) {
+        zoomPercent = percent;
+        OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
+        camera.zoom = 1f / (zoomPercent / 100f);
+    }
 
-	 public void zoomBy(float amount) {
-		  zoomPercent+=-amount*15f;
+    public void zoomBy(float amount) {
+        zoomPercent += -amount * 15f;
 
-		  if(zoomPercent < 20) zoomPercent = 20;
-		  if(zoomPercent > 1000) zoomPercent = 1000;
+        if (zoomPercent < 20) zoomPercent = 20;
+        if (zoomPercent > 1000) zoomPercent = 1000;
 
-		  setZoomPercent(zoomPercent);
-	 }
+        setZoomPercent(zoomPercent);
+    }
 
-	 public void zoomDevideBy(float amount) {
+    public void zoomDevideBy(float amount) {
 
-		  zoomPercent /= amount;
-		  if(zoomPercent < 20) zoomPercent = 20;
-		  if(zoomPercent > 1000) zoomPercent = 1000;
+        zoomPercent /= amount;
+        if (zoomPercent < 20) zoomPercent = 20;
+        if (zoomPercent > 1000) zoomPercent = 1000;
 
-		  setZoomPercent(zoomPercent);
-	 }
+        setZoomPercent(zoomPercent);
+    }
 }
