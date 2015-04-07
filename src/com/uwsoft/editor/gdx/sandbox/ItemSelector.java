@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
@@ -67,6 +68,45 @@ public class ItemSelector {
             items.add(value.getHost());
         }
         return items;
+    }
+
+    //TODO remove if not needed
+//    public Rectangle getVisualBoundingBox(SelectionRectangle of, Rectangle out) {
+//        out.x = Math.min(of.getX(), of.getX() + of.getWidth());
+//        out.y = Math.min(of.getY(), of.getY() + of.getHeight());
+//        out.width = Math.abs(of.getWidth());
+//        out.height = Math.abs(of.getHeight());
+//        return out;
+//    }
+
+    public SelectionRectangle getCurrentSelectionsItemWithHighestWidth() {
+        float highestWidth = -Float.MAX_VALUE;
+        SelectionRectangle candidate = null;
+
+        for (SelectionRectangle value : currentSelection.values()) {
+
+            float vWidth = value.getVisualWidth();
+            if (vWidth > highestWidth) {
+                highestWidth = vWidth;
+                candidate = value;
+            }
+        }
+        return candidate;
+    }
+
+    public SelectionRectangle getCurrentSelectionsItemWithHighestHeight() {
+        float highestHeight = -Float.MAX_VALUE;
+        SelectionRectangle candidate = null;
+
+        for (SelectionRectangle value : currentSelection.values()) {
+
+            float vHeight = value.getVisualHeight();
+            if (vHeight > highestHeight) {
+                highestHeight = vHeight;
+                candidate = value;
+            }
+        }
+        return candidate;
     }
 
     /**
@@ -309,6 +349,45 @@ public class ItemSelector {
         }
     }
 
+    public void alignSelectionsVerticallyCentered(SelectionRectangle relativeTo) {
+        if (relativeTo == null) return;
+
+        final float relativeToY = relativeTo.getVisualY();
+        final float relativeToHeight = relativeTo.getVisualHeight();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaY = value.getY() - value.getVisualY();
+            final float visualY = relativeToY + (relativeToHeight - value.getVisualHeight()) / 2;
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setY(visualY + deltaY);
+            value.setY(actor.getY());
+        }
+    }
+
+    public void alignSelectionsHorizontallyCentered(SelectionRectangle relativeTo) {
+
+        if (relativeTo == null) return;
+
+        final float relativeToX = relativeTo.getVisualX();
+        final float relativeToWidth = relativeTo.getVisualWidth();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaX = value.getX() - value.getVisualX();
+            final float visualX = relativeToX + (relativeToWidth - value.getVisualWidth()) / 2;
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setX(visualX + deltaX);
+            value.setX(actor.getX());
+        }
+    }
+
     public void alignSelections(int align) {
         //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.curResolution);
         switch (align) {
@@ -323,6 +402,12 @@ public class ItemSelector {
                 break;
             case Align.right:
                 alignSelectionsByX(getCurrentSelectionsHighestX(), false);
+                break;
+            case Align.center | Align.left: //horizontal
+                alignSelectionsHorizontallyCentered(getCurrentSelectionsItemWithHighestWidth());
+                break;
+            case Align.center | Align.bottom: //vertical
+                alignSelectionsVerticallyCentered(getCurrentSelectionsItemWithHighestHeight());
                 break;
         }
     }
