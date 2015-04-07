@@ -25,7 +25,7 @@ import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.*;

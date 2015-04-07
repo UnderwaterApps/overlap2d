@@ -24,7 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;

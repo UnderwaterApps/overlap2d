@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;

@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ExpandableUIBox;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemSource;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;

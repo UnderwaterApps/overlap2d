@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.stage;
+package com.uwsoft.editor.mvc.view.stage;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;

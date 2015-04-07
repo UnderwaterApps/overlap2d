@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
-import com.uwsoft.editor.gdx.stage.BaseStage;
+import com.uwsoft.editor.mvc.view.stage.BaseStage;
 
 import java.util.AbstractList;
 import java.util.ArrayList;

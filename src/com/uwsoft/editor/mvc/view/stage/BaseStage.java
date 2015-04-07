@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.stage;
+package com.uwsoft.editor.mvc.view.stage;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;

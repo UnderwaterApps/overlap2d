@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.properties.*;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;

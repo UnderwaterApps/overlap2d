@@ -21,7 +21,7 @@ package com.uwsoft.editor.gdx.ui;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by sargis on 9/15/14.

@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.gdx.ui.dialogs;
 
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by CyberJoe on 3/18/2015.

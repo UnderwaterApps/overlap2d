@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;

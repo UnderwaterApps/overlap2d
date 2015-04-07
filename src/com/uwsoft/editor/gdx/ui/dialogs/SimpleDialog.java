@@ -29,7 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;

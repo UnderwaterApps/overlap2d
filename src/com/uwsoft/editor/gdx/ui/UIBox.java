@@ -20,7 +20,7 @@ package com.uwsoft.editor.gdx.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 public class UIBox extends Group {
 

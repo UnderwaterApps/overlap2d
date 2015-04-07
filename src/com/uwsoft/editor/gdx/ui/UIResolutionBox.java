@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
