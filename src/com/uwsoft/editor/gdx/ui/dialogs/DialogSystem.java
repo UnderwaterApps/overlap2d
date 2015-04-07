@@ -42,12 +42,6 @@ public class DialogSystem {
         return (ConfirmDialog) initiateDialog(dlg);
     }
 
-    public InputDialog showInputDialog() {
-        InputDialog dlg = new InputDialog(stage);
-        return (InputDialog) initiateDialog(dlg);
-    }
-
-
     public InfoDialog showInfoDialog(String desc) {
         InfoDialog dlg = new InfoDialog(stage);
         dlg.setDescription(desc);

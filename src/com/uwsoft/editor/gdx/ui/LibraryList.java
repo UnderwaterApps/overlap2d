@@ -26,9 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
@@ -152,18 +153,17 @@ public class LibraryList extends Group {
     }
 
     private void showRenameDialog() {
-        InputDialog dlg = stage.dialogs().showInputDialog();
-
-
-        dlg.setDescription("New name for your layer");
-
-        dlg.setListener(new InputDialog.InputDialogListener() {
-
+        DialogUtils.showInputDialog(stage, "Rename Library Item", "New Name : ", new InputDialogListener() {
             @Override
-            public void onConfirm(String input) {
+            public void finished(String input) {
                 items.remove(librarySelectedItem.getKey());
                 librarySelectedItem.setKey(input);
                 items.put(input, librarySelectedItem.getCompositeItemVO());
+            }
+
+            @Override
+            public void canceled() {
+
             }
         });
     }

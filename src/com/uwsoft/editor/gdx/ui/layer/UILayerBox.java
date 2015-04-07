@@ -24,10 +24,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.ExpandableUIBox;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog.InputDialogListener;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemSource;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -136,14 +136,9 @@ public class UILayerBox extends ExpandableUIBox {
     }
 
     private void showRenameDialog() {
-        InputDialog dlg = stage.dialogs().showInputDialog();
-
-        dlg.setDescription("New name for your layer");
-
-        dlg.setListener(new InputDialogListener() {
-
+        DialogUtils.showInputDialog(stage, "Rename Layer", "New Name : ", new InputDialogListener() {
             @Override
-            public void onConfirm(String input) {
+            public void finished(String input) {
                 if (checkIfNameIsUnique(input)) {
                     LayerItemVO layerVo = layers.get(currentSelectedLayerIndex);
                     layerVo.layerName = input;
@@ -151,6 +146,11 @@ public class UILayerBox extends ExpandableUIBox {
                 } else {
                     // show error dialog
                 }
+            }
+
+            @Override
+            public void canceled() {
+
             }
         });
     }
@@ -218,14 +218,9 @@ public class UILayerBox extends ExpandableUIBox {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 if (layers == null) return;
-                InputDialog dlg = stage.dialogs().showInputDialog();
-
-                dlg.setDescription("Please set unique name for your Layer");
-
-                dlg.setListener(new InputDialogListener() {
-
+                DialogUtils.showInputDialog(stage, "Please set unique name for your Layer", "Please set unique name for your Layer", new InputDialogListener() {
                     @Override
-                    public void onConfirm(String input) {
+                    public void finished(String input) {
                         if (checkIfNameIsUnique(input)) {
                             LayerItemVO layerVo = new LayerItemVO();
                             layerVo.layerName = input;
@@ -235,6 +230,11 @@ public class UILayerBox extends ExpandableUIBox {
                         } else {
                             // show error dialog
                         }
+                    }
+
+                    @Override
+                    public void canceled() {
+
                     }
                 });
             }

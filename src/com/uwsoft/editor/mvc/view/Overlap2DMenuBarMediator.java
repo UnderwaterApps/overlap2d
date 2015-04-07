@@ -20,6 +20,8 @@ package com.uwsoft.editor.mvc.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
@@ -27,7 +29,6 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -137,14 +138,22 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Gdx.app.exit();
                 break;
             case Overlap2DMenuBar.NEW_SCENE:
-                showInputDialog(input -> {
-                    if (input == null || input.equals("")) {
-                        return;
+                DialogUtils.showInputDialog(sandbox.getUIStage(), "Create New Scene", "Scene Name : ", new InputDialogListener() {
+                    @Override
+                    public void finished(String input) {
+                        if (input == null || input.equals("")) {
+                            return;
+                        }
+                        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                        sceneDataManager.createNewScene(input);
+                        sandbox.loadScene(input);
+                        onScenesChanged();
                     }
-                    SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-                    sceneDataManager.createNewScene(input);
-                    sandbox.loadScene(input);
-                    onScenesChanged();
+
+                    @Override
+                    public void canceled() {
+
+                    }
                 });
                 break;
             case Overlap2DMenuBar.SELECT_SCENE:
@@ -171,12 +180,11 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     }
 
     private void onScenesChanged() {
-
         viewComponent.reInitScenes(projectManager.currentProjectInfoVO.scenes);
     }
 
     private void onProjectOpened() {
-        viewComponent.addScenes(projectManager.currentProjectInfoVO.scenes);
+        viewComponent.reInitScenes(projectManager.currentProjectInfoVO.scenes);
         viewComponent.setProjectOpen(true);
     }
 
@@ -202,13 +210,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             }
         });
         sandbox.getUIStage().addActor(fileChooser.fadeIn());
-    }
-
-    public void showInputDialog(InputDialog.InputDialogListener inputDialogListener) {
-        Sandbox sandbox = Sandbox.getInstance();
-        UIStage uiStage = sandbox.getUIStage();
-        InputDialog inputDialog = uiStage.dialogs().showInputDialog();
-        inputDialog.setListener(inputDialogListener);
     }
 
     public void showDialog(String dialog) {

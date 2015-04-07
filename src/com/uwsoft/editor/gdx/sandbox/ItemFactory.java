@@ -20,11 +20,12 @@ package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.*;
@@ -58,10 +59,10 @@ public class ItemFactory {
         vo.x = x + sandboxStage.getCamera().position.x - sandboxStage.getWidth() / 2;
         vo.y = y + sandboxStage.getCamera().position.y - sandboxStage.getHeight() / 2;
 
-		  // Need to adjust x and y according to scene zoom
-		  OrthographicCamera camera = (OrthographicCamera)sandboxStage.getCamera();
-		  vo.x*=camera.zoom;
-		  vo.y*=camera.zoom;
+        // Need to adjust x and y according to scene zoom
+        OrthographicCamera camera = (OrthographicCamera) sandboxStage.getCamera();
+        vo.x *= camera.zoom;
+        vo.y *= camera.zoom;
     }
 
     private void addItem(IBaseItem item, MainItemVO vo) {
@@ -141,7 +142,7 @@ public class ItemFactory {
         SpriteAnimation itm = new SpriteAnimation(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 
         addItem(itm, vo);
-		  itm.start();
+        itm.start();
     }
 
     public void createSpriterAnimation(LayerItemVO layer, String animationsName, float x, float y) {
@@ -250,22 +251,19 @@ public class ItemFactory {
 
         if (item == null) return;
 
-        InputDialog dlg = sandbox.getUIStage().dialogs().showInputDialog();
-
-        dlg.setDescription("Please set unique name for your component");
-
         final CompositeItem itemToAdd = item;
-
-        dlg.setListener(new InputDialog.InputDialogListener() {
-
+        DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
             @Override
-            public void onConfirm(String input) {
+            public void finished(String input) {
                 sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
                 sandbox.getUIStage().reInitLibrary();
             }
+
+            @Override
+            public void canceled() {
+
+            }
         });
-
-
     }
 
     public CompositeItem groupItemsIntoComposite() {
