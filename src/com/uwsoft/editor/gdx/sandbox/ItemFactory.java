@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
@@ -56,6 +57,11 @@ public class ItemFactory {
         vo.layerName = layerName;
         vo.x = x + sandboxStage.getCamera().position.x - sandboxStage.getWidth() / 2;
         vo.y = y + sandboxStage.getCamera().position.y - sandboxStage.getHeight() / 2;
+
+		  // Need to adjust x and y according to scene zoom
+		  OrthographicCamera camera = (OrthographicCamera)sandboxStage.getCamera();
+		  vo.x*=camera.zoom;
+		  vo.y*=camera.zoom;
     }
 
     private void addItem(IBaseItem item, MainItemVO vo) {
@@ -135,6 +141,7 @@ public class ItemFactory {
         SpriteAnimation itm = new SpriteAnimation(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 
         addItem(itm, vo);
+		  itm.start();
     }
 
     public void createSpriterAnimation(LayerItemVO layer, String animationsName, float x, float y) {

@@ -2,7 +2,10 @@ Overlap2D - 0.0.8
 ------------------------------
 
 Ditched swing JFrame and Menu, using libGDX widgets instead.
+Zoom functionality added - you can now zoom with Alt+Scroll or Ctrl+- and you can default zoom with Ctrl+0
+1px image import was crashing if more then one resolution exists.
 Tons of refactorings.
+
 
 
 Overlap2D - 0.0.7

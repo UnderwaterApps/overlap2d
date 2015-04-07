@@ -25,6 +25,8 @@ import com.uwsoft.editor.mvc.proxy.TextureManager;
 
 public class PixelLine extends Image {
 
+	 private float thickness = 1f;
+
 	public PixelLine(TextureManager tm, float x, float y, float toX, float toY) {
 		super(prepareTexture(tm));
 		
@@ -51,6 +53,12 @@ public class PixelLine extends Image {
 		AtlasRegion tx = tm.getEditorAsset("pixel");
 		return tx;
 	}
+
+	 @Override
+	 public void act(float delta) {
+		  super.act(delta);
+		  this.setScaleY(thickness);
+	 }
 	
 	private float getAngle(float x, float y, float toX, float toY) {
 	    float angle = (float) Math.toDegrees(Math.atan2(toX - x, toY - y));
@@ -61,5 +69,9 @@ public class PixelLine extends Image {
 
 	    return angle;
 	}
+
+	 public void setThickness (float thickness) {
+		  this.thickness = thickness;
+	 }
 	
 }

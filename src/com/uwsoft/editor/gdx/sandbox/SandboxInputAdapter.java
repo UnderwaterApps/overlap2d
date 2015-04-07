@@ -21,6 +21,7 @@ package com.uwsoft.editor.gdx.sandbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -165,6 +166,9 @@ public class SandboxInputAdapter extends InputAdapter {
 					 value.update();
 				}
 				sandbox.dirty = true;
+		  } else if(Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)){
+				// if not item is touched then we can use this for zoom
+				sandbox.zoomBy(amount);
 		  }
 		  return false;
 	 }
@@ -237,8 +241,10 @@ public class SandboxInputAdapter extends InputAdapter {
 
 		  if (sandbox.cameraPanOn) {
 				// if panning, then just move camera
-				float currX = sandbox.getSandboxStage().getCamera().position.x + (lastX - Gdx.input.getX());
-				float currY = sandbox.getSandboxStage().getCamera().position.y + (Gdx.input.getY() - lastY);
+				OrthographicCamera camera = (OrthographicCamera)(sandbox.getSandboxStage().getCamera());
+
+				float currX = camera.position.x + (lastX - Gdx.input.getX())*camera.zoom;
+				float currY = camera.position.y + (Gdx.input.getY() - lastY)*camera.zoom;
 
 				sandbox.getSandboxStage().getCamera().position.set(currX, currY, 0);
 
@@ -253,6 +259,9 @@ public class SandboxInputAdapter extends InputAdapter {
 	 }
 
 	 private boolean sandboxKeyDown(int keycode) {
+
+		  boolean isControlPressed = Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+
 		  // the amount of pixels by which to move item if moving
 		  float deltaMove = 1;
 
@@ -260,7 +269,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // TODO: key pressed 0 for unckown, should be removed?
 		  // TODO: need to make sure OSX Command button works too.
 
-		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0)) {
+		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
 				if (keycode == Input.Keys.UP) {
 					 // going to front of next item in z-index ladder
 					 sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), true);
@@ -285,6 +294,9 @@ public class SandboxInputAdapter extends InputAdapter {
 				}
 				if (keycode == Input.Keys.NUM_4 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
 					 sandbox.getSelector().alignSelections(Align.right);
+				}
+				if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
+					 sandbox.setZoomPercent(100);
 				}
 
 				return true;
@@ -317,6 +329,14 @@ public class SandboxInputAdapter extends InputAdapter {
 		  if (keycode == Input.Keys.SPACE && !sandbox.isItemTouched && !sandbox.isUsingSelectionTool) {
 				sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
 				sandbox.cameraPanOn = true;
+		  }
+
+		  // Zoom
+		  if (keycode == Input.Keys.MINUS && isControlPressed) {
+				sandbox.zoomDevideBy(2f);
+		  }
+		  if (keycode == Input.Keys.EQUALS  && isControlPressed) {
+				sandbox.zoomDevideBy(1f / 2f);
 		  }
 
 		  return true;
