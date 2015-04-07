@@ -1,12 +1,12 @@
 Overlap2D - 0.0.8
 ------------------------------
 
-Ditched swing JFrame and Menu, using libGDX widgets instead.
 Zoom functionality added - you can now zoom with Alt+Scroll or Ctrl+- and you can default zoom with Ctrl+0
 1px image import was crashing if more then one resolution exists.
 Tons of refactorings.
 New color picker and file open dialog (check out thisL: https://github.com/kotcrab/VisEditor/wiki/VisUI for awesome libgdx UI widgets!)
 Other UI changed to another UI system (with actual design changes to come soon)
+Ditched swing JFrame and Menu, using libGDX widgets instead.
 Vertical Center and Horizontal Center alignment buttons
 
 
