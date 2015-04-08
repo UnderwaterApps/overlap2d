@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.dialog;
+package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.Gdx;
 import com.puremvc.patterns.mediator.SimpleMediator;

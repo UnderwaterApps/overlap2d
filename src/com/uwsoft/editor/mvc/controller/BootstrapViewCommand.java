@@ -23,9 +23,9 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
-import com.uwsoft.editor.mvc.view.dialog.AssetsImportDialogMediator;
-import com.uwsoft.editor.mvc.view.dialog.ExportSettingsDialogMediator;
-import com.uwsoft.editor.mvc.view.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
 
 /**
  * Created by sargis on 4/1/15.

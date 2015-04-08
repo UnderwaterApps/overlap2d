@@ -16,9 +16,10 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui;
+package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.uwsoft.editor.gdx.ui.*;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;

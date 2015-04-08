@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.dialog;
+package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -36,7 +36,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class AssetsImportDialog extends VisDialog {
-    public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".START_IMPORTING_BTN_CLICKED";
+    public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".START_IMPORTING_BTN_CLICKED";
     private final AssetsImportInputFileWidget imagesInputFileWidget;
     private final AssetsImportInputFileWidget fontsInputFileWidget;
     private final AssetsImportInputFileWidget spineSpriterInputFileWidget;

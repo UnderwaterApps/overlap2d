@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.dialog;
+package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,8 +34,8 @@ import com.uwsoft.editor.ui.widget.InputFileWidget;
  * Created by sargis on 7/31/14.
  */
 public class ExportSettingsDialog extends VisDialog {
-    public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
-    public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
+    public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
+    public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
     private final ExportSettingsInputFileWidget exportSettingsInputFileWidget;
     private final AtlasMaxSizeWidget atlasMaxSizeWidget;
 

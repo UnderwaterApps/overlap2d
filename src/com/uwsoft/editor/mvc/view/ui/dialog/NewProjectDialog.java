@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.dialog;
+package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -28,7 +28,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.ui.widget.InputFileWidget;
 
 public class NewProjectDialog extends VisDialog {
-    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
+    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
     private static final String DEFAULT_ORIGIN_WITH = "2400";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
     private final InputFileWidget inputFile;
