@@ -269,6 +269,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // TODO: key pressed 0 for unckown, should be removed?
 		  // TODO: need to make sure OSX Command button works too.
 
+		  // Control pressed as well
 		  if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
 				if (keycode == Input.Keys.UP) {
 					 // going to front of next item in z-index ladder
@@ -298,6 +299,25 @@ public class SandboxInputAdapter extends InputAdapter {
 				if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
 					 sandbox.setZoomPercent(100);
 				}
+				if (keycode == Input.Keys.X) {
+					 sandbox.getUac().cutAction();
+				}
+				if (keycode == Input.Keys.C) {
+					 sandbox.getUac().copyAction();
+				}
+				if (keycode == Input.Keys.V) {
+					 try {
+						  sandbox.getUac().pasteAction(0, 0, false);
+					 } catch (Exception e) {
+						  //TODO: need to be fixed!
+					 }
+				}
+				if (keycode == Input.Keys.Z) {
+					 sandbox.getUac().undo();
+				}
+				if (keycode == Input.Keys.Y) {
+					 sandbox.getUac().redo();
+				}
 
 				return true;
 		  }
@@ -322,6 +342,11 @@ public class SandboxInputAdapter extends InputAdapter {
 		  if (keycode == Input.Keys.RIGHT) {
 				//moving right
 				sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+		  }
+
+		  // Delete
+		  if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
+				sandbox.getUac().deleteAction();
 		  }
 
 		  // if space is pressed, that means we are going to pan, so set cursor accordingly

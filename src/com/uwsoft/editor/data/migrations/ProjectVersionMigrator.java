@@ -77,6 +77,10 @@ public class ProjectVersionMigrator {
             DummyMig vmt = new DummyMig();
             doMigartion(vmt, "0.0.7");
         }
+		  if (projectVo.projectVersion.equals("0.0.7")) {
+				DummyMig vmt = new DummyMig();
+				doMigartion(vmt, "0.0.8");
+		  }
     }
 
     private void doMigartion(IVersionMigrator vmt, String nextVersion) {

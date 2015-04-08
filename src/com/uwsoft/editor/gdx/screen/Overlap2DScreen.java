@@ -109,44 +109,22 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
         if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
             switch (keycode) {
-                case Input.Keys.X:
-                    sandbox.getUac().cutAction();
-                    break;
-                case Input.Keys.C:
-                    sandbox.getUac().copyAction();
-                    break;
-                case Input.Keys.V:
-                    try {
-                        sandbox.getUac().pasteAction(0, 0, false);
-                    } catch (Exception e) {
-                        //TODO: need to be fixed!
-                    }
-                    break;
-                case Input.Keys.Z:
-                    sandbox.getUac().undo();
-                    break;
-                case Input.Keys.Y:
-                    sandbox.getUac().redo();
-                    break;
-				case Input.Keys.N:
-					 uiStage.menuMediator.showDialog("createNewProjectDialog");
-					 break;
-				case Input.Keys.O:
-					 uiStage.menuMediator.showOpenProject();
-					 break;
-				case Input.Keys.S:
-					 SceneVO vo = sandbox.sceneVoFromItems();
-					 DataManager.getInstance().saveCurrentProject(vo);
-					 break;
-				case Input.Keys.E:
-					 DataManager.getInstance().exportProject();
-					 break;
+					 case Input.Keys.N:
+						  uiStage.menuMediator.showDialog("createNewProjectDialog");
+						  break;
+					 case Input.Keys.O:
+						  uiStage.menuMediator.showOpenProject();
+						  break;
+					 case Input.Keys.S:
+						  SceneVO vo = sandbox.sceneVoFromItems();
+						  DataManager.getInstance().saveCurrentProject(vo);
+						  break;
+					 case Input.Keys.E:
+						  DataManager.getInstance().exportProject();
+						  break;
             }
         }
 
-        if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-            sandbox.getUac().deleteAction();
-        }
         Gdx.app.log(TAG, "keyDown : " + keycode);
         return false;
     }

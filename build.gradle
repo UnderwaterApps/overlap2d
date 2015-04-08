@@ -12,7 +12,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '0.0.7'
+    version = '0.0.8'
     ext {
         appName = 'Overlap2D'
         gdxVersion = '1.5.5'
