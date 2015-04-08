@@ -73,10 +73,12 @@ public class UIToolBox extends UIBox {
 		  topEdgeIcon.setRotation(270f);
         Button rightEdgeIcon = addButton("AlignEdge", false);
 		  rightEdgeIcon.setTransform(true);
-		  rightEdgeIcon.setRotation(180f);
+          rightEdgeIcon.setScaleX(-1);
+		  //rightEdgeIcon.setRotation(180f);
         Button bottomEdgeIcon = addButton("AlignEdge", false);
 		  bottomEdgeIcon.setTransform(true);
-		  bottomEdgeIcon.setRotation(90f);
+          bottomEdgeIcon.setScaleX(-1);
+		  bottomEdgeIcon.setRotation(270f);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
