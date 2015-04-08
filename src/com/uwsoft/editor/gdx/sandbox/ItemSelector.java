@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
@@ -29,6 +28,7 @@ import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -70,105 +70,67 @@ public class ItemSelector {
         return items;
     }
 
-    //TODO remove if not needed
-//    public Rectangle getVisualBoundingBox(SelectionRectangle of, Rectangle out) {
-//        out.x = Math.min(of.getX(), of.getX() + of.getWidth());
-//        out.y = Math.min(of.getY(), of.getY() + of.getHeight());
-//        out.width = Math.abs(of.getWidth());
-//        out.height = Math.abs(of.getHeight());
-//        return out;
-//    }
+    public BiConsumer<SelectionRectangle, AccContainer> broadestItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        final float width = i.getVisualWidth();
+        if (width > acc.carryVal) {
+            acc.carryVal = width;
+            acc.carry = i;
+        }
+    };
 
-    public SelectionRectangle getCurrentSelectionsItemWithHighestWidth() {
-        float highestWidth = -Float.MAX_VALUE;
-        SelectionRectangle candidate = null;
+    public BiConsumer<SelectionRectangle, AccContainer> highestItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        final float height = i.getVisualHeight();
+        if (height > acc.carryVal) {
+            acc.carryVal = height;
+            acc.carry = i;
+        }
+    };
+
+    public BiConsumer<SelectionRectangle, AccContainer> rightmostItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        final float x = i.getVisualRightX();
+        if (x > acc.carryVal) {
+            acc.carryVal = x;
+            acc.carry = i;
+        }
+    };
+
+    public BiConsumer<SelectionRectangle, AccContainer> leftmostItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MAX_VALUE;
+        final float x = i.getVisualX();
+        if (x < acc.carryVal) {
+            acc.carryVal = x;
+            acc.carry = i;
+        }
+    };
+
+    public BiConsumer<SelectionRectangle, AccContainer> topmostItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        final float y = i.getVisualTopY();
+        if (y > acc.carryVal) {
+            acc.carryVal = y;
+            acc.carry = i;
+        }
+    };
+    public BiConsumer<SelectionRectangle, AccContainer> bottommostItem = (i, acc) -> {
+        if (acc.carryVal == null) acc.carryVal = Float.MAX_VALUE;
+        final float y = i.getVisualY();
+        if (y < acc.carryVal) {
+            acc.carryVal = y;
+            acc.carry = i;
+        }
+    };
+
+    public SelectionRectangle get(BiConsumer<SelectionRectangle, AccContainer> checkSelection) {
+        final AccContainer acc = new AccContainer();
 
         for (SelectionRectangle value : currentSelection.values()) {
-
-            float vWidth = value.getVisualWidth();
-            if (vWidth > highestWidth) {
-                highestWidth = vWidth;
-                candidate = value;
-            }
+            checkSelection.accept(value, acc);
         }
-        return candidate;
+        return acc.carry;
     }
-
-    public SelectionRectangle getCurrentSelectionsItemWithHighestHeight() {
-        float highestHeight = -Float.MAX_VALUE;
-        SelectionRectangle candidate = null;
-
-        for (SelectionRectangle value : currentSelection.values()) {
-
-            float vHeight = value.getVisualHeight();
-            if (vHeight > highestHeight) {
-                highestHeight = vHeight;
-                candidate = value;
-            }
-        }
-        return candidate;
-    }
-
-    /**
-     * @return float Y coordinate of upper bound of current selection
-     */
-    public float getCurrentSelectionsHighestY() {
-        float highestY = -Float.MAX_VALUE;
-        for (SelectionRectangle value : currentSelection.values()) {
-            Actor actor = value.getHostAsActor();
-            float maxY = Math.max(actor.getY(), actor.getY() + actor.getHeight() * actor.getScaleY());
-            if (maxY > highestY) {
-                highestY = maxY;
-            }
-        }
-        return highestY;
-    }
-
-    /**
-     * @return float X coordinate of right bound of current selection
-     */
-    public float getCurrentSelectionsHighestX() {
-        float highestX = -Float.MAX_VALUE;
-        for (SelectionRectangle value : currentSelection.values()) {
-            Actor actor = value.getHostAsActor();
-            float maxX = Math.max(actor.getX(), actor.getX() + actor.getWidth() * actor.getScaleX());
-            if (maxX > highestX) {
-                highestX = maxX;
-            }
-        }
-        return highestX;
-    }
-
-    /**
-     * @return float X coordinate of left bound of current selection
-     */
-    public float getCurrentSelectionsLowestX() {
-        float lowestX = Float.MAX_VALUE;
-        for (SelectionRectangle value : currentSelection.values()) {
-            Actor actor = value.getHostAsActor();
-            float minX = Math.min(actor.getX(), actor.getX() + actor.getWidth() * actor.getScaleX());
-            if (minX < lowestX) {
-                lowestX = minX;
-            }
-        }
-        return lowestX;
-    }
-
-    /**
-     * @return float Y coordinate of bottom bound of current selection
-     */
-    public float getCurrentSelectionsLowestY() {
-        float lowestY = Float.MAX_VALUE;
-        for (SelectionRectangle value : currentSelection.values()) {
-            Actor actor = value.getHostAsActor();
-            float minY = Math.min(actor.getY(), actor.getY() + actor.getHeight() * actor.getScaleY());
-            if (minY < lowestY) {
-                lowestY = minY;
-            }
-        }
-        return lowestY;
-    }
-
 
     /***************************** Selectors *********************************/
 
@@ -321,31 +283,101 @@ public class ItemSelector {
         currentSelection.clear();
     }
 
-    public void alignSelectionsByY(float y, boolean ignoreSelfHeight) {
-        int ratio = ignoreSelfHeight ? 0 : 1;
+    public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {
+        final float relativeToX = (toHighestX)? relativeTo.getVisualRightX() : relativeTo.getVisualX();
+
         for (SelectionRectangle value : currentSelection.values()) {
+            final float deltaX = value.getX() - value.getVisualX();
+            final float visualX = relativeToX - ((toHighestX)? 1 : 0) * value.getVisualWidth();
+
             Actor actor = value.getHostAsActor();
-            //actor.setY(y - ratio * actor.getHeight());
-            if (actor.getScaleY() < 0) {
-                actor.setY(y - (ratio + actor.getScaleY()) * actor.getHeight());
-            } else {
-                actor.setY(y - ratio * actor.getHeight());
-            }
+
+            actor.setX(visualX + deltaX);
+            value.setX(actor.getX());
+        }
+    }
+
+    public void alignSelectionsByY(SelectionRectangle relativeTo, boolean toHighestY) {
+        final float relativeToY = (toHighestY)? relativeTo.getVisualTopY() : relativeTo.getVisualY();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            final float deltaY = value.getY() - value.getVisualY();
+            final float visualY = relativeToY - ((toHighestY)? 1 : 0) * value.getVisualHeight();
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setY(visualY + deltaY);
             value.setY(actor.getY());
         }
     }
 
-    public void alignSelectionsByX(float x, boolean ignoreSelfWidth) {
-        int ratio = ignoreSelfWidth ? 0 : 1;
+    public void alignSelectionsAtLeftEdge(SelectionRectangle relativeTo) {
+        if (relativeTo == null) return;
+
+        final float relativeToX = relativeTo.getVisualX();
+
         for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaX = value.getX() - value.getVisualX();
+            final float visualX = relativeToX - value.getVisualWidth();
+
             Actor actor = value.getHostAsActor();
-            //actor.setX(x - ratio * actor.getWidth());
-            if (actor.getScaleX() < 0) {
-                actor.setX(x - (ratio + actor.getScaleX()) * actor.getWidth());
-            } else {
-                actor.setX(x - ratio * actor.getWidth());
-            }
+
+            actor.setX(visualX + deltaX);
             value.setX(actor.getX());
+        }
+    }
+
+    public void alignSelectionsAtRightEdge(SelectionRectangle relativeTo) {
+        if (relativeTo == null) return;
+
+        final float relativeToRightX = relativeTo.getVisualRightX();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaX = value.getX() - value.getVisualX();
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setX(relativeToRightX + deltaX);
+            value.setX(actor.getX());
+        }
+    }
+
+    public void alignSelectionsAtTopEdge(SelectionRectangle relativeTo) {
+        if (relativeTo == null) return;
+
+        final float relativeToTopY = relativeTo.getVisualTopY();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaY = value.getY() - value.getVisualY();
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setY(relativeToTopY + deltaY);
+            value.setY(actor.getY());
+        }
+    }
+
+    public void alignSelectionsAtBottomEdge(SelectionRectangle relativeTo) {
+        if (relativeTo == null) return;
+
+        final float relativeToY = relativeTo.getVisualY();
+
+        for (SelectionRectangle value : currentSelection.values()) {
+            if (value == relativeTo) continue;
+
+            final float deltaY = value.getY() - value.getVisualY();
+            final float visualY = relativeToY - value.getVisualHeight();
+
+            Actor actor = value.getHostAsActor();
+
+            actor.setY(visualY + deltaY);
+            value.setY(actor.getY());
         }
     }
 
@@ -392,22 +424,39 @@ public class ItemSelector {
         //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.curResolution);
         switch (align) {
             case Align.top:
-                alignSelectionsByY(getCurrentSelectionsHighestY(), false);
+                alignSelectionsByY(get(topmostItem), true);
                 break;
             case Align.left:
-                alignSelectionsByX(getCurrentSelectionsLowestX(), true);
+                alignSelectionsByX(get(leftmostItem), false);
                 break;
             case Align.bottom:
-                alignSelectionsByY(getCurrentSelectionsLowestY(), true);
+                alignSelectionsByY(get(bottommostItem), false);
                 break;
             case Align.right:
-                alignSelectionsByX(getCurrentSelectionsHighestX(), false);
+                alignSelectionsByX(get(rightmostItem), true);
                 break;
             case Align.center | Align.left: //horizontal
-                alignSelectionsHorizontallyCentered(getCurrentSelectionsItemWithHighestWidth());
+                alignSelectionsHorizontallyCentered(get(broadestItem));
                 break;
             case Align.center | Align.bottom: //vertical
-                alignSelectionsVerticallyCentered(getCurrentSelectionsItemWithHighestHeight());
+                alignSelectionsVerticallyCentered(get(highestItem));
+                break;
+        }
+    }
+
+    public void alignSelectionsAtEdge(int align) {
+        switch (align) {
+            case Align.top:
+                alignSelectionsAtTopEdge(get(bottommostItem));
+                break;
+            case Align.left:
+                alignSelectionsAtLeftEdge(get(rightmostItem));
+                break;
+            case Align.bottom:
+                alignSelectionsAtBottomEdge(get(topmostItem));
+                break;
+            case Align.right:
+                alignSelectionsAtRightEdge(get(leftmostItem));
                 break;
         }
     }
@@ -426,6 +475,14 @@ public class ItemSelector {
         }
 
         sandbox.saveSceneCurrentSceneData();
+    }
+
+    /**
+     * used as accumulator container
+     */
+    private static class AccContainer {
+        public Float carryVal = null;
+        public SelectionRectangle carry = null;
     }
 
 }
