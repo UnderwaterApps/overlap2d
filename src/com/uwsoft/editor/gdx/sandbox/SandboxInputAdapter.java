@@ -21,7 +21,9 @@ package com.uwsoft.editor.gdx.sandbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
@@ -128,24 +130,38 @@ public class SandboxInputAdapter extends InputAdapter {
 		  sandbox.flow.applyPendingAction();
 	 }
 
-	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y) {
+	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y, Vector2 useReducedMoveFixPoint) {
 
 		  // if there is no resizing going on, the item was touched,
 		  // the button is in and we are dragging... well you can probably be safe about saying - we do.
 		  if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-				sandbox.dirty = true;
+			sandbox.dirty = true;
 
-				// Selection rectangles should move and follow along
-				for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-					 float[] diff = value.getTouchDiff();
-					 value.getHostAsActor().setX(event.getStageX() - diff[0]);
-					 value.getHostAsActor().setY(event.getStageY() - diff[1]);
-					 value.hide();
-				}
+			  float newX;
+			  float newY;
+
+			  if (useReducedMoveFixPoint != null) {
+				  Vector2 reducedMoveDiff = useReducedMoveFixPoint.cpy().scl(-1).add(event.getStageX(), event.getStageY());
+				  boolean moveHorizontally = Math.abs(reducedMoveDiff.x) >= Math.abs(reducedMoveDiff.y);
+
+				  newX = (moveHorizontally)? useReducedMoveFixPoint.x + reducedMoveDiff.x : 0;
+				  newY = (!moveHorizontally)? useReducedMoveFixPoint.y + reducedMoveDiff.y : 0;
+			  } else {
+				  newX = event.getStageX();
+				  newY = event.getStageY();
+			  }
+
+			// Selection rectangles should move and follow along
+			for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+				float[] diff = value.getTouchDiff();
+				value.getHostAsActor().setX(newX - diff[0]);
+				value.getHostAsActor().setY(newY - diff[1]);
+				value.hide();
+			}
 		  }
 
-		  // pining UI to update current item properties data
-		  sandbox.getUIStage().updateCurrentItemState();
+			// pining UI to update current item properties data
+			sandbox.getUIStage().updateCurrentItemState();
 	 }
 
 	 private boolean sandboxMouseScrolled(float x, float y, float amount) {
@@ -384,25 +400,33 @@ public class SandboxInputAdapter extends InputAdapter {
     public void initItemListeners(final IBaseItem eventItem) {
         ClickListener listener = new ClickListener() {
 
+			private final Vector2 reducedMoveFixPoint = new Vector2();
+
+			private boolean isMoveReduced() {return Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT);}
+
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
 
-					 return itemTouchDown(eventItem, event, x, y, button);
+				reducedMoveFixPoint.set(event.getStageX(), event.getStageY());
+				System.out.println("Fixed Point: " + reducedMoveFixPoint);
+				return itemTouchDown(eventItem, event, x, y, button);
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-					 itemTouchUp(eventItem, event, x, y, button);
+				 itemTouchUp(eventItem, event, x, y, button);
 
-					 if (getTapCount() == 2) {
-						  // this is double click
-						  itemDoubleClick(eventItem, event, x, y, button);
-					 }
+				 if (getTapCount() == 2) {
+					  // this is double click
+					  itemDoubleClick(eventItem, event, x, y, button);
+				 }
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
-					 itemTouchDragged(eventItem, event, x, y);
+				Vector2 useReducedMoveFixPoint = (isMoveReduced())? reducedMoveFixPoint : null;
+				System.out.println("FixPoint: " + useReducedMoveFixPoint);
+				itemTouchDragged(eventItem, event, x, y, useReducedMoveFixPoint);
             }
         };
 
