@@ -40,8 +40,8 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 public class UIStage extends Stage {
 
     public final SceneLoader sceneLoader;
+    public final Essentials essentials;
     private final Overlap2DFacade facade;
-    private final Essentials essentials;
     public SandboxStage sandboxStage;
     public Group dummyTarget;
     public CompositeItem sceneUI;

@@ -29,11 +29,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
-import com.uwsoft.editor.renderer.actor.LabelItem;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
@@ -52,6 +51,7 @@ public class LibraryList extends Group {
     private LibraryItemThumbnailBox librarySelectedItem;
     private Label searchLbl;
     private TextBoxItem searchText;
+
     public LibraryList(final UIStage s, float width, float height) {
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
@@ -84,22 +84,22 @@ public class LibraryList extends Group {
 
         items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
         //-----------------Search Box
-        Group searchGroup   =   new Group();
+        Group searchGroup = new Group();
         container.add(searchGroup);
         searchGroup.setWidth(200);
         searchGroup.setHeight(30);
-        searchLbl   =   new Label("Search :", s.textureManager.editorSkin);
+        searchLbl = new Label("Search :", textureManager.editorSkin);
         searchGroup.addActor(searchLbl);
 
-        searchText = new TextBoxItem(new TextBoxVO(),s.essentials);
+        searchText = new TextBoxItem(new TextBoxVO(), s.essentials);
         searchText.setX(searchLbl.getTextBounds().width);
         searchGroup.addActor(searchText);
         searchText.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped (TextField textField, char key) {
+            public void keyTyped(TextField textField, char key) {
                 drawItems(searchText.getText());
             }
         });
-        Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
+        Label dummyTst = new Label("dummy", textureManager.editorSkin);
         if (items.size() * dummyTst.getHeight() > listContainer.getHeight()) {
             listContainer.setHeight(items.size() * (dummyTst.getHeight() + 2));
         }
@@ -129,6 +129,7 @@ public class LibraryList extends Group {
 
 
     }
+
     private void drawItems(String searchText) {
         listContainer.clearChildren();
         libraryItems.clear();
@@ -136,7 +137,7 @@ public class LibraryList extends Group {
 
         int iter = 1;
         for (final String value : items.keySet()) {
-            if(!value.contains(searchText))continue;
+            if (!value.contains(searchText)) continue;
             LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
             thumb.setX(0);
             thumb.setY(listContainer.getHeight() - thumb.getHeight() * iter - 2 * iter);
