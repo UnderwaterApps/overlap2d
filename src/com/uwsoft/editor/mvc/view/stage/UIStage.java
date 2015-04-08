@@ -39,9 +39,9 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
+    public final SceneLoader sceneLoader;
     private final Overlap2DFacade facade;
     private final Essentials essentials;
-    public final SceneLoader sceneLoader;
     public SandboxStage sandboxStage;
     public Group dummyTarget;
     public CompositeItem sceneUI;
@@ -168,19 +168,11 @@ public class UIStage extends Stage {
 
 
     public void resize(int width, int height) {
-//        super.resize(width, height);
         getCompositePanel().resize(width, height);
     }
 
-//    @Override
-//    public void draw() {
-//        super.draw();
-//        Table.drawDebug(this); // draw any enabled debug lines
-//    }
-
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
-
         return getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
     }
 
