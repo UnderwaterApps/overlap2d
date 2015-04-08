@@ -67,14 +67,16 @@ public class UIToolBox extends UIBox {
         Button vCenterIcon = addButton("alignIconCV", false);
 
         //TODO: replace textures
-        Button leftEdgeIcon = addButton("alignIconCH", false);
-        leftEdgeIcon.setColor(Color.BLUE);
-        Button topEdgeIcon = addButton("alignIconCV", false);
-        topEdgeIcon.setColor(Color.YELLOW);
-        Button rightEdgeIcon = addButton("alignIconCH", false);
-        rightEdgeIcon.setColor(Color.RED);
-        Button bottomEdgeIcon = addButton("alignIconCV", false);
-        bottomEdgeIcon.setColor(Color.GREEN);
+        Button leftEdgeIcon = addButton("AlignEdge", false);
+        Button topEdgeIcon = addButton("AlignEdge", false);
+        topEdgeIcon.setTransform(true);
+		  topEdgeIcon.setRotation(270f);
+        Button rightEdgeIcon = addButton("AlignEdge", false);
+		  rightEdgeIcon.setTransform(true);
+		  rightEdgeIcon.setRotation(180f);
+        Button bottomEdgeIcon = addButton("AlignEdge", false);
+		  bottomEdgeIcon.setTransform(true);
+		  bottomEdgeIcon.setRotation(90f);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
