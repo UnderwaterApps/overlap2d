@@ -39,14 +39,12 @@ public class Main {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
+            config.width = (int) (width - width * .04);
+            config.height = (int) (height - height * .04);
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);

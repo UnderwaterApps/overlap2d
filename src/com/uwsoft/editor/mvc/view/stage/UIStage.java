@@ -169,7 +169,7 @@ public class UIStage extends Stage {
 
 
     public void resize(int width, int height) {
-        getCompositePanel().resize(width, height);
+//        getCompositePanel().resize(width, height);
     }
 
     public LayerItemVO getCurrentSelectedLayer() {

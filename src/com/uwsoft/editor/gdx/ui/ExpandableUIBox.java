@@ -69,10 +69,10 @@ public abstract class ExpandableUIBox extends UIBox {
                 }
                 isExpanded = !isExpanded;
                 initPanel();
-                stage.uiMainTable.rightTable.invalidate();
-                stage.uiMainTable.rightTable.layout();
-                stage.uiMainTable.leftTable.invalidate();
-                stage.uiMainTable.leftTable.layout();
+                stage.uiMainTable.rightToolsPanel.invalidate();
+                stage.uiMainTable.rightToolsPanel.layout();
+                stage.uiMainTable.leftToolsPanel.invalidate();
+                stage.uiMainTable.leftToolsPanel.layout();
                 stage.uiMainTable.layout();
             }
         });

@@ -19,104 +19,100 @@
 package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.gdx.ui.*;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by sargis on 9/10/14.
  */
-public class UIMainTable extends Table {
+public class UIMainTable extends VisTable {
     private final UIStage uiStage;
+    private final VisTable topTable;
+    private final VisTable middleTable;
     public UICompositePanel compositePanel;
     public UILayerBox layerPanel;
     public UILightBox lightBox;
     public UIItemsBox itemsBox;
     public UIPropertiesBox propertiesPanel;
     public UILibraryBox libraryPanel;
-    public Table rightTable;
-    public Table leftTable;
+    public Table rightToolsPanel;
+    public Table leftToolsPanel;
     public Overlap2DMenuBarMediator menuMediator;
     private UIToolBox toolPanel;
 
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
-        //debug(); // turn on all debug lines (uiMainTable, cell, and widget)
-        //debugTable(); // turn on only uiMainTable lines
-        //debugCell();
-
-        top();
+        debug();
         setFillParent(true);
-        //
-        initTop();
+        top();
+        topTable = new VisTable();
+        middleTable = new VisTable();
+        add(topTable).fillX();
         row();
-        initLeft();
-        initRight();
-
-        //menu.setZIndex(9999);
+        add(middleTable).fillX().padTop(10);
+        //
+        initMenuBar();
+        topTable.row();
+        initCompisitePanel();
+        initLeftToolsPalel();
+        initRightToolsPanel();
     }
 
-    private void initRight() {
-        rightTable = new Table();
-//        rightTable.debug();
-//        rightTable.debugTable();
-//        rightTable.debugCell();
-        rightTable.padTop(10);
+    private void initCompisitePanel() {
+        compositePanel = new UICompositePanel(uiStage);
+        compositePanel.initPanel();
+        topTable.add(compositePanel).left().fillX();
+    }
+
+    private void initRightToolsPanel() {
+        rightToolsPanel = new Table();
         //
         propertiesPanel = new UIPropertiesBox(uiStage);
         propertiesPanel.initPanel();
-        rightTable.add(propertiesPanel).top().fillY();
-        rightTable.row();
+        rightToolsPanel.add(propertiesPanel).top().fillY();
+        rightToolsPanel.row();
         //
         libraryPanel = new UILibraryBox(uiStage);
         libraryPanel.initPanel();
-        rightTable.add(libraryPanel).top().fillY();
-        rightTable.row();
+        rightToolsPanel.add(libraryPanel).top().fillY();
+        rightToolsPanel.row();
         //
         layerPanel = new UILayerBox(uiStage);
         layerPanel.initPanel();
-        rightTable.add(layerPanel).top().fillY();
+        rightToolsPanel.add(layerPanel).top().fillY();
         //
-        add(rightTable).top().right().padRight(5).expand();
+        middleTable.add(rightToolsPanel).top().right().expand();
     }
 
-    private void initLeft() {
+    private void initLeftToolsPalel() {
         //
-        leftTable = new Table();
-//        leftTable.debug();
-//        leftTable.debugTable();
-//        leftTable.debugCell();
-        leftTable.padTop(10);
+        leftToolsPanel = new VisTable();
         //
         toolPanel = new UIToolBox(uiStage);
         toolPanel.initPanel();
-        leftTable.add(toolPanel).top().fillY();
-        leftTable.row();
+        leftToolsPanel.add(toolPanel).top().fillY();
+        leftToolsPanel.row();
         //
         lightBox = new UILightBox(uiStage);
         lightBox.initPanel();
-        leftTable.add(lightBox).top().fillY();
-        leftTable.row();
+        leftToolsPanel.add(lightBox).top().fillY();
+        leftToolsPanel.row();
         //
         itemsBox = new UIItemsBox(uiStage);
         itemsBox.initPanel();
-        leftTable.add(itemsBox).top().fillY();
+        leftToolsPanel.add(itemsBox).top().fillY();
         //
-        add(leftTable).top().left().padLeft(5).expand();
+        middleTable.add(leftToolsPanel).top().left().expand();
     }
 
-    private void initTop() {
-        // init menu bar
+    private void initMenuBar() {
         //TODO: need to be changed!
         Overlap2DMenuBar menuBar = (Overlap2DMenuBar) Overlap2DFacade.getInstance().retrieveMediator(Overlap2DMenuBarMediator.NAME).getViewComponent();
-        add(menuBar.getTable()).fillX().expandX().row();
-        //
-        compositePanel = new UICompositePanel(uiStage);
-        compositePanel.initPanel();
-        add(compositePanel).left().expandX();
-        add();
+        topTable.add(menuBar.getTable()).left().fillX();
     }
 }
