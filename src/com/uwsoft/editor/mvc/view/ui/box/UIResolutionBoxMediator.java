@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui;
+package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.mediator.SimpleMediator;

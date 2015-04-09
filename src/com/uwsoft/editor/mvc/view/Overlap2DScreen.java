@@ -104,7 +104,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
 
     @Override
     public void resize(int width, int height) {
-        uiStage.resize(width, height);//getViewport().update(width, height, true);
+//        uiStage.resize(width, height);//getViewport().update(width, height, true);
         sandboxStage.resize(width, height);//getViewport().update(width, height, true);
     }
 

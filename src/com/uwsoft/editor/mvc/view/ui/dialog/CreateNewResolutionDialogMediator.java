@@ -24,7 +24,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.mvc.view.ui.UIResolutionBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 /**

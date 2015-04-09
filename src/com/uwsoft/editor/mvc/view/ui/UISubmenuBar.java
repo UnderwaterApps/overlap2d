@@ -22,6 +22,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
 
 /**
  * Created by sargis on 4/8/15.

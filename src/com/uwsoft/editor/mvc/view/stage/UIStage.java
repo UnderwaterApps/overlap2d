@@ -157,12 +157,7 @@ public class UIStage extends Stage {
             }
         });
     }
-
-
-    public void resize(int width, int height) {
-//        getCompositePanel().resize(width, height);
-    }
-
+    
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
         return getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);

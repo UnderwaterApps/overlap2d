@@ -20,12 +20,17 @@ package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.gdx.ui.*;
+import com.uwsoft.editor.gdx.ui.UIItemsBox;
+import com.uwsoft.editor.gdx.ui.UILibraryBox;
+import com.uwsoft.editor.gdx.ui.UILightBox;
+import com.uwsoft.editor.gdx.ui.UIPropertiesBox;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -34,6 +39,7 @@ public class UIMainTable extends VisTable {
     private final UIStage uiStage;
     private final VisTable topTable;
     private final VisTable middleTable;
+    private final Overlap2DFacade facade;
     public UISubmenuBar compositePanel;
     public UILayerBox layerPanel;
     public UILightBox lightBox;
@@ -47,6 +53,7 @@ public class UIMainTable extends VisTable {
 
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
+        facade = Overlap2DFacade.getInstance();
 //        debug();
         setFillParent(true);
         top();
@@ -95,8 +102,8 @@ public class UIMainTable extends VisTable {
         //
         leftToolsPanel = new VisTable();
         //
-        toolPanel = new UIToolBox(uiStage);
-        toolPanel.initPanel();
+        UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+        toolPanel = uiToolBoxMediator.getViewComponent();
         leftToolsPanel.add(toolPanel).top().fillY();
         leftToolsPanel.row();
         //
@@ -114,7 +121,8 @@ public class UIMainTable extends VisTable {
 
     private void initMenuBar() {
         //TODO: need to be changed!
-        Overlap2DMenuBar menuBar = (Overlap2DMenuBar) Overlap2DFacade.getInstance().retrieveMediator(Overlap2DMenuBarMediator.NAME).getViewComponent();
+        Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
+        Overlap2DMenuBar menuBar = overlap2DMenuBarMediator.getViewComponent();
         topTable.add(menuBar.getTable()).fillX().expandX();
     }
 }

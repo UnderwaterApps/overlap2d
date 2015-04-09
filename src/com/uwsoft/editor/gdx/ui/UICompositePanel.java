@@ -18,17 +18,14 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.mvc.view.ui.UIResolutionBox;
-import com.uwsoft.editor.mvc.view.ui.UIResolutionBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 

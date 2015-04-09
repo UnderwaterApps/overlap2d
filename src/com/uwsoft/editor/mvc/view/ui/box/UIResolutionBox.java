@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui;
+package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -34,10 +34,10 @@ import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 public class UIResolutionBox extends VisTable {
-    public static final String CREATE_NEW_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.UIResolutionBox" + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
-    public static final String CHANGE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.UIResolutionBox" + ".CHANGE_RESOLUTION_BTN_CLICKED";
-    public static final String DELETE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.UIResolutionBox" + ".DELETE_RESOLUTION_BTN_CLICKED";
-    public static final String REPACK_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.UIResolutionBox" + ".REPACK_BTN_CLICKED";
+    public static final String CREATE_NEW_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox" + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
+    public static final String CHANGE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox" + ".CHANGE_RESOLUTION_BTN_CLICKED";
+    public static final String DELETE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox" + ".DELETE_RESOLUTION_BTN_CLICKED";
+    public static final String REPACK_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox" + ".REPACK_BTN_CLICKED";
     //    private final String currentResolutionName;
     private final Overlap2DFacade facade;
     private final ResolutionManager resolutionManager;
