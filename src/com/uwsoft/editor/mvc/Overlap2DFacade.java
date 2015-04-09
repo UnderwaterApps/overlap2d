@@ -21,12 +21,7 @@ package com.uwsoft.editor.mvc;
 import com.puremvc.patterns.facade.SimpleFacade;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.controller.StartupCommand;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 
 /**
  * Created by sargis on 3/30/15.
@@ -54,6 +49,7 @@ public class Overlap2DFacade extends SimpleFacade {
 
     public void startup(Overlap2D overlap2D) {
         this.overlap2D = overlap2D;
+        registerProxy(this.overlap2D);
         notifyObservers(new BaseNotification(STARTUP, null, null));
     }
 

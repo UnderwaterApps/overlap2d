@@ -34,7 +34,7 @@ public class UIMainTable extends VisTable {
     private final UIStage uiStage;
     private final VisTable topTable;
     private final VisTable middleTable;
-    public UICompositePanel compositePanel;
+    public UISubmenuBar compositePanel;
     public UILayerBox layerPanel;
     public UILightBox lightBox;
     public UIItemsBox itemsBox;
@@ -47,16 +47,18 @@ public class UIMainTable extends VisTable {
 
     public UIMainTable(UIStage uiStage) {
         this.uiStage = uiStage;
-        debug();
+//        debug();
         setFillParent(true);
         top();
         topTable = new VisTable();
         middleTable = new VisTable();
-        add(topTable).fillX();
+        add(topTable).fillX().expandX();
         row();
         add(middleTable).fillX().padTop(10);
         //
         initMenuBar();
+        topTable.row();
+        topTable.addSeparator();
         topTable.row();
         initCompisitePanel();
         initLeftToolsPalel();
@@ -64,9 +66,9 @@ public class UIMainTable extends VisTable {
     }
 
     private void initCompisitePanel() {
-        compositePanel = new UICompositePanel(uiStage);
-        compositePanel.initPanel();
-        topTable.add(compositePanel).left().fillX();
+        compositePanel = new UISubmenuBar();
+        topTable.add(compositePanel).fillX().expandX();
+//        compositePanel.initPanel();
     }
 
     private void initRightToolsPanel() {
@@ -113,6 +115,6 @@ public class UIMainTable extends VisTable {
     private void initMenuBar() {
         //TODO: need to be changed!
         Overlap2DMenuBar menuBar = (Overlap2DMenuBar) Overlap2DFacade.getInstance().retrieveMediator(Overlap2DMenuBarMediator.NAME).getViewComponent();
-        topTable.add(menuBar.getTable()).left().fillX();
+        topTable.add(menuBar.getTable()).fillX().expandX();
     }
 }

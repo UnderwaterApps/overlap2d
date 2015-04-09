@@ -125,7 +125,7 @@ public interface Facade extends Notifier {
      * @return the <code>IMediator</code> previously registered with the given
      * <code>mediatorName</code>.
      */
-    Mediator retrieveMediator(String mediatorName);
+    <T extends Mediator> T retrieveMediator(String mediatorName);
 
     /**
      * Check if a Mediator is registered or not

@@ -103,7 +103,7 @@ public interface View {
      * @return the <code>IMediator</code> instance previously registered with
      * the given <code>mediatorName</code>.
      */
-    Mediator retrieveMediator(String mediatorName);
+    <T extends Mediator> T retrieveMediator(String mediatorName);
 
     /**
      * Remove an <code>IMediator</code> from the <code>View</code>.

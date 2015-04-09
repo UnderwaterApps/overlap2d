@@ -389,7 +389,7 @@ public class ItemSelector {
     }
 
     public void alignSelections(int align) {
-        //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.curResolution);
+        //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.currentResolutionName);
         switch (align) {
             case Align.top:
                 alignSelectionsByY(getCurrentSelectionsHighestY(), false);

@@ -292,7 +292,7 @@ public class SimpleFacade implements Facade {
      * @return the <code>IMediator</code> previously registered with the given
      * <code>mediatorName</code>.
      */
-    public Mediator retrieveMediator(String mediatorName) {
+    public <T extends Mediator> T retrieveMediator(String mediatorName) {
         return this.view.retrieveMediator(mediatorName);
     }
 

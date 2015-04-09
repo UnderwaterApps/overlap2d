@@ -211,10 +211,10 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             }
             ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
             if (resolution == null) {
-                resolutionManager.curResolution = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
+                resolutionManager.currentResolutionName = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
             } else {
-                resolutionManager.curResolution = resolution;
-                currentProjectVO.lastOpenResolution = resolutionManager.curResolution;
+                resolutionManager.currentResolutionName = resolution;
+                currentProjectVO.lastOpenResolution = resolutionManager.currentResolutionName;
                 saveCurrentProject();
 
             }
@@ -276,7 +276,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         // All legit loading assets
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        textureManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.curResolution);
+        textureManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.currentResolutionName);
     }
 
 

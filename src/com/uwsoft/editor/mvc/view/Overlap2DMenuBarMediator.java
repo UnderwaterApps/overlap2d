@@ -26,15 +26,12 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Created by sargis on 3/25/15.
@@ -180,6 +177,8 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     private void onProjectOpened() {
         viewComponent.reInitScenes(projectManager.currentProjectInfoVO.scenes);
         viewComponent.setProjectOpen(true);
+        Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
+        overlap2D.sendProjectOpenNotification();
     }
 
     public void showOpenProject() {
@@ -204,17 +203,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             }
         });
         sandbox.getUIStage().addActor(fileChooser.fadeIn());
-    }
-
-    public void showDialog(String dialog) {
-        try {
-            Sandbox sandbox = Sandbox.getInstance();
-            UIStage uiStage = sandbox.getUIStage();
-            Method method = uiStage.dialogs().getClass().getMethod(dialog);
-            method.invoke(uiStage.dialogs());
-        } catch (SecurityException | NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-            e.printStackTrace();
-        }
     }
 
     public void sceneMenuItemClicked(String sceneName) {

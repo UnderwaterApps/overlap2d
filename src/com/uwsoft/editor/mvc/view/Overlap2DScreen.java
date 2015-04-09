@@ -21,10 +21,10 @@ package com.uwsoft.editor.mvc.view;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.GL20;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.view.stage.SandboxStage;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.File;
@@ -132,7 +132,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     sandbox.getUac().redo();
                     break;
                 case Input.Keys.N:
-                    uiStage.menuMediator.showDialog("createNewProjectDialog");
+                    //uiStage.menuMediator.showDialog("createNewProjectDialog");
                     break;
                 case Input.Keys.O:
                     uiStage.menuMediator.showOpenProject();

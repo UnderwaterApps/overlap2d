@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TextureUnpacker;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.mortennobel.imagescaling.ResampleOp;
 import com.puremvc.patterns.proxy.BaseProxy;
@@ -48,7 +49,7 @@ public class ResolutionManager extends BaseProxy {
     private static final String TAG = ResolutionManager.class.getCanonicalName();
     public static final String NAME = TAG;
     private static final String EXTENSION_9PATCH = ".9.png";
-    public String curResolution;
+    public String currentResolutionName;
     private float currentPercent = 0.0f;
 
     private ProgressHandler handler;
@@ -67,7 +68,7 @@ public class ResolutionManager extends BaseProxy {
             }
             // When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
             // But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
-            if(sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
+            if (sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
                 return null;
             }
             int newWidth = Math.max(3, Math.round(sourceBufferedImage.getWidth() * ratio));
@@ -145,53 +146,41 @@ public class ResolutionManager extends BaseProxy {
 
 //    private static BufferedImage convertTo9Patch(BufferedImage image) {
 
-//    }
-
-    public void createNewResolution(String name, int width, int height, final String resolutionBase, final ProgressHandler handler) {
-        this.handler = handler;
-        final ResolutionEntryVO newResolution = new ResolutionEntryVO();
-        newResolution.name = name;
-        newResolution.width = width;
-        newResolution.height = height;
-        newResolution.base = resolutionBase.equals("width") ? 0 : 1;
+    //    }
+    public void createNewResolution(ResolutionEntryVO resolutionEntryVO) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        projectManager.getCurrentProjectInfoVO().resolutions.add(newResolution);
+        projectManager.getCurrentProjectInfoVO().resolutions.add(resolutionEntryVO);
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                // create new folder structure
-                String projPath = projectManager.getCurrentWorkingPath() + "/" + projectManager.getCurrentProjectVO().projectName;
-                String sourcePath = projPath + "/" + "assets/orig/images";
-                String targetPath = projPath + "/" + "assets/" + newResolution.name + "/images";
-                createIfNotExist(sourcePath);
-                createIfNotExist(projPath + "/" + "assets/" + newResolution.name + "/pack");
-                copyTexturesFromTo(sourcePath, targetPath);
-                int resizeWarnings = resizeTextures(targetPath, newResolution);
-                rePackProjectImages(newResolution);
-                createResizedAnimations(newResolution);
-                changePercentBy(5);
-                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
-            }
+        executor.execute(() -> {
+            // create new folder structure
+            String projPath = projectManager.getCurrentWorkingPath() + "/" + projectManager.getCurrentProjectVO().projectName;
+            String sourcePath = projPath + "/" + "assets/orig/images";
+            String targetPath = projPath + "/" + "assets/" + resolutionEntryVO.name + "/images";
+            createIfNotExist(sourcePath);
+            createIfNotExist(projPath + "/" + "assets/" + resolutionEntryVO.name + "/pack");
+            copyTexturesFromTo(sourcePath, targetPath);
+            int resizeWarnings = resizeTextures(targetPath, resolutionEntryVO);
+            rePackProjectImages(resolutionEntryVO);
+            createResizedAnimations(resolutionEntryVO);
+            changePercentBy(5);
+            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
         });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                projectManager.saveCurrentProject();
-                handler.progressComplete();
+        executor.execute(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            projectManager.saveCurrentProject();
+//            handler.progressComplete();
         });
         executor.shutdown();
     }
 
+
     private void changePercentBy(float value) {
         currentPercent += value;
-        handler.progressChanged(currentPercent);
+        //handler.progressChanged(currentPercent);
     }
 
     public void createResizedAnimations(ResolutionEntryVO resolution) {
@@ -379,7 +368,7 @@ public class ResolutionManager extends BaseProxy {
                 File file = entry.file();
                 File destinationFile = new File(path + "/" + file.getName());
                 BufferedImage resizedImage = ResolutionManager.imageResize(file, ratio);
-                if(resizedImage == null) {
+                if (resizedImage == null) {
                     resizeWarnings++;
                     ImageIO.write(ImageIO.read(file), "png", destinationFile);
                 } else {
@@ -457,9 +446,9 @@ public class ResolutionManager extends BaseProxy {
 
     public float getCurrentMul() {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        ResolutionEntryVO curRes = projectManager.getCurrentProjectInfoVO().getResolution(curResolution);
+        ResolutionEntryVO curRes = projectManager.getCurrentProjectInfoVO().getResolution(currentResolutionName);
         float mul = 1f;
-        if (!curResolution.equals("orig")) {
+        if (!currentResolutionName.equals("orig")) {
             if (curRes.base == 0) {
                 mul = (float) curRes.width / (float) projectManager.getCurrentProjectInfoVO().originalResolution.width;
             } else {
@@ -478,9 +467,8 @@ public class ResolutionManager extends BaseProxy {
         }
     }
 
-    public void deleteResolution(int index) {
+    public void deleteResolution(ResolutionEntryVO resolutionEntryVO) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        ResolutionEntryVO resolutionEntryVO = projectManager.getCurrentProjectInfoVO().resolutions.remove(index);
         try {
             FileUtils.deleteDirectory(new File(projectManager.getWorkspacePath() + "/" + projectManager.currentProjectVO.projectName + "/assets/" + resolutionEntryVO.name));
         } catch (IOException ignored) {
@@ -489,5 +477,17 @@ public class ResolutionManager extends BaseProxy {
         projectManager.saveCurrentProject();
         projectManager.openProjectAndLoadAllData(projectManager.currentProjectVO.projectName, "orig");
     }
+
+    public Array<ResolutionEntryVO> getResolutions() {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        return projectManager.getCurrentProjectInfoVO().resolutions;
+    }
+
+    public ResolutionEntryVO getOriginalResolution() {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        return projectManager.getCurrentProjectInfoVO().originalResolution;
+    }
+
+
 }
 

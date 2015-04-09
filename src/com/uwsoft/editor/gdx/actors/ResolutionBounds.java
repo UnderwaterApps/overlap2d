@@ -49,7 +49,7 @@ public class ResolutionBounds extends Group {
     private void detectDimensions(BaseStage baseStage) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.curResolution);
+        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
         if (resolutionEntryVO == null) {
             resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
         }

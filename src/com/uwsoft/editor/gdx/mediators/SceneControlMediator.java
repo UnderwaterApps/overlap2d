@@ -83,7 +83,7 @@ public class SceneControlMediator {
         essentials.physicsStopped = true;
         sceneLoader = new SceneLoader(essentials);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        sceneLoader.setResolution(resolutionManager.curResolution);
+        sceneLoader.setResolution(resolutionManager.currentResolutionName);
 
         currentSceneVo = sceneLoader.loadScene(sceneName, false);
         essentials.world = new World(new Vector2(currentSceneVo.physicsPropertiesVO.gravityX, currentSceneVo.physicsPropertiesVO.gravityY), true);
@@ -108,7 +108,7 @@ public class SceneControlMediator {
 
     public void initSceneView(CompositeItem composite, boolean isRootScene) {
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        composite.applyResolution(resolutionManager.curResolution);
+        composite.applyResolution(resolutionManager.currentResolutionName);
         currentScene = composite;
 
         if (isRootScene) {

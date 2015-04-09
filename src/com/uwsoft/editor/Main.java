@@ -39,7 +39,7 @@ public class Main {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
-            config.width = (int) (width - width * .04);
+            config.width = (int) (width);
             config.height = (int) (height - height * .04);
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);

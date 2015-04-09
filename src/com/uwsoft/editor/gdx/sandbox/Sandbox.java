@@ -32,8 +32,6 @@ import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.mvc.view.stage.SandboxStage;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -41,6 +39,8 @@ import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -196,7 +196,7 @@ public class Sandbox {
     public void initData(String sceneName) {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.curResolution);
+        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
 
@@ -216,11 +216,11 @@ public class Sandbox {
 
     public void loadScene(String sceneName) {
         currentLoadedSceneFileName = sceneName;
-        uiStage.getCompositePanel().clearScenes();
+//        uiStage.getCompositePanel().clearScenes();
         initData(sceneName);
 
         sandboxStage.initView();
-        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
+//        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
         initSceneView(sceneControl.getRootSceneVO());
         sandboxInputAdapter.initSandboxEvents();
 
@@ -238,10 +238,10 @@ public class Sandbox {
     public void initSceneView(CompositeItem composite) {
         selector.clearSelections();
         sandboxStage.mainBox.clear();
-        sceneControl.initSceneView(composite, uiStage.getCompositePanel().isRootScene());
-        if (uiStage.getCompositePanel().isRootScene()) {
-            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
-        }
+        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
+//        if (uiStage.getCompositePanel().isRootScene()) {
+//            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
+//        }
         for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
             sandboxInputAdapter.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
         }
@@ -258,7 +258,7 @@ public class Sandbox {
      */
     public void enterIntoPrevComposite() {
         sandboxStage.getCamera().position.set(0, 0, 0);
-        uiStage.getCompositePanel().stepUp();
+//        uiStage.getCompositePanel().stepUp();
         uiStage.getItemsBox().initContent();
     }
 
@@ -291,7 +291,7 @@ public class Sandbox {
         sandboxStage.getCamera().position.set(0, 0, 0);
         getSceneControl().disableAmbience(true);
         uiStage.getLightBox().disableAmbiance.setChecked(true);
-        uiStage.getCompositePanel().addScene(compositeItemVO);
+        //uiStage.getCompositePanel().addScene(compositeItemVO);
         initSceneView(compositeItemVO);
         uiStage.getItemsBox().initContent();
     }

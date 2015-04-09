@@ -66,7 +66,7 @@ public class UIItemsBox extends ExpandableUIBox {
 
 
         CompositeItem sceneItems = stage.getSandbox().getCurrentScene();
-        Node root = addTree(sceneItems, stage.getCompositePanel().isRootScene());
+        Node root = addTree(sceneItems, true /*stage.getCompositePanel().isRootScene()*/);
 
 
         for (int i = 0; i < sceneItems.getItems().size(); i++) {
@@ -101,7 +101,7 @@ public class UIItemsBox extends ExpandableUIBox {
                     System.out.println();
                     IBaseItem baseItem = (IBaseItem) selectedNodes.get(i).getObject();
                     IBaseItem item = getCurrentSceneItem(stage.getSandbox().getCurrentScene(), baseItem);
-                    if(item != null) {
+                    if (item != null) {
                         addSelectionAction(item);
                     }
                 }
@@ -114,7 +114,7 @@ public class UIItemsBox extends ExpandableUIBox {
         IBaseItem currentSceneItem = baseItem;
         while (currentScene != currentSceneItem.getParentItem()) {
             currentSceneItem = currentSceneItem.getParentItem();
-            if(currentSceneItem == null) break;
+            if (currentSceneItem == null) break;
         }
         return currentSceneItem;
     }
@@ -218,7 +218,7 @@ public class UIItemsBox extends ExpandableUIBox {
                             stage.getSandbox().enterIntoComposite(iBaseItem.getParentItem().getDataVO());
                     } else {
                         if (!iBaseItem.equals(stage.getSandbox().getCurrentScene())) {
-                            stage.getSandbox().enterIntoComposite(((CompositeItem)iBaseItem).getDataVO());
+                            stage.getSandbox().enterIntoComposite(((CompositeItem) iBaseItem).getDataVO());
                         }
                     }
                 } else {

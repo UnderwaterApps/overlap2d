@@ -21,11 +21,13 @@ package com.uwsoft.editor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.kotcrab.vis.ui.VisUI;
-import com.puremvc.patterns.observer.Notifier;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 
-public class Overlap2D extends ApplicationAdapter implements Notifier {
+public class Overlap2D extends ApplicationAdapter implements Proxy {
+    private static final String TAG = Overlap2D.class.getCanonicalName();
+    public static final String NAME = TAG;
     private static final String EVENT_PREFIX = "com.uwsoft.editor.Overlap2D";
     public static final String PAUSE = EVENT_PREFIX + ".PAUSE";
     public static final String RESUME = EVENT_PREFIX + ".RESUME";
@@ -33,9 +35,11 @@ public class Overlap2D extends ApplicationAdapter implements Notifier {
     public static final String RESIZE = EVENT_PREFIX + ".RESIZE";
     public static final String DISPOSE = EVENT_PREFIX + ".DISPOSE";
     public static final String CREATE = EVENT_PREFIX + ".CREATE_BTN_CLICKED";
+    public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
     //
     public TextureManager textureManager;
     private Overlap2DFacade facade;
+    private Object data;
 
     public Overlap2D() {
 
@@ -83,5 +87,34 @@ public class Overlap2D extends ApplicationAdapter implements Notifier {
     @Override
     public void sendNotification(String notificationName) {
         facade.sendNotification(notificationName);
+    }
+
+    @Override
+    public String getProxyName() {
+        return NAME;
+    }
+
+    @Override
+    public Object getData() {
+        return data;
+    }
+
+    @Override
+    public void setData(Object data) {
+        this.data = data;
+    }
+
+    @Override
+    public void onRegister() {
+
+    }
+
+    @Override
+    public void onRemove() {
+
+    }
+
+    public void sendProjectOpenNotification() {
+        sendNotification(PROJECT_OPENED);
     }
 }

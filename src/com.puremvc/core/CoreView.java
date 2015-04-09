@@ -255,8 +255,8 @@ public class CoreView implements View {
      * @return the <code>Mediator</code> instance previously registered with
      * the given <code>mediatorName</code>.
      */
-    public Mediator retrieveMediator(String mediatorName) {
-        return mediatorMap.get(mediatorName);
+    public <T extends Mediator> T retrieveMediator(String mediatorName) {
+        return (T) mediatorMap.get(mediatorName);
     }
 
     /**

@@ -23,14 +23,16 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.*;
-import com.uwsoft.editor.gdx.ui.dialogs.DialogSystem;
+import com.uwsoft.editor.gdx.ui.DropDown;
+import com.uwsoft.editor.gdx.ui.UIItemsBox;
+import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
+import com.uwsoft.editor.mvc.view.ui.UISubmenuBar;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -49,7 +51,6 @@ public class UIStage extends Stage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
-    public DialogSystem dlgSystem;
 
     public DropDown mainDropDown;
 
@@ -86,21 +87,11 @@ public class UIStage extends Stage {
         setListeners();
 
 
-        initDialogSystem();
-
         mainDropDown = new DropDown(contextMenuContainer);
     }
 
     public Sandbox getSandbox() {
         return sandboxStage.sandbox;
-    }
-
-    public DialogSystem dialogs() {
-        return dlgSystem;
-    }
-
-    public void initDialogSystem() {
-        dlgSystem = new DialogSystem(this);
     }
 
     public void editPhysics(String assetName) {
@@ -133,7 +124,7 @@ public class UIStage extends Stage {
         uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
         uiMainTable.itemsBox.initContent();
-        uiMainTable.compositePanel.initResolutionBox();
+//        uiMainTable.compositePanel.initResolutionBox();
 
         uiMainTable.layerPanel.initContent();
 
@@ -182,7 +173,7 @@ public class UIStage extends Stage {
         return uiMainTable.itemsBox;
     }
 
-    public UICompositePanel getCompositePanel() {
+    public UISubmenuBar getCompositePanel() {
         return uiMainTable.compositePanel;
     }
 
