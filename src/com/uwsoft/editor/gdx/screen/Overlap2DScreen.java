@@ -19,9 +19,7 @@
 package com.uwsoft.editor.gdx.screen;
 
 import com.badlogic.gdx.*;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
@@ -29,10 +27,6 @@ import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.util.Properties;
 
 public class Overlap2DScreen implements Screen, InputProcessor {
     private static final String TAG = Overlap2DScreen.class.getCanonicalName();
@@ -51,27 +45,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         sandboxStage.sandbox = sandbox;
 
         // check for demo project
-
-        // first check for a local configuration
-        String demoProjectDir;
-
-        try {
-            Properties localConfig = new Properties();
-            InputStream fis = new FileInputStream(".." + File.separator + "local" + File.separator + "config.properties");
-            localConfig.load(fis);
-            fis.close();
-            demoProjectDir = localConfig.getProperty("projectDir");
-
-        } catch (Exception e) {
-            System.out.println("no local config file found:");
-            System.out.println(e.getMessage());
-            // use overlap2d demo dir
-            demoProjectDir = DataManager.getInstance().getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo";
-        }
-
-        System.out.println("demo project dir: " + demoProjectDir);
-
-        File demoDir = new File(demoProjectDir);
+        File demoDir = new File(DataManager.getInstance().getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
         if (demoDir.isDirectory() && demoDir.exists()) {
             DataManager.getInstance().openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
             sandbox.loadCurrentProject();

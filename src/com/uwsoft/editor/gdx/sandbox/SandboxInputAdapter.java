@@ -137,7 +137,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // if there is no resizing going on, the item was touched,
 		  // the button is in and we are dragging... well you can probably be safe about saying - we do.
 		  if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
-			sandbox.dirty = true;
+				sandbox.dirty = true;
 
 			  float newX;
 			  float newY;
@@ -161,8 +161,8 @@ public class SandboxInputAdapter extends InputAdapter {
 			}
 		  }
 
-			// pining UI to update current item properties data
-			sandbox.getUIStage().updateCurrentItemState();
+		  // pining UI to update current item properties data
+		  sandbox.getUIStage().updateCurrentItemState();
 	 }
 
 	 private boolean sandboxMouseScrolled(float x, float y, float amount) {
@@ -434,12 +434,12 @@ public class SandboxInputAdapter extends InputAdapter {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-				 itemTouchUp(eventItem, event, x, y, button);
+					 itemTouchUp(eventItem, event, x, y, button);
 
-				 if (getTapCount() == 2) {
-					  // this is double click
-					  itemDoubleClick(eventItem, event, x, y, button);
-				 }
+					 if (getTapCount() == 2) {
+						  // this is double click
+						  itemDoubleClick(eventItem, event, x, y, button);
+					 }
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
