@@ -251,4 +251,6 @@ public class SelectionRectangle extends PixelRect {
     public float getVisualWidth() {return Math.abs(getWidth());}
     public float getVisualHeight() {return Math.abs(getHeight());}
 
+    public float getVisualRightX() {return Math.max(getX(), getX() + getWidth());}
+    public float getVisualTopY() {return Math.max(getY(), getY() + getHeight());}
 }

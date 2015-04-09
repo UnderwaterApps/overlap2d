@@ -88,6 +88,10 @@ public class UIStage extends Stage {
 
 
         mainDropDown = new DropDown(contextMenuContainer);
+
+        // not sure why this is necessary
+        // TODO: temporary fix
+        essentials.rayHandler.setAmbientLight(1, 1, 1, 1);
     }
 
     public Sandbox getSandbox() {
