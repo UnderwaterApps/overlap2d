@@ -24,7 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
-import com.uwsoft.editor.gdx.ui.UIItemsBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
@@ -123,7 +123,7 @@ public class UIStage extends Stage {
     public void loadCurrentProject() {
         uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
-        uiMainTable.itemsBox.initContent();
+        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
 
         uiMainTable.layerPanel.initContent();
@@ -135,7 +135,7 @@ public class UIStage extends Stage {
         uiMainTable.libraryPanel.initContent();
 
         uiMainTable.lightBox.initContent();
-        uiMainTable.itemsBox.initContent();
+        uiMainTable.itemsBox.init();
     }
 
     public void emptyClick() {
@@ -164,7 +164,7 @@ public class UIStage extends Stage {
     }
 
 
-    public UIItemsBox getItemsBox() {
+    public UIItemsTreeBox getItemsBox() {
         return uiMainTable.itemsBox;
     }
 

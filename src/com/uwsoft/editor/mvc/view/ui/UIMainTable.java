@@ -20,7 +20,7 @@ package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.gdx.ui.UIItemsBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.gdx.ui.UILibraryBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.UIPropertiesBox;
@@ -45,7 +45,7 @@ public class UIMainTable extends VisTable {
     public UISubmenuBar compositePanel;
     public UILayerBox layerPanel;
     public UILightBox lightBox;
-    public UIItemsBox itemsBox;
+    public UIItemsTreeBox itemsBox;
     public UIPropertiesBox propertiesPanel;
     public UILibraryBox libraryPanel;
     public Table rightToolsPanel;
@@ -116,10 +116,10 @@ public class UIMainTable extends VisTable {
         //
         lightBox = new UILightBox(uiStage);
         lightBox.initPanel();
-        leftToolsPanel.add(lightBox);
-        leftToolsPanel.row();
+//        leftToolsPanel.add(lightBox);
+//        leftToolsPanel.row();
         //
-        itemsBox = new UIItemsBox(uiStage);
+        itemsBox = new UIItemsTreeBox(uiStage);
         itemsBox.initPanel();
         leftToolsPanel.add(itemsBox);
         //

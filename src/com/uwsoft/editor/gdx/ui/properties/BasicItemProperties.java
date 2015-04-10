@@ -499,7 +499,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             item.getDataVO().itemIdentifier = id;
             item.renew();
             sandbox.saveSceneCurrentSceneData();
-            sandbox.getUIStage().getItemsBox().initContent();
+            sandbox.getUIStage().getItemsBox().init();
         }
     }
 
