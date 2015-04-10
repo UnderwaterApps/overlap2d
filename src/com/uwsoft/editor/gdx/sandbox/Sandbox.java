@@ -342,12 +342,12 @@ public class Sandbox {
         flow.applyPendingAction();
     }
 
-    public void setSceneAmbientColor(Color color) {
+    public void setSceneAmbientColor(Color color, boolean showChange) {
         sceneControl.getCurrentSceneVO().ambientColor[0] = color.r;
         sceneControl.getCurrentSceneVO().ambientColor[1] = color.g;
         sceneControl.getCurrentSceneVO().ambientColor[2] = color.b;
         sceneControl.getCurrentSceneVO().ambientColor[3] = color.a;
-        sceneControl.getEssentials().rayHandler.setAmbientLight(color);
+        if (showChange) sceneControl.getEssentials().rayHandler.setAmbientLight(color);
     }
 
     public ItemSelector getSelector() {

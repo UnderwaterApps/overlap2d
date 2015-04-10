@@ -52,11 +52,11 @@ public class UIResolutionBox extends Group {
 
         int padding = 5;
 
-        String[] arr = new String[projectInfoVO.resolutions.size() + 1];
+        String[] arr = new String[projectInfoVO.resolutions.size + 1];
 
         arr[0] = projectInfoVO.originalResolution.toString();
         int selectedIndex = 0;
-        for (int i = 0; i < projectInfoVO.resolutions.size(); i++) {
+        for (int i = 0; i < projectInfoVO.resolutions.size; i++) {
             ResolutionEntryVO resolution = projectInfoVO.resolutions.get(i);
             String resolutionString = projectInfoVO.resolutions.get(i).toString();
             arr[i + 1] = resolutionString;

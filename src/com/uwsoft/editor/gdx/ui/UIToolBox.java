@@ -66,6 +66,18 @@ public class UIToolBox extends UIBox {
         Button hCenterIcon = addButton("alignIconCH", false);
         Button vCenterIcon = addButton("alignIconCV", false);
 
+        //TODO: replace textures
+        Button leftEdgeIcon = addButton("AlignEdge", false);
+        Button topEdgeIcon = addButton("AlignEdge", false);
+        topEdgeIcon.setTransform(true);
+		  topEdgeIcon.setRotation(270f);
+        Button rightEdgeIcon = addButton("AlignEdge", false);
+		  rightEdgeIcon.setTransform(true);
+		  rightEdgeIcon.setRotation(180f);
+        Button bottomEdgeIcon = addButton("AlignEdge", false);
+		  bottomEdgeIcon.setTransform(true);
+		  bottomEdgeIcon.setRotation(90f);
+
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getSandbox().getSelector().alignSelections(Align.top);
@@ -102,6 +114,30 @@ public class UIToolBox extends UIBox {
         vCenterIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 stage.getSandbox().getSelector().alignSelections(Align.center | Align.bottom);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        leftEdgeIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.left);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        topEdgeIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.top);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        rightEdgeIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.right);
+                return super.touchDown(event, x, y, pointer, button);
+            }
+        });
+        bottomEdgeIcon.addListener(new ClickListener() {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.bottom);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
