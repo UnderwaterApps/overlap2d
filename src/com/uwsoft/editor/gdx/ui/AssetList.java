@@ -26,29 +26,34 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.*;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.*;
+import com.uwsoft.editor.renderer.actor.TextBoxItem;
+import com.uwsoft.editor.renderer.data.TextBoxVO;
 
 public class AssetList extends Group {
-
+    private Label searchLbl;
+    private TextBoxItem searchText;
+    private  TextureAtlas atlas;
+    private Table container;
+    private Table table;
+    private UIStage stage;
+    private HashMap<String, SpineAnimData> spineAnimations;
+    private HashMap<String, TextureAtlas> spriteAnimations;
+    private HashMap<String, FileHandle> spriterAnimations;
     public AssetList(final UIStage s, float width, float height) {
         this.setWidth(width);
         this.setHeight(height);
-        final Table container = new Table();
-        Table table = new Table();
+        this.stage  =   s;
+        container = new Table();
+        table = new Table();
         container.setX(0);
         container.setY(0);
         container.setWidth(getWidth() - 1);
         container.setHeight(getHeight() - 20);
-        final ScrollPane scroll = new ScrollPane(table, s.textureManager.editorSkin);
+        final ScrollPane scroll = new ScrollPane(table, stage.textureManager.editorSkin);
         container.add(scroll).colspan(4).width(getWidth());
         container.row();
         scroll.addListener(new InputListener() {
@@ -59,19 +64,40 @@ public class AssetList extends Group {
         });
         scroll.setHeight(getHeight() - 20);
         scroll.setFlickScroll(false);
-        TextureAtlas atlas = s.textureManager.getProjectAssetsList();
-
-        HashMap<String, SpineAnimData> spineAnimations = s.textureManager.getProjectSpineAnimationsList();
-        HashMap<String, TextureAtlas> spriteAnimations = s.textureManager.getProjectSpriteAnimationsList();
-        HashMap<String, FileHandle> spriterAnimations = s.textureManager.getProjectSpriterAnimationsList();
+        atlas = s.textureManager.getProjectAssetsList();
+        spineAnimations     = stage.textureManager.getProjectSpineAnimationsList();
+        spriteAnimations    = stage.textureManager.getProjectSpriteAnimationsList();
+        spriterAnimations   = stage.textureManager.getProjectSpriterAnimationsList();
 
         if (atlas == null) return;
+        drawItems();
+        //-----------------Search Box
+        Group searchGroup   =   new Group();
+        container.add(searchGroup);
+        searchGroup.setWidth(200);
+        searchGroup.setHeight(30);
+        searchLbl   =   new Label("Search :", s.textureManager.editorSkin);
+        searchGroup.addActor(searchLbl);
 
+        searchText = new TextBoxItem(new TextBoxVO(),s.essentials);
+        searchText.setX(searchLbl.getTextBounds().width);
+        searchGroup.addActor(searchText);
+        searchText.setTextFieldListener(new TextField.TextFieldListener() {
+            public void keyTyped (TextField textField, char key) {
+                drawItems(searchText.getText());
+            }
+        });
+
+
+    }
+    private void drawItems(String searchText) {
+        table.clearChildren();
         int itemIter = 0;
         for (int i = 0; i < atlas.getRegions().size; i++) {
+            if(!atlas.getRegions().get(i).name.contains(searchText))continue;
             TextureAtlas.AtlasRegion atlasRegion = atlas.getRegions().get(i);
             boolean is9patch = atlasRegion.splits != null;
-            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(s, atlasRegion) : new ImageThumbnailBox(s, atlasRegion);
+            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(stage, atlasRegion) : new ImageThumbnailBox(stage, atlasRegion);
 
             table.add(thumb).pad(3);
 
@@ -83,7 +109,8 @@ public class AssetList extends Group {
         }
 
         for (String animationName : spineAnimations.keySet()) {
-            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(s, spineAnimations.get(animationName));
+            if(!animationName.contains(searchText))continue;
+            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(stage, spineAnimations.get(animationName));
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -94,7 +121,8 @@ public class AssetList extends Group {
         }
 
         for (String animationName : spriteAnimations.keySet()) {
-            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(s, animationName);
+            if(!animationName.contains(searchText))continue;
+            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(stage, animationName);
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -103,19 +131,77 @@ public class AssetList extends Group {
             }
             itemIter++;
         }
-        
+
         for (String animationName : spriterAnimations.keySet()) {
-        	final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(s, animationName);
-        	
-        	table.add(thumb).size(50, 50).pad(3);
-        	if ((itemIter - 7) % 4 == 0) {
-        		
-        		table.row();
-        	}
-        	itemIter++;
+            if(!animationName.contains(searchText))continue;
+            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(stage, animationName);
+
+            table.add(thumb).size(50, 50).pad(3);
+            if ((itemIter - 7) % 4 == 0) {
+
+                table.row();
+            }
+            itemIter++;
         }
 
 
         addActor(container);
+
+
+    }
+    private void drawItems() {
+        table.clearChildren();
+        int itemIter = 0;
+        for (int i = 0; i < atlas.getRegions().size; i++) {
+            TextureAtlas.AtlasRegion atlasRegion = atlas.getRegions().get(i);
+            boolean is9patch = atlasRegion.splits != null;
+            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(stage, atlasRegion) : new ImageThumbnailBox(stage, atlasRegion);
+
+            table.add(thumb).pad(3);
+
+
+            if ((itemIter - 7) % 4 == 0) {
+                table.row();
+            }
+            itemIter++;
+        }
+
+        for (String animationName : spineAnimations.keySet()) {
+            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(stage, spineAnimations.get(animationName));
+
+            table.add(thumb).size(50, 50).pad(3);
+            if ((itemIter - 7) % 4 == 0) {
+
+                table.row();
+            }
+            itemIter++;
+        }
+
+        for (String animationName : spriteAnimations.keySet()) {
+            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(stage, animationName);
+
+            table.add(thumb).size(50, 50).pad(3);
+            if ((itemIter - 7) % 4 == 0) {
+
+                table.row();
+            }
+            itemIter++;
+        }
+
+        for (String animationName : spriterAnimations.keySet()) {
+            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(stage, animationName);
+
+            table.add(thumb).size(50, 50).pad(3);
+            if ((itemIter - 7) % 4 == 0) {
+
+                table.row();
+            }
+            itemIter++;
+        }
+
+
+        addActor(container);
+
+
     }
 }
