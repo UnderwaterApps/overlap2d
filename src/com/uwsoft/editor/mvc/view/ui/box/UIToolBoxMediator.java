@@ -19,6 +19,9 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.EditingMode;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
  * Created by sargis on 4/9/15.
@@ -31,82 +34,25 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         super(NAME, new UIToolBox());
     }
 
-    //
-//        topIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.top);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        leftIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.left);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        bottomIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.bottom);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        rightIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.right);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        hCenterIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.center | Align.left);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        vCenterIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelections(Align.center | Align.bottom);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        leftEdgeIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.left);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        topEdgeIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.top);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        rightEdgeIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.right);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//        bottomEdgeIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().getSelector().alignSelectionsAtEdge(Align.bottom);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        mainIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().setCurrentMode(EditingMode.SELECTION);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
-//
-//        resizeIcon.addListener(new ClickListener() {
-//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-//                stage.getSandbox().setCurrentMode(EditingMode.TRANSFORM);
-//                return super.touchDown(event, x, y, pointer, button);
-//            }
-//        });
+    @Override
+    public String[] listNotificationInterests() {
+        return new String[]{
+                UIToolBox.SELECTING_MODE_BTN_CLICKED,
+                UIToolBox.TRANSFORMING_MODE_BTN_CLICKED
+        };
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+        Sandbox sandbox = Sandbox.getInstance();
+        switch (notification.getName()) {
+            case UIToolBox.SELECTING_MODE_BTN_CLICKED:
+                sandbox.setCurrentMode(EditingMode.SELECTION);
+                break;
+            case UIToolBox.TRANSFORMING_MODE_BTN_CLICKED:
+                sandbox.setCurrentMode(EditingMode.TRANSFORM);
+                break;
+        }
+    }
 }

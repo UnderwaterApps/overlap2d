@@ -29,6 +29,8 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.ui.box.UIAlignBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBox;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 
@@ -104,17 +106,22 @@ public class UIMainTable extends VisTable {
         //
         UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
         toolPanel = uiToolBoxMediator.getViewComponent();
-        leftToolsPanel.add(toolPanel).top().fillY();
-        leftToolsPanel.row();
+        leftToolsPanel.add(toolPanel).expandX().fillX();
+        leftToolsPanel.row().padTop(5);
+        //
+        UIAlignBoxMediator uiAlignBoxMediator = facade.retrieveMediator(UIAlignBoxMediator.NAME);
+        UIAlignBox uiAlignBox = uiAlignBoxMediator.getViewComponent();
+        leftToolsPanel.add(uiAlignBox).expandX().fillX();
+        leftToolsPanel.row().padTop(5);
         //
         lightBox = new UILightBox(uiStage);
         lightBox.initPanel();
-        leftToolsPanel.add(lightBox).top().fillY();
+        leftToolsPanel.add(lightBox);
         leftToolsPanel.row();
         //
         itemsBox = new UIItemsBox(uiStage);
         itemsBox.initPanel();
-        leftToolsPanel.add(itemsBox).top().fillY();
+        leftToolsPanel.add(itemsBox);
         //
         middleTable.add(leftToolsPanel).top().left().expand();
     }
