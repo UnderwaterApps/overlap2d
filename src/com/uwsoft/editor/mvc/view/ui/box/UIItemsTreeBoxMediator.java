@@ -18,11 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.utils.Selection;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
  * Created by sargis on 4/10/15.
@@ -38,7 +42,8 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                Overlap2D.PROJECT_OPENED,
+                UIItemsTreeBox.ITEMS_SELECTED
         };
     }
 
@@ -49,8 +54,24 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
         switch (notification.getName()) {
             case Overlap2D.PROJECT_OPENED:
                 CompositeItem rootScene = sandbox.getCurrentScene();
-//                viewComponent.init(rootScene);
+                viewComponent.init(rootScene);
+                break;
+            case UIItemsTreeBox.ITEMS_SELECTED:
+                Selection<Tree.Node> selection = notification.getBody();
+                Array<Tree.Node> nodes = selection.toArray();
+                for (Tree.Node node : nodes) {
+                    IBaseItem baseItem = (IBaseItem) node.getObject();
+                    if (baseItem != null) {
+                        addSelectionAction(baseItem);
+                    }
+                }
+
                 break;
         }
+    }
+
+    private void addSelectionAction(IBaseItem iBaseItem) {
+        Sandbox sandbox = Sandbox.getInstance();
+        sandbox.getSelector().setSelection(iBaseItem, true);
     }
 }

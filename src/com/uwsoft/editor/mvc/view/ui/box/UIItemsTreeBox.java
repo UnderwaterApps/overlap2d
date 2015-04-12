@@ -18,181 +18,106 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTree;
-import com.kotcrab.vis.ui.widget.VisWindow;
+import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.utils.MySkin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 
 public class UIItemsTreeBox extends VisWindow {
-
+    public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
     private VisTree tree;
-    private MySkin skin;
-    private IBaseItem selectedItem;
     private VisTable mainTable;
 
     public UIItemsTreeBox() {
         super("Items Tree");
         setMovable(false);
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
         mainTable = new VisTable();
         mainTable.addSeparator().padBottom(10);
         add(mainTable).expandX().fillX();
     }
 
-    public void init(CompositeItem rootScene) {
 
+    public void init(CompositeItem rootScene) {
         tree = new VisTree();
         VisScrollPane scroller = new VisScrollPane(tree);
         scroller.setFlickScroll(false);
-        mainTable.add(mainTable);
-        Node rootNode = addTreeNode(rootScene, true);
-        for (int i = 0; i < rootScene.getItems().size(); i++) {
-            if (rootScene.getItems().get(i).isComposite()) {
-                innerComposite(rootScene.getItems().get(i), rootNode);
-            } else {
-                addTreeNode(rootScene.getItems().get(i), rootNode);
-            }
-        }
-
-//        skin = textureManager.editorSkin;
-//        tree = new VisTree();
-//
-//
-//        CompositeItem rootScene = stage.getSandbox().getCurrentScene();
-//        Node rootNode = addTreeNode(rootScene, true /*stage.getCompositePanel().isRootScene()*/);
-//
-//
-
-//        //expand rootNode
-//        if (rootNode != null && rootNode.getChildren() != null && rootNode.getChildren().size > 0 && rootNode.getChildren().get(0) != null) {
-//            rootNode.getChildren().get(0).expandTo();
-//        }
-//
-//        Table scrolltable = new Table();
-//        scrolltable.padBottom(20);
-//        scrolltable.add(tree).fill().expand();
-//        final ScrollPane scroller = new ScrollPane(scrolltable, skin);
-//        scroller.setFlickScroll(false);
-//        final Table table = new Table();
-//        table.setFillParent(true);
-//        table.padTop(10);
-//        table.add(scroller).fill().expand();
-//        table.setName("treeTable");
-//        addActor(table);
-//        tree.addListener(new ChangeListener() {
-//
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                Array<Node> selectedNodes = tree.getSelection().toArray();
-//                for (int i = 0; i < selectedNodes.size; i++) {
-//                    System.out.println();
-//                    IBaseItem baseItem = (IBaseItem) selectedNodes.get(i).getObject();
-//                    IBaseItem item = getCurrentSceneItem(stage.getSandbox().getCurrentScene(), baseItem);
-//                    if (item != null) {
-//                        addSelectionAction(item);
-//                    }
-//                }
-//
-//            }
-//        });
+        mainTable.add(scroller).expandX().fillX();
+        //
+        Node root = addTreeRoot(rootScene, null);
+        root.setExpanded(true);
+        tree.addListener(new TreeChangeListener());
     }
 
-    private IBaseItem getCurrentSceneItem(CompositeItem currentScene, IBaseItem baseItem) {
-        IBaseItem currentSceneItem = baseItem;
-        while (currentScene != currentSceneItem.getParentItem()) {
-            currentSceneItem = currentSceneItem.getParentItem();
-            if (currentSceneItem == null) break;
-        }
-        return currentSceneItem;
-    }
-
-
-    private void innerComposite(IBaseItem iBaseItem, Node node) {
-        CompositeItem compoiteItem = (CompositeItem) iBaseItem;
-        node = getNode(iBaseItem, node);
-
-        for (int i = 0; i < compoiteItem.getItems().size(); i++) {
-            if (compoiteItem.getItems().get(i).isComposite()) {
-//                innerComposite(compoiteItem.getItems().get(i), node);
-            } else {
-                addTreeNode(compoiteItem.getItems().get(i), node);
-            }
-        }
-    }
-
-
-    private String getItemName(IBaseItem iBaseItem) {
-        if (iBaseItem.getDataVO().itemIdentifier != null && !iBaseItem.getDataVO().itemIdentifier.equals("")) {
-            return iBaseItem.getDataVO().itemIdentifier;
+    private String getItemName(IBaseItem baseItem) {
+        String itemIdentifier = baseItem.getDataVO().itemIdentifier;
+        if (itemIdentifier != null && !itemIdentifier.isEmpty()) {
+            return itemIdentifier;
         } else {
-            String className = iBaseItem.getDataVO().getClass().getSimpleName().toString();
-
-            if (className.equals("SimpleImageVO")) {
-                return "Image";
-            } else if (className.equals("Image9patchVO")) {
-                return "9PatchImage";
-            } else if (className.equals("TextBoxVO")) {
-                return "TextBbox";
-            } else if (className.equals("ButtonVO")) {
-                return "Button";
-            } else if (className.equals("LabelVO")) {
-                return "Label";
-            } else if (className.equals("CompositeItemVO")) {
-                return "CompositeItem";
-            } else if (className.equals("CheckBoxVO")) {
-                return "CheckBox";
-            } else if (className.equals("SelectBoxVO")) {
-                return "SelectBox";
-            } else if (className.equals("ParticleEffectVO")) {
-                return "ParticleEffect";
-            } else if (className.equals("LightVO")) {
-                return "Light";
-            } else if (className.equals("SpineVO")) {
-                return "Spine";
-            } else if (className.equals("SpriteAnimationVO")) {
-                return "SpriteAnimation";
-            } else {
-                return "unknown";
+            String className = baseItem.getDataVO().getClass().getSimpleName();
+            switch (className) {
+                case "SimpleImageVO":
+                    return "Image";
+                case "Image9patchVO":
+                    return "9PatchImage";
+                case "TextBoxVO":
+                    return "TextBox";
+                case "ButtonVO":
+                    return "Button";
+                case "LabelVO":
+                    return "Label";
+                case "CompositeItemVO":
+                    return "CompositeItem";
+                case "CheckBoxVO":
+                    return "CheckBox";
+                case "SelectBoxVO":
+                    return "SelectBox";
+                case "ParticleEffectVO":
+                    return "ParticleEffect";
+                case "LightVO":
+                    return "Light";
+                case "SpineVO":
+                    return "Spine";
+                case "SpriteAnimationVO":
+                    return "SpriteAnimation";
+                default:
+                    return "unknown";
             }
         }
     }
 
-
-    private Node addTreeNode(CompositeItem sceneItems, boolean isRoot) {
-        Node moo = new Node(new Label((isRoot) ? "root" : getItemName(sceneItems), skin));
-        moo.setObject(sceneItems);
-        tree.add(moo);
-        //addClickListener(moo,sceneItems);
-        return moo;
+    private Node addTreeRoot(CompositeItem compoiteItem, Node parentNode) {
+        Node node = addTreeNode(compoiteItem, parentNode);
+        ArrayList<IBaseItem> items = compoiteItem.getItems();
+        for (IBaseItem item : items) {
+            if (item.isComposite()) {
+                addTreeRoot((CompositeItem) item, node);
+            } else {
+                addTreeNode(item, node);
+            }
+        }
+        return node;
     }
 
-    private void addTreeNode(IBaseItem iBaseItem, Node node) {
-        Node moo = new Node(new Label(getItemName(iBaseItem), skin));
-        moo.setObject(iBaseItem);
-        node.add(moo);
-    }
-
-    private Node getNode(IBaseItem iBaseItem, Node node) {
-        Node moo = new Node(new Label(getItemName(iBaseItem), skin));
-        moo.setObject(iBaseItem);
-        node.add(moo);
-        return moo;
+    private Node addTreeNode(IBaseItem baseItem, Node parentNode) {
+        Node node = new Node(new VisLabel(parentNode == null ? "root" : getItemName(baseItem)));
+        node.setObject(baseItem);
+        if (parentNode != null) {
+            parentNode.add(node);
+        } else {
+            tree.add(node);
+        }
+        return node;
     }
 
 
@@ -200,17 +125,23 @@ public class UIItemsTreeBox extends VisWindow {
         if (tree == null) return;
         tree.getSelection().clear();
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
-        Iterator it = currentSelection.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry pairs = (Map.Entry) it.next();
+        for (Object o : currentSelection.entrySet()) {
+            Map.Entry pairs = (Map.Entry) o;
             for (int i = 0; i < allSceneRootNodes.size; i++) {
-                if (((IBaseItem) allSceneRootNodes.get(i).getObject()).equals(pairs.getKey())) {
+                if ((allSceneRootNodes.get(i).getObject()).equals(pairs.getKey())) {
                     tree.getSelection().add(allSceneRootNodes.get(i));
                 }
             }
             //it.remove();
         }
+    }
 
 
+    private class TreeChangeListener extends ChangeListener {
+
+        @Override
+        public void changed(ChangeEvent event, Actor actor) {
+            facade.sendNotification(ITEMS_SELECTED, tree.getSelection());
+        }
     }
 }
