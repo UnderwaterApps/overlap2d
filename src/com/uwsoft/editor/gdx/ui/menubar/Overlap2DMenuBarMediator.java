@@ -23,6 +23,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.data.manager.DataManager;
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
@@ -30,6 +31,7 @@ import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
+
 import org.apache.commons.io.filefilter.SuffixFileFilter;
 
 import java.lang.reflect.InvocationTargetException;
@@ -131,7 +133,10 @@ public class Overlap2DMenuBarMediator {
     }
 
     private void onProjectOpened() {
-		  overlap2DMenuBar.reInitScenes(dataManager.currentProjectInfoVO.scenes);
+		overlap2DMenuBar.reInitScenes(dataManager.currentProjectInfoVO.scenes);
+		PreferencesManager prefs = PreferencesManager.getInstance();
+		prefs.buildRecentHistory();
+		overlap2DMenuBar.reInitRecent(prefs.getRecentHistory());
         overlap2DMenuBar.setProjectOpen(true);
     }
 
@@ -149,9 +154,13 @@ public class Overlap2DMenuBarMediator {
 				public void selected(FileHandle file) {
 					 String path = file.file().getAbsolutePath();
 					 if (path.length() > 0) {
-						  dataManager.openProjectFromPath(path);
-						  sandbox.loadCurrentProject();
-						  onProjectOpened();
+						 PreferencesManager prefs = PreferencesManager.getInstance();
+						 prefs.buildRecentHistory();
+						 prefs.pushHistory(path);
+						 
+						 dataManager.openProjectFromPath(path);
+						 sandbox.loadCurrentProject();
+						 onProjectOpened();
 					 }
 				}
 		  });
@@ -184,6 +193,15 @@ public class Overlap2DMenuBarMediator {
     public void setTarget(Overlap2DMenuBar overlap2DMenuBar) {
         this.overlap2DMenuBar = overlap2DMenuBar;
         overlap2DMenuBar.setProjectOpen(false);
+    }
+    
+    public void recentProjectItemClicked(String path) {
+    	PreferencesManager prefs = PreferencesManager.getInstance();
+    	prefs.buildRecentHistory();
+    	prefs.pushHistory(path);
+    	dataManager.openProjectFromPath(path);
+    	sandbox.loadCurrentProject();
+    	onProjectOpened();
     }
 
     public void sceneMenuItemClicked(String sceneName) {
