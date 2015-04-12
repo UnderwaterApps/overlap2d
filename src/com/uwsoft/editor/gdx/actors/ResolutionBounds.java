@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.actors;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.data.manager.TextureManager;
@@ -32,6 +33,9 @@ public class ResolutionBounds extends Group {
     private final TextureManager textureManager;
     private float width;
     private float height;
+
+	 private PixelRect resolutionBounds;
+	 private Label label;
 
     public ResolutionBounds(BaseStage baseStage) {
         textureManager = baseStage.textureManager;
@@ -50,14 +54,23 @@ public class ResolutionBounds extends Group {
     }
 
     private void crateResolutionIndicator() {
-        Label label = new Label((int) width + " x " + (int) height, textureManager.editorSkin);
+        label = new Label((int) width + " x " + (int) height, textureManager.editorSkin);
         label.setX(width - label.getWidth());
         label.setY(height);
         addActor(label);
     }
 
     private void crateBoundsRectangle() {
-        PixelRect resolutionBounds = new PixelRect(width, height);
+        resolutionBounds = new PixelRect(width, height);
         addActor(resolutionBounds);
     }
+
+	 @Override
+	 public void act(float delta) {
+		  super.act(delta);
+
+		  // change size according to zoom
+		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		  resolutionBounds.setThickness(camera.zoom);
+	 }
 }

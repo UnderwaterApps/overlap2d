@@ -20,6 +20,7 @@ package com.uwsoft.editor.gdx.actors;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -71,6 +72,11 @@ public class SelectionRectangle extends PixelRect {
     public void act(float delta) {
         super.act(delta);
 
+
+		  // change size according to zoom
+		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		  setThickness(camera.zoom);
+
         if (mode != EditingMode.TRANSFORM) return;
 
         Vector2 mouseCoords = getMouseLocalCoordinates();
@@ -117,9 +123,6 @@ public class SelectionRectangle extends PixelRect {
         if (!isOver) {
             sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
         }
-
-
-        // change size according to zoom
     }
 
     private Vector2 getMouseLocalCoordinates() {
@@ -238,4 +241,11 @@ public class SelectionRectangle extends PixelRect {
         }
     }
 
+    public float getVisualX() {return Math.min(getX(), getX() + getWidth());}
+    public float getVisualY() {return Math.min(getY(), getY() + getHeight());}
+    public float getVisualWidth() {return Math.abs(getWidth());}
+    public float getVisualHeight() {return Math.abs(getHeight());}
+
+    public float getVisualRightX() {return Math.max(getX(), getX() + getWidth());}
+    public float getVisualTopY() {return Math.max(getY(), getY() + getHeight());}
 }
