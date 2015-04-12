@@ -462,7 +462,7 @@ public class ResolutionManager {
     }
 
     public void deleteResolution(int index) {
-        ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().resolutions.removeIndex(index);
+        ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().resolutions.remove(index);
         try {
             FileUtils.deleteDirectory(new File(dataManager.getWorkspacePath() + "/" + dataManager.currentProjectVO.projectName + "/assets/" + resolutionEntryVO.name));
         } catch (IOException ignored) {
