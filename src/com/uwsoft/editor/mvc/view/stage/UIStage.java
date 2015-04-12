@@ -123,7 +123,7 @@ public class UIStage extends Stage {
     public void loadCurrentProject() {
         uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
-        uiMainTable.itemsBox.init();
+//        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
 
         uiMainTable.layerPanel.initContent();
@@ -135,7 +135,7 @@ public class UIStage extends Stage {
         uiMainTable.libraryPanel.initContent();
 
         uiMainTable.lightBox.initContent();
-        uiMainTable.itemsBox.init();
+//        uiMainTable.itemsBox.init();
     }
 
     public void emptyClick() {

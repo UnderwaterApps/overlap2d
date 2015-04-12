@@ -19,6 +19,10 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
 
 /**
  * Created by sargis on 4/10/15.
@@ -29,5 +33,24 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
 
     public UIItemsTreeBoxMediator() {
         super(NAME, new UIItemsTreeBox());
+    }
+
+    @Override
+    public String[] listNotificationInterests() {
+        return new String[]{
+                Overlap2D.PROJECT_OPENED
+        };
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+        Sandbox sandbox = Sandbox.getInstance();
+        switch (notification.getName()) {
+            case Overlap2D.PROJECT_OPENED:
+                CompositeItem rootScene = sandbox.getCurrentScene();
+//                viewComponent.init(rootScene);
+                break;
+        }
     }
 }

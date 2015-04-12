@@ -70,7 +70,7 @@ public class ItemFactory {
         sceneControl.getCurrentScene().addItem(item);
         sandbox.getSandboxInputAdapter().initItemListeners(item);
         sandbox.saveSceneCurrentSceneData();
-        sandbox.getUIStage().getItemsBox().init();
+//        sandbox.getUIStage().getItemsBox().init();
         itemActor.setX(vo.x);
         itemActor.setY(vo.y);
     }
@@ -332,7 +332,7 @@ public class ItemFactory {
         sceneControl.getCurrentScene().addItem(item);
 
         sandbox.getSandboxInputAdapter().initItemListeners(item);
-        sandbox.getUIStage().getItemsBox().init();
+//        sandbox.getUIStage().getItemsBox().init();
         sandbox.getSelector().setSelection(item, true);
 
         return item;

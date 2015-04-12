@@ -20,7 +20,6 @@ package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.gdx.ui.UILibraryBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.UIPropertiesBox;
@@ -29,10 +28,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.mvc.view.ui.box.UIAlignBox;
-import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIToolBox;
-import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.*;
 
 /**
  * Created by sargis on 9/10/14.
@@ -119,9 +115,10 @@ public class UIMainTable extends VisTable {
 //        leftToolsPanel.add(lightBox);
 //        leftToolsPanel.row();
         //
-        itemsBox = new UIItemsTreeBox(uiStage);
-        itemsBox.initPanel();
-        leftToolsPanel.add(itemsBox);
+        UIItemsTreeBoxMediator uiItemsTreeBoxMediator = facade.retrieveMediator(UIItemsTreeBoxMediator.NAME);
+        itemsBox = uiItemsTreeBoxMediator.getViewComponent();
+//        itemsBox.initPanel();
+        leftToolsPanel.add(itemsBox).expandX().fillX();
         //
         middleTable.add(leftToolsPanel).top().left().expand();
     }

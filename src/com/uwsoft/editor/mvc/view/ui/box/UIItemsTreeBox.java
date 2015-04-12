@@ -47,12 +47,16 @@ public class UIItemsTreeBox extends VisWindow {
 
     public UIItemsTreeBox() {
         super("Items Tree");
+        setMovable(false);
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
+        mainTable = new VisTable();
+        mainTable.addSeparator().padBottom(10);
+        add(mainTable).expandX().fillX();
     }
 
     public void init(CompositeItem rootScene) {
-        mainTable = new VisTable();
+
         tree = new VisTree();
         VisScrollPane scroller = new VisScrollPane(tree);
         scroller.setFlickScroll(false);
@@ -65,6 +69,7 @@ public class UIItemsTreeBox extends VisWindow {
                 addTreeNode(rootScene.getItems().get(i), rootNode);
             }
         }
+
 //        skin = textureManager.editorSkin;
 //        tree = new VisTree();
 //
@@ -124,7 +129,7 @@ public class UIItemsTreeBox extends VisWindow {
 
         for (int i = 0; i < compoiteItem.getItems().size(); i++) {
             if (compoiteItem.getItems().get(i).isComposite()) {
-                innerComposite(compoiteItem.getItems().get(i), node);
+//                innerComposite(compoiteItem.getItems().get(i), node);
             } else {
                 addTreeNode(compoiteItem.getItems().get(i), node);
             }

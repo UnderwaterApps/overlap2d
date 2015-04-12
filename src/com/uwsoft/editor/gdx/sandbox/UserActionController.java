@@ -225,7 +225,7 @@ public class UserActionController {
         }
 
         sandbox.getSelector().setSelections(finalItems, true);
-        sandbox.getUIStage().getItemsBox().init();
+//        sandbox.getUIStage().getItemsBox().init();
     }
 
     private void putItemsToClipboard(ArrayList<IBaseItem> items) {

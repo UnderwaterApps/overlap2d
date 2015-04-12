@@ -279,7 +279,7 @@ public class ItemSelector {
             sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
             selectionRect.remove();
         }
-        sandbox.getSandboxStage().uiStage.getItemsBox().init();
+//        sandbox.getSandboxStage().uiStage.getItemsBox().init();
         currentSelection.clear();
     }
 

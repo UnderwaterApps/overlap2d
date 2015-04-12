@@ -24,6 +24,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
@@ -48,5 +49,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UIResolutionBoxMediator());
         facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new UIAlignBoxMediator());
+        facade.registerMediator(new UIItemsTreeBoxMediator());
     }
 }

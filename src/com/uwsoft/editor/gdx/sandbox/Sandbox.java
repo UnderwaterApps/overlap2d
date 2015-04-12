@@ -259,7 +259,7 @@ public class Sandbox {
     public void enterIntoPrevComposite() {
         sandboxStage.getCamera().position.set(0, 0, 0);
 //        uiStage.getCompositePanel().stepUp();
-        uiStage.getItemsBox().init();
+//        uiStage.getItemsBox().init();
     }
 
     /**
@@ -293,7 +293,7 @@ public class Sandbox {
         uiStage.getLightBox().disableAmbiance.setChecked(true);
         //uiStage.getCompositePanel().addScene(compositeItemVO);
         initSceneView(compositeItemVO);
-        uiStage.getItemsBox().init();
+//        uiStage.getItemsBox().init();
     }
 
     /**
