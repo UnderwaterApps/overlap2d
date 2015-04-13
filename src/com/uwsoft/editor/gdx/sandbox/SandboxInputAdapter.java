@@ -175,21 +175,15 @@ public class SandboxInputAdapter extends InputAdapter {
 			  }
 
 
-				float[] touchedItemDiff = new float[2];
-				float[] tmp = sandbox.getSelector().getCurrentSelection().get(item).getTouchDiff();
-				System.arraycopy(tmp, 0, touchedItemDiff, 0, tmp.length);
-
-				// temp fix
-				if(sandbox.gridSize == 1) {
-					 touchedItemDiff[0] = 0;
-					 touchedItemDiff[1] = 0;
-				}
-
 				 // Selection rectangles should move and follow along
 				 for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 					 float[] diff = value.getTouchDiff();
-					  value.getHostAsActor().setX(newX - diff[0] + touchedItemDiff[0]);
-					  value.getHostAsActor().setY(newY - diff[1] + touchedItemDiff[1]);
+
+					  diff[0] = MathUtils.floor(diff[0] / gridSize)*gridSize;
+					  diff[1] = MathUtils.floor(diff[1] / gridSize)*gridSize;
+
+					  value.getHostAsActor().setX(newX - diff[0]);
+					  value.getHostAsActor().setY(newY - diff[1]);
 					  value.hide();
 				 }
 		  }
