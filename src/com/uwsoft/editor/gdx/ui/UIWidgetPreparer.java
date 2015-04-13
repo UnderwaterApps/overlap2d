@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
@@ -25,17 +26,17 @@ final public class UIWidgetPreparer {
 
     public static TextField textFieldBroker(TextField textField, boolean enableNumberHandling, Consumer<String> onApplyText) {
 
-        final FocusChecker focusChecker = new FocusChecker();
-
-        // on focus change
-        textField.addListener(new FocusChecker() {
+        final FocusChecker focusListener = new FocusChecker() {
             public void keyboardFocusChanged(FocusListener.FocusEvent event, Actor actor, boolean focused) {
                 super.keyboardFocusChanged(event, actor, focused);
                 if (!focused) {
                     onApplyText.accept(textField.getText());
                 }
             }
-        });
+        };
+
+        // on focus change
+        textField.addListener(focusListener);
 
         // on pressing enter
         textField.addListener(new InputListener() {
@@ -47,11 +48,11 @@ final public class UIWidgetPreparer {
             }
         });
 
-
-        final ChangeValueByInput valChanger = new ChangeValueByInput(textField, focusChecker, onApplyText);
-
         // number value handling
         if (enableNumberHandling) {
+
+            final ChangeValueByInput valChanger = new ChangeValueByInput(textField, focusListener, onApplyText);
+
             textField.addListener(valChanger);
             textField.addAction(forever(run(() ->
                             valChanger.update(Gdx.graphics.getDeltaTime())
@@ -114,7 +115,7 @@ final public class UIWidgetPreparer {
         @Override
         public boolean scrolled(InputEvent event, float x, float y, int amount) {
             System.out.println("scroll amount: " + amount);
-            return super.scrolled(event, x, y, amount);
+            return true;
         }
 
         private void changeValueByFixStep() {

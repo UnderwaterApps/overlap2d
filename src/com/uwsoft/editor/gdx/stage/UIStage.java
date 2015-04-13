@@ -27,7 +27,6 @@ import com.uwsoft.editor.gdx.ui.*;
 import com.uwsoft.editor.gdx.ui.dialogs.DialogSystem;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
-import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBar;
 import com.uwsoft.editor.gdx.ui.menubar.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
