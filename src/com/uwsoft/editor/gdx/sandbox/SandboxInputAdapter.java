@@ -47,7 +47,11 @@ public class SandboxInputAdapter extends InputAdapter {
 	private float lastX = 0;
 	private float lastY = 0;
 
+	private boolean isDragging = false;
+	private boolean currentTouchedItemWasSelected = false;
+
 	private final Vector2 dragStartPosition = new Vector2();
+	private final Vector2 reducedMoveDirection = new Vector2(0,0);
 	private boolean reducedMouseMoveEnabled = false;
 
     public SandboxInputAdapter (Sandbox sandbox) {
@@ -59,28 +63,30 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // Making sure we have fresh VO data
 		 item.updateDataVO();
 
+		 currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
+
+		 // if shift is pressed we are in add/remove selection mode
+		 if (isShiftPressed()) {
+
+			 //TODO block selection handling
+			 if(!currentTouchedItemWasSelected) {
+				 // item was not selected, adding it to selection
+				 sandbox.getSelector().setSelection(item, false);
+			 }
+		 } else {
+
+			 if (item.isLockedByLayer()) {
+				 // this is considered empty space click and thus should release all selections
+				 sandbox.getSelector().clearSelections();
+			 } else {
+				 // select this item and remove others from selection
+				 sandbox.getSelector().setSelection(item, true);
+			 }
+		 }
+
 		  // If currently panning do nothing regarding this item, panning will take over
 		  if (sandbox.cameraPanOn) {
 				return false;
-		  }
-
-		  // if shift is pressed we are in add/remove selection mode
-		  if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-				if(sandbox.getSelector().getCurrentSelection().get(item) != null) {
-					 // item was selected, so we need to release it
-					 sandbox.getSelector().releaseSelection(item);
-				} else {
-					 // item was not selected, adding it to selection
-					 sandbox.getSelector().setSelection(item, false);
-				}
-		  } else {
-				if (item.isLockedByLayer()) {
-					 // this is considered empty space click and thus should release all selections
-					 sandbox.getSelector().clearSelections();
-				} else {
-					 // select this item and remove others from selection
-					 sandbox.getSelector().setSelection(item, true);
-				}
 		  }
 
 		  // remembering local touch position for each of selected items, if planning to drag
@@ -99,7 +105,17 @@ public class SandboxInputAdapter extends InputAdapter {
 
 	 private void itemTouchUp(IBaseItem item, InputEvent event, float x, float y, int button) {
 
-		  sandbox.getSelector().flushAllSelectedItems();
+
+		if (currentTouchedItemWasSelected && !isDragging) {
+			// item was selected (and no dragging was performed), so we need to release it
+			if (isShiftPressed()) {
+				sandbox.getSelector().releaseSelection(item);
+			}
+		}
+
+
+		 sandbox.getSelector().flushAllSelectedItems();
+
 
 		  // if panning was taking place - do nothing else. (other touch up got this)
 		  if (sandbox.cameraPanOn) {
@@ -132,7 +148,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  sandbox.flow.applyPendingAction();
 	 }
 
-	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y, Vector2 useReducedMoveFixPoint) {
+	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y, Vector2 useReducedMoveFixPoint, boolean isFirstDragCall) {
 
 		  // if there is no resizing going on, the item was touched,
 		  // the button is in and we are dragging... well you can probably be safe about saying - we do.
@@ -144,9 +160,12 @@ public class SandboxInputAdapter extends InputAdapter {
 
 			  if (useReducedMoveFixPoint != null) {
 				  Vector2 reducedMoveDiff = useReducedMoveFixPoint.cpy().scl(-1).add(event.getStageX(), event.getStageY());
-				  int moveHorizontallyRatio = (Math.abs(reducedMoveDiff.x) >= Math.abs(reducedMoveDiff.y))? 1 : 0;
-				  newX = useReducedMoveFixPoint.x + moveHorizontallyRatio * reducedMoveDiff.x;
-				  newY = useReducedMoveFixPoint.y + (moveHorizontallyRatio^1) * reducedMoveDiff.y;
+				  if (isFirstDragCall) {
+					  int moveHorizontallyRatio = (Math.abs(reducedMoveDiff.x) >= Math.abs(reducedMoveDiff.y))? 1 : 0;
+					  reducedMoveDirection.set(moveHorizontallyRatio, moveHorizontallyRatio^1);
+				  }
+				  newX = useReducedMoveFixPoint.x + reducedMoveDirection.x * reducedMoveDiff.x;
+				  newY = useReducedMoveFixPoint.y + reducedMoveDirection.y * reducedMoveDiff.y;
 			  } else {
 				  newX = event.getStageX();
 				  newY = event.getStageY();
@@ -173,13 +192,13 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // mouse scroll should rotate the selection around it's origin
 		  if (sandbox.isItemTouched) {
 				for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-					 float degreeAmmount = 1;
-					 if (amount < 0) degreeAmmount = -1;
+					 float degreeAmount = 1;
+					 if (amount < 0) degreeAmount = -1;
 					 // And if shift is pressed, the rotation amount is bigger
 					 if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-						  degreeAmmount = degreeAmmount * 30;
+						  degreeAmount = degreeAmount * 30;
 					 }
-					 value.getHostAsActor().rotateBy(degreeAmmount);
+					 value.getHostAsActor().rotateBy(degreeAmount);
 					 value.update();
 				}
 				sandbox.dirty = true;
@@ -275,6 +294,16 @@ public class SandboxInputAdapter extends InputAdapter {
 		  }
 	 }
 
+	private boolean isShiftKey(int keycode) {
+		return keycode == Input.Keys.SHIFT_LEFT
+				|| keycode == Input.Keys.SHIFT_RIGHT;
+	}
+
+	private boolean isShiftPressed() {
+		return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
+				|| Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+	}
+
 	 private boolean isControlKey(int keycode) {
 		 return keycode == Input.Keys.SYM
 				 || keycode == Input.Keys.CONTROL_LEFT
@@ -301,7 +330,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // TODO: need to make sure OSX Command button works too.
 
 
-		 if (isControlKey(keycode)) {
+		 if (isShiftKey(keycode)) {
 			 reducedMouseMoveEnabled = true;
 			 System.out.println("pressed");
 		 }
@@ -415,7 +444,8 @@ public class SandboxInputAdapter extends InputAdapter {
 				sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
 				sandbox.cameraPanOn = false;
 		  }
-		  if (isControlKey(keycode)) {
+		  if (!isShiftPressed()) {
+			  reducedMoveDirection.setZero();
 			  reducedMouseMoveEnabled = false;
 		  }
 		  return true;
@@ -432,19 +462,22 @@ public class SandboxInputAdapter extends InputAdapter {
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
+				super.touchUp(event, x, y, pointer, button);
 
-					 itemTouchUp(eventItem, event, x, y, button);
+				itemTouchUp(eventItem, event, x, y, button);
 
 					 if (getTapCount() == 2) {
 						  // this is double click
-						  itemDoubleClick(eventItem, event, x, y, button);
+						 itemDoubleClick(eventItem, event, x, y, button);
 					 }
+				isDragging = false;
             }
 
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
+				boolean isFirstDrag = !isDragging;
+				isDragging = true;
 				Vector2 useReducedMoveFixPoint = (reducedMouseMoveEnabled)? dragStartPosition : null;
-				itemTouchDragged(eventItem, event, x, y, useReducedMoveFixPoint);
+				itemTouchDragged(eventItem, event, x, y, useReducedMoveFixPoint, isFirstDrag);
             }
         };
 
