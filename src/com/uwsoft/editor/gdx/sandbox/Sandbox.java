@@ -69,6 +69,8 @@ public class Sandbox {
 
 	 private float zoomPercent = 100;
 
+	 public int gridSize = 1;
+
     /**
      * this part contains legacy params that need to be removed one by one
      */

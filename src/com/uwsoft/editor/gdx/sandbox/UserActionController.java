@@ -19,6 +19,7 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Json;
@@ -51,6 +52,8 @@ public class UserActionController {
         LayerItemVO layer  = sandbox.getSelectedLayer();
         if(layer == null) return;
 
+		  x = MathUtils.floor(x / sandbox.gridSize)*sandbox.gridSize;
+		  y = MathUtils.floor(y / sandbox.gridSize)*sandbox.gridSize;
         sandbox.getItemFactory().createImageItem(layer, regionName, x, y);
     }
 
