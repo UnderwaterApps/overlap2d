@@ -18,8 +18,12 @@
 
 package com.uwsoft.editor.gdx.ui;
 
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.properties.*;
+import com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox;
+import com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.*;
 
@@ -171,10 +175,12 @@ public class UIPropertiesBox extends ExpandableUIBox {
 
     public void showPhysicsParams() {
         initView();
-        ProjectGeneralPropertiesBox physicsPropertiesBox = new ProjectGeneralPropertiesBox(stage);
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        ProjectGeneralPropertiesBoxMediator projectGeneralPropertiesBoxMediator = facade.retrieveMediator(ProjectGeneralPropertiesBoxMediator.NAME);
+        ProjectGeneralPropertiesBox physicsPropertiesBox = projectGeneralPropertiesBoxMediator.getViewComponent();
 //        physicsPropertiesBox.setObject(currentItem);
-        physicsPropertiesBox.setX(getWidth() / 2 - physicsPropertiesBox.getWidth() / 2);
-        physicsPropertiesBox.setY(getHeight() - physicsPropertiesBox.getHeight() - 20);
+//        physicsPropertiesBox.setX(getWidth() / 2 - physicsPropertiesBox.getWidth() / 2);
+//        physicsPropertiesBox.setY(getHeight() - physicsPropertiesBox.getHeight() - 20);
         mainLayer.addActor(physicsPropertiesBox);
     }
 }
