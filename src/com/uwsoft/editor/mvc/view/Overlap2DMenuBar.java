@@ -27,11 +27,8 @@ import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
-import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
-import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.SceneVO;
-
 import org.apache.commons.lang3.SystemUtils;
 
 import java.io.File;
@@ -44,6 +41,7 @@ public class Overlap2DMenuBar extends MenuBar {
     public static final String OPEN_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".OPEN_PROJECT";
     public static final String SAVE_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SAVE_PROJECT";
     public static final String IMPORT_TO_LIBRARY = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".IMPORT_TO_LIBRARY";
+    public static final String RECENT_PROJECTS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".RECENT_PROJECTS";
     public static final String EXPORT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT";
     public static final String EXPORT_SETTINGS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT_SETTINGS";
     public static final String EXIT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXIT";
@@ -81,9 +79,9 @@ public class Overlap2DMenuBar extends MenuBar {
     public void reInitScenes(ArrayList<SceneVO> scenes) {
         fileMenu.reInitScenes(scenes);
     }
-    
-    public void reInitRecent(ArrayList<String> paths) { 
-    	fileMenu.reInitRecent(paths);
+
+    public void reInitRecent(ArrayList<String> paths) {
+        fileMenu.reInitRecent(paths);
     }
 
     public void setProjectOpen(boolean open) {
@@ -135,7 +133,7 @@ public class Overlap2DMenuBar extends MenuBar {
         private final MenuItem importToLibrary;
         private final MenuItem export;
         private final MenuItem exportSettings;
-        
+
         private final PopupMenu recentProjectsPopupMenu;
         private final Array<MenuItem> recentProjectsMenuItems;
         private final MenuItem recentProjectsMenuItem;
@@ -173,7 +171,6 @@ public class Overlap2DMenuBar extends MenuBar {
             addRecent(prefs.getRecentHistory());
             //
             addSeparator();
-            addItem(new MenuItem("Exit", new FileMenuListener(FileMenuCommand.EXIT)));
             addItem(new MenuItem("Exit", new MenuItemListener(EXIT, FILE_MENU)));
             sceneMenuItems = new Array<>();
         }
@@ -194,26 +191,26 @@ public class Overlap2DMenuBar extends MenuBar {
             scenesPopupMenu.addSeparator();
             addScenes(scenes);
         }
-        
+
         public String getFolderName(String path) {
-        	File path1 = new File(path);
-        	File path2 = new File(path1.getParent());
-        	return path2.getName();
+            File path1 = new File(path);
+            File path2 = new File(path1.getParent());
+            return path2.getName();
         }
-        
-        public void addRecent(ArrayList<String> paths) { 
-        	for (String path : paths) {
-        		MenuItem menuItem = new MenuItem(getFolderName(path),new RecentProjectListener(path));
-        		recentProjectsMenuItems.add(menuItem);
-        		recentProjectsPopupMenu.addItem(menuItem);
-        	}
+
+        public void addRecent(ArrayList<String> paths) {
+            for (String path : paths) {
+                MenuItem menuItem = new MenuItem(getFolderName(path), new MenuItemListener(RECENT_PROJECTS, FILE_MENU, path));
+                recentProjectsMenuItems.add(menuItem);
+                recentProjectsPopupMenu.addItem(menuItem);
+            }
         }
-        
+
         public void reInitRecent(ArrayList<String> paths) {
-        	recentProjectsMenuItems.clear();
-        	recentProjectsPopupMenu.clear();
-        	
-        	addRecent(paths);
+            recentProjectsMenuItems.clear();
+            recentProjectsPopupMenu.clear();
+
+            addRecent(paths);
         }
 
         public void setProjectOpen(boolean open) {
@@ -223,19 +220,20 @@ public class Overlap2DMenuBar extends MenuBar {
             export.setDisabled(!open);
             exportSettings.setDisabled(!open);
         }
-        
-        private class RecentProjectListener extends ChangeListener {
-        	private final String path;
-        	public RecentProjectListener(String path) {
-        		this.path = path;
-        	}
-        	
-        	@Override
-        	public void changed(ChangeEvent event, Actor actor) {
-        		Gdx.app.log(TAG,"recentProject : " + path);
-        		mediator.recentProjectItemClicked(path);
-        	}
-        }
+
+//        private class RecentProjectListener extends ChangeListener {
+//            private final String path;
+//
+//            public RecentProjectListener(String path) {
+//                this.path = path;
+//            }
+//
+//            @Override
+//            public void changed(ChangeEvent event, Actor actor) {
+//                Gdx.app.log(TAG, "recentProject : " + path);
+//                mediator.recentProjectItemClicked(path);
+//            }
+//        }
     }
 
     private class MenuItemListener extends ChangeListener {
