@@ -29,7 +29,7 @@ import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
-public class PhysicsPropertiesBox extends PropertyBox {
+public class ProjectGeneralPropertiesBox extends PropertyBox {
 
     private final SceneVO currentSceneVO;
     private final PhysicsPropertiesVO physicsPropertiesVO;
@@ -39,7 +39,7 @@ public class PhysicsPropertiesBox extends PropertyBox {
     private TextBoxItem sleepVelocityValue;
     private CheckBoxItem enableCheckbox;
 
-    public PhysicsPropertiesBox(UIStage stage) {
+    public ProjectGeneralPropertiesBox(UIStage stage) {
         super(stage.sceneLoader, "PhysicsItemProperties");
         currentSceneVO = stage.getSandbox().sceneControl.getCurrentSceneVO();
         physicsPropertiesVO = currentSceneVO.physicsPropertiesVO;

@@ -171,7 +171,7 @@ public class UIPropertiesBox extends ExpandableUIBox {
 
     public void showPhysicsParams() {
         initView();
-        PhysicsPropertiesBox physicsPropertiesBox = new PhysicsPropertiesBox(stage);
+        ProjectGeneralPropertiesBox physicsPropertiesBox = new ProjectGeneralPropertiesBox(stage);
 //        physicsPropertiesBox.setObject(currentItem);
         physicsPropertiesBox.setX(getWidth() / 2 - physicsPropertiesBox.getWidth() / 2);
         physicsPropertiesBox.setY(getHeight() - physicsPropertiesBox.getHeight() - 20);
