@@ -49,7 +49,7 @@ public class UIPropertiesBox extends ExpandableUIBox {
         if (currentItem == null) return;
         SceneLoader sceneLoader = stage.sceneLoader;
 
-        basicBox = new BasicItemProperties(stage.getSandbox(), sceneLoader);
+        basicBox = new BasicItemProperties();
         basicBox.setObject(currentItem);
         basicBox.setX(getWidth() / 2 - basicBox.getWidth() / 2);
         basicBox.setY(getHeight() - basicBox.getHeight() - 20);

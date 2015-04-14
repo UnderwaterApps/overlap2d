@@ -25,8 +25,13 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -39,7 +44,8 @@ import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
 
-public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBaseItem> {
+public class BasicItemProperties extends VisTable implements IPropertyBox<IBaseItem> {
+    protected IBaseItem item = null;
 
     private final Sandbox sandbox;
     private TextField idBox;
@@ -63,99 +69,136 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
     private Actor itemActor;
     private TextBoxItem rotationVal;
 
-    public BasicItemProperties(Sandbox sandbox, SceneLoader scene) {
-        super(scene, "BasicItemProperties");
-        this.sandbox = sandbox;
+    public BasicItemProperties() {
+        this.sandbox = Sandbox.getInstance();
         tintColorComponent = new ColorPickerButton();
-        LabelItem tintLbl = ui.getLabelById("tintLbl");
-        tintColorComponent.setX(tintLbl.getX() + tintLbl.getWidth() + 5);
-        tintColorComponent.setY(tintLbl.getY() - 3);
-        addActor(tintColorComponent);
+        pad(15);
+//        LabelItem tintLbl = ui.getLabelById("tintLbl");
+//        tintColorComponent.setX(tintLbl.getX() + tintLbl.getWidth() + 5);
+//        tintColorComponent.setY(tintLbl.getY() - 3);
+//        addActor(tintColorComponent);
+        debug();
+        add(new VisLabel("Identifier:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisTextField()).width(120).colspan(2);
+        row().padTop(5);
+        add(new VisLabel("X:", Align.right)).padRight(10).width(50).right();
+        add(new VisTextField()).width(55).padRight(10);
+        add(new VisLabel("Y:", Align.right)).padRight(10).width(50).right();
+        add(new VisTextField()).width(55);
+        row().padTop(5);
+        add(new VisLabel("Width:", Align.right)).padRight(10).width(55).right();
+        add(new VisTextField()).width(55).padRight(10);
+        add(new VisLabel("Height:", Align.right)).padRight(10).width(55).right();
+        add(new VisTextField()).width(55);
+        row().padTop(5);
+        add(new VisLabel("Scale X:", Align.right)).padRight(10).width(55).right();
+        add(new VisTextField()).width(55).padRight(10);
+        add(new VisLabel("Scale Y:", Align.right)).padRight(10).width(55).right();
+        add(new VisTextField()).width(55);
+        row().padTop(5);
+        add(new VisLabel("Flip X:", Align.right)).padRight(10).width(55).right();
+        add(new VisCheckBox(null)).padRight(10).left();
+        add(new VisLabel("Flip Y:", Align.right)).padRight(10).width(55).right();
+        add(new VisCheckBox(null)).left();
+        row().padTop(5);
+        add(new VisLabel("Rotation:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisTextField()).width(120).colspan(2);
+        row().padTop(5);
+        add(new VisLabel("Rotation:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisTextField()).width(120).colspan(2);
+        row().padTop(5);
+        add(new VisLabel("Tint:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new ColorPickerButton()).width(120).colspan(2);
     }
 
     @Override
     public void setObject(IBaseItem object) {
-        item = object;
-        itemActor = (Actor) object;
+//        item = object;
+//        itemActor = (Actor) object;
+//
+//        idBox = ui.getTextBoxById("itemIdTxt");
+//        idBox.setText(item.getDataVO().itemIdentifier);
+//
+//        xVal = ui.getTextBoxById("xVal");
+//        yVal = ui.getTextBoxById("yVal");
+//
+//        widthVal = ui.getTextBoxById("widthVal");
+//        heightVal = ui.getTextBoxById("heightVal");
+//        rotationVal = ui.getTextBoxById("rotationVal");
+//
+//        xVal.setText(roundTwoDecimals(itemActor.getX()) + "");
+//        yVal.setText(roundTwoDecimals(itemActor.getY()) + "");
+//
+//        final String className = item.getClass().getSimpleName();
+//
+//        if (className.equals("LabelItem")) {
+//            widthVal.setText(roundTwoDecimals(itemActor.getWidth()) + "");
+//            heightVal.setText(roundTwoDecimals(itemActor.getHeight()) + "");
+//        } else {
+//            widthVal.setText(roundTwoDecimals(itemActor.getWidth() * itemActor.getScaleX()) + "");
+//            heightVal.setText(roundTwoDecimals(itemActor.getHeight() * itemActor.getScaleY()) + "");
+//        }
+//
+//        rotationVal.setText(String.valueOf(itemActor.getRotation()));
+//
+//        scalexVal = ui.getTextBoxById("scalexVal");
+//        scaleyVal = ui.getTextBoxById("scaleyVal");
+//
+//        customVarsBtn = ui.getTextButtonById("customVarsBtn");
+//
+//        scalexVal.setText(roundTwoDecimals(((Actor) item).getScaleX()) + "");
+//        scaleyVal.setText(roundTwoDecimals(((Actor) item).getScaleY()) + "");
+//
+//        flipV = ui.getCheckBoxById("flipV");
+//        flipH = ui.getCheckBoxById("flipH");
+//        if (((Actor) item).getScaleY() < 0) {
+//            flipV.setChecked(true);
+//        }
+//        if (((Actor) item).getScaleX() < 0) {
+//            flipH.setChecked(true);
+//        }
+//
+//        tintColorComponent.setColorValue(((Actor) item).getColor());
+//
+//
+//        setListeners();
+    }
 
-        idBox = ui.getTextBoxById("itemIdTxt");
-        idBox.setText(item.getDataVO().itemIdentifier);
+    @Override
+    public void initView() {
 
-        xVal = ui.getTextBoxById("xVal");
-        yVal = ui.getTextBoxById("yVal");
-
-        widthVal = ui.getTextBoxById("widthVal");
-        heightVal = ui.getTextBoxById("heightVal");
-        rotationVal = ui.getTextBoxById("rotationVal");
-
-        xVal.setText(roundTwoDecimals(itemActor.getX()) + "");
-        yVal.setText(roundTwoDecimals(itemActor.getY()) + "");
-
-        final String className = item.getClass().getSimpleName();
-
-        if (className.equals("LabelItem")) {
-            widthVal.setText(roundTwoDecimals(itemActor.getWidth()) + "");
-            heightVal.setText(roundTwoDecimals(itemActor.getHeight()) + "");
-        } else {
-            widthVal.setText(roundTwoDecimals(itemActor.getWidth() * itemActor.getScaleX()) + "");
-            heightVal.setText(roundTwoDecimals(itemActor.getHeight() * itemActor.getScaleY()) + "");
-        }
-
-        rotationVal.setText(String.valueOf(itemActor.getRotation()));
-
-        scalexVal = ui.getTextBoxById("scalexVal");
-        scaleyVal = ui.getTextBoxById("scaleyVal");
-
-        customVarsBtn = ui.getTextButtonById("customVarsBtn");
-
-        scalexVal.setText(roundTwoDecimals(((Actor) item).getScaleX()) + "");
-        scaleyVal.setText(roundTwoDecimals(((Actor) item).getScaleY()) + "");
-
-        flipV = ui.getCheckBoxById("flipV");
-        flipH = ui.getCheckBoxById("flipH");
-        if (((Actor) item).getScaleY() < 0) {
-            flipV.setChecked(true);
-        }
-        if (((Actor) item).getScaleX() < 0) {
-            flipH.setChecked(true);
-        }
-
-        tintColorComponent.setColorValue(((Actor) item).getColor());
-
-
-        setListeners();
     }
 
     @Override
     public void updateView() {
-        xVal.setText(roundTwoDecimals(((Actor) item).getX()) + "");
-        yVal.setText(roundTwoDecimals(((Actor) item).getY()) + "");
-
-
-        final String className = item.getClass().getSimpleName();
-
-        if (className.equals("LabelItem")) {
-            widthVal.setText(roundTwoDecimals(itemActor.getWidth()) + "");
-            heightVal.setText(roundTwoDecimals(itemActor.getHeight()) + "");
-        } else {
-            widthVal.setText(roundTwoDecimals(itemActor.getWidth() * itemActor.getScaleX()) + "");
-            heightVal.setText(roundTwoDecimals(itemActor.getHeight() * itemActor.getScaleY()) + "");
-        }
-
-
-        rotationVal.setText(String.valueOf(itemActor.getRotation()));
-
-        scalexVal.setText(roundTwoDecimals(((Actor) item).getScaleX()) + "");
-        scaleyVal.setText(roundTwoDecimals(((Actor) item).getScaleY()) + "");
-
-        if (((Actor) item).getScaleY() < 0) {
-            flipV.setChecked(true);
-        }
-        if (((Actor) item).getScaleX() < 0) {
-            flipH.setChecked(true);
-        }
-
-        tintColorComponent.setColorValue(((Actor) item).getColor());
+//        xVal.setText(roundTwoDecimals(((Actor) item).getX()) + "");
+//        yVal.setText(roundTwoDecimals(((Actor) item).getY()) + "");
+//
+//
+//        final String className = item.getClass().getSimpleName();
+//
+//        if (className.equals("LabelItem")) {
+//            widthVal.setText(roundTwoDecimals(itemActor.getWidth()) + "");
+//            heightVal.setText(roundTwoDecimals(itemActor.getHeight()) + "");
+//        } else {
+//            widthVal.setText(roundTwoDecimals(itemActor.getWidth() * itemActor.getScaleX()) + "");
+//            heightVal.setText(roundTwoDecimals(itemActor.getHeight() * itemActor.getScaleY()) + "");
+//        }
+//
+//
+//        rotationVal.setText(String.valueOf(itemActor.getRotation()));
+//
+//        scalexVal.setText(roundTwoDecimals(((Actor) item).getScaleX()) + "");
+//        scaleyVal.setText(roundTwoDecimals(((Actor) item).getScaleY()) + "");
+//
+//        if (((Actor) item).getScaleY() < 0) {
+//            flipV.setChecked(true);
+//        }
+//        if (((Actor) item).getScaleX() < 0) {
+//            flipH.setChecked(true);
+//        }
+//
+//        tintColorComponent.setColorValue(((Actor) item).getColor());
     }
 
     private void setListeners() {
@@ -174,8 +217,8 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             }
 
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            	CustomVariablesDialog dlg = new CustomVariablesDialog(item);
-            	sandbox.getUIStage().addActor(dlg);
+                CustomVariablesDialog dlg = new CustomVariablesDialog(item);
+                sandbox.getUIStage().addActor(dlg);
             }
         });
 
