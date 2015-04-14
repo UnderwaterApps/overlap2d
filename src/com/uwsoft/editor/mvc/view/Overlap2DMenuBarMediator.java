@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -124,6 +125,10 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 //showDialog("showImportDialog");
                 break;
+            case Overlap2DMenuBar.RECENT_PROJECTS:
+                recentProjectItemClicked(notification.getBody());
+                //showDialog("showImportDialog");
+                break;
             case Overlap2DMenuBar.EXPORT:
                 projectManager.exportProject();
                 break;
@@ -203,6 +208,16 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             }
         });
         sandbox.getUIStage().addActor(fileChooser.fadeIn());
+    }
+
+    public void recentProjectItemClicked(String path) {
+        PreferencesManager prefs = PreferencesManager.getInstance();
+        prefs.buildRecentHistory();
+        prefs.pushHistory(path);
+        Sandbox sandbox = Sandbox.getInstance();
+        projectManager.openProjectFromPath(path);
+        sandbox.loadCurrentProject();
+        onProjectOpened();
     }
 
     public void sceneMenuItemClicked(String sceneName) {
