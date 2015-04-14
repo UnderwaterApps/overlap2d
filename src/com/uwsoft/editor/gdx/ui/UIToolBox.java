@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.kotcrab.vis.ui.widget.Tooltip;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -48,18 +49,18 @@ public class UIToolBox extends UIBox {
         btnGroup.setMaxCheckCount(1);
         btnGroup.setMinCheckCount(1);
 
-        Button mainIcon = addButton("mainIcon", true);
-        Button resizeIcon = addButton("resizeIcon", true);
+        Button mainIcon = addButton("mainIcon", "Selection", true);
+        Button resizeIcon = addButton("resizeIcon", "Transform", true);
         //
-        Button topIcon = addButton("alignIconL", false);
+        Button topIcon = addButton("alignIconL", "Top", false);
         topIcon.setTransform(true);
         topIcon.setRotation(-90);
-        Button leftIcon = addButton("alignIconL", false);
+        Button leftIcon = addButton("alignIconL", "Left", false);
         leftIcon.setTransform(true);
-        Button bottomIcon = addButton("alignIconL", false);
+        Button bottomIcon = addButton("alignIconL", "Bottom", false);
         bottomIcon.setTransform(true);
         bottomIcon.setRotation(90);
-        Button rightIcon = addButton("alignIconL", false);
+        Button rightIcon = addButton("alignIconL", "Right", false);
         rightIcon.setTransform(true);
         rightIcon.setRotation(180);
 
@@ -158,14 +159,19 @@ public class UIToolBox extends UIBox {
             }
         });
     }
-
+    
     private Button addButton(String img, boolean isCheckButton) {
-        ButtonStyle btnStl = new ButtonStyle();
+        return addButton(img, null, isCheckButton);
+    }
+    
+    private Button addButton(String img, String tooltipText, boolean isCheckButton) {
+    	ButtonStyle btnStl = new ButtonStyle();
         btnStl.up = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img));
         btnStl.down = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img + "Checked"));
 
 
         Button btn = new Button(btnStl);
+        if (tooltipText != null) new Tooltip(btn, tooltipText);
 
         btn.setX(10 + currCol * (btn.getWidth() + 5));
         btn.setY(getHeight() - (currRow + 1) * (btn.getHeight() + 3) - 17);
