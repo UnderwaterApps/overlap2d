@@ -107,7 +107,7 @@ public class EditorResourceManager implements IResourceRetriever {
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
             FreeTypeFontParameter parameter = new FreeTypeFontParameter();
             parameter.size = fontSize;*/
-            BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/arial.fnt"));//generator.generateFont(parameter);
+            BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/arial_12.fnt"));//generator.generateFont(parameter);
             bitmapFonts.put(fontpair, font);
             return font;
         }
