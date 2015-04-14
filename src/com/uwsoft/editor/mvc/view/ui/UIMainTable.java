@@ -79,8 +79,8 @@ public class UIMainTable extends VisTable {
     private void initRightToolsPanel() {
         rightToolsPanel = new Table();
         //
-        propertiesPanel = new UIPropertiesBox(uiStage);
-        propertiesPanel.initPanel();
+        propertiesPanel = new UIPropertiesBox();
+//        propertiesPanel.initPanel();
         rightToolsPanel.add(propertiesPanel).top().fillY();
         rightToolsPanel.row();
         //

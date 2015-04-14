@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box;
+package com.uwsoft.editor.mvc.view.ui.properties;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,16 +31,15 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 
-public class ProjectGeneralPropertiesBox extends VisTable {
+public class UIProjectGeneralProperties extends VisTable {
 
-    public static final String PHYSICS_ENABLED_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".PHYSICS_ENABLED_CHECKBOX_CLICKED";
-    public static final String GRAVITY_X_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".GRAVITY_X_TEXT_FIELD_UPDATED";
-    public static final String GRAVITY_Y_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".GRAVITY_Y_TEXT_FIELD_UPDATED";
-    public static final String SLEEP_VELOCITY_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".SLEEP_VELOCITY_TEXT_FIELD_UPDATED";
-    public static final String ENABLE_LIGHTS_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".ENABLE_LIGHTS_CHECKBOX_CLICKED";
-    public static final String DIFFUSE_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.ProjectGeneralPropertiesBox" + ".DIFFUSE_CHECKBOX_CLICKED";
+    public static final String PHYSICS_ENABLED_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".PHYSICS_ENABLED_CHECKBOX_CLICKED";
+    public static final String GRAVITY_X_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".GRAVITY_X_TEXT_FIELD_UPDATED";
+    public static final String GRAVITY_Y_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".GRAVITY_Y_TEXT_FIELD_UPDATED";
+    public static final String SLEEP_VELOCITY_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".SLEEP_VELOCITY_TEXT_FIELD_UPDATED";
+    public static final String ENABLE_LIGHTS_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".ENABLE_LIGHTS_CHECKBOX_CLICKED";
+    public static final String DIFFUSE_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".DIFFUSE_CHECKBOX_CLICKED";
     //
     private final VisCheckBox physicsEnabledCheckBox;
     private final VisTextField gravityXTextField;
@@ -56,42 +55,43 @@ public class ProjectGeneralPropertiesBox extends VisTable {
 //    private TextBoxItem sleepVelocityValue;
 //    private CheckBoxItem enableCheckbox;
 
-    public ProjectGeneralPropertiesBox() {
+    public UIProjectGeneralProperties() {
 //        //super(stage.sceneLoader, "PhysicsItemProperties");
 //        currentSceneVO = stage.getSandbox().sceneControl.getCurrentSceneVO();
 //        physicsPropertiesVO = currentSceneVO.physicsPropertiesVO;
 //        initValues();
-        debug();
-        pad(15);
-        add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115).colspan(2);
+//        debug();
+        pad(5);
+        add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);
         physicsEnabledCheckBox = new VisCheckBox(null);
         physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
-        add(physicsEnabledCheckBox).left().colspan(2);
+        add(physicsEnabledCheckBox).left();
         row().padTop(5);
-        add("Gravity X:").padRight(5).width(70);
+        add(new VisLabel("Gravity X:", Align.right)).padRight(5).width(115);
         gravityXTextField = new VisTextField();
         gravityXTextField.addListener(new KeyboardListener(GRAVITY_X_TEXT_FIELD_UPDATED));
-        add(gravityXTextField).width(40).padRight(5);
-        add("Gravity Y:").padRight(5).width(70);
+        add(gravityXTextField).width(115);
+        row().padTop(5);
+        add(new VisLabel("Gravity Y:", Align.right)).padRight(5).width(115);
         gravityYTextField = new VisTextField();
         gravityYTextField.addListener(new KeyboardListener(GRAVITY_Y_TEXT_FIELD_UPDATED));
-        add(gravityYTextField).width(40);
+        add(gravityYTextField).width(115);
         row().padTop(5);
-        add(new VisLabel("Sleep velocity:", Align.right)).padRight(5).width(115).colspan(2);
+        add(new VisLabel("Sleep velocity:", Align.right)).padRight(5).width(115);
         sleepVelocityTextField = new VisTextField();
         sleepVelocityTextField.addListener(new KeyboardListener(SLEEP_VELOCITY_TEXT_FIELD_UPDATED));
-        add(sleepVelocityTextField).colspan(2).width(115);
+        add(sleepVelocityTextField).width(115);
         row().padTop(5);
-        addSeparator().colspan(4);
-        add(new VisLabel("Enable lights:", Align.right)).padRight(5).width(115).colspan(2);
+        addSeparator().colspan(2).padTop(5).padBottom(5);
+        add(new VisLabel("Enable lights:", Align.right)).padRight(5).width(115);
         enableLightsCheckBox = new VisCheckBox(null);
         enableLightsCheckBox.addListener(new CheckBoxChangeListener(ENABLE_LIGHTS_CHECKBOX_CLICKED));
-        add(enableLightsCheckBox).left().colspan(2);
+        add(enableLightsCheckBox).left();
         row().padTop(5);
-        add(new VisLabel("Diffuse:", Align.right)).padRight(5).width(115).colspan(2);
+        add(new VisLabel("Diffuse:", Align.right)).padRight(5).width(115);
         diffuseCheckBox = new VisCheckBox(null);
         diffuseCheckBox.addListener(new CheckBoxChangeListener(DIFFUSE_CHECKBOX_CLICKED));
-        add(diffuseCheckBox).left().colspan(2);
+        add(diffuseCheckBox).left();
     }
 
     private void initValues() {

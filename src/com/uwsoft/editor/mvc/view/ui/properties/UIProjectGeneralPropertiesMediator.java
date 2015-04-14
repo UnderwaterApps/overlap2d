@@ -16,18 +16,18 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box;
+package com.uwsoft.editor.mvc.view.ui.properties;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 
 /**
  * Created by sargis on 4/14/15.
  */
-public class ProjectGeneralPropertiesBoxMediator extends SimpleMediator<ProjectGeneralPropertiesBox> {
-    private static final String TAG = ProjectGeneralPropertiesBoxMediator.class.getCanonicalName();
+public class UIProjectGeneralPropertiesMediator extends SimpleMediator<UIProjectGeneralProperties> {
+    private static final String TAG = UIProjectGeneralPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public ProjectGeneralPropertiesBoxMediator() {
-        super(NAME, new ProjectGeneralPropertiesBox());
+    public UIProjectGeneralPropertiesMediator() {
+        super(NAME, new UIProjectGeneralProperties());
     }
 }

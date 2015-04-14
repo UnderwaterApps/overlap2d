@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -37,17 +37,16 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.gdx.ui.dialogs.CustomVariablesDialog;
-import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.gdx.ui.properties.IPropertyBox;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.LabelVO;
 import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
 
-public class BasicItemProperties extends VisTable implements IPropertyBox<IBaseItem> {
-    protected IBaseItem item = null;
-
+public class UIItemBasicProperties extends VisTable implements IPropertyBox<IBaseItem> {
     private final Sandbox sandbox;
+    protected IBaseItem item = null;
     private TextField idBox;
 
     private TextField xVal;
@@ -69,45 +68,45 @@ public class BasicItemProperties extends VisTable implements IPropertyBox<IBaseI
     private Actor itemActor;
     private TextBoxItem rotationVal;
 
-    public BasicItemProperties() {
+    public UIItemBasicProperties() {
         this.sandbox = Sandbox.getInstance();
         tintColorComponent = new ColorPickerButton();
-        pad(15);
+//        pad(5);
 //        LabelItem tintLbl = ui.getLabelById("tintLbl");
 //        tintColorComponent.setX(tintLbl.getX() + tintLbl.getWidth() + 5);
 //        tintColorComponent.setY(tintLbl.getY() - 3);
 //        addActor(tintColorComponent);
-        debug();
-        add(new VisLabel("Identifier:", Align.right)).padRight(10).colspan(2).fillX();
+//        debug();
+        add(new VisLabel("Identifier:", Align.right)).padRight(5).colspan(2).fillX();
         add(new VisTextField()).width(120).colspan(2);
         row().padTop(5);
-        add(new VisLabel("X:", Align.right)).padRight(10).width(50).right();
-        add(new VisTextField()).width(55).padRight(10);
-        add(new VisLabel("Y:", Align.right)).padRight(10).width(50).right();
+        add(new VisLabel("X:", Align.right)).padRight(5).width(50).right();
+        add(new VisTextField()).width(55).padRight(5);
+        add(new VisLabel("Y:", Align.right)).padRight(5).width(50).right();
         add(new VisTextField()).width(55);
         row().padTop(5);
-        add(new VisLabel("Width:", Align.right)).padRight(10).width(55).right();
-        add(new VisTextField()).width(55).padRight(10);
-        add(new VisLabel("Height:", Align.right)).padRight(10).width(55).right();
+        add(new VisLabel("Width:", Align.right)).padRight(5).width(55).right();
+        add(new VisTextField()).width(55).padRight(5);
+        add(new VisLabel("Height:", Align.right)).padRight(5).width(55).right();
         add(new VisTextField()).width(55);
         row().padTop(5);
-        add(new VisLabel("Scale X:", Align.right)).padRight(10).width(55).right();
-        add(new VisTextField()).width(55).padRight(10);
-        add(new VisLabel("Scale Y:", Align.right)).padRight(10).width(55).right();
+        add(new VisLabel("Scale X:", Align.right)).padRight(5).width(55).right();
+        add(new VisTextField()).width(55).padRight(5);
+        add(new VisLabel("Scale Y:", Align.right)).padRight(5).width(55).right();
         add(new VisTextField()).width(55);
         row().padTop(5);
-        add(new VisLabel("Flip X:", Align.right)).padRight(10).width(55).right();
-        add(new VisCheckBox(null)).padRight(10).left();
-        add(new VisLabel("Flip Y:", Align.right)).padRight(10).width(55).right();
+        add(new VisLabel("Flip X:", Align.right)).padRight(5).width(55).right();
+        add(new VisCheckBox(null)).padRight(5).left();
+        add(new VisLabel("Flip Y:", Align.right)).padRight(5).width(55).right();
         add(new VisCheckBox(null)).left();
         row().padTop(5);
-        add(new VisLabel("Rotation:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisLabel("Rotation:", Align.right)).padRight(5).colspan(2).fillX();
         add(new VisTextField()).width(120).colspan(2);
         row().padTop(5);
-        add(new VisLabel("Rotation:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisLabel("Rotation:", Align.right)).padRight(5).colspan(2).fillX();
         add(new VisTextField()).width(120).colspan(2);
         row().padTop(5);
-        add(new VisLabel("Tint:", Align.right)).padRight(10).colspan(2).fillX();
+        add(new VisLabel("Tint:", Align.right)).padRight(5).colspan(2).fillX();
         add(new ColorPickerButton()).width(120).colspan(2);
     }
 
