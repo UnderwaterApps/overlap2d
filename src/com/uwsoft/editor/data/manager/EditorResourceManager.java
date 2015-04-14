@@ -95,20 +95,19 @@ public class EditorResourceManager implements IResourceRetriever {
         return animData.jsonFile;
     }
 
-
     @Override
     public BitmapFont getBitmapFont(String fontName, int fontSize) {
         String fontpair = fontName + "_" + fontSize;
         if (bitmapFonts.containsKey(fontpair)) {
             return bitmapFonts.get(fontpair);
         } else {
-            FileHandle fontFile;
+            /*FileHandle fontFile;
             fontFile = Gdx.files.internal("freetypefonts" + File.separator + fontName + ".ttf");
             if (!fontFile.exists()) fontFile = Gdx.files.internal("freetypefonts" + File.separator + "arial.ttf");
             FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
             FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-            parameter.size = fontSize;
-            BitmapFont font = generator.generateFont(parameter);
+            parameter.size = fontSize;*/
+            BitmapFont font = new BitmapFont(Gdx.files.internal("fonts/arial_12.fnt"));//generator.generateFont(parameter);
             bitmapFonts.put(fontpair, font);
             return font;
         }
