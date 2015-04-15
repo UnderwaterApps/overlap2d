@@ -284,6 +284,8 @@ public class ItemSelector {
     }
 
     public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {
+        if (relativeTo == null) return;
+
         final float relativeToX = (toHighestX)? relativeTo.getVisualRightX() : relativeTo.getVisualX();
 
         for (SelectionRectangle value : currentSelection.values()) {
@@ -298,6 +300,8 @@ public class ItemSelector {
     }
 
     public void alignSelectionsByY(SelectionRectangle relativeTo, boolean toHighestY) {
+        if (relativeTo == null) return;
+
         final float relativeToY = (toHighestY)? relativeTo.getVisualTopY() : relativeTo.getVisualY();
 
         for (SelectionRectangle value : currentSelection.values()) {
