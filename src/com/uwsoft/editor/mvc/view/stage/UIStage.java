@@ -18,10 +18,16 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.*;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
@@ -57,7 +63,8 @@ public class UIStage extends Stage {
     public Overlap2DMenuBarMediator menuMediator;
 
     public UIStage(SandboxStage sandboxStage) {
-        super();
+        super(new ScreenViewport());
+
         facade = Overlap2DFacade.getInstance();
         essentials = new Essentials();
         essentials.rm = facade.retrieveProxy(EditorResourceManager.NAME);
@@ -84,10 +91,15 @@ public class UIStage extends Stage {
 
         addActor(uiMainTable);
         addActor(contextMenuContainer);
+
         setListeners();
 
 
         mainDropDown = new DropDown(contextMenuContainer);
+    }
+
+    public void resize(int width, int height) {
+        getViewport().update(width, height, true);
     }
 
     public Sandbox getSandbox() {
@@ -168,10 +180,6 @@ public class UIStage extends Stage {
         return uiMainTable.itemsBox;
     }
 
-    public UISubmenuBar getCompositePanel() {
-        return uiMainTable.compositePanel;
-    }
-
     public UILightBox getLightBox() {
         return uiMainTable.lightBox;
     }
@@ -184,6 +192,5 @@ public class UIStage extends Stage {
     public boolean keyDown(int keyCode) {
         return super.keyDown(keyCode);
     }
-
 
 }
