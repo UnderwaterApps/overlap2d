@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
@@ -69,7 +70,7 @@ public class Sandbox {
     public FlowManager flow;
     public TransformationHandler transformationHandler;
 
-	 public int gridSize = 1; // pixels
+    private int gridSize = 1; // pixels
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -448,6 +449,7 @@ public class Sandbox {
                     dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
                 }
             }
+            dropDown.addItem(SelectionActions.SET_GRID_SIZE_FROM, "Set grid size from");
         }
 
         dropDown.addItem(SelectionActions.PASTE, "Paste");
@@ -497,6 +499,9 @@ public class Sandbox {
                         flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
                         flow.applyPendingAction();
                         break;
+                    case SelectionActions.SET_GRID_SIZE_FROM:
+                        setGridSize((int) ((Actor) (selector.getSelectedItems().get(0))).getWidth());
+                        break;
                     case SelectionActions.COPY:
                         getUac().copyAction();
                         break;
@@ -540,5 +545,15 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
+    }
+
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+        facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
+    }
+
+    public int getGridSize() {
+        return gridSize;
     }
 }

@@ -31,6 +31,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.event.KeyboardListener;
 
 public class UIProjectGeneralProperties extends VisTable {
 
@@ -121,53 +122,6 @@ public class UIProjectGeneralProperties extends VisTable {
         }
     }
 
-    private class KeyboardListener implements EventListener {
-
-        private final String eventName;
-
-        public KeyboardListener(String eventName) {
-            this.eventName = eventName;
-        }
-
-        @Override
-        public boolean handle(Event event) {
-            if (event instanceof FocusListener.FocusEvent) {
-                handleFocusListener((FocusListener.FocusEvent) event);
-                return true;
-            }
-            if (event instanceof InputEvent) {
-                handleInputListener((InputEvent) event);
-                return true;
-            }
-            return false;
-        }
-
-        private void handleInputListener(InputEvent event) {
-            switch (event.getType()) {
-                case keyUp:
-                    if (event.getKeyCode() == Input.Keys.ENTER) {
-                        keyboardHandler((VisTextField) event.getTarget());
-                    }
-                    break;
-            }
-        }
-
-        private void handleFocusListener(FocusListener.FocusEvent event) {
-            switch (event.getType()) {
-                case keyboard:
-                    keyboardHandler((VisTextField) event.getTarget());
-                    break;
-                case scroll:
-                    break;
-            }
-
-        }
-
-        private void keyboardHandler(VisTextField target) {
-            Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(eventName, target.getText());
-        }
-    }
 
 //    private void setListeners() {
 //        gravityValueX.addListener(new FocusListener() {

@@ -151,7 +151,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
 	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y, Vector2 useReducedMoveFixPoint, boolean isFirstDragCall) {
 
-		  int gridSize = Sandbox.getInstance().gridSize;
+		  int gridSize = Sandbox.getInstance().getGridSize();
 
 		  // if there is no resizing going on, the item was touched,
 		  // the button is in and we are dragging... well you can probably be safe about saying - we do.
@@ -400,8 +400,8 @@ public class SandboxInputAdapter extends InputAdapter {
 				deltaMove = 20; //pixels
 		  }
 
-		  if(sandbox.gridSize > 1) {
-				deltaMove = sandbox.gridSize;
+		  if(sandbox.getGridSize() > 1) {
+				deltaMove = sandbox.getGridSize();
 				if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 					 // if shift is pressed, move items 3 times more then the grid size
 					 deltaMove *= 3;

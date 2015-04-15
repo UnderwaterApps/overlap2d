@@ -45,6 +45,7 @@ public class SelectionActions extends Group {
     public static final int ADD_TO_LIBRARY = 8;
     public static final int EDIT_PHYSICS = 9;
     public static final int EDIT_ASSET_PHYSICS = 10;
+    public static final int SET_GRID_SIZE_FROM = 10;
     public static final int DO_NOTHING = 99;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;

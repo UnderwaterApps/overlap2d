@@ -57,8 +57,8 @@ public class UserActionController {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
 
-		  x = MathUtils.floor(x / sandbox.gridSize)*sandbox.gridSize;
-		  y = MathUtils.floor(y / sandbox.gridSize)*sandbox.gridSize;
+		  x = MathUtils.floor(x / sandbox.getGridSize())*sandbox.getGridSize();
+		  y = MathUtils.floor(y / sandbox.getGridSize())*sandbox.getGridSize();
         sandbox.getItemFactory().createImageItem(layer, regionName, x, y);
     }
 
