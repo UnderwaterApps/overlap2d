@@ -36,7 +36,7 @@ public class UISubmenuBar extends VisTable {
     public UISubmenuBar() {
         Skin skin = VisUI.getSkin();
         facade = Overlap2DFacade.getInstance();
-        debug();
+        //debug();
         setBackground(skin.getDrawable("window-bg"));
         add("root scene > ").left().expandX();
 

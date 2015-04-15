@@ -49,9 +49,8 @@ public class Main {
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
-            //LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
-            //mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-            LwjglApplication mainFrame = new LwjglApplication(overlap2D, config);
+            LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
+            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }
 
     }
