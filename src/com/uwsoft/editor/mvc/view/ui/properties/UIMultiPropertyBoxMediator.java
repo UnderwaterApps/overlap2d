@@ -84,5 +84,5 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             UIAbstractPropertiesMediator propertyBoxMediator = facade.retrieveMediator(mediatorName);
             viewComponent.addBox(propertyBoxMediator.getViewComponent());
         }
-    }
+    } 
 }
