@@ -28,6 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
@@ -123,11 +124,13 @@ public class UIStage extends Stage {
     }
 
     public void updateCurrentItemState() {
-        uiMainTable.propertiesPanel.updateState();
+        // TODO: do this with notification
+       // uiMainTable.multiPropertyBox.updateState();
     }
 
     public void itemWasSelected(IBaseItem itm) {
-        uiMainTable.propertiesPanel.setItem(itm);
+        //uiMainTable.multiPropertyBox.setItem(itm);
+        facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
 
         uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
     }
@@ -151,8 +154,9 @@ public class UIStage extends Stage {
     }
 
     public void emptyClick() {
-        uiMainTable.propertiesPanel.cleanContent();
-        uiMainTable.propertiesPanel.showPhysicsParams();
+        //uiMainTable.propertiesPanel.cleanContent();
+        //uiMainTable.propertiesPanel.showPhysicsParams();
+        //facade.sendNotification(Overlap2D.ITEM_SELECTED, Sandbox.getInstance().get);
     }
 
     public void loadScene(CompositeItemVO scene) {
