@@ -68,6 +68,8 @@ public class Sandbox {
     public ItemControlMediator itemControl;
     public FlowManager flow;
     public TransformationHandler transformationHandler;
+
+	 public int gridSize = 1; // pixels
     /**
      * this part contains legacy params that need to be removed one by one
      */

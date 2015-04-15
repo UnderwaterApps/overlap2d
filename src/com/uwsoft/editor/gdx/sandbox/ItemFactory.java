@@ -19,6 +19,8 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
@@ -56,13 +58,10 @@ public class ItemFactory {
 
     private void prepareVO(MainItemVO vo, String layerName, float x, float y) {
         vo.layerName = layerName;
-        vo.x = x + sandboxStage.getCamera().position.x - sandboxStage.getWidth() / 2;
-        vo.y = y + sandboxStage.getCamera().position.y - sandboxStage.getHeight() / 2;
 
-        // Need to adjust x and y according to scene zoom
-        OrthographicCamera camera = (OrthographicCamera) sandboxStage.getCamera();
-        vo.x *= camera.zoom;
-        vo.y *= camera.zoom;
+		Vector2 stageCoordinates = sandboxStage.screenToStageCoordinates(new Vector2(x, sandboxStage.getHeight()-y));
+        vo.x = stageCoordinates.x;
+        vo.y = stageCoordinates.y;
     }
 
     private void addItem(IBaseItem item, MainItemVO vo) {
