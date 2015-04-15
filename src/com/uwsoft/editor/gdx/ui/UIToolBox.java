@@ -49,37 +49,37 @@ public class UIToolBox extends UIBox {
         btnGroup.setMaxCheckCount(1);
         btnGroup.setMinCheckCount(1);
 
-        Button mainIcon = addButton("mainIcon", "Select", true);
-        Button resizeIcon = addButton("resizeIcon", "Transform", true);
+        Button mainIcon = addButton("mainIcon", "Select tool", true);
+        Button resizeIcon = addButton("resizeIcon", "Transform tool", true);
         //
-        Button topIcon = addButton("alignIconL", "Top", false);
+        Button topIcon = addButton("alignIconL", "Align top", false);
         topIcon.setTransform(true);
         topIcon.setRotation(-90);
-        Button leftIcon = addButton("alignIconL", "Left", false);
+        Button leftIcon = addButton("alignIconL", "Align left", false);
         leftIcon.setTransform(true);
-        Button bottomIcon = addButton("alignIconL", "Bottom", false);
+        Button bottomIcon = addButton("alignIconL", "Align bottom", false);
         bottomIcon.setTransform(true);
         bottomIcon.setRotation(90);
-        Button rightIcon = addButton("alignIconL", "Right", false);
+        Button rightIcon = addButton("alignIconL", "Align right", false);
         rightIcon.setTransform(true);
         rightIcon.setRotation(180);
 
-        Button hCenterIcon = addButton("alignIconCH", false);
-        Button vCenterIcon = addButton("alignIconCV", false);
+        Button hCenterIcon = addButton("alignIconCH", "Align horizontally center", false);
+        Button vCenterIcon = addButton("alignIconCV", "Align vertically center", false);
 
         //TODO: replace textures
-        Button leftEdgeIcon = addButton("AlignEdge", false);
-        Button topEdgeIcon = addButton("AlignEdge", false);
+        Button leftEdgeIcon = addButton("AlignEdge", "Align right edge", false);
+        Button topEdgeIcon = addButton("AlignEdge", "Align bottom edge", false);
         topEdgeIcon.setTransform(true);
-		  topEdgeIcon.setRotation(270f);
-        Button rightEdgeIcon = addButton("AlignEdge", false);
-		  rightEdgeIcon.setTransform(true);
-          rightEdgeIcon.setScaleX(-1);
-		  //rightEdgeIcon.setRotation(180f);
-        Button bottomEdgeIcon = addButton("AlignEdge", false);
-		  bottomEdgeIcon.setTransform(true);
-          bottomEdgeIcon.setScaleX(-1);
-		  bottomEdgeIcon.setRotation(270f);
+		topEdgeIcon.setRotation(270f);
+        Button rightEdgeIcon = addButton("AlignEdge", "Align left edge", false);
+		rightEdgeIcon.setTransform(true);
+        rightEdgeIcon.setScaleX(-1);
+		//rightEdgeIcon.setRotation(180f);
+        Button bottomEdgeIcon = addButton("AlignEdge", "Align top edge", false);
+		bottomEdgeIcon.setTransform(true);
+        bottomEdgeIcon.setScaleX(-1);
+		bottomEdgeIcon.setRotation(270f);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
