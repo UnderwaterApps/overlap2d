@@ -21,7 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.properties;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIItemProperties extends UIAbstractProperties {
+public abstract class UIItemProperties extends UIAbstractProperties {
 
     public UIItemProperties() {
 

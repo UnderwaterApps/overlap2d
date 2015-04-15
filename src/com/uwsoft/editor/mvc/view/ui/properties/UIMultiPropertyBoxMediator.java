@@ -18,9 +18,13 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.ImageItem;
 
 import java.util.ArrayList;
@@ -38,6 +42,9 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
     public UIMultiPropertyBoxMediator() {
         super(NAME, new UIMultiPropertyBox());
+
+        // TODO: shouldn't this be initialized by default?
+        facade = Overlap2DFacade.getInstance();
 
         initMap();
     }
@@ -81,8 +88,14 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         viewComponent.clearBoxes();
 
         for (String mediatorName : mediatorNames) {
-            UIAbstractPropertiesMediator propertyBoxMediator = facade.retrieveMediator(mediatorName);
-            viewComponent.addBox(propertyBoxMediator.getViewComponent());
+            try {
+                facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
+
+                UIAbstractPropertiesMediator propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                viewComponent.addBox(propertyBoxMediator.getViewComponent());
+            } catch (ReflectionException e) {
+                e.printStackTrace();
+            }
         }
-    } 
+    }
 }

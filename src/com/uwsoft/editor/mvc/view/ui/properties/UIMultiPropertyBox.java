@@ -33,11 +33,6 @@ public class UIMultiPropertyBox extends VisWindow {
 
     private final VisTable mainTable;
     private final VisTable propertiesTable;
-    private IBaseItem currentItem;
-
-    private UIItemBasicProperties basicBox;
-    private ArrayList<IPropertyBox> additionalBoxes = new ArrayList<>();
-
 
     public UIMultiPropertyBox() {
         super("Properties");
@@ -53,39 +48,16 @@ public class UIMultiPropertyBox extends VisWindow {
     }
 
     public void initView() {
-        basicBox = new UIItemBasicProperties();
-        basicBox.setObject(currentItem);
-        propertiesTable.add(basicBox);
-    }
 
-    public void setItem(IBaseItem item) {
-        currentItem = item;
-        propertiesTable.reset();
-        initView();
-    }
-
-    public void cleanContent() {
-        propertiesTable.reset();
-    }
-
-    public void updateState() {
-        basicBox.updateView();
-        for (int i = 0; i < additionalBoxes.size(); i++) {
-            additionalBoxes.get(i).updateView();
-        }
-    }
-
-    public void showPhysicsParams() {
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        UIProjectGeneralPropertiesMediator uiProjectGeneralPropertiesMediator = facade.retrieveMediator(UIProjectGeneralPropertiesMediator.NAME);
-        UIProjectGeneralProperties physicsPropertiesBox = uiProjectGeneralPropertiesMediator.getViewComponent();
-        propertiesTable.add(physicsPropertiesBox);
     }
 
     public void clearBoxes() {
+        propertiesTable.clear();
+        propertiesTable.reset();
     }
 
     public void addBox(UIAbstractProperties viewComponent) {
-
+        viewComponent.initView();
+        propertiesTable.add(viewComponent);
     }
 }

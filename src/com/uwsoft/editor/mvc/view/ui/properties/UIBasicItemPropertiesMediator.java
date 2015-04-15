@@ -22,7 +22,7 @@ package com.uwsoft.editor.mvc.view.ui.properties;
  * Created by azakhary on 4/15/2015.
  */
 public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator {
-    private static final String TAG = UIItemPropertiesMediator.class.getCanonicalName();
+    private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
     public UIBasicItemPropertiesMediator() {

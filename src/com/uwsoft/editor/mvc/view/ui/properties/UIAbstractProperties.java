@@ -18,16 +18,19 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIAbstractProperties {
+public abstract class UIAbstractProperties extends VisTable {
 
     protected final Overlap2DFacade facade;
 
     public UIAbstractProperties() {
         facade = Overlap2DFacade.getInstance();
     }
+
+    public abstract void initView();
 }
