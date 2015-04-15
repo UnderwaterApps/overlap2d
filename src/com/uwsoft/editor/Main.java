@@ -20,6 +20,7 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.uwsoft.editor.utils.AppConfig;
@@ -46,8 +47,11 @@ public class Main {
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
-            LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
-            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            config.width = (int) (width);
+            config.height = (int) (height - height * .04);
+            //LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
+            //mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            LwjglApplication mainFrame = new LwjglApplication(overlap2D, config);
         }
 
     }
