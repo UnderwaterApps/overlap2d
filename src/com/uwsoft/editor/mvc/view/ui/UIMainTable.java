@@ -29,6 +29,8 @@ import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.*;
+import com.uwsoft.editor.mvc.view.ui.properties.UIMultiPropertyBox;
+import com.uwsoft.editor.mvc.view.ui.properties.UIMultiPropertyBoxMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -42,7 +44,7 @@ public class UIMainTable extends VisTable {
     public UILayerBox layerPanel;
     public UILightBox lightBox;
     public UIItemsTreeBox itemsBox;
-    public UIPropertiesBox propertiesPanel;
+    public UIMultiPropertyBox multiPropertyBox;
     public UILibraryBox libraryPanel;
     public Table rightToolsPanel;
     public Table leftToolsPanel;
@@ -79,10 +81,15 @@ public class UIMainTable extends VisTable {
     private void initRightToolsPanel() {
         rightToolsPanel = new Table();
         //
-        propertiesPanel = new UIPropertiesBox();
+        UIMultiPropertyBoxMediator multiPropertyBoxMediator = facade.retrieveMediator(UIMultiPropertyBoxMediator.NAME);
+        multiPropertyBox = multiPropertyBoxMediator.getViewComponent();
+
+        //propertiesPanel = new UIPropertiesBox();
 //        propertiesPanel.initPanel();
-        rightToolsPanel.add(propertiesPanel).top().fillY();
+        rightToolsPanel.add(multiPropertyBox).top().fillY();
         rightToolsPanel.row();
+
+
         //
         libraryPanel = new UILibraryBox(uiStage);
         libraryPanel.initPanel();

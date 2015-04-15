@@ -28,6 +28,7 @@ import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.UIMultiPropertyBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralPropertiesMediator;
 
 /**
@@ -49,6 +50,7 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new UIAlignBoxMediator());
         facade.registerMediator(new UIItemsTreeBoxMediator());
-        facade.registerMediator(new UIProjectGeneralPropertiesMediator());
+        facade.registerMediator(new UIMultiPropertyBoxMediator());
+        //facade.registerMediator(new UIProjectGeneralPropertiesMediator());
     }
 }
