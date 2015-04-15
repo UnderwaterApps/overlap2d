@@ -19,10 +19,11 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
@@ -32,6 +33,8 @@ import com.uwsoft.editor.renderer.data.SpriterVO;
 public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
 
 
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
     private AssetPayloadObject payload;
 
     private float scaleSize = 1;
@@ -40,19 +43,20 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
 
     public SpriterAnimationThumbnailBox(UIStage s, String animationName) {
         super(s);
-
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
         SpriterActor animThumb = new SpriterActor(vo, s.sceneLoader.essentials);
 
-        if(animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
+        if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
             float scaleFactor = 1.0f;
-            if(animThumb.getWidth() > animThumb.getHeight()) {
+            if (animThumb.getWidth() > animThumb.getHeight()) {
                 //scale by width
-                scaleFactor = 1.0f/(animThumb.getWidth()/thumbnailSize);
+                scaleFactor = 1.0f / (animThumb.getWidth() / thumbnailSize);
             } else {
-                scaleFactor = 1.0f/(animThumb.getHeight()/thumbnailSize);
+                scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
             }
             scaleSize = scaleFactor;
             animThumb.setSpriterScale(scaleFactor);
@@ -68,8 +72,8 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
         }
 
         addActor(animThumb);
-
-        Image payloadImg = new Image(DataManager.getInstance().textureManager.getEditorAsset("resizeIconChecked"));
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
         payload = new AssetPayloadObject();
         payload.assetName = animationName;
         payload.type = AssetPayloadObject.AssetType.Spriter;
@@ -91,7 +95,7 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
 
     @Override
     public void act(float delta) {
-        if(isMouseInside) {
+        if (isMouseInside) {
             super.act(delta);
         }
     }

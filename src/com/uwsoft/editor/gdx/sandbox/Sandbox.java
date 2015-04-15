@@ -26,18 +26,22 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.SandboxResourceManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
-import com.uwsoft.editor.gdx.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -45,7 +49,6 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 import java.util.ArrayList;
 
@@ -67,8 +70,7 @@ public class Sandbox {
     public FlowManager flow;
     public TransformationHandler transformationHandler;
 
-	 private float zoomPercent = 100;
-
+    private int gridSize = 1; // pixels
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -79,11 +81,11 @@ public class Sandbox {
     public boolean isItemTouched = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
-    public IResourceRetriever rm;
     public ArrayList<MainItemVO> tempClipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
+    private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
     private SandboxInputAdapter sandboxInputAdapter;
@@ -91,9 +93,12 @@ public class Sandbox {
     private ItemFactory itemFactory;
     private ItemSelector selector;
     private InputMultiplexer inputMultiplexer;
-	 /**
-	  * end of shitty part
-	  */
+    private Overlap2DFacade facade;
+    private ProjectManager projectManager;
+
+    /**
+     * end of shitty part
+     */
 
 
     private Sandbox() {
@@ -101,7 +106,7 @@ public class Sandbox {
 
     public synchronized static Sandbox getInstance() {
         /*
-		 * The instance gets created only when it is called for first time.
+         * The instance gets created only when it is called for first time.
 		 * Lazy-loading
 		 */
         if (instance == null) {
@@ -113,6 +118,7 @@ public class Sandbox {
     }
 
     private void init() {
+        facade = Overlap2DFacade.getInstance();
         inputMultiplexer = new InputMultiplexer();
         Gdx.input.setInputProcessor(inputMultiplexer);
         sandboxStage = new SandboxStage();
@@ -132,6 +138,8 @@ public class Sandbox {
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
         itemFactory = new ItemFactory(this);
+
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
     /**
@@ -163,7 +171,9 @@ public class Sandbox {
     }
 
 
-    /** Initializers **/
+    /**
+     * Initializers *
+     */
 
     public EditingMode getCurrentMode() {
         return editingMode;
@@ -187,7 +197,9 @@ public class Sandbox {
      * @param sceneName
      */
     public void initData(String sceneName) {
-        DataManager.getInstance().sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), DataManager.getInstance().resolutionManager.curResolution);
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
 
@@ -195,32 +207,29 @@ public class Sandbox {
     }
 
     public void loadCurrentProject(String name) {
-        rm = new SandboxResourceManager();
-        sceneControl.getEssentials().rm = rm;
+        sceneControl.getEssentials().rm = projectManager;
         loadScene(name);
     }
 
     public void loadCurrentProject() {
-		  setZoomPercent(100f);
-
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
+        ProjectVO projectVO = projectManager.getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
         uiStage.loadCurrentProject();
     }
 
     public void loadScene(String sceneName) {
         currentLoadedSceneFileName = sceneName;
-        uiStage.getCompositePanel().clearScenes();
+//        uiStage.getCompositePanel().clearScenes();
         initData(sceneName);
 
         sandboxStage.initView();
-        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
+//        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
         initSceneView(sceneControl.getRootSceneVO());
         sandboxInputAdapter.initSandboxEvents();
 
-        ProjectVO projectVO = DataManager.getInstance().getCurrentProjectVO();
+        ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
-        DataManager.getInstance().saveCurrentProject();
+        projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
         uiStage.reInitLibrary();
     }
@@ -232,10 +241,10 @@ public class Sandbox {
     public void initSceneView(CompositeItem composite) {
         selector.clearSelections();
         sandboxStage.mainBox.clear();
-        sceneControl.initSceneView(composite, uiStage.getCompositePanel().isRootScene());
-        if (uiStage.getCompositePanel().isRootScene()) {
-            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
-        }
+        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
+//        if (uiStage.getCompositePanel().isRootScene()) {
+//            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
+//        }
         for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
             sandboxInputAdapter.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
         }
@@ -252,8 +261,8 @@ public class Sandbox {
      */
     public void enterIntoPrevComposite() {
         sandboxStage.getCamera().position.set(0, 0, 0);
-        uiStage.getCompositePanel().stepUp();
-        uiStage.getItemsBox().initContent();
+//        uiStage.getCompositePanel().stepUp();
+//        uiStage.getItemsBox().init();
     }
 
     /**
@@ -285,9 +294,9 @@ public class Sandbox {
         sandboxStage.getCamera().position.set(0, 0, 0);
         getSceneControl().disableAmbience(true);
         uiStage.getLightBox().disableAmbiance.setChecked(true);
-        uiStage.getCompositePanel().addScene(compositeItemVO);
+        //uiStage.getCompositePanel().addScene(compositeItemVO);
         initSceneView(compositeItemVO);
-        uiStage.getItemsBox().initContent();
+//        uiStage.getItemsBox().init();
     }
 
     /**
@@ -355,11 +364,9 @@ public class Sandbox {
     }
 
     public boolean isComponentSkinAvailable() {
-        if (DataManager.getInstance().textureManager.projectSkin == null) {
-            return false;
-        }
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        return textureManager.projectSkin != null;
 
-        return true;
     }
 
     public LayerItemVO getSelectedLayer() {
@@ -442,6 +449,7 @@ public class Sandbox {
                     dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
                 }
             }
+            dropDown.addItem(SelectionActions.SET_GRID_SIZE_FROM, "Set grid size from");
         }
 
         dropDown.addItem(SelectionActions.PASTE, "Paste");
@@ -491,6 +499,9 @@ public class Sandbox {
                         flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
                         flow.applyPendingAction();
                         break;
+                    case SelectionActions.SET_GRID_SIZE_FROM:
+                        setGridSize((int) ((Actor) (selector.getSelectedItems().get(0))).getWidth());
+                        break;
                     case SelectionActions.COPY:
                         getUac().copyAction();
                         break;
@@ -512,27 +523,37 @@ public class Sandbox {
         });
     }
 
-	 public void setZoomPercent(float percent) {
-		  zoomPercent = percent;
-		  OrthographicCamera camera = (OrthographicCamera)(sandboxStage.getCamera());
-		  camera.zoom = 1f/(zoomPercent/100f);
-	 }
+    public void setZoomPercent(float percent) {
+        zoomPercent = percent;
+        OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
+        camera.zoom = 1f / (zoomPercent / 100f);
+    }
 
-	 public void zoomBy(float amount) {
-		  zoomPercent+=-amount*15f;
+    public void zoomBy(float amount) {
+        zoomPercent += -amount * 15f;
 
-		  if(zoomPercent < 20) zoomPercent = 20;
-		  if(zoomPercent > 1000) zoomPercent = 1000;
+        if (zoomPercent < 20) zoomPercent = 20;
+        if (zoomPercent > 1000) zoomPercent = 1000;
 
-		  setZoomPercent(zoomPercent);
-	 }
+        setZoomPercent(zoomPercent);
+    }
 
-	 public void zoomDevideBy(float amount) {
+    public void zoomDevideBy(float amount) {
 
-		  zoomPercent /= amount;
-		  if(zoomPercent < 20) zoomPercent = 20;
-		  if(zoomPercent > 1000) zoomPercent = 1000;
+        zoomPercent /= amount;
+        if (zoomPercent < 20) zoomPercent = 20;
+        if (zoomPercent > 1000) zoomPercent = 1000;
 
-		  setZoomPercent(zoomPercent);
-	 }
+        setZoomPercent(zoomPercent);
+    }
+
+
+    public void setGridSize(int gridSize) {
+        this.gridSize = gridSize;
+        facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
+    }
+
+    public int getGridSize() {
+        return gridSize;
+    }
 }

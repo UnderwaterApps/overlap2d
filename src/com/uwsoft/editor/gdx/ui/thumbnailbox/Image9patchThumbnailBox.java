@@ -19,7 +19,7 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by sargis on 8/21/14.

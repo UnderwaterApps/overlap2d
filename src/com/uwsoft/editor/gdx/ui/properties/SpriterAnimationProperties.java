@@ -23,15 +23,11 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.gdx.stage.SandboxStage;
-import com.uwsoft.editor.gdx.ui.dialogs.EditAnimationDialog;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.SelectBoxItem;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
-import com.uwsoft.editor.renderer.actor.TextButtonItem;
-import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
 /**

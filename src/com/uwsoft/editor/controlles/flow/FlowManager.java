@@ -18,9 +18,9 @@
 
 package com.uwsoft.editor.controlles.flow;
 
-import java.util.ArrayList;
-
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+
+import java.util.ArrayList;
 
 /**
  * Keeps track of user actions that can be one of {@link FlowActionEnum} types

@@ -21,13 +21,17 @@ package com.uwsoft.editor.gdx.ui;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by sargis on 9/15/14.
  */
 public abstract class ExpandableUIBox extends UIBox {
     protected final float expandedHeight;
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private boolean isExpanded;
     private Image expandImg;
 
@@ -35,12 +39,14 @@ public abstract class ExpandableUIBox extends UIBox {
         super(s, width, height);
         expandedHeight = height;
         isExpanded = true;
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     @Override
     public void initPanel() {
         super.initPanel();
-        expandImg = new Image(stage.textureManager.getEditorAsset("expand16"));
+        expandImg = new Image(textureManager.getEditorAsset("expand16"));
         expandImg.setOrigin(expandImg.getWidth() / 2, expandImg.getHeight() / 2);
         expandImg.setScale(.7f);
         expandImg.setX(getWidth() - expandImg.getWidth() - 2);
@@ -63,10 +69,10 @@ public abstract class ExpandableUIBox extends UIBox {
                 }
                 isExpanded = !isExpanded;
                 initPanel();
-                stage.uiMainTable.rightTable.invalidate();
-                stage.uiMainTable.rightTable.layout();
-                stage.uiMainTable.leftTable.invalidate();
-                stage.uiMainTable.leftTable.layout();
+                stage.uiMainTable.rightToolsPanel.invalidate();
+                stage.uiMainTable.rightToolsPanel.layout();
+                stage.uiMainTable.leftToolsPanel.invalidate();
+                stage.uiMainTable.leftToolsPanel.layout();
                 stage.uiMainTable.layout();
             }
         });

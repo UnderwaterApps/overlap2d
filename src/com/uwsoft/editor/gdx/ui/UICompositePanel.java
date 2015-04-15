@@ -18,19 +18,24 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 import java.util.ArrayList;
 
-public class UICompositePanel extends UIBox {
+public class UICompositePanel extends VisTable {
 
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
+    private final TextureManager textureManager;
     private ArrayList<CompositeItemVO> scenes = new ArrayList<CompositeItemVO>();
 
     private UIStage uiStage;
@@ -38,17 +43,19 @@ public class UICompositePanel extends UIBox {
     private UIResolutionBox resolutionBox = null;
 
     public UICompositePanel(UIStage s) {
-        super(s, s.getWidth(), 36.0f);
         uiStage = s;
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
-    @Override
     public void initPanel() {
-        Image bgImg = new Image(stage.textureManager.getEditorAsset("panel"));
+        Image bgImg = new Image(textureManager.getEditorAsset("panel"));
 
-        bgImg.setScaleX(getWidth());
-
-        backLayer.addActor(bgImg);
+        bgImg.setWidth(getWidth());
+        add(bgImg);
+//
+//        backLayer.addActor(bgImg);
     }
 
     public void clearScenes() {
@@ -89,22 +96,22 @@ public class UICompositePanel extends UIBox {
         }
     }*/
     public void updateOriginalItem() {
-        updateOriginalItem(scenes.get(scenes.size() - 1), stage.getSandbox().getCurrentScene());
+        //updateOriginalItem(scenes.get(scenes.size() - 1), stage.getSandbox().getCurrentScene());
     }
 
     private void updateOriginalItem(CompositeItemVO updatableVo, CompositeItem currItem) {
-        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
-
-        String libName = currItem.getDataVO().itemName;
-        CompositeItemVO libItem = stage.getSandbox().sceneControl.getCurrentSceneVO().libraryItems.get(libName);
-
-        if (libItem != null) {
-            libItem.update(currItem.getDataVO());
-
-
-            //TODO: update other items with same name
-            revursiveUpdateLibraryVO(libName, stage.getSandbox().sceneControl.getRootSceneVO(), currItem.getDataVO());
-        }
+//        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
+//
+//        String libName = currItem.getDataVO().itemName;
+//        CompositeItemVO libItem = stage.getSandbox().sceneControl.getCurrentSceneVO().libraryItems.get(libName);
+//
+//        if (libItem != null) {
+//            libItem.update(currItem.getDataVO());
+//
+//
+//            //TODO: update other items with same name
+//            revursiveUpdateLibraryVO(libName, stage.getSandbox().sceneControl.getRootSceneVO(), currItem.getDataVO());
+//        }
     }
 
 
@@ -119,47 +126,47 @@ public class UICompositePanel extends UIBox {
     }
 
     public void stepUp() {
-        if (scenes.size() > 1) {
-            int currIndex = scenes.size() - 1;
-            stage.getSandbox().getCurrentScene().updateDataVO();
-            updateOriginalItem(scenes.get(currIndex), stage.getSandbox().getCurrentScene());
-            scenes.remove(currIndex);
-            CompositeItemVO scn = scenes.get(currIndex - 1);
-            loadScene(scn);
-            if (currIndex == 1) {
-                stage.getLightBox().disableAmbiance.setChecked(false);
-					 stage.getSandbox().getSceneControl().disableAmbience(false);
-            }
-        }
+//        if (scenes.size() > 1) {
+//            int currIndex = scenes.size() - 1;
+//            stage.getSandbox().getCurrentScene().updateDataVO();
+//            updateOriginalItem(scenes.get(currIndex), stage.getSandbox().getCurrentScene());
+//            scenes.remove(currIndex);
+//            CompositeItemVO scn = scenes.get(currIndex - 1);
+//            loadScene(scn);
+//            if (currIndex == 1) {
+//                stage.getLightBox().disableAmbiance.setChecked(false);
+//                stage.getSandbox().getSceneControl().disableAmbience(false);
+//            }
+//        }
     }
 
     public void initView() {
-        mainLayer.clear();
-        float pointer = 10;
-        for (int i = 0; i < scenes.size(); i++) {
-            String tmpName = "root scene >";
-            if (i > 0) tmpName = "Scene" + i + " >";
-            Label lbl = new Label(tmpName, stage.textureManager.editorSkin);
-            lbl.setX(pointer);
-            lbl.setY(11);
-            pointer += lbl.getWidth() + 10;
-            mainLayer.addActor(lbl);
-
-            final CompositeItemVO currScn = scenes.get(i);
-            final int currIter = i;
-
-            lbl.addListener(new ClickListener() {
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchUp(event, x, y, pointer, button);
-
-                    for (int j = scenes.size() - 1; j > currIter; j--) {
-                        updateOriginalItem(scenes.get(j), stage.getSandbox().getCurrentScene());
-                        scenes.remove(j);
-                    }
-                    loadScene(currScn);
-                }
-            });
-        }
+//        mainLayer.clear();
+//        float pointer = 10;
+//        for (int i = 0; i < scenes.size(); i++) {
+//            String tmpName = "root scene >";
+//            if (i > 0) tmpName = "Scene" + i + " >";
+//            Label lbl = new Label(tmpName, textureManager.editorSkin);
+//            lbl.setX(pointer);
+//            lbl.setY(11);
+//            pointer += lbl.getWidth() + 10;
+//            mainLayer.addActor(lbl);
+//
+//            final CompositeItemVO currScn = scenes.get(i);
+//            final int currIter = i;
+//
+//            lbl.addListener(new ClickListener() {
+//                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                    super.touchUp(event, x, y, pointer, button);
+//
+//                    for (int j = scenes.size() - 1; j > currIter; j--) {
+//                        updateOriginalItem(scenes.get(j), stage.getSandbox().getCurrentScene());
+//                        scenes.remove(j);
+//                    }
+//                    loadScene(currScn);
+//                }
+//            });
+//        }
     }
 
     @SuppressWarnings("unchecked")
@@ -167,8 +174,8 @@ public class UICompositePanel extends UIBox {
         if (resolutionBox != null) {
             resolutionBox.remove();
         }
-
-        resolutionBox = new UIResolutionBox(stage, DataManager.getInstance().getCurrentProjectInfoVO(), stage.dataManager.resolutionManager.curResolution);
+        UIResolutionBoxMediator uiResolutionBoxMediator = facade.retrieveMediator(UIResolutionBoxMediator.NAME);
+        UIResolutionBox resolutionBox = uiResolutionBoxMediator.getViewComponent();
         addActor(resolutionBox);
         resolutionBox.setX(getWidth() - resolutionBox.getWidth());
     }

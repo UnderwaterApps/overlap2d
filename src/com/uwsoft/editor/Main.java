@@ -23,14 +23,11 @@ import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
-import com.uwsoft.editor.gdx.Overlap2D;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
 
 public class Main {
 
@@ -43,17 +40,17 @@ public class Main {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
+            config.width = (int) (width);
+            config.height = (int) (height - height * .04);
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
-				LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
-				mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH );
+            config.width = (int) (width);
+            config.height = (int) (height - height * .04);
+            LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
+            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }
 
     }

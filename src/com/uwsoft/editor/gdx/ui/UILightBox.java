@@ -26,10 +26,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
-import com.uwsoft.editor.controlles.handlers.ColorPickerHandler;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CheckBoxItem;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -39,6 +40,9 @@ import com.uwsoft.editor.renderer.data.LightVO.LightType;
 
 public class UILightBox extends ExpandableUIBox {
 
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
+    private final TextureManager textureManager;
     public CheckBoxItem disableAmbiance;
     private ColorPickerButton cPicker;
     private ColorPickerButton cPickerElems;
@@ -46,6 +50,9 @@ public class UILightBox extends ExpandableUIBox {
 
     public UILightBox(UIStage s) {
         super(s, 160, 300);
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
     }
 
     public void initContent() {
@@ -84,7 +91,7 @@ public class UILightBox extends ExpandableUIBox {
 
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void finished (Color newColor) {
+                    public void finished(Color newColor) {
                         cPicker.setColorValue(newColor);
 
                         // change scene ambient light
@@ -106,7 +113,7 @@ public class UILightBox extends ExpandableUIBox {
                 super.touchUp(event, x, y, pointer, button);
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
                     @Override
-                    public void finished (Color newColor) {
+                    public void finished(Color newColor) {
                         cPickerElems.setColorValue(newColor);
                     }
                 });
@@ -121,7 +128,8 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image bulbThumb = new Image(DataManager.getInstance().textureManager.getEditorAsset("bulb"));
+                TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+                Image bulbThumb = new Image(textureManager.getEditorAsset("bulb"));
                 payload.setDragActor(bulbThumb);
                 dragAndDropBulb.setDragActorPosition(-bulbThumb.getWidth() / 2, bulbThumb.getHeight() / 2);
 
@@ -161,7 +169,8 @@ public class UILightBox extends ExpandableUIBox {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
 
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-                Image coneThumb = new Image(DataManager.getInstance().textureManager.getEditorAsset("cone"));
+                TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+                Image coneThumb = new Image(textureManager.getEditorAsset("cone"));
                 payload.setDragActor(coneThumb);
                 dragAndDropCone.setDragActorPosition(-coneThumb.getWidth() / 2, coneThumb.getHeight() / 2);
 

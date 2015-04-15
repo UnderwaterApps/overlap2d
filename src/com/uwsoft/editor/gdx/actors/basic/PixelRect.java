@@ -22,16 +22,21 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.data.manager.DataManager;
-import com.uwsoft.editor.data.manager.TextureManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 public class PixelRect extends Group {
 
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
     private PixelLine[] lines = new PixelLine[4];
     private Image fill;
 
     public PixelRect(float width, float height) {
-        TextureManager tm = DataManager.getInstance().textureManager;
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        TextureManager tm = facade.retrieveProxy(TextureManager.NAME);
         lines[0] = new PixelLine(tm, 0, 0, width, 0);
         lines[1] = new PixelLine(tm, 0, 0, 0, height);
         lines[2] = new PixelLine(tm, width, 0, width, height);

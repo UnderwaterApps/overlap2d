@@ -24,11 +24,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.gdx.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
-import com.uwsoft.editor.renderer.data.SimpleImageVO;
 
 public class ImageThumbnailBox extends DraggableThumbnailBox {
 

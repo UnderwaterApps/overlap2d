@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -150,6 +151,8 @@ public class SandboxInputAdapter extends InputAdapter {
 
 	 private void itemTouchDragged(IBaseItem item, InputEvent event, float x, float y, Vector2 useReducedMoveFixPoint, boolean isFirstDragCall) {
 
+		  int gridSize = Sandbox.getInstance().getGridSize();
+
 		  // if there is no resizing going on, the item was touched,
 		  // the button is in and we are dragging... well you can probably be safe about saying - we do.
 		  if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
@@ -167,17 +170,22 @@ public class SandboxInputAdapter extends InputAdapter {
 				  newX = useReducedMoveFixPoint.x + reducedMoveDirection.x * reducedMoveDiff.x;
 				  newY = useReducedMoveFixPoint.y + reducedMoveDirection.y * reducedMoveDiff.y;
 			  } else {
-				  newX = event.getStageX();
-				  newY = event.getStageY();
+				  newX = MathUtils.floor(event.getStageX() / gridSize)*gridSize;
+				  newY = MathUtils.floor(event.getStageY() / gridSize)*gridSize;
 			  }
 
-			// Selection rectangles should move and follow along
-			for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-				float[] diff = value.getTouchDiff();
-				value.getHostAsActor().setX(newX - diff[0]);
-				value.getHostAsActor().setY(newY - diff[1]);
-				value.hide();
-			}
+
+				 // Selection rectangles should move and follow along
+				 for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+					 float[] diff = value.getTouchDiff();
+
+					  diff[0] = MathUtils.floor(diff[0] / gridSize)*gridSize;
+					  diff[1] = MathUtils.floor(diff[1] / gridSize)*gridSize;
+
+					  value.getHostAsActor().setX(newX - diff[0]);
+					  value.getHostAsActor().setY(newY - diff[1]);
+					  value.hide();
+				 }
 		  }
 
 		  // pining UI to update current item properties data
@@ -329,8 +337,7 @@ public class SandboxInputAdapter extends InputAdapter {
 		  // TODO: key pressed 0 for unckown, should be removed?
 		  // TODO: need to make sure OSX Command button works too.
 
-
-		 if (isShiftKey(keycode)) {
+		  if (isShiftKey(keycode)) {
 			 reducedMouseMoveEnabled = true;
 			 System.out.println("pressed");
 		 }
@@ -391,6 +398,14 @@ public class SandboxInputAdapter extends InputAdapter {
 		  if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
 				// if shift is pressed, move items by 20 pixels instead of one
 				deltaMove = 20; //pixels
+		  }
+
+		  if(sandbox.getGridSize() > 1) {
+				deltaMove = sandbox.getGridSize();
+				if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+					 // if shift is pressed, move items 3 times more then the grid size
+					 deltaMove *= 3;
+				}
 		  }
 
 		  if (keycode == Input.Keys.UP) {

@@ -20,12 +20,9 @@ package com.uwsoft.editor.gdx.mediators;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.data.manager.DataManager;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.renderer.actor.*;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
-import java.io.File;
 import java.util.HashMap;
 
 /**

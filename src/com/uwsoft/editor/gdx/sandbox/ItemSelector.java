@@ -279,7 +279,7 @@ public class ItemSelector {
             sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
             selectionRect.remove();
         }
-        sandbox.getSandboxStage().uiStage.getItemsBox().initContent();
+//        sandbox.getSandboxStage().uiStage.getItemsBox().init();
         currentSelection.clear();
     }
 
@@ -425,7 +425,7 @@ public class ItemSelector {
     }
 
     public void alignSelections(int align) {
-        //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.curResolution);
+        //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.currentResolutionName);
         switch (align) {
             case Align.top:
                 alignSelectionsByY(get(topmostItem), true);

@@ -37,6 +37,8 @@ import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
+import java.util.Map;
+
 public class CustomVariablesDialog extends VisWindow {
 	
 	private IBaseItem item;

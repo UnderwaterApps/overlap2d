@@ -18,9 +18,6 @@
 
 package com.uwsoft.editor.gdx.ui;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,25 +27,34 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.stage.UIStage;
-import com.uwsoft.editor.gdx.ui.dialogs.ConfirmDialog;
-import com.uwsoft.editor.gdx.ui.dialogs.InputDialog;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
-import com.uwsoft.editor.renderer.actor.LabelItem;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class LibraryList extends Group {
 
     private final HashMap<String, CompositeItemVO> items;
     private final UIStage stage;
     private final Group listContainer;
+    private final Overlap2DFacade facade;
+    private final TextureManager textureManager;
     private ArrayList<LibraryItemThumbnailBox> libraryItems;
     private LibraryItemThumbnailBox librarySelectedItem;
     private Label searchLbl;
     private TextBoxItem searchText;
+
     public LibraryList(final UIStage s, float width, float height) {
+        facade = Overlap2DFacade.getInstance();
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
         stage = s;
         libraryItems = new ArrayList<>();
         this.setWidth(width);
@@ -62,7 +68,7 @@ public class LibraryList extends Group {
         container.setHeight(getHeight() - 20);
         listContainer.setWidth(getWidth() - 20);
         listContainer.setHeight(getHeight() - 25);
-        final ScrollPane scroll = new ScrollPane(table, s.textureManager.editorSkin);
+        final ScrollPane scroll = new ScrollPane(table, textureManager.editorSkin);
         container.add(scroll).colspan(4).width(getWidth());
         container.row();
         scroll.addListener(new InputListener() {
@@ -78,22 +84,22 @@ public class LibraryList extends Group {
 
         items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
         //-----------------Search Box
-        Group searchGroup   =   new Group();
+        Group searchGroup = new Group();
         container.add(searchGroup);
         searchGroup.setWidth(200);
         searchGroup.setHeight(30);
-        searchLbl   =   new Label("Search :", s.textureManager.editorSkin);
+        searchLbl = new Label("Search :", textureManager.editorSkin);
         searchGroup.addActor(searchLbl);
 
-        searchText = new TextBoxItem(new TextBoxVO(),s.essentials);
+        searchText = new TextBoxItem(new TextBoxVO(), s.essentials);
         searchText.setX(searchLbl.getTextBounds().width);
         searchGroup.addActor(searchText);
         searchText.setTextFieldListener(new TextField.TextFieldListener() {
-            public void keyTyped (TextField textField, char key) {
+            public void keyTyped(TextField textField, char key) {
                 drawItems(searchText.getText());
             }
         });
-        Label dummyTst = new Label("dummy", s.textureManager.editorSkin);
+        Label dummyTst = new Label("dummy", textureManager.editorSkin);
         if (items.size() * dummyTst.getHeight() > listContainer.getHeight()) {
             listContainer.setHeight(items.size() * (dummyTst.getHeight() + 2));
         }
@@ -123,6 +129,7 @@ public class LibraryList extends Group {
 
 
     }
+
     private void drawItems(String searchText) {
         listContainer.clearChildren();
         libraryItems.clear();
@@ -130,7 +137,7 @@ public class LibraryList extends Group {
 
         int iter = 1;
         for (final String value : items.keySet()) {
-            if(!value.contains(searchText))continue;
+            if (!value.contains(searchText)) continue;
             LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
             thumb.setX(0);
             thumb.setY(listContainer.getHeight() - thumb.getHeight() * iter - 2 * iter);
@@ -175,36 +182,30 @@ public class LibraryList extends Group {
     }
 
     private void showConfirmDialog(final LibraryItemThumbnailBox librarySelectedItem) {
-        ConfirmDialog confirmDialog = stage.dialogs().showConfirmDialog();
-        confirmDialog.setDescription("Are you sure you want to delete library item?");
-
-        confirmDialog.setListener(new ConfirmDialog.ConfirmDialogListener() {
-            @Override
-            public void onConfirm() {
-                items.remove(librarySelectedItem.getKey());
-                drawItems();
-            }
-
-            @Override
-            public void onCancel() {
-
-            }
-        });
+        DialogUtils.showConfirmDialog(stage,
+                "Delete library item",
+                "Are you sure you want to delete library item?",
+                new String[]{"Delete", "Cancel"}, new Integer[]{0, 1},
+                result -> {
+                    if (result == 0) {
+                        items.remove(librarySelectedItem.getKey());
+                        drawItems();
+                    }
+                });
     }
 
     private void showRenameDialog() {
-        InputDialog dlg = stage.dialogs().showInputDialog();
-
-
-        dlg.setDescription("New name for your layer");
-
-        dlg.setListener(new InputDialog.InputDialogListener() {
-
+        DialogUtils.showInputDialog(stage, "Rename Library Item", "New Name : ", new InputDialogListener() {
             @Override
-            public void onConfirm(String input) {
+            public void finished(String input) {
                 items.remove(librarySelectedItem.getKey());
                 librarySelectedItem.setKey(input);
                 items.put(input, librarySelectedItem.getCompositeItemVO());
+            }
+
+            @Override
+            public void canceled() {
+
             }
         });
     }
