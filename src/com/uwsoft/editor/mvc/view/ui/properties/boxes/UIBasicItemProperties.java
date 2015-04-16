@@ -22,9 +22,11 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
@@ -58,17 +60,19 @@ public class UIBasicItemProperties extends UIItemProperties {
 
         tintColorComponent = new ColorPickerButton();
 
+        Validators.FloatValidator floatValidator = new Validators.FloatValidator();
+
         idBox = new VisTextField();
-        xValue = new VisTextField();
-        yValue = new VisTextField();
-        widthValue = new VisTextField();
-        heightValue = new VisTextField();
-        scaleXValue = new VisTextField();
-        scaleYValue = new VisTextField();
+        xValue = new VisValidableTextField(floatValidator);
+        yValue = new VisValidableTextField(floatValidator);
+        widthValue = new VisValidableTextField(floatValidator);
+        heightValue = new VisValidableTextField(floatValidator);
+        scaleXValue = new VisValidableTextField(floatValidator);
+        scaleYValue = new VisValidableTextField(floatValidator);
         flipVertical = new VisCheckBox(null);
         flipHorizontal = new VisCheckBox(null);
         tintColorComponent = new ColorPickerButton();
-        rotationValue = new VisTextField();
+        rotationValue = new VisValidableTextField(floatValidator);
 
         add(new VisLabel("Identifier:", Align.right)).padRight(5).colspan(2).fillX();
         add(idBox).width(120).colspan(2);

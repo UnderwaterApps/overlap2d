@@ -72,6 +72,9 @@ public class KeyboardListener implements EventListener {
     }
 
     private void keyboardHandler(VisTextField target) {
+        if(!target.isInputValid()) {
+            return;
+        }
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         facade.sendNotification(eventName, target.getText());
     }
