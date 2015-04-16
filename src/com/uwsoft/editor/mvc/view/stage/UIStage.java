@@ -18,15 +18,10 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -39,7 +34,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
-import com.uwsoft.editor.mvc.view.ui.UISubmenuBar;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -154,9 +148,7 @@ public class UIStage extends Stage {
     }
 
     public void emptyClick() {
-        //uiMainTable.propertiesPanel.cleanContent();
-        //uiMainTable.propertiesPanel.showPhysicsParams();
-        //facade.sendNotification(Overlap2D.ITEM_SELECTED, Sandbox.getInstance().get);
+        facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }
 
     public void loadScene(CompositeItemVO scene) {

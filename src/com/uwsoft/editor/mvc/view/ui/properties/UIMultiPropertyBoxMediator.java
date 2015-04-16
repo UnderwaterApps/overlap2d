@@ -24,8 +24,13 @@ import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIScenePropertiesMediator;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ImageItem;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,6 +44,8 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     public static final String NAME = TAG;
 
     private HashMap<String, ArrayList<String>> classToMediatorMap;
+
+    private ArrayList<UIAbstractPropertiesMediator> currentRegisteredPropertyBoxes = new ArrayList<>();
 
     public UIMultiPropertyBoxMediator() {
         super(NAME, new UIMultiPropertyBox());
@@ -54,12 +61,16 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(ImageItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(ImageItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
     }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2D.PROJECT_OPENED,
+                Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATE,
                 Overlap2D.ITEM_SELECTED
         };
@@ -70,6 +81,9 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         switch (notification.getName()) {
             case Overlap2D.PROJECT_OPENED:
 
+                break;
+            case Overlap2D.EMPTY_SPACE_CLICKED:
+                initAllPropertyBoxes(Sandbox.getInstance().sceneControl.getCurrentSceneVO());
                 break;
             case Overlap2D.ITEM_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
@@ -83,16 +97,24 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     }
 
     private void initAllPropertyBoxes(Object observable) {
+        // retrieve a list of property boxes to show
         ArrayList<String> mediatorNames = classToMediatorMap.get(observable.getClass().getName());
 
-        viewComponent.clearBoxes();
+        //clear all current enabled boxes
+        viewComponent.clearAll();
+
+        //unregister all current mediators
+        for(UIAbstractPropertiesMediator mediator: currentRegisteredPropertyBoxes) {
+            facade.removeMediator(mediator.NAME);
+        }
+        currentRegisteredPropertyBoxes.clear();
 
         for (String mediatorName : mediatorNames) {
             try {
                 facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
 
-                UIAbstractPropertiesMediator propertyBoxMediator = facade.retrieveMediator(mediatorName);
-                viewComponent.addBox(propertyBoxMediator.getViewComponent());
+                UIAbstractPropertiesMediator<Object> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                viewComponent.addPropertyBox(propertyBoxMediator.getViewComponent());
             } catch (ReflectionException e) {
                 e.printStackTrace();
             }

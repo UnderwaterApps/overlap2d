@@ -16,18 +16,29 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
-import com.puremvc.patterns.mediator.SimpleMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
- * Created by sargis on 4/14/15.
+ * Created by azakhary on 4/15/2015.
  */
-public class UIProjectGeneralPropertiesMediator extends SimpleMediator<UIProjectGeneralProperties> {
-    private static final String TAG = UIProjectGeneralPropertiesMediator.class.getCanonicalName();
+public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem> {
+    private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public UIProjectGeneralPropertiesMediator() {
-        super(NAME, new UIProjectGeneralProperties());
+    public UIBasicItemPropertiesMediator() {
+        super(NAME, new UIBasicItemProperties());
+    }
+
+    @Override
+    public void setItem(IBaseItem item) {
+
+    }
+
+    @Override
+    public void onItemDataUpdate() {
+
     }
 }

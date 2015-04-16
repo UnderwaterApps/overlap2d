@@ -51,13 +51,12 @@ public class UIMultiPropertyBox extends VisWindow {
 
     }
 
-    public void clearBoxes() {
+    public void clearAll() {
         propertiesTable.clear();
         propertiesTable.reset();
     }
 
-    public void addBox(UIAbstractProperties viewComponent) {
-        viewComponent.initView();
+    public void addPropertyBox(UIAbstractProperties viewComponent) {
         propertiesTable.add(viewComponent);
     }
 }

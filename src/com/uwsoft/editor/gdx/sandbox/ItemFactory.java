@@ -37,7 +37,7 @@ import java.io.File;
 import java.util.Iterator;
 
 /**
- * Provides methods to create items of different types based on provided data, and adds them to the scene.
+ * Provides methods to create boxes of different types based on provided data, and adds them to the scene.
  */
 public class ItemFactory {
 

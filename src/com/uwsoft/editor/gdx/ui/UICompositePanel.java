@@ -109,7 +109,7 @@ public class UICompositePanel extends VisTable {
 //            libItem.update(currItem.getDataVO());
 //
 //
-//            //TODO: update other items with same name
+//            //TODO: update other boxes with same name
 //            revursiveUpdateLibraryVO(libName, stage.getSandbox().sceneControl.getRootSceneVO(), currItem.getDataVO());
 //        }
     }

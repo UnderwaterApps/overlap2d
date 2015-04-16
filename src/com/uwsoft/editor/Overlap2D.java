@@ -41,6 +41,7 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
     public static final String ITEM_DATA_UPDATE = EVENT_PREFIX + ".ITEM_DATA_UPDATE";
     public static final String ITEM_SELECTED = EVENT_PREFIX + ".ITEM_SELECTED";
+    public static final String EMPTY_SPACE_CLICKED = EVENT_PREFIX + ".EMPTY_SPACE_CLICKED";
 
     //
     public TextureManager textureManager;

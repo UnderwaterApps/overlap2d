@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties.depricated;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -31,16 +31,17 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 
 public class UIProjectGeneralProperties extends VisTable {
 
-    public static final String PHYSICS_ENABLED_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".PHYSICS_ENABLED_CHECKBOX_CLICKED";
-    public static final String GRAVITY_X_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".GRAVITY_X_TEXT_FIELD_UPDATED";
-    public static final String GRAVITY_Y_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".GRAVITY_Y_TEXT_FIELD_UPDATED";
-    public static final String SLEEP_VELOCITY_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".SLEEP_VELOCITY_TEXT_FIELD_UPDATED";
-    public static final String ENABLE_LIGHTS_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".ENABLE_LIGHTS_CHECKBOX_CLICKED";
-    public static final String DIFFUSE_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties" + ".DIFFUSE_CHECKBOX_CLICKED";
+    public static final String PHYSICS_ENABLED_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".PHYSICS_ENABLED_CHECKBOX_CLICKED";
+    public static final String GRAVITY_X_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".GRAVITY_X_TEXT_FIELD_UPDATED";
+    public static final String GRAVITY_Y_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".GRAVITY_Y_TEXT_FIELD_UPDATED";
+    public static final String SLEEP_VELOCITY_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".SLEEP_VELOCITY_TEXT_FIELD_UPDATED";
+    public static final String ENABLE_LIGHTS_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".ENABLE_LIGHTS_CHECKBOX_CLICKED";
+    public static final String DIFFUSE_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".DIFFUSE_CHECKBOX_CLICKED";
     //
     private final VisCheckBox physicsEnabledCheckBox;
     private final VisTextField gravityXTextField;
@@ -105,21 +106,6 @@ public class UIProjectGeneralProperties extends VisTable {
 //        enableCheckbox = ui.getCheckBoxById("enableCheckbox");
 //        enableCheckbox.setChecked(physicsPropertiesVO.enabled);
 //        setListeners();
-    }
-
-    private class CheckBoxChangeListener extends ChangeListener {
-
-        private final String eventName;
-
-        public CheckBoxChangeListener(String eventName) {
-            this.eventName = eventName;
-        }
-
-        @Override
-        public void changed(ChangeEvent changeEvent, Actor actor) {
-            Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(eventName, ((VisCheckBox) actor).isChecked());
-        }
     }
 
 

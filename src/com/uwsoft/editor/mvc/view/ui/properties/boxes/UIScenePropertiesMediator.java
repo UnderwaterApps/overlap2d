@@ -16,16 +16,29 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/16/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator {
-    private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
+public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO> {
+    private static final String TAG = UIScenePropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public UIBasicItemPropertiesMediator() {
-        super(NAME, new UIBasicItemProperties());
+    public UIScenePropertiesMediator() {
+        super(NAME, new UISceneProperties());
+    }
+
+    @Override
+    public void setItem(SceneVO item) {
+
+    }
+
+    @Override
+    public void onItemDataUpdate() {
+
     }
 }

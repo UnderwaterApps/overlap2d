@@ -27,7 +27,7 @@ import com.uwsoft.editor.mvc.view.ui.box.UIGridBox;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIAbstractPropertiesMediator extends SimpleMediator<UIAbstractProperties> {
+public abstract class UIAbstractPropertiesMediator<T> extends SimpleMediator<UIAbstractProperties> {
     private Sandbox sandbox;
 
     public UIAbstractPropertiesMediator(String mediatorName, UIAbstractProperties viewComponent) {
@@ -56,6 +56,8 @@ public abstract class UIAbstractPropertiesMediator extends SimpleMediator<UIAbst
                 break;
         }
     }
+
+    public abstract void setItem(T item);
 
     public abstract void onItemDataUpdate();
 }

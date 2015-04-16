@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
 import com.uwsoft.editor.renderer.actor.TextBoxItem;
 
 /**
@@ -56,10 +57,8 @@ public class UIBasicItemProperties extends UIItemProperties {
     private TextBoxItem rotationVal;
 
     public UIBasicItemProperties() {
+        super();
 
-    }
-
-    public void initView() {
         tintColorComponent = new ColorPickerButton();
 
         add(new VisLabel("Identifier:", Align.right)).padRight(5).colspan(2).fillX();
@@ -94,5 +93,4 @@ public class UIBasicItemProperties extends UIItemProperties {
         add(new VisLabel("Tint:", Align.right)).padRight(5).colspan(2).fillX();
         add(new ColorPickerButton()).width(120).colspan(2);
     }
-
 }

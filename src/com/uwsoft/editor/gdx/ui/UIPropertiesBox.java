@@ -21,10 +21,7 @@ package com.uwsoft.editor.gdx.ui;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.gdx.ui.properties.IPropertyBox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemBasicProperties;
-import com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralProperties;
-import com.uwsoft.editor.mvc.view.ui.properties.UIProjectGeneralPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.depricated.UIItemBasicProperties;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.util.ArrayList;
@@ -189,6 +186,7 @@ public class UIPropertiesBox extends VisWindow {
 //    }
 
     public void showPhysicsParams() {
+        /*
         //initView();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         UIProjectGeneralPropertiesMediator uiProjectGeneralPropertiesMediator = facade.retrieveMediator(UIProjectGeneralPropertiesMediator.NAME);
@@ -198,5 +196,6 @@ public class UIPropertiesBox extends VisWindow {
 //        physicsPropertiesBox.setY(getHeight() - physicsPropertiesBox.getHeight() - 20);
         //mainLayer.addActor(physicsPropertiesBox);
         propertiesTable.add(physicsPropertiesBox);
+        */
     }
 }

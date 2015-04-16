@@ -16,19 +16,27 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.event;
 
-import com.kotcrab.vis.ui.widget.VisTable;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/16/2015.
  */
-public abstract class UIAbstractProperties extends VisTable {
+public class CheckBoxChangeListener extends ChangeListener {
 
-    protected final Overlap2DFacade facade;
+    private final String eventName;
 
-    public UIAbstractProperties() {
-        facade = Overlap2DFacade.getInstance();
+    public CheckBoxChangeListener(String eventName) {
+        this.eventName = eventName;
+    }
+
+    @Override
+    public void changed(ChangeEvent changeEvent, Actor actor) {
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        facade.sendNotification(eventName, ((VisCheckBox) actor).isChecked());
     }
 }
