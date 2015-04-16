@@ -26,10 +26,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIScenePropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.UISpineAnimationItemPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.UISpriteAnimationItemPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.boxes.*;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -76,6 +73,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(CompositeItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(CompositeItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get(CompositeItem.class.getName()).add(UICompositeItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(ParticleItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(ParticleItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);

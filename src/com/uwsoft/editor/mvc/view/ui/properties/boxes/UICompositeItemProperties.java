@@ -19,49 +19,40 @@
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
-import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
+import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpineAnimationItemProperties extends UIItemProperties {
+public class UICompositeItemProperties extends UIItemProperties {
 
-    private VisSelectBox<String> animationsSelectBox;
+    private VisCheckBox scissorsEnabledCheckBox;
 
-    public UISpineAnimationItemProperties() {
+    public UICompositeItemProperties() {
         super();
 
-        animationsSelectBox = new VisSelectBox<>();
+        scissorsEnabledCheckBox = new VisCheckBox(null);
 
-        add(new VisLabel("Animations:", Align.right)).padRight(5).colspan(2).fillX();
-        add(animationsSelectBox).width(120).colspan(2);
+        add(new VisLabel("Scissors Enabled", Align.right)).padRight(5).width(55).right();
+        add(scissorsEnabledCheckBox).left();
         row().padTop(5);
 
         setListeners();
     }
 
-    public Array<String> getAnimations() {
-        return animationsSelectBox.getItems();
+    public boolean isScissorsEnabled() {
+        return scissorsEnabledCheckBox.isChecked();
     }
 
-    public void setAnimations(Array<String> animations) {
-        animationsSelectBox.setItems(animations);
-    }
-
-    public String getSelected() {
-        return animationsSelectBox.getSelected();
-    }
-
-    public void setSelectedAnimation(String currentAnimationName) {
-        animationsSelectBox.setSelected(currentAnimationName);
+    public void setScissorsEnabled(boolean scissorsEnabled) {
+        scissorsEnabledCheckBox.setChecked(scissorsEnabled);
     }
 
     private void setListeners() {
-        animationsSelectBox.addListener(new SelectBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        scissorsEnabledCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
     }
 }

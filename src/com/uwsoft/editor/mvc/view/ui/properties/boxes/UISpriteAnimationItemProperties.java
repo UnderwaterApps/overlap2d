@@ -40,6 +40,7 @@ public class UISpriteAnimationItemProperties extends UIItemProperties {
 
         add(new VisLabel("Animations:", Align.right)).padRight(5).colspan(2).fillX();
         add(animationsSelectBox).width(120).colspan(2);
+        row().padTop(5);
 
         setListeners();
     }
