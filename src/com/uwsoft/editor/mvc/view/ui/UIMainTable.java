@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.gdx.ui.UILibraryBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
-import com.uwsoft.editor.gdx.ui.UIPropertiesBox;
 import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;

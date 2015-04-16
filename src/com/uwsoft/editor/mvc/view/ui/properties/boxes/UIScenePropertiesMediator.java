@@ -19,11 +19,9 @@
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -47,6 +45,10 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
 
     @Override
     protected void translateViewToItemData() {
-
+        PhysicsPropertiesVO physicsVO = observableReference.physicsPropertiesVO;
+        physicsVO.gravityX = NumberUtils.toFloat(viewComponent.getGravityXValue(), physicsVO.gravityX);
+        physicsVO.gravityY = NumberUtils.toFloat(viewComponent.getGravityYValue(), physicsVO.gravityY);
+        physicsVO.sleepVelocity = NumberUtils.toFloat(viewComponent.getSleepVelocityValue(), physicsVO.sleepVelocity);
+        physicsVO.enabled = viewComponent.isPhysicsEnabled();
     }
 }

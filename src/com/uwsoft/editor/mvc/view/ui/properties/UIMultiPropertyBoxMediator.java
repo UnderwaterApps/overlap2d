@@ -79,7 +79,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case Overlap2D.PROJECT_OPENED:
-
+                initAllPropertyBoxes(Sandbox.getInstance().sceneControl.getCurrentSceneVO());
                 break;
             case Overlap2D.EMPTY_SPACE_CLICKED:
                 initAllPropertyBoxes(Sandbox.getInstance().sceneControl.getCurrentSceneVO());

@@ -23,11 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.depricated.UIItemBasicProperties;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import org.apache.commons.lang3.ArrayUtils;
@@ -66,7 +63,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBa
                         viewComponent.setTintColor(newColor);
                     }
                 });
-                //TODO might be more wise to manage a single tmp color instead of recreating new colors
+
                 picker.setColor(viewComponent.getTintColor());
                 Sandbox.getInstance().getUIStage().addActor(picker.fadeIn());
 
@@ -99,14 +96,14 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBa
         MainItemVO vo = observableReference.getDataVO();
 
         vo.itemIdentifier = viewComponent.getIdBoxValue();
-        vo.x = NumberUtils.toFloat(viewComponent.getXValue(), 0);
-        vo.y = NumberUtils.toFloat(viewComponent.getYValue(), 0);
+        vo.x = NumberUtils.toFloat(viewComponent.getXValue(), vo.x);
+        vo.y = NumberUtils.toFloat(viewComponent.getYValue(), vo.y);
         vo.isFlipedH = viewComponent.getFlipH();
         vo.isFlipedV = viewComponent.getFlipV();
         // TODO: manage width and height
-        vo.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), 0);
-        vo.scaleX = NumberUtils.toFloat(viewComponent.getScaleXValue(), 0);
-        vo.scaleY = NumberUtils.toFloat(viewComponent.getScaleYValue(), 0);
+        vo.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), vo.rotation);
+        vo.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), vo.scaleX);
+        vo.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), vo.scaleY);
         Color color = viewComponent.getTintColor();
         vo.tint[0] = color.r;
         vo.tint[1] = color.g;

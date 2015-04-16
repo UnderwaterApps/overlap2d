@@ -19,9 +19,11 @@
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
@@ -41,30 +43,33 @@ public class UISceneProperties extends UIAbstractProperties {
     public UISceneProperties() {
         super();
 
+        Validators.FloatValidator floatValidator = new Validators.FloatValidator();
+
+        physicsEnabledCheckBox = new VisCheckBox(null);
+        gravityXTextField = new VisValidableTextField(floatValidator);
+        gravityYTextField = new VisValidableTextField(floatValidator);
+        sleepVelocityTextField = new VisValidableTextField(floatValidator);
+        enableLightsCheckBox = new VisCheckBox(null);
+        diffuseCheckBox = new VisCheckBox(null);
+
         pad(5);
         add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);
-        physicsEnabledCheckBox = new VisCheckBox(null);
         add(physicsEnabledCheckBox).left();
         row().padTop(5);
         add(new VisLabel("Gravity X:", Align.right)).padRight(5).width(115);
-        gravityXTextField = new VisTextField();
         add(gravityXTextField).width(115);
         row().padTop(5);
         add(new VisLabel("Gravity Y:", Align.right)).padRight(5).width(115);
-        gravityYTextField = new VisTextField();
         add(gravityYTextField).width(115);
         row().padTop(5);
         add(new VisLabel("Sleep velocity:", Align.right)).padRight(5).width(115);
-        sleepVelocityTextField = new VisTextField();
         add(sleepVelocityTextField).width(115);
         row().padTop(5);
         addSeparator().colspan(2).padTop(5).padBottom(5);
         add(new VisLabel("Enable lights:", Align.right)).padRight(5).width(115);
-        enableLightsCheckBox = new VisCheckBox(null);
         add(enableLightsCheckBox).left();
         row().padTop(5);
         add(new VisLabel("Diffuse:", Align.right)).padRight(5).width(115);
-        diffuseCheckBox = new VisCheckBox(null);
         add(diffuseCheckBox).left();
 
         setListeners();
