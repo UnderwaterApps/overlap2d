@@ -42,8 +42,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         Actor itemAsActor = (Actor) item;
 
         viewComponent.setIdBoxValue(vo.itemIdentifier);
-        viewComponent.setXValue(vo.x + "");
-        viewComponent.setYValue(vo.y + "");
+        viewComponent.setXValue(itemAsActor.getX() + "");
+        viewComponent.setYValue(itemAsActor.getY() + "");
         viewComponent.setFlipH(vo.isFlipedH);
         viewComponent.setFlipV(vo.isFlipedV);
         viewComponent.setWidthValue(itemAsActor.getWidth() + "");
