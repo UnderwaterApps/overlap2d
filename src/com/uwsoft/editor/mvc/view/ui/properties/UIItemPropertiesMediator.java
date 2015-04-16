@@ -21,9 +21,9 @@ package com.uwsoft.editor.mvc.view.ui.properties;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIItemPropertiesMediator<T> extends UIAbstractPropertiesMediator<T> {
+public abstract class UIItemPropertiesMediator<T, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
 
-    public UIItemPropertiesMediator(String mediatorName, UIAbstractProperties viewComponent) {
+    public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
     }
 }

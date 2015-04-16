@@ -18,13 +18,16 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.MainItemVO;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem> {
+public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem, UIBasicItemProperties> {
     private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -32,13 +35,22 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         super(NAME, new UIBasicItemProperties());
     }
 
-    @Override
-    public void setItem(IBaseItem item) {
 
-    }
+    protected void translateItemDataToView(IBaseItem item) {
+        MainItemVO vo = item.getDataVO();
 
-    @Override
-    public void onItemDataUpdate() {
+        Actor itemAsActor = (Actor) item;
 
+        viewComponent.setIdBoxValue(vo.itemIdentifier);
+        viewComponent.setXValue(vo.x + "");
+        viewComponent.setYValue(vo.y + "");
+        viewComponent.setFlipH(vo.isFlipedH);
+        viewComponent.setFlipV(vo.isFlipedV);
+        viewComponent.setWidthValue(itemAsActor.getWidth() + "");
+        viewComponent.setHeightValue(itemAsActor.getHeight() + "");
+        viewComponent.setRotationValue(vo.rotation + "");
+        viewComponent.setScaleXValue(vo.scaleX + "");
+        viewComponent.setScaleYValue(vo.scaleY + "");
+        viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[1], vo.tint[2]));
     }
 }

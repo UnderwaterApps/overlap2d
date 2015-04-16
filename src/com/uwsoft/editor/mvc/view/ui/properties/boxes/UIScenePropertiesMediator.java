@@ -19,12 +19,15 @@
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO> {
+public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO, UISceneProperties> {
     private static final String TAG = UIScenePropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -32,13 +35,12 @@ public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO>
         super(NAME, new UISceneProperties());
     }
 
-    @Override
-    public void setItem(SceneVO item) {
+    protected void translateItemDataToView(SceneVO item) {
+        PhysicsPropertiesVO physicsVO = item.physicsPropertiesVO;
 
-    }
-
-    @Override
-    public void onItemDataUpdate() {
-
+        viewComponent.setGravityXValue(physicsVO.gravityX + "");
+        viewComponent.setGravityYValue(physicsVO.gravityY + "");
+        viewComponent.setPhysicsEnable(physicsVO.enabled);
+        viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
     }
 }

@@ -120,6 +120,7 @@ public class UIStage extends Stage {
     public void updateCurrentItemState() {
         // TODO: do this with notification
        // uiMainTable.multiPropertyBox.updateState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     public void itemWasSelected(IBaseItem itm) {

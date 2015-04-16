@@ -28,7 +28,6 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIScenePropertiesMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ImageItem;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -71,7 +70,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         return new String[]{
                 Overlap2D.PROJECT_OPENED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
-                Overlap2D.ITEM_DATA_UPDATE,
+                Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTED
         };
     }
@@ -87,9 +86,6 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 break;
             case Overlap2D.ITEM_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
-                break;
-            case Overlap2D.ITEM_DATA_UPDATE:
-
                 break;
             default:
                 break;
@@ -113,7 +109,8 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             try {
                 facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
 
-                UIAbstractPropertiesMediator<Object> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                UIAbstractPropertiesMediator<Object, UIAbstractProperties> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                propertyBoxMediator.setItem(observable);
                 viewComponent.addPropertyBox(propertyBoxMediator.getViewComponent());
             } catch (ReflectionException e) {
                 e.printStackTrace();

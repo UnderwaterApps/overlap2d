@@ -22,15 +22,16 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.view.ui.box.UIGridBox;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIAbstractPropertiesMediator<T> extends SimpleMediator<UIAbstractProperties> {
+public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProperties> extends SimpleMediator<V> {
     private Sandbox sandbox;
 
-    public UIAbstractPropertiesMediator(String mediatorName, UIAbstractProperties viewComponent) {
+    private T itemReference;
+
+    public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
 
         sandbox = Sandbox.getInstance();
@@ -40,7 +41,8 @@ public abstract class UIAbstractPropertiesMediator<T> extends SimpleMediator<UIA
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_DATA_UPDATE
+                Overlap2D.ITEM_DATA_UPDATED,
+                UIAbstractProperties.PROPERTIES_UPDATED
         };
     }
 
@@ -49,7 +51,10 @@ public abstract class UIAbstractPropertiesMediator<T> extends SimpleMediator<UIA
         super.handleNotification(notification);
 
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case UIAbstractProperties.PROPERTIES_UPDATED:
+
+                break;
+            case Overlap2D.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
                 break;
             default:
@@ -57,7 +62,14 @@ public abstract class UIAbstractPropertiesMediator<T> extends SimpleMediator<UIA
         }
     }
 
-    public abstract void setItem(T item);
+    public void setItem(T item) {
+        itemReference = item;
+        translateItemDataToView(itemReference);
+    }
 
-    public abstract void onItemDataUpdate();
+    public void onItemDataUpdate() {
+        translateItemDataToView(itemReference);
+    }
+
+    protected abstract void translateItemDataToView(T item);
 }

@@ -31,8 +31,6 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
  */
 public class UISceneProperties extends UIAbstractProperties {
 
-    public static final String PHYSICS_ENABLED_CHECKBOX_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.depricated.UIProjectGeneralProperties" + ".PHYSICS_ENABLED_CHECKBOX_CLICKED";
-
     private VisCheckBox physicsEnabledCheckBox;
     private VisTextField gravityXTextField;
     private VisTextField gravityYTextField;
@@ -46,33 +44,86 @@ public class UISceneProperties extends UIAbstractProperties {
         pad(5);
         add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);
         physicsEnabledCheckBox = new VisCheckBox(null);
-        physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(physicsEnabledCheckBox).left();
         row().padTop(5);
         add(new VisLabel("Gravity X:", Align.right)).padRight(5).width(115);
         gravityXTextField = new VisTextField();
-        gravityXTextField.addListener(new KeyboardListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(gravityXTextField).width(115);
         row().padTop(5);
         add(new VisLabel("Gravity Y:", Align.right)).padRight(5).width(115);
         gravityYTextField = new VisTextField();
-        gravityYTextField.addListener(new KeyboardListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(gravityYTextField).width(115);
         row().padTop(5);
         add(new VisLabel("Sleep velocity:", Align.right)).padRight(5).width(115);
         sleepVelocityTextField = new VisTextField();
-        sleepVelocityTextField.addListener(new KeyboardListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(sleepVelocityTextField).width(115);
         row().padTop(5);
         addSeparator().colspan(2).padTop(5).padBottom(5);
         add(new VisLabel("Enable lights:", Align.right)).padRight(5).width(115);
         enableLightsCheckBox = new VisCheckBox(null);
-        enableLightsCheckBox.addListener(new CheckBoxChangeListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(enableLightsCheckBox).left();
         row().padTop(5);
         add(new VisLabel("Diffuse:", Align.right)).padRight(5).width(115);
         diffuseCheckBox = new VisCheckBox(null);
-        diffuseCheckBox.addListener(new CheckBoxChangeListener(PHYSICS_ENABLED_CHECKBOX_CLICKED));
         add(diffuseCheckBox).left();
+
+        setListeners();
+    }
+
+    public boolean isDiffuse() {
+        return diffuseCheckBox.isChecked();
+    }
+
+    public void setDiffuse(boolean isDiffuse) {
+        this.diffuseCheckBox.setChecked(isDiffuse);
+    }
+
+    public boolean isPhysicsEnabled() {
+        return physicsEnabledCheckBox.isChecked();
+    }
+
+    public void setPhysicsEnable(boolean isPhysicsEnabled) {
+        this.physicsEnabledCheckBox.setChecked(isPhysicsEnabled);
+    }
+
+    public String getGravityXValue() {
+        return gravityXTextField.getText();
+    }
+
+    public void setGravityXValue(String gravityXValue) {
+        this.gravityXTextField.setText(gravityXValue);
+    }
+
+    public String getGravityYValue() {
+        return gravityYTextField.getText();
+    }
+
+    public void setGravityYValue(String gravityYValue) {
+        this.gravityXTextField.setText(gravityYValue);
+    }
+
+    public String getSleepVelocityValue() {
+        return sleepVelocityTextField.getText();
+    }
+
+    public void setSleepVelocityValue(String sleepVelocityValue) {
+        this.sleepVelocityTextField.setText(sleepVelocityValue);
+    }
+
+    public boolean isLightsEnabled() {
+        return enableLightsCheckBox.isChecked();
+    }
+
+    public void setLightsEnabled(boolean isLightsEnabled) {
+        this.enableLightsCheckBox.setChecked(isLightsEnabled);
+    }
+
+    private void setListeners() {
+        physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        gravityXTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        gravityYTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        sleepVelocityTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        enableLightsCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        diffuseCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
     }
 }
