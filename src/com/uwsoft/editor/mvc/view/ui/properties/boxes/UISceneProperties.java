@@ -104,7 +104,7 @@ public class UISceneProperties extends UIAbstractProperties {
     }
 
     public void setGravityYValue(String gravityYValue) {
-        this.gravityXTextField.setText(gravityYValue);
+        this.gravityYTextField.setText(gravityYValue);
     }
 
     public String getSleepVelocityValue() {
