@@ -29,6 +29,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIScenePropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UISpineAnimationItemPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.boxes.UISpriteAnimationItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -64,10 +65,14 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(SpriteAnimation.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SpriteAnimation.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get(SpriteAnimation.class.getName()).add(UISpriteAnimationItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(SpineActor.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SpineActor.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
         classToMediatorMap.get(SpineActor.class.getName()).add(UISpineAnimationItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(SpriterActor.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(SpriterActor.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(CompositeItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(CompositeItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
