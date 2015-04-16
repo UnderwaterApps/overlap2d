@@ -19,10 +19,14 @@
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
@@ -33,6 +37,8 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
  * Created by azakhary on 4/15/2015.
  */
 public class UIBasicItemProperties extends UIItemProperties {
+
+    public static final String TINT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemProperties" + ".TINT_COLOR_BUTTON_CLICKED";
 
     private VisTextField idBox;
 
@@ -85,10 +91,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         add(new VisLabel("Flip X:", Align.right)).padRight(5).width(55).right();
         add(flipVertical).padRight(5).left();
         add(new VisLabel("Flip Y:", Align.right)).padRight(5).width(55).right();
-        add(new VisCheckBox(null)).left();
-        row().padTop(5);
-        add(new VisLabel("Rotation:", Align.right)).padRight(5).colspan(2).fillX();
-        add(flipHorizontal).width(120).colspan(2);
+        add(flipHorizontal).left();
         row().padTop(5);
         add(new VisLabel("Rotation:", Align.right)).padRight(5).colspan(2).fillX();
         add(rotationValue).width(120).colspan(2);
@@ -187,19 +190,26 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     public void setTintColor(Color tintColor) {
         tintColorComponent.setColorValue(tintColor);
+        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
     }
 
     private void setListeners() {
-        idBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        idBox.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
         xValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
         yValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
         widthValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        heightValue.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        scaleXValue.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        scaleYValue.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        heightValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        scaleXValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        scaleYValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
         flipVertical.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
         flipHorizontal.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        //tintColorComponent.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        rotationValue.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        rotationValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+
+        tintColorComponent.addListener(new ClickListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                facade.sendNotification(TINT_COLOR_BUTTON_CLICKED);
+            }
+        });
     }
 }

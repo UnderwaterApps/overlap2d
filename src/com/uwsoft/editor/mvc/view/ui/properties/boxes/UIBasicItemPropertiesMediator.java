@@ -20,9 +20,18 @@ package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.depricated.UIItemBasicProperties;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -35,6 +44,37 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBa
         super(NAME, new UIBasicItemProperties());
     }
 
+    @Override
+    public String[] listNotificationInterests() {
+        String[] defaultNotifications = super.listNotificationInterests();
+        String[] notificationInterests = new String[]{
+                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED
+        };
+
+        return ArrayUtils.addAll(defaultNotifications, notificationInterests);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED:
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                    @Override
+                    public void finished(Color newColor) {
+                        viewComponent.setTintColor(newColor);
+                    }
+                });
+                //TODO might be more wise to manage a single tmp color instead of recreating new colors
+                picker.setColor(viewComponent.getTintColor());
+                Sandbox.getInstance().getUIStage().addActor(picker.fadeIn());
+
+                break;
+            default:
+                break;
+        }
+    }
 
     protected void translateObservableDataToView(IBaseItem item) {
         MainItemVO vo = item.getDataVO();
@@ -51,12 +91,31 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBa
         viewComponent.setRotationValue(vo.rotation + "");
         viewComponent.setScaleXValue(vo.scaleX + "");
         viewComponent.setScaleYValue(vo.scaleY + "");
-        viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[1], vo.tint[2]));
+        viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
     }
 
     @Override
     protected void translateViewToItemData() {
+        MainItemVO vo = observableReference.getDataVO();
+
+        vo.itemIdentifier = viewComponent.getIdBoxValue();
+        vo.x = NumberUtils.toFloat(viewComponent.getXValue(), 0);
+        vo.y = NumberUtils.toFloat(viewComponent.getYValue(), 0);
+        vo.isFlipedH = viewComponent.getFlipH();
+        vo.isFlipedV = viewComponent.getFlipV();
+        // TODO: manage width and height
+        vo.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), 0);
+        vo.scaleX = NumberUtils.toFloat(viewComponent.getScaleXValue(), 0);
+        vo.scaleY = NumberUtils.toFloat(viewComponent.getScaleYValue(), 0);
+        Color color = viewComponent.getTintColor();
+        vo.tint[0] = color.r;
+        vo.tint[1] = color.g;
+        vo.tint[2] = color.b;
+        vo.tint[3] = color.a;
 
         observableReference.renew();
+
+        Sandbox.getInstance().getSelector().updateSelections();
+        Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }

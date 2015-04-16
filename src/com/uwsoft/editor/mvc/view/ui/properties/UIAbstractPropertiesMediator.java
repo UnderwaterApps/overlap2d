@@ -52,7 +52,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
         switch (notification.getName()) {
             case UIAbstractProperties.PROPERTIES_UPDATED:
-
+                translateViewToItemData();
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
