@@ -27,7 +27,7 @@ import com.uwsoft.editor.renderer.data.MainItemVO;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem, UIBasicItemProperties> {
+public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBasicItemProperties> {
     private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -36,7 +36,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
     }
 
 
-    protected void translateItemDataToView(IBaseItem item) {
+    protected void translateObservableDataToView(IBaseItem item) {
         MainItemVO vo = item.getDataVO();
 
         Actor itemAsActor = (Actor) item;
@@ -52,5 +52,11 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         viewComponent.setScaleXValue(vo.scaleX + "");
         viewComponent.setScaleYValue(vo.scaleY + "");
         viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[1], vo.tint[2]));
+    }
+
+    @Override
+    protected void translateViewToItemData() {
+
+        observableReference.renew();
     }
 }

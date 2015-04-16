@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.boxes;
 
+import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
@@ -27,7 +28,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO, UISceneProperties> {
+public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<SceneVO, UISceneProperties> {
     private static final String TAG = UIScenePropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -35,12 +36,17 @@ public class UIScenePropertiesMediator extends UIItemPropertiesMediator<SceneVO,
         super(NAME, new UISceneProperties());
     }
 
-    protected void translateItemDataToView(SceneVO item) {
+    protected void translateObservableDataToView(SceneVO item) {
         PhysicsPropertiesVO physicsVO = item.physicsPropertiesVO;
 
         viewComponent.setGravityXValue(physicsVO.gravityX + "");
         viewComponent.setGravityYValue(physicsVO.gravityY + "");
         viewComponent.setPhysicsEnable(physicsVO.enabled);
         viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
+    }
+
+    @Override
+    protected void translateViewToItemData() {
+
     }
 }

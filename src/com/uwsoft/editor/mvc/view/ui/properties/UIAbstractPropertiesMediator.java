@@ -29,7 +29,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProperties> extends SimpleMediator<V> {
     private Sandbox sandbox;
 
-    private T itemReference;
+    protected T observableReference;
 
     public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
@@ -63,13 +63,15 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
     }
 
     public void setItem(T item) {
-        itemReference = item;
-        translateItemDataToView(itemReference);
+        observableReference = item;
+        translateObservableDataToView(observableReference);
     }
 
     public void onItemDataUpdate() {
-        translateItemDataToView(itemReference);
+        translateObservableDataToView(observableReference);
     }
 
-    protected abstract void translateItemDataToView(T item);
+    protected abstract void translateObservableDataToView(T item);
+
+    protected abstract void translateViewToItemData();
 }
