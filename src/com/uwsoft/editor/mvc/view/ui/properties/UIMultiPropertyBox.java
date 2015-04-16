@@ -58,5 +58,8 @@ public class UIMultiPropertyBox extends VisWindow {
 
     public void addPropertyBox(UIAbstractProperties viewComponent) {
         propertiesTable.add(viewComponent);
+        propertiesTable.row();
+        propertiesTable.addSeparator().padBottom(5);
+        propertiesTable.row();
     }
 }

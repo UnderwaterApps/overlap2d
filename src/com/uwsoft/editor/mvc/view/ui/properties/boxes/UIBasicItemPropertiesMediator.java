@@ -33,7 +33,7 @@ import org.apache.commons.lang3.math.NumberUtils;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<UIBasicItemProperties> {
+public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem, UIBasicItemProperties> {
     private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 

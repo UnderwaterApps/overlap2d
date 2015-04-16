@@ -16,16 +16,27 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.event;
 
-import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/16/2015.
  */
-public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
+public class SelectBoxChangeListener extends ChangeListener {
 
-    public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
-        super(mediatorName, viewComponent);
+    private final String eventName;
+
+    public SelectBoxChangeListener(String eventName) {
+        this.eventName = eventName;
+    }
+
+    @Override
+    public void changed(ChangeEvent changeEvent, Actor actor) {
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        facade.sendNotification(eventName, ((VisSelectBox) actor).getSelected());
     }
 }

@@ -28,7 +28,8 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.boxes.UIScenePropertiesMediator;
-import com.uwsoft.editor.renderer.actor.ImageItem;
+import com.uwsoft.editor.mvc.view.ui.properties.boxes.UISpineAnimationItemPropertiesMediator;
+import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 import java.util.ArrayList;
@@ -60,6 +61,22 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(ImageItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(ImageItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(SpriteAnimation.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(SpriteAnimation.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(SpineActor.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(SpineActor.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get(SpineActor.class.getName()).add(UISpineAnimationItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(CompositeItem.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(CompositeItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(ParticleItem.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(ParticleItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+
+        classToMediatorMap.put(LightActor.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(LightActor.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
@@ -95,6 +112,8 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     private void initAllPropertyBoxes(Object observable) {
         // retrieve a list of property boxes to show
         ArrayList<String> mediatorNames = classToMediatorMap.get(observable.getClass().getName());
+
+        if(mediatorNames == null) return;
 
         //clear all current enabled boxes
         viewComponent.clearAll();
