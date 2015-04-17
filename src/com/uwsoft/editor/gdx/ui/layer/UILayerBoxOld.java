@@ -37,7 +37,7 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 import java.awt.*;
 import java.util.ArrayList;
 
-public class UILayerBox extends ExpandableUIBox {
+public class UILayerBoxOld extends ExpandableUIBox {
 
     private final Overlap2DFacade facade;
     private final TextureManager textureManager;
@@ -49,7 +49,7 @@ public class UILayerBox extends ExpandableUIBox {
     private DragAndDrop dragAndDrop;
     private boolean isLayerDragging;
 
-    public UILayerBox(UIStage s) {
+    public UILayerBoxOld(UIStage s) {
         super(s, 250, 250);
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);

@@ -16,21 +16,34 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/17/2015.
  */
-public abstract class UIAbstractProperties extends VisTable {
+public class UIParticleEffectsTab extends Tab {
 
-    public static final String PROPERTIES_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties" + ".PROPERTIES_UPDATED";
+    private VisTable contentTable;
 
-    protected final Overlap2DFacade facade;
+    public UIParticleEffectsTab() {
+        super(false, false);
 
-    public UIAbstractProperties() {
-        facade = Overlap2DFacade.getInstance();
+        contentTable = new VisTable();
+
+        contentTable.setWidth(250);
+    }
+
+    @Override
+    public String getTabTitle() {
+        return "Particles";
+    }
+
+    @Override
+    public Table getContentTable() {
+        return contentTable;
     }
 }

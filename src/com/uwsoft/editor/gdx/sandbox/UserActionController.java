@@ -38,8 +38,8 @@ import com.uwsoft.editor.renderer.data.LightVO;
 import java.util.ArrayList;
 
 /**
- * Provides interface for user actions/intentions like creating items
- * copying and pasting items and doing redo/undo.
+ * Provides interface for user actions/intentions like creating boxes
+ * copying and pasting boxes and doing redo/undo.
  */
 public class UserActionController {
 

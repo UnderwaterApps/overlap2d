@@ -42,7 +42,7 @@ public class ItemSelector {
 
     private SceneControlMediator sceneControl;
 
-    /** list of current selected items */
+    /** list of current selected boxes */
     private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
 
     public ItemSelector(Sandbox sandbox) {
@@ -53,14 +53,14 @@ public class ItemSelector {
     /***************************** Getters *********************************/
 
     /**
-     * @return HashMap of selection rectangles that contain items
+     * @return HashMap of selection rectangles that contain boxes
      */
     public HashMap<IBaseItem, SelectionRectangle> getCurrentSelection() {
         return currentSelection;
     }
 
     /**
-     * @return list of currently selected items
+     * @return list of currently selected boxes
      */
     public ArrayList<IBaseItem> getSelectedItems() {
         ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
@@ -151,7 +151,7 @@ public class ItemSelector {
     }
 
     /**
-     * Finds all items that are on particular layer and selects them
+     * Finds all boxes that are on particular layer and selects them
      * @param name of the layer
      */
     public void selectItemsByLayerName(String name) {
@@ -189,8 +189,8 @@ public class ItemSelector {
 
 
     /**
-     * set selection to a list of items
-     * @param items list of items to select
+     * set selection to a list of boxes
+     * @param items list of boxes to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
     public void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
@@ -237,8 +237,8 @@ public class ItemSelector {
     }
 
     /**
-     * Selects all items on currently active scene
-     * TODO: This should not select locked items, check if it's true and remove this comment
+     * Selects all boxes on currently active scene
+     * TODO: This should not select locked boxes, check if it's true and remove this comment
      */
     public void selectAllItems() {
         ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
@@ -251,7 +251,7 @@ public class ItemSelector {
 
 
 
-    /************************ Manipulate selected items  ******************************/
+    /************************ Manipulate selected boxes  ******************************/
 
     /**
      * Updates VO objects, and physics related data of all selected objects
@@ -272,7 +272,7 @@ public class ItemSelector {
     }
 
     /**
-     * removes all selected items from the scene
+     * removes all selected boxes from the scene
      */
     public void removeCurrentSelectedItems() {
         for (SelectionRectangle selectionRect : currentSelection.values()) {
@@ -466,7 +466,7 @@ public class ItemSelector {
     }
 
     /**
-     * Moves selected items by specified values in both directions
+     * Moves selected boxes by specified values in both directions
      * @param x
      * @param y
      */

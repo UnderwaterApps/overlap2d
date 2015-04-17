@@ -22,19 +22,19 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Payload;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Source;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop.Target;
 import com.uwsoft.editor.gdx.ui.layer.LayerItem;
-import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+import com.uwsoft.editor.gdx.ui.layer.UILayerBoxOld;
 
 /**
  * Created by sargis on 7/2/14.
  */
 public class LayerItemTarget extends Target {
     private final LayerItem layerItem;
-    private final UILayerBox uiLayerBox;
+    private final UILayerBoxOld uiLayerBoxOld;
 
-    public LayerItemTarget(LayerItem layerItem, UILayerBox uiLayerBox) {
+    public LayerItemTarget(LayerItem layerItem, UILayerBoxOld uiLayerBoxOld) {
         super(layerItem);
         this.layerItem = layerItem;
-        this.uiLayerBox = uiLayerBox;
+        this.uiLayerBoxOld = uiLayerBoxOld;
     }
 
     @Override
@@ -51,7 +51,7 @@ public class LayerItemTarget extends Target {
         if (layerItem == sourceLayerItem) {
             return;
         }
-        uiLayerBox.arrangeLayers(sourceLayerItem, layerItem);
+        uiLayerBoxOld.arrangeLayers(sourceLayerItem, layerItem);
 //        ArrayList<LayerItemVO> layers = sandboxStage.getCurrentScene().dataVO.composite.layers;
 //        int index = -1;
 //        for (LayerItemVO layer : layers) {

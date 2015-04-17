@@ -26,12 +26,12 @@ package com.uwsoft.editor.gdx.sandbox;
 public enum EditingMode {
 
 	 /**
-	  * user can only select items
+	  * user can only select boxes
 	  */
     SELECTION,
 
 	 /**
-	  * User can scale and rotate items
+	  * User can scale and rotate boxes
 	  */
     TRANSFORM,
 

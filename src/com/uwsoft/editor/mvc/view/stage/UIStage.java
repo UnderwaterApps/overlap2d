@@ -18,15 +18,10 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.*;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -34,12 +29,11 @@ import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
-import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+import com.uwsoft.editor.gdx.ui.layer.UILayerBoxOld;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
-import com.uwsoft.editor.mvc.view.ui.UISubmenuBar;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -126,37 +120,36 @@ public class UIStage extends Stage {
     public void updateCurrentItemState() {
         // TODO: do this with notification
        // uiMainTable.multiPropertyBox.updateState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     public void itemWasSelected(IBaseItem itm) {
         //uiMainTable.multiPropertyBox.setItem(itm);
         facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
 
-        uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
+        //uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
     }
 
     public void loadCurrentProject() {
-        uiMainTable.libraryPanel.initContent();
+       // uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
 
-        uiMainTable.layerPanel.initContent();
+        //uiMainTable.layerPanel.initContent();
 
 //        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
     }
 
     public void reInitLibrary() {
-        uiMainTable.libraryPanel.initContent();
+        //uiMainTable.libraryPanel.initContent();
 
         uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
     }
 
     public void emptyClick() {
-        //uiMainTable.propertiesPanel.cleanContent();
-        //uiMainTable.propertiesPanel.showPhysicsParams();
-        //facade.sendNotification(Overlap2D.ITEM_SELECTED, Sandbox.getInstance().get);
+        facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }
 
     public void loadScene(CompositeItemVO scene) {
@@ -188,7 +181,7 @@ public class UIStage extends Stage {
         return uiMainTable.lightBox;
     }
 
-    public UILayerBox getLayerPanel() {
+    public UILayerBoxOld getLayerPanel() {
         return uiMainTable.layerPanel;
     }
 

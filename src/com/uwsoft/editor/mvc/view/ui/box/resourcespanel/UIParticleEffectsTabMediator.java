@@ -16,18 +16,39 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 
 /**
- * Created by sargis on 4/14/15.
+ * Created by azakhary on 4/17/2015.
  */
-public class UIProjectGeneralPropertiesMediator extends SimpleMediator<UIProjectGeneralProperties> {
-    private static final String TAG = UIProjectGeneralPropertiesMediator.class.getCanonicalName();
+public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffectsTab> {
+
+    private static final String TAG = UIParticleEffectsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public UIProjectGeneralPropertiesMediator() {
-        super(NAME, new UIProjectGeneralProperties());
+    public UIParticleEffectsTabMediator() {
+        super(NAME, new UIParticleEffectsTab());
+    }
+
+    @Override
+    public String[] listNotificationInterests() {
+        return new String[]{
+                Overlap2D.PROJECT_OPENED
+        };
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        switch (notification.getName()) {
+            case Overlap2D.PROJECT_OPENED:
+
+                break;
+            default:
+                break;
+        }
     }
 }

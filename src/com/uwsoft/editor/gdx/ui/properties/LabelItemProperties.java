@@ -105,7 +105,7 @@ public class LabelItemProperties extends PropertyBox implements IPropertyBox<Lab
                 }
             });
         }
-        //size items
+        //size boxes
         for (int i = 0; i < sizeArray.length; i++) {
         	if (sizeArray[i] == ((LabelItem) item).getDataVO().size) {
         		sizeIndex = i;

@@ -16,62 +16,39 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/17/2015.
  */
-public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProperties> extends SimpleMediator<V> {
-    private Sandbox sandbox;
+public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
 
-    protected T observableReference;
+    private static final String TAG = UIAnimationsTabMediator.class.getCanonicalName();
+    public static final String NAME = TAG;
 
-    public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
-        super(mediatorName, viewComponent);
-
-        sandbox = Sandbox.getInstance();
+    public UIAnimationsTabMediator() {
+        super(NAME, new UIAnimationsTab());
     }
-
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_DATA_UPDATED,
-                UIAbstractProperties.PROPERTIES_UPDATED
+                Overlap2D.PROJECT_OPENED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
-        super.handleNotification(notification);
-
         switch (notification.getName()) {
-            case UIAbstractProperties.PROPERTIES_UPDATED:
-                translateViewToItemData();
-                break;
-            case Overlap2D.ITEM_DATA_UPDATED:
-                onItemDataUpdate();
+            case Overlap2D.PROJECT_OPENED:
+
                 break;
             default:
                 break;
         }
     }
-
-    public void setItem(T item) {
-        observableReference = item;
-        translateObservableDataToView(observableReference);
-    }
-
-    public void onItemDataUpdate() {
-        translateObservableDataToView(observableReference);
-    }
-
-    protected abstract void translateObservableDataToView(T item);
-
-    protected abstract void translateViewToItemData();
 }

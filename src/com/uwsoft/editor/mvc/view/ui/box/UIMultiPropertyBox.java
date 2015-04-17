@@ -16,12 +16,13 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.gdx.ui.properties.IPropertyBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.util.ArrayList;
@@ -51,13 +52,15 @@ public class UIMultiPropertyBox extends VisWindow {
 
     }
 
-    public void clearBoxes() {
+    public void clearAll() {
         propertiesTable.clear();
         propertiesTable.reset();
     }
 
-    public void addBox(UIAbstractProperties viewComponent) {
-        viewComponent.initView();
+    public void addPropertyBox(UIAbstractProperties viewComponent) {
         propertiesTable.add(viewComponent);
+        propertiesTable.row();
+        propertiesTable.addSeparator().padBottom(5);
+        propertiesTable.row();
     }
 }

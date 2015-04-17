@@ -16,16 +16,30 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties;
+package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
 
 /**
- * Created by azakhary on 4/15/2015.
+ * Created by azakhary on 4/16/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator {
-    private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
+public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<CompositeItem, UICompositeItemProperties> {
+
+    private static final String TAG = UICompositeItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public UIBasicItemPropertiesMediator() {
-        super(NAME, new UIBasicItemProperties());
+    public UICompositeItemPropertiesMediator() {
+        super(NAME, new UICompositeItemProperties());
+    }
+
+    @Override
+    protected void translateObservableDataToView(CompositeItem item) {
+
+    }
+
+    @Override
+    protected void translateViewToItemData() {
+        observableReference.renew();
     }
 }

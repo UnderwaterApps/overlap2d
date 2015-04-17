@@ -18,17 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIItemPropertiesMediator extends UIAbstractPropertiesMediator {
+public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
 
-    public UIItemPropertiesMediator(String mediatorName, UIAbstractProperties viewComponent) {
+    public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
-    }
-
-    @Override
-    public void onItemDataUpdate() {
-
     }
 }
