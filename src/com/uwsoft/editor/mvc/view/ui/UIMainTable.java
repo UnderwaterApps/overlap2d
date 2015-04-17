@@ -92,13 +92,13 @@ public class UIMainTable extends VisTable {
         //
         libraryPanel = new UILibraryBox(uiStage);
         libraryPanel.initPanel();
-        //rightToolsPanel.add(libraryPanel).top().fillY();
+        rightToolsPanel.add(libraryPanel).top().fillY();
         rightToolsPanel.row();
         //
-        layerPanel = new UILayerBoxOld(uiStage);
-        layerPanel.initPanel();
-        rightToolsPanel.add(layerPanel).top().fillY();
-        rightToolsPanel.row();
+        //layerPanel = new UILayerBoxOld(uiStage);
+        //layerPanel.initPanel();
+        //rightToolsPanel.add(layerPanel).top().fillY();
+        //rightToolsPanel.row();
 
         UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
         UILayerBox layerBox = layerBoxMediator.getViewComponent();

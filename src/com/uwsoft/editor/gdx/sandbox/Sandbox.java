@@ -252,7 +252,7 @@ public class Sandbox {
         sceneControl.getCurrentScene().setX(0);
         sceneControl.getCurrentScene().setY(0);
 
-        uiStage.getLayerPanel().initContent();
+        //uiStage.getLayerPanel().initContent();
         forceContinuousParticles(composite);
     }
 

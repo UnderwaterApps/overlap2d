@@ -127,7 +127,7 @@ public class UIStage extends Stage {
         //uiMainTable.multiPropertyBox.setItem(itm);
         facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
 
-        uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
+        //uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
     }
 
     public void loadCurrentProject() {
@@ -136,7 +136,7 @@ public class UIStage extends Stage {
 //        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
 
-        uiMainTable.layerPanel.initContent();
+        //uiMainTable.layerPanel.initContent();
 
 //        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
     }
