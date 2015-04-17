@@ -29,7 +29,7 @@ import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
-import com.uwsoft.editor.gdx.ui.layer.UILayerBox;
+import com.uwsoft.editor.gdx.ui.layer.UILayerBoxOld;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
@@ -181,7 +181,7 @@ public class UIStage extends Stage {
         return uiMainTable.lightBox;
     }
 
-    public UILayerBox getLayerPanel() {
+    public UILayerBoxOld getLayerPanel() {
         return uiMainTable.layerPanel;
     }
 
