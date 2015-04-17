@@ -131,7 +131,7 @@ public class UIStage extends Stage {
     }
 
     public void loadCurrentProject() {
-        uiMainTable.libraryPanel.initContent();
+       // uiMainTable.libraryPanel.initContent();
         uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
@@ -142,7 +142,7 @@ public class UIStage extends Stage {
     }
 
     public void reInitLibrary() {
-        uiMainTable.libraryPanel.initContent();
+        //uiMainTable.libraryPanel.initContent();
 
         uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
