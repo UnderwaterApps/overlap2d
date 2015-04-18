@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -32,8 +31,8 @@ public class ComponentThumbnailBox extends DraggableThumbnailBox {
     private final Overlap2DFacade facade;
     private final TextureManager textureManager;
 
-    public ComponentThumbnailBox(UIStage s, float width, String text) {
-        super(s);
+    public ComponentThumbnailBox(float width, String text) {
+        super();
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
         setWidth(width);
@@ -50,8 +49,8 @@ public class ComponentThumbnailBox extends DraggableThumbnailBox {
         payload.assetName = text;
         payload.type = AssetPayloadObject.AssetType.Component;
 
-        DraggableThumbnailEvent event = (pld, x, y) -> stage.getSandbox().getUac().createComponent(pld.assetName, x, y);
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createComponent(pld.assetName, x, y);
 
-        initDragDrop(stage, payloadLbl, payload, event);
+        initDragDrop(payloadLbl, payload, event);
     }
 }

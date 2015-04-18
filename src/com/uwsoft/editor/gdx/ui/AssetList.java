@@ -107,7 +107,7 @@ public class AssetList extends Group {
             if (!atlas.getRegions().get(i).name.contains(searchText)) continue;
             TextureAtlas.AtlasRegion atlasRegion = atlas.getRegions().get(i);
             boolean is9patch = atlasRegion.splits != null;
-            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(stage, atlasRegion) : new ImageThumbnailBox(stage, atlasRegion);
+            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(atlasRegion) : new ImageThumbnailBox(atlasRegion);
 
             table.add(thumb).pad(3);
 
@@ -120,7 +120,7 @@ public class AssetList extends Group {
 
         for (String animationName : spineAnimations.keySet()) {
             if (!animationName.contains(searchText)) continue;
-            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(stage, spineAnimations.get(animationName));
+            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(spineAnimations.get(animationName));
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -132,7 +132,7 @@ public class AssetList extends Group {
 
         for (String animationName : spriteAnimations.keySet()) {
             if (!animationName.contains(searchText)) continue;
-            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(stage, animationName);
+            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(animationName);
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -144,7 +144,7 @@ public class AssetList extends Group {
 
         for (String animationName : spriterAnimations.keySet()) {
             if (!animationName.contains(searchText)) continue;
-            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(stage, animationName);
+            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(animationName);
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -166,7 +166,7 @@ public class AssetList extends Group {
         for (int i = 0; i < atlas.getRegions().size; i++) {
             TextureAtlas.AtlasRegion atlasRegion = atlas.getRegions().get(i);
             boolean is9patch = atlasRegion.splits != null;
-            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(stage, atlasRegion) : new ImageThumbnailBox(stage, atlasRegion);
+            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(atlasRegion) : new ImageThumbnailBox(atlasRegion);
 
             table.add(thumb).pad(3);
 
@@ -178,7 +178,7 @@ public class AssetList extends Group {
         }
 
         for (String animationName : spineAnimations.keySet()) {
-            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(stage, spineAnimations.get(animationName));
+            final SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(spineAnimations.get(animationName));
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -189,7 +189,7 @@ public class AssetList extends Group {
         }
 
         for (String animationName : spriteAnimations.keySet()) {
-            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(stage, animationName);
+            final SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(animationName);
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {
@@ -200,7 +200,7 @@ public class AssetList extends Group {
         }
 
         for (String animationName : spriterAnimations.keySet()) {
-            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(stage, animationName);
+            final SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(animationName);
 
             table.add(thumb).size(50, 50).pad(3);
             if ((itemIter - 7) % 4 == 0) {

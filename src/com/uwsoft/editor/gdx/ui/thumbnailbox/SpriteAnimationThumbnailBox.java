@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
@@ -40,12 +39,12 @@ public class SpriteAnimationThumbnailBox extends DraggableThumbnailBox {
 
     private boolean isMouseInside = false;
 
-    public SpriteAnimationThumbnailBox(UIStage s, String animationName) {
-        super(s);
+    public SpriteAnimationThumbnailBox(String animationName) {
+        super();
         this.animationName = animationName;
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
-        final SpriteAnimation animThumb = new SpriteAnimation(vo, s.sceneLoader.essentials);
+        final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getUIStage().sceneLoader.essentials);
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -85,14 +84,9 @@ public class SpriteAnimationThumbnailBox extends DraggableThumbnailBox {
         payload.assetName = animationName;
         payload.type = AssetPayloadObject.AssetType.Sprite;
 
-        DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
-            @Override
-            public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.getSandbox().getUac().createSpriteAnimation(payload.assetName, x, y);
-            }
-        };
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpriteAnimation(payload.assetName, x, y);
 
-        initDragDrop(stage, payloadImg, payload, event);
+        initDragDrop(payloadImg, payload, event);
 
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);

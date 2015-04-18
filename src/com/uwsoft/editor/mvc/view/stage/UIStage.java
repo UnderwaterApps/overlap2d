@@ -34,6 +34,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -181,7 +182,7 @@ public class UIStage extends Stage {
         return uiMainTable.lightBox;
     }
 
-    public UILayerBoxOld getLayerPanel() {
+    public UILayerBox getLayerPanel() {
         return uiMainTable.layerPanel;
     }
 

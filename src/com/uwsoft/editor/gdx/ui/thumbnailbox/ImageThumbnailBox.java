@@ -24,10 +24,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 public class ImageThumbnailBox extends DraggableThumbnailBox {
 
@@ -35,8 +35,7 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
 
     private AtlasRegion region;
 
-    public ImageThumbnailBox(UIStage s, AtlasRegion region) {
-        super(s);
+    public ImageThumbnailBox(AtlasRegion region) {
         Image img = new Image(region);
         this.region = region;
 
@@ -74,27 +73,27 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
             }
         };
 
-        initDragDrop(stage, payloadImg, scaleSize, scaleSize, payload, event);
+        initDragDrop(payloadImg, scaleSize, scaleSize, payload, event);
 
         initAdditionalListeners();
     }
 
     public void initAdditionalListeners() {
-        addListener(new InputListener(){
+        addListener(new InputListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 return true;
             }
 
-			@Override
-			public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-				if(button == Buttons.RIGHT){
-					 showRightClickDropDown(region.name);
-				}
-				super.touchUp(event, x, y, pointer, button);
-			}
-        	
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (button == Buttons.RIGHT) {
+                    showRightClickDropDown(region.name);
+                }
+                super.touchUp(event, x, y, pointer, button);
+            }
+
         });
     }
 
@@ -103,27 +102,25 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
     }
 
     protected void itemDropped(String assetName, float x, float y) {
-        stage.getSandbox().getUac().createImage(assetName, x, y);
+        sandbox.getUac().createImage(assetName, x, y);
     }
 
-	 private void showRightClickDropDown(final String regionName) {
-		  DropDown dropDown = stage.mainDropDown;
-		  dropDown.clearItems();
-		  dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
-		  dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
+    private void showRightClickDropDown(final String regionName) {
+        final UIStage stage = sandbox.getUIStage();
+        DropDown dropDown = stage.mainDropDown;
+        dropDown.clearItems();
+        dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
+        dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
 
-		  dropDown.setEventListener(new DropDown.SelectionEvent() {
-
-				@Override public void doAction (int action) {
-					 switch (action) {
-						  case SelectionActions.EDIT_ASSET_PHYSICS:
-								 stage.editPhysics(regionName);
-								break;
-						  default:
-								break;
-					 }
-				}
-		  });
-	 }
+        dropDown.setEventListener(action -> {
+            switch (action) {
+                case SelectionActions.EDIT_ASSET_PHYSICS:
+                    stage.editPhysics(regionName);
+                    break;
+                default:
+                    break;
+            }
+        });
+    }
 
 }

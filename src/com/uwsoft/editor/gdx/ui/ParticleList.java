@@ -36,7 +36,7 @@ public class ParticleList extends Group {
     private final Overlap2DFacade facade;
     private final TextureManager textureManager;
 
-    public ParticleList(final UIStage s, float width, float height) {
+    public ParticleList(float width, float height) {
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.setWidth(width);
@@ -66,7 +66,7 @@ public class ParticleList extends Group {
 
         int i = 0;
         for (String key : particles.keySet()) {
-            final ParticleThumbnailBox thumb = new ParticleThumbnailBox(s, key);
+            final ParticleThumbnailBox thumb = new ParticleThumbnailBox(key);
 
             final String pname = key;
 

@@ -18,20 +18,12 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -42,17 +34,10 @@ public class UIImagesTab extends Tab {
     private VisTable imagesTable;
     private VisScrollPane scrollPane;
 
-    private TextureManager textureManager;
-    private UIStage stage;
 
     public UIImagesTab() {
         super(false, false);
-
-        textureManager = Overlap2DFacade.getInstance().retrieveProxy(TextureManager.NAME);
-        stage = Sandbox.getInstance().getUIStage();
-
         contentTable = new VisTable();
-
         imagesTable = new VisTable();
         scrollPane = new VisScrollPane(imagesTable);
         contentTable.add(scrollPane).width(230).height(350);
@@ -69,26 +54,13 @@ public class UIImagesTab extends Tab {
         return contentTable;
     }
 
-    public void setRegionNames(Array<String> regionNames) {
-        TextureAtlas atlas = textureManager.getProjectAssetsList();
-
+    public void setThumbnailBoxes(Array<ImageThumbnailBox> thumbnailBoxes) {
         imagesTable.clearChildren();
-        int itemIterator = 0;
-
-        for(int i = 0; i < regionNames.size; i++) {
-            TextureAtlas.AtlasRegion atlasRegion = atlas.findRegion(regionNames.get(i));
-
-            boolean is9patch = atlasRegion.splits != null;
-            final ImageThumbnailBox thumb = is9patch ? new Image9patchThumbnailBox(stage, atlasRegion) : new ImageThumbnailBox(stage, atlasRegion);
-
-            imagesTable.add(thumb).pad(3);
-
-
-            if ((itemIterator - 7) % 4 == 0) {
+        for (int i = 0; i < thumbnailBoxes.size; i++) {
+            imagesTable.add(thumbnailBoxes.get(i)).pad(3);
+            if ((i - 7) % 4 == 0) {
                 imagesTable.row();
             }
-            itemIterator++;
         }
-
     }
 }
