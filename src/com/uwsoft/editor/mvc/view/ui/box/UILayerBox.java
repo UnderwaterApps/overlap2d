@@ -57,7 +57,7 @@ public class UILayerBox extends VisWindow {
         return currentSelectedLayerIndex;
     }
 
-    private int currentSelectedLayerIndex = 0;
+    public int currentSelectedLayerIndex = 0;
 
     public UILayerBox() {
         super("Layers");

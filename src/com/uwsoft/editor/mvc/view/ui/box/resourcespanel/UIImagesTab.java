@@ -34,17 +34,10 @@ public class UIImagesTab extends Tab {
     private VisTable imagesTable;
     private VisScrollPane scrollPane;
 
-//    private TextureManager textureManager;
-//    private UIStage stage;
 
     public UIImagesTab() {
         super(false, false);
-
-//        textureManager = Overlap2DFacade.getInstance().retrieveProxy(TextureManager.NAME);
-//        stage = Sandbox.getInstance().getUIStage();
-
         contentTable = new VisTable();
-
         imagesTable = new VisTable();
         scrollPane = new VisScrollPane(imagesTable);
         contentTable.add(scrollPane).width(230).height(350);

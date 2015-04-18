@@ -108,7 +108,7 @@ public class LayerItem extends Group {
                 layerItemVo.isLocked = !layerItemVo.isLocked;
                 updateUI();
                 sandbox.getCurrentScene().reAssembleLayers();
-                sandbox.getUIStage().getLayerPanel().initContent();
+//                sandbox.getUIStage().getLayerPanel().initContent();
             }
         });
         eye.addListener(new ClickListener() {
@@ -117,7 +117,7 @@ public class LayerItem extends Group {
                 layerItemVo.isVisible = !layerItemVo.isVisible;
                 updateUI();
                 sandbox.getCurrentScene().reAssembleLayers();
-                sandbox.getUIStage().getLayerPanel().initContent();
+//                sandbox.getUIStage().getLayerPanel().initContent();
             }
         });
     }

@@ -112,17 +112,13 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
         dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
         dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
 
-        dropDown.setEventListener(new DropDown.SelectionEvent() {
-
-            @Override
-            public void doAction(int action) {
-                switch (action) {
-                    case SelectionActions.EDIT_ASSET_PHYSICS:
-                        stage.editPhysics(regionName);
-                        break;
-                    default:
-                        break;
-                }
+        dropDown.setEventListener(action -> {
+            switch (action) {
+                case SelectionActions.EDIT_ASSET_PHYSICS:
+                    stage.editPhysics(regionName);
+                    break;
+                default:
+                    break;
             }
         });
     }

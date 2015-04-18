@@ -22,14 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.gdx.ui.UILibraryBox;
 import com.uwsoft.editor.gdx.ui.UILightBox;
-import com.uwsoft.editor.gdx.ui.layer.UILayerBoxOld;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.*;
-import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBox;
-import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBoxMediator;
 
 /**
  * Created by sargis on 9/10/14.
@@ -40,7 +37,7 @@ public class UIMainTable extends VisTable {
     private final VisTable middleTable;
     private final Overlap2DFacade facade;
     public UISubmenuBar compositePanel;
-    public UILayerBoxOld layerPanel;
+    public UILayerBox layerPanel;
     public UILightBox lightBox;
     public UIItemsTreeBox itemsBox;
     public UIMultiPropertyBox multiPropertyBox;
@@ -91,7 +88,7 @@ public class UIMainTable extends VisTable {
 
         //
         //libraryPanel = new UILibraryBox(uiStage);
-       // libraryPanel.initPanel();
+        // libraryPanel.initPanel();
         //rightToolsPanel.add(libraryPanel).top().fillY();
         //rightToolsPanel.row();
         //
@@ -106,8 +103,8 @@ public class UIMainTable extends VisTable {
         rightToolsPanel.row().padTop(5);
 
         UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
-        UILayerBox layerBox = layerBoxMediator.getViewComponent();
-        rightToolsPanel.add(layerBox).top().fillY();
+        layerPanel = layerBoxMediator.getViewComponent();
+        rightToolsPanel.add(layerPanel).top().fillY();
 
         //
         middleTable.add(rightToolsPanel).top().right().expand();

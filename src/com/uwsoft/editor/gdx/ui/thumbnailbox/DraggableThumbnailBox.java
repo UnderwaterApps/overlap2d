@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.uwsoft.editor.gdx.actors.CustomDragAndDrop;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
@@ -54,36 +54,46 @@ public class DraggableThumbnailBox extends Group {
 
     public void initDragDrop(final Actor thumbnail, final float itemScaleX, final float itemScaleY, final AssetPayloadObject payloadData, DraggableThumbnailEvent event) {
         this.draggingEvent = event;
-        final CustomDragAndDrop dragAndDrop = new CustomDragAndDrop();
+        final DragAndDrop dragAndDrop = new DragAndDrop();
 
-        dragAndDrop.addSource(new CustomDragAndDrop.Source(this) {
-            public CustomDragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
-                CustomDragAndDrop.Payload payload = new CustomDragAndDrop.Payload();
+        dragAndDrop.addSource(new DragAndDrop.Source(this) {
+            public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
+                DragAndDrop.Payload payload = new DragAndDrop.Payload();
 
                 payloadData.xOffset = thumbnail.getWidth() / 2;
                 payloadData.yOffset = thumbnail.getHeight() / 2;
                 payload.setDragActor(thumbnail);
                 payload.setObject(payloadData);
                 payload.setInvalidDragActor(null);
+//                payload.setValidDragActor();
                 dragAndDrop.setDragActorPosition(-thumbnail.getWidth() / 2, thumbnail.getHeight() / 2);
 
                 return payload;
             }
         });
 
-        dragAndDrop.addTarget(new CustomDragAndDrop.Target(sandbox.getUIStage().dummyTarget) {
+        dragAndDrop.addTarget(new DragAndDrop.Target(sandbox.getUIStage().dummyTarget) {
+            @Override
+            public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+                return true;
+            }
 
             @Override
-            public void drop(CustomDragAndDrop.Source source, CustomDragAndDrop.Payload payload, float x, float y, int pointer) {
+            public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
                 AssetPayloadObject pld = ((AssetPayloadObject) (payload.getObject()));
                 draggingEvent.drop(pld, x - pld.xOffset, y - pld.yOffset);
             }
 
-            @Override
-            public boolean drag(CustomDragAndDrop.Source arg0, CustomDragAndDrop.Payload arg1, float arg2, float arg3, int arg4) {
+//            @Override
+//            public void drop(CustomDragAndDrop.Source source, CustomDragAndDrop.Payload payload, float x, float y, int pointer) {
 
-                return true;
-            }
+//            }
+//
+//            @Override
+//            public boolean drag(CustomDragAndDrop.Source arg0, CustomDragAndDrop.Payload arg1, float arg2, float arg3, int arg4) {
+//
+//                return true;
+//            }
         });
     }
 
