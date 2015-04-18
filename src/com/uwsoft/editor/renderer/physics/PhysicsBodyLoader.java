@@ -1,5 +1,6 @@
 package com.uwsoft.editor.renderer.physics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -13,7 +14,12 @@ import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
  * Created by azakhary on 9/28/2014.
  */
 public class PhysicsBodyLoader {
-	public static final float SCALE = 1/10f;
+
+
+    // Ensures optimal box2d resolution of below 10 meters on the longest size
+    // See http://www.box2d.org/manual.html Units 1.7
+    public static float SCALE = 10f/Gdx.graphics.getWidth();
+
     // Mesh Data
     private final World world;
 
