@@ -42,8 +42,8 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
     private final TextureManager textureManager;
     private String key;
 
-    public LibraryItemThumbnailBox(UIStage s, float width, String key, CompositeItemVO compositeItemVO) {
-        super(s);
+    public LibraryItemThumbnailBox(float width, String key, CompositeItemVO compositeItemVO) {
+        super();
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
         this.key = key;
@@ -71,9 +71,9 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
         payload.assetName = key;
         payload.type = AssetPayloadObject.AssetType.Component;
 
-        DraggableThumbnailEvent event = (pld, x, y) -> stage.getSandbox().getUac().createItemFromLibrary(pld.assetName, x, y);
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createItemFromLibrary(pld.assetName, x, y);
 
-        initDragDrop(stage, payloadLbl, payload, event);
+        initDragDrop(payloadLbl, payload, event);
     }
 
     public void select() {

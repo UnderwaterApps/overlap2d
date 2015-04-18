@@ -71,7 +71,7 @@ public class UILibraryBox extends ExpandableUIBox {
         mainLayer.addActor(libraryList);
         libraryList.setVisible(false);
 
-        particleList = new ParticleList(s, getWidth() - 10, getHeight() - 20);
+        particleList = new ParticleList(getWidth() - 10, getHeight() - 20);
         particleList.setX(7);
         particleList.setY(6);
         mainLayer.addActor(particleList);

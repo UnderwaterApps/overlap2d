@@ -67,7 +67,7 @@ public class UIMainTable extends VisTable {
         topTable.addSeparator();
         topTable.row();
         initCompisitePanel();
-        initLeftToolsPalel();
+        initLeftToolsPanel();
         initRightToolsPanel();
     }
 
@@ -86,7 +86,7 @@ public class UIMainTable extends VisTable {
         //propertiesPanel = new UIPropertiesBox();
 //        propertiesPanel.initPanel();
         rightToolsPanel.add(multiPropertyBox).top().fillY();
-        rightToolsPanel.row();
+        rightToolsPanel.row().padTop(5);
 
 
         //
@@ -103,7 +103,7 @@ public class UIMainTable extends VisTable {
         UIResourcesBoxMediator resourceBoxMediator = facade.retrieveMediator(UIResourcesBoxMediator.NAME);
         UIResourcesBox resourceBox = resourceBoxMediator.getViewComponent();
         rightToolsPanel.add(resourceBox).top().fillY();
-        rightToolsPanel.row();
+        rightToolsPanel.row().padTop(5);
 
         UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
         UILayerBox layerBox = layerBoxMediator.getViewComponent();
@@ -113,7 +113,7 @@ public class UIMainTable extends VisTable {
         middleTable.add(rightToolsPanel).top().right().expand();
     }
 
-    private void initLeftToolsPalel() {
+    private void initLeftToolsPanel() {
         //
         leftToolsPanel = new VisTable();
         //

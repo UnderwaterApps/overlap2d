@@ -19,11 +19,11 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -32,8 +32,8 @@ public class ParticleThumbnailBox extends DraggableThumbnailBox {
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
 
-    public ParticleThumbnailBox(UIStage s, String particleName) {
-        super(s);
+    public ParticleThumbnailBox( String particleName) {
+        super();
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
@@ -53,13 +53,8 @@ public class ParticleThumbnailBox extends DraggableThumbnailBox {
         payload.assetName = particleName;
         payload.type = AssetPayloadObject.AssetType.Particle;
 
-        DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
-            @Override
-            public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.getSandbox().getUac().createParticleItem(pld.assetName, x, y);
-            }
-        };
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createParticleItem(pld.assetName, x, y);
 
-        initDragDrop(stage, payloadImg, payload, event);
+        initDragDrop(payloadImg, payload, event);
     }
 }

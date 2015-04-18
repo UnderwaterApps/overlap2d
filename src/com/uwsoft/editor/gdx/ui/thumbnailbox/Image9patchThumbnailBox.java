@@ -19,18 +19,17 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
  * Created by sargis on 8/21/14.
  */
 public class Image9patchThumbnailBox extends ImageThumbnailBox {
-    public Image9patchThumbnailBox(UIStage s, TextureAtlas.AtlasRegion region) {
-        super(s, region);
+    public Image9patchThumbnailBox(TextureAtlas.AtlasRegion region) {
+        super(region);
     }
 
     protected void itemDropped(String assetName, float x, float y) {
-        stage.getSandbox().getUac().create9Patch(assetName, x, y);
+        sandbox.getUac().create9Patch(assetName, x, y);
     }
 
     @Override

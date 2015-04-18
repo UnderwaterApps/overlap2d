@@ -39,7 +39,6 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
     @Override
     public void onRegister() {
         super.onRegister();
-
         facade = Overlap2DFacade.getInstance();
         registerTabMediators();
         initTabs();

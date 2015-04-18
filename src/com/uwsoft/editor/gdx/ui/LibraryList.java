@@ -117,7 +117,7 @@ public class LibraryList extends Group {
 
         int iter = 1;
         for (final String value : items.keySet()) {
-            LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
+            LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(getWidth(), value, items.get(value));
             thumb.setX(0);
             thumb.setY(listContainer.getHeight() - thumb.getHeight() * iter - 2 * iter);
             listContainer.addActor(thumb);
@@ -138,7 +138,7 @@ public class LibraryList extends Group {
         int iter = 1;
         for (final String value : items.keySet()) {
             if (!value.contains(searchText)) continue;
-            LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(stage, getWidth(), value, items.get(value));
+            LibraryItemThumbnailBox thumb = new LibraryItemThumbnailBox(getWidth(), value, items.get(value));
             thumb.setX(0);
             thumb.setY(listContainer.getHeight() - thumb.getHeight() * iter - 2 * iter);
             listContainer.addActor(thumb);

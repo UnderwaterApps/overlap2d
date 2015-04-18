@@ -18,17 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
-
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -76,12 +74,30 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
 
         atlas = textureManager.getProjectAssetsList();
 
-        Array<String> regionNames = new Array();
-
-        for (int i = 0; i < atlas.getRegions().size; i++) {
-            regionNames.add(atlas.getRegions().get(i).name);
+        Array<ImageThumbnailBox> thumbnailBoxes = new Array<>();
+        Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();
+        for (TextureAtlas.AtlasRegion region : atlasRegions) {
+            boolean is9patch = region.splits != null;
+            ImageThumbnailBox thumbnailBox = is9patch ? new Image9patchThumbnailBox(region) : new ImageThumbnailBox(region);
+            thumbnailBoxes.add(thumbnailBox);
         }
+//        for (int i = 0; i < atlas.getRegions().size; i++) {
+//            regionNames.add(atlas.getRegions().get(i).name);
+//        }
+//
+//        for(int i = 0; i < regionNames.size; i++) {
+//            TextureAtlas.AtlasRegion atlasRegion = atlas.findRegion(regionNames.get(i));
+//
 
-        viewComponent.setRegionNames(regionNames);
+//
+//            imagesTable.add(thumb).pad(3);
+//
+//
+//            if ((itemIterator - 7) % 4 == 0) {
+//                imagesTable.row();
+//            }
+//            itemIterator++;
+//        }
+        viewComponent.setThumbnailBoxes(thumbnailBoxes);
     }
 }

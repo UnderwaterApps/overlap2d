@@ -19,11 +19,10 @@
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
@@ -41,13 +40,13 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
 
     private boolean isMouseInside = true;
 
-    public SpriterAnimationThumbnailBox(UIStage s, String animationName) {
-        super(s);
+    public SpriterAnimationThumbnailBox(String animationName) {
+        super();
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
-        SpriterActor animThumb = new SpriterActor(vo, s.sceneLoader.essentials);
+        SpriterActor animThumb = new SpriterActor(vo, sandbox.getUIStage().sceneLoader.essentials);
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -78,14 +77,9 @@ public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
         payload.assetName = animationName;
         payload.type = AssetPayloadObject.AssetType.Spriter;
 
-        DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
-            @Override
-            public void drop(AssetPayloadObject pld, float x, float y) {
-                stage.getSandbox().getUac().createSpriterAnimation(payload.assetName, x, y);
-            }
-        };
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpriterAnimation(payload.assetName, x, y);
 
-        initDragDrop(stage, payloadImg, payload, event);
+        initDragDrop(payloadImg, payload, event);
 
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
