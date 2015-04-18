@@ -20,6 +20,7 @@ package com.uwsoft.editor.gdx.ui.menubar;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.uwsoft.editor.data.manager.DataManager;
