@@ -18,9 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.badlogic.gdx.graphics.Color;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
@@ -34,6 +40,38 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         super(NAME, new UISceneProperties());
     }
 
+    @Override
+    public String[] listNotificationInterests() {
+        String[] defaultNotifications = super.listNotificationInterests();
+        String[] notificationInterests = new String[]{
+                UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED
+        };
+
+        return ArrayUtils.addAll(defaultNotifications, notificationInterests);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED:
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                    @Override
+                    public void finished(Color newColor) {
+                        viewComponent.setAmbientColor(newColor);
+                    }
+                });
+
+                picker.setColor(viewComponent.getAmbientColor());
+                Sandbox.getInstance().getUIStage().addActor(picker.fadeIn());
+
+                break;
+            default:
+                break;
+        }
+    }
+
     protected void translateObservableDataToView(SceneVO item) {
         PhysicsPropertiesVO physicsVO = item.physicsPropertiesVO;
 
@@ -41,6 +79,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         viewComponent.setGravityYValue(physicsVO.gravityY + "");
         viewComponent.setPhysicsEnable(physicsVO.enabled);
         viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
+        viewComponent.setAmbientColor(new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
     }
 
     @Override
@@ -50,5 +89,10 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         physicsVO.gravityY = NumberUtils.toFloat(viewComponent.getGravityYValue(), physicsVO.gravityY);
         physicsVO.sleepVelocity = NumberUtils.toFloat(viewComponent.getSleepVelocityValue(), physicsVO.sleepVelocity);
         physicsVO.enabled = viewComponent.isPhysicsEnabled();
+        Color color = viewComponent.getAmbientColor();
+        observableReference.ambientColor[0] = color.r;
+        observableReference.ambientColor[1] = color.g;
+        observableReference.ambientColor[2] = color.b;
+        observableReference.ambientColor[3] = color.a;
     }
 }
