@@ -19,8 +19,13 @@
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -28,13 +33,16 @@ import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 public class UIAnimationsTab extends Tab {
 
     private VisTable contentTable;
+    private VisTable animationsTable;
+    private VisScrollPane scrollPane;
 
     public UIAnimationsTab() {
         super(false, false);
-
         contentTable = new VisTable();
-
-        contentTable.setWidth(250);
+        animationsTable = new VisTable();
+        scrollPane = new VisScrollPane(animationsTable);
+        contentTable.add(scrollPane).width(230).height(350);
+        contentTable.row();
     }
 
     @Override
@@ -45,5 +53,15 @@ public class UIAnimationsTab extends Tab {
     @Override
     public Table getContentTable() {
         return contentTable;
+    }
+
+    public void setThumbnailBoxes(Array<AnimationThumbnailBox> thumbnailBoxes) {
+        animationsTable.clearChildren();
+        for (int i = 0; i < thumbnailBoxes.size; i++) {
+            animationsTable.add(thumbnailBoxes.get(i)).pad(3);
+            if ((i - 7) % 4 == 0) {
+                animationsTable.row();
+            }
+        }
     }
 }

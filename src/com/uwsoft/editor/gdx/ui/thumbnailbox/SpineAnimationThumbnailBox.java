@@ -33,7 +33,7 @@ import com.uwsoft.editor.renderer.data.SpineVO;
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class SpineAnimationThumbnailBox extends DraggableThumbnailBox {
+public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
 
 
     private final Overlap2DFacade facade;
