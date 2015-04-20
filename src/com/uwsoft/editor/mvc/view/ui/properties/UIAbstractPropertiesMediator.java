@@ -32,6 +32,8 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     protected T observableReference;
 
+    private boolean observableToDataViewTransactionInProgress = false;
+
     public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
 
@@ -58,7 +60,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
         switch (notification.getName()) {
             case UIAbstractProperties.PROPERTIES_UPDATED:
-                translateViewToItemData();
+                if(!observableToDataViewTransactionInProgress) translateViewToItemData();
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
@@ -70,11 +72,15 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     public void setItem(T item) {
         observableReference = item;
+        observableToDataViewTransactionInProgress = true;
         translateObservableDataToView(observableReference);
+        observableToDataViewTransactionInProgress = false;
     }
 
     public void onItemDataUpdate() {
+        observableToDataViewTransactionInProgress = true;
         translateObservableDataToView(observableReference);
+        observableToDataViewTransactionInProgress = false;
     }
 
     protected abstract void translateObservableDataToView(T item);

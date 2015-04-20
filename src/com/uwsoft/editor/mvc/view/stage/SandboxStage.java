@@ -78,7 +78,6 @@ public class SandboxStage extends BaseStage {
 
     }
 
-
     public void setKeyboardFocus() {
         setKeyboardFocus(mainBox);
     }

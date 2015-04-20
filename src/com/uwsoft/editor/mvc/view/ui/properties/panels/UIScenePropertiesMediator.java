@@ -84,6 +84,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         viewComponent.setAmbientColor(new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
 
         viewComponent.setLightsEnabled(Sandbox.getInstance().sceneControl.isLightsEnabled());
+        viewComponent.setDiffuse(Sandbox.getInstance().sceneControl.isDiffuse());
     }
 
     @Override
@@ -103,5 +104,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
 
         Sandbox.getInstance().sceneControl.disableLights(!viewComponent.isLightsEnabled());
         Sandbox.getInstance().sceneControl.disableAmbience(!viewComponent.isLightsEnabled());
+
+        Sandbox.getInstance().sceneControl.setDiffuse(viewComponent.isDiffuse());
     }
 }

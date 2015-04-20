@@ -69,6 +69,7 @@ public class SceneControlMediator {
     private CompositeItem currentScene;
 
     private boolean isLightsEnabled;
+    private boolean isDiffuseEnabled;
 
     public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
         this.sceneLoader = sceneLoader;
@@ -139,6 +140,19 @@ public class SceneControlMediator {
         }
 
         isLightsEnabled = !disable;
+    }
+
+    public void setDiffuse(boolean isDiffuse) {
+        isDiffuseEnabled = isDiffuse;
+        if(isLightsEnabled) {
+            essentials.rayHandler.useDiffuseLight(isDiffuse);
+        } else {
+            essentials.rayHandler.useDiffuseLight(true);
+        }
+    }
+
+    public boolean isDiffuse() {
+        return isDiffuseEnabled;
     }
 
     public boolean isLightsEnabled() {
