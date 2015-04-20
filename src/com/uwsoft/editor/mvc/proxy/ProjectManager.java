@@ -140,7 +140,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         // create project file
         ProjectVO projVo = new ProjectVO();
         projVo.projectName = projectName;
-        projVo.projectVersion = AppConfig.getInstance().version;
+        projVo.projectVersion = ProjectVersionMigrator.dataFormatVersion;
 
         // create project info file
         ProjectInfoVO projInfoVo = new ProjectInfoVO();
