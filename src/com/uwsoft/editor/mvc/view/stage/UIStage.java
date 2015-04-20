@@ -58,7 +58,7 @@ public class UIStage extends Stage {
 
     public Overlap2DMenuBarMediator menuMediator;
 
-    public UIStage(SandboxStage sandboxStage) {
+    public UIStage() {
         super(new ScreenViewport());
 
         facade = Overlap2DFacade.getInstance();
@@ -69,9 +69,6 @@ public class UIStage extends Stage {
         sceneLoader.loadScene("MainScene");
 
         this.sceneLoader = sceneLoader;
-
-        this.sandboxStage = sandboxStage;
-
         sceneUI = sceneLoader.getSceneAsActor();
 
         dummyTarget = new Group();
@@ -98,9 +95,6 @@ public class UIStage extends Stage {
         getViewport().update(width, height, true);
     }
 
-    public Sandbox getSandbox() {
-        return sandboxStage.sandbox;
-    }
 
     public void editPhysics(String assetName) {
         ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
@@ -154,7 +148,7 @@ public class UIStage extends Stage {
     }
 
     public void loadScene(CompositeItemVO scene) {
-        getSandbox().initSceneView(scene);
+        //getSandbox().initSceneView(scene);
     }
 
 
@@ -170,7 +164,7 @@ public class UIStage extends Stage {
     
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
-        return getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
+        return null;//getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
     }
 
 

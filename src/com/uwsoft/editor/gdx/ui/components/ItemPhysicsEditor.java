@@ -36,10 +36,11 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Pools;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MeshVO;
 import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
@@ -64,6 +65,7 @@ public class ItemPhysicsEditor extends Group {
     public static boolean autoTraceHoleDetection = false;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
+    private final Sandbox sandbox;
     public IBaseItem originalItem;
     public EditMode currentMode;
     public PhysicsBodyDataVO physicsBodyDataVO = new PhysicsBodyDataVO();
@@ -98,6 +100,7 @@ public class ItemPhysicsEditor extends Group {
 
     public ItemPhysicsEditor(UIStage s, float width, float height) {
         this.stage = s;
+        sandbox = Sandbox.getInstance();
         testBodiesToDestroy = new ArrayList();
         edgBodyList = new ArrayList<>();
         setWidth(width);
@@ -113,7 +116,7 @@ public class ItemPhysicsEditor extends Group {
 
         currentMode = EditMode.Create;
         box2dRenderer = new Box2DDebugRenderer();
-        resVec = new Vector2(stage.getSandbox().getCurrentScene().mulX, stage.getSandbox().getCurrentScene().mulY);
+        resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
@@ -385,7 +388,7 @@ public class ItemPhysicsEditor extends Group {
                     currentItem.getDataVO().meshId = meshKey;
                 }
             }
-            Vector2 resVec = new Vector2(stage.getSandbox().getCurrentScene().mulX, stage.getSandbox().getCurrentScene().mulY);
+            Vector2 resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
 
             if (mesh != null) {
                 if (originalItem.getBody() != null) {

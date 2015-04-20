@@ -41,7 +41,9 @@ import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -69,8 +71,6 @@ public class Sandbox {
     public ItemControlMediator itemControl;
     public FlowManager flow;
     public TransformationHandler transformationHandler;
-
-    private int gridSize = 1; // pixels
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -85,6 +85,7 @@ public class Sandbox {
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
+    private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
@@ -121,8 +122,10 @@ public class Sandbox {
         facade = Overlap2DFacade.getInstance();
         inputMultiplexer = new InputMultiplexer();
         Gdx.input.setInputProcessor(inputMultiplexer);
-        sandboxStage = new SandboxStage();
-        uiStage = new UIStage(sandboxStage);
+        SandboxStageMediator sandboxStageMediator = facade.retrieveMediator(SandboxStageMediator.NAME);
+        sandboxStage = sandboxStageMediator.getViewComponent();
+        UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
+        uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
         inputMultiplexer.addProcessor(uiStage);
@@ -547,13 +550,12 @@ public class Sandbox {
         setZoomPercent(zoomPercent);
     }
 
+    public int getGridSize() {
+        return gridSize;
+    }
 
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
-    }
-
-    public int getGridSize() {
-        return gridSize;
     }
 }
