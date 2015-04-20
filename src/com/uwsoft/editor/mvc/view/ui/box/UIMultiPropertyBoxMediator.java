@@ -125,7 +125,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         //unregister all current mediators
         for(UIAbstractPropertiesMediator mediator: currentRegisteredPropertyBoxes) {
-            facade.removeMediator(mediator.NAME);
+            facade.removeMediator(mediator.getMediatorName());
         }
         currentRegisteredPropertyBoxes.clear();
 
@@ -134,6 +134,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
 
                 UIAbstractPropertiesMediator<Object, UIAbstractProperties> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                currentRegisteredPropertyBoxes.add(propertyBoxMediator);
                 propertyBoxMediator.setItem(observable);
                 viewComponent.addPropertyBox(propertyBoxMediator.getViewComponent());
             } catch (ReflectionException e) {
