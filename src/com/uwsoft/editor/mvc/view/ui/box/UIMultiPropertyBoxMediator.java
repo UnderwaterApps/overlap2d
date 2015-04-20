@@ -28,7 +28,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.*;
+import com.uwsoft.editor.mvc.view.ui.properties.panels.*;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -115,12 +115,12 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     }
 
     private void initAllPropertyBoxes(Object observable) {
-        // retrieve a list of property boxes to show
+        // retrieve a list of property panels to show
         ArrayList<String> mediatorNames = classToMediatorMap.get(observable.getClass().getName());
 
         if(mediatorNames == null) return;
 
-        //clear all current enabled boxes
+        //clear all current enabled panels
         viewComponent.clearAll();
 
         //unregister all current mediators

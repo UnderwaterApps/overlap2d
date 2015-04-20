@@ -35,7 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * DropDown element with list of clickable boxes
+ * DropDown element with list of clickable panels
  * It requires listener being given from outside
  */
 public class DropDown extends Group {
