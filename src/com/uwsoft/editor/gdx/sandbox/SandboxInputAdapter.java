@@ -36,7 +36,7 @@ import java.awt.*;
 
 /**
  * Adds listeners to everything sandbox related, including
- * boxes, entire scene, mouse, keys e.g.
+ * panels, entire scene, mouse, keys e.g.
  * Communicates user actions/intentions to Sandbox or UAC
  *
  * @author azakhary
@@ -90,7 +90,7 @@ public class SandboxInputAdapter extends InputAdapter {
 				return false;
 		  }
 
-		  // remembering local touch position for each of selected boxes, if planning to drag
+		  // remembering local touch position for each of selected panels, if planning to drag
 		  for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
 			  value.setTouchDiff(event.getStageX() - value.getHostAsActor().getX(), event.getStageY() - value.getHostAsActor().getY());
 		  }
@@ -396,14 +396,14 @@ public class SandboxInputAdapter extends InputAdapter {
 		  }
 
 		  if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-				// if shift is pressed, move boxes by 20 pixels instead of one
+				// if shift is pressed, move panels by 20 pixels instead of one
 				deltaMove = 20; //pixels
 		  }
 
 		  if(sandbox.getGridSize() > 1) {
 				deltaMove = sandbox.getGridSize();
 				if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-					 // if shift is pressed, move boxes 3 times more then the grid size
+					 // if shift is pressed, move panels 3 times more then the grid size
 					 deltaMove *= 3;
 				}
 		  }

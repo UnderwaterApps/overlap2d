@@ -29,7 +29,7 @@ import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class SpriteAnimationThumbnailBox extends DraggableThumbnailBox {
+public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
 
 
     private final String animationName;

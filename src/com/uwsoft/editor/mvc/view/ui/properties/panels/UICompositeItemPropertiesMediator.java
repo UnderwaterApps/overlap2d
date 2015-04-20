@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;

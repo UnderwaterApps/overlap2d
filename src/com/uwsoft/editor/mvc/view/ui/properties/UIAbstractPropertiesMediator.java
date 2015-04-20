@@ -22,6 +22,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -31,10 +32,17 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     protected T observableReference;
 
+    private boolean observableToDataViewTransactionInProgress = false;
+
     public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
 
         sandbox = Sandbox.getInstance();
+    }
+
+    @Override
+    public void onRegister() {
+        facade = Overlap2DFacade.getInstance();
     }
 
 
@@ -52,7 +60,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
         switch (notification.getName()) {
             case UIAbstractProperties.PROPERTIES_UPDATED:
-                translateViewToItemData();
+                if(!observableToDataViewTransactionInProgress) translateViewToItemData();
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
@@ -64,11 +72,15 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     public void setItem(T item) {
         observableReference = item;
+        observableToDataViewTransactionInProgress = true;
         translateObservableDataToView(observableReference);
+        observableToDataViewTransactionInProgress = false;
     }
 
     public void onItemDataUpdate() {
+        observableToDataViewTransactionInProgress = true;
         translateObservableDataToView(observableReference);
+        observableToDataViewTransactionInProgress = false;
     }
 
     protected abstract void translateObservableDataToView(T item);

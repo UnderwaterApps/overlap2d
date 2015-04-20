@@ -36,7 +36,7 @@ import com.puremvc.patterns.observer.Notifier;
  * Additionally, <code>IMediator</code>s typically:
  * <UL>
  * <LI>Act as an intermediary between one or more view components such as text
- * boxes or list controls, maintaining references and coordinating their
+ * panels or list controls, maintaining references and coordinating their
  * behavior.</LI>
  * <LI>In Flash-based apps, this is often the place where event listeners are
  * added to view components, and their handlers implemented.</LI>

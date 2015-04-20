@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -29,11 +29,11 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpriteAnimationItemProperties extends UIItemProperties {
+public class UISpineAnimationItemProperties extends UIItemProperties {
 
     private VisSelectBox<String> animationsSelectBox;
 
-    public UISpriteAnimationItemProperties() {
+    public UISpineAnimationItemProperties() {
         super();
 
         animationsSelectBox = new VisSelectBox<>();
