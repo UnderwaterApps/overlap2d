@@ -94,5 +94,10 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         observableReference.ambientColor[1] = color.g;
         observableReference.ambientColor[2] = color.b;
         observableReference.ambientColor[3] = color.a;
+
+        Sandbox.getInstance().setSceneAmbientColor(color, viewComponent.isLightsEnabled());
+
+        Sandbox.getInstance().sceneControl.disableLights(!viewComponent.isLightsEnabled());
+        Sandbox.getInstance().sceneControl.disableAmbience(!viewComponent.isLightsEnabled());
     }
 }
