@@ -23,6 +23,7 @@ import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -60,6 +61,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
+                        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
                     }
                 });
 
@@ -80,6 +82,8 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         viewComponent.setPhysicsEnable(physicsVO.enabled);
         viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
         viewComponent.setAmbientColor(new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
+
+        viewComponent.setLightsEnabled(Sandbox.getInstance().sceneControl.isLightsEnabled());
     }
 
     @Override

@@ -68,6 +68,8 @@ public class SceneControlMediator {
      */
     private CompositeItem currentScene;
 
+    private boolean isLightsEnabled;
+
     public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
         this.sceneLoader = sceneLoader;
         this.essentials = essentials;
@@ -135,6 +137,12 @@ public class SceneControlMediator {
             }
 
         }
+
+        isLightsEnabled = !disable;
+    }
+
+    public boolean isLightsEnabled() {
+        return isLightsEnabled;
     }
 
     public void setAmbienceInfo(SceneVO vo) {

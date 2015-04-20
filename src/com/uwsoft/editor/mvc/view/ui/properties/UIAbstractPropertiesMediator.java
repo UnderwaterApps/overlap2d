@@ -22,6 +22,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -35,6 +36,11 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
         super(mediatorName, viewComponent);
 
         sandbox = Sandbox.getInstance();
+    }
+
+    @Override
+    public void onRegister() {
+        facade = Overlap2DFacade.getInstance();
     }
 
 

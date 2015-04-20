@@ -141,7 +141,6 @@ public class UISceneProperties extends UIAbstractProperties {
 
     public void setAmbientColor(Color tintColor) {
         ambientColorComponent.setColorValue(tintColor);
-        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
     }
 
     private void setListeners() {

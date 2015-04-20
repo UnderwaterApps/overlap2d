@@ -192,7 +192,6 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     public void setTintColor(Color tintColor) {
         tintColorComponent.setColorValue(tintColor);
-        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
     }
 
     private void setListeners() {
