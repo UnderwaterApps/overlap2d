@@ -23,6 +23,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
+import com.uwsoft.editor.mvc.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.mvc.view.ui.box.*;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIImagesTabMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
@@ -53,5 +54,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UIMultiPropertyBoxMediator());
         facade.registerMediator(new UILayerBoxMediator());
         facade.registerMediator(new UIResourcesBoxMediator());
+        facade.registerMediator(new UIDropDownMenuMediator());
     }
 }
