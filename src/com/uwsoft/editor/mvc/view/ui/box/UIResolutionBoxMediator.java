@@ -50,7 +50,7 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED,
+                ProjectManager.PROJECT_OPENED,
                 UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED,
                 UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED,
                 UIResolutionBox.REPACK_BTN_CLICKED
@@ -63,7 +63,7 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
         Sandbox sandbox = Sandbox.getInstance();
         ResolutionEntryVO resolutionEntryVO;
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
                 viewComponent.init();
                 break;
             case UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED:

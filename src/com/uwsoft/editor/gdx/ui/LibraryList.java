@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.LibraryItemThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
@@ -47,6 +48,7 @@ public class LibraryList extends Group {
     private final Group listContainer;
     private final Overlap2DFacade facade;
     private final TextureManager textureManager;
+    private final Sandbox sandbox;
     private ArrayList<LibraryItemThumbnailBox> libraryItems;
     private LibraryItemThumbnailBox librarySelectedItem;
     private Label searchLbl;
@@ -55,6 +57,7 @@ public class LibraryList extends Group {
     public LibraryList(final UIStage s, float width, float height) {
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
+        sandbox = Sandbox.getInstance();
         stage = s;
         libraryItems = new ArrayList<>();
         this.setWidth(width);
@@ -82,7 +85,7 @@ public class LibraryList extends Group {
         scroll.setFlickScroll(false);
 
 
-        items = s.getSandbox().sceneControl.getCurrentSceneVO().libraryItems;
+        items = sandbox.sceneControl.getCurrentSceneVO().libraryItems;
         //-----------------Search Box
         Group searchGroup = new Group();
         container.add(searchGroup);

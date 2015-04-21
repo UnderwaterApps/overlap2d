@@ -23,10 +23,13 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.*;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 
 import java.util.HashMap;
@@ -60,14 +63,14 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
                 initAnimationsList();
                 break;
             default:

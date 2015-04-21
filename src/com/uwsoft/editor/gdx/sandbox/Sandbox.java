@@ -19,7 +19,6 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
@@ -41,7 +40,9 @@ import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -69,8 +70,6 @@ public class Sandbox {
     public ItemControlMediator itemControl;
     public FlowManager flow;
     public TransformationHandler transformationHandler;
-
-    private int gridSize = 1; // pixels
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -85,6 +84,7 @@ public class Sandbox {
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     public boolean cameraPanOn;
+    private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
@@ -92,7 +92,6 @@ public class Sandbox {
     private UserActionController uac;
     private ItemFactory itemFactory;
     private ItemSelector selector;
-    private InputMultiplexer inputMultiplexer;
     private Overlap2DFacade facade;
     private ProjectManager projectManager;
 
@@ -119,14 +118,15 @@ public class Sandbox {
 
     private void init() {
         facade = Overlap2DFacade.getInstance();
-        inputMultiplexer = new InputMultiplexer();
-        Gdx.input.setInputProcessor(inputMultiplexer);
-        sandboxStage = new SandboxStage();
-        uiStage = new UIStage(sandboxStage);
+        Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
+        SandboxStageMediator sandboxStageMediator = facade.retrieveMediator(SandboxStageMediator.NAME);
+        sandboxStage = sandboxStageMediator.getViewComponent();
+        UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
+        uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
-        inputMultiplexer.addProcessor(uiStage);
-        inputMultiplexer.addProcessor(sandboxStage);
+//        overlap2D.addInputProcessor(uiStage);
+//        overlap2D.addInputProcessor(sandboxStage);
 
         editingMode = EditingMode.SELECTION;
 
@@ -199,7 +199,7 @@ public class Sandbox {
     public void initData(String sceneName) {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
+        sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
 
@@ -225,13 +225,16 @@ public class Sandbox {
         sandboxStage.initView();
 //        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
         initSceneView(sceneControl.getRootSceneVO());
-        sandboxInputAdapter.initSandboxEvents();
+//        sandboxInputAdapter.initSandboxEvents();
 
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
         uiStage.reInitLibrary();
+        //TODO: move this into SceneDataManager!
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
@@ -547,13 +550,12 @@ public class Sandbox {
         setZoomPercent(zoomPercent);
     }
 
+    public int getGridSize() {
+        return gridSize;
+    }
 
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
-    }
-
-    public int getGridSize() {
-        return gridSize;
     }
 }

@@ -65,6 +65,8 @@ import java.util.concurrent.Executors;
 public class ProjectManager extends BaseProxy implements IResourceRetriever {
     private static final String TAG = ProjectManager.class.getCanonicalName();
     public static final String NAME = TAG;
+    private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.proxy.ProjectManager";
+    public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
     private String currentWorkingPath;
@@ -221,6 +223,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             checkForConsistancy();
             loadProjectData(projectName);
         }
+        facade.sendNotification(PROJECT_OPENED);
     }
 
     private void goThroughVersionMigrationProtocol(String projectPath, ProjectVO projectVo) {

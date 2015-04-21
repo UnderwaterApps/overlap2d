@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.ExpandableUIBox;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemSource;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;
@@ -41,6 +42,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
 
     private final Overlap2DFacade facade;
     private final TextureManager textureManager;
+    private final Sandbox sandbox;
     public int currentSelectedLayerIndex = 0;
     public Group contentGroup = new Group();
     public Group uiGroup = new Group();
@@ -53,6 +55,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
         super(s, 250, 250);
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(TextureManager.NAME);
+        sandbox = Sandbox.getInstance();
         addActor(contentGroup);
         addActor(uiGroup);
 
@@ -83,7 +86,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
     }
 
     public void initContent() {
-        layers = stage.getSandbox().getCurrentScene().dataVO.composite.layers;
+        layers = sandbox.getCurrentScene().dataVO.composite.layers;
         contentGroup.clear();
         layerActors.clear();
         float heightSize = layers.size() * 20;
@@ -95,7 +98,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
         checkForSelectedIndexChanges();
 
         for (int i = 0; i < layers.size(); i++) {
-            LayerItem itm = new LayerItem(layers.get(i), stage.getSandbox());
+            LayerItem itm = new LayerItem(layers.get(i), sandbox);
             itm.initListeners();
             itm.setY(contentGroup.getHeight() - (layers.size() - i - 1) * itm.getHeight());
             contentGroup.addActor(itm);
@@ -123,7 +126,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
 
                     currentSelectedLayerIndex = iter;
                     selectItem(iter);
-                    stage.getSandbox().getSelector().selectItemsByLayerName(layers.get(iter).layerName);
+                    sandbox.getSelector().selectItemsByLayerName(layers.get(iter).layerName);
 
                     if (getTapCount() == 2) {
                         showRenameDialog();
@@ -264,7 +267,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
             layers.set(targetIndex - 1, sourceLayerItemVo);
         }
         initContent();
-        stage.getSandbox().getCurrentScene().sortZindexes();
+        sandbox.getCurrentScene().sortZindexes();
         selectLayerByName(sourceLayerItem.getLayerName());
     }
 

@@ -171,7 +171,6 @@ public class UIResolutionBox extends VisTable {
         resolutionEntryVOs.add(resolutionManager.getOriginalResolution());
         resolutionEntryVOs.addAll(resolutionManager.getResolutions());
         visSelectBox.setItems(resolutionEntryVOs);
-        visSelectBox.addListener(new ResolutionChangeListener());
         add("Current Resolution : ").padRight(5);
         add(visSelectBox).padRight(5);
         deleteBtn = new VisTextButton("Delete");
@@ -181,6 +180,7 @@ public class UIResolutionBox extends VisTable {
         repackBtn.addListener(new UIResolutionBoxButtonClickListener(REPACK_BTN_CLICKED));
         add(repackBtn).padRight(5);
         setCurrentResolution(resolutionManager.currentResolutionName);
+        visSelectBox.addListener(new ResolutionChangeListener());
     }
 
     private void setCurrentResolution(String currentResolutionName) {

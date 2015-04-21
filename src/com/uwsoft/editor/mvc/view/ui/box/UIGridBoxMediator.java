@@ -22,6 +22,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -37,7 +38,7 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED,
+                ProjectManager.PROJECT_OPENED,
                 Overlap2D.GRID_SIZE_CHANGED,
                 UIGridBox.GRID_SIZE_TEXT_FIELD_UPDATED
         };
@@ -49,7 +50,7 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
         Sandbox sandbox = Sandbox.getInstance();
 
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
                 viewComponent.init();
                 viewComponent.setGridSize(sandbox.getGridSize());
                 break;

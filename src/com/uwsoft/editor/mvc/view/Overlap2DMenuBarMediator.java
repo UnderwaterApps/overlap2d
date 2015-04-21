@@ -26,7 +26,6 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -72,19 +71,36 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Overlap2DMenuBar.COPY,
                 Overlap2DMenuBar.PAST,
                 Overlap2DMenuBar.UNDO,
-                Overlap2DMenuBar.REDO
+                Overlap2DMenuBar.REDO,
+                //General
+                ProjectManager.PROJECT_OPENED,
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
-        switch (notification.getType()) {
+        String type = notification.getType();
+        if (type == null) {
+            handleGeneralNotification(notification);
+            return;
+        }
+        switch (type) {
             case Overlap2DMenuBar.FILE_MENU:
                 handleFileMenuNotification(notification);
                 break;
             case Overlap2DMenuBar.EDIT_MENU:
                 handleEditMenuNotification(notification);
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void handleGeneralNotification(Notification notification) {
+        switch (notification.getName()) {
+            case ProjectManager.PROJECT_OPENED:
+                onProjectOpened();
                 break;
         }
     }
@@ -182,8 +198,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     private void onProjectOpened() {
         viewComponent.reInitScenes(projectManager.currentProjectInfoVO.scenes);
         viewComponent.setProjectOpen(true);
-        Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
-        overlap2D.sendProjectOpenNotification();
     }
 
     public void showOpenProject() {
@@ -203,7 +217,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 if (path.length() > 0) {
                     projectManager.openProjectFromPath(path);
                     sandbox.loadCurrentProject();
-                    onProjectOpened();
                 }
             }
         });
@@ -217,7 +230,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         Sandbox sandbox = Sandbox.getInstance();
         projectManager.openProjectFromPath(path);
         sandbox.loadCurrentProject();
-        onProjectOpened();
     }
 
     public void sceneMenuItemClicked(String sceneName) {

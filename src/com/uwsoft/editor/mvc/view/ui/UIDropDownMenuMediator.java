@@ -56,9 +56,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_ADD_TO_LIBRARY);
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_SET_GRID_SIZE_FROM_ITEM);
-
-        Sandbox.getInstance().getUIStage().addActor(viewComponent);
-        viewComponent.hideList();
     }
 
     @Override
@@ -74,9 +71,9 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         Sandbox sandbox = Sandbox.getInstance();
-
         switch (notification.getName()) {
             case Overlap2D.SCENE_RIGHT_CLICK:
+                sandbox.getUIStage().addActor(viewComponent);
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
                 viewComponent.setActionList(actionSets.get(ITEMS_ACTIONS_SET));

@@ -34,6 +34,9 @@ import java.util.ArrayList;
  * Created by sargis on 3/23/15.
  */
 public class SceneDataManager extends BaseProxy {
+    private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.proxy.SceneDataManager";
+    public static final String SCENE_LOADED = EVENT_PREFIX + ".SCENE_LOADED";
+
     private static final String TAG = SceneDataManager.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -62,7 +65,7 @@ public class SceneDataManager extends BaseProxy {
         return vo;
     }
 
-    public void preloadSceneSpecificData(SceneVO sceneVO, String resolution) {
+    public void loadScene(SceneVO sceneVO, String resolution) {
         if (sceneVO == null || sceneVO.composite == null) return;
 
         FontSizePair[] fonts = sceneVO.composite.getRecursiveFontList();

@@ -35,7 +35,6 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String RESIZE = EVENT_PREFIX + ".RESIZE";
     public static final String DISPOSE = EVENT_PREFIX + ".DISPOSE";
     public static final String CREATE = EVENT_PREFIX + ".CREATE_BTN_CLICKED";
-    public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
 
     // tmp events
     public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
@@ -52,7 +51,6 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     private Object data;
 
     public Overlap2D() {
-
     }
 
     public void create() {
@@ -122,9 +120,5 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     @Override
     public void onRemove() {
 
-    }
-
-    public void sendProjectOpenNotification() {
-        sendNotification(PROJECT_OPENED);
     }
 }

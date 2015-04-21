@@ -26,11 +26,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CheckBoxItem;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
@@ -47,6 +48,7 @@ public class UILightBox extends ExpandableUIBox {
     private ColorPickerButton cPicker;
     private ColorPickerButton cPickerElems;
     private CheckBoxItem disableLights;
+    private Sandbox sandbox;
 
     public UILightBox(UIStage s) {
         super(s, 160, 300);
@@ -56,6 +58,7 @@ public class UILightBox extends ExpandableUIBox {
     }
 
     public void initContent() {
+        sandbox = Sandbox.getInstance();
         SceneLoader sceneLoader = stage.sceneLoader;
 
         CompositeItem ui = sceneLoader.getCompositeElementById("lightBox");
@@ -68,7 +71,7 @@ public class UILightBox extends ExpandableUIBox {
         cPicker.setY(getHeight() - 92);
         mainLayer.addActor(cPicker);
 
-        float[] ambientColor = stage.getSandbox().sceneControl.getCurrentSceneVO().ambientColor;
+        float[] ambientColor = sandbox.sceneControl.getCurrentSceneVO().ambientColor;
         cPicker.setColorValue(new Color(ambientColor[0], ambientColor[1], ambientColor[2], ambientColor[3]));
 
         //System.out.println("ambient " +cPicker.getColorValue().toString());
@@ -95,11 +98,11 @@ public class UILightBox extends ExpandableUIBox {
                         cPicker.setColorValue(newColor);
 
                         // change scene ambient light
-                        stage.getSandbox().setSceneAmbientColor(newColor, !disableAmbiance.isChecked());
+                        sandbox.setSceneAmbientColor(newColor, !disableAmbiance.isChecked());
                     }
                 });
 
-                final float[] ambientColor = stage.getSandbox().getSceneControl().getCurrentSceneVO().ambientColor;
+                final float[] ambientColor = sandbox.getSceneControl().getCurrentSceneVO().ambientColor;
                 //TODO might be more wise to manage a single tmp color instead of recreating new colors
                 picker.setColor(new Color(
                         ambientColor[0], ambientColor[1],
@@ -153,7 +156,7 @@ public class UILightBox extends ExpandableUIBox {
                 vo.tint = clr;
 
                 vo.type = LightType.POINT;
-                stage.getSandbox().getUac().createLight(vo, x, y);
+                sandbox.getUac().createLight(vo, x, y);
             }
 
             @Override
@@ -193,7 +196,7 @@ public class UILightBox extends ExpandableUIBox {
                 clr[2] = tint.b;
                 clr[3] = tint.a;
                 vo.tint = clr;
-                stage.getSandbox().getUac().createLight(vo, x, y);
+                sandbox.getUac().createLight(vo, x, y);
             }
 
             @Override
@@ -214,7 +217,7 @@ public class UILightBox extends ExpandableUIBox {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                stage.getSandbox().sceneControl.disableLights(disableLights.isChecked());
+                sandbox.sceneControl.disableLights(disableLights.isChecked());
             }
 
         });
@@ -230,7 +233,7 @@ public class UILightBox extends ExpandableUIBox {
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
-                stage.getSandbox().getSceneControl().disableAmbience(disableAmbiance.isChecked());
+                sandbox.getSceneControl().disableAmbience(disableAmbiance.isChecked());
             }
 
         });
