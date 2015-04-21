@@ -28,9 +28,11 @@ import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 
 import java.awt.*;
@@ -55,7 +57,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     public void onRegister() {
         super.onRegister();
         eventListener = new SandboxStageEventListener();
-
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -272,9 +274,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 sandbox.getSelector().clearSelections();
 
                 // show default dropdown
-                if (sandbox.showDropDown(x, y)) {
-                    return;
-                }
+                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+
+                return;
             }
 
             // Basically if panning but space is not pressed, stop panning.? o_O

@@ -36,6 +36,7 @@ import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -166,8 +167,10 @@ public class UIStage extends Stage {
     }
     
     public LayerItemVO getCurrentSelectedLayer() {
-        if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
-        return null;//getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
+        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
+        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
+        return layerVO;
     }
 
 

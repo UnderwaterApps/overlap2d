@@ -116,4 +116,8 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
             viewComponent.addItem(new UILayerItem(layers.get(i)));
         }
     }
+
+    public int getCurrentSelectedLayerIndex() {
+        return viewComponent.getCurrentSelectedLayerIndex();
+    }
 }

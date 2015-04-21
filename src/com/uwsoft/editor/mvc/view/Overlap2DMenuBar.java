@@ -28,6 +28,8 @@ import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+
+import com.uwsoft.editor.mvc.event.MenuItemListener;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -101,11 +103,11 @@ public class Overlap2DMenuBar extends MenuBar {
         public EditMenu() {
             super("Edit");
             pad(5);
-            cut = new MenuItem("Cut", new MenuItemListener(CUT, EDIT_MENU)).setShortcut(maskKey + " + X");
-            copy = new MenuItem("Copy", new MenuItemListener(COPY, EDIT_MENU)).setShortcut(maskKey + " + C");
-            paste = new MenuItem("Paste", new MenuItemListener(PAST, EDIT_MENU)).setShortcut(maskKey + " + P");
-            undo = new MenuItem("Undo", new MenuItemListener(UNDO, EDIT_MENU)).setShortcut(maskKey + " + Z");
-            redo = new MenuItem("Redo", new MenuItemListener(REDO, EDIT_MENU)).setShortcut(maskKey + " + Y");
+            cut = new MenuItem("Cut", new MenuItemListener(CUT, null, EDIT_MENU)).setShortcut(maskKey + " + X");
+            copy = new MenuItem("Copy", new MenuItemListener(COPY, null, EDIT_MENU)).setShortcut(maskKey + " + C");
+            paste = new MenuItem("Paste", new MenuItemListener(PAST, null, EDIT_MENU)).setShortcut(maskKey + " + P");
+            undo = new MenuItem("Undo", new MenuItemListener(UNDO, null, EDIT_MENU)).setShortcut(maskKey + " + Z");
+            redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(maskKey + " + Y");
             addItem(cut);
             addItem(copy);
             addItem(paste);
@@ -141,9 +143,9 @@ public class Overlap2DMenuBar extends MenuBar {
         public FileMenu() {
             super("File");
             pad(5);
-            saveProject = new MenuItem("Save Project", new MenuItemListener(SAVE_PROJECT, FILE_MENU));
-            addItem(new MenuItem("New Project", new MenuItemListener(NEW_PROJECT, FILE_MENU)));
-            addItem(new MenuItem("Open Project", new MenuItemListener(OPEN_PROJECT, FILE_MENU)));
+            saveProject = new MenuItem("Save Project", new MenuItemListener(SAVE_PROJECT, null, FILE_MENU));
+            addItem(new MenuItem("New Project", new MenuItemListener(NEW_PROJECT, null, FILE_MENU)));
+            addItem(new MenuItem("Open Project", new MenuItemListener(OPEN_PROJECT, null, FILE_MENU)));
             addItem(saveProject);
             //
             scenesMenuItem = new MenuItem("Scenes");
@@ -153,9 +155,9 @@ public class Overlap2DMenuBar extends MenuBar {
             addItem(scenesMenuItem);
             //
             addSeparator();
-            importToLibrary = new MenuItem("Import to Library", new MenuItemListener(IMPORT_TO_LIBRARY, FILE_MENU));
-            export = new MenuItem("Export", new MenuItemListener(EXPORT, FILE_MENU));
-            exportSettings = new MenuItem("Export Settings", new MenuItemListener(EXPORT_SETTINGS, FILE_MENU));
+            importToLibrary = new MenuItem("Import to Library", new MenuItemListener(IMPORT_TO_LIBRARY, null, FILE_MENU));
+            export = new MenuItem("Export", new MenuItemListener(EXPORT, null, FILE_MENU));
+            exportSettings = new MenuItem("Export Settings", new MenuItemListener(EXPORT_SETTINGS, null, FILE_MENU));
             addItem(importToLibrary);
             addItem(export);
             addItem(exportSettings);
@@ -177,7 +179,7 @@ public class Overlap2DMenuBar extends MenuBar {
 
         public void addScenes(ArrayList<SceneVO> scenes) {
             for (SceneVO sceneVO : scenes) {
-                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new MenuItemListener(SELECT_SCENE, FILE_MENU, sceneVO.sceneName));
+                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new MenuItemListener(SELECT_SCENE, sceneVO.sceneName, FILE_MENU));
                 sceneMenuItems.add(menuItem);
                 scenesPopupMenu.addItem(menuItem);
             }
@@ -186,8 +188,8 @@ public class Overlap2DMenuBar extends MenuBar {
         public void reInitScenes(ArrayList<SceneVO> scenes) {
             sceneMenuItems.clear();
             scenesPopupMenu.clear();
-            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new MenuItemListener(NEW_SCENE, FILE_MENU)));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, FILE_MENU)));
+            scenesPopupMenu.addItem(new MenuItem("Create New Scene", new MenuItemListener(NEW_SCENE, null, FILE_MENU)));
+            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, null, FILE_MENU)));
             scenesPopupMenu.addSeparator();
             addScenes(scenes);
         }
@@ -200,7 +202,7 @@ public class Overlap2DMenuBar extends MenuBar {
 
         public void addRecent(ArrayList<String> paths) {
             for (String path : paths) {
-                MenuItem menuItem = new MenuItem(getFolderName(path), new MenuItemListener(RECENT_PROJECTS, FILE_MENU, path));
+                MenuItem menuItem = new MenuItem(getFolderName(path), new MenuItemListener(RECENT_PROJECTS, path, FILE_MENU));
                 recentProjectsMenuItems.add(menuItem);
                 recentProjectsPopupMenu.addItem(menuItem);
             }
@@ -236,27 +238,6 @@ public class Overlap2DMenuBar extends MenuBar {
 //        }
     }
 
-    private class MenuItemListener extends ChangeListener {
-
-        private final String menuCommand;
-        private final String menuType;
-        private final Object data;
-
-        public MenuItemListener(String menuCommand, String menuType) {
-            this(menuCommand, menuType, null);
-        }
-
-        public MenuItemListener(String menuCommand, String menuType, Object data) {
-            this.menuCommand = menuCommand;
-            this.menuType = menuType;
-            this.data = data;
-        }
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            facade.sendNotification(menuCommand, data, menuType);
-        }
-    }
 
 
 }

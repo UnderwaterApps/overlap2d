@@ -481,6 +481,16 @@ public class ItemSelector {
         sandbox.saveSceneCurrentSceneData();
     }
 
+    public boolean selectionIsComposite() {
+        for (SelectionRectangle value : getCurrentSelection().values()) {
+            if (value.getHost().isComposite()) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     /**
      * used as accumulator container
      */
