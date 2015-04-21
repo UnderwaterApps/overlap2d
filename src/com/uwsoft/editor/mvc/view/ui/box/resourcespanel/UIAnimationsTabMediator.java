@@ -18,10 +18,21 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
+import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -31,8 +42,22 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     private static final String TAG = UIAnimationsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private TextureManager textureManager;
+
+    private HashMap<String, SpineAnimData> spineAnimations;
+    private HashMap<String, TextureAtlas> spriteAnimations;
+    private HashMap<String, FileHandle> spriterAnimations;
+
     public UIAnimationsTabMediator() {
         super(NAME, new UIAnimationsTab());
+    }
+
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -46,10 +71,35 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-
+                initAnimationsList();
                 break;
             default:
                 break;
         }
+    }
+
+    private void initAnimationsList() {
+        textureManager = facade.retrieveProxy(TextureManager.NAME);
+
+        spineAnimations = textureManager.getProjectSpineAnimationsList();
+        spriteAnimations = textureManager.getProjectSpriteAnimationsList();
+        spriterAnimations = textureManager.getProjectSpriterAnimationsList();
+
+        Array<AnimationThumbnailBox> animationBoxes = new Array<>();
+
+        for (String animationName : spineAnimations.keySet()) {
+            SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(spineAnimations.get(animationName));
+            animationBoxes.add(thumb);
+        }
+        for (String animationName : spriteAnimations.keySet()) {
+            SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(animationName);
+            animationBoxes.add(thumb);
+        }
+        for (String animationName : spriterAnimations.keySet()) {
+            SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(animationName);
+            animationBoxes.add(thumb);
+        }
+
+        viewComponent.setThumbnailBoxes(animationBoxes);
     }
 }

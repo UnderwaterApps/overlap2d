@@ -29,7 +29,7 @@ import com.uwsoft.editor.renderer.data.SpriterVO;
 /**
  * Created by hayk on 19/12/2014.
  */
-public class SpriterAnimationThumbnailBox extends DraggableThumbnailBox {
+public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
 
 
     private final Overlap2DFacade facade;

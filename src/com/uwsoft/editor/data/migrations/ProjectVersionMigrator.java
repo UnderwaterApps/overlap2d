@@ -38,6 +38,8 @@ public class ProjectVersionMigrator {
 
     private int safetyIterator = 0;
 
+    public static String dataFormatVersion = "0.0.8";
+
     private Json json = new Json();
 
     public ProjectVersionMigrator(String projectPath, ProjectVO projectVo) {

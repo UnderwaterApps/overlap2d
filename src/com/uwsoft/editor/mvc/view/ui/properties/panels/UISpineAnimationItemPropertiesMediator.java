@@ -16,28 +16,29 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.spine.Animation;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
+import com.uwsoft.editor.renderer.actor.SpineActor;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<SpriteAnimation, UISpineAnimationItemProperties> {
-    private static final String TAG = UISpriteAnimationItemPropertiesMediator.class.getCanonicalName();
+public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<SpineActor, UISpineAnimationItemProperties> {
+    private static final String TAG = UISpineAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public UISpriteAnimationItemPropertiesMediator() {
+    public UISpineAnimationItemPropertiesMediator() {
         super(NAME, new UISpineAnimationItemProperties());
     }
 
     @Override
-    protected void translateObservableDataToView(SpriteAnimation item) {
+    protected void translateObservableDataToView(SpineActor item) {
         Array<String> animations = new Array<>();
-        for (String name : item.getAnimations().keySet()) {
-            animations.add(name);
+        for (Animation animation : item.getAnimations()) {
+            animations.add(animation.getName());
         }
 
         viewComponent.setAnimations(animations);

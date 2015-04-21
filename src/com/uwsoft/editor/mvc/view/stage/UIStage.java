@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.*;
+import com.esotericsoftware.spine.SkeletonRenderer;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
@@ -64,6 +65,8 @@ public class UIStage extends Stage {
         facade = Overlap2DFacade.getInstance();
         essentials = new Essentials();
         essentials.rm = facade.retrieveProxy(EditorResourceManager.NAME);
+
+        essentials.skeletonRenderer = new SkeletonRenderer();
 
         SceneLoader sceneLoader = new SceneLoader(essentials);
         sceneLoader.loadScene("MainScene");

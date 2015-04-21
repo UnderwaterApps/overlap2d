@@ -55,7 +55,7 @@ import java.util.ArrayList;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
- * user drops all boxes, moves them around, and composes the scene. sandbox is responsible for using runtime to render the visual scene,
+ * user drops all panels, moves them around, and composes the scene. sandbox is responsible for using runtime to render the visual scene,
  * it is responsible to listen for all the events, item resizing, selecting, aligning, removing and things like that.
  *
  * @author azakhary
@@ -303,7 +303,7 @@ public class Sandbox {
     }
 
     /**
-     * Some particle boxes might not be continuous, so they will stop after first iteration, which is ok
+     * Some particle panels might not be continuous, so they will stop after first iteration, which is ok
      * This method will make sure they look continuous while in editor, so user will find and see them easily.
      *
      * @param composite composite on screen with particles to be forced to be continuous
@@ -410,7 +410,7 @@ public class Sandbox {
     }
 
     public void selectionComplete() {
-        // when touch is up, selection process stops, and if any boxes got "caught" in they should be selected.
+        // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
         isUsingSelectionTool = false;
         // hiding selection rectangle
         getSandboxStage().selectionRec.setOpacity(0.0f);
@@ -432,7 +432,7 @@ public class Sandbox {
     }
 
     /**
-     * Configures and shows drop down for currently selected boxes list
+     * Configures and shows drop down for currently selected panels list
      *
      * @param x coordinate
      * @param y coordinate

@@ -16,27 +16,14 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.sandbox;
+package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
 /**
- * List of editing modes in sandbox
- *
- * Created by azakhary on 3/18/2015.
+ * Created by azakhary on 4/20/2015.
  */
-public enum EditingMode {
+public class AnimationThumbnailBox extends DraggableThumbnailBox {
 
-	 /**
-	  * user can only select panels
-	  */
-    SELECTION,
-
-	 /**
-	  * User can scale and rotate panels
-	  */
-    TRANSFORM,
-
-	 /**
-	  * User is in panning mode so dragging just moves the scene
-	  */
-    PAN
+    public AnimationThumbnailBox() {
+        super();
+    }
 }

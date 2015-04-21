@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -24,6 +24,7 @@ import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MainItemVO;
@@ -61,6 +62,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setTintColor(newColor);
+                        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
                     }
                 });
 

@@ -82,23 +82,7 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
             ImageThumbnailBox thumbnailBox = is9patch ? new Image9patchThumbnailBox(region) : new ImageThumbnailBox(region);
             thumbnailBoxes.add(thumbnailBox);
         }
-//        for (int i = 0; i < atlas.getRegions().size; i++) {
-//            regionNames.add(atlas.getRegions().get(i).name);
-//        }
-//
-//        for(int i = 0; i < regionNames.size; i++) {
-//            TextureAtlas.AtlasRegion atlasRegion = atlas.findRegion(regionNames.get(i));
-//
 
-//
-//            imagesTable.add(thumb).pad(3);
-//
-//
-//            if ((itemIterator - 7) % 4 == 0) {
-//                imagesTable.row();
-//            }
-//            itemIterator++;
-//        }
         viewComponent.setThumbnailBoxes(thumbnailBoxes);
     }
 }

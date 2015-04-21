@@ -18,10 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -46,10 +50,22 @@ public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffec
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-
+                initParticleEffects();
                 break;
             default:
                 break;
         }
+    }
+
+    private void initParticleEffects() {
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+
+        HashMap<String, ParticleEffect> particles = textureManager.getProjectParticleList();
+        Array<String> itemArray = new Array<>();
+        for (String name : particles.keySet()) {
+            itemArray.add(name);
+        }
+        viewComponent.setItems(itemArray);
     }
 }

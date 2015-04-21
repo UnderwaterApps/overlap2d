@@ -16,14 +16,18 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
@@ -33,12 +37,15 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
  */
 public class UISceneProperties extends UIAbstractProperties {
 
+    public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.panels.UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
+
     private VisCheckBox physicsEnabledCheckBox;
     private VisTextField gravityXTextField;
     private VisTextField gravityYTextField;
     private VisTextField sleepVelocityTextField;
     private VisCheckBox enableLightsCheckBox;
     private VisCheckBox diffuseCheckBox;
+    private ColorPickerButton ambientColorComponent;
 
     public UISceneProperties() {
         super();
@@ -51,6 +58,7 @@ public class UISceneProperties extends UIAbstractProperties {
         sleepVelocityTextField = new VisValidableTextField(floatValidator);
         enableLightsCheckBox = new VisCheckBox(null);
         diffuseCheckBox = new VisCheckBox(null);
+        ambientColorComponent = new ColorPickerButton();
 
         pad(5);
         add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);
@@ -71,6 +79,10 @@ public class UISceneProperties extends UIAbstractProperties {
         row().padTop(5);
         add(new VisLabel("Diffuse:", Align.right)).padRight(5).width(115);
         add(diffuseCheckBox).left();
+        row().padTop(5);
+        add(new VisLabel("AL Color:", Align.right)).padRight(5).width(115);
+        add(ambientColorComponent).left();
+        row().padTop(5);
 
         setListeners();
     }
@@ -123,6 +135,14 @@ public class UISceneProperties extends UIAbstractProperties {
         this.enableLightsCheckBox.setChecked(isLightsEnabled);
     }
 
+    public Color getAmbientColor() {
+        return ambientColorComponent.getColorValue();
+    }
+
+    public void setAmbientColor(Color tintColor) {
+        ambientColorComponent.setColorValue(tintColor);
+    }
+
     private void setListeners() {
         physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
         gravityXTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
@@ -130,5 +150,12 @@ public class UISceneProperties extends UIAbstractProperties {
         sleepVelocityTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
         enableLightsCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
         diffuseCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+
+        ambientColorComponent.addListener(new ClickListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                facade.sendNotification(AMBIENT_COLOR_BUTTON_CLICKED);
+            }
+        });
     }
 }

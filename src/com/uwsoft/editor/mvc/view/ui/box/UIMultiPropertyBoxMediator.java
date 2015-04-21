@@ -30,7 +30,7 @@ import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.mvc.view.ui.properties.boxes.*;
+import com.uwsoft.editor.mvc.view.ui.properties.panels.*;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
@@ -117,17 +117,17 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     }
 
     private void initAllPropertyBoxes(Object observable) {
-        // retrieve a list of property boxes to show
+        // retrieve a list of property panels to show
         ArrayList<String> mediatorNames = classToMediatorMap.get(observable.getClass().getName());
 
         if(mediatorNames == null) return;
 
-        //clear all current enabled boxes
+        //clear all current enabled panels
         viewComponent.clearAll();
 
         //unregister all current mediators
         for(UIAbstractPropertiesMediator mediator: currentRegisteredPropertyBoxes) {
-            facade.removeMediator(mediator.NAME);
+            facade.removeMediator(mediator.getMediatorName());
         }
         currentRegisteredPropertyBoxes.clear();
 
@@ -136,6 +136,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
 
                 UIAbstractPropertiesMediator<Object, UIAbstractProperties> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                currentRegisteredPropertyBoxes.add(propertyBoxMediator);
                 propertyBoxMediator.setItem(observable);
                 viewComponent.addPropertyBox(propertyBoxMediator.getViewComponent());
             } catch (ReflectionException e) {

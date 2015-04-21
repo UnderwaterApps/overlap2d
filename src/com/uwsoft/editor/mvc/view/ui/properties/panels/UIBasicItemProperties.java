@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.properties.boxes;
+package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,7 +38,7 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
  */
 public class UIBasicItemProperties extends UIItemProperties {
 
-    public static final String TINT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.boxes.UIBasicItemProperties" + ".TINT_COLOR_BUTTON_CLICKED";
+    public static final String TINT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties" + ".TINT_COLOR_BUTTON_CLICKED";
 
     private VisTextField idBox;
 
@@ -192,7 +192,6 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     public void setTintColor(Color tintColor) {
         tintColorComponent.setColorValue(tintColor);
-        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
     }
 
     private void setListeners() {

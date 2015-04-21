@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class FlowManager {
 
 	 /**
-	  * List of {@link HistoryData} boxes, that are basically data points of user action/scene-snapshot
+	  * List of {@link HistoryData} panels, that are basically data points of user action/scene-snapshot
 	  */
     private ArrayList<HistoryData> history = new ArrayList<>();
 
