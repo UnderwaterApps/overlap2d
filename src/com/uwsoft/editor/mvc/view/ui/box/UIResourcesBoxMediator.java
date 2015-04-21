@@ -23,6 +23,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIAnimationsTabMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIImagesTabMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UILibraryItemsTabMediator;
@@ -51,14 +52,14 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
 
                 break;
             default:

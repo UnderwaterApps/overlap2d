@@ -26,6 +26,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 
 /**
@@ -47,7 +48,7 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED
         };
     }
 
@@ -61,7 +62,7 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
                 initImagesList();
                 break;
             default:

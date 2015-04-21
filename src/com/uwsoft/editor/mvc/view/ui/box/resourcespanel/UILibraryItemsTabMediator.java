@@ -23,6 +23,8 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 import java.util.HashMap;
@@ -44,14 +46,14 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                SceneDataManager.SCENE_LOADED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case SceneDataManager.SCENE_LOADED:
                 initLibraryItems();
                 break;
             default:

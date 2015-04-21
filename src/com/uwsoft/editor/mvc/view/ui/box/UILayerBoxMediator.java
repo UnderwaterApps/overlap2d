@@ -18,18 +18,16 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 
 /**
@@ -49,7 +47,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED,
+                SceneDataManager.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
                 UILayerBox.DELETE_NEW_LAYER
@@ -59,8 +57,8 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
-                    initLayerData();
+            case SceneDataManager.SCENE_LOADED:
+                initLayerData();
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
                 // select this one deselect others

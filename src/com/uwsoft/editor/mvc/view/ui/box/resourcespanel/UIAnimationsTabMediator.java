@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -37,14 +38,14 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case ProjectManager.PROJECT_OPENED:
 
                 break;
             default:

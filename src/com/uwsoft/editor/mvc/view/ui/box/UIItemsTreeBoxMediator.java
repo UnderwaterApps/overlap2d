@@ -25,6 +25,8 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
@@ -42,7 +44,7 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.PROJECT_OPENED,
+                SceneDataManager.SCENE_LOADED,
                 UIItemsTreeBox.ITEMS_SELECTED
         };
     }
@@ -52,7 +54,7 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
         super.handleNotification(notification);
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
-            case Overlap2D.PROJECT_OPENED:
+            case SceneDataManager.SCENE_LOADED:
                 CompositeItem rootScene = sandbox.getCurrentScene();
                 viewComponent.init(rootScene);
                 break;

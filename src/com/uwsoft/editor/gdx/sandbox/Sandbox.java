@@ -19,7 +19,6 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
@@ -93,7 +92,6 @@ public class Sandbox {
     private UserActionController uac;
     private ItemFactory itemFactory;
     private ItemSelector selector;
-    private InputMultiplexer inputMultiplexer;
     private Overlap2DFacade facade;
     private ProjectManager projectManager;
 
@@ -120,16 +118,15 @@ public class Sandbox {
 
     private void init() {
         facade = Overlap2DFacade.getInstance();
-        inputMultiplexer = new InputMultiplexer();
-        Gdx.input.setInputProcessor(inputMultiplexer);
+        Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
         SandboxStageMediator sandboxStageMediator = facade.retrieveMediator(SandboxStageMediator.NAME);
         sandboxStage = sandboxStageMediator.getViewComponent();
         UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
         uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
-        inputMultiplexer.addProcessor(uiStage);
-        inputMultiplexer.addProcessor(sandboxStage);
+//        overlap2D.addInputProcessor(uiStage);
+//        overlap2D.addInputProcessor(sandboxStage);
 
         editingMode = EditingMode.SELECTION;
 
@@ -202,7 +199,7 @@ public class Sandbox {
     public void initData(String sceneName) {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        sceneDataManager.preloadSceneSpecificData(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
+        sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
 
@@ -228,13 +225,16 @@ public class Sandbox {
         sandboxStage.initView();
 //        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
         initSceneView(sceneControl.getRootSceneVO());
-        sandboxInputAdapter.initSandboxEvents();
+//        sandboxInputAdapter.initSandboxEvents();
 
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
         uiStage.reInitLibrary();
+        //TODO: move this into SceneDataManager!
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
