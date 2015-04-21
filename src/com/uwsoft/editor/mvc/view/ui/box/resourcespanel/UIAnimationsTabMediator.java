@@ -23,7 +23,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
