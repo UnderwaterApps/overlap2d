@@ -37,11 +37,16 @@ public class UIGridBox extends UIBaseBox {
 
     public UIGridBox() {
        super();
-
+       init();
+        setVisible(false);
     }
 
     @Override
-    public void init() {
+    public void update() {
+        setVisible(true);
+    }
+
+    private void init() {
         VisLabel lbl = new VisLabel("Grid Snapping:");
         add(lbl);
 

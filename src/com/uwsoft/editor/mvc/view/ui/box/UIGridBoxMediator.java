@@ -51,7 +51,7 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
 
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-                viewComponent.init();
+                viewComponent.update();
                 viewComponent.setGridSize(sandbox.getGridSize());
                 break;
             case Overlap2D.GRID_SIZE_CHANGED:

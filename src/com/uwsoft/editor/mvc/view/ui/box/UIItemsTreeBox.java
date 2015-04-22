@@ -49,6 +49,7 @@ public class UIItemsTreeBox extends VisWindow {
 
 
     public void init(CompositeItem rootScene) {
+        mainTable.clear();
         tree = new VisTree();
         VisScrollPane scroller = new VisScrollPane(tree);
         scroller.setFlickScroll(false);

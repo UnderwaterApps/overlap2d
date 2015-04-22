@@ -26,8 +26,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
@@ -37,7 +40,7 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
  *
  * @author azakhary
  */
-public class SandboxInputAdapter extends InputAdapter {
+public class SandboxInputAdapter {
 
     private final Vector2 dragStartPosition = new Vector2();
     private final Vector2 reducedMoveDirection = new Vector2(0, 0);
@@ -46,8 +49,12 @@ public class SandboxInputAdapter extends InputAdapter {
     private boolean currentTouchedItemWasSelected = false;
     private boolean reducedMouseMoveEnabled = false;
 
+    private Overlap2DFacade facade;
+
     public SandboxInputAdapter(Sandbox sandbox) {
         this.sandbox = sandbox;
+
+        facade = Overlap2DFacade.getInstance();
     }
 
     /**
@@ -118,7 +125,7 @@ public class SandboxInputAdapter extends InputAdapter {
 
         if (button == Input.Buttons.RIGHT) {
             // if right clicked on an item, drop down for current selection
-            sandbox.showDropDown(event.getStageX(), event.getStageY());
+            facade.sendNotification(Overlap2D.ITEM_RIGHT_CLICK, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
         }
 
         // re-show all selection rectangles as clicking/dragging is finished
@@ -185,79 +192,11 @@ public class SandboxInputAdapter extends InputAdapter {
 
     }
 
-    private boolean sandboxMouseScrolled(float x, float y, float amount) {
-        // well, duh
-        if (amount == 0) return false;
-
-        // if item is currently being held with mouse (touched in but not touched out)
-        // mouse scroll should rotate the selection around it's origin
-        if (sandbox.isItemTouched) {
-            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-                float degreeAmount = 1;
-                if (amount < 0) degreeAmount = -1;
-                // And if shift is pressed, the rotation amount is bigger
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    degreeAmount = degreeAmount * 30;
-                }
-                value.getHostAsActor().rotateBy(degreeAmount);
-                value.update();
-            }
-            sandbox.dirty = true;
-        } else if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
-            // if not item is touched then we can use this for zoom
-            sandbox.zoomBy(amount);
-        }
-        return false;
-    }
-
-
-    private void sandboxTouchUp(InputEvent event, float x, float y, int button) {
-
-        if (button == Input.Buttons.RIGHT) {
-            // if clicked on empty space, selections need to be cleared
-            sandbox.getSelector().clearSelections();
-
-            // show default dropdown
-            if (sandbox.showDropDown(x, y)) {
-                return;
-            }
-        }
-
-        // Basically if panning but space is not pressed, stop panning.? o_O
-        // TODO: seriously this needs to be figured out, I am not sure we need it
-        if (sandbox.cameraPanOn) {
-            sandbox.cameraPanOn = Gdx.input.isKeyPressed(Input.Keys.SPACE);
-            return;
-        }
-
-        // selection is complete, this will check for what get caught in selection rect, and select 'em
-        sandbox.selectionComplete();
-    }
-
-
-    private boolean isControlPressed() {
-        return Gdx.input.isKeyPressed(Input.Keys.SYM)
-                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
-                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
-    }
-
-    private boolean isShiftKey(int keycode) {
-        return keycode == Input.Keys.SHIFT_LEFT
-                || keycode == Input.Keys.SHIFT_RIGHT;
-    }
 
     private boolean isShiftPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                 || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
-
-
-    private boolean isControlKey(int keycode) {
-        return keycode == Input.Keys.SYM
-                || keycode == Input.Keys.CONTROL_LEFT
-                || keycode == Input.Keys.CONTROL_RIGHT;
-    }
-
 
     public void initItemListeners(final IBaseItem eventItem) {
         ClickListener listener = new ClickListener() {

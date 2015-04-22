@@ -402,12 +402,6 @@ public class Sandbox {
         getSandboxStage().selectionRec.setY(y);
     }
 
-    public boolean showDropDown(float x, float y) {
-        showDropDownForSelection(x, y);
-
-        return true;
-    }
-
     public void selectionComplete() {
         // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
         isUsingSelectionTool = false;
@@ -428,101 +422,6 @@ public class Sandbox {
         if (curr.size() == 0) {
             getUIStage().emptyClick();
         }
-    }
-
-    /**
-     * Configures and shows drop down for currently selected panels list
-     *
-     * @param x coordinate
-     * @param y coordinate
-     */
-    public void showDropDownForSelection(final float x, final float y) {
-        DropDown dropDown = uiStage.mainDropDown;
-        dropDown.clearItems();
-
-        if (getSelector().getCurrentSelection().size() > 0) {
-            dropDown.addItem(SelectionActions.GROUP_ITEMS, "Group into Composite");
-        }
-
-        if (getSelector().getCurrentSelection().size() == 1) {
-            for (SelectionRectangle value : getSelector().getCurrentSelection().values()) {
-                if (value.getHost().isComposite()) {
-                    dropDown.addItem(SelectionActions.ADD_TO_LIBRARY, "Add to Library");
-                    dropDown.addItem(SelectionActions.EDIT_COMPOSITE, "Edit Composite");
-                }
-            }
-            dropDown.addItem(SelectionActions.SET_GRID_SIZE_FROM, "Set grid size from");
-        }
-
-        dropDown.addItem(SelectionActions.PASTE, "Paste");
-
-        if (isItemTouched) {
-            dropDown.addItem(SelectionActions.CONVERT_TO_BUTTON, "Convert to Button");
-            dropDown.addItem(SelectionActions.EDIT_PHYSICS, "Edit Physics");
-            dropDown.addItem(SelectionActions.CUT, "Cut");
-            dropDown.addItem(SelectionActions.COPY, "Copy");
-            dropDown.addItem(SelectionActions.DELETE, "Delete");
-        }
-
-        dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
-
-        dropDown.setEventListener(new DropDown.SelectionEvent() {
-
-            @Override
-            public void doAction(int action) {
-                switch (action) {
-                    case SelectionActions.GROUP_ITEMS:
-                        getItemFactory().groupItemsIntoComposite();
-                        saveSceneCurrentSceneData();
-                        break;
-                    case SelectionActions.CONVERT_TO_BUTTON:
-                        // TODO: this should go to UAC
-                        CompositeItem btn = getItemFactory().groupItemsIntoComposite();
-                        btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
-                        btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
-                        btn.reAssembleLayers();
-
-                        saveSceneCurrentSceneData();
-                        break;
-                    case SelectionActions.EDIT_PHYSICS:
-                        if (getSelector().getCurrentSelection().size() == 1) {
-                            for (SelectionRectangle value : getSelector().getCurrentSelection().values()) {
-                                IBaseItem item = value.getHost();
-                                getUIStage().editPhysics(item);
-                                break;
-                            }
-                        }
-                        break;
-                    case SelectionActions.ADD_TO_LIBRARY:
-                        getItemFactory().addCompositeToLibrary();
-                        break;
-                    case SelectionActions.EDIT_COMPOSITE:
-                        enterIntoComposite();
-                        flow.setPendingHistory(getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
-                        flow.applyPendingAction();
-                        break;
-                    case SelectionActions.SET_GRID_SIZE_FROM:
-                        setGridSize((int) ((Actor) (selector.getSelectedItems().get(0))).getWidth());
-                        break;
-                    case SelectionActions.COPY:
-                        getUac().copyAction();
-                        break;
-                    case SelectionActions.CUT:
-                        getUac().cutAction();
-                        saveSceneCurrentSceneData();
-                        break;
-                    case SelectionActions.PASTE:
-                        getUac().pasteAction(x, y, true);
-                        saveSceneCurrentSceneData();
-                        break;
-                    case SelectionActions.DELETE:
-                        getSelector().removeCurrentSelectedItems();
-                        break;
-                    default:
-                        break;
-                }
-            }
-        });
     }
 
     public void setZoomPercent(float percent) {
