@@ -92,7 +92,7 @@ public class EditAnimationDialog extends SimpleDialog {
         addActor(topWrapper);
 
 
-        final CompositeItem newAnimationControl = stage.sceneLoader.getLibraryAsActor("newAnimationControl");
+        final CompositeItem newAnimationControl = null;//stage.sceneLoader.getLibraryAsActor("newAnimationControl");
         addActor(newAnimationControl);
         newAnimationControl.setX(getWidth() / 2 - newAnimationControl.getWidth() / 2);
         newAnimationControl.setY(topWrapper.getY() - newAnimationControl.getHeight() - 5);
@@ -160,8 +160,8 @@ public class EditAnimationDialog extends SimpleDialog {
         for (Map.Entry<String, SpriteAnimation.Animation> entry : animations.entrySet()) {
             final String name = entry.getKey();
             SpriteAnimation.Animation value = entry.getValue();
-            final CompositeItem itm = stage.sceneLoader.getLibraryAsActor("animationValueControl");
-            itm.getLabelById("name").setText("\""+name + "\" frames: " + value.startFrame + " - " + value.endFrame);
+            final CompositeItem itm = null;//stage.sceneLoader.getLibraryAsActor("animationValueControl");
+            itm.getLabelById("name").setText("\"" + name + "\" frames: " + value.startFrame + " - " + value.endFrame);
             listContainer.addActor(itm);
             itm.setX(2);
             itm.setY(listContainer.getHeight() - (itm.getHeight() + 3) * (iterator + 1));

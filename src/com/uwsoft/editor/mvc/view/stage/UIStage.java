@@ -22,22 +22,17 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.viewport.*;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.esotericsoftware.spine.SkeletonRenderer;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
-import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
-import com.uwsoft.editor.gdx.ui.layer.UILayerBoxOld;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorResourceManager;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
-import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.Essentials;
@@ -45,12 +40,10 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
-    public final SceneLoader sceneLoader;
     public final Essentials essentials;
     private final Overlap2DFacade facade;
     public SandboxStage sandboxStage;
     public Group dummyTarget;
-    public CompositeItem sceneUI;
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
@@ -68,11 +61,6 @@ public class UIStage extends Stage {
 
         essentials.skeletonRenderer = new SkeletonRenderer();
 
-        SceneLoader sceneLoader = new SceneLoader(essentials);
-        sceneLoader.loadScene("MainScene");
-
-        this.sceneLoader = sceneLoader;
-        sceneUI = sceneLoader.getSceneAsActor();
 
         dummyTarget = new Group();
         dummyTarget.setWidth(getWidth());
@@ -117,7 +105,7 @@ public class UIStage extends Stage {
 
     public void updateCurrentItemState() {
         // TODO: do this with notification
-       // uiMainTable.multiPropertyBox.updateState();
+        // uiMainTable.multiPropertyBox.updateState();
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
@@ -129,8 +117,8 @@ public class UIStage extends Stage {
     }
 
     public void loadCurrentProject() {
-       // uiMainTable.libraryPanel.initContent();
-        uiMainTable.lightBox.initContent();
+        // uiMainTable.libraryPanel.initContent();
+//        uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
 //        uiMainTable.compositePanel.initResolutionBox();
 
@@ -142,7 +130,7 @@ public class UIStage extends Stage {
     public void reInitLibrary() {
         //uiMainTable.libraryPanel.initContent();
 
-        uiMainTable.lightBox.initContent();
+//        uiMainTable.lightBox.initContent();
 //        uiMainTable.itemsBox.init();
     }
 
@@ -164,7 +152,7 @@ public class UIStage extends Stage {
             }
         });
     }
-    
+
     public LayerItemVO getCurrentSelectedLayer() {
         if (uiMainTable.layerPanel.currentSelectedLayerIndex == -1) return null;
         return null;//getSandbox().sceneControl.getCurrentScene().dataVO.composite.layers.get(uiMainTable.layerPanel.currentSelectedLayerIndex);
@@ -173,10 +161,6 @@ public class UIStage extends Stage {
 
     public UIItemsTreeBox getItemsBox() {
         return uiMainTable.itemsBox;
-    }
-
-    public UILightBox getLightBox() {
-        return uiMainTable.lightBox;
     }
 
     public UILayerBox getLayerPanel() {

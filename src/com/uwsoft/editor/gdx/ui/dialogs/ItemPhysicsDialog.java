@@ -27,9 +27,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor.EditMode;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.utils.poly.Clipper.Polygonizer;
@@ -107,7 +107,7 @@ public class ItemPhysicsDialog extends SimpleDialog {
     private void buildPropertyPanel() {
         propertyPanel = new Group();
 
-        CompositeItem compositeItem = stage.sceneLoader.getCompositeElementById("physicsProperties");
+        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsProperties");
         compositeItem.setX(6);
         compositeItem.setY(getHeight() - compositeItem.getHeight() - 25);
         //item property
@@ -292,7 +292,7 @@ public class ItemPhysicsDialog extends SimpleDialog {
 
     private void buildControlPanel() {
         controlPanel = new Group();
-        CompositeItem compositeItem = stage.sceneLoader.getCompositeElementById("physicsToolbar");
+        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsToolbar");
         btnEdit = compositeItem.getTextButtonById("btnEdit");
         btnTest = compositeItem.getTextButtonById("btnTest");
         TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(btnTest.getStyle());

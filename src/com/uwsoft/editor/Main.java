@@ -42,6 +42,7 @@ public class Main {
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
@@ -49,6 +50,7 @@ public class Main {
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
             LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }

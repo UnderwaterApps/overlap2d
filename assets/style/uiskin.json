@@ -1,0 +1,123 @@
+{
+"com.badlogic.gdx.graphics.g2d.BitmapFont": {
+  "default-font": { "file": "default.fnt" },
+  "small-font": { "file": "font-small.fnt" }
+},
+com.badlogic.gdx.graphics.Color: {
+	green: { a: 1, b: 0, g: 1, r: 0 },
+	white: { a: 1, b: 1, g: 1, r: 1 },
+	red: { a: 1, b: 0, g: 0, r: 1 },
+	black: { a: 1, b: 0, g: 0, r: 0 },
+	grey: { a: 1, b: 0.32, g: 0.32, r: 0.32 },
+	menuitem-grey: { a: 1, b: 0.65, g: 0.65, r: 0.65 },
+	vis-blue: { a: 1, b: 0.886, g: 0.631, r: 0.105 },
+},
+com.badlogic.gdx.scenes.scene2d.ui.Skin$TintedDrawable: {
+	dialogDim: { name: white, color: { r: 0, g: 0, b: 0, a: 0.45 } }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Button$ButtonStyle: {
+	default: { down: button-down, up: button },
+	toggle: { down: button-down, checked: button-down, up: button }
+},
+com.badlogic.gdx.scenes.scene2d.ui.TextButton$TextButtonStyle: {
+	default: { down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey },
+	toggle: { down: button-down, up: button, checked: button-down, over: button-over, font: default-font, fontColor: white },
+},
+com.badlogic.gdx.scenes.scene2d.ui.ScrollPane$ScrollPaneStyle: {
+	default: { vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal, background: border},
+	list: { vScroll: scroll, vScrollKnob: scroll-knob-vertical, hScroll: scroll-horizontal, hScrollKnob: scroll-knob-horizontal }
+},
+com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle: {
+	default: {
+		font: default-font, fontColor: white, background: default-select,
+		scrollStyle: default,
+		listStyle: { font: default-font, selection: list-selection, background: select-box-list-bg }
+	}
+},
+com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle: {
+	default-vertical: { handle: splitpane-vertical },
+	default-horizontal: { handle: splitpane }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle: {
+	default: { titleFont: default-font, background: window, titleFontColor: white },
+	noborder: { titleFont: default-font, background: window-noborder, titleFontColor: white },
+	dialog: { titleFont: default-font, background: window, titleFontColor: white, stageBackground: dialogDim }
+},
+com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle: {
+	default-horizontal: { background: progressbar, knob: progressbar-filled, knobBefore: progressbar-filled},
+	default-vertical: { background: progressbar-vertical, knob: progressbar-filled-vertical, knobBefore: progressbar-filled-vertical }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle: {
+	default-horizontal: { background: slider, knob: slider-knob, disabledKnob: §-knob-disabled },
+	default-vertical: { background: slider-vertical, knob: slider-knob, disabledKnob: slider-knob-disabled }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle: {
+	default: { font: default-font, fontColor: white },
+    small: {font: small-font, fontColor: white},
+	menuitem-shortcut: { font: default-font, fontColor: menuitem-grey },
+},
+com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle: {
+	default: { selection: selection, background: textfield, font: default-font, fontColor: white, cursor: cursor }
+},
+com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle: {
+	default: { checkboxOn: check-on, checkboxOff: check-off, font: default-font, fontColor: white, disabledFontColor: grey },
+	radio: { checkboxOn: radio-on, checkboxOff: radio-off, font: default-font, fontColor: white, disabledFontColor: grey }
+},
+com.badlogic.gdx.scenes.scene2d.ui.List$ListStyle: {
+	default: { fontColorUnselected: white, selection: list-selection, fontColorSelected: white, font: default-font }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle: {
+	default: { background: default-pane, knob: touchpad-knob }
+},
+com.badlogic.gdx.scenes.scene2d.ui.Tree$TreeStyle: {
+	default: { minus: tree-minus, plus: tree-plus, selection: tree-selection, over: tree-over }
+},
+com.kotcrab.vis.ui.widget.VisTextField$VisTextFieldStyle: {
+	default: { selection: selection, background: textfield, backgroundOver: textfield-over, focusBorder: border, errorBorder: border-error,
+	font: default-font, fontColor: white, disabledFontColor: grey, cursor: cursor },
+},
+com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle: {
+	default: { down: button-down, up: button, over: button-over, disabled: button, focusBorder: border,
+               font: default-font, fontColor: white, disabledFontColor: grey },
+	toggle: { down: button-down, up: button, checked: button-down, over: button-over, font: default-font, fontColor: white, focusBorder: border },
+    menu-bar: { down: button-down, up: button, over: button-down, font: default-font, fontColor: white },
+},
+com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle: {
+	default: { down: button-down, up: button, over: button-over, disabled: button, focusBorder: border },
+	toggle: { down: button-down, up: button, checked: button-down, over: button-over, focusBorder: border }
+    close-window: { down: button-red, up: button-window-bg, over: button-over, imageUp: icon-close}
+    close: { down: button-red, up: button, over: button-over, imageUp: icon-close}
+},
+com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle: {
+	default-horizontal: { background: slider, knob: slider-knob, disabledKnob: slider-knob-disabled, knobOver: slider-knob-over, knobDown: slider-knob-down },
+	default-vertical: { background: slider-vertical, knob: slider-knob, disabledKnob: slider-knob-disabled, knobOver: slider-knob-over, knobDown: slider-knob-down }
+},
+com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle: {
+	default: { checkboxOn: check-on, checkboxOff: check-off, checkboxOver: check-over-off, checkboxOnOver: check-over-on,
+               checkboxOffDown: check-down, checkboxOnDown: check-down-on, checkboxOffDisabled: check-off, checkboxOnDisabled: check-on-disabled,
+	           focusBorder: border, font: default-font, fontColor: white, disabledFontColor: grey },
+	
+	radio: { checkboxOn: radio-on, checkboxOff: radio-off, checkboxOver: radio-over-off, checkboxOnOver: radio-over-on,
+	         checkboxOffDown: radio-down, checkboxOnDown: radio-down-on, checkboxOffDisabled: radio-off, checkboxOnDisabled: radio-on-disabled,
+	         focusBorder: border-circle, font: default-font, fontColor: white, disabledFontColor: grey }
+},
+com.kotcrab.vis.ui.widget.PopupMenu$PopupMenuStyle: {
+	default: {background: button, border: border},
+	noborder: {background: button},
+},
+com.kotcrab.vis.ui.widget.Separator$SeparatorStyle: {
+	default: {background: separator, thickness: 4},
+    vertical: {background: separator, thickness: 4, vertical: true},
+	menu: {background: separator-menu, thickness: 3},
+},
+com.kotcrab.vis.ui.widget.VisSplitPane$VisSplitPaneStyle: {
+    default-vertical: { handle: splitpane-vertical, handleOver: splitpane-vertical-over },
+    default-horizontal: { handle: splitpane, handleOver: splitpane-over }
+},
+com.kotcrab.vis.ui.widget.MenuItem$MenuItemStyle: {
+    default: { down: button-down, up: button, over: button-over, disabled: button, font: default-font, fontColor: white, disabledFontColor: grey, subMenu: sub-menu },
+},
+  com.kotcrab.vis.ui.widget.NumberSelector$NumberSelectorStyle: {
+  default: { down: select-down, up: select-up },
+},
+}
