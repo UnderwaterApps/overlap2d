@@ -41,6 +41,10 @@ public class UISubmenuBar extends VisTable {
         add(uiCompositeHierarchy).left().expandX();
 
 
+        UIFontChooserMediator ioFontChooserMediator = facade.retrieveMediator(UIFontChooserMediator.NAME);
+        UIFontChooser uiFontChooser = ioFontChooserMediator.getViewComponent();
+        add(uiFontChooser).right().expandX().fillX();
+
         //grid
         UIGridBoxMediator uiGridBoxMediator = facade.retrieveMediator(UIGridBoxMediator.NAME);
         UIGridBox uiGridBox = uiGridBoxMediator.getViewComponent();
