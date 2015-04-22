@@ -140,13 +140,6 @@ public class UIStage extends Stage {
 //        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
     }
 
-    public void reInitLibrary() {
-        //uiMainTable.libraryPanel.initContent();
-
-        uiMainTable.lightBox.initContent();
-//        uiMainTable.itemsBox.init();
-    }
-
     public void emptyClick() {
         facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }

@@ -47,7 +47,8 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
     public String[] listNotificationInterests() {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
-                ProjectManager.PROJECT_DATA_UPDATED
+                ProjectManager.PROJECT_DATA_UPDATED,
+                Overlap2D.LIBRARY_LIST_UPDATED
         };
     }
 
@@ -60,6 +61,8 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
             case ProjectManager.PROJECT_DATA_UPDATED:
                 initLibraryItems();
                 break;
+            case Overlap2D.LIBRARY_LIST_UPDATED:
+                initLibraryItems();
             default:
                 break;
         }

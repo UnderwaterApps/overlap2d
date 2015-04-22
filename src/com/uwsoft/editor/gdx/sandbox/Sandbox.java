@@ -232,7 +232,9 @@ public class Sandbox {
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
-        uiStage.reInitLibrary();
+
+        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+
         //TODO: move this into SceneDataManager!
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
