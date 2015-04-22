@@ -71,7 +71,7 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-                initAnimationsList();
+//                initAnimationsList();
                 break;
             default:
                 break;
