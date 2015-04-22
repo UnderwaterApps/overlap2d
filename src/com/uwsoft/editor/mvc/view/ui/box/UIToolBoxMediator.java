@@ -38,7 +38,8 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 UIToolBox.SELECTING_MODE_BTN_CLICKED,
-                UIToolBox.TRANSFORMING_MODE_BTN_CLICKED
+                UIToolBox.TRANSFORMING_MODE_BTN_CLICKED,
+                UIToolBox.TEXT_MODE_BTN_CLICKED
         };
     }
 
@@ -52,6 +53,9 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
                 break;
             case UIToolBox.TRANSFORMING_MODE_BTN_CLICKED:
                 sandbox.setCurrentMode(EditingMode.TRANSFORM);
+                break;
+            case UIToolBox.TEXT_MODE_BTN_CLICKED:
+                sandbox.setCurrentMode(EditingMode.TEXT);
                 break;
         }
     }

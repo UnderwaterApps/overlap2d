@@ -35,6 +35,8 @@ public enum EditingMode {
 	  */
     TRANSFORM,
 
+    TEXT,
+
 	 /**
 	  * User is in panning mode so dragging just moves the scene
 	  */

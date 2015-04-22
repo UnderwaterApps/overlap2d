@@ -245,17 +245,11 @@ public class TextureManager extends BaseProxy {
         labelStylePath = string;
     }
 
-    public boolean checkFontExistence() {
-        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        File folder = new File(projectManager.getFreeTypeFontPath());
-        if (!folder.exists()) return false;
-        for (final File fileEntry : folder.listFiles()) {
-            if (fileEntry.getName().toLowerCase().endsWith(".ttf")) {
-                return true;
-            }
-        }
-        return false;
+
+    public void addBitmapFont(String name, int size, BitmapFont font) {
+        bitmapFonts.put(new FontSizePair(name, size), font);
     }
+
 
     public void loadBitmapFonts(FontSizePair[] fonts, float mulX) {
         bitmapFonts.clear();
