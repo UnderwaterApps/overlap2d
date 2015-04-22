@@ -18,6 +18,8 @@ public class UIFontChooser extends UIBaseBox {
         add(selectBox);
 
         selectBox.addListener(new SelectBoxChangeListener(FONT_SELECTED));
+
+        selectBox.setMaxListCount(12);
     }
 
     public void setSelectBoxItems(Array<String> newItems) {
