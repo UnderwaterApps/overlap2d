@@ -64,7 +64,7 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
         ResolutionEntryVO resolutionEntryVO;
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-                viewComponent.init();
+                viewComponent.update();
                 break;
             case UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED:
                 resolutionEntryVO = notification.getBody();

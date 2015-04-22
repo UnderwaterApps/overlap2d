@@ -54,115 +54,16 @@ public class UIResolutionBox extends VisTable {
     public UIResolutionBox() {
         facade = Overlap2DFacade.getInstance();
         resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-//        this.stage = s;
-//
-//        this.projectInfoVO = prjVo;
-//
-//        this.currentResolutionName = currentResolutionName;
-//        projectManager = facade.retrieveProxy(ProjectManager.NAME);
-//        int padding = 5;
-//
-//        String[] arr = new String[projectInfoVO.resolutions.size() + 1];
-//
-//        arr[0] = projectInfoVO.originalResolution.toString();
-//        int selectedIndex = 0;
-//        for (int i = 0; i < projectInfoVO.resolutions.size(); i++) {
-//            ResolutionEntryVO resolution = projectInfoVO.resolutions.get(i);
-//            String resolutionString = projectInfoVO.resolutions.get(i).toString();
-//            arr[i + 1] = resolutionString;
-//            if (resolution.name.equals(currentResolutionName)) {
-//                selectedIndex = i + 1;
-//            }
-//        }
-//
-//        dropdown = new SelectBox(textureManager.editorSkin);
-//        dropdown.setItems(arr);
-//        dropdown.setSelectedIndex(selectedIndex);
-//        dropdown.setWidth(150);
-//        addActor(dropdown);
-//
-//        dropdown.setX(0);
-//        dropdown.setY(6);
-//
-//        dropdown.addListener(new ChangeListener() {
-//
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                loadCurrentResolution();
-//
-//            }
-//        });
-//
-//        TextButton delBtn = new TextButton("Delete", textureManager.editorSkin);
-//        delBtn.setX(dropdown.getX() + dropdown.getWidth() + padding);
-//        delBtn.setY(8);
-//        addActor(delBtn);
-//
-//        TextButton createBtn = new TextButton("Create New", textureManager.editorSkin);
-//        createBtn.setX(delBtn.getX() + delBtn.getWidth() + padding);
-//        createBtn.setY(8);
-//        addActor(createBtn);
-//
-//        TextButton repackBtn = new TextButton("Repack", textureManager.editorSkin);
-//        repackBtn.setX(createBtn.getX() + createBtn.getWidth() + padding);
-//        repackBtn.setY(8);
-//        addActor(repackBtn);
-//
-////        openBtn.addListener(new ClickListener() {
-////            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-////                super.touchUp(event, x, y, pointer, button);
-////
-////                String res = "orig";
-////
-////                final int index = dropdown.getSelectedIndex();
-////                if (index > 0) {
-////                    res = projectInfoVO.resolutions.get(index - 1).name;
-////                }
-////                String name = stage.sandboxStage.getCurrentSceneVO().sceneName;
-////                DataManager.getInstance().openProjectAndLoadAllData(DataManager.getInstance().getCurrentProjectVO().projectName, res);
-////                stage.sandboxStage.loadCurrentProject(name);
-////                stage.loadCurrentProject();
-////
-////            }
-////        });
-//
-//        createBtn.addListener(new ClickListener() {
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                super.touchUp(event, x, y, pointer, button);
-//
-//                stage.dialogs().showCreateNewResolutionDialog();
-//
-//            }
-//        });
-//
-//        delBtn.addListener(new ClickListener() {
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                super.touchUp(event, x, y, pointer, button);
-//
-//                final int index = dropdown.getSelectedIndex();
-//                if (index == 0) {
-//                    return;
-//                }
-//
-//                ResolutionEntryVO resEntry = projectInfoVO.resolutions.get(index - 1);
-//
 
-//
-//            }
-//        });
-//
-//        repackBtn.addListener(new ClickListener() {
-//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-//                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-//                resolutionManager.rePackProjectImagesForAllResolutions();
-//                loadCurrentResolution();
-//            }
-//        });
-//
-//        setWidth(340);
+        init();
     }
 
-    public void init() {
+    private void init() {
+
+    }
+
+    public void update() {
+        clear();
         visSelectBox = new VisSelectBox<>();
         Array<ResolutionEntryVO> resolutionEntryVOs = new Array<>();
         ResolutionEntryVO newResolutionEntryVO = new ResolutionEntryVO();

@@ -32,5 +32,5 @@ public abstract class UIBaseBox extends VisTable {
         facade = Overlap2DFacade.getInstance();
     }
 
-    public abstract void init();
+    public abstract void update();
 }
