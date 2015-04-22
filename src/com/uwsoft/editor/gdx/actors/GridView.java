@@ -22,6 +22,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
 import com.uwsoft.editor.mvc.view.stage.BaseStage;
 
@@ -59,7 +60,7 @@ public class GridView extends Group {
 		this.setWidth(gridSize*gridLinesCount);
 		this.setHeight(gridSize*gridLinesCount);
 		
-		Label lbl = new Label("0.0", s.textureManager.editorSkin);
+		Label lbl = new VisLabel("0.0");
 		lbl.setX(-5 - lbl.getWidth());
 		lbl.setY( - lbl.getHeight());
 		lbl.setColor(new Color(1, 1, 1, 0.4f));
