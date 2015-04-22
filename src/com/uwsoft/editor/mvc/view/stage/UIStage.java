@@ -152,7 +152,7 @@ public class UIStage extends Stage {
     }
 
     public void loadScene(CompositeItemVO scene) {
-        //getSandbox().initSceneView(scene);
+        Sandbox.getInstance().initSceneView(scene);
     }
 
 

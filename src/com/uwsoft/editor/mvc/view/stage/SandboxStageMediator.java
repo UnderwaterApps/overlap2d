@@ -233,6 +233,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
             Sandbox sandbox = Sandbox.getInstance();
             lastX = Gdx.input.getX();
             lastY = Gdx.input.getY();
@@ -268,6 +269,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         @Override
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchUp(event, x, y, pointer, button);
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {
                 // if clicked on empty space, selections need to be cleared
