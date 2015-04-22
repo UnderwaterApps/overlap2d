@@ -63,7 +63,8 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                ProjectManager.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED,
+                ProjectManager.PROJECT_DATA_UPDATED
         };
     }
 
@@ -71,6 +72,9 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
+                initAnimationsList();
+                break;
+            case ProjectManager.PROJECT_DATA_UPDATED:
                 initAnimationsList();
                 break;
             default:

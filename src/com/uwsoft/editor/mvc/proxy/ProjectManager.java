@@ -41,7 +41,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
-import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.Overlap2DUtils;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -66,7 +65,10 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     private static final String TAG = ProjectManager.class.getCanonicalName();
     public static final String NAME = TAG;
     private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.proxy.ProjectManager";
+
     public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
+    public static final String PROJECT_DATA_UPDATED = EVENT_PREFIX + ".PROJECT_DATA_UPDATED";
+
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
     private String currentWorkingPath;
@@ -223,7 +225,6 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             checkForConsistancy();
             loadProjectData(projectName);
         }
-        facade.sendNotification(PROJECT_OPENED);
     }
 
     private void goThroughVersionMigrationProtocol(String projectPath, ProjectVO projectVo) {
@@ -311,32 +312,6 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
     }
 
 
-    private Array<FileHandle> getImageListFromAtlas(FileHandle fileHandle) throws IOException {
-        Array<FileHandle> images = new Array<>();
-        BufferedReader br;
-
-        br = new BufferedReader(new FileReader(fileHandle.file()));
-        String line;
-        while ((line = br.readLine()) != null) {
-            if (line.equals("- Image Path -")) {
-                line = br.readLine();
-                String absolutePath = fileHandle.path();
-                if (line.contains("/") || line.indexOf("\\") > 0) {
-                    line = line.substring(line.lastIndexOf(File.separator), line.length());
-                }
-                String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + line;
-                FileHandle imgFile = new FileHandle(path);
-                if (imgFile.exists()) {
-                    images.add(imgFile);
-                } else {
-                    throw new IOException("Particle image fileHandle missing.");
-                }
-            }
-        }
-        br.close();
-        return images;
-    }
-
     private ArrayList<File> getScmlFileImagesList(FileHandle fileHandle) {
         ArrayList<File> images = new ArrayList<File>();
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
@@ -405,7 +380,8 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             String targetPath;
             if (Overlap2DUtils.JSON_FILTER.accept(null, fileName)) {
                 sourcePath = animationFileSource.path();
-                animationDataPath = sourcePath.substring(0, sourcePath.lastIndexOf(File.separator)) + File.separator;
+
+                animationDataPath = FilenameUtils.getFullPathNoEndSeparator(sourcePath);
                 targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
                 FileHandle atlasFileSource = new FileHandle(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
                 if (!atlasFileSource.exists()) {
@@ -416,14 +392,14 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                 FileUtils.forceMkdir(new File(targetPath));
                 File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
                 File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
-                Array<FileHandle> imageFiles = getImageListFromAtlas(atlasFileSource);
+                Array<File> imageFiles = getAtlasPages(atlasFileSource);
 
                 FileUtils.copyFile(animationFileSource.file(), jsonFileTarget);
                 FileUtils.copyFile(atlasFileSource.file(), atlasFileTarget);
 
-                for (FileHandle imageFile : imageFiles) {
-                    FileHandle imgFileTarget = new FileHandle(targetPath + File.separator + imageFile.name());
-                    FileUtils.copyFile(imageFile.file(), imgFileTarget.file());
+                for (File imageFile : imageFiles) {
+                    FileHandle imgFileTarget = new FileHandle(targetPath + File.separator + imageFile.getName());
+                    FileUtils.copyFile(imageFile, imgFileTarget.file());
                 }
 
                 return atlasFileTarget;
@@ -490,7 +466,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             } else {
                 for (FileHandle fileHandle : fileHandles) {
                     try {
-                        ArrayList<File> imgs = getAtlasPages(fileHandle);
+                        Array<File> imgs = getAtlasPages(fileHandle);
                         String fileNameWithoutExt = FilenameUtils.removeExtension(fileHandle.name());
                         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutExt;
                         File targetDir = new File(targetPath);
@@ -526,8 +502,8 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         executor.shutdown();
     }
 
-    private ArrayList<File> getAtlasPages(FileHandle fileHandle) {
-        ArrayList<File> imgs = new ArrayList<File>();
+    private Array<File> getAtlasPages(FileHandle fileHandle) {
+        Array<File> imgs = new Array<>();
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
             while (true) {
@@ -535,7 +511,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                 if (line == null) break;
                 if (line.trim().length() == 0) {
                     line = reader.readLine();
-                    imgs.add(new FileHandle(fileHandle.path()).child(line).file());
+                    imgs.add(new File(FilenameUtils.getFullPath(fileHandle.path()) + line));
                 }
             }
         } catch (IOException e) {
@@ -544,6 +520,16 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         return imgs;
     }
 
+    private Array<FileHandle> getAtlasPageHandles(FileHandle fileHandle) {
+        Array<File> imgs = getAtlasPages(fileHandle);
+
+        Array<FileHandle> imgHandles = new Array<>();
+        for(int i = 0; i < imgs.size; i++) {
+            imgHandles.add(new FileHandle(imgs.get(i)));
+        }
+
+        return  imgHandles;
+    }
 
     public void importParticlesIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
         if (fileHandles == null) {
@@ -560,7 +546,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                     if (!fileHandle.isDirectory() && fileHandle.exists()) {
                         try {
                             //copy images
-                            Array<FileHandle> imgs = getImageListFromAtlas(fileHandle);
+                            Array<FileHandle> imgs = getAtlasPageHandles(fileHandle);
                             copyImageFilesForAllResolutionsIntoProject(imgs, false);
                             // copy the fileHandle
                             String newName = fileHandle.name();
