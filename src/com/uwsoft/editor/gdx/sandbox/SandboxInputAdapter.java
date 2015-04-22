@@ -99,7 +99,7 @@ public class SandboxInputAdapter {
         sandbox.isItemTouched = true;
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
 
         return true;
     }
@@ -140,7 +140,7 @@ public class SandboxInputAdapter {
         sandbox.dirty = false;
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     private void itemDoubleClick(IBaseItem item, InputEvent event, float x, float y, int button) {
@@ -188,8 +188,7 @@ public class SandboxInputAdapter {
         }
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
-
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
 

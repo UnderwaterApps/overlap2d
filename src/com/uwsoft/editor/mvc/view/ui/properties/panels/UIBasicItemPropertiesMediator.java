@@ -87,7 +87,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         viewComponent.setFlipV(vo.isFlipedV);
         viewComponent.setWidthValue(itemAsActor.getWidth() + "");
         viewComponent.setHeightValue(itemAsActor.getHeight() + "");
-        viewComponent.setRotationValue(vo.rotation + "");
+        viewComponent.setRotationValue(((Actor) item).getRotation() + "");
         viewComponent.setScaleXValue(vo.scaleX + "");
         viewComponent.setScaleYValue(vo.scaleY + "");
         viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));

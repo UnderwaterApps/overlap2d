@@ -116,11 +116,6 @@ public class UIStage extends Stage {
         setKeyboardFocus(dummyTarget);
     }
 
-    public void updateCurrentItemState() {
-        // TODO: do this with notification
-       // uiMainTable.multiPropertyBox.updateState();
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
-    }
 
     public void itemWasSelected(IBaseItem itm) {
         //uiMainTable.multiPropertyBox.setItem(itm);

@@ -349,6 +349,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                     value.getHostAsActor().rotateBy(degreeAmount);
                     value.update();
                 }
+                facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
                 sandbox.dirty = true;
             } else if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
                 // if not item is touched then we can use this for zoom
