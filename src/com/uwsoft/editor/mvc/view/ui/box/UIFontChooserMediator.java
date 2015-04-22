@@ -1,13 +1,11 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.tools.hiero.BMFontUtil;
-import com.badlogic.gdx.tools.hiero.unicodefont.UnicodeFont;
-import com.badlogic.gdx.tools.hiero.unicodefont.effects.ColorEffect;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -15,10 +13,15 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
+import org.apache.commons.io.FileUtils;
 
 import java.awt.*;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 /**
@@ -28,18 +31,24 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
     private static final String TAG = UIFontChooserMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private HashMap<String, String> systemFontMap = new HashMap<>();
+
     public UIFontChooserMediator() {
         super(NAME, new UIFontChooser());
 
         // get system fonts
+        /*
         String[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
         Array<String> fontList = new Array<>(fonts);
-        viewComponent.setSelectBoxItems(fontList);
+        viewComponent.setSelectBoxItems(fontList);*/
+        generateFontList();
     }
 
     @Override
     public void onRegister() {
+
     }
+
 
     @Override
     public String[] listNotificationInterests() {
@@ -64,7 +73,55 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
         }
     }
 
+    private void generateFontList() {
+
+        Preferences prefs = Gdx.app.getPreferences("o2d_prefs_fonts");
+
+        systemFontMap = (HashMap<String, String>)prefs.get();
+
+        String path = System.getenv("WINDIR");
+        File fontDirectory = new File(path, "Fonts");
+        String[] extensions = new String[] { "ttf" };
+        List<File> files = (List<File>) FileUtils.listFiles(fontDirectory, extensions, true);
+        Array<String> fontList = new Array<>();
+
+        for (File file : files) {
+            Font f = null;
+            try {
+                if(!systemFontMap.containsValue(file.getAbsolutePath())) {
+                    f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(file.getAbsolutePath()));
+                    String name = f.getName();
+                    systemFontMap.put(name, file.getAbsolutePath());
+                }
+            } catch (FontFormatException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        }
+
+        for (Map.Entry<String, String> entry : systemFontMap.entrySet()) {
+            fontList.add(entry.getKey());
+        }
+
+        prefs.put(systemFontMap);
+        prefs.flush();
+
+        viewComponent.setSelectBoxItems(fontList);
+    }
+
     private void fontSelected(String fontName) {
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = 18;
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(new FileHandle(systemFontMap.get(fontName)));
+        BitmapFont font = generator.generateFont(parameter);
+
+
+
+        /*
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
         parameter.characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz\\n1234567890\\\"!`?'.,;:()[]{}<>|/@\\\\^$-%+=#_&~*\\u007F";
@@ -92,9 +149,10 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
         }
 
         BitmapFont font = new BitmapFont(new FileHandle(fontFile.getAbsolutePath() + ".fnt"));
-
+*/
         TextureManager textureManager = Overlap2DFacade.getInstance().retrieveProxy(TextureManager.NAME);
-        textureManager.addBitmapFont(fontName, parameter.size, font);
+        textureManager.addBitmapFont(fontName.replaceAll(" ", ""), parameter.size, font);
+
     }
 
     public String getCurrentFont() {
