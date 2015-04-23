@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer.data;
+package com.uwsoft.editor.renderer.legacy.data;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;

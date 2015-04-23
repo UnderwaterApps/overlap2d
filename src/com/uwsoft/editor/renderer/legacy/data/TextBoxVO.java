@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer.data;
+package com.uwsoft.editor.renderer.legacy.data;
 
 public class TextBoxVO extends MainItemVO  {
 	
