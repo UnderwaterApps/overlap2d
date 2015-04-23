@@ -20,9 +20,9 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -58,6 +58,10 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
+        String input = "../art";
+        String output = "style";
+        String packFileName = "uiskin";
+        TexturePacker.processIfModified(input, output, packFileName);
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
