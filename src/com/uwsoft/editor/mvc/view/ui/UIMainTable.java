@@ -63,8 +63,6 @@ public class UIMainTable extends VisTable {
         //
         initMenuBar();
         topTable.row();
-        topTable.addSeparator().colspan(2);
-        topTable.row();
         initCompisitePanel();
         initLeftToolsPanel();
         initRightToolsPanel();
