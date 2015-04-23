@@ -22,7 +22,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -48,7 +47,8 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                ProjectManager.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED,
+                ProjectManager.PROJECT_DATA_UPDATED
         };
     }
 
@@ -63,6 +63,9 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
+                initImagesList();
+                break;
+            case ProjectManager.PROJECT_DATA_UPDATED:
                 initImagesList();
                 break;
             default:

@@ -24,12 +24,15 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UILibraryItemsTabMediator;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -197,6 +200,20 @@ public class ItemFactory {
     }
 
 
+    public void createLabel(String fontName, float x, float y) {
+        LayerItemVO layer = getSelectedLayer();
+        sceneControl.getCurrentScene().updateDataVO();
+
+        LabelVO vo = new LabelVO();
+        prepareVO(vo, layer.layerName, x, y);
+
+        vo.style = fontName;
+        vo.text = "LABEL";
+        vo.size = 18;
+        IBaseItem item = new LabelItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
+        addItem(item, vo);
+    }
+
     public void createComponent(LayerItemVO layer, String type, float x, float y) {
         sceneControl.getCurrentScene().updateDataVO();
 
@@ -255,7 +272,7 @@ public class ItemFactory {
             @Override
             public void finished(String input) {
                 sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
-                sandbox.getUIStage().reInitLibrary();
+                facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
             }
 
             @Override
@@ -355,5 +372,13 @@ public class ItemFactory {
         }
         cleanComposite(composite);
         return composite.isEmpty();
+    }
+
+    public LayerItemVO getSelectedLayer() {
+        UILayerBoxMediator lbm = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        int selectedLayerIndex = lbm.getCurrentSelectedLayerIndex();
+        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
+
+        return layerVO;
     }
 }

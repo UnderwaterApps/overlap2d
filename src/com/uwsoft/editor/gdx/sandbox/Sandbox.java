@@ -43,6 +43,7 @@ import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
@@ -231,7 +232,9 @@ public class Sandbox {
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
         sandboxStage.getCamera().position.set(0, 0, 0);
-        uiStage.reInitLibrary();
+
+        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+
         //TODO: move this into SceneDataManager!
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
@@ -264,6 +267,7 @@ public class Sandbox {
      */
     public void enterIntoPrevComposite() {
         sandboxStage.getCamera().position.set(0, 0, 0);
+        facade.sendNotification(Overlap2D.OPENED_PREVIOUS_COMPOSITE);
 //        uiStage.getCompositePanel().stepUp();
 //        uiStage.getItemsBox().init();
     }
@@ -296,7 +300,11 @@ public class Sandbox {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
         sandboxStage.getCamera().position.set(0, 0, 0);
         getSceneControl().disableAmbience(true);
+        uiStage.getLightBox().disableAmbiance.setChecked(true);
+
+        facade.sendNotification(Overlap2D.OPENED_COMPOSITE, compositeItemVO);
         //uiStage.getCompositePanel().addScene(compositeItemVO);
+
         initSceneView(compositeItemVO);
 //        uiStage.getItemsBox().init();
     }

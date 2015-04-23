@@ -71,6 +71,7 @@ public class Overlap2DMenuBar extends MenuBar {
         editMenu = new EditMenu();
         addMenu(fileMenu);
         addMenu(editMenu);
+        setProjectOpen(false);
     }
 
 

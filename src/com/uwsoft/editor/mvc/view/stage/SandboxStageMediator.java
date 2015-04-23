@@ -31,9 +31,11 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.UIFontChooserMediator;
 
 import java.awt.*;
 
@@ -233,6 +235,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
             Sandbox sandbox = Sandbox.getInstance();
             lastX = Gdx.input.getX();
             lastY = Gdx.input.getY();
@@ -268,6 +271,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         @Override
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchUp(event, x, y, pointer, button);
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {
                 // if clicked on empty space, selections need to be cleared
@@ -290,6 +294,14 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             sandbox.selectionComplete();
             if (getTapCount() == 2 && button == Input.Buttons.LEFT) {
                 doubleClick(event, x, y);
+            }
+
+            if(sandbox.editingMode == EditingMode.TEXT) {
+                UIFontChooserMediator fcm = facade.retrieveMediator(UIFontChooserMediator.NAME);
+
+                sandbox.getItemFactory().createLabel(fcm.getCurrentFont(), Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+
+                return;
             }
         }
 
@@ -347,6 +359,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                     value.getHostAsActor().rotateBy(degreeAmount);
                     value.update();
                 }
+                facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
                 sandbox.dirty = true;
             } else if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
                 // if not item is touched then we can use this for zoom

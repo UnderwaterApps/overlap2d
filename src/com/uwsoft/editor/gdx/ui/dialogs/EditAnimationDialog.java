@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
@@ -178,6 +179,6 @@ public class EditAnimationDialog extends SimpleDialog {
             });
         }
 
-        uiStage.updateCurrentItemState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 }

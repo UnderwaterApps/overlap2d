@@ -38,7 +38,7 @@ public class UIGridBox extends UIBaseBox {
     public UIGridBox() {
        super();
        init();
-        setVisible(false);
+       setVisible(false);
     }
 
     @Override

@@ -31,7 +31,11 @@ import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.UIDropDownMenu;
+import com.uwsoft.editor.mvc.view.ui.box.UIFontChooser;
+import com.uwsoft.editor.mvc.view.ui.box.UIFontChooserMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
  * Adds listeners to everything sandbox related, including
@@ -99,13 +103,12 @@ public class SandboxInputAdapter {
         sandbox.isItemTouched = true;
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
 
         return true;
     }
 
     private void itemTouchUp(IBaseItem item, InputEvent event, float x, float y, int button) {
-
 
         if (currentTouchedItemWasSelected && !isDragging) {
             // item was selected (and no dragging was performed), so we need to release it
@@ -140,7 +143,7 @@ public class SandboxInputAdapter {
         sandbox.dirty = false;
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     private void itemDoubleClick(IBaseItem item, InputEvent event, float x, float y, int button) {
@@ -188,8 +191,7 @@ public class SandboxInputAdapter {
         }
 
         // pining UI to update current item properties data
-        sandbox.getUIStage().updateCurrentItemState();
-
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
 

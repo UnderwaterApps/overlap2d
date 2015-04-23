@@ -62,6 +62,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Overlap2DMenuBar.IMPORT_TO_LIBRARY,
                 Overlap2DMenuBar.EXPORT,
                 Overlap2DMenuBar.EXPORT_SETTINGS,
+                Overlap2DMenuBar.RECENT_PROJECTS,
                 Overlap2DMenuBar.EXIT,
                 Overlap2DMenuBar.NEW_SCENE,
                 Overlap2DMenuBar.SELECT_SCENE,
@@ -217,6 +218,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 if (path.length() > 0) {
                     projectManager.openProjectFromPath(path);
                     sandbox.loadCurrentProject();
+                    facade.sendNotification(ProjectManager.PROJECT_OPENED);
                 }
             }
         });

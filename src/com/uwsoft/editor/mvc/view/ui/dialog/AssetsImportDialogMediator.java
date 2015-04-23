@@ -103,6 +103,7 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
 //                uiStage.getCompositePanel().initResolutionBox();
                 sandbox.loadCurrentProject();
                 AssetsImportDialogMediator.this.viewComponent.hide();
+                facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);
             });
         }
     }

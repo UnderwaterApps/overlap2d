@@ -52,7 +52,8 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                ProjectManager.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED,
+                ProjectManager.PROJECT_DATA_UPDATED
         };
     }
 
@@ -62,6 +63,8 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
             case ProjectManager.PROJECT_OPENED:
 
                 break;
+            case ProjectManager.PROJECT_DATA_UPDATED:
+
             default:
                 break;
         }
