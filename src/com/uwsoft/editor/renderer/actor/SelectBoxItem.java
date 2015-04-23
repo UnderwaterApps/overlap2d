@@ -1,19 +1,16 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.legacy.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class ParticleItem extends Group implements IBaseItem {
-
-	private ParticleActor particle;
-	public ParticleEffectVO dataVO;	
+public class SelectBoxItem<T> extends SelectBox<T> implements IBaseItem {
+	
+	public SelectBoxVO dataVO;	
 	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
@@ -21,19 +18,19 @@ public class ParticleItem extends Group implements IBaseItem {
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
-    private Body body;
-
     private CustomVariables customVariables = new CustomVariables();
+
+    private Body body;
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e,CompositeItem parent) {
+	public SelectBoxItem(SelectBoxVO vo, Essentials e,CompositeItem parent) {
 		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e) {
-		
+	public SelectBoxItem(SelectBoxVO vo, Essentials e) {
+		super(e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
+		dataVO = vo;	
 		this.essentials = e;
-		dataVO = vo;
 		setX(dataVO.x);
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
@@ -48,32 +45,7 @@ public class ParticleItem extends Group implements IBaseItem {
 		} else {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
-
-		particle = new ParticleActor(e.rm.getParticleEffect(vo.particleName));
-		addActor(particle);
-		
-		particle.setX(50);
-		particle.setY(50);
-		
-		setWidth(vo.particleWidth);
-		setHeight(vo.particleHeight);
 	}	
-	
-	
-	public void start(){
-		particle.start();
-	}
-	
-	public ParticleActor getParticle() {
-        return particle;
-    }
-	
-	public void forceContinuous() {
-        Array<ParticleEmitter> emitters = getParticle().getParticleEffect().getEmitters();
-        for(int i = 0; i < emitters.size; i++) {
-            emitters.get(i).setContinuous(true);
-        }
-    }
 	
 	public void setTint(Color tint) {
 		float[] clr = new float[4]; 
@@ -84,14 +56,22 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.getDataVO().tint = clr;
 		this.setColor(tint);
 	}
-	
-	public ParticleEffectVO getDataVO() {
+		
+	public SelectBoxVO getDataVO() {
 		//updateDataVO();
 		return dataVO;
 	}
 	
 	@Override
 	public void renew() {		
+		pack(); layout();
+		if(dataVO.width > 0) {
+			setWidth(dataVO.width);
+		}
+		if(dataVO.height > 0) {
+			setHeight(dataVO.height);
+		}
+		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		setScaleX(dataVO.scaleX*this.mulX);
@@ -99,8 +79,7 @@ public class ParticleItem extends Group implements IBaseItem {
 		setRotation(dataVO.rotation);
         customVariables.loadFromString(dataVO.customVars);
 	}
-
-
+	
 	@Override
 	public boolean isLockedByLayer() {
 		return isLockedByLayer;
@@ -132,14 +111,15 @@ public class ParticleItem extends Group implements IBaseItem {
 
         dataVO.customVars = customVariables.saveAsString();
 	}
-	
+
 	public void applyResolution(float mulX, float mulY) {
+		setScaleX(dataVO.scaleX*mulX);
+		setScaleY(dataVO.scaleY*mulY);
 		this.mulX = mulX;
 		this.mulY = mulY;
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		updateDataVO();	
-		this.setScale(mulX, mulY);
 	}
 	
 	@Override
@@ -160,14 +140,9 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.parentItem = parentItem;
 	}
 	
-	@Override
-	public float getWidth() {
-		return super.getWidth()*getScaleX();
-	}
-	
-	@Override
-	public float getHeight() {
-		return super.getHeight()*getScaleY();
+	public void setStyle(SelectBoxStyle lst, String styleName) {
+		setStyle(lst);
+		dataVO.style	=	styleName;
 	}
 
     public Body getBody() {
@@ -182,6 +157,7 @@ public class ParticleItem extends Group implements IBaseItem {
         if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
         setBody(null);
     }
+
     public CustomVariables getCustomVariables() {
         return customVariables;
     }

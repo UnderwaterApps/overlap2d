@@ -8,11 +8,10 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 import com.uwsoft.editor.renderer.spine.SpineDataHelper;
 import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class SpineActor extends Actor implements IBaseItem {

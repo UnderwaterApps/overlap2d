@@ -13,12 +13,11 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.LightVO;
-import com.uwsoft.editor.renderer.data.LightVO.LightType;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 

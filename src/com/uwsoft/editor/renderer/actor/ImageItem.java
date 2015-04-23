@@ -5,11 +5,10 @@ import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 public class ImageItem extends Image implements IBaseItem {

@@ -13,10 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**

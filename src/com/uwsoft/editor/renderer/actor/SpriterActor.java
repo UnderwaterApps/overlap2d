@@ -10,15 +10,10 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.brashmonkey.spriter.Data;
-import com.brashmonkey.spriter.Player;
-import com.brashmonkey.spriter.Rectangle;
-import com.brashmonkey.spriter.SCMLReader;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation.Animation;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.SpriterVO;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
+import com.brashmonkey.spriter.*;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
 import com.uwsoft.editor.renderer.utils.LibGdxLoader;
@@ -31,7 +26,6 @@ public class SpriterActor extends Actor implements IBaseItem {
     public float mulX = 1f;
     public float mulY = 1f;
     public SpriterVO dataVO;
-    public boolean looping;
     protected int layerIndex = 0;
     protected boolean reverse = false;
     private boolean isLockedByLayer = false;
@@ -52,6 +46,7 @@ public class SpriterActor extends Actor implements IBaseItem {
     private ArrayList<String> entities = new ArrayList<String>();
     private int currentEntityIndex	=	0;
     private int currentAnimationIndex;
+
     public SpriterActor(SpriterVO vo, Essentials e, CompositeItem parent) {
         this(vo, e);
         setParentItem(parent);
@@ -73,10 +68,8 @@ public class SpriterActor extends Actor implements IBaseItem {
             setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
         }
         initSpriteAnimation();
+
     }
-
-  
-
     private void initSpriteAnimation() {
         setOriginX(0);
         setOriginY(0);
@@ -94,8 +87,10 @@ public class SpriterActor extends Actor implements IBaseItem {
 
     private void initPlayer() {
     	player = new Player(data.getEntity(currentEntityIndex));
+
     	player.setAnimation(currentAnimationIndex);
     	player.setScale(dataVO.scale * this.mulX);
+
     	setRectangle();		
 	}
 
@@ -111,20 +106,22 @@ public class SpriterActor extends Actor implements IBaseItem {
 	@Override
     public void act(float delta) {
         //if (paused) return;
-        super.act(delta);       
-        player.update();
+        super.act(delta);
+        //player.update();
     }
 
     @Override
     public void draw(Batch batch, float parentAlpha) {    	
     	batch.setColor(1, 1, 1, parentAlpha * getColor().a);    	
         super.draw(batch, parentAlpha);
-        
+
         player.setPosition(getX(), getY());
-        player.setPivot(getWidth()/2, getHeight()/2);
+        player.setPivot(getWidth() / 2, getHeight() / 2);
         player.setScale(dataVO.scale * this.mulX);
-        player.rotate(getRotation()-player.getAngle());        
-        drawer.beforeDraw(player,batch);        
+        player.rotate(getRotation() - player.getAngle());
+        player.update();
+        drawer.beforeDraw(player, batch);
+
     }
     @Override
     public void renew() {
@@ -258,7 +255,7 @@ public class SpriterActor extends Actor implements IBaseItem {
 	public void setAnimation(int i) {
 		currentAnimationIndex	=	i;
 	 	updateDataVO();
-		initPlayer();		
+		initPlayer();
 	}
 	public void setEntity(int i) {
 		currentEntityIndex	=	i;	

@@ -19,33 +19,27 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.uwsoft.editor.renderer.data.ButtonVO;
-import com.uwsoft.editor.renderer.data.CheckBoxVO;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.Image9patchVO;
-import com.uwsoft.editor.renderer.data.LabelVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.LightVO;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
-import com.uwsoft.editor.renderer.data.SelectBoxVO;
-import com.uwsoft.editor.renderer.data.SimpleImageVO;
-import com.uwsoft.editor.renderer.data.SpineVO;
-import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
-import com.uwsoft.editor.renderer.data.SpriterVO;
-import com.uwsoft.editor.renderer.data.TextBoxVO;
+import com.uwsoft.editor.renderer.legacy.data.ButtonVO;
+import com.uwsoft.editor.renderer.legacy.data.CheckBoxVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.Image9patchVO;
+import com.uwsoft.editor.renderer.legacy.data.LabelVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.legacy.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.legacy.data.SelectBoxVO;
+import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
+import com.uwsoft.editor.renderer.legacy.data.TextBoxVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.script.IScript;
-import com.uwsoft.editor.renderer.ui.CheckBoxItem;
-import com.uwsoft.editor.renderer.ui.IBaseItem;
-import com.uwsoft.editor.renderer.ui.LabelItem;
-import com.uwsoft.editor.renderer.ui.SelectBoxItem;
-import com.uwsoft.editor.renderer.ui.TextBoxItem;
-import com.uwsoft.editor.renderer.ui.TextButtonItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**
@@ -535,7 +529,7 @@ public class CompositeItem extends Group implements IBaseItem {
                 item.setBody(null);
             }
             
-            item.setBody(PhysicsBodyLoader.createBody(essentials.world, item.getDataVO().physicsBodyData, essentials.rm.getProjectVO().meshes.get(item.getDataVO().meshId), new Vector2(mulX, mulY)));
+            //item.setBody(PhysicsBodyLoader.createBody(essentials.world, item.getDataVO().physicsBodyData, essentials.rm.getProjectVO().meshes.get(item.getDataVO().meshId), new Vector2(mulX, mulY)));
             item.getBody().setTransform(toStageVec.x, toStageVec.y, (float) Math.toRadians(item.getDataVO().rotation));
         }
     }
@@ -594,7 +588,7 @@ public class CompositeItem extends Group implements IBaseItem {
             if( essentials.rm.getProjectVO().meshes.get(itemVO.meshId) == null) {
                 continue;
             }
-            item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
+            //item.setBody(PhysicsBodyLoader.createBody(essentials.world, bodyData, essentials.rm.getProjectVO().meshes.get(itemVO.meshId), mulVec));
             item.getBody().setUserData(item);
         }
         positionPhysics();

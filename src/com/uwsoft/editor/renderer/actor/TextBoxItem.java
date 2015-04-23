@@ -1,19 +1,16 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.legacy.data.TextBoxVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class ParticleItem extends Group implements IBaseItem {
+public class TextBoxItem extends TextField implements IBaseItem  {
 
-	private ParticleActor particle;
-	public ParticleEffectVO dataVO;	
+	public TextBoxVO dataVO;	
 	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
@@ -24,13 +21,14 @@ public class ParticleItem extends Group implements IBaseItem {
     private Body body;
 
     private CustomVariables customVariables = new CustomVariables();
-	
-	public ParticleItem(ParticleEffectVO vo, Essentials e,CompositeItem parent) {
-		this(vo, e);
+
+	public TextBoxItem(TextBoxVO vo, Essentials rm,CompositeItem parent) {
+		this(vo, rm);
 		setParentItem(parent);
 	}
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e) {
+	public TextBoxItem(TextBoxVO vo, Essentials e) {
+		super(vo.defaultText, e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
 		
 		this.essentials = e;
 		dataVO = vo;
@@ -48,32 +46,10 @@ public class ParticleItem extends Group implements IBaseItem {
 		} else {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
-
-		particle = new ParticleActor(e.rm.getParticleEffect(vo.particleName));
-		addActor(particle);
 		
-		particle.setX(50);
-		particle.setY(50);
-		
-		setWidth(vo.particleWidth);
-		setHeight(vo.particleHeight);
+		setFocusTraversal(false);
+		renew();
 	}	
-	
-	
-	public void start(){
-		particle.start();
-	}
-	
-	public ParticleActor getParticle() {
-        return particle;
-    }
-	
-	public void forceContinuous() {
-        Array<ParticleEmitter> emitters = getParticle().getParticleEffect().getEmitters();
-        for(int i = 0; i < emitters.size; i++) {
-            emitters.get(i).setContinuous(true);
-        }
-    }
 	
 	public void setTint(Color tint) {
 		float[] clr = new float[4]; 
@@ -84,14 +60,24 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.getDataVO().tint = clr;
 		this.setColor(tint);
 	}
+		
 	
-	public ParticleEffectVO getDataVO() {
+	public TextBoxVO getDataVO() {
 		//updateDataVO();
 		return dataVO;
 	}
 	
 	@Override
-	public void renew() {		
+	public void renew() {
+		setText(dataVO.defaultText);
+		if(dataVO.width > 0) {
+			setWidth(dataVO.width);
+		}
+		if(dataVO.height > 0) {
+			setHeight(dataVO.height);
+		}
+		invalidate();
+		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		setScaleX(dataVO.scaleX*this.mulX);
@@ -99,7 +85,7 @@ public class ParticleItem extends Group implements IBaseItem {
 		setRotation(dataVO.rotation);
         customVariables.loadFromString(dataVO.customVars);
 	}
-
+	
 
 	@Override
 	public boolean isLockedByLayer() {
@@ -134,12 +120,13 @@ public class ParticleItem extends Group implements IBaseItem {
 	}
 	
 	public void applyResolution(float mulX, float mulY) {
+		setScaleX(dataVO.scaleX*mulX);
+		setScaleY(dataVO.scaleY*mulY);
 		this.mulX = mulX;
 		this.mulY = mulY;
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		updateDataVO();	
-		this.setScale(mulX, mulY);
 	}
 	
 	@Override
@@ -160,15 +147,11 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.parentItem = parentItem;
 	}
 	
-	@Override
-	public float getWidth() {
-		return super.getWidth()*getScaleX();
+	public void setStyle(TextFieldStyle lst, String styleName) {
+		setStyle(lst);
+		dataVO.style	=	styleName;
 	}
-	
-	@Override
-	public float getHeight() {
-		return super.getHeight()*getScaleY();
-	}
+
 
     public Body getBody() {
         return body;
@@ -179,9 +162,10 @@ public class ParticleItem extends Group implements IBaseItem {
     }
 
     public void dispose() {
-        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
         setBody(null);
     }
+
     public CustomVariables getCustomVariables() {
         return customVariables;
     }

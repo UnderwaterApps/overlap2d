@@ -1,22 +1,20 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.uwsoft.editor.renderer.legacy.data.ButtonVO;
 import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class ParticleItem extends Group implements IBaseItem {
+public class TextButtonItem extends TextButton  implements IBaseItem {
 
-	private ParticleActor particle;
-	public ParticleEffectVO dataVO;	
+	public ButtonVO dataVO;	
 	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
+	
 	protected int layerIndex = 0;
 	private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
@@ -24,21 +22,23 @@ public class ParticleItem extends Group implements IBaseItem {
     private Body body;
 
     private CustomVariables customVariables = new CustomVariables();
-	
-	public ParticleItem(ParticleEffectVO vo, Essentials e,CompositeItem parent) {
+
+	public TextButtonItem(ButtonVO vo, Essentials e,CompositeItem parent) {
 		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e) {
+	public TextButtonItem(ButtonVO vo, Essentials e) {
+		super(vo.text, e.rm.getSkin());
+		dataVO = vo;
 		
 		this.essentials = e;
-		dataVO = vo;
 		setX(dataVO.x);
 		setY(dataVO.y);
-		setScaleX(dataVO.scaleX);
-		setScaleY(dataVO.scaleY);
+//		setScaleX(dataVO.scaleX);
+//		setScaleY(dataVO.scaleY);
         customVariables.loadFromString(dataVO.customVars);
+		getLabel().setFontScale(dataVO.scaleX, dataVO.scaleY);
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -48,32 +48,8 @@ public class ParticleItem extends Group implements IBaseItem {
 		} else {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
-
-		particle = new ParticleActor(e.rm.getParticleEffect(vo.particleName));
-		addActor(particle);
-		
-		particle.setX(50);
-		particle.setY(50);
-		
-		setWidth(vo.particleWidth);
-		setHeight(vo.particleHeight);
-	}	
-	
-	
-	public void start(){
-		particle.start();
+		pack(); layout();
 	}
-	
-	public ParticleActor getParticle() {
-        return particle;
-    }
-	
-	public void forceContinuous() {
-        Array<ParticleEmitter> emitters = getParticle().getParticleEffect().getEmitters();
-        for(int i = 0; i < emitters.size; i++) {
-            emitters.get(i).setContinuous(true);
-        }
-    }
 	
 	public void setTint(Color tint) {
 		float[] clr = new float[4]; 
@@ -85,21 +61,31 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.setColor(tint);
 	}
 	
-	public ParticleEffectVO getDataVO() {
+	public ButtonVO getDataVO() {
 		//updateDataVO();
 		return dataVO;
 	}
 	
+	public void updateDataVO() {
+		dataVO.x = getX();
+		dataVO.y = getY();
+
+        dataVO.customVars = customVariables.saveAsString();
+	}
+	
 	@Override
-	public void renew() {		
+	public void renew() {
+		setText(dataVO.text);
+        customVariables.loadFromString(dataVO.customVars);
+		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
-		setScaleX(dataVO.scaleX*this.mulX);
-		setScaleY(dataVO.scaleY*this.mulY);
-		setRotation(dataVO.rotation);
-        customVariables.loadFromString(dataVO.customVars);
+//		setScaleX(dataVO.scaleX*this.mulX);
+//		setScaleY(dataVO.scaleY*this.mulY);
+		getLabel().setFontScale(dataVO.scaleX*this.mulX, dataVO.scaleY*this.mulY);
+		setRotation(dataVO.rotation); 
+		pack(); layout();
 	}
-
 
 	@Override
 	public boolean isLockedByLayer() {
@@ -115,33 +101,17 @@ public class ParticleItem extends Group implements IBaseItem {
 	public boolean isComposite() {
 		return false;
 	}
-	
-	public void updateDataVO() {
-		
-		dataVO.x = getX()/this.mulX;
-		dataVO.y = getY()/this.mulY;
-		dataVO.rotation = getRotation();
-		
-		if(getZIndex()>=0){
-			dataVO.zIndex = getZIndex();
-		}
-		
-		if(dataVO.layerName == null || dataVO.layerName.equals("")) {
-			dataVO.layerName = "Default";
-		}
 
-        dataVO.customVars = customVariables.saveAsString();
-	}
-	
 	public void applyResolution(float mulX, float mulY) {
 		this.mulX = mulX;
 		this.mulY = mulY;
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
-		updateDataVO();	
-		this.setScale(mulX, mulY);
+		getLabel().setFontScale(dataVO.scaleX*this.mulX, dataVO.scaleY*this.mulY);
+		updateDataVO();			
+		pack(); layout();
 	}
-	
+
 	@Override
 	public int getLayerIndex() {
 		return layerIndex;
@@ -159,16 +129,7 @@ public class ParticleItem extends Group implements IBaseItem {
 	public void setParentItem(CompositeItem parentItem) {
 		this.parentItem = parentItem;
 	}
-	
-	@Override
-	public float getWidth() {
-		return super.getWidth()*getScaleX();
-	}
-	
-	@Override
-	public float getHeight() {
-		return super.getHeight()*getScaleY();
-	}
+
 
     public Body getBody() {
         return body;
@@ -179,9 +140,10 @@ public class ParticleItem extends Group implements IBaseItem {
     }
 
     public void dispose() {
-        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+        if(essentials.world != null && getBody() != null) essentials.world.destroyBody(getBody());
         setBody(null);
     }
+
     public CustomVariables getCustomVariables() {
         return customVariables;
     }

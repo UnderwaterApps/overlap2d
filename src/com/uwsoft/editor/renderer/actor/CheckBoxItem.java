@@ -1,44 +1,43 @@
 package com.uwsoft.editor.renderer.actor;
 
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.ParticleEmitter;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
+import com.uwsoft.editor.renderer.legacy.data.CheckBoxVO;
 import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-public class ParticleItem extends Group implements IBaseItem {
-
-	private ParticleActor particle;
-	public ParticleEffectVO dataVO;	
+public class CheckBoxItem extends CheckBox implements IBaseItem {
+	
+	public CheckBoxVO dataVO;	
 	public Essentials essentials;
 	public float mulX = 1f;
 	public float mulY = 1f;
 	protected int layerIndex = 0;
-	private boolean isLockedByLayer = false;
+
+    private CustomVariables customVariables = new CustomVariables();
+
+    private boolean isLockedByLayer = false;
 	private CompositeItem parentItem = null;
 
     private Body body;
-
-    private CustomVariables customVariables = new CustomVariables();
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e,CompositeItem parent) {
+	public CheckBoxItem(CheckBoxVO vo, Essentials e,CompositeItem parent) {
 		this(vo, e);
 		setParentItem(parent);
 	}
 	
-	public ParticleItem(ParticleEffectVO vo, Essentials e) {
-		
-		this.essentials = e;
+	public CheckBoxItem(CheckBoxVO vo, Essentials e) {
+		super(vo.text, e.rm.getSkin(),vo.style.isEmpty()?"default":vo.style);
 		dataVO = vo;
+		this.essentials = e;
 		setX(dataVO.x);
 		setY(dataVO.y);
 		setScaleX(dataVO.scaleX);
 		setScaleY(dataVO.scaleY);
         customVariables.loadFromString(dataVO.customVars);
+
 		this.setRotation(dataVO.rotation); 
 		
 		if(dataVO.zIndex < 0) dataVO.zIndex = 0;
@@ -48,32 +47,7 @@ public class ParticleItem extends Group implements IBaseItem {
 		} else {
 			setTint(new Color(dataVO.tint[0], dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]));
 		}
-
-		particle = new ParticleActor(e.rm.getParticleEffect(vo.particleName));
-		addActor(particle);
-		
-		particle.setX(50);
-		particle.setY(50);
-		
-		setWidth(vo.particleWidth);
-		setHeight(vo.particleHeight);
 	}	
-	
-	
-	public void start(){
-		particle.start();
-	}
-	
-	public ParticleActor getParticle() {
-        return particle;
-    }
-	
-	public void forceContinuous() {
-        Array<ParticleEmitter> emitters = getParticle().getParticleEffect().getEmitters();
-        for(int i = 0; i < emitters.size; i++) {
-            emitters.get(i).setContinuous(true);
-        }
-    }
 	
 	public void setTint(Color tint) {
 		float[] clr = new float[4]; 
@@ -84,23 +58,27 @@ public class ParticleItem extends Group implements IBaseItem {
 		this.getDataVO().tint = clr;
 		this.setColor(tint);
 	}
-	
-	public ParticleEffectVO getDataVO() {
+		
+	public CheckBoxVO getDataVO() {
 		//updateDataVO();
 		return dataVO;
 	}
 	
 	@Override
 	public void renew() {		
+		setText(dataVO.text);
+		pack(); layout();
+		
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
 		setScaleX(dataVO.scaleX*this.mulX);
 		setScaleY(dataVO.scaleY*this.mulY);
 		setRotation(dataVO.rotation);
+        setColor(dataVO.tint[0],dataVO.tint[1], dataVO.tint[2], dataVO.tint[3]);
+
         customVariables.loadFromString(dataVO.customVars);
 	}
-
-
+	
 	@Override
 	public boolean isLockedByLayer() {
 		return isLockedByLayer;
@@ -132,16 +110,18 @@ public class ParticleItem extends Group implements IBaseItem {
 
         dataVO.customVars = customVariables.saveAsString();
 	}
-	
+
 	public void applyResolution(float mulX, float mulY) {
+		setScaleX(dataVO.scaleX*mulX);
+		setScaleY(dataVO.scaleY*mulY);
+		
 		this.mulX = mulX;
 		this.mulY = mulY;
 		setX(dataVO.x*this.mulX);
 		setY(dataVO.y*this.mulY);
-		updateDataVO();	
-		this.setScale(mulX, mulY);
+		updateDataVO();			
 	}
-	
+
 	@Override
 	public int getLayerIndex() {
 		return layerIndex;
@@ -152,22 +132,18 @@ public class ParticleItem extends Group implements IBaseItem {
 		layerIndex = index;
 	}
 	
-	public CompositeItem getParentItem() {
-		return parentItem;
-	}
-	
 	public void setParentItem(CompositeItem parentItem) {
 		this.parentItem = parentItem;
 	}
 	
-	@Override
-	public float getWidth() {
-		return super.getWidth()*getScaleX();
+	public CompositeItem getParentItem() {
+		return parentItem;
 	}
 	
-	@Override
-	public float getHeight() {
-		return super.getHeight()*getScaleY();
+	public void setStyle(CheckBoxStyle lst, String styleName) {		
+		setStyle(lst);
+		dataVO.style	=	styleName;
+		
 	}
 
     public Body getBody() {
@@ -178,10 +154,12 @@ public class ParticleItem extends Group implements IBaseItem {
         this.body = body;
     }
 
-    public void dispose() {
-        if(essentials.world != null && getBody() != null)essentials.world.destroyBody(getBody());
+	@Override
+	public void dispose() {
+        if(essentials.world != null && body != null) essentials.world.destroyBody(getBody());
         setBody(null);
-    }
+	}
+
     public CustomVariables getCustomVariables() {
         return customVariables;
     }
