@@ -75,7 +75,7 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
 
     private void generateFontList() {
 
-        Preferences prefs = Gdx.app.getPreferences("o2d_prefs_fonts");
+        /*Preferences prefs = Gdx.app.getPreferences("o2d_prefs_fonts");
 
         systemFontMap = (HashMap<String, String>)prefs.get();
 
@@ -108,7 +108,7 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
         prefs.put(systemFontMap);
         prefs.flush();
 
-        viewComponent.setSelectBoxItems(fontList);
+        viewComponent.setSelectBoxItems(fontList);*/
     }
 
     private void fontSelected(String fontName) {

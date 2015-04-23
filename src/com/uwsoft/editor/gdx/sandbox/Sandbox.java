@@ -300,7 +300,6 @@ public class Sandbox {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
         sandboxStage.getCamera().position.set(0, 0, 0);
         getSceneControl().disableAmbience(true);
-        uiStage.getLightBox().disableAmbiance.setChecked(true);
 
         facade.sendNotification(Overlap2D.OPENED_COMPOSITE, compositeItemVO);
         //uiStage.getCompositePanel().addScene(compositeItemVO);

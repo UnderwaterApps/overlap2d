@@ -63,7 +63,6 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
 
     public void create() {
         VisUI.load(Gdx.files.internal("style/uiskin.json"));
-//        VisUI.getSkin()
         facade = Overlap2DFacade.getInstance();
         facade.startup(this);
         sendNotification(CREATE);

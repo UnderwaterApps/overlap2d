@@ -58,9 +58,11 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "../art";
+        String input = "../art/textures";
         String output = "style";
         String packFileName = "uiskin";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());

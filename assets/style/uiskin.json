@@ -1,13 +1,22 @@
 {
   "com.badlogic.gdx.graphics.g2d.BitmapFont": {
     "default-font": {
-      "file": "default.fnt"
+      "file": "roboto-medium.fnt"
     },
     "small-font": {
-      "file": "font-small.fnt"
+      "file": "roboto-medium-small.fnt"
+    },
+    "big-font": {
+      "file": "roboto-medium-big.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
+    "overlap2d-menuitem-grey": {
+      "a": 1,
+      "b": 0.87,
+      "g": 0.87,
+      "r": 0.87
+    },
     "green": {
       "a": 1,
       "b": 0,
@@ -265,11 +274,11 @@
       "focusBorder": "border"
     },
     "menu-bar": {
-      "down": "button-down",
-      "up": "button",
-      "over": "button-down",
-      "font": "default-font",
-      "fontColor": "white"
+      "down": "menu-bg-down",
+      "up": "menu-bg-up",
+      "over": "menu-bg-over",
+      "font": "big-font",
+      "fontColor": "overlap2d-menuitem-grey"
     }
   },
   "com.kotcrab.vis.ui.widget.VisImageButton$VisImageButtonStyle": {
@@ -387,7 +396,7 @@
       "over": "button-over",
       "disabled": "button",
       "font": "default-font",
-      "fontColor": "white",
+      "fontColor": "overlap2d-menuitem-grey",
       "disabledFontColor": "grey",
       "subMenu": "sub-menu"
     }
