@@ -21,9 +21,12 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -41,6 +44,7 @@ public class UIResolutionBox extends VisTable {
     //    private final String currentResolutionName;
     private final Overlap2DFacade facade;
     private final ResolutionManager resolutionManager;
+    private final Skin skin;
     private VisSelectBox<ResolutionEntryVO> visSelectBox;
 //    private final ProjectManager projectManager;
 
@@ -49,12 +53,12 @@ public class UIResolutionBox extends VisTable {
     private SelectBox<String> dropdown;
 
     private ProjectInfoVO projectInfoVO;
-    private VisTextButton deleteBtn;
+    private VisImageButton deleteBtn;
 
     public UIResolutionBox() {
         facade = Overlap2DFacade.getInstance();
         resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-
+        skin = VisUI.getSkin();
         init();
     }
 
@@ -72,14 +76,18 @@ public class UIResolutionBox extends VisTable {
         resolutionEntryVOs.add(resolutionManager.getOriginalResolution());
         resolutionEntryVOs.addAll(resolutionManager.getResolutions());
         visSelectBox.setItems(resolutionEntryVOs);
-        add("Current Resolution : ").padRight(5);
-        add(visSelectBox).padRight(5);
-        deleteBtn = new VisTextButton("Delete");
+        add("Resolution : ").padRight(5);
+        add(visSelectBox).padRight(11);
+        VisImageButton.VisImageButtonStyle visImageButtonStyle = skin.get("dark", VisImageButton.VisImageButtonStyle.class);
+        visImageButtonStyle.imageUp = skin.getDrawable("icon-trash");
+        visImageButtonStyle.imageDisabled = skin.getDrawable("icon-trash-disabled");
+        deleteBtn = new VisImageButton("dark");
+        deleteBtn.setStyle(visImageButtonStyle);
         deleteBtn.addListener(new UIResolutionBoxButtonClickListener(DELETE_RESOLUTION_BTN_CLICKED));
-        add(deleteBtn).padRight(5);
-        VisTextButton repackBtn = new VisTextButton("Repack");
+        add(deleteBtn).padRight(11).height(25);
+        VisTextButton repackBtn = new VisTextButton("Repack", "orange");
         repackBtn.addListener(new UIResolutionBoxButtonClickListener(REPACK_BTN_CLICKED));
-        add(repackBtn).padRight(5);
+        add(repackBtn).padRight(5).width(93).height(25);
         setCurrentResolution(resolutionManager.currentResolutionName);
         visSelectBox.addListener(new ResolutionChangeListener());
     }

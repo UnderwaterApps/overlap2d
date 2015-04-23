@@ -30,6 +30,12 @@
       "g": 0.75,
       "r": 0.72
     },
+    "overlap2d-button-text-black": {
+      "a": 1,
+      "b": 0.33,
+      "g": 0.33,
+      "r": 0.33
+    },
     "green": {
       "a": 1,
       "b": 0,
@@ -102,7 +108,7 @@
       "over": "button-over",
       "disabled": "button",
       "font": "default-font",
-      "fontColor": "white",
+      "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
     "toggle": {
@@ -272,9 +278,26 @@
       "up": "button",
       "over": "button-over",
       "disabled": "button",
-      "focusBorder": "border",
-      "font": "default-font",
-      "fontColor": "white",
+      "font": "big-font",
+      "fontColor": "overlap2d-button-text-black",
+      "disabledFontColor": "grey"
+    },
+    "dark": {
+      "down": "button-dark-down",
+      "up": "button-dark",
+      "over": "button-dark-over",
+      "disabled": "button-dark",
+      "font": "big-font",
+      "fontColor": "overlap2d-button-text-black",
+      "disabledFontColor": "grey"
+    },
+    "orange": {
+      "down": "button-orange-down",
+      "up": "button-orange",
+      "over": "button-orange-over",
+      "disabled": "button-orange",
+      "font": "big-font",
+      "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
     "toggle": {
@@ -301,6 +324,12 @@
       "over": "button-over",
       "disabled": "button",
       "focusBorder": "border"
+    },
+    "dark": {
+      "down": "button-dark-down",
+      "up": "button-dark",
+      "over": "button-dark-over",
+      "disabled": "button-dark"
     },
     "toggle": {
       "down": "button-down",
