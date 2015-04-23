@@ -17,6 +17,19 @@
       "g": 0.87,
       "r": 0.87
     },
+
+    "overlap2d-menuitem-disabled-grey": {
+      "a": 1,
+      "b": 0.45,
+      "g": 0.45,
+      "r": 0.45
+    },
+    "overlap2d-menuitem-shortcut-grey": {
+      "a": 1,
+      "b": 0.8,
+      "g": 0.75,
+      "r": 0.72
+    },
     "green": {
       "a": 1,
       "b": 0,
@@ -189,8 +202,8 @@
       "fontColor": "white"
     },
     "menuitem-shortcut": {
-      "font": "default-font",
-      "fontColor": "menuitem-grey"
+      "font": "small-font",
+      "fontColor": "overlap2d-menuitem-shortcut-grey"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.TextField$TextFieldStyle": {
@@ -357,7 +370,7 @@
   },
   "com.kotcrab.vis.ui.widget.PopupMenu$PopupMenuStyle": {
     "default": {
-      "background": "button",
+      "background": "popup-menu",
       "border": "border"
     },
     "noborder": {
@@ -367,16 +380,16 @@
   "com.kotcrab.vis.ui.widget.Separator$SeparatorStyle": {
     "default": {
       "background": "separator",
-      "thickness": 4
+      "thickness": 2
     },
     "vertical": {
       "background": "separator",
-      "thickness": 4,
+      "thickness": 2,
       "vertical": true
     },
     "menu": {
       "background": "separator-menu",
-      "thickness": 3
+      "thickness": 2
     }
   },
   "com.kotcrab.vis.ui.widget.VisSplitPane$VisSplitPaneStyle": {
@@ -391,13 +404,13 @@
   },
   "com.kotcrab.vis.ui.widget.MenuItem$MenuItemStyle": {
     "default": {
-      "down": "button-down",
-      "up": "button",
-      "over": "button-over",
-      "disabled": "button",
+      "down": "popup-menu-down",
+      "up": "popup-menu",
+      "over": "popup-menu-over",
+      "disabled": "popup-menu",
       "font": "default-font",
       "fontColor": "overlap2d-menuitem-grey",
-      "disabledFontColor": "grey",
+      "disabledFontColor": "overlap2d-menuitem-disabled-grey",
       "subMenu": "sub-menu"
     }
   },
