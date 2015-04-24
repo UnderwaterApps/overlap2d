@@ -42,10 +42,10 @@ public class FontUtils {
             result[0] = path + "\\" + "Fonts";
             return result;
         } else if(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
-            result = new String[4];
-            result[0] = "~/Library/Fonts";
-            result[1] = "/Library/Fonts";
-            result[2] = "/System/Library/Fonts";
+            result = new String[1];
+            result[0] = System.getProperty("user.home")+File.separator + "Library/Fonts";
+            //result[1] = "/Library/Fonts";
+            //result[2] = "/System/Library/Fonts";
             return result;
         } else if (SystemUtils.IS_OS_LINUX) {
             result = new String[1];
