@@ -64,6 +64,10 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         classToMediatorMap.put(ImageItem.class.getName(), new ArrayList<>());
         classToMediatorMap.get(ImageItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
 
+        classToMediatorMap.put(LabelItem.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(LabelItem.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get(LabelItem.class.getName()).add(UILabelItemPropertiesMediator.NAME);
+
         classToMediatorMap.put(SpriteAnimation.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SpriteAnimation.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
         classToMediatorMap.get(SpriteAnimation.class.getName()).add(UISpriteAnimationItemPropertiesMediator.NAME);

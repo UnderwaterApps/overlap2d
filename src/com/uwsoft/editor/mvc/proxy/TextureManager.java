@@ -34,6 +34,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.ObjectMap;
 import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.puremvc.patterns.proxy.BaseProxy;
@@ -41,9 +42,14 @@ import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
+import com.uwsoft.editor.utils.FontUtils;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -252,16 +258,40 @@ public class TextureManager extends BaseProxy {
 
     public void loadBitmapFonts(FontSizePair[] fonts, float mulX) {
         bitmapFonts.clear();
-        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+
         for (FontSizePair pair : fonts) {
             FileHandle fontFile;
-            fontFile = Gdx.files.internal(projectManager.getFreeTypeFontPath() + File.separator + pair.fontName + ".ttf");
-            FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-            FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-            parameter.size = Math.round(pair.fontSize * mulX);
-            BitmapFont font = generator.generateFont(parameter);
-            bitmapFonts.put(pair, font);
+            try {
+                fontFile = getTTFSafely(pair.fontName);
+                FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+                FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                parameter.size = Math.round(pair.fontSize * mulX);
+                BitmapFont font = generator.generateFont(parameter);
+                bitmapFonts.put(pair, font);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
+    }
+
+    public FileHandle getTTFSafely(String fontName) throws IOException {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        String expectedPath = projectManager.getFreeTypeFontPath() + File.separator + fontName + ".ttf";
+        FileHandle expectedFile = Gdx.files.internal(expectedPath);
+        if(!expectedFile.exists()) {
+            // let's check if system fonts fot it
+            FontUtils fontUtils = new FontUtils();
+            HashMap<String, String> fonts = fontUtils.getFontsMap();
+            if(fonts.containsKey(fontName)) {
+                File source = new File(fonts.get(fontName));
+                FileUtils.copyFile(source, expectedFile.file());
+                expectedFile = Gdx.files.internal(expectedPath);
+            } else {
+                throw new FileNotFoundException();
+            }
+        }
+
+        return expectedFile;
     }
 
     public BitmapFont getBitmapFont(String name, int size) {
