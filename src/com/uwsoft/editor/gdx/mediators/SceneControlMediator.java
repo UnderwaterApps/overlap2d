@@ -68,8 +68,8 @@ public class SceneControlMediator {
      */
     private CompositeItem currentScene;
 
-    private boolean isLightsEnabled;
-    private boolean isDiffuseEnabled;
+    private boolean isLightsEnabled = false;
+    private boolean isDiffuseEnabled = true;
 
     public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
         this.sceneLoader = sceneLoader;

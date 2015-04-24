@@ -1037,6 +1037,7 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
                 setLastOpenedPath(workSpacePath);
                 setWorkspacePath(workSpacePath);
             }
+            facade.sendNotification(PROJECT_OPENED);
         } catch (IOException e) {
             e.printStackTrace();
         }

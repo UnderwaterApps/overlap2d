@@ -74,7 +74,7 @@ public class InputFileWidget extends VisTable {
         return value;
     }
 
-    private void setValue(FileHandle value) {
+    public void setValue(FileHandle value) {
         this.value = value;
         textField.setText(value.path());
     }
