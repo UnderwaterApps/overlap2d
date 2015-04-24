@@ -9,7 +9,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.utils.FontUtils;
+import com.uwsoft.editor.mvc.proxy.FontManager;
 
 
 /**
@@ -19,7 +19,7 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
     private static final String TAG = UIFontChooserMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    FontUtils fontUtils = new FontUtils();
+    private FontManager fontManager;
 
     public UIFontChooserMediator() {
         super(NAME, new UIFontChooser());
@@ -28,7 +28,8 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
 
     @Override
     public void onRegister() {
-
+        facade = Overlap2DFacade.getInstance();
+        fontManager = facade.retrieveProxy(FontManager.NAME);
     }
 
 
@@ -57,10 +58,7 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
     }
 
     private void generateFontList() {
-
-        fontUtils.generateFontsMap();
-
-        viewComponent.setSelectBoxItems(fontUtils.getFontNamesFromMap());
+        viewComponent.setSelectBoxItems(fontManager.getFontNamesFromMap());
     }
 
     private void fontSelected(String fontName) {
@@ -68,15 +66,15 @@ public class UIFontChooserMediator extends SimpleMediator<UIFontChooser> {
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = 18;
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontUtils.getTTFByName(fontName));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(fontName));
         BitmapFont font = generator.generateFont(parameter);
 
         TextureManager textureManager = Overlap2DFacade.getInstance().retrieveProxy(TextureManager.NAME);
-        textureManager.addBitmapFont(fontName.replaceAll(" ", ""), parameter.size, font);
+        textureManager.addBitmapFont(fontManager.getShortName(fontName), parameter.size, font);
 
     }
 
     public String getCurrentFont() {
-        return viewComponent.getSelectedFont().replaceAll(" ", "");
+        return fontManager.getShortName(viewComponent.getSelectedFont());
     }
 }

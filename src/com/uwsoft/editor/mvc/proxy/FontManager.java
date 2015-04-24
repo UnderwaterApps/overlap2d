@@ -1,10 +1,13 @@
-package com.uwsoft.editor.utils;
+package com.uwsoft.editor.mvc.proxy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Array;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.SystemUtils;
 
 import java.awt.*;
@@ -18,7 +21,10 @@ import java.util.stream.Collectors;
 /**
  * Created by CyberJoe on 4/24/2015.
  */
-public class FontUtils {
+public class FontManager extends BaseProxy {
+
+    private static final String TAG = FontManager.class.getCanonicalName();
+    public static final String NAME = TAG;
 
     private static final String cache_name = "overlap2d-fonts-cache";
 
@@ -26,8 +32,16 @@ public class FontUtils {
 
     private HashMap<String, String> systemFontMap = new HashMap<>();
 
-    public FontUtils() {
+    public FontManager() {
+        super(NAME);
+    }
+
+    @Override
+    public void onRegister() {
+        super.onRegister();
+        facade = Overlap2DFacade.getInstance();
         prefs = Gdx.app.getPreferences(cache_name);
+        generateFontsMap();
     }
 
     public String[] getSystemFontNames() {
@@ -114,9 +128,6 @@ public class FontUtils {
     }
 
     public HashMap<String, String> getFontsMap() {
-        if(systemFontMap.size() == 0) {
-            generateFontsMap();
-        }
         return systemFontMap;
     }
 
@@ -134,6 +145,15 @@ public class FontUtils {
 
     public FileHandle getTTFByName(String fontName) {
         return new FileHandle(systemFontMap.get(fontName));
+    }
+
+    public String getShortName(String longName) {
+        String path = systemFontMap.get(longName);
+        return FilenameUtils.getBaseName(path);
+    }
+
+    public String getFontFilePath(String fontFaily) {
+        return systemFontMap.get(fontFaily);
     }
 
 
