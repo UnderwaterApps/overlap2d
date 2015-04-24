@@ -49,7 +49,7 @@ public class FontUtils {
             return result;
         } else if (SystemUtils.IS_OS_LINUX) {
             result = new String[1];
-            result[0] = "~/.fonts";
+            result[0] = System.getProperty("user.home")+File.separator + ".fonts";
             return result;
         }
 
