@@ -20,6 +20,9 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -59,7 +62,7 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     }
 
     public void create() {
-        VisUI.load();
+        VisUI.load(Gdx.files.internal("style/uiskin.json"));
         facade = Overlap2DFacade.getInstance();
         facade.startup(this);
         sendNotification(CREATE);

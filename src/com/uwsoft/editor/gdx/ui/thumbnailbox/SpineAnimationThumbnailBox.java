@@ -50,7 +50,7 @@ public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpineVO vo = new SpineVO();
         vo.animationName = animData.animName;
-        final SpineActor animThumb = new SpineActor(vo, sandbox.getUIStage().sceneLoader.essentials);
+        final SpineActor animThumb = new SpineActor(vo, null);
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed

@@ -19,8 +19,8 @@
 package com.uwsoft.editor.mvc.view;
 
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
@@ -28,7 +28,6 @@ import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-
 import com.uwsoft.editor.mvc.event.MenuItemListener;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import org.apache.commons.lang3.SystemUtils;
@@ -69,6 +68,7 @@ public class Overlap2DMenuBar extends MenuBar {
         maskKey = SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC ? "Cmd" : "Ctrl";
         fileMenu = new FileMenu();
         editMenu = new EditMenu();
+//        getTable().debug();
         addMenu(fileMenu);
         addMenu(editMenu);
         setProjectOpen(false);
@@ -92,7 +92,7 @@ public class Overlap2DMenuBar extends MenuBar {
         editMenu.setProjectOpen(open);
     }
 
-    private class EditMenu extends Menu {
+    private class EditMenu extends O2DMenu {
 
 
         private final MenuItem cut;
@@ -103,7 +103,6 @@ public class Overlap2DMenuBar extends MenuBar {
 
         public EditMenu() {
             super("Edit");
-            pad(5);
             cut = new MenuItem("Cut", new MenuItemListener(CUT, null, EDIT_MENU)).setShortcut(maskKey + " + X");
             copy = new MenuItem("Copy", new MenuItemListener(COPY, null, EDIT_MENU)).setShortcut(maskKey + " + C");
             paste = new MenuItem("Paste", new MenuItemListener(PAST, null, EDIT_MENU)).setShortcut(maskKey + " + P");
@@ -127,7 +126,7 @@ public class Overlap2DMenuBar extends MenuBar {
     }
 
 
-    private class FileMenu extends Menu {
+    private class FileMenu extends O2DMenu {
 
         private final PopupMenu scenesPopupMenu;
         private final Array<MenuItem> sceneMenuItems;
@@ -143,7 +142,6 @@ public class Overlap2DMenuBar extends MenuBar {
 
         public FileMenu() {
             super("File");
-            pad(5);
             saveProject = new MenuItem("Save Project", new MenuItemListener(SAVE_PROJECT, null, FILE_MENU));
             addItem(new MenuItem("New Project", new MenuItemListener(NEW_PROJECT, null, FILE_MENU)));
             addItem(new MenuItem("Open Project", new MenuItemListener(OPEN_PROJECT, null, FILE_MENU)));
@@ -239,6 +237,15 @@ public class Overlap2DMenuBar extends MenuBar {
 //        }
     }
 
+    class O2DMenu extends Menu {
+
+        public O2DMenu(String title) {
+            super(title);
+            BitmapFont.TextBounds textBounds = openButton.getLabel().getTextBounds();
+            Cell labelCell = openButton.getLabelCell();
+            labelCell.width(textBounds.width + 14);
+        }
+    }
 
 
 }

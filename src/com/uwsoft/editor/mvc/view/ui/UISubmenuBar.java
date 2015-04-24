@@ -34,7 +34,7 @@ public class UISubmenuBar extends VisTable {
         Skin skin = VisUI.getSkin();
         facade = Overlap2DFacade.getInstance();
         //debug();
-        setBackground(skin.getDrawable("window-bg"));
+        setBackground(skin.getDrawable("sub-menu-bg"));
 
         UICompositeHierarchyMediator uiCompositeHierarchyMediator = facade.retrieveMediator(UICompositeHierarchyMediator.NAME);
         UICompositeHierarchy uiCompositeHierarchy = uiCompositeHierarchyMediator.getViewComponent();

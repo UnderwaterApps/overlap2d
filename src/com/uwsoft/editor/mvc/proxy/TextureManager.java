@@ -79,7 +79,6 @@ public class TextureManager extends BaseProxy {
 
     public void loadEditorAssets() {
         editorAtlas = new TextureAtlas(Gdx.files.getFileHandle("imgs/pack.atlas", FileType.Internal));
-        editorSkin = new MySkin(Gdx.files.internal("ui/styles.dt"));
 
 //		  newEditorSkin = new Skin(Gdx.files.internal("ui/newskin.dt"));
         /*

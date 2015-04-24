@@ -20,9 +20,9 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -42,6 +42,7 @@ public class Main {
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
@@ -49,6 +50,7 @@ public class Main {
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
             LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
         }
@@ -56,6 +58,12 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
+        String input = "../art/textures";
+        String output = "style";
+        String packFileName = "uiskin";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
+        TexturePacker.processIfModified(input, output, packFileName);
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }

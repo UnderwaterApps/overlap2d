@@ -21,6 +21,7 @@ package com.uwsoft.editor.gdx.actors;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
@@ -58,7 +59,7 @@ public class ResolutionBounds extends Group {
     }
 
     private void crateResolutionIndicator() {
-        label = new Label((int) width + " x " + (int) height, textureManager.editorSkin);
+        label = new VisLabel((int) width + " x " + (int) height);
         label.setX(width - label.getWidth());
         label.setY(height);
         addActor(label);

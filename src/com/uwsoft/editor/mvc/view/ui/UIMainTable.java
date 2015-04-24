@@ -19,14 +19,16 @@
 package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.gdx.ui.UILibraryBox;
-import com.uwsoft.editor.gdx.ui.UILightBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.*;
+import com.uwsoft.editor.ui.widget.O2DLogo;
 
 /**
  * Created by sargis on 9/10/14.
@@ -38,7 +40,6 @@ public class UIMainTable extends VisTable {
     private final Overlap2DFacade facade;
     public UISubmenuBar compositePanel;
     public UILayerBox layerPanel;
-    public UILightBox lightBox;
     public UIItemsTreeBox itemsBox;
     public UIMultiPropertyBox multiPropertyBox;
     public UILibraryBox libraryPanel;
@@ -54,14 +55,13 @@ public class UIMainTable extends VisTable {
         setFillParent(true);
         top();
         topTable = new VisTable();
+//        topTable.debug();
         middleTable = new VisTable();
         add(topTable).fillX().expandX();
         row();
         add(middleTable).fillX().padTop(10);
         //
         initMenuBar();
-        topTable.row();
-        topTable.addSeparator();
         topTable.row();
         initCompisitePanel();
         initLeftToolsPanel();
@@ -70,7 +70,7 @@ public class UIMainTable extends VisTable {
 
     private void initCompisitePanel() {
         compositePanel = new UISubmenuBar();
-        topTable.add(compositePanel).fillX().expandX();
+        topTable.add(compositePanel).fillX().expandX().colspan(2);
 //        compositePanel.initPanel();
     }
 
@@ -124,8 +124,6 @@ public class UIMainTable extends VisTable {
         leftToolsPanel.add(uiAlignBox).expandX().fillX();
         leftToolsPanel.row().padTop(5);
         //
-        lightBox = new UILightBox(uiStage);
-        lightBox.initPanel();
 //        leftToolsPanel.add(lightBox);
 //        leftToolsPanel.row();
         //
@@ -141,6 +139,7 @@ public class UIMainTable extends VisTable {
         //TODO: need to be changed!
         Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
         Overlap2DMenuBar menuBar = overlap2DMenuBarMediator.getViewComponent();
-        topTable.add(menuBar.getTable()).fillX().expandX();
+        topTable.add(new O2DLogo()).left();
+        topTable.add(menuBar.getTable().padLeft(24)).fillX().expandX();
     }
 }
