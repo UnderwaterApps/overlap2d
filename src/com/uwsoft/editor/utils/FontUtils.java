@@ -13,6 +13,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.*;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Created by CyberJoe on 4/24/2015.
@@ -30,13 +31,7 @@ public class FontUtils {
     }
 
     public String[] getSystemFontNames() {
-        Font[] fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAllFonts();
-        String[] names = new String[fonts.length];
-        for(int i = 0; i < fonts.length; i++) {
-            names[i] = fonts[i].getName();
-        }
-
-        return names;
+        return GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
     }
 
     public String[] getSystemFontsPaths() {
@@ -63,7 +58,7 @@ public class FontUtils {
 
     public List<File> getSystemFontFiles() {
         // only retrieving ttf files
-        String[] extensions = new String[] { "ttf" };
+        String[] extensions = new String[] { "ttf", "TTF" };
         String[] paths = getSystemFontsPaths();
 
         ArrayList<File> files = new ArrayList<>();
@@ -84,7 +79,7 @@ public class FontUtils {
             try {
                 if(!systemFontMap.containsValue(file.getAbsolutePath())) {
                     f = Font.createFont(Font.TRUETYPE_FONT, new FileInputStream(file.getAbsolutePath()));
-                    String name = f.getName();
+                    String name = f.getFamily();
                     systemFontMap.put(name, file.getAbsolutePath());
                 }
             } catch (FontFormatException e) {
@@ -115,7 +110,7 @@ public class FontUtils {
     public void generateFontsMap() {
         loadCachedSystemFontMap();
         preCacheSystemFontsMap();
-        //invalidateFontMap();
+        invalidateFontMap();
     }
 
     public HashMap<String, String> getFontsMap() {
@@ -126,15 +121,27 @@ public class FontUtils {
     }
 
     public Array<String> getFontNamesFromMap() {
+        AlphabeticalComparator comparator = new AlphabeticalComparator();
         Array<String> fontNames = new Array<>();
+
         for (Map.Entry<String, String> entry : systemFontMap.entrySet()) {
             fontNames.add(entry.getKey());
         }
+        fontNames.sort(comparator);
 
         return fontNames;
     }
 
     public FileHandle getTTFByName(String fontName) {
         return new FileHandle(systemFontMap.get(fontName));
+    }
+
+
+    public class AlphabeticalComparator implements Comparator<String> {
+
+        @Override
+        public int compare(String o1, String o2) {
+            return o1.compareTo(o2);
+        }
     }
 }
