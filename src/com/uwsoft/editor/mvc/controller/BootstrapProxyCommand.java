@@ -36,5 +36,6 @@ public class BootstrapProxyCommand extends SimpleCommand {
         facade.registerProxy(new ResolutionManager());
         facade.registerProxy(new SceneDataManager());
         facade.registerProxy(new TextureManager());
+        facade.registerProxy(new ResourceManager());
     }
 }

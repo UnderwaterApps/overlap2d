@@ -35,10 +35,7 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.*;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
@@ -94,7 +91,10 @@ public class Sandbox {
     private ItemFactory itemFactory;
     private ItemSelector selector;
     private Overlap2DFacade facade;
+
     private ProjectManager projectManager;
+    private ResourceManager resourceManager;
+
 
     /**
      * end of shitty part
@@ -126,9 +126,6 @@ public class Sandbox {
         uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
-//        overlap2D.addInputProcessor(uiStage);
-//        overlap2D.addInputProcessor(sandboxStage);
-
         editingMode = EditingMode.SELECTION;
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
@@ -141,6 +138,7 @@ public class Sandbox {
         itemFactory = new ItemFactory(this);
 
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
     }
 
     /**
@@ -208,7 +206,7 @@ public class Sandbox {
     }
 
     public void loadCurrentProject(String name) {
-        sceneControl.getEssentials().rm = projectManager;
+        sceneControl.getEssentials().rm = resourceManager;
         loadScene(name);
     }
 

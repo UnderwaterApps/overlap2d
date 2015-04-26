@@ -61,7 +61,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 
-public class ProjectManager extends BaseProxy implements IResourceRetriever {
+public class ProjectManager extends BaseProxy {
     private static final String TAG = ProjectManager.class.getCanonicalName();
     public static final String NAME = TAG;
     private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.proxy.ProjectManager";
@@ -938,75 +938,6 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
             }
         }
         return editorConfig;
-    }
-
-    @Override
-    public MySkin getSkin() {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.projectSkin;
-    }
-
-    @Override
-    public TextureRegion getTextureRegion(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        TextureAtlas atl = textureManager.getProjectAssetsList();
-        TextureRegion reg = atl.findRegion(name);
-        if (reg == null) {
-            reg = textureManager.getEditorAsset(name);
-        }
-        return reg;
-    }
-
-    @Override
-    public ProjectInfoVO getProjectVO() {
-        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        return projectManager.getCurrentProjectInfoVO();
-    }
-
-    @Override
-    public ParticleEffect getParticleEffect(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getParticle(name);
-    }
-
-    @Override
-    public TextureAtlas getSkeletonAtlas(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
-        return animData.atlas;
-    }
-
-    @Override
-    public TextureAtlas getSpriteAnimation(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getProjectSpriteAnimationsList().get(animationName);
-    }
-
-    @Override
-    public FileHandle getSkeletonJSON(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
-        return animData.jsonFile;
-    }
-
-    @Override
-    public BitmapFont getBitmapFont(String fontName, int fontSize) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getBitmapFont(fontName, fontSize);
-    }
-
-    @Override
-    public SceneVO getSceneVO(String name) {
-        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-        FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
-        Json json = new Json();
-        return json.fromJson(SceneVO.class, file.readString());
-    }
-
-    @Override
-    public FileHandle getSCMLFile(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getProjectSpriterAnimationsList().get(name);
     }
 
     public void createNewProject(String projectPath, int originWidth, int originHeight) {
