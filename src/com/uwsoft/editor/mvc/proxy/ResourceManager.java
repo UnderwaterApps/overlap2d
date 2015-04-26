@@ -21,6 +21,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -122,6 +123,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     @Override
     public SceneVO getSceneVO(String name) {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        // TODO: this should be cached
         FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
         return json.fromJson(SceneVO.class, file.readString());
@@ -203,11 +205,11 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         }
     }
 
-    public ArrayList<FontSizePair> getProjectRequiredFontsList(String path) {
+    public ArrayList<FontSizePair> getProjectRequiredFontsList() {
         HashSet<FontSizePair> fontsToLoad = new HashSet<>();
 
         for (int i = 0; i < getProjectVO().scenes.size(); i++) {
-            SceneVO scene = loadSceneVO(path + File.separator + "scenes" + File.separator + getProjectVO().scenes.get(i).sceneName + ".dt");
+            SceneVO scene = getSceneVO(getProjectVO().scenes.get(i).sceneName);
             CompositeVO composite = scene.composite;
             FontSizePair[] fonts = composite.getRecursiveFontList();
             for(CompositeItemVO library : getProjectVO().scenes.get(i).libraryItems.values()) {
@@ -220,18 +222,10 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         return new ArrayList<>(fontsToLoad);
     }
 
-    public SceneVO loadSceneVO(String path) {
-        FileHandle file = Gdx.files.internal(path);
-        Json json = new Json();
-        SceneVO sceneVO = json.fromJson(SceneVO.class, file.readString());
-
-        return sceneVO;
-    }
-
     public void loadCurrentProjectBitmapFonts(String path, String curResolution) {
         bitmapFonts.clear();
 
-        ArrayList<FontSizePair> requiredFonts = getProjectRequiredFontsList(path);
+        ArrayList<FontSizePair> requiredFonts = getProjectRequiredFontsList();
         for (int i = 0; i < requiredFonts.size(); i++) {
             FontSizePair pair = requiredFonts.get(i);
             FileHandle fontFile;
@@ -293,7 +287,15 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     }
 
     public void flushAllUnusedFonts() {
-        //TODO: add logic here
+        //List of fonts that are required to be in memory
+        ArrayList<FontSizePair> requiredFonts = getProjectRequiredFontsList();
+        ArrayList<FontSizePair> fontsInMemory = new ArrayList<>(bitmapFonts.keySet());
+
+        for(FontSizePair font: fontsInMemory) {
+            if(!requiredFonts.contains(font)){
+                bitmapFonts.remove(font);
+            }
+        }
     }
 
     public boolean isFontLoaded(String shortName, int fontSize) {
