@@ -35,6 +35,8 @@ public class UILabelItemProperties extends UIItemProperties {
         italicCheckBox = new VisCheckBox(null);
         fontSizeField = new VisValidableTextField();
 
+        fontFamilySelectBox.setMaxListCount(10);
+
         add(new VisLabel("Font Family", Align.right)).padRight(5).width(50).left();
         add(fontFamilySelectBox).width(55).padRight(5);
         row().padTop(5);

@@ -138,7 +138,7 @@ public class SimpleFacade implements Facade {
      * Note: This method is <i>rarely</i> overridden; in practice you are more
      * likely to use a <code>Command</code> to create and register <code>Proxy</code>s
      * with the <code>Model</code>, since <code>Proxy</code>s with mutable
-     * data will likely need to send <code>INotification</code>s and thus
+     * tools will likely need to send <code>INotification</code>s and thus
      * will likely want to fetch a reference to the <code>Facade</code> during
      * their construction.
      * </P>

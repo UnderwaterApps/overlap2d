@@ -32,12 +32,12 @@ import com.puremvc.patterns.observer.Notifier;
  * Additionally, <code>IProxy</code>s typically:
  * </P>
  * <UL>
- * <LI>Maintain references to one or more pieces of model data.</LI>
- * <LI>Provide methods for manipulating that data.</LI>
- * <LI>Generate <code>INotifications</code> when their model data changes.</LI>
+ * <LI>Maintain references to one or more pieces of model tools.</LI>
+ * <LI>Provide methods for manipulating that tools.</LI>
+ * <LI>Generate <code>INotifications</code> when their model tools changes.</LI>
  * <LI>Expose their name as a <code>public static const</code> called <code>NAME</code>, if they are not instantiated multiple times.</LI>
  * <LI>Encapsulate interaction with local or remote services used to fetch and
- * persist model data.</LI>
+ * persist model tools.</LI>
  * </UL>
  */
 public interface Proxy extends Notifier {
@@ -50,16 +50,16 @@ public interface Proxy extends Notifier {
     String getProxyName();
 
     /**
-     * Get the data object
+     * Get the tools object
      *
-     * @return the data as type Object
+     * @return the tools as type Object
      */
     Object getData();
 
     /**
-     * Set the data object
+     * Set the tools object
      *
-     * @param data the data object
+     * @param data the tools object
      */
     void setData(Object data);
 

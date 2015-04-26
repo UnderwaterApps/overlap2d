@@ -28,6 +28,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.*;
@@ -91,6 +92,9 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
+
+        classToMediatorMap.put(TextToolSettings.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(TextToolSettings.class.getName()).add(UITextToolPropertiesMediator.NAME);
     }
 
     @Override
@@ -99,7 +103,8 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 SceneDataManager.SCENE_LOADED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
-                Overlap2D.ITEM_SELECTED
+                Overlap2D.ITEM_SELECTED,
+                UIToolBoxMediator.TOOL_SELECTED
         };
     }
 
@@ -107,12 +112,15 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
-                initAllPropertyBoxes(Sandbox.getInstance().sceneControl.getCurrentSceneVO());
+                initAllPropertyBoxes(null);
                 break;
             case Overlap2D.EMPTY_SPACE_CLICKED:
-                initAllPropertyBoxes(Sandbox.getInstance().sceneControl.getCurrentSceneVO());
+                initAllPropertyBoxes(null);
                 break;
             case Overlap2D.ITEM_SELECTED:
+                initAllPropertyBoxes(notification.getBody());
+                break;
+            case UIToolBoxMediator.TOOL_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
             default:
@@ -121,6 +129,12 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
     }
 
     private void initAllPropertyBoxes(Object observable) {
+
+        if(observable == null) {
+            // if there is nothing to observe, always observe current scene
+            observable = Sandbox.getInstance().sceneControl.getCurrentSceneVO();
+        }
+
         // retrieve a list of property panels to show
         ArrayList<String> mediatorNames = classToMediatorMap.get(observable.getClass().getName());
 

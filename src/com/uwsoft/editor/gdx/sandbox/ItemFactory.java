@@ -28,11 +28,14 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.proxy.FontManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UILibraryItemsTabMediator;
+import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -40,7 +43,7 @@ import java.io.File;
 import java.util.Iterator;
 
 /**
- * Provides methods to create panels of different types based on provided data, and adds them to the scene.
+ * Provides methods to create panels of different types based on provided tools, and adds them to the scene.
  */
 public class ItemFactory {
 
@@ -200,16 +203,21 @@ public class ItemFactory {
     }
 
 
-    public void createLabel(String fontName, float x, float y) {
+    public void createLabel(TextToolSettings textSettings, float x, float y) {
         LayerItemVO layer = getSelectedLayer();
         sceneControl.getCurrentScene().updateDataVO();
 
         LabelVO vo = new LabelVO();
         prepareVO(vo, layer.layerName, x, y);
 
-        vo.style = fontName;
+        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+
+        textureManager.prepareEmbeddingFont(textSettings);
+
+        vo.style = fontManager.getShortName(textSettings.getFontFamily());
         vo.text = "LABEL";
-        vo.size = 18;
+        vo.size = textSettings.getFontSize();
         IBaseItem item = new LabelItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
         addItem(item, vo);
     }

@@ -36,11 +36,10 @@ public class UIToolBox extends VisWindow {
     public static final String TRANSFORMING_MODE_BTN_CLICKED = PREFIX + ".TRANSFORMING_MODE_BTN_CLICKED";
     public static final String TEXT_MODE_BTN_CLICKED = PREFIX + ".TEXT_MODE_BTN_CLICKED";
 
+    public static final int SELECTION_TOOL = 0;
+    public static final int TRANSFORM_TOOL = 1;
+    public static final int TEXT_TOOL = 2;
 
-    private static final int BUTTON_SELECTING_MODE = 0;
-    private static final int BUTTON_TRANSFORMING_MODE = 1;
-    private static final int BUTTON_TEXT_MODE = 2;
-    //
     private final Overlap2DFacade faced;
     private final TextureManager textureManager;
 
@@ -51,9 +50,9 @@ public class UIToolBox extends VisWindow {
         textureManager = faced.retrieveProxy(TextureManager.NAME);
         VisTable mainTable = new VisTable();
         mainTable.addSeparator().colspan(2).padBottom(10);
-        mainTable.add(createButton("mainIcon", BUTTON_SELECTING_MODE)).padRight(5).left();
-        mainTable.add(createButton("resizeIcon", BUTTON_TRANSFORMING_MODE)).padRight(5).left();
-        mainTable.add(createButton("resizeIcon", BUTTON_TEXT_MODE)).expandX().left();
+        mainTable.add(createButton("mainIcon", SELECTION_TOOL)).padRight(5).left();
+        mainTable.add(createButton("resizeIcon", TRANSFORM_TOOL)).padRight(5).left();
+        mainTable.add(createButton("resizeIcon", TEXT_TOOL)).expandX().left();
         add(mainTable).expandX().fillX();
     }
 
@@ -80,18 +79,18 @@ public class UIToolBox extends VisWindow {
             super.clicked(event, x, y);
             String notification = "";
             switch (buttonId) {
-                case BUTTON_SELECTING_MODE:
+                case SELECTION_TOOL:
                     notification = SELECTING_MODE_BTN_CLICKED;
                     break;
-                case BUTTON_TRANSFORMING_MODE:
+                case TRANSFORM_TOOL:
                     notification = TRANSFORMING_MODE_BTN_CLICKED;
                     break;
-                case BUTTON_TEXT_MODE:
+                case TEXT_TOOL:
                     notification = TEXT_MODE_BTN_CLICKED;
                     break;
             }
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(notification);
+            facade.sendNotification(notification, buttonId);
         }
     }
 }

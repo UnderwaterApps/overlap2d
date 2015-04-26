@@ -37,7 +37,7 @@ import java.util.ArrayList;
 public class FlowManager {
 
 	 /**
-	  * List of {@link HistoryData} panels, that are basically data points of user action/scene-snapshot
+	  * List of {@link HistoryData} panels, that are basically tools points of user action/scene-snapshot
 	  */
     private ArrayList<HistoryData> history = new ArrayList<>();
 
@@ -47,7 +47,7 @@ public class FlowManager {
     private int historyPointer;
 
 	 /**
-	  * Keeps a scheduled data to be added as a history data point
+	  * Keeps a scheduled tools to be added as a history tools point
 	  */
     private HistoryData pendingHistoryData;
 
@@ -55,7 +55,7 @@ public class FlowManager {
         historyPointer = -1;
 
 		  /**
-			* When this is just created a first data point is created from existing scene, as a simple action of doing nothing
+			* When this is just created a first tools point is created from existing scene, as a simple action of doing nothing
 			*/
         setPendingHistory(dataVO, FlowActionEnum.SIMPLE);
         applyPendingAction();
@@ -63,7 +63,7 @@ public class FlowManager {
 
 	 /**
 	  * Adds fixed history point to the end of chain if pointer is at the end of action chain
-	  * If pointer is not in the end of action chain, then all other data points should be removed, and this one added.
+	  * If pointer is not in the end of action chain, then all other tools points should be removed, and this one added.
 	  * Should be private and used internally to permanently add a point
 	  *
 	  * @param data point to add
@@ -84,7 +84,7 @@ public class FlowManager {
 	 /**
 	  * Undo action reverts history to a point back from current point,
 	  *
-	  * @return snapshot data of new current scene composite item
+	  * @return snapshot tools of new current scene composite item
 	  */
     public CompositeItemVO undo() {
         HistoryData historyData = history.get(historyPointer > 0 ? --historyPointer : 0);
@@ -94,7 +94,7 @@ public class FlowManager {
 	 /**
 	  * Redo action reverts history to a point previously undone if there is any
 	  *
-	  * @return snapshot data of new current scene composite item
+	  * @return snapshot tools of new current scene composite item
 	  */
     public CompositeItemVO redo() {
         HistoryData historyData = history.get(historyPointer < history.size() - 1 ? ++historyPointer : history.size() - 1);
@@ -102,7 +102,7 @@ public class FlowManager {
     }
 
 	 /**
-	  * @return latest history data point
+	  * @return latest history tools point
 	  */
     public FlowActionEnum getFlowLastAction() {
         HistoryData historyData = history.get(historyPointer);
@@ -112,7 +112,7 @@ public class FlowManager {
 	 /**
 	  * Adds a simple snapshot of scene as a simple action to history
 	  *
-	  * @param pendingAction snapshot data of scene
+	  * @param pendingAction snapshot tools of scene
 	  */
     public void setPendingHistory(CompositeItemVO pendingAction) {
         setPendingHistory(pendingAction, FlowActionEnum.SIMPLE);

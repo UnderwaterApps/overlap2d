@@ -20,7 +20,6 @@ package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -30,12 +29,8 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.UIDropDownMenu;
-import com.uwsoft.editor.mvc.view.ui.box.UIFontChooser;
-import com.uwsoft.editor.mvc.view.ui.box.UIFontChooserMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
+
 
 /**
  * Adds listeners to everything sandbox related, including
@@ -65,7 +60,7 @@ public class SandboxInputAdapter {
      * When item is touched, managing selections and preparing to drag selection
      */
     private boolean itemTouchDown(IBaseItem item, InputEvent event, float x, float y, int button) {
-        // Making sure we have fresh VO data
+        // Making sure we have fresh VO tools
         item.updateDataVO();
 
         currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
@@ -102,7 +97,7 @@ public class SandboxInputAdapter {
         // remembering that item was touched
         sandbox.isItemTouched = true;
 
-        // pining UI to update current item properties data
+        // pining UI to update current item properties tools
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
 
         return true;
@@ -142,7 +137,7 @@ public class SandboxInputAdapter {
         sandbox.isItemTouched = false;
         sandbox.dirty = false;
 
-        // pining UI to update current item properties data
+        // pining UI to update current item properties tools
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
@@ -190,7 +185,7 @@ public class SandboxInputAdapter {
             }
         }
 
-        // pining UI to update current item properties data
+        // pining UI to update current item properties tools
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 

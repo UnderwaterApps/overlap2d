@@ -54,12 +54,12 @@ public class SceneControlMediator {
     private Essentials essentials;
 
     /**
-     * current scene data
+     * current scene tools
      */
     private SceneVO currentSceneVo;
 
     /**
-     * data object of the root element of the scene
+     * tools object of the root element of the scene
      */
     private CompositeItemVO rootSceneVO;
 

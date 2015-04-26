@@ -294,7 +294,7 @@ public class Sandbox {
     /**
      * Opens up provided composite item, sets it as a main view, and focuses editing on it's contents.
      *
-     * @param compositeItemVO data object of composite to enter into
+     * @param compositeItemVO tools object of composite to enter into
      */
     public void enterIntoComposite(CompositeItemVO compositeItemVO) {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
@@ -343,9 +343,9 @@ public class Sandbox {
     }
 
     /**
-     * Initializes current scene on screen from a data object.
+     * Initializes current scene on screen from a tools object.
      *
-     * @param vo CompositeItemVO data
+     * @param vo CompositeItemVO tools
      */
     public void reconstructFromSceneVo(CompositeItemVO vo) {
         initSceneView(vo);

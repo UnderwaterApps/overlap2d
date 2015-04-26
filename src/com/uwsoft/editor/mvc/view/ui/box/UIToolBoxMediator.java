@@ -22,6 +22,11 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
+import com.uwsoft.editor.mvc.view.ui.box.tools.ToolSettings;
+
+import java.util.HashMap;
 
 /**
  * Created by sargis on 4/9/15.
@@ -30,9 +35,24 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String TAG = UIToolBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private static final String PREFIX =  "com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator.";
+    public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
+
+    private int currentSelectedTool = UIToolBox.SELECTION_TOOL;
+
+    private HashMap<Integer, ToolSettings> toolSettings = new HashMap<>();
+
     public UIToolBoxMediator() {
         super(NAME, new UIToolBox());
     }
+
+    @Override
+    public void onRegister() {
+        toolSettings.put(UIToolBox.TEXT_TOOL, new TextToolSettings());
+
+        facade = Overlap2DFacade.getInstance();
+    }
+
 
     @Override
     public String[] listNotificationInterests() {
@@ -50,13 +70,28 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         switch (notification.getName()) {
             case UIToolBox.SELECTING_MODE_BTN_CLICKED:
                 sandbox.setCurrentMode(EditingMode.SELECTION);
+                onToolChanged(notification.getBody());
                 break;
             case UIToolBox.TRANSFORMING_MODE_BTN_CLICKED:
                 sandbox.setCurrentMode(EditingMode.TRANSFORM);
+                onToolChanged(notification.getBody());
                 break;
             case UIToolBox.TEXT_MODE_BTN_CLICKED:
                 sandbox.setCurrentMode(EditingMode.TEXT);
+                onToolChanged(notification.getBody());
                 break;
         }
+    }
+
+    public void onToolChanged(int currentToolId) {
+        currentSelectedTool = currentToolId;
+
+        facade.sendNotification(TOOL_SELECTED, getCurrentSelectedToolSettings());
+    }
+
+    public ToolSettings getCurrentSelectedToolSettings() {
+        ToolSettings currentToolSettings = toolSettings.get(currentSelectedTool);
+
+        return currentToolSettings;
     }
 }

@@ -25,21 +25,21 @@ import com.puremvc.patterns.observer.BaseNotifier;
  * <p>
  * <p>
  * In PureMVC, <code>Proxy</code> classes are used to manage parts of the
- * application's data model.
+ * application's tools model.
  * </P>
  * <p>
  * <p>
- * A <code>Proxy</code> might simply manage a reference to a local data
+ * A <code>Proxy</code> might simply manage a reference to a local tools
  * object, in which case interacting with it might involve setting and getting
- * of its data in synchronous fashion.
+ * of its tools in synchronous fashion.
  * </P>
  * <p>
  * <p>
  * <code>Proxy</code> classes are also used to encapsulate the application's
- * interaction with remote services to save or retrieve data, in which case, we
- * adopt an asyncronous idiom; setting data (or calling a method) on the
+ * interaction with remote services to save or retrieve tools, in which case, we
+ * adopt an asyncronous idiom; setting tools (or calling a method) on the
  * <code>Proxy</code> and listening for a <code>Notification</code> to be
- * sent when the <code>Proxy</code> has retrieved the data from the service.
+ * sent when the <code>Proxy</code> has retrieved the tools from the service.
  * </P>
  *
  * @see com.puremvc.core.Model Model
@@ -49,7 +49,7 @@ public class BaseProxy extends BaseNotifier implements Proxy {
     // the proxy name
     protected String proxyName = "BaseProxy";
 
-    // the data object
+    // the tools object
     protected Object data = null;
 
     /**
@@ -89,16 +89,16 @@ public class BaseProxy extends BaseNotifier implements Proxy {
     }
 
     /**
-     * Get the data object
+     * Get the tools object
      *
-     * @return the data object
+     * @return the tools object
      */
     public Object getData() {
         return data;
     }
 
     /**
-     * Set the data object
+     * Set the tools object
      *
      * @param data
      */

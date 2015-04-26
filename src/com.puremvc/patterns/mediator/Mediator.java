@@ -82,7 +82,7 @@ import com.puremvc.patterns.observer.Notifier;
  * public function handleNotification( notification:INotification ):void {
  * switch ( notification.getName() ) { case MyFacade.SET_SELECTION:
  * setSelection(notification); break; case MyFacade.SET_DATAPROVIDER:
- * setDataProvider(notification); break; } } // Set the data provider of the
+ * setDataProvider(notification); break; } } // Set the tools provider of the
  * combo box private function setDataProvider( notification:INotification ):void {
  * combo.dataProvider = notification.getBody() as Array; } // Invoked when the
  * combo box dispatches a change event, we send a // notification with the

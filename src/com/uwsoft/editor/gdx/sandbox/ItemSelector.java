@@ -254,7 +254,7 @@ public class ItemSelector {
     /************************ Manipulate selected panels  ******************************/
 
     /**
-     * Updates VO objects, and physics related data of all selected objects
+     * Updates VO objects, and physics related tools of all selected objects
      */
     public void flushAllSelectedItems() {
         for (SelectionRectangle value : getCurrentSelection().values()) {

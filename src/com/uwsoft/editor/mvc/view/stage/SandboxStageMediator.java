@@ -35,7 +35,8 @@ import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.ui.box.UIFontChooserMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 
 import java.awt.*;
 
@@ -297,9 +298,10 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             }
 
             if(sandbox.editingMode == EditingMode.TEXT) {
-                UIFontChooserMediator fcm = facade.retrieveMediator(UIFontChooserMediator.NAME);
+                UIToolBoxMediator toolBox = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                TextToolSettings textToolSettings = (TextToolSettings) toolBox.getCurrentSelectedToolSettings();
 
-                sandbox.getItemFactory().createLabel(fcm.getCurrentFont(), Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+                sandbox.getItemFactory().createLabel(textToolSettings, Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
                 return;
             }

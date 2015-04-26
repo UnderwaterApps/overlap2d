@@ -39,6 +39,7 @@ import com.badlogic.gdx.utils.ObjectMap.Entry;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FileUtils;
@@ -320,5 +321,24 @@ public class TextureManager extends BaseProxy {
         loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
         loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
         loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+    }
+
+    public void flushAllUnusedFonts() {
+        //TODO: add logic here
+    }
+
+    public void prepareEmbeddingFont(TextToolSettings textToolSettings) {
+        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
+
+        String shortName = fontManager.getShortName(textToolSettings.getFontFamily());
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = textToolSettings.getFontSize();
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(textToolSettings.getFontFamily()));
+        BitmapFont font = generator.generateFont(parameter);
+
+        flushAllUnusedFonts();
+        addBitmapFont(shortName, parameter.size, font);
     }
 }
