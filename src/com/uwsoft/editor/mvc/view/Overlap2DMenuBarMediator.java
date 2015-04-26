@@ -218,7 +218,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 if (path.length() > 0) {
                     projectManager.openProjectFromPath(path);
                     sandbox.loadCurrentProject();
-                    facade.sendNotification(ProjectManager.PROJECT_OPENED);
                 }
             }
         });

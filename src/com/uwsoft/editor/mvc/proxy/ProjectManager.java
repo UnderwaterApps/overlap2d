@@ -162,16 +162,6 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
 
     }
 
-    public void openProjectFromPath(String path) {
-        File projectFile = new File(path);
-        File projectFolder = projectFile.getParentFile();
-        String projectName = projectFolder.getName();
-        currentWorkingPath = projectFolder.getParentFile().getPath();
-        editorConfigVO.lastOpenedSystemPath = currentWorkingPath;
-        saveEditorConfig();
-        openProjectAndLoadAllData(projectName);
-    }
-
     public void setLastOpenedPath(String path) {
         editorConfigVO.lastOpenedSystemPath = path;
         saveEditorConfig();
@@ -1041,5 +1031,16 @@ public class ProjectManager extends BaseProxy implements IResourceRetriever {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void openProjectFromPath(String path) {
+        File projectFile = new File(path);
+        File projectFolder = projectFile.getParentFile();
+        String projectName = projectFolder.getName();
+        currentWorkingPath = projectFolder.getParentFile().getPath();
+        editorConfigVO.lastOpenedSystemPath = currentWorkingPath;
+        saveEditorConfig();
+        openProjectAndLoadAllData(projectName);
+        facade.sendNotification(ProjectManager.PROJECT_OPENED);
     }
 }
