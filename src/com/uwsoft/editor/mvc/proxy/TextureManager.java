@@ -327,18 +327,27 @@ public class TextureManager extends BaseProxy {
         //TODO: add logic here
     }
 
-    public void prepareEmbeddingFont(TextToolSettings textToolSettings) {
+    public boolean isFontLoaded(String shortName, int fontSize) {
+        return bitmapFonts.containsKey(new FontSizePair(shortName, fontSize));
+    }
+
+    public void prepareEmbeddingFont(String fontfamily, int fontSize) {
+        flushAllUnusedFonts();
+
+        if(isFontLoaded(fontfamily, fontSize)) {
+            return;
+        }
+
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
 
-        String shortName = fontManager.getShortName(textToolSettings.getFontFamily());
+        String shortName = fontManager.getShortName(fontfamily);
 
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = textToolSettings.getFontSize();
+        parameter.size = fontSize;
 
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(textToolSettings.getFontFamily()));
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(fontfamily));
         BitmapFont font = generator.generateFont(parameter);
 
-        flushAllUnusedFonts();
         addBitmapFont(shortName, parameter.size, font);
     }
 }

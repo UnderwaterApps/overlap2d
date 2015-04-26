@@ -40,6 +40,6 @@ public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<
 
     @Override
     protected void translateViewToItemData() {
-        observableReference.renew();
+
     }
 }

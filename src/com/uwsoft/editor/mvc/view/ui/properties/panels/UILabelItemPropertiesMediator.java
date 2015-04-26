@@ -7,6 +7,7 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
+import com.uwsoft.editor.mvc.proxy.TextureManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.LabelItem;
 import org.apache.commons.lang3.ArrayUtils;
@@ -37,10 +38,6 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
         viewComponent.setFontFamilyList(fontManager.getFontNamesFromMap());
     }
 
-    private void loadFaces() {
-       //TODO: figure this later
-    }
-
     @Override
     protected void translateObservableDataToView(LabelItem item) {
         viewComponent.setFontFamily(item.dataVO.style);
@@ -49,6 +46,9 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
 
     @Override
     protected void translateViewToItemData() {
+        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+
         String shortFontName = fontManager.getShortName(viewComponent.getFontFamily());
         observableReference.setStyle(shortFontName, NumberUtils.toInt(viewComponent.getFontSize()));
     }

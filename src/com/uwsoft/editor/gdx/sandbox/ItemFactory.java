@@ -78,6 +78,8 @@ public class ItemFactory {
 //        sandbox.getUIStage().getItemsBox().init();
         itemActor.setX(vo.x);
         itemActor.setY(vo.y);
+
+        sandbox.getSelector().setSelection(item, true);
     }
 
     private void initSpritePhysicsData(SimpleImageVO vo) {
@@ -213,7 +215,7 @@ public class ItemFactory {
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
 
-        textureManager.prepareEmbeddingFont(textSettings);
+        textureManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
 
         vo.style = fontManager.getShortName(textSettings.getFontFamily());
         vo.text = "LABEL";

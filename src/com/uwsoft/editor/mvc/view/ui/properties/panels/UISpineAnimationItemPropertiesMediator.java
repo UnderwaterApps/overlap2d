@@ -48,6 +48,5 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
     @Override
     protected void translateViewToItemData() {
         observableReference.setAnimation(viewComponent.getSelected());
-        observableReference.renew();
     }
 }

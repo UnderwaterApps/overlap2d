@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
@@ -27,5 +30,31 @@ public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UI
 
     public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UIAbstractProperties.PROPERTIES_UPDATED:
+                if(!lockUpdates) {
+                    translateViewToItemData();
+                    afterItemDataModified();
+                }
+                break;
+            case Overlap2D.ITEM_DATA_UPDATED:
+                onItemDataUpdate();
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void afterItemDataModified() {
+        observableReference.renew();
+
+        Sandbox.getInstance().getSelector().updateSelections();
+        Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }

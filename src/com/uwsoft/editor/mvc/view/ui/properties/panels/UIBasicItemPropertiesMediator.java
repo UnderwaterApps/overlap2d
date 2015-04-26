@@ -111,10 +111,5 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         vo.tint[1] = color.g;
         vo.tint[2] = color.b;
         vo.tint[3] = color.a;
-
-        observableReference.renew();
-
-        Sandbox.getInstance().getSelector().updateSelections();
-        Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }

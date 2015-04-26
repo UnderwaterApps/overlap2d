@@ -79,7 +79,7 @@ public class UILabelItemProperties extends UIItemProperties {
     }
 
     public String getFontSize() {
-        return fontSizeField.getText();
+        return"12";
     }
 
     public void setFontSize(String fontSize) {

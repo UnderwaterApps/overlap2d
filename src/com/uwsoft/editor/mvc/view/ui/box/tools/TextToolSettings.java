@@ -62,7 +62,7 @@ public class TextToolSettings implements ToolSettings {
     }
 
     public void setFontSize(int fontSize) {
-        this.fontSize = 12;
+        this.fontSize = fontSize;
     }
 
     public int getLetterSpacing() {

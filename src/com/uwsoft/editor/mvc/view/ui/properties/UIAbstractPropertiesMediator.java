@@ -32,7 +32,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     protected T observableReference;
 
-    private boolean lockUpdates = true;
+    protected boolean lockUpdates = true;
 
     public UIAbstractPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);

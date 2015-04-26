@@ -78,6 +78,5 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     @Override
     protected void translateViewToItemData() {
         observableReference.setAnimation(viewComponent.getSelected());
-        observableReference.renew();
     }
 }
