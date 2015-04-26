@@ -18,9 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.Overlap2DStage;
@@ -32,14 +31,15 @@ public class BaseStage extends Overlap2DStage {
 
     private final Overlap2DFacade facade;
     public ProjectManager projectManager;
-    public TextureManager textureManager;
+    public ResourceManager resourceManager;
 
 
     public BaseStage() {
         super(new ScreenViewport());
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+
         initLightsConfiguration();
     }
 

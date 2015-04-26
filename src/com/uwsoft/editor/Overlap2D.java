@@ -20,13 +20,10 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 public class Overlap2D extends ApplicationAdapter implements Proxy {
     private static final String TAG = Overlap2D.class.getCanonicalName();
@@ -54,7 +51,7 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String LIBRARY_LIST_UPDATED = EVENT_PREFIX + ".LIBRARY_LIST_UPDATED";
 
     //
-    public TextureManager textureManager;
+    public EditorTextureManager textureManager;
     private Overlap2DFacade facade;
     private Object data;
 

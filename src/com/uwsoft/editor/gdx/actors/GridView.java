@@ -24,6 +24,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.BaseStage;
 
 import java.util.AbstractList;
@@ -33,12 +35,14 @@ public class GridView extends Group {
 
 	 private AbstractList<PixelLine> lines = new ArrayList<PixelLine>();
 
-	public GridView(BaseStage s) {
+	public GridView() {
 		float gridSize = 50;
 		float gridLinesCount = 200;
+
+        EditorTextureManager textureManager = Overlap2DFacade.getInstance().retrieveProxy(EditorTextureManager.NAME);
 		
 		for(int i = 0; i <gridLinesCount; i++) {
-			PixelLine tmp = new PixelLine(s.textureManager, i*gridSize, 0, i*gridSize, gridSize*gridLinesCount);
+			PixelLine tmp = new PixelLine(textureManager, i*gridSize, 0, i*gridSize, gridSize*gridLinesCount);
 			opacityHandler(i, tmp);
 			addActor(tmp);
 			tmp.setX(tmp.getX()-(gridLinesCount/2-1)*gridSize);
@@ -48,7 +52,7 @@ public class GridView extends Group {
 		}
 		
 		for(int i = 0; i <gridLinesCount; i++) {
-			PixelLine tmp = new PixelLine(s.textureManager, 0, i*gridSize, gridSize*gridLinesCount,  i*gridSize);
+			PixelLine tmp = new PixelLine(textureManager, 0, i*gridSize, gridSize*gridLinesCount,  i*gridSize);
 			opacityHandler(i, tmp);
 			addActor(tmp);
 			tmp.setX(tmp.getX()-(gridLinesCount/2-1)*gridSize);

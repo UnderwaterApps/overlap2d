@@ -370,10 +370,12 @@ public class Sandbox {
         return selector;
     }
 
+    /**
+     * @deprecated
+     * @return
+     */
     public boolean isComponentSkinAvailable() {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.projectSkin != null;
-
+        return true;
     }
 
     public LayerItemVO getSelectedLayer() {

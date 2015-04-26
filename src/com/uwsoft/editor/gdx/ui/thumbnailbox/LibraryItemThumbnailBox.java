@@ -23,8 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
@@ -39,17 +38,17 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
     private final CompositeItemVO compositeItemVO;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     private String key;
 
     public LibraryItemThumbnailBox(float width, String key, CompositeItemVO compositeItemVO) {
         super();
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         this.key = key;
         this.compositeItemVO = compositeItemVO;
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         setWidth(width);
         bgImg = new Image(textureManager.getEditorAsset("pixel"));
         bgImg.setColor(0.425f, 0.425f, 0.425f, 1.0f);

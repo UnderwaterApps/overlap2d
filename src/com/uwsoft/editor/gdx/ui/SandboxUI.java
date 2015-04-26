@@ -26,7 +26,7 @@ import com.uwsoft.editor.mvc.view.stage.BaseStage;
 public class SandboxUI extends Group {
 
     public SandboxUI(BaseStage s) {
-        GridView gridView = new GridView(s);
+        GridView gridView = new GridView();
         addActor(gridView);
         ResolutionBounds resolutionBounds = new ResolutionBounds(s);
         addActor(resolutionBounds);

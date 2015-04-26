@@ -27,7 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -51,7 +51,7 @@ public class SelectionRectangle extends PixelRect {
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
     private IBaseItem host;
-    private TextureManager tm;
+    private EditorTextureManager rm;
     private Sandbox sandbox;
     private float[] touchDiff = new float[2];
     private Group transformGroup;
@@ -62,7 +62,7 @@ public class SelectionRectangle extends PixelRect {
         super(0, 0);
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        this.tm = facade.retrieveProxy(TextureManager.NAME);
+        rm = facade.retrieveProxy(EditorTextureManager.NAME);
         this.sandbox = sandbox;
         setTouchable(Touchable.disabled);
         setVisible(false);
@@ -170,7 +170,7 @@ public class SelectionRectangle extends PixelRect {
     }
 
     private Image getMiniRect() {
-        Image rect = new Image(tm.getEditorAsset("pixel"));
+        Image rect = new Image(rm.getEditorAsset("pixel"));
         rect.setScale(6);
         rect.setColor(new Color(1, 1, 1, 1));
 

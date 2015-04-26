@@ -21,13 +21,13 @@ package com.uwsoft.editor.gdx.actors.basic;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 public class PixelLine extends Image {
 
 	 private float thickness = 1f;
 
-	public PixelLine(TextureManager tm, float x, float y, float toX, float toY) {
+	public PixelLine(EditorTextureManager tm, float x, float y, float toX, float toY) {
 		super(prepareTexture(tm));
 		
 		setPosition(x, y, toX, toY);
@@ -49,7 +49,7 @@ public class PixelLine extends Image {
 		setColor(clr);
 	}
 	
-	private static AtlasRegion prepareTexture(TextureManager tm) {
+	private static AtlasRegion prepareTexture(EditorTextureManager tm) {
 		AtlasRegion tx = tm.getEditorAsset("pixel");
 		return tx;
 	}

@@ -28,7 +28,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.gdx.ui.UIBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -62,7 +62,7 @@ public class SimpleDialog extends UIBox {
 
 
         ButtonStyle stl = new ButtonStyle();
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         stl.down = new TextureRegionDrawable(textureManager.getEditorAsset("closeBtnClicked"));
         stl.up = new TextureRegionDrawable(textureManager.getEditorAsset("closeBtn"));
         stl.over = new TextureRegionDrawable(textureManager.getEditorAsset("closeHoverBtn"));

@@ -1,19 +1,34 @@
 package com.uwsoft.editor.mvc.proxy;
 
+import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by azakhary on 4/26/2015.
@@ -23,6 +38,17 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     private static final String TAG = ResourceManager.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>(1);
+    private TextureAtlas currentProjectAtlas;
+
+    private HashMap<String, SpineAnimData> spineAnimAtlases = new HashMap<String, SpineAnimData>();
+    private HashMap<String, TextureAtlas> spriteAnimAtlases = new HashMap<String, TextureAtlas>();
+    private HashMap<String, FileHandle> spriterAnimFiles = new HashMap<String, FileHandle>();
+
+    private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<>();
+
+    private ResolutionManager resolutionManager;
+
     public ResourceManager() {
         super(NAME);
     }
@@ -31,66 +57,59 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     public void onRegister() {
         super.onRegister();
         facade = Overlap2DFacade.getInstance();
+        resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
     }
 
     @Override
     public TextureRegion getTextureRegion(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        TextureAtlas atl = textureManager.getProjectAssetsList();
-        TextureRegion reg = atl.findRegion(name);
-        if (reg == null) {
-            reg = textureManager.getEditorAsset(name);
-        }
+        TextureRegion reg = currentProjectAtlas.findRegion(name);
+
         return reg;
     }
 
     @Override
     public ParticleEffect getParticleEffect(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getParticle(name);
+        return new ParticleEffect(particleEffects.get(name));
     }
 
 
     @Override
     public TextureAtlas getSkeletonAtlas(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
+        SpineAnimData animData = spineAnimAtlases.get(animationName);
         return animData.atlas;
     }
 
 
     @Override
     public FileHandle getSkeletonJSON(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        SpineAnimData animData = textureManager.getProjectSpineAnimationsList().get(animationName);
+        SpineAnimData animData = spineAnimAtlases.get(animationName);
         return animData.jsonFile;
     }
 
     @Override
     public FileHandle getSCMLFile(String name) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getProjectSpriterAnimationsList().get(name);
+        return spriterAnimFiles.get(name);
     }
 
 
     @Override
     public TextureAtlas getSpriteAnimation(String animationName) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getProjectSpriteAnimationsList().get(animationName);
+        return spriteAnimAtlases.get(animationName);
     }
 
 
     @Override
     public BitmapFont getBitmapFont(String fontName, int fontSize) {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.getBitmapFont(fontName, fontSize);
+        FontSizePair pair = new FontSizePair(fontName, fontSize);
+        return bitmapFonts.get(pair);
     }
 
 
     @Override
     public MySkin getSkin() {
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        return textureManager.projectSkin;
+        //return textureManager.projectSkin;
+        // not sure if we are going to use skins for labels
+        return null;
     }
 
     @Override
@@ -106,5 +125,218 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
         return json.fromJson(SceneVO.class, file.readString());
+    }
+
+    public void loadCurrentProjectData(String currentWorkingPath, String projectName, String curResolution) {
+        loadCurrentProjectAssets(currentWorkingPath + "/" + projectName + "/assets/" + curResolution + "/pack/pack.atlas");
+        loadCurrentProjectSkin(currentWorkingPath + "/" + projectName + "/assets/orig/styles");
+        loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
+        loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
+        loadCurrentProjectBitmapFonts(currentWorkingPath + "/" + projectName, curResolution);
+    }
+
+    private void loadCurrentProjectParticles(String path) {
+        particleEffects.clear();
+        FileHandle sourceDir = new FileHandle(path);
+        for (FileHandle entry : sourceDir.list()) {
+            File file = entry.file();
+            String filename = file.getName();
+            if (file.isDirectory() || filename.endsWith(".DS_Store")) continue;
+
+            ParticleEffect particleEffect = new ParticleEffect();
+            particleEffect.load(Gdx.files.internal(file.getAbsolutePath()), currentProjectAtlas, "");
+            particleEffects.put(filename, particleEffect);
+        }
+
+    }
+
+
+    private void loadCurrentProjectSpineAnimations(String path, String curResolution) {
+        spineAnimAtlases.clear();
+        FileHandle sourceDir = new FileHandle(path + "orig/spine-animations");
+        for (FileHandle entry : sourceDir.list()) {
+            if (entry.file().isDirectory()) {
+                String animName = FilenameUtils.removeExtension(entry.file().getName());
+                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(path + curResolution + "/spine-animations/" + File.separator + animName + File.separator + animName + ".atlas"));
+                FileHandle animJsonFile = Gdx.files.internal(entry.file().getAbsolutePath() + File.separator + animName + ".json");
+                SpineAnimData data = new SpineAnimData();
+                data.atlas = atlas;
+                data.jsonFile = animJsonFile;
+                data.animName = animName;
+                spineAnimAtlases.put(animName, data);
+            }
+        }
+
+    }
+
+    private void loadCurrentProjectSpriteAnimations(String path, String curResolution) {
+        spriteAnimAtlases.clear();
+        FileHandle sourceDir = new FileHandle(path + curResolution + "/sprite-animations");
+        for (FileHandle entry : sourceDir.list()) {
+            if (entry.file().isDirectory()) {
+                String animName = FilenameUtils.removeExtension(entry.file().getName());
+                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(entry.file().getAbsolutePath() + File.separator + animName + ".atlas"));
+                spriteAnimAtlases.put(animName, atlas);
+            }
+        }
+    }
+
+    private void loadCurrentProjectSpriterAnimations(String path, String curResolution) {
+        spriterAnimFiles.clear();
+        FileHandle sourceDir = new FileHandle(path + "orig" + "/spriter-animations");
+        for (FileHandle entry : sourceDir.list()) {
+            if (entry.file().isDirectory()) {
+                String animName = entry.file().getName();
+                FileHandle scmlFile = new FileHandle(path + "orig" + "/spriter-animations/" + animName + "/" + animName + ".scml");
+                spriterAnimFiles.put(animName, scmlFile);
+            }
+        }
+    }
+
+    private void loadCurrentProjectAssets(String packPath) {
+        try {
+            currentProjectAtlas = new TextureAtlas(Gdx.files.getFileHandle(packPath, Files.FileType.Internal));
+        } catch (Exception e) {
+            currentProjectAtlas = new TextureAtlas();
+        }
+    }
+
+    public ArrayList<FontSizePair> getProjectRequiredFontsList(String path) {
+        HashSet<FontSizePair> fontsToLoad = new HashSet<>();
+
+        for (int i = 0; i < getProjectVO().scenes.size(); i++) {
+            SceneVO scene = loadSceneVO(path + File.separator + "scenes" + File.separator + getProjectVO().scenes.get(i).sceneName + ".dt");
+            CompositeVO composite = scene.composite;
+            FontSizePair[] fonts = composite.getRecursiveFontList();
+            for(CompositeItemVO library : getProjectVO().scenes.get(i).libraryItems.values()) {
+                FontSizePair[] libFonts = library.composite.getRecursiveFontList();
+                Collections.addAll(fontsToLoad, libFonts);
+            }
+            Collections.addAll(fontsToLoad, fonts);
+        }
+
+        return new ArrayList<>(fontsToLoad);
+    }
+
+    public SceneVO loadSceneVO(String path) {
+        FileHandle file = Gdx.files.internal(path);
+        Json json = new Json();
+        SceneVO sceneVO = json.fromJson(SceneVO.class, file.readString());
+
+        return sceneVO;
+    }
+
+    public void loadCurrentProjectBitmapFonts(String path, String curResolution) {
+        bitmapFonts.clear();
+
+        ArrayList<FontSizePair> requiredFonts = getProjectRequiredFontsList(path);
+        for (int i = 0; i < requiredFonts.size(); i++) {
+            FontSizePair pair = requiredFonts.get(i);
+            FileHandle fontFile;
+            try {
+                fontFile = getTTFSafely(pair.fontName);
+                FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
+                FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                parameter.size = Math.round(pair.fontSize * resolutionManager.getCurrentMul());
+                BitmapFont font = generator.generateFont(parameter);
+                bitmapFonts.put(pair, font);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    /**
+     * @deprecated
+     * @param fontPath
+     */
+    private void loadCurrentProjectSkin(String fontPath) {
+        /*
+        File styleFile = new File(fontPath, "styles.dt");
+        FileHandle f = new FileHandle(styleFile);
+
+        if (styleFile.isFile() && styleFile.exists()) {
+            projectSkin = new MySkin(f);
+            ObjectMap<String, BitmapFont> map = projectSkin.getAll(BitmapFont.class);
+            for (ObjectMap.Entry<String, BitmapFont> entry : map.entries()) {
+                projectSkin.getFont(entry.key).getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+            }
+        }
+        */
+    }
+
+    public FileHandle getTTFSafely(String fontName) throws IOException {
+        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
+
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        String expectedPath = projectManager.getFreeTypeFontPath() + File.separator + fontName + ".ttf";
+        FileHandle expectedFile = Gdx.files.internal(expectedPath);
+        if(!expectedFile.exists()) {
+            // let's check if system fonts fot it
+            HashMap<String, String> fonts = fontManager.getFontsMap();
+            if(fonts.containsKey(fontName)) {
+                File source = new File(fonts.get(fontName));
+                FileUtils.copyFile(source, expectedFile.file());
+                expectedFile = Gdx.files.internal(expectedPath);
+            } else {
+                throw new FileNotFoundException();
+            }
+        }
+
+        return expectedFile;
+    }
+
+    public void addBitmapFont(String name, int size, BitmapFont font) {
+        bitmapFonts.put(new FontSizePair(name, size), font);
+    }
+
+    public void flushAllUnusedFonts() {
+        //TODO: add logic here
+    }
+
+    public boolean isFontLoaded(String shortName, int fontSize) {
+        return bitmapFonts.containsKey(new FontSizePair(shortName, fontSize));
+    }
+
+    public void prepareEmbeddingFont(String fontfamily, int fontSize) {
+        flushAllUnusedFonts();
+
+        if(isFontLoaded(fontfamily, fontSize)) {
+            return;
+        }
+
+        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
+
+        String shortName = fontManager.getShortName(fontfamily);
+
+        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+        parameter.size = fontSize;
+
+        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(fontfamily));
+        BitmapFont font = generator.generateFont(parameter);
+
+        addBitmapFont(shortName, parameter.size, font);
+    }
+
+    public HashMap<String,SpineAnimData> getProjectSpineAnimationsList() {
+        return spineAnimAtlases;
+    }
+
+    public HashMap<String,TextureAtlas> getProjectSpriteAnimationsList() {
+        return spriteAnimAtlases;
+    }
+
+    public HashMap<String,FileHandle> getProjectSpriterAnimationsList() {
+        return spriterAnimFiles;
+    }
+
+    public TextureAtlas getProjectAssetsList() {
+        return currentProjectAtlas;
+    }
+
+    public HashMap<String,ParticleEffect> getProjectParticleList() {
+        return particleEffects;
     }
 }

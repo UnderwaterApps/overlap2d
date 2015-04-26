@@ -20,10 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
-import com.uwsoft.editor.gdx.ui.properties.IPropertyBox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.util.ArrayList;
 

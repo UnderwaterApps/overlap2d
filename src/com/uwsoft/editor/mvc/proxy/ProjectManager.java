@@ -269,8 +269,8 @@ public class ProjectManager extends BaseProxy {
     private void loadProjectData(String projectName) {
         // All legit loading assets
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
-        textureManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.currentResolutionName);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        resourceManager.loadCurrentProjectData(currentWorkingPath, projectName, resolutionManager.currentResolutionName);
     }
 
 
@@ -734,9 +734,13 @@ public class ProjectManager extends BaseProxy {
         executor.shutdown();
     }
 
+    /**
+     * @depricated
+     */
     public void copyDefaultStyleIntoProject() {
+        /*
         String targetPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/orig/styles";
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        ResourceManager textureManager = facade.retrieveProxy(ResourceManager.NAME);
         File source = new File("assets/ui");
         if (!(source.exists() && source.isDirectory())) {
             try {
@@ -756,7 +760,7 @@ public class ProjectManager extends BaseProxy {
             System.err.println(e.getMessage());
             e.printStackTrace();
         }
-
+        */
     }
 
     public String getFreeTypeFontPath() {

@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -41,7 +41,7 @@ public class EditAnimationDialog extends SimpleDialog {
 
     private final Map<String, SpriteAnimation.Animation> animations;
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     UIStage uiStage;
     private Group listContainer;
     private float maxHeight = 250;
@@ -53,7 +53,7 @@ public class EditAnimationDialog extends SimpleDialog {
     public EditAnimationDialog(UIStage s, final SpriteAnimation item) {
         super(s, 320, 310);
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         this.uiStage = s;
         setX(200);
         setY(200);

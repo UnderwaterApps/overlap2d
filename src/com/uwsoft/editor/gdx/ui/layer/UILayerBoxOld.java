@@ -31,7 +31,7 @@ import com.uwsoft.editor.gdx.ui.ExpandableUIBox;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemSource;
 import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
@@ -41,7 +41,7 @@ import java.util.ArrayList;
 public class UILayerBoxOld extends ExpandableUIBox {
 
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     private final Sandbox sandbox;
     public int currentSelectedLayerIndex = 0;
     public Group contentGroup = new Group();
@@ -54,7 +54,7 @@ public class UILayerBoxOld extends ExpandableUIBox {
     public UILayerBoxOld(UIStage s) {
         super(s, 250, 250);
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         sandbox = Sandbox.getInstance();
         addActor(contentGroup);
         addActor(uiGroup);

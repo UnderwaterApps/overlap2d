@@ -22,7 +22,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 
@@ -36,7 +36,7 @@ public class PixelRect extends Group {
     public PixelRect(float width, float height) {
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        TextureManager tm = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager tm = facade.retrieveProxy(EditorTextureManager.NAME);
         lines[0] = new PixelLine(tm, 0, 0, width, 0);
         lines[1] = new PixelLine(tm, 0, 0, 0, height);
         lines[2] = new PixelLine(tm, width, 0, width, height);

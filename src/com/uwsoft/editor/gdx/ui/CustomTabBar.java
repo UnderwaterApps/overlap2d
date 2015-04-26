@@ -25,7 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 import java.util.ArrayList;
@@ -33,7 +33,7 @@ import java.util.ArrayList;
 public class CustomTabBar extends Group {
 
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     protected UIStage s;
 
     private ArrayList<String> tabs = new ArrayList<String>();
@@ -43,7 +43,7 @@ public class CustomTabBar extends Group {
 
     public CustomTabBar(UIStage s) {
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         this.s = s;
     }
 

@@ -26,7 +26,8 @@ import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -36,7 +37,7 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     private static final String TAG = UIImagesTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private TextureManager textureManager;
+    private ResourceManager resourceManager;
 
     private TextureAtlas atlas;
 
@@ -74,9 +75,9 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
     }
 
     private void initImagesList() {
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-        atlas = textureManager.getProjectAssetsList();
+        atlas = resourceManager.getProjectAssetsList();
 
         Array<ImageThumbnailBox> thumbnailBoxes = new Array<>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();

@@ -66,12 +66,15 @@ public class SceneDataManager extends BaseProxy {
     }
 
     public void loadScene(SceneVO sceneVO, String resolution) {
+        /*
         if (sceneVO == null || sceneVO.composite == null) return;
 
         FontSizePair[] fonts = sceneVO.composite.getRecursiveFontList();
         TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        textureManager.loadBitmapFonts(fonts, resolutionManager.getCurrentMul());
+        textureManager.loadBitmapFonts(fonts, resolutionManager.getCurrentMul());*/
+
+        // Apparently all was loaded when project was loaded
     }
 
     public String getCurrProjectScenePathByName(String sceneName) {

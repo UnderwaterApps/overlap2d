@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.view.stage.BaseStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -33,7 +33,7 @@ import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
  * Created by sargis on 7/10/14.
  */
 public class ResolutionBounds extends Group {
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     private float width;
     private float height;
 
@@ -41,7 +41,8 @@ public class ResolutionBounds extends Group {
 	 private Label label;
 
     public ResolutionBounds(BaseStage baseStage) {
-        textureManager = baseStage.textureManager;
+        textureManager = Overlap2DFacade.getInstance().retrieveProxy(EditorTextureManager.NAME);
+
         detectDimensions(baseStage);
         crateBoundsRectangle();
         crateResolutionIndicator();

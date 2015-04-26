@@ -30,7 +30,8 @@ import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 import java.util.HashMap;
 
@@ -42,7 +43,7 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     private static final String TAG = UIAnimationsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private TextureManager textureManager;
+    private ResourceManager resourceManager;
 
     private HashMap<String, SpineAnimData> spineAnimations;
     private HashMap<String, TextureAtlas> spriteAnimations;
@@ -83,11 +84,11 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
     }
 
     private void initAnimationsList() {
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-        spineAnimations = textureManager.getProjectSpineAnimationsList();
-        spriteAnimations = textureManager.getProjectSpriteAnimationsList();
-        spriterAnimations = textureManager.getProjectSpriterAnimationsList();
+        spineAnimations = resourceManager.getProjectSpineAnimationsList();
+        spriteAnimations = resourceManager.getProjectSpriteAnimationsList();
+        spriterAnimations = resourceManager.getProjectSpriterAnimationsList();
 
         Array<AnimationThumbnailBox> animationBoxes = new Array<>();
 

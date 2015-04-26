@@ -39,7 +39,7 @@ import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.MeshVO;
@@ -200,7 +200,7 @@ public class ItemPhysicsEditor extends Group {
 
     public void editAsset(String assetName) {
         this.assetName = assetName;
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         Texture texture = textureManager.getRegionOriginalImage(assetName);
         Image img = new Image(texture);
         currentActor = img;
@@ -315,7 +315,7 @@ public class ItemPhysicsEditor extends Group {
         }
 
         System.out.println("Retrace");
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         Texture texture = textureManager.getRegionOriginalImage(assetName);
         Image img = new Image(texture);
         img.setX((getWidth() - img.getWidth()) / 2);

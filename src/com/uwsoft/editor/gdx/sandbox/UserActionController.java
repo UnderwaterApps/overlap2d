@@ -113,7 +113,14 @@ public class UserActionController {
         sandbox.getItemFactory().createItemFromLibrary(layer, name, x, y);
     }
 
+    /**
+     * @depricated
+     * @param name
+     * @param x
+     * @param y
+     */
     public void createComponent(final String name, final float x, final float y) {
+        /*
         final LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
 
@@ -133,6 +140,7 @@ public class UserActionController {
         } else {
             sandbox.getItemFactory().createComponent(layer, name, x, y);
         }
+        */
     }
 
     /**

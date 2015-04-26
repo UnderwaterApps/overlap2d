@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
@@ -29,12 +27,11 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.proxy.FontManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UILibraryItemsTabMediator;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
@@ -213,9 +210,9 @@ public class ItemFactory {
         prepareVO(vo, layer.layerName, x, y);
 
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-        textureManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
+        resourceManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
 
         vo.style = fontManager.getShortName(textSettings.getFontFamily());
         vo.text = "LABEL";
@@ -224,6 +221,13 @@ public class ItemFactory {
         addItem(item, vo);
     }
 
+    /**
+     * @depricated
+     * @param layer
+     * @param type
+     * @param x
+     * @param y
+     */
     public void createComponent(LayerItemVO layer, String type, float x, float y) {
         sceneControl.getCurrentScene().updateDataVO();
 

@@ -21,13 +21,13 @@ package com.uwsoft.editor.gdx.ui;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 public class UIBox extends Group {
 
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     protected Group backLayer;
 
     protected Group mainLayer;
@@ -51,7 +51,7 @@ public class UIBox extends Group {
         addActor(backLayer);
         addActor(mainLayer);
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
     }
 
     public void initPanel() {

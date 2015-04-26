@@ -25,7 +25,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by sargis on 4/10/15.
@@ -62,13 +62,13 @@ public class UIAlignBox extends VisWindow {
 
     //
     private final Overlap2DFacade faced;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
 
     public UIAlignBox() {
         super("Align");
         setMovable(false);
         faced = Overlap2DFacade.getInstance();
-        textureManager = faced.retrieveProxy(TextureManager.NAME);
+        textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
         VisTable mainTable = new VisTable();
         //
         mainTable.addSeparator().colspan(5).padBottom(10);

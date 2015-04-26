@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
@@ -35,7 +35,7 @@ public class UICompositePanel extends VisTable {
 
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     private ArrayList<CompositeItemVO> scenes = new ArrayList<CompositeItemVO>();
 
     private UIStage uiStage;
@@ -46,7 +46,7 @@ public class UICompositePanel extends VisTable {
         uiStage = s;
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
     }
 
     public void initPanel() {

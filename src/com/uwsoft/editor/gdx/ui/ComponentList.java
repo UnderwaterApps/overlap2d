@@ -26,7 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ScrollPane;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ComponentThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 import java.util.HashMap;
@@ -34,11 +34,11 @@ import java.util.HashMap;
 public class ComponentList extends Group {
 
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
 
     public ComponentList(final UIStage s, float width, float height) {
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         this.setWidth(width);
         this.setHeight(height);
         final Table container = new Table();

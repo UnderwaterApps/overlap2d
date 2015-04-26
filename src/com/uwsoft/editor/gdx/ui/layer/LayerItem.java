@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -48,7 +48,7 @@ public class LayerItem extends Group {
         this.sandbox = sandbox;
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         setWidth(247);
         setHeight(20);
         bgImg = new Image(textureManager.getEditorAsset("pixel"));
@@ -124,7 +124,7 @@ public class LayerItem extends Group {
 
     public void showLayerRowSeparator() {
         if (rowSeparator == null) {
-            TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+            EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
             rowSeparator = new Image(textureManager.getEditorAsset("pixel"));
             rowSeparator.setColor(0.97f, 0.97f, 0.98f, 1.0f);
             rowSeparator.setScaleX(getWidth());

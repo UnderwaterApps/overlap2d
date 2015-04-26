@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
@@ -31,7 +31,7 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 public class UILayerItem extends VisTable {
 
     private Overlap2DFacade facade;
-    private TextureManager textureManager;
+    private EditorTextureManager textureManager;
 
     private Image lock;
     private Image eye;
@@ -41,7 +41,7 @@ public class UILayerItem extends VisTable {
         super();
 
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
 
         lock = new Image(textureManager.getEditorAsset("lock"));
         add(lock).left().padRight(10);

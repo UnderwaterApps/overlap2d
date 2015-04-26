@@ -24,7 +24,8 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 import java.util.HashMap;
 
@@ -64,9 +65,9 @@ public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffec
 
     private void initParticleEffects() {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-        HashMap<String, ParticleEffect> particles = textureManager.getProjectParticleList();
+        HashMap<String, ParticleEffect> particles = resourceManager.getProjectParticleList();
         Array<String> itemArray = new Array<>();
         for (String name : particles.keySet()) {
             itemArray.add(name);

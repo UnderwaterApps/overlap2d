@@ -22,7 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 /**
@@ -31,7 +31,7 @@ import com.uwsoft.editor.mvc.view.stage.UIStage;
 public abstract class ExpandableUIBox extends UIBox {
     protected final float expandedHeight;
     private final Overlap2DFacade facade;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
     private boolean isExpanded;
     private Image expandImg;
 
@@ -40,7 +40,7 @@ public abstract class ExpandableUIBox extends UIBox {
         expandedHeight = height;
         isExpanded = true;
         facade = Overlap2DFacade.getInstance();
-        textureManager = facade.retrieveProxy(TextureManager.NAME);
+        textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
     }
 
     @Override

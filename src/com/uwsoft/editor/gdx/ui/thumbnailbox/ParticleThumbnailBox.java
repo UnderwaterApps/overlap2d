@@ -22,8 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -36,7 +35,7 @@ public class ParticleThumbnailBox extends DraggableThumbnailBox {
         super();
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        TextureManager textureManager = facade.retrieveProxy(TextureManager.NAME);
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         Image img = new Image(textureManager.getEditorAsset("resizeIconChecked"));
 
         this.setWidth(thumbnailSize);

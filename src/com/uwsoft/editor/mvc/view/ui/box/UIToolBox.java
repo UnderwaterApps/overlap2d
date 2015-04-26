@@ -26,7 +26,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.TextureManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 public class UIToolBox extends VisWindow {
 
@@ -41,13 +41,13 @@ public class UIToolBox extends VisWindow {
     public static final int TEXT_TOOL = 2;
 
     private final Overlap2DFacade faced;
-    private final TextureManager textureManager;
+    private final EditorTextureManager textureManager;
 
     public UIToolBox() {
         super("Tools", true);
         setMovable(false);
         faced = Overlap2DFacade.getInstance();
-        textureManager = faced.retrieveProxy(TextureManager.NAME);
+        textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
         VisTable mainTable = new VisTable();
         mainTable.addSeparator().colspan(2).padBottom(10);
         mainTable.add(createButton("mainIcon", SELECTION_TOOL)).padRight(5).left();
