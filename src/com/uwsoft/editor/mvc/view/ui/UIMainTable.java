@@ -19,10 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.gdx.ui.UILibraryBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
@@ -42,7 +39,6 @@ public class UIMainTable extends VisTable {
     public UILayerBox layerPanel;
     public UIItemsTreeBox itemsBox;
     public UIMultiPropertyBox multiPropertyBox;
-    public UILibraryBox libraryPanel;
     public Table rightToolsPanel;
     public Table leftToolsPanel;
     public Overlap2DMenuBarMediator menuMediator;
