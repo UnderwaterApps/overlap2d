@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.uwsoft.editor.controlles.ResolutionManager;
@@ -447,7 +448,7 @@ public class DataManager {
                 FileUtils.forceMkdir(new File(targetPath));
                 File jsonFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".json");
                 File atlasFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".atlas");
-                ArrayList<File> imageFiles = getImageListFromAtlas(atlasFileSource);
+                ArrayList<File> imageFiles = getAtlasPages(atlasFileSource);
 
                 FileUtils.copyFile(animationFileSource, jsonFileTarget);
                 FileUtils.copyFile(atlasFileSource, atlasFileTarget);
