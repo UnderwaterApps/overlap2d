@@ -81,6 +81,7 @@ public class UIResolutionBox extends VisTable {
         add(visSelectBox).padRight(11).width(156);
         VisImageButton.VisImageButtonStyle visImageButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         visImageButtonStyle.imageUp = skin.getDrawable("icon-trash");
+        visImageButtonStyle.imageOver = skin.getDrawable("icon-trash-over");
         visImageButtonStyle.imageDisabled = skin.getDrawable("icon-trash-disabled");
         deleteBtn = new VisImageButton("dark");
         deleteBtn.setStyle(visImageButtonStyle);

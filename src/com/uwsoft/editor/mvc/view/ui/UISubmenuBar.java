@@ -44,7 +44,7 @@ public class UISubmenuBar extends VisTable {
         //grid
         UIGridBoxMediator uiGridBoxMediator = facade.retrieveMediator(UIGridBoxMediator.NAME);
         UIGridBox uiGridBox = uiGridBoxMediator.getViewComponent();
-        add(uiGridBox).right();
+        add(uiGridBox).right().padRight(8);
         //
 
         //grid

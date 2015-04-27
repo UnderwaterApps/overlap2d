@@ -47,16 +47,12 @@ public class UIGridBox extends UIBaseBox {
     }
 
     private void init() {
-        VisLabel lbl = new VisLabel("Grid Snapping:");
-        add(lbl);
-
+        VisLabel lbl = new VisLabel("Grid Size:");
+        add(lbl).padRight(4);
         gridSizeTextField = new VisValidableTextField(new Validators.IntegerValidator());
         gridSizeTextField.setRightAligned(true);
-        gridSizeTextField.setWidth(40);
-
         gridSizeTextField.addListener(new KeyboardListener(GRID_SIZE_TEXT_FIELD_UPDATED));
-
-        add(gridSizeTextField);
+        add(gridSizeTextField).width(60);
     }
 
     public void setGridSize(int gridSize) {

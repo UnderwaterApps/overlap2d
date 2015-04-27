@@ -45,6 +45,7 @@ public class UIZoomBox extends VisTable {
 
     private void init() {
         //
+        addSeparator(true).padRight(6);
         add("Zoom:").padRight(5);
         //
         VisImageButton.VisImageButtonStyle zoominButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
@@ -55,7 +56,7 @@ public class UIZoomBox extends VisTable {
         zoomInBtn = new VisImageButton("dark");
         zoomInBtn.setStyle(zoominButtonStyle);
         zoomInBtn.addListener(new UIZoomBoxButtonClickListener(1));
-        add(zoomInBtn).padRight(11).height(25);
+        add(zoomInBtn).height(25);
         //
         VisImageButton.VisImageButtonStyle zoomoutButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         zoomoutButtonStyle.imageUp = skin.getDrawable("icon-zoomout");
