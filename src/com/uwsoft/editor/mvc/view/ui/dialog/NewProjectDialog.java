@@ -33,8 +33,8 @@ import java.io.File;
 
 public class NewProjectDialog extends VisDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
-    private static final String DEFAULT_ORIGIN_WITH = "2400";
-    private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
+    private static final String DEFAULT_ORIGIN_WITH = "1920";
+    private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
 
     private String defaultWorkspacePath;
 
