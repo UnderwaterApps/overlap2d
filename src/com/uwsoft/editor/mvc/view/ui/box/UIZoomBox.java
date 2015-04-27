@@ -68,7 +68,7 @@ public class UIZoomBox extends VisTable {
         zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(1));
         add(zoomOutBtn).padRight(11).height(25);
         //
-        visSelectBox = new VisSelectBox<>();
+        visSelectBox = new VisSelectBox<>("white");
         visSelectBox.setItems("200%", "100%", "50%", "25%");
         add(visSelectBox).width(114);
     }

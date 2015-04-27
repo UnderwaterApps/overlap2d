@@ -69,7 +69,7 @@ public class UIResolutionBox extends VisTable {
     public void update() {
         clear();
         addSeparator(true).padRight(6);
-        visSelectBox = new VisSelectBox<>();
+        visSelectBox = new VisSelectBox<>("white");
         Array<ResolutionEntryVO> resolutionEntryVOs = new Array<>();
         ResolutionEntryVO newResolutionEntryVO = new ResolutionEntryVO();
         newResolutionEntryVO.name = "Create New ...";

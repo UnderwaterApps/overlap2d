@@ -146,6 +146,19 @@
         "selection": "list-selection",
         "background": "select-box-list-bg"
       }
+    },
+    "white": {
+      "font": "default-font",
+      "fontColor": "black",
+      "background": "default-select-white",
+      "scrollStyle": "default",
+      "listStyle": {
+        "font": "default-font",
+        "fontColorSelected": "black",
+        "fontColorUnselected": "black",
+        "selection": "list-selection-white",
+        "background": "select-box-list-bg-white"
+      }
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle": {
@@ -158,17 +171,17 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
     "default": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window",
       "titleFontColor": "white"
     },
     "noborder": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window-noborder",
       "titleFontColor": "white"
     },
     "dialog": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window",
       "titleFontColor": "white",
       "stageBackground": "dialogDim"
@@ -270,6 +283,17 @@
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
+    },
+    "light": {
+      "selection": "selection",
+      "background": "textfield-light",
+      "backgroundOver": "textfield-light-over",
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "default-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey",
+      "cursor": "cursor"
     }
   },
   "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
@@ -339,8 +363,8 @@
       "focusBorder": "border"
     },
     "close-window": {
-      "down": "button-red",
-      "up": "button-window-bg",
+      "down": "button-down",
+      "up": "button",
       "over": "button-over",
       "imageUp": "icon-close"
     },
