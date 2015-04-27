@@ -2,6 +2,7 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
@@ -29,16 +30,17 @@ public class UILabelItemProperties extends UIItemProperties {
     public UILabelItemProperties() {
         super();
 
+        Validators.IntegerValidator intValidator = new Validators.IntegerValidator();
 
         fontFamilySelectBox = new VisSelectBox<>();
         boldCheckBox = new VisCheckBox(null);
         italicCheckBox = new VisCheckBox(null);
-        fontSizeField = new VisValidableTextField();
+        fontSizeField = new VisValidableTextField(intValidator);
 
         fontFamilySelectBox.setMaxListCount(10);
 
         add(new VisLabel("Font Family", Align.right)).padRight(5).width(50).left();
-        add(fontFamilySelectBox).width(55).padRight(5);
+        add(fontFamilySelectBox).width(90).padRight(5);
         row().padTop(5);
         add(new VisLabel("Bold", Align.right)).padRight(5).width(50).left();
         add(boldCheckBox).width(55).padRight(5);
@@ -79,7 +81,7 @@ public class UILabelItemProperties extends UIItemProperties {
     }
 
     public String getFontSize() {
-        return"12";
+        return fontSizeField.getText();
     }
 
     public void setFontSize(String fontSize) {
