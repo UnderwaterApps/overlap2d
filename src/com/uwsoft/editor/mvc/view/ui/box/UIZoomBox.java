@@ -31,6 +31,12 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
  * Created by sargis on 4/27/15.
  */
 public class UIZoomBox extends VisTable {
+
+    private static final String prefix = "com.uwsoft.editor.mvc.view.ui.box.UIZoomBox";
+
+    public static final String ZOOM_SHIFT_REQUESTED = prefix + "ZOOM_SHIFT_REQUESTED";
+
+
     private final Overlap2DFacade facade;
     private final Skin skin;
     private VisSelectBox<String> visSelectBox;
@@ -55,8 +61,8 @@ public class UIZoomBox extends VisTable {
         //
         zoomInBtn = new VisImageButton("dark");
         zoomInBtn.setStyle(zoominButtonStyle);
-        zoomInBtn.addListener(new UIZoomBoxButtonClickListener(1));
-        add(zoomInBtn).height(25);
+        zoomInBtn.addListener(new UIZoomBoxButtonClickListener(0.5f));
+        add(zoomInBtn).padRight(11).height(25);
         //
         VisImageButton.VisImageButtonStyle zoomoutButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         zoomoutButtonStyle.imageUp = skin.getDrawable("icon-zoomout");
@@ -65,7 +71,7 @@ public class UIZoomBox extends VisTable {
         //
         zoomOutBtn = new VisImageButton("dark");
         zoomOutBtn.setStyle(zoomoutButtonStyle);
-        zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(1));
+        zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(2f));
         add(zoomOutBtn).padRight(11).height(25);
         //
         visSelectBox = new VisSelectBox<>("white");
@@ -74,17 +80,17 @@ public class UIZoomBox extends VisTable {
     }
 
     private class UIZoomBoxButtonClickListener extends ClickListener {
-        private final int direction;
+        private final float zoomDevider;
 
-        public UIZoomBoxButtonClickListener(int direction) {
-            this.direction = direction;
+        public UIZoomBoxButtonClickListener(float zoomDevider) {
+            this.zoomDevider = zoomDevider;
         }
-
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
+            facade.sendNotification(ZOOM_SHIFT_REQUESTED, zoomDevider);
         }
     }
 

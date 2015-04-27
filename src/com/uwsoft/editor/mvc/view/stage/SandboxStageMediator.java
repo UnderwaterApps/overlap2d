@@ -207,7 +207,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 sandbox.zoomDevideBy(2f);
             }
             if (keycode == Input.Keys.EQUALS && isControlPressed) {
-                sandbox.zoomDevideBy(1f / 2f);
+                sandbox.zoomDevideBy(0.5f);
             }
 
             return true;
