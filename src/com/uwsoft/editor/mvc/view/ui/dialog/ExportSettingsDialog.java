@@ -33,7 +33,7 @@ import com.uwsoft.editor.ui.widget.InputFileWidget;
 /**
  * Created by sargis on 7/31/14.
  */
-public class ExportSettingsDialog extends VisDialog {
+public class ExportSettingsDialog extends O2DDialog {
     public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
     public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
     private final ExportSettingsInputFileWidget exportSettingsInputFileWidget;

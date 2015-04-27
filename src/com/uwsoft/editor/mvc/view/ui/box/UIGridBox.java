@@ -19,10 +19,10 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 
@@ -31,14 +31,13 @@ import com.uwsoft.editor.mvc.event.KeyboardListener;
  */
 public class UIGridBox extends UIBaseBox {
 
+    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.box.UIGridBox" + ".GRID_SIZE_TEXT_FIELD_UPDATED";
     private VisValidableTextField gridSizeTextField;
 
-    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.mvc.view.ui.box.UIGridBox" + ".GRID_SIZE_TEXT_FIELD_UPDATED";
-
     public UIGridBox() {
-       super();
-       init();
-       setVisible(false);
+        super();
+        init();
+        setVisible(false);
     }
 
     @Override
@@ -47,19 +46,16 @@ public class UIGridBox extends UIBaseBox {
     }
 
     private void init() {
-        VisLabel lbl = new VisLabel("Grid Snapping:");
-        add(lbl);
-
+        VisLabel lbl = new VisLabel("Grid Size:");
+        add(lbl).padRight(4);
         gridSizeTextField = new VisValidableTextField(new Validators.IntegerValidator());
+        gridSizeTextField.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
         gridSizeTextField.setRightAligned(true);
-        gridSizeTextField.setWidth(40);
-
         gridSizeTextField.addListener(new KeyboardListener(GRID_SIZE_TEXT_FIELD_UPDATED));
-
-        add(gridSizeTextField);
+        add(gridSizeTextField).width(60);
     }
 
     public void setGridSize(int gridSize) {
-        gridSizeTextField.setText(gridSize+"");
+        gridSizeTextField.setText(gridSize + "");
     }
 }

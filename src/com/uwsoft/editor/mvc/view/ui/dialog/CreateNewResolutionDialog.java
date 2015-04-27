@@ -24,7 +24,7 @@ import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
-public class CreateNewResolutionDialog extends VisDialog {
+public class CreateNewResolutionDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialog" + ".CREATE_BTN_CLICKED";
     private final VisTextField nameVisTextField;
     private final VisTextField widthVisTextField;

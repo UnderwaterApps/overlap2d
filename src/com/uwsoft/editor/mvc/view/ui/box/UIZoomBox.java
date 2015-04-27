@@ -53,6 +53,7 @@ public class UIZoomBox extends VisTable {
 
     private void init() {
         //
+        addSeparator(true).padRight(6);
         add("Zoom:").padRight(5);
         //
         VisImageButton.VisImageButtonStyle zoominButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
@@ -75,7 +76,7 @@ public class UIZoomBox extends VisTable {
         zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(2f));
         add(zoomOutBtn).padRight(11).height(25);
         //
-        visSelectBox = new VisSelectBox<>();
+        visSelectBox = new VisSelectBox<>("white");
         visSelectBox.setItems("200%", "100%", "50%", "25%");
         visSelectBox.addListener(new SelectBoxChangeListener(ZOOM_VALUE_CHANGED));
         add(visSelectBox).width(114);
