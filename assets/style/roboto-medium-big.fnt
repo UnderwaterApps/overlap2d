@@ -92,5 +92,4 @@ char id=54 x=7 y=270 width=6 height=11 xoffset=1 yoffset=1 xadvance=7 page=0 chn
 char id=55 x=7 y=283 width=7 height=11 xoffset=0 yoffset=1 xadvance=7 page=0 chnl=15
 char id=56 x=8 y=238 width=6 height=11 xoffset=1 yoffset=1 xadvance=7 page=0 chnl=15
 char id=57 x=12 y=223 width=6 height=11 xoffset=1 yoffset=1 xadvance=7 page=0 chnl=15
-char id=13 x=10 y=223 width=0 height=0 xoffset=0 yoffset=12 xadvance=3 page=0 chnl=15
 char id=32 x=0 y=0 width=0 height=0 xoffset=0 yoffset=12 xadvance=3 page=0 chnl=15
