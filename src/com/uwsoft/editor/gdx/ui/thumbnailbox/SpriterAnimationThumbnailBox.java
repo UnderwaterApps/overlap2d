@@ -46,7 +46,7 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
-        SpriterActor animThumb = new SpriterActor(vo, null);
+        SpriterActor animThumb = new SpriterActor(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed

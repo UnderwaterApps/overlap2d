@@ -44,7 +44,7 @@ public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
         this.animationName = animationName;
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
-        final SpriteAnimation animThumb = new SpriteAnimation(vo, null);
+        final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed

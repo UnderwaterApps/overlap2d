@@ -213,7 +213,6 @@ public class Sandbox {
     public void loadCurrentProject() {
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
-        uiStage.loadCurrentProject();
     }
 
     public void loadScene(String sceneName) {

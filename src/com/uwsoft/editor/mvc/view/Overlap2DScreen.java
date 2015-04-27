@@ -86,8 +86,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         File demoDir = new File(projectManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
         if (demoDir.isDirectory() && demoDir.exists()) {
             projectManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
-            sandbox.loadCurrentProject();
-            uiStage.loadCurrentProject();
             sandboxStage.getCamera().position.set(400, 200, 0);
         }
         multiplexer = new InputMultiplexer();

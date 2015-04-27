@@ -217,7 +217,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 String path = file.file().getAbsolutePath();
                 if (path.length() > 0) {
                     projectManager.openProjectFromPath(path);
-                    sandbox.loadCurrentProject();
                 }
             }
         });
@@ -230,7 +229,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         prefs.pushHistory(path);
         Sandbox sandbox = Sandbox.getInstance();
         projectManager.openProjectFromPath(path);
-        sandbox.loadCurrentProject();
     }
 
     public void sceneMenuItemClicked(String sceneName) {

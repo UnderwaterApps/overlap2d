@@ -104,16 +104,6 @@ public class UIStage extends Stage {
         //uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
     }
 
-    public void loadCurrentProject() {
-        // uiMainTable.libraryPanel.initContent();
-//        uiMainTable.lightBox.initContent();
-//        uiMainTable.itemsBox.init();
-//        uiMainTable.compositePanel.initResolutionBox();
-
-        //uiMainTable.layerPanel.initContent();
-
-//        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
-    }
 
     public void emptyClick() {
         facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
