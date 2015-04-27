@@ -20,8 +20,10 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Action;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
 import com.kotcrab.vis.ui.widget.*;
@@ -31,21 +33,18 @@ import com.uwsoft.editor.ui.widget.InputFileWidget;
 
 import java.io.File;
 
-public class NewProjectDialog extends VisDialog {
+public class NewProjectDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
     private static final String DEFAULT_ORIGIN_WITH = "2400";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1140";
-
-    private String defaultWorkspacePath;
-
     private final VisValidableTextField projectName;
     private final InputFileWidget workspacePathField;
     private final VisTextField originWithTextField;
     private final VisTextField originHeightTextField;
+    private String defaultWorkspacePath;
 
     NewProjectDialog() {
         super("Create New Project");
-
         setModal(true);
         addCloseButton();
         VisTable mainTable = new VisTable();
@@ -105,6 +104,14 @@ public class NewProjectDialog extends VisDialog {
         return originHeightTextField.getText();
     }
 
+    public String getDefaultWorkspacePath() {
+        return defaultWorkspacePath;
+    }
+
+    public void setDefaultWorkspacePath(String defaultWorkspacePath) {
+        this.defaultWorkspacePath = defaultWorkspacePath;
+    }
+
     private class BtnClickListener extends ClickListener {
         private final String command;
 
@@ -118,13 +125,5 @@ public class NewProjectDialog extends VisDialog {
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
             facade.sendNotification(command, workspacePathField.getValue().path() + File.separator + projectName.getText());
         }
-    }
-
-    public String getDefaultWorkspacePath() {
-        return defaultWorkspacePath;
-    }
-
-    public void setDefaultWorkspacePath(String defaultWorkspacePath) {
-        this.defaultWorkspacePath = defaultWorkspacePath;
     }
 }

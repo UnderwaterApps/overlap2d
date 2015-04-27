@@ -16,12 +16,30 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui;
+package com.uwsoft.editor.mvc.view.ui.dialog;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 
 /**
- * Created by azakhary on 4/6/2015.
+ * Created by sargis on 4/27/15.
  */
-public class UIZoomBox {
+public class O2DDialog extends VisDialog {
+    public O2DDialog(String title) {
+        super(title);
+    }
 
-
+    @Override
+    public void addCloseButton() {
+        VisImageButton closeButton = new VisImageButton("close-window");
+        getTitleTable().add(closeButton).padRight(4).padBottom(5);
+        closeButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                close();
+            }
+        });
+    }
 }

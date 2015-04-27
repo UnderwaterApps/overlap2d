@@ -23,7 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -35,7 +34,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-public class AssetsImportDialog extends VisDialog {
+public class AssetsImportDialog extends O2DDialog {
     public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".START_IMPORTING_BTN_CLICKED";
     private final AssetsImportInputFileWidget imagesInputFileWidget;
     private final AssetsImportInputFileWidget fontsInputFileWidget;
