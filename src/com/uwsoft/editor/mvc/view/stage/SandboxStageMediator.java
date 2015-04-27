@@ -136,6 +136,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 }
                 if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
                     sandbox.setZoomPercent(100);
+                    facade.sendNotification(Overlap2D.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
                     sandbox.getUac().cutAction();

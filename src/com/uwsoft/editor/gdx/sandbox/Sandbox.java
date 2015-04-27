@@ -431,6 +431,10 @@ public class Sandbox {
         }
     }
 
+    public int getZoomPercent() {
+        return (int)zoomPercent;
+    }
+
     public void setZoomPercent(float percent) {
         zoomPercent = percent;
         OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
@@ -444,6 +448,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
+        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
     }
 
     public void zoomDevideBy(float amount) {
@@ -453,6 +458,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
+        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
     }
 
     public int getGridSize() {

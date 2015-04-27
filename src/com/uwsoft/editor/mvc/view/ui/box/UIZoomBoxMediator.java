@@ -20,10 +20,12 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by sargis on 4/9/15.
@@ -48,7 +50,9 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 ProjectManager.PROJECT_OPENED,
-                UIZoomBox.ZOOM_SHIFT_REQUESTED
+                UIZoomBox.ZOOM_SHIFT_REQUESTED,
+                UIZoomBox.ZOOM_VALUE_CHANGED,
+                Overlap2D.ZOOM_CHANGED
         };
     }
 
@@ -58,11 +62,17 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-                sandbox.setCurrentMode(EditingMode.SELECTION);
+                viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
             case  UIZoomBox.ZOOM_SHIFT_REQUESTED:
                 float zoomDevider = notification.getBody();
                 sandbox.zoomDevideBy(zoomDevider);
+                break;
+            case  UIZoomBox.ZOOM_VALUE_CHANGED:
+                sandbox.setZoomPercent(NumberUtils.toInt(viewComponent.getCurrentZoom()));
+                break;
+            case  Overlap2D.ZOOM_CHANGED:
+                viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
         }
     }

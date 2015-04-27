@@ -26,6 +26,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 
 /**
  * Created by sargis on 4/27/15.
@@ -35,6 +36,7 @@ public class UIZoomBox extends VisTable {
     private static final String prefix = "com.uwsoft.editor.mvc.view.ui.box.UIZoomBox";
 
     public static final String ZOOM_SHIFT_REQUESTED = prefix + "ZOOM_SHIFT_REQUESTED";
+    public static final String ZOOM_VALUE_CHANGED = prefix + "ZOOM_VALUE_CHANGED";
 
 
     private final Overlap2DFacade facade;
@@ -75,7 +77,17 @@ public class UIZoomBox extends VisTable {
         //
         visSelectBox = new VisSelectBox<>();
         visSelectBox.setItems("200%", "100%", "50%", "25%");
+        visSelectBox.addListener(new SelectBoxChangeListener(ZOOM_VALUE_CHANGED));
         add(visSelectBox).width(114);
+    }
+
+    public String getCurrentZoom() {
+        String percent = visSelectBox.getSelected();
+        return percent.substring(0, percent.length()-1);
+    }
+
+    public void setCurrentZoom(String currentZoom) {
+        visSelectBox.setSelected(currentZoom+'%');
     }
 
     private class UIZoomBoxButtonClickListener extends ClickListener {
