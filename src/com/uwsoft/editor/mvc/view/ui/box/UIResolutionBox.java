@@ -68,6 +68,7 @@ public class UIResolutionBox extends VisTable {
 
     public void update() {
         clear();
+        addSeparator(true).padRight(6);
         visSelectBox = new VisSelectBox<>();
         Array<ResolutionEntryVO> resolutionEntryVOs = new Array<>();
         ResolutionEntryVO newResolutionEntryVO = new ResolutionEntryVO();
@@ -76,9 +77,9 @@ public class UIResolutionBox extends VisTable {
         resolutionEntryVOs.add(resolutionManager.getOriginalResolution());
         resolutionEntryVOs.addAll(resolutionManager.getResolutions());
         visSelectBox.setItems(resolutionEntryVOs);
-        add("Resolution : ").padRight(5);
-        add(visSelectBox).padRight(11);
-        VisImageButton.VisImageButtonStyle visImageButtonStyle = skin.get("dark", VisImageButton.VisImageButtonStyle.class);
+        add("Resolution:").padRight(4);
+        add(visSelectBox).padRight(11).width(156);
+        VisImageButton.VisImageButtonStyle visImageButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         visImageButtonStyle.imageUp = skin.getDrawable("icon-trash");
         visImageButtonStyle.imageDisabled = skin.getDrawable("icon-trash-disabled");
         deleteBtn = new VisImageButton("dark");

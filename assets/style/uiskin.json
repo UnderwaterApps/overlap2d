@@ -412,7 +412,7 @@
       "thickness": 2
     },
     "vertical": {
-      "background": "separator",
+      "background": "separator-vertical",
       "thickness": 2,
       "vertical": true
     },
