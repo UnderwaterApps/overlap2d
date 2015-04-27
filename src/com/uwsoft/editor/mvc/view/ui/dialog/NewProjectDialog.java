@@ -38,8 +38,6 @@ public class NewProjectDialog extends O2DDialog {
     private static final String DEFAULT_ORIGIN_WITH = "1920";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
 
-    private String defaultWorkspacePath;
-
     private final VisValidableTextField projectName;
     private final InputFileWidget workspacePathField;
     private final VisTextField originWithTextField;
