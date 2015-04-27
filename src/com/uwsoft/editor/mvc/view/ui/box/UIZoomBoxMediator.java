@@ -47,7 +47,8 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                ProjectManager.PROJECT_OPENED
+                ProjectManager.PROJECT_OPENED,
+                UIZoomBox.ZOOM_SHIFT_REQUESTED
         };
     }
 
@@ -58,6 +59,10 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
                 sandbox.setCurrentMode(EditingMode.SELECTION);
+                break;
+            case  UIZoomBox.ZOOM_SHIFT_REQUESTED:
+                float zoomDevider = notification.getBody();
+                sandbox.zoomDevideBy(zoomDevider);
                 break;
         }
     }
