@@ -415,7 +415,6 @@
       "checkboxOnDown": "radio-down-on",
       "checkboxOffDisabled": "radio-off",
       "checkboxOnDisabled": "radio-on-disabled",
-      "focusBorder": "border-circle",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
