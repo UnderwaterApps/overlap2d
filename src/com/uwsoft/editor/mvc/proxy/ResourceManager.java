@@ -21,7 +21,6 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.ArrayUtils;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -211,8 +210,11 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         for (int i = 0; i < getProjectVO().scenes.size(); i++) {
             SceneVO scene = getSceneVO(getProjectVO().scenes.get(i).sceneName);
             CompositeVO composite = scene.composite;
+            if (composite == null) {
+                break;
+            }
             FontSizePair[] fonts = composite.getRecursiveFontList();
-            for(CompositeItemVO library : getProjectVO().scenes.get(i).libraryItems.values()) {
+            for (CompositeItemVO library : getProjectVO().scenes.get(i).libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
                 Collections.addAll(fontsToLoad, libFonts);
             }
@@ -243,8 +245,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     }
 
     /**
-     * @deprecated
      * @param fontPath
+     * @deprecated
      */
     private void loadCurrentProjectSkin(String fontPath) {
         /*
@@ -267,10 +269,10 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         String expectedPath = projectManager.getFreeTypeFontPath() + File.separator + fontName + ".ttf";
         FileHandle expectedFile = Gdx.files.internal(expectedPath);
-        if(!expectedFile.exists()) {
+        if (!expectedFile.exists()) {
             // let's check if system fonts fot it
             HashMap<String, String> fonts = fontManager.getFontsMap();
-            if(fonts.containsKey(fontName)) {
+            if (fonts.containsKey(fontName)) {
                 File source = new File(fonts.get(fontName));
                 FileUtils.copyFile(source, expectedFile.file());
                 expectedFile = Gdx.files.internal(expectedPath);
@@ -291,8 +293,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         ArrayList<FontSizePair> requiredFonts = getProjectRequiredFontsList();
         ArrayList<FontSizePair> fontsInMemory = new ArrayList<>(bitmapFonts.keySet());
 
-        for(FontSizePair font: fontsInMemory) {
-            if(!requiredFonts.contains(font)){
+        for (FontSizePair font : fontsInMemory) {
+            if (!requiredFonts.contains(font)) {
                 bitmapFonts.remove(font);
             }
         }
@@ -305,7 +307,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     public void prepareEmbeddingFont(String fontfamily, int fontSize) {
         flushAllUnusedFonts();
 
-        if(isFontLoaded(fontfamily, fontSize)) {
+        if (isFontLoaded(fontfamily, fontSize)) {
             return;
         }
 
@@ -322,15 +324,15 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         addBitmapFont(shortName, parameter.size, font);
     }
 
-    public HashMap<String,SpineAnimData> getProjectSpineAnimationsList() {
+    public HashMap<String, SpineAnimData> getProjectSpineAnimationsList() {
         return spineAnimAtlases;
     }
 
-    public HashMap<String,TextureAtlas> getProjectSpriteAnimationsList() {
+    public HashMap<String, TextureAtlas> getProjectSpriteAnimationsList() {
         return spriteAnimAtlases;
     }
 
-    public HashMap<String,FileHandle> getProjectSpriterAnimationsList() {
+    public HashMap<String, FileHandle> getProjectSpriterAnimationsList() {
         return spriterAnimFiles;
     }
 
@@ -338,7 +340,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         return currentProjectAtlas;
     }
 
-    public HashMap<String,ParticleEffect> getProjectParticleList() {
+    public HashMap<String, ParticleEffect> getProjectParticleList() {
         return particleEffects;
     }
 }

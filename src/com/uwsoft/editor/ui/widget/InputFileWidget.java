@@ -59,10 +59,10 @@ public class InputFileWidget extends VisTable {
     }
 
     private void initWidget() {
-        textField = new VisTextField("");
-        textFieldCell = add(textField).fillX().padRight(3);
-        browsBtn = new VisTextButton(" ... ");
-        add(browsBtn);
+        textField = new VisTextField("", "light");
+        textFieldCell = add(textField).fillX().padRight(8).height(21);
+        browsBtn = new VisTextButton("Add");
+        add(browsBtn).width(45).height(21);
         addListener(new InputFileWidgetClickListener());
 
     }
