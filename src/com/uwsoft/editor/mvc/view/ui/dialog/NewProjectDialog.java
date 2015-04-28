@@ -50,9 +50,7 @@ public class NewProjectDialog extends O2DDialog {
         addCloseButton();
         VisTable mainTable = new VisTable();
 //        mainTable.debug();
-        mainTable.padRight(6);
-        mainTable.padTop(6);
-        mainTable.padBottom(22);
+        mainTable.padTop(6).padRight(6).padBottom(22);
         //
         VisLabel projectNameLavel = new VisLabel("Project Name:");
         mainTable.add(projectNameLavel).right().padRight(5);
