@@ -23,6 +23,7 @@ import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
@@ -40,8 +41,11 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
 
     private boolean isMouseInside = true;
 
+    private String animationName;
+
     public SpriterAnimationThumbnailBox(String animationName) {
         super();
+        this.animationName = animationName;
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
@@ -92,5 +96,10 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
         if (isMouseInside) {
             super.act(delta);
         }
+    }
+
+    @Override
+    protected void showRightClickDropDown() {
+        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animationName);
     }
 }

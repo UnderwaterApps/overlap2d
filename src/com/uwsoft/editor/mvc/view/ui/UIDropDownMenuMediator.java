@@ -18,9 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
+import com.brashmonkey.spriter.Timeline;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -28,6 +30,7 @@ import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -44,10 +47,14 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
     public static final Integer SCENE_ACTIONS_SET = 0;
     public static final Integer ITEMS_ACTIONS_SET = 1;
+    public static final Integer RESOURCE_ACTION_SET = 2;
+    public static final Integer IMAGE_RESOURCE_ACTION_SET = 3;
 
     private Sandbox sandbox;
 
     private Vector2 currentCoordinates;
+
+    private Object currentObservable;
 
     public HashMap<Integer, Array<String>> actionSets = new HashMap<>();
 
@@ -64,6 +71,13 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.put(SCENE_ACTIONS_SET, new Array<>());
         actionSets.get(SCENE_ACTIONS_SET).add(UIDropDownMenu.ACTION_PASTE);
 
+        actionSets.put(RESOURCE_ACTION_SET, new Array<>());
+        actionSets.get(RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_DELETE);
+
+        actionSets.put(IMAGE_RESOURCE_ACTION_SET, new Array<>());
+        actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS);
+        actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_DELETE_RESOURCE);
+
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_CUT);
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_COPY);
@@ -72,6 +86,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_ADD_TO_LIBRARY);
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_CONVERT_TO_BUTTON);
+        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_EDIT_PHYSICS);
     }
 
     @Override
@@ -79,7 +94,11 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         return new String[]{
                 Overlap2D.SCENE_RIGHT_CLICK,
                 Overlap2D.ITEM_RIGHT_CLICK,
-                UIDropDownMenu.ITEM_CLICKED
+                UIDropDownMenu.ITEM_CLICKED,
+                UIResourcesBoxMediator.IMAGE_RIGHT_CLICK,
+                UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK,
+                UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK,
+                UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK,
         };
     }
 
@@ -89,7 +108,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
         switch (notification.getName()) {
             case Overlap2D.SCENE_RIGHT_CLICK:
-                showPopup(SCENE_ACTIONS_SET, notification.getBody());
+                showPopup(SCENE_ACTIONS_SET, null);
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
@@ -100,7 +119,19 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                     }
                     actionsSet.add(UIDropDownMenu.ACTION_SET_GRID_SIZE_FROM_ITEM);
                 }
-                showPopup(actionsSet, notification.getBody());
+                showPopup(actionsSet, null);
+                break;
+            case UIResourcesBoxMediator.IMAGE_RIGHT_CLICK:
+                showPopup(IMAGE_RESOURCE_ACTION_SET, notification.getBody());
+                break;
+            case UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK:
+                showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                break;
+            case UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK:
+                showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                break;
+            case UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK:
+                showPopup(RESOURCE_ACTION_SET, notification.getBody());
                 break;
             case UIDropDownMenu.ITEM_CLICKED:
                 processUserAction(notification.getBody());
@@ -110,17 +141,21 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         }
     }
 
-    private void showPopup(Integer actionsSet, Vector2 coordinates) {
-       showPopup(actionSets.get(actionsSet), coordinates);
+    private void showPopup(Integer actionsSet, Object observable) {
+        showPopup(actionSets.get(actionsSet), observable);
     }
 
-    private void showPopup(Array<String> actionsSet, Vector2 coordinates) {
+    private void showPopup(Array<String> actionsSet,Object observable) {
+        Vector2 coordinates = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+
         sandbox.getUIStage().addActor(viewComponent);
         viewComponent.setActionList(actionsSet);
         viewComponent.setX(coordinates.x);
         viewComponent.setY(coordinates.y);
 
         currentCoordinates = new Vector2(coordinates);
+
+        currentObservable = observable;
     }
 
     private void processUserAction(String action) {
@@ -171,6 +206,12 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                         break;
                     }
                 }
+                break;
+            case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
+                sandbox.getUIStage().editPhysics((String) currentObservable);
+                break;
+            case UIDropDownMenu.ACTION_DELETE_RESOURCE:
+                // TODO: do something here
                 break;
         }
     }

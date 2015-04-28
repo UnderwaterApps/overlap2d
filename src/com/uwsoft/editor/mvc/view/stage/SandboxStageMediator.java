@@ -280,7 +280,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 sandbox.getSelector().clearSelections();
 
                 // show default dropdown
-                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK);
 
                 return;
             }

@@ -44,9 +44,10 @@ public class UIDropDownMenu extends PopupMenu {
     public static final String ACTION_COPY = "ACTION_COPY";
     public static final String ACTION_PASTE = "ACTION_PASTE";
     public static final String ACTION_DELETE = "ACTION_DELETE";
+    public static final String ACTION_DELETE_RESOURCE = "ACTION_DELETE_RESOURCE";
     public static final String ACTION_ADD_TO_LIBRARY = "ACTION_ADD_TO_LIBRARY";
     public static final String ACTION_EDIT_PHYSICS = "ACTION_EDIT_PHYSICS";
-    public static final String ACTION_EDIT_ASSET_PHYSICS = "ACTION_EDIT_ASSET_PHYSICS";
+    public static final String ACTION_EDIT_RESOURCE_PHYSICS = "ACTION_EDIT_RESOURCE_PHYSICS";
     public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = "ACTION_SET_GRID_SIZE_FROM_ITEM";
 
     public static final String ITEM_CLICKED = CLASS_NAME + ".ACTION_CLICKED";
@@ -65,8 +66,9 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(ACTION_DELETE, "Delete");
         actionNames.put(ACTION_ADD_TO_LIBRARY, "Add to library");
         actionNames.put(ACTION_EDIT_PHYSICS, "Edit physics");
-        actionNames.put(ACTION_EDIT_ASSET_PHYSICS, "Edit physics");
+        actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
+        actionNames.put(ACTION_DELETE_RESOURCE, "Delete");
 
     }
 

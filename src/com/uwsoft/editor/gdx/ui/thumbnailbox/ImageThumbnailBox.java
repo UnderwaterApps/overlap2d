@@ -27,7 +27,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 
 public class ImageThumbnailBox extends DraggableThumbnailBox {
 
@@ -74,28 +76,9 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
         };
 
         initDragDrop(payloadImg, scaleSize, scaleSize, payload, event);
-
         initAdditionalListeners();
     }
 
-    public void initAdditionalListeners() {
-        addListener(new InputListener() {
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (button == Buttons.RIGHT) {
-                    showRightClickDropDown(region.name);
-                }
-                super.touchUp(event, x, y, pointer, button);
-            }
-
-        });
-    }
 
     public float getScaleSize() {
         return scaleSize;
@@ -105,22 +88,9 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
         sandbox.getUac().createImage(assetName, x, y);
     }
 
-    private void showRightClickDropDown(final String regionName) {
-        final UIStage stage = sandbox.getUIStage();
-        DropDown dropDown = stage.mainDropDown;
-        dropDown.clearItems();
-        dropDown.addItem(SelectionActions.EDIT_ASSET_PHYSICS, "Edit Physics");
-        dropDown.initView(Gdx.input.getX(), Gdx.input.getY());
-
-        dropDown.setEventListener(action -> {
-            switch (action) {
-                case SelectionActions.EDIT_ASSET_PHYSICS:
-                    stage.editPhysics(regionName);
-                    break;
-                default:
-                    break;
-            }
-        });
+    @Override
+    protected void showRightClickDropDown() {
+        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.IMAGE_RIGHT_CLICK, region.name);
     }
 
 }
