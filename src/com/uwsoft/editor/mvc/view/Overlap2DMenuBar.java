@@ -241,9 +241,8 @@ public class Overlap2DMenuBar extends MenuBar {
 
         public O2DMenu(String title) {
             super(title);
-            BitmapFont.TextBounds textBounds = openButton.getLabel().getTextBounds();
             Cell labelCell = openButton.getLabelCell();
-            labelCell.width(textBounds.width + 14);
+            labelCell.width(openButton.getWidth() + 14);
         }
     }
 

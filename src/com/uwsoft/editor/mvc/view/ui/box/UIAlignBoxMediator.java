@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.ItemSelector;

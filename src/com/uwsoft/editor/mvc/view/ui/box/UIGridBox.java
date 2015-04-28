@@ -50,7 +50,7 @@ public class UIGridBox extends UIBaseBox {
         add(lbl).padRight(4);
         gridSizeTextField = new VisValidableTextField(new Validators.IntegerValidator());
         gridSizeTextField.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
-        gridSizeTextField.setRightAligned(true);
+        //gridSizeTextField.setRightAligned(true);
         gridSizeTextField.addListener(new KeyboardListener(GRID_SIZE_TEXT_FIELD_UPDATED));
         add(gridSizeTextField).width(60);
     }
