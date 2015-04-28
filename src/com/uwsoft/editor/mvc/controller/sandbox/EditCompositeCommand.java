@@ -19,14 +19,18 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class DeleteItemsCommand extends SandboxCommand {
+public class EditCompositeCommand extends SandboxCommand {
 
+    @Override
     public void execute(Notification notification) {
-        sandbox.getSelector().removeCurrentSelectedItems();
+        sandbox.enterIntoComposite();
+        sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
+        sandbox.flow.applyPendingAction();
     }
 }

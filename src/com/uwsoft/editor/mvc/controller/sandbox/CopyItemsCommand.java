@@ -18,8 +18,8 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.util.ArrayList;

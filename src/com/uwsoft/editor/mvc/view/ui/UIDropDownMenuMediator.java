@@ -85,7 +85,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_COPY);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_DELETE);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_ADD_TO_LIBRARY);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CONVERT_TO_BUTTON);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_EDIT_PHYSICS);
@@ -122,7 +121,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                         actionsSet.add(Sandbox.ACTION_ADD_TO_LIBRARY);
                         actionsSet.add(Sandbox.ACTION_EDIT_COMPOSITE);
                     }
-                    actionsSet.add(UIDropDownMenu.ACTION_SET_GRID_SIZE_FROM_ITEM);
+                    actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
                 }
                 showPopup(actionsSet, null);
                 break;
@@ -166,44 +165,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     private void processUserAction(String action) {
         /*
         switch (action) {
-            case UIDropDownMenu.ACTION_CUT:
-                sandbox.getUac().cutAction();
-                sandbox.saveSceneCurrentSceneData();
-                break;
-            case UIDropDownMenu.ACTION_COPY:
-                sandbox.getUac().copyAction();
-                break;
-            case UIDropDownMenu.ACTION_PASTE:
-                sandbox.getUac().pasteAction(currentCoordinates.x, currentCoordinates.y, true);
-                sandbox.saveSceneCurrentSceneData();
-                break;
-            case UIDropDownMenu.ACTION_DELETE:
-                sandbox. getSelector().removeCurrentSelectedItems();
-                break;
-            case UIDropDownMenu.ACTION_ADD_TO_LIBRARY:
-                sandbox.getItemFactory().addCompositeToLibrary();
-                break;
-            case UIDropDownMenu.ACTION_GROUP_ITEMS:
-                sandbox.getItemFactory().groupItemsIntoComposite();
-                sandbox.saveSceneCurrentSceneData();
-                break;
-            case UIDropDownMenu.ACTION_SET_GRID_SIZE_FROM_ITEM:
-                sandbox.setGridSize((int) ((Actor) (sandbox.getSelector().getSelectedItems().get(0))).getWidth());
-                break;
-            case UIDropDownMenu.ACTION_EDIT_COMPOSITE:
-                sandbox.enterIntoComposite();
-                sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
-                sandbox.flow.applyPendingAction();
-                break;
-            case UIDropDownMenu.ACTION_CONVERT_TO_BUTTON:
-                // TODO: this should go to UAC
-                CompositeItem btn = sandbox.getItemFactory().groupItemsIntoComposite();
-                btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
-                btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
-                btn.reAssembleLayers();
-
-                sandbox.saveSceneCurrentSceneData();
-                break;
             case UIDropDownMenu.ACTION_EDIT_PHYSICS:
                 if (sandbox.getSelector().getCurrentSelection().size() == 1) {
                     for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {

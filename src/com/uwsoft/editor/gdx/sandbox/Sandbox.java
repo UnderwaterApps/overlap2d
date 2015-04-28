@@ -72,6 +72,7 @@ public class Sandbox {
     public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
     public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
+    public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
 
     public EditingMode editingMode;
     public SceneControlMediator sceneControl;

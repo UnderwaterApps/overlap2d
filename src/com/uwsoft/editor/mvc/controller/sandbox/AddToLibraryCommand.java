@@ -24,9 +24,10 @@ import com.uwsoft.editor.mvc.controller.SandboxCommand;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class DeleteItemsCommand extends SandboxCommand {
+public class AddToLibraryCommand extends SandboxCommand {
 
+    @Override
     public void execute(Notification notification) {
-        sandbox.getSelector().removeCurrentSelectedItems();
+        sandbox.getItemFactory().addCompositeToLibrary();
     }
 }

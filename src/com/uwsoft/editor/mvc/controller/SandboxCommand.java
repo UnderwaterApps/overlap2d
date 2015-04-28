@@ -16,17 +16,19 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.controller.sandbox;
+package com.uwsoft.editor.mvc.controller;
 
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.puremvc.patterns.command.SimpleCommand;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class DeleteItemsCommand extends SandboxCommand {
+public class SandboxCommand extends SimpleCommand {
 
-    public void execute(Notification notification) {
-        sandbox.getSelector().removeCurrentSelectedItems();
+    protected Sandbox sandbox;
+
+    public SandboxCommand() {
+        sandbox = Sandbox.getInstance();
     }
 }

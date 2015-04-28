@@ -18,15 +18,17 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class DeleteItemsCommand extends SandboxCommand {
+public class SetGridSizeFromItemCommand extends SandboxCommand {
 
+    @Override
     public void execute(Notification notification) {
-        sandbox.getSelector().removeCurrentSelectedItems();
+        sandbox.setGridSize((int) ((Actor) (sandbox.getSelector().getSelectedItems().get(0))).getWidth());
     }
 }

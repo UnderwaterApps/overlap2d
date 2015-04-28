@@ -22,10 +22,7 @@ import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.sandbox.CopyItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.CutItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.DeleteItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.PasteItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.*;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -39,5 +36,10 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_COPY, CopyItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_PASTE, PasteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_DELETE, DeleteItemsCommand.class);
+        facade.registerCommand(Sandbox.ACTION_EDIT_COMPOSITE, EditCompositeCommand.class);
+        facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
+        facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
+        facade.registerCommand(Sandbox.ACTION_GROUP_ITEMS, GroupItemsCommand.class);
+        facade.registerCommand(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, SetGridSizeFromItemCommand.class);
     }
 }

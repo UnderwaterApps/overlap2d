@@ -18,17 +18,17 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.command.SimpleCommand;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class SandboxCommand extends SimpleCommand {
+public class GroupItemsCommand extends SandboxCommand {
 
-    protected Sandbox sandbox;
-
-    public SandboxCommand() {
-        sandbox = Sandbox.getInstance();
+    @Override
+    public void execute(Notification notification) {
+        sandbox.getItemFactory().groupItemsIntoComposite();
+        sandbox.saveSceneCurrentSceneData();
     }
 }

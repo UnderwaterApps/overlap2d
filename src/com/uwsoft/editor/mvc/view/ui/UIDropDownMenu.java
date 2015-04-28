@@ -40,7 +40,6 @@ public class UIDropDownMenu extends PopupMenu {
 
 
     public static final String ACTION_EDIT_RESOURCE_PHYSICS = CLASS_NAME + "ACTION_EDIT_RESOURCE_PHYSICS";
-    public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
 
     public static final String ITEM_CLICKED = CLASS_NAME + ".ACTION_CLICKED";
 
@@ -59,7 +58,7 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(Sandbox.ACTION_ADD_TO_LIBRARY, "Add to library");
         actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
         actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
-        actionNames.put(ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
+        actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
         //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
 
     }

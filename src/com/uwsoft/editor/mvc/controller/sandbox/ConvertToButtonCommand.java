@@ -20,13 +20,21 @@ package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class DeleteItemsCommand extends SandboxCommand {
+public class ConvertToButtonCommand extends SandboxCommand {
 
+    @Override
     public void execute(Notification notification) {
-        sandbox.getSelector().removeCurrentSelectedItems();
+        CompositeItem btn = sandbox.getItemFactory().groupItemsIntoComposite();
+        btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
+        btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
+        btn.reAssembleLayers();
+
+        sandbox.saveSceneCurrentSceneData();
     }
 }
