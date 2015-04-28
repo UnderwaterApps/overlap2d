@@ -94,7 +94,7 @@ public class ItemPhysicsDialog extends SimpleDialog {
         pixelRect.setBorderColor(new Color(0, 0, 0, 0.7f));
         mainLayer.addActor(pixelRect);
 
-        itemPhysicsEditor = new ItemPhysicsEditor(stage, pixelRect.getWidth(), pixelRect.getHeight());
+        //itemPhysicsEditor = new ItemPhysicsEditor(stage, pixelRect.getWidth(), pixelRect.getHeight());
         itemPhysicsEditor.setX(controlPanel.getX());
         itemPhysicsEditor.setY(10);
         mainLayer.addActor(itemPhysicsEditor);

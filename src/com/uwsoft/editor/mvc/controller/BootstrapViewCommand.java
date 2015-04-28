@@ -39,7 +39,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade = Overlap2DFacade.getInstance();
         facade.registerMediator(new Overlap2DScreenMediator());
         facade.registerMediator(new Overlap2DMenuBarMediator());
-        facade.registerMediator(new PhysicsEditorDialogMediator());
         facade.registerMediator(new NewProjectDialogMediator());
         facade.registerMediator(new AssetsImportDialogMediator());
         facade.registerMediator(new ExportSettingsDialogMediator());
@@ -57,5 +56,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UIZoomBoxMediator());
         facade.registerMediator(new UIStageMediator());
         facade.registerMediator(new UIDropDownMenuMediator());
+        facade.registerMediator(new PhysicsEditorDialogMediator());
     }
 }
