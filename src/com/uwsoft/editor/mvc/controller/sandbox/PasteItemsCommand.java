@@ -70,17 +70,18 @@ public class PasteItemsCommand extends SandboxCommand {
             }
 
             Vector3 cameraPos = ((OrthographicCamera) sandbox.getSandboxStage().getCamera()).position;
-            if(pastePlace == null) {
-                pastePlace = new Vector2(0, 0);
-            } else {
-                cameraPos = new Vector3(0, 0, 0);
-            }
+
             for (int i = 0; i < fakeItem.getItems().size(); i++) {
                 IBaseItem itm = fakeItem.getItems().get(i);
                 itm.getDataVO().layerName = sandbox.getUIStage().getCurrentSelectedLayer().layerName;
                 sandbox.sceneControl.getCurrentScene().addItem(itm);
-                ((Actor) itm).setX(pastePlace.x + ((Actor) itm).getX() - offsetX + (cameraPos.x + sandbox.copedItemCameraOffset.x));
-                ((Actor) itm).setY(pastePlace.y + ((Actor) itm).getY() - offsetY + (cameraPos.y + sandbox.copedItemCameraOffset.y));
+                if(pastePlace == null) {
+                    ((Actor) itm).setX(((Actor) itm).getX() - offsetX + (cameraPos.x + sandbox.copedItemCameraOffset.x));
+                    ((Actor) itm).setY(((Actor) itm).getY() - offsetY + (cameraPos.y + sandbox.copedItemCameraOffset.y));
+                } else {
+                    ((Actor) itm).setX(pastePlace.x + ((Actor) itm).getX() - offsetX);
+                    ((Actor) itm).setY(pastePlace.y + ((Actor) itm).getY() - offsetY);
+                }
                 itm.updateDataVO();
                 sandbox.getSandboxInputAdapter().initItemListeners(itm);
                 finalItems.add(itm);

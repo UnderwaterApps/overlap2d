@@ -112,7 +112,8 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
         switch (notification.getName()) {
             case Overlap2D.SCENE_RIGHT_CLICK:
-                showPopup(SCENE_ACTIONS_SET, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+                Vector2 stageCoords = notification.getBody();
+                showPopup(SCENE_ACTIONS_SET, stageCoords);
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
