@@ -19,16 +19,24 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.InputValidator;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 
 /**
  * Created by sargis on 4/27/15.
  */
 public class O2DDialog extends VisDialog {
+    protected final Skin skin;
+
     public O2DDialog(String title) {
         super(title);
+        skin = VisUI.getSkin();
     }
 
     @Override
@@ -41,5 +49,28 @@ public class O2DDialog extends VisDialog {
                 close();
             }
         });
+    }
+
+    protected VisTextField createTextField(String text) {
+        return new VisTextField(text, "light");
+    }
+
+    protected VisTextField createTextField(String text, VisTextField.TextFieldFilter textFieldFilter) {
+        VisTextField visTextField = createTextField(text);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
+        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+        visTextField.setText(text);
+        visTextField.setStyle(skin.get("light", VisTextField.VisTextFieldStyle.class));
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
     }
 }

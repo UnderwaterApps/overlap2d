@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
@@ -57,8 +56,7 @@ public class NewProjectDialog extends O2DDialog {
         //
         VisLabel projectNameLavel = new VisLabel("Project Name:");
         mainTable.add(projectNameLavel).right().padRight(5);
-        projectName = new VisValidableTextField(new SimpleFormValidator.EmptyInputValidator("Cannot be empty"));
-        projectName.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
+        projectName = createValidableTextField("", new SimpleFormValidator.EmptyInputValidator("Cannot be empty"));
         mainTable.add(projectName).height(21).expandX().fillX();
         //
         mainTable.row().padTop(10);
@@ -87,15 +85,11 @@ public class NewProjectDialog extends O2DDialog {
     private Table getDimensionsTable() {
         VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
         VisTable dimensionsTable = new VisTable();
-        originWidthTextField = new VisTextField(DEFAULT_ORIGIN_WIDTH);
-        originWidthTextField.setTextFieldFilter(digitsOnlyFilter);
-        originWidthTextField.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
+        originWidthTextField = createTextField(DEFAULT_ORIGIN_WIDTH, digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
         dimensionsTable.add(originWidthTextField).width(45).height(21).padRight(3);
         dimensionsTable.row().padTop(10);
-        originHeightTextField = new VisTextField(DEFAULT_ORIGIN_HEIGHT);
-        originHeightTextField.setTextFieldFilter(digitsOnlyFilter);
-        originHeightTextField.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
+        originHeightTextField = createTextField(DEFAULT_ORIGIN_HEIGHT, digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Height:")).left().padRight(3);
         dimensionsTable.add(originHeightTextField).width(45).height(21).left();
         return dimensionsTable;
