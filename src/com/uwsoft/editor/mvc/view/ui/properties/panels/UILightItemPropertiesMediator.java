@@ -21,6 +21,8 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.LightActor;
+import com.uwsoft.editor.renderer.data.LightVO;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -36,11 +38,32 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Ligh
 
     @Override
     protected void translateObservableDataToView(LightActor item) {
+        LightVO vo = item.getDataVO();
 
+        viewComponent.setType(vo.type);
+        viewComponent.setRayCount(vo.rays);
+        viewComponent.setStatic(vo.isStatic);
+        viewComponent.setXRay(vo.isXRay);
+        viewComponent.setRadius(vo.distance + "");
+        viewComponent.setAngle(vo.coneDegree + "");
+        viewComponent.setDistance(vo.distance + "");
     }
 
     @Override
     protected void translateViewToItemData() {
+        LightVO vo = observableReference.getDataVO();
 
+        vo.type = viewComponent.getType();
+        vo.rays = viewComponent.getRayCount();
+        vo.isStatic = viewComponent.isStatic();
+        vo.isXRay = viewComponent.isXRay();
+
+        vo.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
+
+        if(viewComponent.getType() == LightVO.LightType.POINT) {
+            vo.distance = NumberUtils.toFloat(viewComponent.getRadius());
+        } else {
+            vo.distance = NumberUtils.toFloat(viewComponent.getDistance());
+        }
     }
 }
