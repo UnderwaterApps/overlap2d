@@ -22,6 +22,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
@@ -45,7 +46,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-
+                Sandbox.ACTION_EDIT_PHYSICS
         };
     }
 
@@ -53,19 +54,25 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
 
-        Sandbox sandbox = Sandbox.getInstance();
-
         switch (notification.getName()) {
-
+            case Sandbox.ACTION_EDIT_PHYSICS:
+                show((IBaseItem)notification.getBody());
+                break;
+            default:
+                break;
         }
 
     }
 
     public void show(IBaseItem item) {
+        Sandbox sandbox = Sandbox.getInstance();
+        UIStage uiStage = sandbox.getUIStage();
 
+        viewComponent.show(uiStage);
     }
 
     public void show(String asset) {
-
+        Sandbox sandbox = Sandbox.getInstance();
+        UIStage uiStage = sandbox.getUIStage();
     }
 }

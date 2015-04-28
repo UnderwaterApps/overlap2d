@@ -165,16 +165,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     private void processUserAction(String action) {
         /*
         switch (action) {
-            case UIDropDownMenu.ACTION_EDIT_PHYSICS:
-                if (sandbox.getSelector().getCurrentSelection().size() == 1) {
-                    for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-                        IBaseItem item = value.getHost();
-                        PhysicsEditorDialogMediator dialog = facade.retrieveMediator(PhysicsEditorDialogMediator.NAME);
-                        dialog.show(item);
-                        break;
-                    }
-                }
-                break;
             case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
                 PhysicsEditorDialogMediator dialog = facade.retrieveMediator(PhysicsEditorDialogMediator.NAME);
                 dialog.show((String)currentObservable);
