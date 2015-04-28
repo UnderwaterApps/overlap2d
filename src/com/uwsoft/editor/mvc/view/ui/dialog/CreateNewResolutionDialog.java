@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -27,37 +28,44 @@ import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 public class CreateNewResolutionDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialog" + ".CREATE_BTN_CLICKED";
     private final VisTextField nameVisTextField;
-    private final VisTextField widthVisTextField;
-    private final VisTextField heightVisTextField;
-    private final VisSelectBox<String> basedOnVisSelectBox;
+    private VisTextField widthVisTextField;
+    private VisTextField heightVisTextField;
 
 
     public CreateNewResolutionDialog() {
         super("Create New Resolution");
-
         addCloseButton();
         VisTable mainTable = new VisTable();
-        mainTable.pad(15);
-        mainTable.add("Name :").padRight(5).right();
-        nameVisTextField = new VisTextField();
-        mainTable.add(nameVisTextField).colspan(3).expandX().fillX();
-        mainTable.row().padTop(20);
-        mainTable.add("Size :").padRight(5).right();
-        widthVisTextField = new VisTextField();
-        mainTable.add(widthVisTextField).padRight(5).width(60);
-        mainTable.add("X").padRight(5);
-        heightVisTextField = new VisTextField();
-        mainTable.add(heightVisTextField).width(60);
-        mainTable.row().padTop(20);
-        mainTable.add("Based on :").padRight(5).right();
-        basedOnVisSelectBox = new VisSelectBox<>();
-        basedOnVisSelectBox.setItems("width", "height");
-        mainTable.add(basedOnVisSelectBox).colspan(3).expandX().fillX();
+        mainTable.debug();
+        mainTable.padTop(6).padRight(6).padBottom(22);
+        mainTable.add("Name:").padRight(5).right();
+        nameVisTextField = createTextField("");
+        mainTable.add(nameVisTextField).colspan(3).width(177).height(21);
+        mainTable.row().padTop(10);
+        mainTable.add("Resolution:").padRight(5).right().top();
+        mainTable.add(getDimensionsTable()).left();
         mainTable.row().padTop(20);
         VisTextButton createBtn = new VisTextButton("Create");
         createBtn.addListener(new CrateButtonCliclListener());
-        mainTable.add(createBtn).right().colspan(4);
+        mainTable.add(createBtn).width(93).height(24).colspan(2);
         add(mainTable);
+    }
+
+    private Table getDimensionsTable() {
+        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
+        VisTable dimensionsTable = new VisTable();
+        widthVisTextField = createTextField("", digitsOnlyFilter);
+        dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
+        dimensionsTable.add(widthVisTextField).width(45).height(21).padRight(7);
+        dimensionsTable.add(new VisCheckBox(null));
+        dimensionsTable.add("Based on");
+        dimensionsTable.row().padTop(10);
+        heightVisTextField = createTextField("", digitsOnlyFilter);
+        dimensionsTable.add(new VisLabel("Height:")).left().padRight(7);
+        dimensionsTable.add(heightVisTextField).width(45).height(21).left();
+        dimensionsTable.add(new VisCheckBox(null));
+        dimensionsTable.add("Based on");
+        return dimensionsTable;
     }
 
     private class CrateButtonCliclListener extends ClickListener {
@@ -69,7 +77,7 @@ public class CreateNewResolutionDialog extends O2DDialog {
             resolutionEntryVO.name = nameVisTextField.getText();
             resolutionEntryVO.width = Integer.parseInt(widthVisTextField.getText());
             resolutionEntryVO.height = Integer.parseInt(heightVisTextField.getText());
-            resolutionEntryVO.base = basedOnVisSelectBox.getSelectedIndex();
+           // resolutionEntryVO.base = basedOnVisSelectBox.getSelectedIndex();
             facade.sendNotification(CREATE_BTN_CLICKED, resolutionEntryVO);
         }
     }
