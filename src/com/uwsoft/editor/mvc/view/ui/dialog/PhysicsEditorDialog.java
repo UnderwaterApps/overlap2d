@@ -16,19 +16,17 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.controller;
-
-import com.puremvc.patterns.command.MacroCommand;
+package com.uwsoft.editor.mvc.view.ui.dialog;
 
 /**
- * Created by sargis on 3/30/15.
+ * Created by azakhary on 4/28/2015.
  */
-public class StartupCommand extends MacroCommand {
-    @Override
-    protected void initializeMacroCommand() {
-        super.initializeMacroCommand();
-        addSubCommand(BootstrapProxyCommand.class);
-        addSubCommand(BootstrapViewCommand.class);
-        addSubCommand(BootstrapCommand.class);
+public class PhysicsEditorDialog extends O2DDialog {
+
+
+    public PhysicsEditorDialog() {
+        super("Physics Editor");
+        setModal(true);
+        addCloseButton();
     }
 }

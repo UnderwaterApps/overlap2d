@@ -27,10 +27,7 @@ import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.mvc.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.mvc.view.ui.box.*;
-import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.*;
 
 /**
  * Created by sargis on 4/1/15.
@@ -42,6 +39,7 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade = Overlap2DFacade.getInstance();
         facade.registerMediator(new Overlap2DScreenMediator());
         facade.registerMediator(new Overlap2DMenuBarMediator());
+        facade.registerMediator(new PhysicsEditorDialogMediator());
         facade.registerMediator(new NewProjectDialogMediator());
         facade.registerMediator(new AssetsImportDialogMediator());
         facade.registerMediator(new ExportSettingsDialogMediator());

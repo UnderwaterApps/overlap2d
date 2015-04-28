@@ -30,7 +30,9 @@ import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.SelectionActions;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.PhysicsEditorDialogMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -69,24 +71,26 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         sandbox = Sandbox.getInstance();
 
         actionSets.put(SCENE_ACTIONS_SET, new Array<>());
-        actionSets.get(SCENE_ACTIONS_SET).add(UIDropDownMenu.ACTION_PASTE);
+        actionSets.get(SCENE_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
 
         actionSets.put(RESOURCE_ACTION_SET, new Array<>());
-        actionSets.get(RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_DELETE);
+        actionSets.get(RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE);
 
         actionSets.put(IMAGE_RESOURCE_ACTION_SET, new Array<>());
         actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS);
-        actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_DELETE_RESOURCE);
+        //actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE_RESOURCE);
 
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_CUT);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_COPY);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_PASTE);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_DELETE);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_ADD_TO_LIBRARY);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_GROUP_ITEMS);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_CONVERT_TO_BUTTON);
-        actionSets.get(ITEMS_ACTIONS_SET).add(UIDropDownMenu.ACTION_EDIT_PHYSICS);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CUT);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_COPY);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_DELETE);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_ADD_TO_LIBRARY);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_GROUP_ITEMS);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CONVERT_TO_BUTTON);
+        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_EDIT_PHYSICS);
+
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -108,14 +112,14 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
         switch (notification.getName()) {
             case Overlap2D.SCENE_RIGHT_CLICK:
-                showPopup(SCENE_ACTIONS_SET, null);
+                showPopup(SCENE_ACTIONS_SET, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
                 if (sandbox.getSelector().getCurrentSelection().size() == 1) {
                     if(sandbox.getSelector().selectionIsComposite()) {
-                        actionsSet.add(UIDropDownMenu.ACTION_ADD_TO_LIBRARY);
-                        actionsSet.add(UIDropDownMenu.ACTION_EDIT_COMPOSITE);
+                        actionsSet.add(Sandbox.ACTION_ADD_TO_LIBRARY);
+                        actionsSet.add(Sandbox.ACTION_EDIT_COMPOSITE);
                     }
                     actionsSet.add(UIDropDownMenu.ACTION_SET_GRID_SIZE_FROM_ITEM);
                 }
@@ -134,7 +138,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 showPopup(RESOURCE_ACTION_SET, notification.getBody());
                 break;
             case UIDropDownMenu.ITEM_CLICKED:
-                processUserAction(notification.getBody());
+                facade.sendNotification(notification.getBody(), currentObservable);
                 break;
             default:
                 break;
@@ -159,6 +163,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     }
 
     private void processUserAction(String action) {
+        /*
         switch (action) {
             case UIDropDownMenu.ACTION_CUT:
                 sandbox.getUac().cutAction();
@@ -202,17 +207,20 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 if (sandbox.getSelector().getCurrentSelection().size() == 1) {
                     for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
                         IBaseItem item = value.getHost();
-                        sandbox.getUIStage().editPhysics(item);
+                        PhysicsEditorDialogMediator dialog = facade.retrieveMediator(PhysicsEditorDialogMediator.NAME);
+                        dialog.show(item);
                         break;
                     }
                 }
                 break;
             case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
-                sandbox.getUIStage().editPhysics((String) currentObservable);
+                PhysicsEditorDialogMediator dialog = facade.retrieveMediator(PhysicsEditorDialogMediator.NAME);
+                dialog.show((String)currentObservable);
                 break;
             case UIDropDownMenu.ACTION_DELETE_RESOURCE:
                 // TODO: do something here
                 break;
         }
+        */
     }
 }

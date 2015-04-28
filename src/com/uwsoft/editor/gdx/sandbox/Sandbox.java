@@ -25,6 +25,8 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
@@ -44,10 +46,7 @@ import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.ParticleItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.data.*;
 
 import java.util.ArrayList;
 
@@ -62,6 +61,17 @@ public class Sandbox {
 
     private static Sandbox instance = null;
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.gdx.sandbox.Sandbox";
+
+    public static final String ACTION_GROUP_ITEMS = CLASS_NAME + "ACTION_GROUP_ITEMS";
+    public static final String ACTION_EDIT_COMPOSITE = CLASS_NAME + "ACTION_EDIT_COMPOSITE";
+    public static final String ACTION_CONVERT_TO_BUTTON = CLASS_NAME + "ACTION_CONVERT_TO_BUTTON";
+    public static final String ACTION_CUT = CLASS_NAME + "ACTION_CUT";
+    public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
+    public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
+    public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
+    public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
+    public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
 
     public EditingMode editingMode;
     public SceneControlMediator sceneControl;
@@ -467,5 +477,31 @@ public class Sandbox {
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
+    }
+
+
+    /**
+     * TODO: put this in different place, not sandbox specific
+     * @param items
+     */
+    public void putItemsToClipboard(ArrayList<IBaseItem> items) {
+        CompositeVO tempHolder = new CompositeVO();
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        Actor actor = (Actor) items.get(0);
+        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
+        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
+        for (IBaseItem item : items) {
+            tempHolder.addItem(item.getDataVO());
+            actor = (Actor) item;
+            if (actor.getX() - cameraPos.x < vector3.x) {
+                vector3.x = actor.getX() - cameraPos.x;
+            }
+            if (actor.getY() - cameraPos.y < vector3.y) {
+                vector3.y = actor.getY() - cameraPos.y;
+            }
+        }
+        fakeClipboard = json.toJson(tempHolder);
+        copedItemCameraOffset = vector3;
     }
 }

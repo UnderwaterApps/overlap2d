@@ -139,17 +139,13 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                     facade.sendNotification(Overlap2D.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
-                    sandbox.getUac().cutAction();
+                    facade.sendNotification(Sandbox.ACTION_CUT);
                 }
                 if (keycode == Input.Keys.C) {
-                    sandbox.getUac().copyAction();
+                    facade.sendNotification(Sandbox.ACTION_COPY);
                 }
                 if (keycode == Input.Keys.V) {
-                    try {
-                        sandbox.getUac().pasteAction(0, 0, false);
-                    } catch (Exception e) {
-                        //TODO: need to be fixed!
-                    }
+                    facade.sendNotification(Sandbox.ACTION_PASTE);
                 }
                 if (keycode == Input.Keys.Z) {
                     sandbox.getUac().undo();
@@ -193,7 +189,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // Delete
             if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-                sandbox.getUac().deleteAction();
+                facade.sendNotification(Sandbox.ACTION_DELETE);
             }
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly
