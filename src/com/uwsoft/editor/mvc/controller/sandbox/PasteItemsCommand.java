@@ -69,9 +69,9 @@ public class PasteItemsCommand extends SandboxCommand {
                 }
             }
 
-            Vector3 cameraPos = new Vector3(0, 0, 0);
-            if(pastePlace != null) {
-                cameraPos = ((OrthographicCamera) sandbox.getSandboxStage().getCamera()).position;
+            Vector3 cameraPos = ((OrthographicCamera) sandbox.getSandboxStage().getCamera()).position;
+            if(pastePlace == null) {
+                pastePlace = new Vector2(0, 0);
             }
             for (int i = 0; i < fakeItem.getItems().size(); i++) {
                 IBaseItem itm = fakeItem.getItems().get(i);
