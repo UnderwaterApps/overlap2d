@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.*;
@@ -30,6 +31,9 @@ public class CreateNewResolutionDialog extends O2DDialog {
     private final VisTextField nameVisTextField;
     private VisTextField widthVisTextField;
     private VisTextField heightVisTextField;
+    private ButtonGroup<VisRadioButton> buttonGroup;
+    private VisRadioButton basedOnWidthRadioButton;
+    private VisRadioButton basedOnHeightRadioButton;
 
 
     public CreateNewResolutionDialog() {
@@ -45,26 +49,31 @@ public class CreateNewResolutionDialog extends O2DDialog {
         mainTable.add("Resolution:").padRight(5).right().top();
         mainTable.add(getDimensionsTable()).left();
         mainTable.row().padTop(20);
-        VisTextButton createBtn = new VisTextButton("Create");
+        VisTextButton createBtn = new VisTextButton("Create", "orange");
         createBtn.addListener(new CrateButtonCliclListener());
         mainTable.add(createBtn).width(93).height(24).colspan(2);
         add(mainTable);
     }
 
     private Table getDimensionsTable() {
+        buttonGroup = new ButtonGroup<>();
         VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
         VisTable dimensionsTable = new VisTable();
         widthVisTextField = createTextField("", digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
         dimensionsTable.add(widthVisTextField).width(45).height(21).padRight(7);
-        dimensionsTable.add(new VisCheckBox(null));
+        basedOnWidthRadioButton = new VisRadioButton(null);
+        dimensionsTable.add(basedOnWidthRadioButton);
         dimensionsTable.add("Based on");
         dimensionsTable.row().padTop(10);
         heightVisTextField = createTextField("", digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Height:")).left().padRight(7);
         dimensionsTable.add(heightVisTextField).width(45).height(21).left();
-        dimensionsTable.add(new VisCheckBox(null));
+        basedOnHeightRadioButton = new VisRadioButton(null);
+        dimensionsTable.add(basedOnHeightRadioButton);
         dimensionsTable.add("Based on");
+        buttonGroup.add(basedOnWidthRadioButton);
+        buttonGroup.add(basedOnHeightRadioButton);
         return dimensionsTable;
     }
 
@@ -77,7 +86,7 @@ public class CreateNewResolutionDialog extends O2DDialog {
             resolutionEntryVO.name = nameVisTextField.getText();
             resolutionEntryVO.width = Integer.parseInt(widthVisTextField.getText());
             resolutionEntryVO.height = Integer.parseInt(heightVisTextField.getText());
-           // resolutionEntryVO.base = basedOnVisSelectBox.getSelectedIndex();
+            resolutionEntryVO.base = buttonGroup.getCheckedIndex();
             facade.sendNotification(CREATE_BTN_CLICKED, resolutionEntryVO);
         }
     }
