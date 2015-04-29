@@ -49,6 +49,9 @@ public class PhysicsEditorDialog extends O2DDialog {
     private VisValidableTextField densityField;
     private VisValidableTextField frictionField;
     private VisValidableTextField restitutionField;
+    private VisCheckBox allowSleepBox;
+    private VisCheckBox awakeBox;
+    private VisCheckBox bulletBox;
 
     private VisSelectBox<String> poligonyzerBox;
     private VisValidableTextField hullToleranceField;
@@ -124,6 +127,9 @@ public class PhysicsEditorDialog extends O2DDialog {
         densityField = new VisValidableTextField(floatValidator);
         frictionField = new VisValidableTextField(floatValidator);
         restitutionField = new VisValidableTextField(floatValidator);
+        allowSleepBox = new VisCheckBox("Allow Sleep");
+        awakeBox = new VisCheckBox("Awake");
+        bulletBox = new VisCheckBox("Bullet");
 
         controlsTable.add(new VisLabel("Body type:", Align.right)).padRight(5).colspan(2).fillX();
         controlsTable.add(bodyTypeBox).width(120).colspan(2);
@@ -159,7 +165,14 @@ public class PhysicsEditorDialog extends O2DDialog {
         controlsTable.row().padTop(5);
 
         controlsTable.add(new VisLabel("Restitution:", Align.right)).padRight(5).colspan(2).fillX();
-        controlsTable.add(restitutionField).width(120).colspan(2).padBottom(20);
+        controlsTable.add(restitutionField).width(120).colspan(2);
+        controlsTable.row().padTop(5);
+
+        VisTable bottomTable = new VisTable();
+        bottomTable.add(allowSleepBox);
+        bottomTable.add(awakeBox);
+        bottomTable.add(bulletBox);
+        controlsTable.add(bottomTable).padBottom(20).colspan(4);
         controlsTable.row().padTop(5);
     }
 
@@ -220,6 +233,10 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     public String getBodyType() {
         return bodyTypeBox.getSelected();
+    }
+
+    public void setBodyType(int bodyTypeIndex) {
+        bodyTypeBox.setSelectedIndex(bodyTypeIndex);
     }
 
     public void setBodyType(String bodyType) {
@@ -346,5 +363,29 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     public ItemPhysicsEditor getItemPhysicsEditor() {
         return itemPhysicsEditor;
+    }
+
+    public boolean isAllowSleep() {
+        return  allowSleepBox.isChecked();
+    }
+
+    public void setAllowSleep(boolean isAllowSleep) {
+        allowSleepBox.setChecked(isAllowSleep);
+    }
+
+    public boolean isAwake() {
+        return  awakeBox.isChecked();
+    }
+
+    public void setAwake(boolean isAwake) {
+        awakeBox.setChecked(isAwake);
+    }
+
+    public boolean isBullet() {
+        return  bulletBox.isChecked();
+    }
+
+    public void setBullet(boolean isBullet) {
+        bulletBox.setChecked(isBullet);
     }
 }

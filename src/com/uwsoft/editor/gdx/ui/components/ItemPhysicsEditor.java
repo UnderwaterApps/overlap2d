@@ -98,6 +98,8 @@ public class ItemPhysicsEditor extends Group {
     private float timeAcc = 0;
     private Vector2 resVec;
 
+    private Color color;
+
     public ItemPhysicsEditor(float width, float height) {
         sandbox = Sandbox.getInstance();
         testBodiesToDestroy = new ArrayList();
@@ -108,6 +110,8 @@ public class ItemPhysicsEditor extends Group {
         verticesList = new ArrayList<Vector2>();
 
         vertices = new Vector2[0];
+
+        color = new Color(80f/255f, 146f/255f, 204f/255f, 1f);
 
         setListeners();
 
@@ -742,14 +746,14 @@ public class ItemPhysicsEditor extends Group {
     public void drawOutlines() {
         if (vertices.length > 0) {
             shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(0, 0, 0.7f, 1);
+            shapeRenderer.setColor(color);
             for (int i = 1; i < vertices.length; i++) {
                 if (lineIndex == i) {
                     shapeRenderer.setColor(selectedLineColor);
                 }
                 shapeRenderer.line(vertices[i], vertices[i - 1]);
                 if (lineIndex == i) {
-                    shapeRenderer.setColor(0, 0, 0.7f, 1);
+                    shapeRenderer.setColor(color);
                 }
             }
             if (currentMode == EditMode.Edit) {
