@@ -18,12 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+import org.apache.commons.lang3.math.NumberUtils;
 
 
 /**
@@ -58,6 +60,8 @@ public class PhysicsEditorDialog extends O2DDialog {
     private VisTextButton clearMeshButton;
     private VisTextButton createFreshCopyButton;
 
+    private Vector2 dialogStartPosition;
+
     public PhysicsEditorDialog() {
         super("Physics Editor");
         setModal(true);
@@ -76,6 +80,20 @@ public class PhysicsEditorDialog extends O2DDialog {
 
         add(mainTable);
         row();
+
+        dialogStartPosition = new Vector2(getX(), getY());
+    }
+
+    @Override
+    public void act(float delta) {
+        float diffX = dialogStartPosition.x - getX();
+        float diffY = dialogStartPosition.y - getY();
+        if (diffX != 0 || diffY != 0) {
+            itemPhysicsEditor.moveRenderer(diffX, diffY);
+            dialogStartPosition.x = getX();
+            dialogStartPosition.y = getY();
+        }
+        super.act(delta);
     }
 
     private void initSidePanel() {
@@ -200,155 +218,133 @@ public class PhysicsEditorDialog extends O2DDialog {
         itemPhysicsEditor.editItem(item);
     }
 
-    public VisSelectBox<String> getBodyTypeBox() {
-        return bodyTypeBox;
+    public String getBodyType() {
+        return bodyTypeBox.getSelected();
     }
 
-    public void setBodyTypeBox(VisSelectBox<String> bodyTypeBox) {
-        this.bodyTypeBox = bodyTypeBox;
+    public void setBodyType(String bodyType) {
+        bodyTypeBox.setSelected(bodyType);
     }
 
-    public VisValidableTextField getMassField() {
-        return massField;
+    public String getMass() {
+        return massField.getText();
     }
 
-    public void setMassField(VisValidableTextField massField) {
-        this.massField = massField;
+    public void setMass(String mass) {
+        massField.setText(mass);
     }
 
-    public VisValidableTextField getCenterOfMassXField() {
-        return centerOfMassXField;
+    public Vector2 getCenterOfMass() {
+        Vector2 centerOfMass = new Vector2(NumberUtils.toFloat(centerOfMassXField.getText()), NumberUtils.toFloat(centerOfMassYField.getText()));
+        return centerOfMass;
     }
 
-    public void setCenterOfMassXField(VisValidableTextField centerOfMassXField) {
-        this.centerOfMassXField = centerOfMassXField;
+    public void setCenterOfMass(Vector2 centerOfMass) {
+        centerOfMassXField.setText(centerOfMass.x + "");
+        centerOfMassYField.setText(centerOfMass.y + "");
     }
 
-    public VisValidableTextField getCenterOfMassYField() {
-        return centerOfMassYField;
+    public String getRotationalIntertia() {
+        return rotationalIntertiaField.getText();
     }
 
-    public void setCenterOfMassYField(VisValidableTextField centerOfMassYField) {
-        this.centerOfMassYField = centerOfMassYField;
+    public void setRotationalIntertia(String rotationalIntertia) {
+        rotationalIntertiaField.setText(rotationalIntertia);
     }
 
-    public VisValidableTextField getRotationalIntertiaField() {
-        return rotationalIntertiaField;
+    public String getDumping() {
+        return dumpingField.getText();
     }
 
-    public void setRotationalIntertiaField(VisValidableTextField rotationalIntertiaField) {
-        this.rotationalIntertiaField = rotationalIntertiaField;
+    public void setDumping(String dumping) {
+        dumpingField.setText(dumping);
     }
 
-    public VisValidableTextField getDumpingField() {
-        return dumpingField;
+    public String getGravityScale() {
+        return gravityScaleField.getText();
     }
 
-    public void setDumpingField(VisValidableTextField dumpingField) {
-        this.dumpingField = dumpingField;
+    public void setGravityScale(String gravityScale) {
+        this.gravityScaleField.setText(gravityScale);
     }
 
-    public VisValidableTextField getGravityScaleField() {
-        return gravityScaleField;
+    public String getDensity() {
+        return densityField.getText();
     }
 
-    public void setGravityScaleField(VisValidableTextField gravityScaleField) {
-        this.gravityScaleField = gravityScaleField;
+    public void setDensity(String density) {
+        densityField.setText(density);
     }
 
-    public VisValidableTextField getDensityField() {
-        return densityField;
+    public String getFriction() {
+        return frictionField.getText();
     }
 
-    public void setDensityField(VisValidableTextField densityField) {
-        this.densityField = densityField;
+    public void setFriction(String friction) {
+        frictionField.setText(friction);
     }
 
-    public VisValidableTextField getFrictionField() {
-        return frictionField;
+    public String getRestitution() {
+        return restitutionField.getText();
     }
 
-    public void setFrictionField(VisValidableTextField frictionField) {
-        this.frictionField = frictionField;
+    public void setRestitution(String restitution) {
+        restitutionField.setText(restitution);
     }
 
-    public VisValidableTextField getRestitutionField() {
-        return restitutionField;
+    public String getPoligonyze() {
+        return poligonyzerBox.getSelected();
     }
 
-    public void setRestitutionField(VisValidableTextField restitutionField) {
-        this.restitutionField = restitutionField;
+    public void setPoligonyzer(String poligonyzer) {
+        poligonyzerBox.setSelected(poligonyzer);
     }
 
-    public VisSelectBox<String> getPoligonyzerBox() {
-        return poligonyzerBox;
+    public String getHullTolerance() {
+        return hullToleranceField.getText();
     }
 
-    public void setPoligonyzerBox(VisSelectBox<String> poligonyzerBox) {
-        this.poligonyzerBox = poligonyzerBox;
+    public void setHullTolerance(String hullTolerance) {
+        hullToleranceField.setText(hullTolerance);
     }
 
-    public VisValidableTextField getHullToleranceField() {
-        return hullToleranceField;
+    public String getAlphaTolerance() {
+        return alphaToleranceField.getText();
     }
 
-    public void setHullToleranceField(VisValidableTextField hullToleranceField) {
-        this.hullToleranceField = hullToleranceField;
+    public void setAlphaTolerance(String alphaTolerance) {
+        alphaToleranceField.setText(alphaTolerance);
     }
 
-    public VisValidableTextField getAlphaToleranceField() {
-        return alphaToleranceField;
+    public boolean isMultiPartDetection() {
+        return multiPartDetectionBox.isChecked();
     }
 
-    public void setAlphaToleranceField(VisValidableTextField alphaToleranceField) {
-        this.alphaToleranceField = alphaToleranceField;
+    public void setMultiPartDetection(boolean isMultiPartDetection) {
+        multiPartDetectionBox.setChecked(isMultiPartDetection);
     }
 
-    public VisCheckBox getMultiPartDetectionBox() {
-        return multiPartDetectionBox;
+    public boolean isHoleDetection() {
+        return holeDetectionBox.isChecked();
     }
 
-    public void setMultiPartDetectionBox(VisCheckBox multiPartDetectionBox) {
-        this.multiPartDetectionBox = multiPartDetectionBox;
-    }
-
-    public VisCheckBox getHoleDetectionBox() {
-        return holeDetectionBox;
-    }
-
-    public void setHoleDetectionBox(VisCheckBox holeDetectionBox) {
-        this.holeDetectionBox = holeDetectionBox;
+    public void setHoleDetection(boolean isHoleDetection) {
+        holeDetectionBox.setChecked(isHoleDetection);
     }
 
     public VisTextButton getRetraceButton() {
         return retraceButton;
     }
 
-    public void setRetraceButton(VisTextButton retraceButton) {
-        this.retraceButton = retraceButton;
-    }
-
     public VisTextButton getClearMeshButton() {
         return clearMeshButton;
-    }
-
-    public void setClearMeshButton(VisTextButton clearMeshButton) {
-        this.clearMeshButton = clearMeshButton;
     }
 
     public VisTextButton getCreateFreshCopyButton() {
         return createFreshCopyButton;
     }
 
-    public void setCreateFreshCopyButton(VisTextButton createFreshCopyButton) {
-        this.createFreshCopyButton = createFreshCopyButton;
-    }
-
     public ItemPhysicsEditor getItemPhysicsEditor() {
         return itemPhysicsEditor;
-    }
-
-    public void setItemPhysicsEditor(ItemPhysicsEditor itemPhysicsEditor) {
-        this.itemPhysicsEditor = itemPhysicsEditor;
     }
 }
