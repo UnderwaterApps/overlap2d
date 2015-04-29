@@ -688,7 +688,9 @@ public class ItemPhysicsEditor extends Group {
     public void draw(Batch batch, float parentAlpha) {
         //super.draw(batch, parentAlpha);
 
-        if (isTransform()) applyTransform(batch, computeTransform());
+        if (isTransform()) {
+            applyTransform(batch, computeTransform());
+        }
         Rectangle calculatedScissorBounds = Pools.obtain(Rectangle.class);
         getStage().calculateScissors(new Rectangle(0, 0, getWidth(), getHeight()), calculatedScissorBounds);
         // Enable scissors.

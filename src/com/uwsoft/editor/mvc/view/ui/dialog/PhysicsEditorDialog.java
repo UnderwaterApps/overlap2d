@@ -38,6 +38,7 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     private VisSelectBox<String> bodyTypeBox;
     private VisValidableTextField massField;
+
     private VisValidableTextField centerOfMassXField;
     private VisValidableTextField centerOfMassYField;
     private VisValidableTextField rotationalIntertiaField;
@@ -56,7 +57,6 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     private VisTextButton clearMeshButton;
     private VisTextButton createFreshCopyButton;
-    private IBaseItem item;
 
     public PhysicsEditorDialog() {
         super("Physics Editor");
@@ -198,5 +198,157 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     public void setItem(IBaseItem item) {
         itemPhysicsEditor.editItem(item);
+    }
+
+    public VisSelectBox<String> getBodyTypeBox() {
+        return bodyTypeBox;
+    }
+
+    public void setBodyTypeBox(VisSelectBox<String> bodyTypeBox) {
+        this.bodyTypeBox = bodyTypeBox;
+    }
+
+    public VisValidableTextField getMassField() {
+        return massField;
+    }
+
+    public void setMassField(VisValidableTextField massField) {
+        this.massField = massField;
+    }
+
+    public VisValidableTextField getCenterOfMassXField() {
+        return centerOfMassXField;
+    }
+
+    public void setCenterOfMassXField(VisValidableTextField centerOfMassXField) {
+        this.centerOfMassXField = centerOfMassXField;
+    }
+
+    public VisValidableTextField getCenterOfMassYField() {
+        return centerOfMassYField;
+    }
+
+    public void setCenterOfMassYField(VisValidableTextField centerOfMassYField) {
+        this.centerOfMassYField = centerOfMassYField;
+    }
+
+    public VisValidableTextField getRotationalIntertiaField() {
+        return rotationalIntertiaField;
+    }
+
+    public void setRotationalIntertiaField(VisValidableTextField rotationalIntertiaField) {
+        this.rotationalIntertiaField = rotationalIntertiaField;
+    }
+
+    public VisValidableTextField getDumpingField() {
+        return dumpingField;
+    }
+
+    public void setDumpingField(VisValidableTextField dumpingField) {
+        this.dumpingField = dumpingField;
+    }
+
+    public VisValidableTextField getGravityScaleField() {
+        return gravityScaleField;
+    }
+
+    public void setGravityScaleField(VisValidableTextField gravityScaleField) {
+        this.gravityScaleField = gravityScaleField;
+    }
+
+    public VisValidableTextField getDensityField() {
+        return densityField;
+    }
+
+    public void setDensityField(VisValidableTextField densityField) {
+        this.densityField = densityField;
+    }
+
+    public VisValidableTextField getFrictionField() {
+        return frictionField;
+    }
+
+    public void setFrictionField(VisValidableTextField frictionField) {
+        this.frictionField = frictionField;
+    }
+
+    public VisValidableTextField getRestitutionField() {
+        return restitutionField;
+    }
+
+    public void setRestitutionField(VisValidableTextField restitutionField) {
+        this.restitutionField = restitutionField;
+    }
+
+    public VisSelectBox<String> getPoligonyzerBox() {
+        return poligonyzerBox;
+    }
+
+    public void setPoligonyzerBox(VisSelectBox<String> poligonyzerBox) {
+        this.poligonyzerBox = poligonyzerBox;
+    }
+
+    public VisValidableTextField getHullToleranceField() {
+        return hullToleranceField;
+    }
+
+    public void setHullToleranceField(VisValidableTextField hullToleranceField) {
+        this.hullToleranceField = hullToleranceField;
+    }
+
+    public VisValidableTextField getAlphaToleranceField() {
+        return alphaToleranceField;
+    }
+
+    public void setAlphaToleranceField(VisValidableTextField alphaToleranceField) {
+        this.alphaToleranceField = alphaToleranceField;
+    }
+
+    public VisCheckBox getMultiPartDetectionBox() {
+        return multiPartDetectionBox;
+    }
+
+    public void setMultiPartDetectionBox(VisCheckBox multiPartDetectionBox) {
+        this.multiPartDetectionBox = multiPartDetectionBox;
+    }
+
+    public VisCheckBox getHoleDetectionBox() {
+        return holeDetectionBox;
+    }
+
+    public void setHoleDetectionBox(VisCheckBox holeDetectionBox) {
+        this.holeDetectionBox = holeDetectionBox;
+    }
+
+    public VisTextButton getRetraceButton() {
+        return retraceButton;
+    }
+
+    public void setRetraceButton(VisTextButton retraceButton) {
+        this.retraceButton = retraceButton;
+    }
+
+    public VisTextButton getClearMeshButton() {
+        return clearMeshButton;
+    }
+
+    public void setClearMeshButton(VisTextButton clearMeshButton) {
+        this.clearMeshButton = clearMeshButton;
+    }
+
+    public VisTextButton getCreateFreshCopyButton() {
+        return createFreshCopyButton;
+    }
+
+    public void setCreateFreshCopyButton(VisTextButton createFreshCopyButton) {
+        this.createFreshCopyButton = createFreshCopyButton;
+    }
+
+    public ItemPhysicsEditor getItemPhysicsEditor() {
+        return itemPhysicsEditor;
+    }
+
+    public void setItemPhysicsEditor(ItemPhysicsEditor itemPhysicsEditor) {
+        this.itemPhysicsEditor = itemPhysicsEditor;
     }
 }
