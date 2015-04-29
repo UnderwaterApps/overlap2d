@@ -96,7 +96,7 @@ public class ItemPhysicsEditor extends Group {
     private IBaseItem currentItem;
     private Actor currentActor;
     private float timeAcc = 0;
-    private Vector2 resVec;
+    public Vector2 resVec;
 
     private Color color;
 
@@ -124,13 +124,6 @@ public class ItemPhysicsEditor extends Group {
         stage = Sandbox.getInstance().getUIStage();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
-    }
-
-    public void init() {
-
-
-        resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
-
     }
 
     public void startTest() {
@@ -354,6 +347,8 @@ public class ItemPhysicsEditor extends Group {
     }
 
     public void save() {
+        World world = Sandbox.getInstance().getSandboxStage().getWorld();
+
         ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
         if (assetName != null && !assetName.isEmpty()) {
@@ -404,10 +399,10 @@ public class ItemPhysicsEditor extends Group {
 
             if (mesh != null) {
                 if (originalItem.getBody() != null) {
-                    stage.sandboxStage.getWorld().destroyBody(originalItem.getBody());
+                    world.destroyBody(originalItem.getBody());
                 }
                 currentItem.getDataVO().physicsBodyData = new PhysicsBodyDataVO(physicsBodyDataVO);
-                originalItem.setBody(PhysicsBodyLoader.createBody(stage.sandboxStage.getWorld(), physicsBodyDataVO, mesh, resVec));
+                originalItem.setBody(PhysicsBodyLoader.createBody(world, physicsBodyDataVO, mesh, resVec));
                 originalItem.getBody().setTransform(currentItem.getDataVO().x * PhysicsBodyLoader.SCALE, currentItem.getDataVO().y * PhysicsBodyLoader.SCALE, (float) Math.toRadians(currentItem.getDataVO().rotation));
             }
 

@@ -19,10 +19,13 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
@@ -36,7 +39,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     public static final String NAME = TAG;
 
     private IBaseItem currentItem;
-    private PhysicsBodyDataVO currentPhysicsDataVO;
+
 
     public PhysicsEditorDialogMediator() {
         super(NAME, new PhysicsEditorDialog());
@@ -51,7 +54,12 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Sandbox.ACTION_EDIT_PHYSICS
+                SceneDataManager.SCENE_LOADED,
+                Sandbox.ACTION_EDIT_PHYSICS,
+                PhysicsEditorDialog.CLEAR_MESH_CLICKED,
+                PhysicsEditorDialog.CREATE_FRESH_COPY_CLICKED,
+                PhysicsEditorDialog.RETRACE_CLICKED,
+                PhysicsEditorDialog.SAVE_CLICKED
         };
     }
 
@@ -60,8 +68,16 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         super.handleNotification(notification);
 
         switch (notification.getName()) {
+            case SceneDataManager.SCENE_LOADED:
+                Sandbox sandbox = Sandbox.getInstance();
+                viewComponent.getItemPhysicsEditor().resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
+                break;
             case Sandbox.ACTION_EDIT_PHYSICS:
                 setItem((IBaseItem) notification.getBody());
+                break;
+            case PhysicsEditorDialog.SAVE_CLICKED:
+                collectData();
+                viewComponent.getItemPhysicsEditor().save();
                 break;
             default:
                 break;
@@ -69,13 +85,9 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
 
     }
 
-    public void setVariables() {
-
-        if (currentItem.getDataVO().physicsBodyData != null) {
-            currentPhysicsDataVO = new PhysicsBodyDataVO(currentItem.getDataVO().physicsBodyData);
-        } else {
-            currentPhysicsDataVO = new PhysicsBodyDataVO();
-        }
+    public void setData() {
+        ItemPhysicsEditor itemPhysicsEditor = viewComponent.getItemPhysicsEditor();
+        PhysicsBodyDataVO currentPhysicsDataVO = itemPhysicsEditor.physicsBodyDataVO;
 
         viewComponent.setBodyType(currentPhysicsDataVO.bodyType);
         viewComponent.setMass(String.valueOf(currentPhysicsDataVO.mass));
@@ -94,24 +106,29 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         viewComponent.setAlphaTolerance("128");
         viewComponent.setMultiPartDetection(false);
         viewComponent.setHoleDetection(false);
-        /*
-        massVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.mass));
-        centerOfMassXVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.x));
-        centerOfMassYVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.y));
-        rotationalInertiaVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.rotationalInertia));
-        dampingVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.damping));
-        gravityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.gravityScale));
-        densityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.density));
-        frictionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.friction));
-        restitutionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.restitution));
-        allowSleepVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.allowSleep);
-        awakeVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.awake);
-        bulletVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.bullet);
-        polygonizerVal.setSelectedIndex(0);
-        hullToleranceVal.setText(String.valueOf(2.5f));
-        alphaToleranceVal.setText(String.valueOf(128));
-        multiPartDetectionVal.setChecked(false);
-        holeDetectionVal.setChecked(false);*/
+    }
+
+    private void collectData() {
+        ItemPhysicsEditor itemPhysicsEditor = viewComponent.getItemPhysicsEditor();
+        if (viewComponent.getBodyType().equals("STATIC")) {
+            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.StaticBody.getValue();
+        } else if (viewComponent.getBodyType().equals("KINEMATIC")) {
+            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.KinematicBody.getValue();
+        } else {
+            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.DynamicBody.getValue();
+        }
+
+        itemPhysicsEditor.physicsBodyDataVO.mass = Float.parseFloat(viewComponent.getMass());
+        itemPhysicsEditor.physicsBodyDataVO.centerOfMass = new Vector2(viewComponent.getCenterOfMass());
+        itemPhysicsEditor.physicsBodyDataVO.rotationalInertia = Float.parseFloat(viewComponent.getRotationalIntertia());
+        itemPhysicsEditor.physicsBodyDataVO.damping = Float.parseFloat(viewComponent.getDumping());
+        itemPhysicsEditor.physicsBodyDataVO.gravityScale = Float.parseFloat(viewComponent.getGravityScale());
+        itemPhysicsEditor.physicsBodyDataVO.density = Float.parseFloat(viewComponent.getDensity());
+        itemPhysicsEditor.physicsBodyDataVO.friction = Float.parseFloat(viewComponent.getFriction());
+        itemPhysicsEditor.physicsBodyDataVO.restitution = Float.parseFloat(viewComponent.getRestitution());
+        itemPhysicsEditor.physicsBodyDataVO.allowSleep = !itemPhysicsEditor.physicsBodyDataVO.allowSleep;
+        itemPhysicsEditor.physicsBodyDataVO.awake = !itemPhysicsEditor.physicsBodyDataVO.awake;
+        itemPhysicsEditor.physicsBodyDataVO.bullet = !itemPhysicsEditor.physicsBodyDataVO.bullet;
     }
 
     public void setItem(IBaseItem item) {
@@ -125,7 +142,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         viewComponent.getCreateFreshCopyButton().setDisabled(false);
 
         viewComponent.setItem(duplicateItem(item));
-        setVariables();
+        setData();
     }
 
     public void setItem(String asset) {

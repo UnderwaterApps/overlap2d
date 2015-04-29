@@ -19,11 +19,13 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
+import com.uwsoft.editor.mvc.event.ClickNotifier;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -32,6 +34,12 @@ import org.apache.commons.lang3.math.NumberUtils;
  * Created by azakhary on 4/28/2015.
  */
 public class PhysicsEditorDialog extends O2DDialog {
+
+    public static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.dialog.PhysicsEditorDialog";
+    public static final String SAVE_CLICKED = PREFIX + ".SAVE_CLICKED";
+    public static final String RETRACE_CLICKED = PREFIX + ".RETRACE_CLICKED";
+    public static final String CLEAR_MESH_CLICKED = PREFIX + ".CLEAR_MESH_CLICKED";
+    public static final String CREATE_FRESH_COPY_CLICKED = PREFIX + ".CREATE_FRESH_COPY_CLICKED";
 
     private VisTable mainTable;
     private VisTable controlsTable;
@@ -52,6 +60,7 @@ public class PhysicsEditorDialog extends O2DDialog {
     private VisCheckBox allowSleepBox;
     private VisCheckBox awakeBox;
     private VisCheckBox bulletBox;
+    private VisTextButton saveButton;
 
     private VisSelectBox<String> poligonyzerBox;
     private VisValidableTextField hullToleranceField;
@@ -105,9 +114,17 @@ public class PhysicsEditorDialog extends O2DDialog {
         initMeshUI();
         initRetraceUI();
 
+        initListeners();
     }
 
-    public void initPropertiesUI() {
+    private void initListeners() {
+        saveButton.addListener(new ClickNotifier(SAVE_CLICKED));
+        retraceButton.addListener(new ClickNotifier(RETRACE_CLICKED));
+        clearMeshButton.addListener(new ClickNotifier(CLEAR_MESH_CLICKED));
+        createFreshCopyButton.addListener(new ClickNotifier(CREATE_FRESH_COPY_CLICKED));
+    }
+
+    private void initPropertiesUI() {
 
         bodyTypeBox = new VisSelectBox<>("white");
         Array<String> types = new Array<>();
@@ -130,6 +147,7 @@ public class PhysicsEditorDialog extends O2DDialog {
         allowSleepBox = new VisCheckBox("Allow Sleep");
         awakeBox = new VisCheckBox("Awake");
         bulletBox = new VisCheckBox("Bullet");
+        saveButton = new VisTextButton("Save");
 
         controlsTable.add(new VisLabel("Body type:", Align.right)).padRight(5).colspan(2).fillX();
         controlsTable.add(bodyTypeBox).width(120).colspan(2);
@@ -172,11 +190,14 @@ public class PhysicsEditorDialog extends O2DDialog {
         bottomTable.add(allowSleepBox);
         bottomTable.add(awakeBox);
         bottomTable.add(bulletBox);
-        controlsTable.add(bottomTable).padBottom(20).colspan(4);
+        controlsTable.add(bottomTable).padBottom(5).colspan(4);
+        controlsTable.row().padTop(5);
+
+        controlsTable.add(saveButton).colspan(4).right().padBottom(20);
         controlsTable.row().padTop(5);
     }
 
-    public void initRetraceUI() {
+    private void initRetraceUI() {
         poligonyzerBox = new VisSelectBox<>("white");
         Array<String> types = new Array<>();
         types.add("BAYAZIT");
@@ -216,7 +237,7 @@ public class PhysicsEditorDialog extends O2DDialog {
         controlsTable.row().padTop(5);
     }
 
-    public void initMeshUI() {
+    private void initMeshUI() {
         clearMeshButton = new VisTextButton("Clear Mesh");
         createFreshCopyButton = new VisTextButton("Create Fresh Copy");
 
@@ -351,6 +372,10 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     public VisTextButton getRetraceButton() {
         return retraceButton;
+    }
+
+    public VisTextButton getSaveButton() {
+        return saveButton;
     }
 
     public VisTextButton getClearMeshButton() {
