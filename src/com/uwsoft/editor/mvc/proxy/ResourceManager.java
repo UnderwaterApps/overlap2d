@@ -211,7 +211,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             SceneVO scene = getSceneVO(getProjectVO().scenes.get(i).sceneName);
             CompositeVO composite = scene.composite;
             if (composite == null) {
-                break;
+                continue;
             }
             FontSizePair[] fonts = composite.getRecursiveFontList();
             for (CompositeItemVO library : getProjectVO().scenes.get(i).libraryItems.values()) {
