@@ -81,15 +81,15 @@ public class UIStage extends Stage {
 
 
     public void editPhysics(String assetName) {
-        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-        addActor(dlg);
-        dlg.editAsset(assetName);
+        //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+        //addActor(dlg);
+        //dlg.editAsset(assetName);
     }
 
     public void editPhysics(IBaseItem item) {
-        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-        addActor(dlg);
-        dlg.editItem(item);
+        //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+        //addActor(dlg);
+        //dlg.editItem(item);
     }
 
     public void setKeyboardFocus() {

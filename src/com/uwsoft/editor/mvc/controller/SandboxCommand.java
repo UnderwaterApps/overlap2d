@@ -18,17 +18,19 @@
 
 package com.uwsoft.editor.mvc.controller;
 
-import com.puremvc.patterns.command.MacroCommand;
+import com.puremvc.patterns.command.SimpleCommand;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
- * Created by sargis on 3/30/15.
+ * Created by azakhary on 4/28/2015.
  */
-public class StartupCommand extends MacroCommand {
-    @Override
-    protected void initializeMacroCommand() {
-        super.initializeMacroCommand();
-        addSubCommand(BootstrapProxyCommand.class);
-        addSubCommand(BootstrapViewCommand.class);
-        addSubCommand(BootstrapCommand.class);
+public class SandboxCommand extends SimpleCommand {
+
+    protected Sandbox sandbox;
+
+    public SandboxCommand() {
+        sandbox = Sandbox.getInstance();
+        facade = Overlap2DFacade.getInstance();
     }
 }

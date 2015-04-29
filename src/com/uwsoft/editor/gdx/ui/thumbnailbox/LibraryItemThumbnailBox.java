@@ -24,6 +24,7 @@ import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
@@ -96,5 +97,10 @@ public class LibraryItemThumbnailBox extends DraggableThumbnailBox {
 
     public CompositeItemVO getCompositeItemVO() {
         return compositeItemVO;
+    }
+
+    @Override
+    protected void showRightClickDropDown() {
+        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK, key);
     }
 }

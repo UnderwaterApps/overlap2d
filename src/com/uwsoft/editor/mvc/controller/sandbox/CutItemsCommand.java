@@ -16,19 +16,23 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.controller;
+package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.command.MacroCommand;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+
+import java.util.ArrayList;
 
 /**
- * Created by sargis on 3/30/15.
+ * Created by azakhary on 4/28/2015.
  */
-public class StartupCommand extends MacroCommand {
+public class CutItemsCommand extends SandboxCommand {
+
     @Override
-    protected void initializeMacroCommand() {
-        super.initializeMacroCommand();
-        addSubCommand(BootstrapProxyCommand.class);
-        addSubCommand(BootstrapViewCommand.class);
-        addSubCommand(BootstrapCommand.class);
+    public void execute(Notification notification) {
+        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
+        sandbox.putItemsToClipboard(items);
+        sandbox.getSelector().removeCurrentSelectedItems();
     }
 }

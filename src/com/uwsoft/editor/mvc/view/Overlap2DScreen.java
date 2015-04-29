@@ -110,19 +110,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
         if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
             switch (keycode) {
-                case Input.Keys.X:
-                    sandbox.getUac().cutAction();
-                    break;
-                case Input.Keys.C:
-                    sandbox.getUac().copyAction();
-                    break;
-                case Input.Keys.V:
-                    try {
-                        sandbox.getUac().pasteAction(0, 0, false);
-                    } catch (Exception e) {
-                        //TODO: need to be fixed!
-                    }
-                    break;
                 case Input.Keys.Z:
                     sandbox.getUac().undo();
                     break;

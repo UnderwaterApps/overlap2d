@@ -24,7 +24,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -139,17 +139,13 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                     facade.sendNotification(Overlap2D.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
-                    sandbox.getUac().cutAction();
+                    facade.sendNotification(Sandbox.ACTION_CUT);
                 }
                 if (keycode == Input.Keys.C) {
-                    sandbox.getUac().copyAction();
+                    facade.sendNotification(Sandbox.ACTION_COPY);
                 }
                 if (keycode == Input.Keys.V) {
-                    try {
-                        sandbox.getUac().pasteAction(0, 0, false);
-                    } catch (Exception e) {
-                        //TODO: need to be fixed!
-                    }
+                    facade.sendNotification(Sandbox.ACTION_PASTE);
                 }
                 if (keycode == Input.Keys.Z) {
                     sandbox.getUac().undo();
@@ -193,7 +189,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // Delete
             if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-                sandbox.getUac().deleteAction();
+                facade.sendNotification(Sandbox.ACTION_DELETE);
             }
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly
@@ -280,7 +276,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 sandbox.getSelector().clearSelections();
 
                 // show default dropdown
-                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(event.getStageX(), event.getStageY()));
 
                 return;
             }

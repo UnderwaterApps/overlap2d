@@ -123,7 +123,7 @@ public class SandboxInputAdapter {
 
         if (button == Input.Buttons.RIGHT) {
             // if right clicked on an item, drop down for current selection
-            facade.sendNotification(Overlap2D.ITEM_RIGHT_CLICK, new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY()));
+            facade.sendNotification(Overlap2D.ITEM_RIGHT_CLICK);
         }
 
         // re-show all selection rectangles as clicking/dragging is finished

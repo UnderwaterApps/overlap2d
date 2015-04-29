@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
 
 import java.util.HashMap;
@@ -37,17 +38,8 @@ public class UIDropDownMenu extends PopupMenu {
 
     private static final String CLASS_NAME = "com.uwsoft.editor.mvc.view.ui.UIDropDownMenu";
 
-    public static final String ACTION_GROUP_ITEMS = "ACTION_GROUP_ITEMS";
-    public static final String ACTION_EDIT_COMPOSITE = "ACTION_EDIT_COMPOSITE";
-    public static final String ACTION_CONVERT_TO_BUTTON = "ACTION_CONVERT_TO_BUTTON";
-    public static final String ACTION_CUT = "ACTION_CUT";
-    public static final String ACTION_COPY = "ACTION_COPY";
-    public static final String ACTION_PASTE = "ACTION_PASTE";
-    public static final String ACTION_DELETE = "ACTION_DELETE";
-    public static final String ACTION_ADD_TO_LIBRARY = "ACTION_ADD_TO_LIBRARY";
-    public static final String ACTION_EDIT_PHYSICS = "ACTION_EDIT_PHYSICS";
-    public static final String ACTION_EDIT_ASSET_PHYSICS = "ACTION_EDIT_ASSET_PHYSICS";
-    public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = "ACTION_SET_GRID_SIZE_FROM_ITEM";
+
+    public static final String ACTION_EDIT_RESOURCE_PHYSICS = CLASS_NAME + "ACTION_EDIT_RESOURCE_PHYSICS";
 
     public static final String ITEM_CLICKED = CLASS_NAME + ".ACTION_CLICKED";
 
@@ -56,17 +48,18 @@ public class UIDropDownMenu extends PopupMenu {
     private HashMap<String, String> actionNames = new HashMap<>();
 
     public UIDropDownMenu() {
-        actionNames.put(ACTION_GROUP_ITEMS, "Convert into composite");
-        actionNames.put(ACTION_EDIT_COMPOSITE, "Edit composite");
-        actionNames.put(ACTION_CONVERT_TO_BUTTON, "Convert to button");
-        actionNames.put(ACTION_CUT, "Cut");
-        actionNames.put(ACTION_COPY, "Copy");
-        actionNames.put(ACTION_PASTE, "Paste");
-        actionNames.put(ACTION_DELETE, "Delete");
-        actionNames.put(ACTION_ADD_TO_LIBRARY, "Add to library");
-        actionNames.put(ACTION_EDIT_PHYSICS, "Edit physics");
-        actionNames.put(ACTION_EDIT_ASSET_PHYSICS, "Edit physics");
-        actionNames.put(ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
+        actionNames.put(Sandbox.ACTION_GROUP_ITEMS, "Convert into composite");
+        actionNames.put(Sandbox.ACTION_EDIT_COMPOSITE, "Edit composite");
+        actionNames.put(Sandbox.ACTION_CONVERT_TO_BUTTON, "Convert to button");
+        actionNames.put(Sandbox.ACTION_CUT, "Cut");
+        actionNames.put(Sandbox.ACTION_COPY, "Copy");
+        actionNames.put(Sandbox.ACTION_PASTE, "Paste");
+        actionNames.put(Sandbox.ACTION_DELETE, "Delete");
+        actionNames.put(Sandbox.ACTION_ADD_TO_LIBRARY, "Add to library");
+        actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
+        actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
+        actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
+        //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
 
     }
 
@@ -90,9 +83,5 @@ public class UIDropDownMenu extends PopupMenu {
             MenuItem menuItem = new MenuItem(itemName, new MenuItemListener(ITEM_CLICKED, currentActionList.get(i)));
             addItem(menuItem);
         }
-
-        addListener(new ClickListener() {
-
-        });
     }
 }

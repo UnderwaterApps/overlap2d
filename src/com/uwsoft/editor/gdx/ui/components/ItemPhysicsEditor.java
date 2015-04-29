@@ -98,16 +98,13 @@ public class ItemPhysicsEditor extends Group {
     private float timeAcc = 0;
     private Vector2 resVec;
 
-    public ItemPhysicsEditor(UIStage s, float width, float height) {
-        this.stage = s;
+    public ItemPhysicsEditor(float width, float height) {
         sandbox = Sandbox.getInstance();
         testBodiesToDestroy = new ArrayList();
         edgBodyList = new ArrayList<>();
         setWidth(width);
         setHeight(height);
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(s.getCamera().combined);
         verticesList = new ArrayList<Vector2>();
 
         vertices = new Vector2[0];
@@ -116,9 +113,20 @@ public class ItemPhysicsEditor extends Group {
 
         currentMode = EditMode.Create;
         box2dRenderer = new Box2DDebugRenderer();
-        resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
+
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
+
+        stage = Sandbox.getInstance().getUIStage();
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
+    }
+
+    public void init() {
+
+
+        resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
+
     }
 
     public void startTest() {

@@ -89,6 +89,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
         classToMediatorMap.put(LightActor.class.getName(), new ArrayList<>());
         classToMediatorMap.get(LightActor.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get(LightActor.class.getName()).add(UILightItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);

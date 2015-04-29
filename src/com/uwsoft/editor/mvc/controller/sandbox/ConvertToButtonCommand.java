@@ -16,19 +16,25 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.controller;
+package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.command.MacroCommand;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
- * Created by sargis on 3/30/15.
+ * Created by azakhary on 4/28/2015.
  */
-public class StartupCommand extends MacroCommand {
+public class ConvertToButtonCommand extends SandboxCommand {
+
     @Override
-    protected void initializeMacroCommand() {
-        super.initializeMacroCommand();
-        addSubCommand(BootstrapProxyCommand.class);
-        addSubCommand(BootstrapViewCommand.class);
-        addSubCommand(BootstrapCommand.class);
+    public void execute(Notification notification) {
+        CompositeItem btn = sandbox.getItemFactory().groupItemsIntoComposite();
+        btn.getDataVO().composite.layers.add(new LayerItemVO("normal"));
+        btn.getDataVO().composite.layers.add(new LayerItemVO("pressed"));
+        btn.reAssembleLayers();
+
+        sandbox.saveSceneCurrentSceneData();
     }
 }

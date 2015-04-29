@@ -110,13 +110,13 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case Overlap2DMenuBar.CUT:
-                sandbox.getUac().cutAction();
+                facade.sendNotification(Sandbox.ACTION_CUT);
                 break;
             case Overlap2DMenuBar.COPY:
-                sandbox.getUac().copyAction();
+                facade.sendNotification(Sandbox.ACTION_COPY);
                 break;
             case Overlap2DMenuBar.PAST:
-                sandbox.getUac().pasteAction(0, 0, false);
+                facade.sendNotification(Sandbox.ACTION_PASTE);
                 break;
             case Overlap2DMenuBar.UNDO:
                 sandbox.getUac().undo();
