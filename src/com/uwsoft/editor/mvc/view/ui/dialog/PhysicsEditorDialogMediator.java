@@ -69,6 +69,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         UIStage uiStage = sandbox.getUIStage();
 
         viewComponent.show(uiStage);
+        viewComponent.setItem(item);
     }
 
     public void show(String asset) {

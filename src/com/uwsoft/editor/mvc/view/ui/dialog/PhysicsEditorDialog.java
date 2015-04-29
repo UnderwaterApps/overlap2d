@@ -23,6 +23,7 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 
 /**
@@ -55,6 +56,7 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     private VisTextButton clearMeshButton;
     private VisTextButton createFreshCopyButton;
+    private IBaseItem item;
 
     public PhysicsEditorDialog() {
         super("Physics Editor");
@@ -192,5 +194,9 @@ public class PhysicsEditorDialog extends O2DDialog {
         controlsTable.add(clearMeshButton).padRight(5).colspan(2);
         controlsTable.add(createFreshCopyButton).padRight(5).colspan(2);
         controlsTable.row().padBottom(20);
+    }
+
+    public void setItem(IBaseItem item) {
+        itemPhysicsEditor.editItem(item);
     }
 }
