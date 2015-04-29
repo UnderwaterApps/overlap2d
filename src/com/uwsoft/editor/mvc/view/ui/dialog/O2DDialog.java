@@ -51,6 +51,10 @@ public class O2DDialog extends VisDialog {
         });
     }
 
+    protected VisTextField createTextField() {
+        return new VisTextField("", "light");
+    }
+
     protected VisTextField createTextField(String text) {
         return new VisTextField(text, "light");
     }
@@ -65,6 +69,11 @@ public class O2DDialog extends VisDialog {
         VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
         visTextField.setText(text);
         visTextField.setStyle(skin.get("light", VisTextField.VisTextFieldStyle.class));
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
         return visTextField;
     }
 

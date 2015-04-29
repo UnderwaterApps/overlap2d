@@ -109,7 +109,7 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     public void initPropertiesUI() {
 
-        bodyTypeBox = new VisSelectBox<>();
+        bodyTypeBox = new VisSelectBox<>("white");
         Array<String> types = new Array<>();
         types.add("STATIC");
         types.add("KINEMATIC");
@@ -118,15 +118,15 @@ public class PhysicsEditorDialog extends O2DDialog {
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
-        massField = new VisValidableTextField(floatValidator);
-        centerOfMassXField = new VisValidableTextField(floatValidator);
-        centerOfMassYField = new VisValidableTextField(floatValidator);
-        rotationalIntertiaField = new VisValidableTextField(floatValidator);
-        dumpingField = new VisValidableTextField(floatValidator);
-        gravityScaleField = new VisValidableTextField(floatValidator);
-        densityField = new VisValidableTextField(floatValidator);
-        frictionField = new VisValidableTextField(floatValidator);
-        restitutionField = new VisValidableTextField(floatValidator);
+        massField = createValidableTextField(floatValidator);
+        centerOfMassXField = createValidableTextField(floatValidator);
+        centerOfMassYField = createValidableTextField(floatValidator);
+        rotationalIntertiaField = createValidableTextField(floatValidator);
+        dumpingField = createValidableTextField(floatValidator);
+        gravityScaleField = createValidableTextField(floatValidator);
+        densityField = createValidableTextField(floatValidator);
+        frictionField = createValidableTextField(floatValidator);
+        restitutionField = createValidableTextField(floatValidator);
         allowSleepBox = new VisCheckBox("Allow Sleep");
         awakeBox = new VisCheckBox("Awake");
         bulletBox = new VisCheckBox("Bullet");
@@ -177,7 +177,7 @@ public class PhysicsEditorDialog extends O2DDialog {
     }
 
     public void initRetraceUI() {
-        poligonyzerBox = new VisSelectBox<>();
+        poligonyzerBox = new VisSelectBox<>("white");
         Array<String> types = new Array<>();
         types.add("BAYAZIT");
         types.add("EWJORDAN");
@@ -185,8 +185,8 @@ public class PhysicsEditorDialog extends O2DDialog {
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
-        hullToleranceField = new VisValidableTextField(floatValidator);
-        alphaToleranceField = new VisValidableTextField(floatValidator);
+        hullToleranceField = createValidableTextField(floatValidator);
+        alphaToleranceField = createValidableTextField(floatValidator);
         multiPartDetectionBox = new VisCheckBox(null);
         holeDetectionBox = new VisCheckBox(null);
         retraceButton = new VisTextButton("Retrace");
