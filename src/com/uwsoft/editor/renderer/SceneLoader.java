@@ -1,6 +1,6 @@
 package com.uwsoft.editor.renderer;
 
-import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -12,8 +12,12 @@ import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntitySystem;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Animation.PlayMode;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
@@ -22,21 +26,32 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brashmonkey.spriter.Player;
 import com.brashmonkey.spriter.SCMLReader;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
+import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.BoneData;
+import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonJson;
+import com.esotericsoftware.spine.Slot;
+import com.esotericsoftware.spine.attachments.Attachment;
+import com.esotericsoftware.spine.attachments.RegionAttachment;
 import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.LayerMapComponent;
-import com.uwsoft.editor.renderer.conponents.ZindexComponent;
 import com.uwsoft.editor.renderer.conponents.MainItemComponent;
 import com.uwsoft.editor.renderer.conponents.NodeComponent;
 import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
 import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
 import com.uwsoft.editor.renderer.conponents.TintComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.renderer.conponents.ZindexComponent;
 import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
 import com.uwsoft.editor.renderer.conponents.physics.MeshComponont;
@@ -60,12 +75,11 @@ import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
-import com.uwsoft.editor.renderer.spine.SpineDataHelper;
-import com.uwsoft.editor.renderer.spine.SpineReflectionHelper;
 import com.uwsoft.editor.renderer.systems.LayerSystem;
 import com.uwsoft.editor.renderer.systems.LightSystem;
 import com.uwsoft.editor.renderer.systems.ParticleSystem;
 import com.uwsoft.editor.renderer.systems.PhysicsSystem;
+import com.uwsoft.editor.renderer.systems.SpineSystem;
 import com.uwsoft.editor.renderer.systems.SpriteAnimationSystem;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
 import com.uwsoft.editor.renderer.utils.LibGdxLoader;
@@ -84,21 +98,19 @@ public class SceneLoader {
 	private SceneVO sceneVO;
 	private ResourceManager rm = null;
 	private ComponentMapper<NodeComponent> nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
-	public long rootID = -1;
 	public Engine engine = null;
 	public RayHandler rayHandler;
 	public World world;
-	public SpineReflectionHelper spineReflectionHelper;
 
 	/**
 	 * Empty constructor is intended for easy use, it will create default
 	 * ResourceManager, and load all possible resources into memory that have
 	 * been exported with editor
 	 */
-	public SceneLoader() {
+	public SceneLoader(Engine engine) {
+		this.engine = engine;
 		rm = new ResourceManager();
 		rm.initAllResources();
-		spineReflectionHelper = new SpineReflectionHelper();
 		// world = new World(gravity, doSleep)
 		RayHandler.setGammaCorrection(true);
 		RayHandler.useDiffuseLight(true);
@@ -111,7 +123,8 @@ public class SceneLoader {
 		rayHandler.setShadows(true);
 		// TODO
 		// rayHandler.setCombinedMatrix(getCamera().combined);
-
+		
+		addSystems();
 	}
 
 	/**
@@ -188,7 +201,8 @@ public class SceneLoader {
 	 *         this point though...)
 	 */
 	public SceneVO loadScene(String sceneName) {
-		engine = new Engine();
+		engine.removeAllEntities();
+		
 		sceneVO = rm.getSceneVO(sceneName);
 
 		// init physics world
@@ -209,14 +223,19 @@ public class SceneLoader {
 		MainItemComponent mainComponent = new MainItemComponent();
 		CompositeTransformComponent transform = new CompositeTransformComponent();
 		NodeComponent node = new NodeComponent();
+		
+		ViewPortComponent viewPortComponent = new ViewPortComponent();
+		viewPortComponent.viewPort = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+		viewPortComponent.viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+		
 		Entity entity = new Entity();
 		entity.add(mainComponent);
 		entity.add(transform);
 		entity.add(node);
+		entity.add(viewPortComponent);
 
 		engine.addEntity(entity);
-
-		rootID = entity.getId();
 
 		initWithAshley(entity, sceneVO.composite);
 
@@ -227,7 +246,7 @@ public class SceneLoader {
 		// }
 		//
 		setAmbienceInfo(sceneVO);
-		addSystems();
+		
 		return sceneVO;
 	}
 	
@@ -239,11 +258,13 @@ public class SceneLoader {
 		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();
 		LayerSystem layerSystem = new LayerSystem();
 		PhysicsSystem physicsSystem = new PhysicsSystem();
+		SpineSystem spineSystem = new SpineSystem();
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
 		engine.addSystem(layerSystem);
 		engine.addSystem(physicsSystem);
+		engine.addSystem(spineSystem);
 	}
 
 	//TODO this function should be changed later 
@@ -571,17 +592,18 @@ public class SceneLoader {
 			parentNodeComponent.parentEntity = root;
 
 			SpineDataComponent spineDataComponent = new SpineDataComponent();
-			spineDataComponent.spineData = new SpineDataHelper();
-	    	try {
-	    		//TODO mullx thing and spine VO part
-	    		spineDataComponent.spineData.initSpine(spineVo, rm, spineReflectionHelper,1);
-			} catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | ReflectionException e) {
-				System.out.println("Reflection problem");
-				e.printStackTrace();
-			}
-
-	    	dimensionsComponent.width = spineDataComponent.spineData.width;
-	    	dimensionsComponent.height = spineDataComponent.spineData.height;
+			spineDataComponent.animationName = spineVo.animationName;
+			spineDataComponent.skeletonJson = new SkeletonJson(rm.getSkeletonAtlas(spineDataComponent.animationName));
+			spineDataComponent.skeletonData = spineDataComponent.skeletonJson.readSkeletonData((rm.getSkeletonJSON(spineDataComponent.animationName)));
+			
+			BoneData rootBone = spineDataComponent.skeletonData.getBones().get(0); // this has to be the root bone.
+			rootBone.setScale(transform.scaleX, transform.scaleY); //TODO resolution part
+	        spineDataComponent.skeleton = new Skeleton(spineDataComponent.skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
+	        AnimationStateData stateData = new AnimationStateData(spineDataComponent.skeletonData); // Defines mixing (crossfading) between animations.
+	        spineDataComponent.state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
+	        spineDataComponent.computeBoundBox(dimensionsComponent);
+	        // todo: fix this, it's a temporary soluition
+	        spineDataComponent.setAnimation(spineDataComponent.currentAnimationName.isEmpty() ? spineDataComponent.skeletonData.getAnimations().get(0).getName() : spineDataComponent.currentAnimationName);
 			
 			Entity entity = new Entity();
 			entity.add(mainComponent);
@@ -638,11 +660,11 @@ public class SceneLoader {
 			SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent();
 
 			if (!spriteComponent.animations.isEmpty()) {
-				spriteComponent.keyFrames = SpriteAnimation.Animation
+				spriteComponent.keyFrames = Frames
 						.constructJsonObject(spriteComponent.animations);
-				for (Map.Entry<String, SpriteAnimation.Animation> entry : spriteComponent.keyFrames
+				for (Map.Entry<String, Frames> entry : spriteComponent.keyFrames
 						.entrySet()) {
-					SpriteAnimation.Animation keyFrame = entry.getValue();
+					Frames keyFrame = entry.getValue();
 
 					Array<AtlasRegion> tmpRegions = new Array<TextureAtlas.AtlasRegion>(keyFrame.endFrame - keyFrame.startFrame + 1);
 					for (int r = keyFrame.startFrame; r <= keyFrame.endFrame; r++) {
@@ -746,7 +768,7 @@ public class SceneLoader {
 		}
 
 		for (int i = 0; i < vo.layers.size(); i++) {
-
+			//TODO wtf is this do we need this? :O
 		}
 
 		for (int i = 0; i < vo.sComposites.size(); i++) {
@@ -874,6 +896,37 @@ public class SceneLoader {
 			rayHandler.setAmbientLight(clr);
 		}
 	}
+	
+	public static class Frames {
+        public int startFrame;
+        public int endFrame;
+        public String name;
+
+        public Frames(int startFrame, int endFrame, String name) {
+            this.startFrame = startFrame;
+            this.endFrame = endFrame;
+            this.name = name;
+        }
+
+        public Frames() {
+        }
+
+        public static String constructJsonString(Map<String, Frames> animations) {
+            String str = "";
+            Json json = new Json();
+            json.setOutputType(JsonWriter.OutputType.json);
+            str = json.toJson(animations);
+            return str;
+        }
+
+        public static Map<String, Frames> constructJsonObject(String animations) {
+            if (animations.isEmpty()) {
+                return new HashMap<>();
+            }
+            Json json = new Json();
+            return json.fromJson(HashMap.class, animations);
+        }
+    }
 
 	/**
 	 * Creates CompositeItem from sceneVo *
@@ -901,17 +954,18 @@ public class SceneLoader {
 	 *            String - library item name
 	 * @return CompositeItem Actor
 	 */
-	public CompositeItem getLibraryAsActor(String name) {
-		CompositeItemVO vo = new CompositeItemVO(sceneVO.libraryItems.get(name));
-		if (vo.composite == null)
-			vo.composite = new CompositeVO();
-		CompositeItem cnt = new CompositeItem(vo, null);
-		cnt.dataVO.itemName = name;
-		cnt.applyResolution(curResolution);
-		cnt.setX(0);
-		cnt.setY(0);
-		return cnt;
-	}
+//	public CompositeItem getLibraryAsActor(String name) {
+//		CompositeItemVO vo = new CompositeItemVO(sceneVO.libraryItems.get(name));
+//		if (vo.composite == null)
+//			vo.composite = new CompositeVO();
+//		CompositeItem cnt = new CompositeItem(vo, null);
+//		cnt.dataVO.itemName = name;
+//		cnt.applyResolution(curResolution);
+//		cnt.setX(0);
+//		cnt.setY(0);
+//		return cnt;
+//	}
+	
 
 	/**
 	 * Returns CompositeItem that is inside rootScene identified by unique id
