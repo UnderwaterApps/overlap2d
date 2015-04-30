@@ -19,15 +19,16 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
-import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
+import com.uwsoft.editor.gdx.ui.components.TintButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
@@ -50,13 +51,13 @@ public class UIBasicItemProperties extends UIItemProperties {
     private VisTextField scaleYValue;
     private VisCheckBox flipVertical;
     private VisCheckBox flipHorizontal;
-    private ColorPickerButton tintColorComponent;
+    private TintButton tintColorComponent;
     private VisTextField rotationValue;
 
     public UIBasicItemProperties() {
         super();
-
-        tintColorComponent = new ColorPickerButton();
+        padTop(7);
+//        debug();
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
@@ -69,39 +70,41 @@ public class UIBasicItemProperties extends UIItemProperties {
         scaleYValue = new VisValidableTextField(floatValidator);
         flipVertical = new VisCheckBox(null);
         flipHorizontal = new VisCheckBox(null);
-        tintColorComponent = new ColorPickerButton();
+        tintColorComponent = new TintButton(29, 21);
         rotationValue = new VisValidableTextField(floatValidator);
 
-        add(new VisLabel("Identifier:", Align.right)).padRight(5).colspan(2).fillX();
-        add(idBox).width(120).colspan(2);
-        row().padTop(5);
-        add(new VisLabel("X:", Align.right)).padRight(5).width(50).right();
-        add(xValue).width(55).padRight(5);
-        add(new VisLabel("Y:", Align.right)).padRight(5).width(50).right();
-        add(yValue).width(55);
-        row().padTop(5);
-        add(new VisLabel("Width:", Align.right)).padRight(5).width(55).right();
-        add(widthValue).width(55).padRight(5);
-        add(new VisLabel("Height:", Align.right)).padRight(5).width(55).right();
-        add(heightValue).width(55);
-        row().padTop(5);
-        add(new VisLabel("Scale X:", Align.right)).padRight(5).width(55).right();
-        add(scaleXValue).width(55).padRight(5);
-        add(new VisLabel("Scale Y:", Align.right)).padRight(5).width(55).right();
-        add(scaleYValue).width(55);
-        row().padTop(5);
-        add(new VisLabel("Flip X:", Align.right)).padRight(5).width(55).right();
-        add(flipVertical).padRight(5).left();
-        add(new VisLabel("Flip Y:", Align.right)).padRight(5).width(55).right();
-        add(flipHorizontal).left();
-        row().padTop(5);
-        add(new VisLabel("Rotation:", Align.right)).padRight(5).colspan(2).fillX();
-        add(rotationValue).width(120).colspan(2);
-        row().padTop(5);
-        add(new VisLabel("Tint:", Align.right)).padRight(5).colspan(2).fillX();
-        add(tintColorComponent).width(120).colspan(2);
-
+        add(createLabel("Identifier:")).padRight(3).fillX();
+        add(idBox).width(156).height(21).colspan(2);
+        row().padTop(13);
+        add(createLabel("Position:")).padRight(3).left().top();
+        add(getAsTable("X:", xValue, "Y:", yValue)).left();
+        add(getAsTable("Width:", widthValue, "Height:", heightValue)).right();
+        row().padTop(6);
+        add(createLabel("Rotation:")).padRight(3).left();
+        add(rotationValue).width(45).height(21).colspan(2).left().padLeft(13);
+        row().padTop(6);
+        add(createLabel("Scale:")).padRight(3).left().top();
+        add(getAsTable("X:", scaleXValue, "Y:", scaleYValue)).left().colspan(2);
+        row().padTop(6);
+        add(getTintTable()).right().colspan(3);
         setListeners();
+    }
+
+    private Table getTintTable() {
+        VisTable tintTable = new VisTable();
+        tintTable.add(createLabel("Tint:")).padRight(3);
+        tintTable.add(tintColorComponent);
+        return tintTable;
+    }
+
+    private Table getAsTable(String text1, Actor actor1, String text2, Actor actor2) {
+        VisTable positionTable = new VisTable();
+        positionTable.add(createLabel(text1)).right().padRight(3);
+        positionTable.add(actor1).width(45).height(21);
+        positionTable.row().padTop(4);
+        positionTable.add(createLabel(text2)).right().padRight(3);
+        positionTable.add(actor2).width(45).height(21).left();
+        return positionTable;
     }
 
     public String getIdBoxValue() {

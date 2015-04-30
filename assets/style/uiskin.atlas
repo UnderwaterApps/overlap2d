@@ -661,7 +661,7 @@ roboto-medium-small
   index: -1
 scroll
   rotate: false
-  xy: 21, 86
+  xy: 10, 2
   size: 5, 6
   split: 2, 2, 2, 2
   orig: 5, 6
@@ -678,7 +678,7 @@ scroll-horizontal
   index: -1
 scroll-knob-horizontal
   rotate: false
-  xy: 9, 3
+  xy: 17, 3
   size: 6, 5
   split: 2, 2, 0, 5
   pad: -1, -1, 2, 2
@@ -687,7 +687,7 @@ scroll-knob-horizontal
   index: -1
 scroll-knob-vertical
   rotate: false
-  xy: 2, 2
+  xy: 21, 86
   size: 5, 6
   split: 2, 2, 2, 2
   orig: 5, 6
@@ -857,6 +857,14 @@ textfield-over
   size: 14, 14
   split: 2, 2, 3, 2
   orig: 14, 14
+  offset: 0, 0
+  index: -1
+tint-border
+  rotate: false
+  xy: 2, 2
+  size: 6, 6
+  split: 2, 2, 2, 2
+  orig: 6, 6
   offset: 0, 0
   index: -1
 tool-align

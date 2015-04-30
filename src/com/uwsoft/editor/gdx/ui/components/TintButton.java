@@ -22,30 +22,29 @@ package com.uwsoft.editor.gdx.ui.components;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.kotcrab.vis.ui.VisUI;
 
 
 /**
  * Created by azakhary on 7/8/2014.
  */
-public class ColorPickerButton extends Group {
+public class TintButton extends Group {
 
-    private final Overlap2DFacade facade;
-    private final ProjectManager projectManager;
+    private final Skin skin;
     private Image colorImg;
 
-    public ColorPickerButton() {
-        facade = Overlap2DFacade.getInstance();
-        projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        colorImg = new Image(textureManager.getEditorAsset("pixel"));
-        Image borderImg = new Image(textureManager.getEditorAsset("colorBox"));
+    public TintButton(int width, int height) {
+        skin = VisUI.getSkin();
+        colorImg = new Image(skin.getDrawable("white"));
+        Image borderImg = new Image(skin.getDrawable("tint-border"));
 
-        colorImg.setScale(16);
-        colorImg.setX(2);
-        colorImg.setY(2);
+        colorImg.setWidth(width - 2);
+        colorImg.setHeight(height - 2);
+        colorImg.setX(1);
+        colorImg.setY(1);
+        borderImg.setWidth(width);
+        borderImg.setHeight(height);
 
         addActor(colorImg);
         addActor(borderImg);
