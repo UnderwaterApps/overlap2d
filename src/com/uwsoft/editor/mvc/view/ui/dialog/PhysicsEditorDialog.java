@@ -252,6 +252,10 @@ public class PhysicsEditorDialog extends O2DDialog {
         itemPhysicsEditor.editItem(item);
     }
 
+    public void setItem(String item) {
+        itemPhysicsEditor.editAsset(item);
+    }
+
     public String getBodyType() {
         return bodyTypeBox.getSelected();
     }

@@ -26,7 +26,9 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.event.EditableSelectBoxChangeListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
+import com.uwsoft.editor.ui.widget.EditableSelectBox;
 
 /**
  * Created by sargis on 4/27/15.
@@ -41,7 +43,7 @@ public class UIZoomBox extends VisTable {
 
     private final Overlap2DFacade facade;
     private final Skin skin;
-    private VisSelectBox<String> visSelectBox;
+    private EditableSelectBox visSelectBox;
     private VisImageButton zoomInBtn;
     private VisImageButton zoomOutBtn;
 
@@ -76,14 +78,18 @@ public class UIZoomBox extends VisTable {
         zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(2f));
         add(zoomOutBtn).padRight(11).height(25);
         //
-        visSelectBox = new VisSelectBox<>("white");
+        visSelectBox = new EditableSelectBox("white");
         visSelectBox.setItems("200%", "100%", "50%", "25%");
-        visSelectBox.addListener(new SelectBoxChangeListener(ZOOM_VALUE_CHANGED));
+        visSelectBox.addListener(new EditableSelectBoxChangeListener(ZOOM_VALUE_CHANGED));
         add(visSelectBox).width(114);
     }
 
     public String getCurrentZoom() {
         String percent = visSelectBox.getSelected();
+        if(!percent.substring(percent.length()-1, percent.length()).equals("%")) {
+            percent+="%";
+            visSelectBox.setText(percent);
+        }
         return percent.substring(0, percent.length()-1);
     }
 
