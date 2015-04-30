@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -35,10 +36,13 @@ import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.tools.*;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by sargis on 4/20/15.
@@ -52,6 +56,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private float lastX = 0;
     private float lastY = 0;
 
+    private HashMap<String, Tool> sandboxTools = new HashMap<>();
+    private Tool currentSelectedTool;
+
     public SandboxStageMediator() {
         super(NAME, new SandboxStage());
     }
@@ -61,6 +68,25 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         super.onRegister();
         eventListener = new SandboxStageEventListener();
         facade = Overlap2DFacade.getInstance();
+        initTools();
+    }
+
+    private void initTools() {
+        sandboxTools.put(SelectionTool.NAME, new SelectionTool());
+        sandboxTools.put(TransformTool.NAME, new TransformTool());
+        sandboxTools.put(TextTool.NAME, new TextTool());
+        sandboxTools.put(PointLightTool.NAME, new PointLightTool());
+        sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
+
+        setCurrentTool(SelectionTool.NAME);
+    }
+
+    private void setCurrentTool(String toolName) {
+        currentSelectedTool = sandboxTools.get(toolName);
+    }
+
+    private ArrayList<String> getToolNameList() {
+        return new ArrayList(sandboxTools.keySet());
     }
 
     @Override

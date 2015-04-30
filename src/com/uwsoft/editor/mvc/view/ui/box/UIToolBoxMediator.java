@@ -23,6 +23,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.stage.tools.Tool;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.mvc.view.ui.box.tools.ToolSettings;
 
@@ -38,9 +39,8 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String PREFIX =  "com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator.";
     public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
-    private int currentSelectedTool = UIToolBox.SELECTION_TOOL;
+    private Tool currentTool;
 
-    private HashMap<Integer, ToolSettings> toolSettings = new HashMap<>();
 
     public UIToolBoxMediator() {
         super(NAME, new UIToolBox());
