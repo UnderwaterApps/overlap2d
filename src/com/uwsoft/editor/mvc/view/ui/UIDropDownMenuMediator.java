@@ -162,17 +162,4 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         currentObservable = observable;
     }
 
-    private void processUserAction(String action) {
-        /*
-        switch (action) {
-            case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
-                PhysicsEditorDialogMediator dialog = facade.retrieveMediator(PhysicsEditorDialogMediator.NAME);
-                dialog.show((String)currentObservable);
-                break;
-            case UIDropDownMenu.ACTION_DELETE_RESOURCE:
-                // TODO: do something here
-                break;
-        }
-        */
-    }
 }

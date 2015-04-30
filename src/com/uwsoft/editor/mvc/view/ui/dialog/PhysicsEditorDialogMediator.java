@@ -27,6 +27,7 @@ import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -56,6 +57,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
                 Sandbox.ACTION_EDIT_PHYSICS,
+                UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS,
                 PhysicsEditorDialog.CLEAR_MESH_CLICKED,
                 PhysicsEditorDialog.CREATE_FRESH_COPY_CLICKED,
                 PhysicsEditorDialog.RETRACE_CLICKED,
@@ -74,6 +76,9 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
                 break;
             case Sandbox.ACTION_EDIT_PHYSICS:
                 setItem((IBaseItem) notification.getBody());
+                break;
+            case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
+                setItem((String) notification.getBody());
                 break;
             case PhysicsEditorDialog.SAVE_CLICKED:
                 collectData();
@@ -148,6 +153,12 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     public void setItem(String asset) {
         Sandbox sandbox = Sandbox.getInstance();
         UIStage uiStage = sandbox.getUIStage();
+
+        viewComponent.show(uiStage);
+        viewComponent.getCreateFreshCopyButton().setDisabled(false);
+
+        viewComponent.setItem(asset);
+        setData();
     }
 
     private IBaseItem duplicateItem(IBaseItem item) {
