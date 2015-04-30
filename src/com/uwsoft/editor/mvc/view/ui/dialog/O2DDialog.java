@@ -42,13 +42,15 @@ public class O2DDialog extends VisDialog {
     @Override
     public void addCloseButton() {
         VisImageButton closeButton = new VisImageButton("close-window");
-        getTitleTable().add(closeButton).padRight(4).padBottom(5);
+        this.getTitleTable().add(closeButton).padBottom(2);
         closeButton.addListener(new ChangeListener() {
-            @Override
             public void changed(ChangeEvent event, Actor actor) {
-                close();
+                O2DDialog.this.close();
             }
         });
+        if (this.getTitleTable().getChildren().size == 2) {
+            this.getTitleTable().getCell(this.getTitleLabel()).padLeft(closeButton.getWidth() * 2.0F);
+        }
     }
 
     protected VisTextField createTextField() {

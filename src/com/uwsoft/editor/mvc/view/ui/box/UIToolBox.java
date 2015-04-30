@@ -20,48 +20,49 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
-public class UIToolBox extends VisWindow {
-
-    private static final String PREFIX =  "com.uwsoft.editor.mvc.view.ui.box.UIToolBox.";
-
-    public static final String SELECTING_MODE_BTN_CLICKED = PREFIX + ".SELECTING_MODE_BTN_CLICKED";
-    public static final String TRANSFORMING_MODE_BTN_CLICKED = PREFIX + ".TRANSFORMING_MODE_BTN_CLICKED";
-    public static final String TEXT_MODE_BTN_CLICKED = PREFIX + ".TEXT_MODE_BTN_CLICKED";
+public class UIToolBox extends VisTable {
 
     public static final int SELECTION_TOOL = 0;
     public static final int TRANSFORM_TOOL = 1;
     public static final int TEXT_TOOL = 2;
-
-    private final Overlap2DFacade faced;
-    private final EditorTextureManager textureManager;
+    private static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.box.UIToolBox.";
+    public static final String SELECTING_MODE_BTN_CLICKED = PREFIX + ".SELECTING_MODE_BTN_CLICKED";
+    public static final String TRANSFORMING_MODE_BTN_CLICKED = PREFIX + ".TRANSFORMING_MODE_BTN_CLICKED";
+    public static final String TEXT_MODE_BTN_CLICKED = PREFIX + ".TEXT_MODE_BTN_CLICKED";
+    private final ButtonGroup<VisImageButton> toolsButtonGroup;
 
     public UIToolBox() {
-        super("Tools", true);
-        setMovable(false);
-        faced = Overlap2DFacade.getInstance();
-        textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
-        VisTable mainTable = new VisTable();
-        mainTable.addSeparator().colspan(2).padBottom(10);
-        mainTable.add(createButton("mainIcon", SELECTION_TOOL)).padRight(5).left();
-        mainTable.add(createButton("resizeIcon", TRANSFORM_TOOL)).padRight(5).left();
-        mainTable.add(createButton("resizeIcon", TEXT_TOOL)).expandX().left();
-        add(mainTable).expandX().fillX();
+        toolsButtonGroup = new ButtonGroup<>();
+        createButtons();
     }
 
-    private TextureRegionDrawable getDrawable(String name) {
-        return new TextureRegionDrawable(textureManager.getEditorAsset(name));
+    private void createButtons() {
+        addToolButton("move", SELECTION_TOOL);
+        row();
+        addToolButton("transform", TRANSFORM_TOOL);
+        row();
+        addSeparator().width(31);
+        addToolButton("label", TEXT_TOOL);
+        row();
+        addSeparator();
+        addToolButton("sphericlight", -1);
+        row();
+        addToolButton("conuslight", -1);
     }
 
-    private VisImageButton createButton(String name, int buttonId) {
-        VisImageButton visImageButton = new VisImageButton(getDrawable(name), getDrawable(name + "Checked"));
+    private void addToolButton(String name, int selectionTool) {
+        add(createButton("tool-" + name, selectionTool)).width(31).height(31);
+    }
+
+    private VisImageButton createButton(String styleName, int buttonId) {
+        VisImageButton visImageButton = new VisImageButton(styleName);
+        toolsButtonGroup.add(visImageButton);
         visImageButton.addListener(new ToolboxButtonClickListener(buttonId));
         return visImageButton;
     }

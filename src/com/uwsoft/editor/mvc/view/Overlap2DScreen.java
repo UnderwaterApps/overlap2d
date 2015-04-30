@@ -120,7 +120,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     //uiStage.menuMediator.showDialog("createNewProjectDialog");
                     break;
                 case Input.Keys.O:
-                    uiStage.menuMediator.showOpenProject();
+                    //uiStage.menuMediator.showOpenProject();
                     break;
                 case Input.Keys.S:
                     SceneVO vo = sandbox.sceneVoFromItems();
