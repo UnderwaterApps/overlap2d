@@ -31,8 +31,8 @@ import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -202,7 +202,7 @@ public class ItemFactory {
     }
 
 
-    public void createLabel(TextToolSettings textSettings, float x, float y) {
+    public void createLabel(TextTool textSettings, float x, float y) {
         LayerItemVO layer = getSelectedLayer();
         sceneControl.getCurrentScene().updateDataVO();
 

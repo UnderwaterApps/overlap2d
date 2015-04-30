@@ -382,35 +382,35 @@
       "imageUp": "box-colapse-on",
       "imageChecked": "box-colapse-off"
     },
-    "tool-move": {
+    "tool-SELECTION_TOOL": {
       "down": "toolbar-down",
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "checked": "toolbar-down",
       "imageUp": "tool-move"
     },
-    "tool-transform": {
+    "tool-TRANSFORM_TOOL": {
       "down": "toolbar-down",
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "checked": "toolbar-down",
       "imageUp": "tool-transform"
     },
-    "tool-label": {
+    "tool-TEXT_TOOL": {
       "down": "toolbar-down",
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "checked": "toolbar-down",
       "imageUp": "tool-label"
     },
-    "tool-sphericlight": {
+    "tool-POINT_LIGHT_TOOL": {
       "down": "toolbar-down",
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "checked": "toolbar-down",
       "imageUp": "tool-sphericlight"
     },
-    "tool-conuslight": {
+    "tool-CONE_LIGHT_TOOL": {
       "down": "toolbar-down",
       "up": "toolbar-normal",
       "over": "toolbar-over",

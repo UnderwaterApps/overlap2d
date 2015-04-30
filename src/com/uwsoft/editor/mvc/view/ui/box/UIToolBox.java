@@ -26,72 +26,51 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
+import java.util.ArrayList;
+
 public class UIToolBox extends VisTable {
 
-    public static final int SELECTION_TOOL = 0;
-    public static final int TRANSFORM_TOOL = 1;
-    public static final int TEXT_TOOL = 2;
     private static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.box.UIToolBox.";
-    public static final String SELECTING_MODE_BTN_CLICKED = PREFIX + ".SELECTING_MODE_BTN_CLICKED";
-    public static final String TRANSFORMING_MODE_BTN_CLICKED = PREFIX + ".TRANSFORMING_MODE_BTN_CLICKED";
-    public static final String TEXT_MODE_BTN_CLICKED = PREFIX + ".TEXT_MODE_BTN_CLICKED";
+
+    public static final String TOOL_CLICKED = PREFIX + ".TOOL_CLICKED";
     private final ButtonGroup<VisImageButton> toolsButtonGroup;
 
     public UIToolBox() {
         toolsButtonGroup = new ButtonGroup<>();
-        createButtons();
     }
 
-    private void createButtons() {
-        addToolButton("move", SELECTION_TOOL);
-        row();
-        addToolButton("transform", TRANSFORM_TOOL);
-        row();
-        addSeparator().width(31);
-        addToolButton("label", TEXT_TOOL);
-        row();
-        addSeparator();
-        addToolButton("sphericlight", -1);
-        row();
-        addToolButton("conuslight", -1);
+    public void createToolButtons(ArrayList<String> toolList) {
+        for(int i = 0; i < toolList.size(); i++) {
+            addToolButton(toolList.get(i));
+            row();
+            if(i == 1) addSeparator().width(31);
+        }
     }
 
-    private void addToolButton(String name, int selectionTool) {
-        add(createButton("tool-" + name, selectionTool)).width(31).height(31);
+    private void addToolButton(String name) {
+        add(createButton("tool-" + name, name)).width(31).height(31);
     }
 
-    private VisImageButton createButton(String styleName, int buttonId) {
+    private VisImageButton createButton(String styleName, String toolId) {
         VisImageButton visImageButton = new VisImageButton(styleName);
         toolsButtonGroup.add(visImageButton);
-        visImageButton.addListener(new ToolboxButtonClickListener(buttonId));
+        visImageButton.addListener(new ToolboxButtonClickListener(toolId));
         return visImageButton;
     }
 
     private class ToolboxButtonClickListener extends ClickListener {
 
-        private final int buttonId;
+        private final String toolId;
 
-        public ToolboxButtonClickListener(int buttonId) {
-            this.buttonId = buttonId;
+        public ToolboxButtonClickListener(String toolId) {
+            this.toolId = toolId;
         }
 
         @Override
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
-            String notification = "";
-            switch (buttonId) {
-                case SELECTION_TOOL:
-                    notification = SELECTING_MODE_BTN_CLICKED;
-                    break;
-                case TRANSFORM_TOOL:
-                    notification = TRANSFORMING_MODE_BTN_CLICKED;
-                    break;
-                case TEXT_TOOL:
-                    notification = TEXT_MODE_BTN_CLICKED;
-                    break;
-            }
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(notification, buttonId);
+            facade.sendNotification(TOOL_CLICKED, toolId);
         }
     }
 }

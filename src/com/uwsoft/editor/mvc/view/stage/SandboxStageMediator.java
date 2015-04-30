@@ -85,7 +85,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         currentSelectedTool = sandboxTools.get(toolName);
     }
 
-    private ArrayList<String> getToolNameList() {
+    public ArrayList<String> getToolNameList() {
         return new ArrayList(sandboxTools.keySet());
     }
 
@@ -102,6 +102,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 handleSceneLoaded(notification);
+                break;
+            case UIToolBoxMediator.TOOL_SELECTED:
+                setCurrentTool(notification.getBody());
                 break;
             default:
                 break;
@@ -260,6 +263,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             super.touchDown(event, x, y, pointer, button);
+
+            currentSelectedTool.stageMouseDown(x, y);
+
             Sandbox sandbox = Sandbox.getInstance();
             lastX = Gdx.input.getX();
             lastY = Gdx.input.getY();
@@ -296,6 +302,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         @Override
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             super.touchUp(event, x, y, pointer, button);
+
+            currentSelectedTool.stageMouseUp(x, y);
+
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {
                 // if clicked on empty space, selections need to be cleared
@@ -320,14 +329,6 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 doubleClick(event, x, y);
             }
 
-            if(sandbox.editingMode == EditingMode.TEXT) {
-                UIToolBoxMediator toolBox = facade.retrieveMediator(UIToolBoxMediator.NAME);
-                TextToolSettings textToolSettings = (TextToolSettings) toolBox.getCurrentSelectedToolSettings();
-
-                sandbox.getItemFactory().createLabel(textToolSettings, Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-
-                return;
-            }
         }
 
         private void doubleClick(InputEvent event, float x, float y) {
@@ -342,6 +343,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Sandbox sandbox = Sandbox.getInstance();
+
+            currentSelectedTool.stageMouseDragged(x, y);
+
             // if resizing is in progress we are not dealing with this
             if (sandbox.isResizing) return;
 

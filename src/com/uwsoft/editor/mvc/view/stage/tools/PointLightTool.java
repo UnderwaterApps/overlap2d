@@ -26,32 +26,32 @@ public class PointLightTool implements Tool {
     public static final String NAME = "POINT_LIGHT_TOOL";
 
     @Override
-    public void stageMouseDown() {
+    public void stageMouseDown(float x, float y) {
 
     }
 
     @Override
-    public void stageMouseUp() {
+    public void stageMouseUp(float x, float y) {
 
     }
 
     @Override
-    public void stageMouseDragged() {
+    public void stageMouseDragged(float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDown() {
+    public void itemMouseDown(float x, float y) {
 
     }
 
     @Override
-    public void itemMouseUp() {
+    public void itemMouseUp(float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDragged() {
+    public void itemMouseDragged(float x, float y) {
 
     }
 }
