@@ -96,7 +96,9 @@ public class ItemPhysicsEditor extends Group {
     private IBaseItem currentItem;
     private Actor currentActor;
     private float timeAcc = 0;
-    private Vector2 resVec;
+    public Vector2 resVec;
+
+    private Color color;
 
     public ItemPhysicsEditor(float width, float height) {
         sandbox = Sandbox.getInstance();
@@ -109,6 +111,8 @@ public class ItemPhysicsEditor extends Group {
 
         vertices = new Vector2[0];
 
+        color = new Color(80f/255f, 146f/255f, 204f/255f, 1f);
+
         setListeners();
 
         currentMode = EditMode.Create;
@@ -120,13 +124,6 @@ public class ItemPhysicsEditor extends Group {
         stage = Sandbox.getInstance().getUIStage();
         shapeRenderer = new ShapeRenderer();
         shapeRenderer.setProjectionMatrix(stage.getCamera().combined);
-    }
-
-    public void init() {
-
-
-        resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
-
     }
 
     public void startTest() {
@@ -350,6 +347,8 @@ public class ItemPhysicsEditor extends Group {
     }
 
     public void save() {
+        World world = Sandbox.getInstance().getSandboxStage().getWorld();
+
         ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
         if (assetName != null && !assetName.isEmpty()) {
@@ -400,10 +399,10 @@ public class ItemPhysicsEditor extends Group {
 
             if (mesh != null) {
                 if (originalItem.getBody() != null) {
-                    stage.sandboxStage.getWorld().destroyBody(originalItem.getBody());
+                    world.destroyBody(originalItem.getBody());
                 }
                 currentItem.getDataVO().physicsBodyData = new PhysicsBodyDataVO(physicsBodyDataVO);
-                originalItem.setBody(PhysicsBodyLoader.createBody(stage.sandboxStage.getWorld(), physicsBodyDataVO, mesh, resVec));
+                originalItem.setBody(PhysicsBodyLoader.createBody(world, physicsBodyDataVO, mesh, resVec));
                 originalItem.getBody().setTransform(currentItem.getDataVO().x * PhysicsBodyLoader.SCALE, currentItem.getDataVO().y * PhysicsBodyLoader.SCALE, (float) Math.toRadians(currentItem.getDataVO().rotation));
             }
 
@@ -688,7 +687,9 @@ public class ItemPhysicsEditor extends Group {
     public void draw(Batch batch, float parentAlpha) {
         //super.draw(batch, parentAlpha);
 
-        if (isTransform()) applyTransform(batch, computeTransform());
+        if (isTransform()) {
+            applyTransform(batch, computeTransform());
+        }
         Rectangle calculatedScissorBounds = Pools.obtain(Rectangle.class);
         getStage().calculateScissors(new Rectangle(0, 0, getWidth(), getHeight()), calculatedScissorBounds);
         // Enable scissors.
@@ -740,14 +741,14 @@ public class ItemPhysicsEditor extends Group {
     public void drawOutlines() {
         if (vertices.length > 0) {
             shapeRenderer.begin(ShapeType.Line);
-            shapeRenderer.setColor(0, 0, 0.7f, 1);
+            shapeRenderer.setColor(color);
             for (int i = 1; i < vertices.length; i++) {
                 if (lineIndex == i) {
                     shapeRenderer.setColor(selectedLineColor);
                 }
                 shapeRenderer.line(vertices[i], vertices[i - 1]);
                 if (lineIndex == i) {
-                    shapeRenderer.setColor(0, 0, 0.7f, 1);
+                    shapeRenderer.setColor(color);
                 }
             }
             if (currentMode == EditMode.Edit) {

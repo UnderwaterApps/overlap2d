@@ -87,7 +87,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_DELETE);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CONVERT_TO_BUTTON);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_EDIT_PHYSICS);
 
         facade = Overlap2DFacade.getInstance();
     }
@@ -121,9 +120,10 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                         actionsSet.add(Sandbox.ACTION_ADD_TO_LIBRARY);
                         actionsSet.add(Sandbox.ACTION_EDIT_COMPOSITE);
                     }
+                    actionsSet.add(Sandbox.ACTION_EDIT_PHYSICS);
                     actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
                 }
-                showPopup(actionsSet, null);
+                showPopup(actionsSet, sandbox.getSelector().getSelectedItem());
                 break;
             case UIResourcesBoxMediator.IMAGE_RIGHT_CLICK:
                 showPopup(IMAGE_RESOURCE_ACTION_SET, notification.getBody());
