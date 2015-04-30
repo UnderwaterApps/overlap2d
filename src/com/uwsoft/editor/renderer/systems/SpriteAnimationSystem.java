@@ -22,9 +22,7 @@ public class SpriteAnimationSystem extends IteratingSystem {
 	public void processEntity(Entity entity, float deltaTime) {
 		TextureRegionComponent tex = tm.get(entity);
 		SpriteAnimationStateComponent state = sm.get(entity);
-		System.out.println("Frame " + state.currentAnimation.getKeyFrameIndex(state.time));
 		tex.region = state.currentAnimation.getKeyFrame(state.time);
-		System.out.println("Region " + tex.region.toString());
 		state.time += deltaTime;
 	}
 
