@@ -416,6 +416,66 @@
       "over": "toolbar-over",
       "checked": "toolbar-down",
       "imageUp": "tool-conuslight"
+    },
+    "align-center-horisontal": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-center-horisontal"
+    },
+    "align-center-vertical": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-center-vertical"
+    },
+    "align-simple-down": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-down"
+    },
+    "align-simple-up": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-up"
+    },
+    "align-simple-left": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-left"
+    },
+    "align-simple-right": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-right"
+    },
+    "align-edge-down": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-down"
+    },
+    "align-edge-right": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-right"
+    },
+    "align-edge-up": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-up"
+    },
+    "align-edge-left": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-left"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
