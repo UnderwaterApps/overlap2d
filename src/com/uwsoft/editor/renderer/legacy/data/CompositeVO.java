@@ -1,6 +1,5 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 
 import java.util.ArrayList;

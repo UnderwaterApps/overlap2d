@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
 
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
@@ -12,7 +13,7 @@ public class ProjectInfoVO {
 
     public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
 
-    public ArrayList<ResolutionEntryVO> resolutions = new ArrayList<>();
+    public Array<ResolutionEntryVO> resolutions = new Array<>();
     public ArrayList<SceneVO> scenes = new ArrayList<SceneVO>();
     public HashMap<String, String> assetMeshMap = new HashMap<String, String>();
     public HashMap<String, MeshVO> meshes = new HashMap<String, MeshVO>();

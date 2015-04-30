@@ -10,6 +10,9 @@ public class ResolutionEntryVO {
 
     @Override
     public String toString() {
+        if (width == 0 && height == 0) {
+            return name;
+        }
         return width + "x" + height + " (" + name + ")";
     }
 }
