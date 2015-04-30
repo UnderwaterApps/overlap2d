@@ -18,11 +18,12 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
-import com.uwsoft.editor.mvc.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.mvc.view.stage.tools.*;
 
 import java.util.ArrayList;
 
@@ -39,7 +40,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
 
     private String currentTool;
     private SandboxStageMediator sandboxStageMediator;
-    private ArrayList<String> toolList;
+    private Array<String> toolList;
 
 
     public UIToolBoxMediator() {
@@ -49,13 +50,23 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     @Override
     public void onRegister() {
         facade = Overlap2DFacade.getInstance();
-        sandboxStageMediator = facade.retrieveMediator(SandboxStageMediator.NAME);
-        toolList = sandboxStageMediator.getToolNameList();
+
+        toolList = getToolNameList();
         currentTool = SelectionTool.NAME;
 
         viewComponent.createToolButtons(toolList);
     }
 
+
+    public Array<String> getToolNameList() {
+        Array<String> toolNames = new Array();
+        toolNames.add(SelectionTool.NAME);
+        toolNames.add(TransformTool.NAME);
+        toolNames.add(TextTool.NAME);
+        toolNames.add(PointLightTool.NAME);
+        toolNames.add(ConeLightTool.NAME);
+        return toolNames;
+    }
 
     @Override
     public String[] listNotificationInterests() {

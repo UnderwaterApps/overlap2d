@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -80,10 +81,6 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
     private void setCurrentTool(String toolName) {
         currentSelectedTool = sandboxTools.get(toolName);
-    }
-
-    public ArrayList<String> getToolNameList() {
-        return new ArrayList(sandboxTools.keySet());
     }
 
     @Override

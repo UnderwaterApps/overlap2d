@@ -22,6 +22,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -39,8 +40,8 @@ public class UIToolBox extends VisTable {
         toolsButtonGroup = new ButtonGroup<>();
     }
 
-    public void createToolButtons(ArrayList<String> toolList) {
-        for(int i = 0; i < toolList.size(); i++) {
+    public void createToolButtons(Array<String> toolList) {
+        for(int i = 0; i < toolList.size; i++) {
             addToolButton(toolList.get(i));
             row();
             if(i == 1) addSeparator().width(31);
