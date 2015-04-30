@@ -5,6 +5,8 @@ import java.util.Comparator;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -18,20 +20,22 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brashmonkey.spriter.Player;
 import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.conponents.LayerMapComponent;
+import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
 import com.uwsoft.editor.renderer.conponents.ZindexComponent;
 import com.uwsoft.editor.renderer.conponents.NodeComponent;
 import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
 import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
 import com.uwsoft.editor.renderer.conponents.spriter.SpriterComponent;
 import com.uwsoft.editor.renderer.conponents.spriter.SpriterDrawerComponent;
 
 
-//TODO this class should be changed to System with separation of camera and other drawabale mechanics
-public class Overlap2dRenderer {
+//TODO drawabale mechanics
+public class Overlap2dRenderer extends IteratingSystem {
 	
-	private Engine engine;
+	private ComponentMapper<ViewPortComponent> viewPortMapper = ComponentMapper.getFor(ViewPortComponent.class);
 	private ComponentMapper<CompositeTransformComponent> compositeTransformMapper = ComponentMapper.getFor(CompositeTransformComponent.class);
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
@@ -46,30 +50,27 @@ public class Overlap2dRenderer {
 	
 	private Entity currentComposite = null;
 	
-	public Viewport viewPort = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-	
-	public Overlap2dRenderer(Engine engine) {
-		this.engine = engine;
-		viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-		//viewPort.getCamera().position.set(0, 0, 0);
+	public Batch batch;
+	public Overlap2dRenderer(Batch batch) {
+		super(Family.all(ViewPortComponent.class).get());
+		this.batch = batch;
 	}
 
-	public void draw(Batch batch, long rootID){
-		
-		Camera camera = viewPort.getCamera();
+	@Override
+	public void processEntity(Entity entity, float deltaTime) {
+		ViewPortComponent ViewPortComponent = viewPortMapper.get(entity);
+		Camera camera = ViewPortComponent.viewPort.getCamera();
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		
-		engine.update(Gdx.app.getGraphics().getDeltaTime());
-		
-		Entity rootEntity = engine.getEntity(rootID);
 		batch.begin();
-		drawRecursively(rootEntity,batch);
+		drawRecursively(entity);
 		batch.end();
+		
+		//TODO add rayHandler thing and Spine rendere thing
 	}
 
-	private void drawRecursively(Entity rootEntity, Batch batch) {
+	private void drawRecursively(Entity rootEntity) {
 		
 		
 		currentComposite = rootEntity;
@@ -122,14 +123,12 @@ public class Overlap2dRenderer {
 				}
 				
 				if(spineDataComponent != null){
-					//TODO act part mus be changed to other place
-					spineDataComponent.spineData.act(Gdx.app.getGraphics().getDeltaTime(), childTransformComponent.x, childTransformComponent.y);
 					//TODO parent alpha thing
-					spineDataComponent.spineData.draw(batch, 1);
+					renderer.draw(batch, spineDataComponent.skeleton);
 				}
 				
 				if(childNodeComponent !=null){
-					drawRecursively(child, batch);
+					drawRecursively(child);
 				}
 			}
 		} else {
@@ -162,7 +161,7 @@ public class Overlap2dRenderer {
 				//TODO other things lights, particles, sprite spine
 				
 				if(childNodeComponent !=null){
-					drawRecursively(child, batch);
+					drawRecursively(child);
 				}
 			}
 			compositeTransformComponent.x = offsetX;
