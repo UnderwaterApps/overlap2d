@@ -25,7 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 public class UIToolBox extends VisTable {
 
@@ -36,13 +35,9 @@ public class UIToolBox extends VisTable {
     public static final String SELECTING_MODE_BTN_CLICKED = PREFIX + ".SELECTING_MODE_BTN_CLICKED";
     public static final String TRANSFORMING_MODE_BTN_CLICKED = PREFIX + ".TRANSFORMING_MODE_BTN_CLICKED";
     public static final String TEXT_MODE_BTN_CLICKED = PREFIX + ".TEXT_MODE_BTN_CLICKED";
-    private final Overlap2DFacade faced;
-    private final EditorTextureManager textureManager;
     private final ButtonGroup<VisImageButton> toolsButtonGroup;
 
     public UIToolBox() {
-        faced = Overlap2DFacade.getInstance();
-        textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
         toolsButtonGroup = new ButtonGroup<>();
         createButtons();
     }

@@ -26,12 +26,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
-import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -48,7 +45,6 @@ public class UIStage extends Stage {
 
     public DropDown mainDropDown;
 
-    public Overlap2DMenuBarMediator menuMediator;
 
     public UIStage() {
         super(new ScreenViewport());
@@ -63,8 +59,7 @@ public class UIStage extends Stage {
         addActor(dummyTarget);
 
         contextMenuContainer = new Group();
-        uiMainTable = new UIMainTable(this);
-        menuMediator = uiMainTable.menuMediator;
+        uiMainTable = new UIMainTable();
 
         addActor(uiMainTable);
         addActor(contextMenuContainer);
