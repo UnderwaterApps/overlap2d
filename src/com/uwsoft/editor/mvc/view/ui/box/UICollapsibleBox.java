@@ -36,7 +36,7 @@ public class UICollapsibleBox extends VisWindow {
     private final VisTable mainTable;
     protected CollapsibleWidget collapsibleWidget;
 
-    public UICollapsibleBox(String title) {
+    public UICollapsibleBox(String title, int width) {
         super(title);
         mainTable = new VisTable();
         mainTable.top();
@@ -51,11 +51,11 @@ public class UICollapsibleBox extends VisWindow {
         });
         getTitleLabel().setAlignment(Align.left);
         getTitleTable().add(collapsibleButton).right();
-        add(mainTable).width(250);
+        add(mainTable).width(width);
     }
 
     protected void createCollapsibleWidget(Table table) {
         collapsibleWidget = new CollapsibleWidget(table);
-        mainTable.add(collapsibleWidget);
+        mainTable.add(collapsibleWidget).expand().left();
     }
 }

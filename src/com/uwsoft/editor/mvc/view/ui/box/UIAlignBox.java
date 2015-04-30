@@ -23,14 +23,13 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by sargis on 4/10/15.
  */
-public class UIAlignBox extends VisWindow {
+public class UIAlignBox extends UICollapsibleBox {
 
     private static final String prefix = "com.uwsoft.editor.mvc.view.ui.box.UIAlignBox.ALIGN_";
 
@@ -65,32 +64,32 @@ public class UIAlignBox extends VisWindow {
     private final EditorTextureManager textureManager;
 
     public UIAlignBox() {
-        super("Align");
+        super("Align", 166);
         setMovable(false);
         faced = Overlap2DFacade.getInstance();
         textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
-        VisTable mainTable = new VisTable();
+        VisTable alignButtonsTable = new VisTable();
         //
-        mainTable.addSeparator().colspan(5).padBottom(10);
-        mainTable.add("Simple:").padRight(10).right();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_TOP, 90)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_BOTTOM, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_RIGHT, 0)).expandX().left();
+        alignButtonsTable.addSeparator().colspan(5).padBottom(10);
+        alignButtonsTable.add("Simple:").padRight(10).right();
+        alignButtonsTable.add(createAlignButton("alignIconL", ALIGN_TOP, 90)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("alignIconL", ALIGN_LEFT, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("alignIconL", ALIGN_BOTTOM, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("alignIconL", ALIGN_RIGHT, 0)).expandX().left();
         //
-        mainTable.row().padTop(10);
-        mainTable.add("Center:").padRight(10).right();
-        mainTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_BOTTOM, 0)).expandX().left().colspan(3);
+        alignButtonsTable.row().padTop(10);
+        alignButtonsTable.add("Center:").padRight(10).right();
+        alignButtonsTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_LEFT, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_BOTTOM, 0)).expandX().left().colspan(3);
         //
-        mainTable.row().padTop(10);
-        mainTable.add("At Edge:").padRight(10).right();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_TOP, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_RIGHT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_BOTTOM, 0)).expandX().left();
+        alignButtonsTable.row().padTop(10);
+        alignButtonsTable.add("At Edge:").padRight(10).right();
+        alignButtonsTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_LEFT, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_TOP, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_RIGHT, 0)).padRight(5).left();
+        alignButtonsTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_BOTTOM, 0)).expandX().left();
         //
-        add(mainTable).expandX().fillX();
+        createCollapsibleWidget(alignButtonsTable);
     }
 
     private TextureRegionDrawable getDrawable(String name) {
