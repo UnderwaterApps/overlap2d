@@ -136,10 +136,6 @@ public class UIStage extends Stage {
         return uiMainTable.itemsBox;
     }
 
-    public UILayerBox getLayerPanel() {
-        return uiMainTable.layerPanel;
-    }
-
     @Override
     public boolean keyDown(int keyCode) {
         return super.keyDown(keyCode);

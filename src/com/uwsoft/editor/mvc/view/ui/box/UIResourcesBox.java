@@ -29,12 +29,11 @@ import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIImagesTab;
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIResourcesBox extends VisWindow {
+public class UIResourcesBox extends UICollapsibleBox {
 
 
     private Overlap2DFacade facade;
 
-    private VisTable mainTable;
     private VisTable contentTable;
     private VisTable tabContent;
 
@@ -42,21 +41,9 @@ public class UIResourcesBox extends VisWindow {
 
     public UIResourcesBox() {
         super("Resources");
-
         facade = Overlap2DFacade.getInstance();
-
-        setMovable(false);
-        mainTable = new VisTable();
-        mainTable.top();
-        mainTable.addSeparator().padBottom(5);
         contentTable = new VisTable();
-        mainTable.add(contentTable);
-
-        add(contentTable).width(250);
-        row();
-
         tabContent = new VisTable();
-
         tabbedPane = new TabbedPane();
         tabbedPane.addListener(new TabbedPaneListener() {
             @Override
@@ -80,6 +67,7 @@ public class UIResourcesBox extends VisWindow {
         contentTable.row();
         contentTable.add(tabContent);
         contentTable.row();
+        createCollapsibleWidget(contentTable);
     }
 
     public void setActiveTabContent(Tab tab) {

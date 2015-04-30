@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -36,11 +37,10 @@ public class UIMainTable extends VisTable {
     private final VisTable middleTable;
     private final Overlap2DFacade facade;
     public UISubmenuBar compositePanel;
-    public UILayerBox layerPanel;
     public UIItemsTreeBox itemsBox;
     public UIMultiPropertyBox multiPropertyBox;
-    public Table rightToolsPanel;
-    public Table leftToolsPanel;
+    public Table rightPanel;
+    public Table leftPanel;
     public Overlap2DMenuBarMediator menuMediator;
     private UIToolBox toolPanel;
 
@@ -53,9 +53,10 @@ public class UIMainTable extends VisTable {
         topTable = new VisTable();
 //        topTable.debug();
         middleTable = new VisTable();
+//        middleTable.debug();
         add(topTable).fillX().expandX();
         row();
-        add(middleTable).fillX().padTop(10);
+        add(middleTable).fillX().padTop(1);
         //
         initMenuBar();
         topTable.row();
@@ -71,64 +72,51 @@ public class UIMainTable extends VisTable {
     }
 
     private void initRightToolsPanel() {
-        rightToolsPanel = new Table();
-        //
+        rightPanel = new Table();
+//        rightPanel.debug();
+        //PropertyBox
         UIMultiPropertyBoxMediator multiPropertyBoxMediator = facade.retrieveMediator(UIMultiPropertyBoxMediator.NAME);
         multiPropertyBox = multiPropertyBoxMediator.getViewComponent();
+        rightPanel.add(multiPropertyBox).top();
+        rightPanel.row();
 
-        //propertiesPanel = new UIPropertiesBox();
-//        propertiesPanel.initPanel();
-        rightToolsPanel.add(multiPropertyBox).top().fillY();
-        rightToolsPanel.row().padTop(5);
-
-
-        //
-        //libraryPanel = new UILibraryBox(uiStage);
-        // libraryPanel.initPanel();
-        //rightToolsPanel.add(libraryPanel).top().fillY();
-        //rightToolsPanel.row();
-        //
-        //layerPanel = new UILayerBoxOld(uiStage);
-        //layerPanel.initPanel();
-        //rightToolsPanel.add(layerPanel).top().fillY();
-        //rightToolsPanel.row();
-
+        //ResourcesBox
         UIResourcesBoxMediator resourceBoxMediator = facade.retrieveMediator(UIResourcesBoxMediator.NAME);
         UIResourcesBox resourceBox = resourceBoxMediator.getViewComponent();
-        rightToolsPanel.add(resourceBox).top().fillY();
-        rightToolsPanel.row().padTop(5);
+        rightPanel.add(resourceBox).top();
+        rightPanel.row();
 
+        //LayerBox
         UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
-        layerPanel = layerBoxMediator.getViewComponent();
-        rightToolsPanel.add(layerPanel).top().fillY();
+        UILayerBox layerBox = layerBoxMediator.getViewComponent();
+        rightPanel.add(layerBox).top();
 
         //
-        middleTable.add(rightToolsPanel).top().right().expand();
+        middleTable.add(rightPanel).top().right().expand().padTop(2);
     }
 
     private void initLeftToolsPanel() {
         //
-        leftToolsPanel = new VisTable();
+        leftPanel = new VisTable();
+        leftPanel.background("toolbar-bg");
         //
         UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
         toolPanel = uiToolBoxMediator.getViewComponent();
-        leftToolsPanel.add(toolPanel).expandX().fillX();
-        leftToolsPanel.row().padTop(5);
+        leftPanel.add(toolPanel).top().expandY().padTop(4);
         //
         UIAlignBoxMediator uiAlignBoxMediator = facade.retrieveMediator(UIAlignBoxMediator.NAME);
         UIAlignBox uiAlignBox = uiAlignBoxMediator.getViewComponent();
-        leftToolsPanel.add(uiAlignBox).expandX().fillX();
-        leftToolsPanel.row().padTop(5);
+        // leftPanel.add(uiAlignBox).expandX().fillX();
         //
-//        leftToolsPanel.add(lightBox);
-//        leftToolsPanel.row();
+//        leftPanel.add(lightBox);
+//        leftPanel.row();
         //
         UIItemsTreeBoxMediator uiItemsTreeBoxMediator = facade.retrieveMediator(UIItemsTreeBoxMediator.NAME);
         itemsBox = uiItemsTreeBoxMediator.getViewComponent();
 //        itemsBox.initPanel();
-        leftToolsPanel.add(itemsBox).expandX().fillX();
+        //leftPanel.add(itemsBox).expandX().fillX();
         //
-        middleTable.add(leftToolsPanel).top().left().expand();
+        middleTable.add(leftPanel).top().left().width(40).height(Gdx.graphics.getHeight()).expandY();
     }
 
     private void initMenuBar() {

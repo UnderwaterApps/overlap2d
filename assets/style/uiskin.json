@@ -17,7 +17,6 @@
       "g": 0.87,
       "r": 0.87
     },
-
     "overlap2d-menuitem-disabled-grey": {
       "a": 1,
       "b": 0.45,
@@ -185,6 +184,11 @@
       "background": "window",
       "titleFontColor": "white",
       "stageBackground": "dialogDim"
+    },
+    "box": {
+      "titleFont": "big-font",
+      "background": "box",
+      "titleFontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
@@ -373,6 +377,45 @@
       "up": "button",
       "over": "button-over",
       "imageUp": "icon-close"
+    },
+    "close-box": {
+      "imageUp": "box-colapse-on",
+      "imageChecked": "box-colapse-off"
+    },
+    "tool-move": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-move"
+    },
+    "tool-transform": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-transform"
+    },
+    "tool-label": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-label"
+    },
+    "tool-sphericlight": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-sphericlight"
+    },
+    "tool-conuslight": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-conuslight"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
