@@ -39,7 +39,6 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
 
 
     private String currentTool;
-    private SandboxStageMediator sandboxStageMediator;
     private Array<String> toolList;
 
 

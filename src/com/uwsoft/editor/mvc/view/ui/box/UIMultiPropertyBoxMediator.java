@@ -27,6 +27,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
@@ -104,7 +105,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTED,
-                UIToolBoxMediator.TOOL_SELECTED
+                SandboxStageMediator.SANDBOX_TOOL_CHANGED
         };
     }
 
@@ -120,7 +121,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             case Overlap2D.ITEM_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case SandboxStageMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
             default:

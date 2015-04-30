@@ -48,6 +48,10 @@ import java.util.HashMap;
 public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private static final String TAG = SandboxStageMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+
+    private static final String PREFIX =  "com.uwsoft.editor.mvc.view.stage.SandboxStageMediator";
+    public static final String SANDBOX_TOOL_CHANGED = PREFIX + ".SANDBOX_TOOL_CHANGED";
+
     private final Vector2 reducedMoveDirection = new Vector2(0, 0);
     private EventListener eventListener;
     private boolean reducedMouseMoveEnabled = false;
@@ -81,12 +85,15 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
     private void setCurrentTool(String toolName) {
         currentSelectedTool = sandboxTools.get(toolName);
+
+        facade.sendNotification(SANDBOX_TOOL_CHANGED, currentSelectedTool);
     }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED
+                SceneDataManager.SCENE_LOADED,
+                UIToolBoxMediator.TOOL_SELECTED
         };
     }
 
@@ -258,8 +265,6 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             super.touchDown(event, x, y, pointer, button);
 
-            currentSelectedTool.stageMouseDown(x, y);
-
             Sandbox sandbox = Sandbox.getInstance();
             lastX = Gdx.input.getX();
             lastY = Gdx.input.getY();
@@ -270,7 +275,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if there was a drop down remove it
             // TODO: this is job for front UI to figure out
-            sandbox.getUIStage().mainDropDown.hide();
+            //sandbox.getUIStage().mainDropDown.hide();
 
             switch (button) {
                 case Input.Buttons.MIDDLE:
@@ -278,15 +283,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                     sandbox.enablePan();
                     break;
                 case Input.Buttons.LEFT:
-                    boolean setOpacity = false;
-
-                    //TODO: Anyone can explain what was the purpose of this?
-                    if (!Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                        setOpacity = true;
-                    }
-
-                    // preparing selection tool rectangle to follow mouse
-                    sandbox.prepareSelectionRectangle(x, y, setOpacity);
+                    currentSelectedTool.stageMouseDown(x, y);
 
                     break;
             }
@@ -317,8 +314,6 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 return;
             }
 
-            // selection is complete, this will check for what get caught in selection rect, and select 'em
-            sandbox.selectionComplete();
             if (getTapCount() == 2 && button == Input.Buttons.LEFT) {
                 doubleClick(event, x, y);
             }
@@ -338,10 +333,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Sandbox sandbox = Sandbox.getInstance();
 
-            currentSelectedTool.stageMouseDragged(x, y);
-
             // if resizing is in progress we are not dealing with this
-            if (sandbox.isResizing) return;
+            //if (sandbox.isResizing) return;
 
             if (sandbox.cameraPanOn) {
                 // if panning, then just move camera
@@ -355,10 +348,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 lastX = Gdx.input.getX();
                 lastY = Gdx.input.getY();
             } else {
-                // else - using selection tool
-                sandbox.isUsingSelectionTool = true;
-                sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
-                sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
+                // else - using current tool tool
+                currentSelectedTool.stageMouseDragged(x, y);
             }
         }
 
