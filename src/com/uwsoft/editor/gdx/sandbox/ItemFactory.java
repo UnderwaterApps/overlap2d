@@ -207,7 +207,10 @@ public class ItemFactory {
         sceneControl.getCurrentScene().updateDataVO();
 
         LabelVO vo = new LabelVO();
-        prepareVO(vo, layer.layerName, x, y);
+        vo.layerName = layer.layerName;
+
+        vo.x = x;
+        vo.y = y;
 
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
