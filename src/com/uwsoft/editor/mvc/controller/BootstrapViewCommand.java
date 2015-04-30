@@ -41,20 +41,20 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new Overlap2DMenuBarMediator());
         facade.registerMediator(new SandboxStageMediator());
         facade.registerMediator(new UICompositeHierarchyMediator());
-        facade.registerMediator(new UIStageMediator());
+        facade.registerMediator(new UIGridBoxMediator());
+        facade.registerMediator(new UIResolutionBoxMediator());
+        facade.registerMediator(new UIZoomBoxMediator());
+        facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new NewProjectDialogMediator());
         facade.registerMediator(new AssetsImportDialogMediator());
         facade.registerMediator(new ExportSettingsDialogMediator());
         facade.registerMediator(new CreateNewResolutionDialogMediator());
-        facade.registerMediator(new UIGridBoxMediator());
-        facade.registerMediator(new UIResolutionBoxMediator());
-        facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new UIAlignBoxMediator());
         facade.registerMediator(new UIItemsTreeBoxMediator());
         facade.registerMediator(new UIMultiPropertyBoxMediator());
         facade.registerMediator(new UILayerBoxMediator());
         facade.registerMediator(new UIResourcesBoxMediator());
-        facade.registerMediator(new UIZoomBoxMediator());
+        facade.registerMediator(new UIStageMediator());
         facade.registerMediator(new UIDropDownMenuMediator());
         facade.registerMediator(new PhysicsEditorDialogMediator());
     }
