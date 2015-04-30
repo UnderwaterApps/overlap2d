@@ -47,7 +47,7 @@ public class UIMainTable extends VisTable {
         topTable = new VisTable();
 //        topTable.debug();
         middleTable = new VisTable();
-        middleTable.debug();
+//        middleTable.debug();
         add(topTable).fillX().expandX();
         row();
         add(middleTable).fillX().padTop(1);
