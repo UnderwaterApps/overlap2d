@@ -259,9 +259,7 @@ public class Sandbox {
 //        if (uiStage.getCompositePanel().isRootScene()) {
 //            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
 //        }
-        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
-            sandboxInputAdapter.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
-        }
+
         sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
         sceneControl.getCurrentScene().setX(0);
         sceneControl.getCurrentScene().setY(0);

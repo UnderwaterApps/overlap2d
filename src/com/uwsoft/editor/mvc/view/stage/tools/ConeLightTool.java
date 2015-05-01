@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+
 /**
  * Created by azakhary on 4/30/2015.
  */
@@ -26,8 +28,8 @@ public class ConeLightTool implements Tool {
     public static final String NAME = "CONE_LIGHT_TOOL";
 
     @Override
-    public void stageMouseDown(float x, float y) {
-
+    public boolean stageMouseDown(float x, float y) {
+        return true;
     }
 
     @Override
@@ -41,17 +43,27 @@ public class ConeLightTool implements Tool {
     }
 
     @Override
-    public void itemMouseDown(float x, float y) {
+    public void stageMouseDoubleClick(float x, float y) {
 
     }
 
     @Override
-    public void itemMouseUp(float x, float y) {
+    public boolean itemMouseDown(IBaseItem item, float x, float y) {
+        return true;
+    }
+
+    @Override
+    public void itemMouseUp(IBaseItem item, float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDragged(float x, float y) {
+    public void itemMouseDragged(IBaseItem item, float x, float y) {
+
+    }
+
+    @Override
+    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
 
     }
 }

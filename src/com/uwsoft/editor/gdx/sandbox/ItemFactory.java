@@ -44,6 +44,9 @@ import java.util.Iterator;
  */
 public class ItemFactory {
 
+    public static final String PREFIX = "com.uwsoft.editor.gdx.sandbox.ItemFactory";
+    public static final String NEW_ITEM_ADDED = PREFIX + ".NEW_ITEM_ADDED";
+
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
     private Sandbox sandbox;
@@ -70,11 +73,12 @@ public class ItemFactory {
     private void addItem(IBaseItem item, MainItemVO vo) {
         Actor itemActor = (Actor) item;
         sceneControl.getCurrentScene().addItem(item);
-        sandbox.getSandboxInputAdapter().initItemListeners(item);
         sandbox.saveSceneCurrentSceneData();
 //        sandbox.getUIStage().getItemsBox().init();
         itemActor.setX(vo.x);
         itemActor.setY(vo.y);
+
+        facade.sendNotification(NEW_ITEM_ADDED, item);
 
         sandbox.getSelector().setSelection(item, true);
     }
@@ -364,8 +368,8 @@ public class ItemFactory {
 
         sceneControl.getCurrentScene().addItem(item);
 
-        sandbox.getSandboxInputAdapter().initItemListeners(item);
-//        sandbox.getUIStage().getItemsBox().init();
+        facade.sendNotification(NEW_ITEM_ADDED, item);
+
         sandbox.getSelector().setSelection(item, true);
 
         return item;

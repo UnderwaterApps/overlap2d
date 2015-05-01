@@ -20,7 +20,13 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -31,12 +37,18 @@ public class SelectionTool implements Tool {
 
     private Sandbox sandbox;
 
+    private boolean isDragging = false;
+    private boolean currentTouchedItemWasSelected = false;
+
+    private Vector2 directionVector = null;
+    private Vector2 dragStartPosition;
+
     public SelectionTool() {
 
     }
 
     @Override
-    public void stageMouseDown(float x, float y) {
+    public boolean stageMouseDown(float x, float y) {
         sandbox = Sandbox.getInstance();
 
         boolean setOpacity = false;
@@ -48,6 +60,8 @@ public class SelectionTool implements Tool {
 
         // preparing selection tool rectangle to follow mouse
         sandbox.prepareSelectionRectangle(x, y, setOpacity);
+
+        return true;
     }
 
     @Override
@@ -67,18 +81,159 @@ public class SelectionTool implements Tool {
     }
 
     @Override
-    public void itemMouseDown(float x, float y) {
-        sandbox = Sandbox.getInstance();
+    public void stageMouseDoubleClick(float x, float y) {
 
     }
 
     @Override
-    public void itemMouseUp(float x, float y) {
+    public boolean itemMouseDown(IBaseItem item, float x, float y) {
         sandbox = Sandbox.getInstance();
+
+        item.updateDataVO();
+
+        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
+
+        // if shift is pressed we are in add/remove selection mode
+        if (isShiftPressed()) {
+
+            //TODO block selection handling
+            if (!currentTouchedItemWasSelected) {
+                // item was not selected, adding it to selection
+                sandbox.getSelector().setSelection(item, false);
+            }
+        } else {
+
+            if (item.isLockedByLayer()) {
+                // this is considered empty space click and thus should release all selections
+                sandbox.getSelector().clearSelections();
+                return false;
+            } else {
+                // select this item and remove others from selection
+                sandbox.getSelector().setSelection(item, true);
+            }
+        }
+
+        // If currently panning do nothing regarding this item, panning will take over
+        if (sandbox.cameraPanOn) {
+            return false;
+        }
+
+        // remembering local touch position for each of selected boxes, if planning to drag
+        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+            value.setTouchDiff(x - value.getHostAsActor().getX(), y - value.getHostAsActor().getY());
+        }
+
+        // remembering that item was touched
+        sandbox.isItemTouched = true;
+
+        dragStartPosition = new Vector2(x, y);
+
+        // pining UI to update current item properties tools
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+
+        return true;
     }
 
     @Override
-    public void itemMouseDragged(float x, float y) {
+    public void itemMouseDragged(IBaseItem item, float x, float y) {
         sandbox = Sandbox.getInstance();
+
+        int gridSize = Sandbox.getInstance().getGridSize();
+
+        if (isShiftPressed()) {
+            // check if we have a direction vector
+            if(directionVector == null) {
+                directionVector = new Vector2();
+                if(Math.abs(x - dragStartPosition.x) >= Math.abs(y - dragStartPosition.y)) {
+                    directionVector.x = 1;
+                    directionVector.y = 0;
+                } else {
+                    directionVector.x = 0;
+                    directionVector.y = 1;
+                }
+            }
+        } else {
+            directionVector = null;
+        }
+
+        // if there is no resizing going on, the item was touched,
+        // the button is in and we are dragging... well you can probably be safe about saying - we do.
+        if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+            sandbox.dirty = true;
+
+            float newX;
+            float newY;
+
+            newX = MathUtils.floor(x / gridSize) * gridSize;
+            newY = MathUtils.floor(y / gridSize) * gridSize;
+
+            if (isShiftPressed()) {
+                if(directionVector.x == 0) {
+                    newX = dragStartPosition.x;
+                }
+                if(directionVector.y == 0) {
+                    newY = dragStartPosition.y;
+                }
+            }
+
+            // Selection rectangles should move and follow along
+            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+                float[] diff = value.getTouchDiff();
+
+                diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
+                diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
+
+                value.getHostAsActor().setX(newX - diff[0]);
+                value.getHostAsActor().setY(newY - diff[1]);
+                value.hide();
+            }
+        }
+
+        // pining UI to update current item properties tools
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+    }
+
+
+    @Override
+    public void itemMouseUp(IBaseItem item, float x, float y) {
+        sandbox = Sandbox.getInstance();
+
+        if (currentTouchedItemWasSelected && !isDragging) {
+            // item was selected (and no dragging was performed), so we need to release it
+            if (isShiftPressed()) {
+                sandbox.getSelector().releaseSelection(item);
+            }
+        }
+
+        sandbox.getSelector().flushAllSelectedItems();
+
+        // if panning was taking place - do nothing else. (other touch up got this)
+        if (sandbox.cameraPanOn) {
+            return;
+        }
+
+        // re-show all selection rectangles as clicking/dragging is finished
+        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+            value.show();
+        }
+
+        if (sandbox.dirty) {
+            sandbox.saveSceneCurrentSceneData();
+        }
+        sandbox.isItemTouched = false;
+        sandbox.dirty = false;
+
+        // pining UI to update current item properties tools
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+    }
+
+    @Override
+    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
+
+    }
+
+    private boolean isShiftPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
+                || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
     }
 }

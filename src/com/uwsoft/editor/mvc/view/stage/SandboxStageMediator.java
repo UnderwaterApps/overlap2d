@@ -22,6 +22,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
@@ -32,11 +33,13 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.tools.*;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -53,7 +56,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     public static final String SANDBOX_TOOL_CHANGED = PREFIX + ".SANDBOX_TOOL_CHANGED";
 
     private final Vector2 reducedMoveDirection = new Vector2(0, 0);
-    private EventListener eventListener;
+
+    private SandboxStageEventListener stageListener;
+
     private boolean reducedMouseMoveEnabled = false;
     private float lastX = 0;
     private float lastY = 0;
@@ -68,8 +73,11 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     @Override
     public void onRegister() {
         super.onRegister();
-        eventListener = new SandboxStageEventListener();
+
         facade = Overlap2DFacade.getInstance();
+
+        stageListener = new SandboxStageEventListener();
+
         initTools();
     }
 
@@ -107,13 +115,66 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             case UIToolBoxMediator.TOOL_SELECTED:
                 setCurrentTool(notification.getBody());
                 break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
+                break;
             default:
                 break;
         }
     }
 
     private void handleSceneLoaded(Notification notification) {
-        viewComponent.addListener(eventListener);
+        viewComponent.addListener(stageListener);
+
+        Sandbox sandbox = Sandbox.getInstance();
+        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
+        for (int i = 0; i < items.size(); i++) {
+            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
+        }
+    }
+
+    public Vector2 getStageCoordinates() {
+        return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+    }
+
+    private class SandboxItemEventListener extends ClickListener {
+
+        private IBaseItem eventItem;
+
+        public SandboxItemEventListener(final IBaseItem eventItem) {
+            this.eventItem = eventItem;
+        }
+
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
+            Vector2 coords = getStageCoordinates();
+
+            event.stop();
+            return currentSelectedTool.itemMouseDown(eventItem, coords.x, coords.y);
+        }
+
+        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchUp(event, x, y, pointer, button);
+            Vector2 coords = getStageCoordinates();
+
+            currentSelectedTool.itemMouseUp(eventItem, x, y);
+
+            if (getTapCount() == 2) {
+                // this is double click
+                currentSelectedTool.itemMouseDoubleClick(eventItem, coords.x, coords.y);
+            }
+
+            if (button == Input.Buttons.RIGHT) {
+                // if right clicked on an item, drop down for current selection
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_RIGHT_CLICK);
+            }
+        }
+
+        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            Vector2 coords = getStageCoordinates();
+            currentSelectedTool.itemMouseDragged(eventItem, coords.x, coords.y);
+        }
+
     }
 
     private class SandboxStageEventListener extends ClickListener {
