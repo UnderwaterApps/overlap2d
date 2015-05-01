@@ -87,13 +87,12 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
         sandboxTools.put(PanTool.NAME, new PanTool());
 
-        setCurrentTool(SelectionTool.NAME);
     }
 
     private void setCurrentTool(String toolName) {
         currentSelectedTool = sandboxTools.get(toolName);
-
         facade.sendNotification(SANDBOX_TOOL_CHANGED, currentSelectedTool);
+        currentSelectedTool.initTool();
     }
 
     @Override
@@ -130,6 +129,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         for (int i = 0; i < items.size(); i++) {
             ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
         }
+
+        setCurrentTool(SelectionTool.NAME);
     }
 
     public Vector2 getStageCoordinates() {

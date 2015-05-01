@@ -24,6 +24,7 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
  * Created by azakhary on 4/30/2015.
  */
 public interface Tool {
+    public void initTool();
     public boolean stageMouseDown(float x, float y);
     public void stageMouseUp(float x, float y);
     public void stageMouseDragged(float x, float y);

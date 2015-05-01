@@ -28,6 +28,8 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
+import java.util.HashMap;
+
 /**
  * Created by azakhary on 4/30/2015.
  */
@@ -46,6 +48,15 @@ public class SelectionTool implements Tool {
 
     public SelectionTool() {
 
+    }
+
+    @Override
+    public void initTool() {
+        sandbox = Sandbox.getInstance();
+        HashMap<IBaseItem, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
+        for (SelectionRectangle value : currSelection.values()) {
+            value.setMode(false);
+        }
     }
 
     @Override

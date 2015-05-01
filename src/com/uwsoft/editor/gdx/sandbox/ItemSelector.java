@@ -76,6 +76,22 @@ public class ItemSelector {
     }
 
     /**
+     * @return one selected item
+     */
+    public SelectionRectangle getSelectedItemSelectionRectangle() {
+        ArrayList<SelectionRectangle> items = new ArrayList<SelectionRectangle>();
+        for (SelectionRectangle value : currentSelection.values()) {
+            items.add(value);
+            break;
+        }
+        if(items.size() > 0) {
+            return items.get(0);
+        }
+
+        return null;
+    }
+
+    /**
      * @return list of currently selected panels
      */
     public ArrayList<IBaseItem> getSelectedItems() {

@@ -48,6 +48,11 @@ public class TextTool implements Tool {
     }
 
     @Override
+    public void initTool() {
+
+    }
+
+    @Override
     public boolean stageMouseDown(float x, float y) {
         return true;
     }

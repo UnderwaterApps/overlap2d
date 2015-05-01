@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
@@ -26,6 +27,12 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
 public class TransformTool implements Tool {
 
     public static final String NAME = "TRANSFORM_TOOL";
+
+    @Override
+    public void initTool() {
+        Sandbox sandbox = Sandbox.getInstance();
+        sandbox.getSelector().clearSelections();
+    }
 
     @Override
     public boolean stageMouseDown(float x, float y) {
@@ -49,6 +56,17 @@ public class TransformTool implements Tool {
 
     @Override
     public boolean itemMouseDown(IBaseItem item, float x, float y) {
+        Sandbox sandbox = Sandbox.getInstance();
+        if (item.isLockedByLayer()) {
+            // this is considered empty space click and thus should release all selections
+            sandbox.getSelector().clearSelections();
+            return false;
+        } else {
+            // select this item and remove others from selection
+            sandbox.getSelector().setSelection(item, true);
+            sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
+        }
+
         return false;
     }
 

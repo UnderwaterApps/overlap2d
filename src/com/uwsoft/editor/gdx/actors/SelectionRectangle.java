@@ -67,6 +67,7 @@ public class SelectionRectangle extends PixelRect {
         setOpacity(0.4f);
 
         transformGroup = new Group();
+        transformGroup.setVisible(false);
         addActor(transformGroup);
         initTransformGroup();
     }
@@ -236,15 +237,13 @@ public class SelectionRectangle extends PixelRect {
         return touchDiff;
     }
 
-    public void setMode(boolean mode) {
-        /*
-        this.mode = mode;
-        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem)) {
+    public void setMode(boolean isTransform) {
+
+        if (isTransform) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);
         }
-        */
     }
 
     public float getVisualX() {return Math.min(getX(), getX() + getWidth());}

@@ -16,6 +16,11 @@ public class PanTool implements Tool {
     private Vector2 lastCoordinates;
 
     @Override
+    public void initTool() {
+
+    }
+
+    @Override
     public boolean stageMouseDown(float x, float y) {
         lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
         return false;

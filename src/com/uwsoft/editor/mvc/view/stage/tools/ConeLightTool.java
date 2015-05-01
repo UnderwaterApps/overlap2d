@@ -28,6 +28,11 @@ public class ConeLightTool implements Tool {
     public static final String NAME = "CONE_LIGHT_TOOL";
 
     @Override
+    public void initTool() {
+
+    }
+
+    @Override
     public boolean stageMouseDown(float x, float y) {
         return true;
     }
