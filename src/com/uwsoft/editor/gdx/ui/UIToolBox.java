@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.kotcrab.vis.ui.widget.Tooltip;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.stage.SandboxStage;
 import com.uwsoft.editor.gdx.stage.UIStage;
@@ -48,48 +49,48 @@ public class UIToolBox extends UIBox {
         btnGroup.setMaxCheckCount(1);
         btnGroup.setMinCheckCount(1);
 
-        Button mainIcon = addButton("mainIcon", true);
-        Button resizeIcon = addButton("resizeIcon", true);
+        Button mainIcon = addButton("mainIcon", "Select tool", true);
+        Button resizeIcon = addButton("resizeIcon", "Transform tool", true);
         //
-        Button topIcon = addButton("alignIconL", false);
+        Button topIcon = addButton("alignIconL", "Align top", false);
         topIcon.setTransform(true);
         topIcon.setRotation(-90);
-        Button leftIcon = addButton("alignIconL", false);
+        Button leftIcon = addButton("alignIconL", "Align left", false);
         leftIcon.setTransform(true);
-        Button bottomIcon = addButton("alignIconL", false);
+        Button bottomIcon = addButton("alignIconL", "Align bottom", false);
         bottomIcon.setTransform(true);
         bottomIcon.setRotation(90);
-        Button rightIcon = addButton("alignIconL", false);
+        Button rightIcon = addButton("alignIconL", "Align right", false);
         rightIcon.setTransform(true);
         rightIcon.setRotation(180);
 
-        Button hCenterIcon = addButton("alignIconCH", false);
-        Button vCenterIcon = addButton("alignIconCV", false);
+        Button hCenterIcon = addButton("alignIconCH", "Align horizontally center", false);
+        Button vCenterIcon = addButton("alignIconCV", "Align vertically center", false);
 
         //TODO: replace textures
-        Button leftEdgeIcon = addButton("AlignEdge", false);
-        Button topEdgeIcon = addButton("AlignEdge", false);
+        Button leftEdgeIcon = addButton("AlignEdge", "Align right edge", false);
+        Button topEdgeIcon = addButton("AlignEdge", "Align bottom edge", false);
         topEdgeIcon.setTransform(true);
-		  topEdgeIcon.setRotation(270f);
-        Button rightEdgeIcon = addButton("AlignEdge", false);
-		  rightEdgeIcon.setTransform(true);
-          rightEdgeIcon.setScaleX(-1);
-		  //rightEdgeIcon.setRotation(180f);
-        Button bottomEdgeIcon = addButton("AlignEdge", false);
-		  bottomEdgeIcon.setTransform(true);
-          bottomEdgeIcon.setScaleX(-1);
-		  bottomEdgeIcon.setRotation(270f);
+		topEdgeIcon.setRotation(270f);
+        Button rightEdgeIcon = addButton("AlignEdge", "Align left edge", false);
+		rightEdgeIcon.setTransform(true);
+        rightEdgeIcon.setScaleX(-1);
+		//rightEdgeIcon.setRotation(180f);
+        Button bottomEdgeIcon = addButton("AlignEdge", "Align top edge", false);
+		bottomEdgeIcon.setTransform(true);
+        bottomEdgeIcon.setScaleX(-1);
+		bottomEdgeIcon.setRotation(270f);
 
         topIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().getSelector().alignSelections(Align.top);
+            	stage.getSandbox().getSelector().alignSelections(Align.top);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
 
         leftIcon.addListener(new ClickListener() {
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                stage.getSandbox().getSelector().alignSelections(Align.left);
+            	stage.getSandbox().getSelector().alignSelections(Align.left);
                 return super.touchDown(event, x, y, pointer, button);
             }
         });
@@ -160,12 +161,16 @@ public class UIToolBox extends UIBox {
     }
 
     private Button addButton(String img, boolean isCheckButton) {
-        ButtonStyle btnStl = new ButtonStyle();
+        return addButton(img, null, isCheckButton);
+    }
+    
+    private Button addButton(String img, String tooltipText, boolean isCheckButton) {
+    	ButtonStyle btnStl = new ButtonStyle();
         btnStl.up = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img));
         btnStl.down = new TextureRegionDrawable(stage.textureManager.getEditorAsset(img + "Checked"));
 
-
         Button btn = new Button(btnStl);
+        if (tooltipText != null) new Tooltip(btn, tooltipText);
 
         btn.setX(10 + currCol * (btn.getWidth() + 5));
         btn.setY(getHeight() - (currRow + 1) * (btn.getHeight() + 3) - 17);
