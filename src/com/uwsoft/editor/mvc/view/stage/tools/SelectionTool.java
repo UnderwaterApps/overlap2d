@@ -39,6 +39,7 @@ public class SelectionTool implements Tool {
 
     private boolean isDragging = false;
     private boolean currentTouchedItemWasSelected = false;
+    private boolean isCastingRectangle = false;
 
     private Vector2 directionVector = null;
     private Vector2 dragStartPosition;
@@ -69,13 +70,16 @@ public class SelectionTool implements Tool {
         sandbox = Sandbox.getInstance();
         // selection is complete, this will check for what get caught in selection rect, and select 'em
         sandbox.selectionComplete();
+
+        isCastingRectangle = false;
+
     }
 
     @Override
     public void stageMouseDragged(float x, float y) {
         sandbox = Sandbox.getInstance();
 
-        sandbox.isUsingSelectionTool = true;
+        isCastingRectangle = true;
         sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
         sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
     }
@@ -113,18 +117,10 @@ public class SelectionTool implements Tool {
             }
         }
 
-        // If currently panning do nothing regarding this item, panning will take over
-        if (sandbox.cameraPanOn) {
-            return false;
-        }
-
         // remembering local touch position for each of selected boxes, if planning to drag
         for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
             value.setTouchDiff(x - value.getHostAsActor().getX(), y - value.getHostAsActor().getY());
         }
-
-        // remembering that item was touched
-        sandbox.isItemTouched = true;
 
         dragStartPosition = new Vector2(x, y);
 
@@ -156,9 +152,7 @@ public class SelectionTool implements Tool {
             directionVector = null;
         }
 
-        // if there is no resizing going on, the item was touched,
-        // the button is in and we are dragging... well you can probably be safe about saying - we do.
-        if (sandbox.isItemTouched && !sandbox.isResizing && Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isButtonPressed(Input.Buttons.LEFT)) {
             sandbox.dirty = true;
 
             float newX;
@@ -207,11 +201,6 @@ public class SelectionTool implements Tool {
 
         sandbox.getSelector().flushAllSelectedItems();
 
-        // if panning was taking place - do nothing else. (other touch up got this)
-        if (sandbox.cameraPanOn) {
-            return;
-        }
-
         // re-show all selection rectangles as clicking/dragging is finished
         for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
             value.show();
@@ -220,7 +209,7 @@ public class SelectionTool implements Tool {
         if (sandbox.dirty) {
             sandbox.saveSceneCurrentSceneData();
         }
-        sandbox.isItemTouched = false;
+
         sandbox.dirty = false;
 
         // pining UI to update current item properties tools

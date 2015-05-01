@@ -74,7 +74,6 @@ public class Sandbox {
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
     public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
 
-    public EditingMode editingMode;
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
     public FlowManager flow;
@@ -85,19 +84,15 @@ public class Sandbox {
     public int currTransformType = -1;
     public IBaseItem currTransformHost;
     public boolean isResizing = false;
-    public boolean isUsingSelectionTool = false;
-    public boolean isItemTouched = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
     public ArrayList<MainItemVO> tempClipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
-    public boolean cameraPanOn;
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
-    private SandboxInputAdapter sandboxInputAdapter;
     private UserActionController uac;
     private ItemFactory itemFactory;
     private ItemSelector selector;
@@ -137,13 +132,11 @@ public class Sandbox {
         uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
-        editingMode = EditingMode.SELECTION;
-
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
 
         transformationHandler = new TransformationHandler();
-        sandboxInputAdapter = new SandboxInputAdapter(this);
+
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
         itemFactory = new ItemFactory(this);
@@ -176,30 +169,6 @@ public class Sandbox {
         return sceneControl;
     }
 
-    public SandboxInputAdapter getSandboxInputAdapter() {
-        return sandboxInputAdapter;
-    }
-
-
-    /**
-     * Initializers *
-     */
-
-    public EditingMode getCurrentMode() {
-        return editingMode;
-    }
-
-    /**
-     * sets current editing mode, and messages all selection rectangles about it.
-     *
-     * @param currentMode
-     */
-    public void setCurrentMode(EditingMode currentMode) {
-        this.editingMode = currentMode;
-        for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-            value.setMode(currentMode);
-        }
-    }
 
     /**
      * TODO: loading fonts this way is a bit outdated and needs to change
@@ -401,9 +370,9 @@ public class Sandbox {
     }
 
     public void enablePan() {
-        cameraPanOn = true;
-        selector.clearSelections();
-        isItemTouched = false;
+        //cameraPanOn = true;
+        //selector.clearSelections();
+        //isItemTouched = false;
     }
 
     public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
@@ -419,7 +388,7 @@ public class Sandbox {
 
     public void selectionComplete() {
         // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
-        isUsingSelectionTool = false;
+
         // hiding selection rectangle
         getSandboxStage().selectionRec.setOpacity(0.0f);
         ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();

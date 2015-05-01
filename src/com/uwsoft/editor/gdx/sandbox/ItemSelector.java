@@ -159,7 +159,7 @@ public class ItemSelector {
     private SelectionRectangle createSelectionRect(IBaseItem item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
         rect.claim(item);
-        rect.setMode(sandbox.getCurrentMode());
+        //rect.setMode(sandbox.getCurrentMode());
         sandbox.getSandboxStage().frontUI.addActor(rect);
         rect.show();
 

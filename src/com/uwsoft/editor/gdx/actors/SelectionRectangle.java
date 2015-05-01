@@ -29,7 +29,6 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
-import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -56,7 +55,6 @@ public class SelectionRectangle extends PixelRect {
     private float[] touchDiff = new float[2];
     private Group transformGroup;
     private Image[] miniRects = new Image[8];
-    private EditingMode mode;
 
     public SelectionRectangle(Sandbox sandbox) {
         super(0, 0);
@@ -82,7 +80,8 @@ public class SelectionRectangle extends PixelRect {
 		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
 		  setThickness(camera.zoom);
 
-        if (mode != EditingMode.TRANSFORM) return;
+        //if(true) return;
+        //if (mode != EditingMode.TRANSFORM) return;
 
         Vector2 mouseCoords = getMouseLocalCoordinates();
 
@@ -237,13 +236,15 @@ public class SelectionRectangle extends PixelRect {
         return touchDiff;
     }
 
-    public void setMode(EditingMode mode) {
+    public void setMode(boolean mode) {
+        /*
         this.mode = mode;
         if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem)) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);
         }
+        */
     }
 
     public float getVisualX() {return Math.min(getX(), getX() + getWidth());}

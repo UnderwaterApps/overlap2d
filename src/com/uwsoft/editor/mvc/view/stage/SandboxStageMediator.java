@@ -59,9 +59,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
     private SandboxStageEventListener stageListener;
 
-    private boolean reducedMouseMoveEnabled = false;
-    private float lastX = 0;
-    private float lastY = 0;
+    private Tool hotSwapMemory;
 
     private HashMap<String, Tool> sandboxTools = new HashMap<>();
     private Tool currentSelectedTool;
@@ -87,6 +85,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         sandboxTools.put(TextTool.NAME, new TextTool());
         sandboxTools.put(PointLightTool.NAME, new PointLightTool());
         sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
+        sandboxTools.put(PanTool.NAME, new PanTool());
 
         setCurrentTool(SelectionTool.NAME);
     }
@@ -193,10 +192,6 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
-            if (isShiftKey(keycode)) {
-                reducedMouseMoveEnabled = true;
-                System.out.println("pressed");
-            }
 
             // Control pressed as well
             if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
@@ -285,9 +280,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly
             // TODO: this pan is kinda different from what happens when you press middle button, so things need to merge right
-            if (keycode == Input.Keys.SPACE && !sandbox.isItemTouched && !sandbox.isUsingSelectionTool) {
+            if (keycode == Input.Keys.SPACE) {
                 sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
-                sandbox.cameraPanOn = true;
+                toolHotSwap(sandboxTools.get(PanTool.NAME));
             }
 
             // Zoom
@@ -310,14 +305,10 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             }
             if (keycode == Input.Keys.SPACE) {
                 // if pan mode is disabled set cursor back
-                // TODO: this should go to sandbox as well
                 sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
-                sandbox.cameraPanOn = false;
+                toolHotSwapBack();
             }
-            if (!isShiftPressed()) {
-                reducedMoveDirection.setZero();
-                reducedMouseMoveEnabled = false;
-            }
+
             return true;
         }
 
@@ -327,8 +318,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             super.touchDown(event, x, y, pointer, button);
 
             Sandbox sandbox = Sandbox.getInstance();
-            lastX = Gdx.input.getX();
-            lastY = Gdx.input.getY();
+
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
             sandbox.getUIStage().setScrollFocus(sandbox.getSandboxStage().mainBox);
@@ -341,14 +331,13 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             switch (button) {
                 case Input.Buttons.MIDDLE:
                     // if middle button is pressed - PAN the scene
-                    sandbox.enablePan();
-                    break;
-                case Input.Buttons.LEFT:
-                    currentSelectedTool.stageMouseDown(x, y);
-
+                    toolHotSwap(sandboxTools.get(PanTool.NAME));
                     break;
             }
-            return !sandbox.isItemTouched;
+
+            currentSelectedTool.stageMouseDown(x, y);
+
+            return true;
         }
 
         @Override
@@ -368,11 +357,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 return;
             }
 
-            // Basically if panning but space is not pressed, stop panning.? o_O
-            // TODO: seriously this needs to be figured out, I am not sure we need it
-            if (sandbox.cameraPanOn) {
-                sandbox.cameraPanOn = Gdx.input.isKeyPressed(Input.Keys.SPACE);
-                return;
+            if (button == Input.Buttons.MIDDLE) {
+                toolHotSwapBack();
             }
 
             if (getTapCount() == 2 && button == Input.Buttons.LEFT) {
@@ -394,24 +380,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Sandbox sandbox = Sandbox.getInstance();
 
-            // if resizing is in progress we are not dealing with this
-            //if (sandbox.isResizing) return;
-
-            if (sandbox.cameraPanOn) {
-                // if panning, then just move camera
-                OrthographicCamera camera = (OrthographicCamera) (sandbox.getSandboxStage().getCamera());
-
-                float currX = camera.position.x + (lastX - Gdx.input.getX()) * camera.zoom;
-                float currY = camera.position.y + (Gdx.input.getY() - lastY) * camera.zoom;
-
-                sandbox.getSandboxStage().getCamera().position.set(currX, currY, 0);
-
-                lastX = Gdx.input.getX();
-                lastY = Gdx.input.getY();
-            } else {
-                // else - using current tool tool
-                currentSelectedTool.stageMouseDragged(x, y);
-            }
+            currentSelectedTool.stageMouseDragged(x, y);
         }
 
 
@@ -423,6 +392,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if item is currently being held with mouse (touched in but not touched out)
             // mouse scroll should rotate the selection around it's origin
+            /*
             if (sandbox.isItemTouched) {
                 for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
                     float degreeAmount = 1;
@@ -440,6 +410,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 // if not item is touched then we can use this for zoom
                 sandbox.zoomBy(amount);
             }
+            */
+
             return false;
         }
 
@@ -458,5 +430,15 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                     || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         }
+    }
+
+    private void toolHotSwap(Tool tool) {
+        hotSwapMemory = currentSelectedTool;
+        currentSelectedTool = tool;
+    }
+
+    private void toolHotSwapBack() {
+        currentSelectedTool = hotSwapMemory;
+        hotSwapMemory = null;
     }
 }
