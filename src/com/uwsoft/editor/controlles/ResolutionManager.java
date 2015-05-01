@@ -412,8 +412,10 @@ public class ResolutionManager {
         TexturePacker.Settings settings = new TexturePacker.Settings();
 
         settings.flattenPaths = true;
-        settings.maxHeight = getMinSquareNum(resolution.height);
-        settings.maxWidth = getMinSquareNum(resolution.height);
+//        settings.maxHeight = getMinSquareNum(resolution.height);
+//        settings.maxWidth = getMinSquareNum(resolution.height);
+        settings.maxHeight = Integer.parseInt(dataManager.getCurrentProjectVO().texturepackerHeight);
+        settings.maxWidth = Integer.parseInt(dataManager.getCurrentProjectVO().texturepackerWidth);
         settings.filterMag = Texture.TextureFilter.Linear;
         settings.filterMin = Texture.TextureFilter.Linear;
 
