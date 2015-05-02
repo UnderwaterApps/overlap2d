@@ -24,7 +24,7 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class TransformTool implements Tool {
+public class TransformTool extends SelectionTool {
 
     public static final String NAME = "TRANSFORM_TOOL";
 
@@ -56,32 +56,11 @@ public class TransformTool implements Tool {
 
     @Override
     public boolean itemMouseDown(IBaseItem item, float x, float y) {
+        super.itemMouseDown(item, x, y);
         Sandbox sandbox = Sandbox.getInstance();
-        if (item.isLockedByLayer()) {
-            // this is considered empty space click and thus should release all selections
-            sandbox.getSelector().clearSelections();
-            return false;
-        } else {
-            // select this item and remove others from selection
-            sandbox.getSelector().setSelection(item, true);
-            sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
-        }
 
-        return false;
-    }
+        sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
 
-    @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
-
+        return true;
     }
 }

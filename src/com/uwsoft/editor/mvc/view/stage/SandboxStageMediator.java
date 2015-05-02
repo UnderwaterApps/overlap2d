@@ -99,7 +99,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     public String[] listNotificationInterests() {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
-                UIToolBoxMediator.TOOL_SELECTED
+                UIToolBoxMediator.TOOL_SELECTED,
+                ItemFactory.NEW_ITEM_ADDED
         };
     }
 
