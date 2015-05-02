@@ -73,6 +73,14 @@ public class SelectionRectangle extends PixelRect {
         transformGroup.setVisible(false);
         addActor(transformGroup);
         initTransformGroup();
+
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                ((Actor)host).fire(event);
+                return true;
+            }
+        });
     }
 
     public interface SelectionRectangleListener {
@@ -81,14 +89,10 @@ public class SelectionRectangle extends PixelRect {
         public void anchorUp(int anchor, float x, float y);
     }
 
-    private Array<SelectionRectangleListener> listeners = new Array<>();
+    private SelectionRectangleListener listener;
 
-    public void addListener(SelectionRectangleListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeListener(SelectionRectangleListener listener) {
-        listeners.removeValue(listener, true);
+    public void setListener(SelectionRectangleListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -174,24 +178,25 @@ public class SelectionRectangle extends PixelRect {
             miniRects[i].addListener(new ClickListener() {
                 @Override
                 public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    for(SelectionRectangleListener listener: listeners) {
+                    super.touchDown(event, x, y, pointer, button);
+                    if(listener != null) {
                         listener.anchorDown(rectId, event.getStageX(), event.getStageY());
                     }
-                    return super.touchDown(event, x, y, pointer, button);
+                    event.stop();
+                    return true;
                 }
                 @Override
                 public void touchDragged (InputEvent event, float x, float y, int pointer) {
-                    for(SelectionRectangleListener listener: listeners) {
+                    if(listener != null) {
                         listener.anchorDragged(rectId, event.getStageX(), event.getStageY());
                     }
-                    super.touchDragged(event, x, y, pointer);
+                    update();
                 }
                 @Override
                 public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    for(SelectionRectangleListener listener: listeners) {
+                    if(listener != null) {
                         listener.anchorUp(rectId, event.getStageX(), event.getStageY());
                     }
-                    super.touchUp(event, x, y, pointer, button);
                 }
             });
         }

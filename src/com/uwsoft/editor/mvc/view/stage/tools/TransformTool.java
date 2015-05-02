@@ -33,6 +33,8 @@ public class TransformTool extends SelectionTool {
 
     public static final String NAME = "TRANSFORM_TOOL";
 
+    SelectionRectangle currentSelection;
+
     @Override
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
@@ -64,16 +66,16 @@ public class TransformTool extends SelectionTool {
         super.itemMouseDown(item, x, y);
         Sandbox sandbox = Sandbox.getInstance();
 
-        SelectionRectangle selectionRect = sandbox.getSelector().getSelectedItemSelectionRectangle();
+        currentSelection = sandbox.getSelector().getSelectedItemSelectionRectangle();
 
-        selectionRect.setMode(true);
-        setListeners(selectionRect);
+        currentSelection.setMode(true);
+        setListeners(currentSelection);
 
         return true;
     }
 
     private void setListeners(SelectionRectangle selectionRect) {
-        selectionRect.addListener(new SelectionRectangle.SelectionRectangleListener() {
+        selectionRect.setListener(new SelectionRectangle.SelectionRectangleListener() {
 
             private int anchorId;
             private Actor host;
