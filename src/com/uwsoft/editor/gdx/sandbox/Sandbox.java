@@ -77,7 +77,6 @@ public class Sandbox {
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
     public FlowManager flow;
-    public TransformationHandler transformationHandler;
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -134,8 +133,6 @@ public class Sandbox {
 
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
-
-        transformationHandler = new TransformationHandler();
 
         uac = new UserActionController(this);
         selector = new ItemSelector(this);

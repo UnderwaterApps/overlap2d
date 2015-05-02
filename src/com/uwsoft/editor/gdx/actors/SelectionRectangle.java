@@ -25,8 +25,11 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -62,7 +65,7 @@ public class SelectionRectangle extends PixelRect {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         rm = facade.retrieveProxy(EditorTextureManager.NAME);
         this.sandbox = sandbox;
-        setTouchable(Touchable.disabled);
+        //setTouchable(Touchable.disabled);
         setVisible(false);
         setOpacity(0.4f);
 
@@ -72,18 +75,34 @@ public class SelectionRectangle extends PixelRect {
         initTransformGroup();
     }
 
+    public interface SelectionRectangleListener {
+        public void anchorDown(int anchor, float x, float y);
+        public void anchorDragged(int anchor, float x, float y);
+        public void anchorUp(int anchor, float x, float y);
+    }
+
+    private Array<SelectionRectangleListener> listeners = new Array<>();
+
+    public void addListener(SelectionRectangleListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(SelectionRectangleListener listener) {
+        listeners.removeValue(listener, true);
+    }
+
     @Override
     public void act(float delta) {
         super.act(delta);
 
 
-		  // change size according to zoom
-		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
-		  setThickness(camera.zoom);
+		// change size according to zoom
+		OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		setThickness(camera.zoom);
 
         //if(true) return;
         //if (mode != EditingMode.TRANSFORM) return;
-
+/*
         Vector2 mouseCoords = getMouseLocalCoordinates();
 
         sandbox.setCurrentlyTransforming(null, -1);
@@ -128,6 +147,7 @@ public class SelectionRectangle extends PixelRect {
         if (!isOver) {
             sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
         }
+        */
     }
 
     private Vector2 getMouseLocalCoordinates() {
@@ -148,6 +168,33 @@ public class SelectionRectangle extends PixelRect {
         miniRects[B] = getMiniRect();
         miniRects[LB] = getMiniRect();
         miniRects[L] = getMiniRect();
+
+        for(int i = 0; i < miniRects.length; i++) {
+            final int rectId = i;
+            miniRects[i].addListener(new ClickListener() {
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    for(SelectionRectangleListener listener: listeners) {
+                        listener.anchorDown(rectId, event.getStageX(), event.getStageY());
+                    }
+                    return super.touchDown(event, x, y, pointer, button);
+                }
+                @Override
+                public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                    for(SelectionRectangleListener listener: listeners) {
+                        listener.anchorDragged(rectId, event.getStageX(), event.getStageY());
+                    }
+                    super.touchDragged(event, x, y, pointer);
+                }
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    for(SelectionRectangleListener listener: listeners) {
+                        listener.anchorUp(rectId, event.getStageX(), event.getStageY());
+                    }
+                    super.touchUp(event, x, y, pointer, button);
+                }
+            });
+        }
     }
 
     private void positionTransformables() {

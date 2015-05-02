@@ -20,8 +20,10 @@ package com.uwsoft.editor.gdx.sandbox;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
@@ -175,7 +177,6 @@ public class ItemSelector {
     private SelectionRectangle createSelectionRect(IBaseItem item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
         rect.claim(item);
-        //rect.setMode(sandbox.getCurrentMode());
         sandbox.getSandboxStage().frontUI.addActor(rect);
         rect.show();
 
@@ -211,9 +212,9 @@ public class ItemSelector {
 
         currentSelection.put(item, rect);
 
-        sandbox.getSandboxStage().uiStage.itemWasSelected(item);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
 
-		  sandbox.getUIStage().mainDropDown.hide();
+		sandbox.getUIStage().mainDropDown.hide();
 
         sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
 
