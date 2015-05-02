@@ -18,57 +18,33 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.LightVO;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class PointLightTool implements Tool {
+public class PointLightTool extends SimpleTool {
 
     public static final String NAME = "POINT_LIGHT_TOOL";
 
     @Override
-    public void initTool() {
-
-    }
-
-    @Override
     public boolean stageMouseDown(float x, float y) {
-        return true;
+        LayerItemVO layer = Sandbox.getInstance().getItemFactory().getSelectedLayer();
+        LightVO vo = new LightVO();
+        vo.type = LightVO.LightType.POINT;
+        vo.distance = 300;
+        Sandbox.getInstance().getItemFactory().createLight(layer, vo, x, y);
+        return false;
     }
 
     @Override
     public void stageMouseUp(float x, float y) {
-
-    }
-
-    @Override
-    public void stageMouseDragged(float x, float y) {
-
-    }
-
-    @Override
-    public void stageMouseDoubleClick(float x, float y) {
-
-    }
-
-    @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
-        return true;
-    }
-
-    @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
 
     }
 }

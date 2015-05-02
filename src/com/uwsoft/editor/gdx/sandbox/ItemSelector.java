@@ -514,6 +514,14 @@ public class ItemSelector {
         sandbox.saveSceneCurrentSceneData();
     }
 
+    public boolean selectionIsOneItem() {
+        if(getCurrentSelection().values().size() == 1) {
+            return true;
+        }
+
+        return false;
+    }
+
     public boolean selectionIsComposite() {
         for (SelectionRectangle value : getCurrentSelection().values()) {
             if (value.getHost().isComposite()) {

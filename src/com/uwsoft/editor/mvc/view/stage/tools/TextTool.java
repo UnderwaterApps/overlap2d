@@ -20,13 +20,16 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class TextTool implements Tool {
+public class TextTool extends SimpleTool {
 
     public static final String NAME = "TEXT_TOOL";
 
@@ -48,11 +51,6 @@ public class TextTool implements Tool {
     }
 
     @Override
-    public void initTool() {
-
-    }
-
-    @Override
     public boolean stageMouseDown(float x, float y) {
         return true;
     }
@@ -64,35 +62,6 @@ public class TextTool implements Tool {
         return;
     }
 
-    @Override
-    public void stageMouseDragged(float x, float y) {
-
-    }
-
-    @Override
-    public void stageMouseDoubleClick(float x, float y) {
-
-    }
-
-    @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
-        return true;
-    }
-
-    @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
-
-    }
 
     public int getAlign() {
         return align;

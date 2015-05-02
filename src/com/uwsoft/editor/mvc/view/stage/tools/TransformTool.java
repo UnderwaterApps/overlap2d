@@ -21,8 +21,10 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
 
@@ -38,7 +40,12 @@ public class TransformTool extends SelectionTool {
     @Override
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
-        sandbox.getSelector().clearSelections();
+
+        if(sandbox.getSelector().selectionIsOneItem()){
+            sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
+        } else {
+            sandbox.getSelector().clearSelections();
+        }
     }
 
     @Override
@@ -84,7 +91,7 @@ public class TransformTool extends SelectionTool {
             public void anchorDown(int anchor, float x, float y) {
                 Sandbox sandbox = Sandbox.getInstance();
                 this.anchorId = anchor;
-                this.host = (Actor)sandbox.getSelector().getSelectedItem();
+                this.host = (Actor) sandbox.getSelector().getSelectedItem();
             }
 
             @Override
@@ -145,6 +152,8 @@ public class TransformTool extends SelectionTool {
                 }
 
                 host.setScale(pseudoWidth / host.getWidth(), pseudoHeight / host.getHeight());
+                ((IBaseItem)host).updateDataVO();
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
             }
 
             @Override
