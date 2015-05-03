@@ -21,6 +21,8 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.LightVO;
 
 import java.util.HashMap;
 
@@ -33,6 +35,12 @@ public class ConeLightTool extends SimpleTool {
 
     @Override
     public boolean stageMouseDown(float x, float y) {
+        LayerItemVO layer = Sandbox.getInstance().getItemFactory().getSelectedLayer();
+        LightVO vo = new LightVO();
+        vo.type = LightVO.LightType.CONE;
+        vo.distance = 300;
+        vo.coneDegree = 45;
+        Sandbox.getInstance().getItemFactory().createLight(layer, vo, x, y);
         return false;
     }
 

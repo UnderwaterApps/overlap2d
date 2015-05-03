@@ -196,7 +196,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
 
             // Control pressed as well
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
+            if (isControlPressed()) {
                 if (keycode == Input.Keys.UP) {
                     // going to front of next item in z-index ladder
                     sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), true);
@@ -243,6 +243,12 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 }
 
                 return true;
+            }
+
+            if (Gdx.input.isKeyPressed(Input.Keys.S) && !isControlPressed()) {
+                setCurrentTool(SelectionTool.NAME);
+                UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                toolBoxMediator.setCurrentTool(SelectionTool.NAME);
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {

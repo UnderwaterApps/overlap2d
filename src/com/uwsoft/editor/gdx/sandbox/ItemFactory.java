@@ -184,7 +184,9 @@ public class ItemFactory {
     public void createLight(LayerItemVO layer, LightVO vo, float x, float y) {
         sceneControl.getCurrentScene().updateDataVO();
 
-        prepareVO(vo, layer.layerName, x, y);
+        vo.layerName = layer.layerName;
+        vo.x = x;
+        vo.y = y;
 
         LightActor itm = new LightActor(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 

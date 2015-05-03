@@ -85,4 +85,9 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
                 break;
         }
     }
+
+    public void setCurrentTool(String tool) {
+        viewComponent.setCurrentTool(tool);
+        currentTool = tool;
+    }
 }

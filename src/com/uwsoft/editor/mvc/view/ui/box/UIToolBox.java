@@ -28,6 +28,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class UIToolBox extends VisTable {
 
@@ -35,6 +36,8 @@ public class UIToolBox extends VisTable {
 
     public static final String TOOL_CLICKED = PREFIX + ".TOOL_CLICKED";
     private final ButtonGroup<VisImageButton> toolsButtonGroup;
+
+    private HashMap<String, VisImageButton> buttonMap = new HashMap<>();
 
     public UIToolBox() {
         toolsButtonGroup = new ButtonGroup<>();
@@ -49,7 +52,9 @@ public class UIToolBox extends VisTable {
     }
 
     private void addToolButton(String name) {
-        add(createButton("tool-" + name, name)).width(31).height(31);
+        VisImageButton button = createButton("tool-" + name, name);
+        buttonMap.put(name, button);
+        add(button).width(31).height(31);
     }
 
     private VisImageButton createButton(String styleName, String toolId) {
@@ -73,5 +78,9 @@ public class UIToolBox extends VisTable {
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
             facade.sendNotification(TOOL_CLICKED, toolId);
         }
+    }
+
+    public void setCurrentTool(String tool) {
+        buttonMap.get(tool).setChecked(true);
     }
 }
