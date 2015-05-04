@@ -18,17 +18,13 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
+import java.util.HashMap;
+
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
-
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.

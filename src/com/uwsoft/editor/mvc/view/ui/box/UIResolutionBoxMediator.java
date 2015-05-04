@@ -21,12 +21,11 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 /**
  * Created by sargis on 4/8/15.

@@ -19,10 +19,8 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 

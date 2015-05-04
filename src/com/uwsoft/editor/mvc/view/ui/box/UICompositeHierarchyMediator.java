@@ -1,15 +1,14 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import com.badlogic.gdx.utils.Array;
+import java.util.Stack;
+
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-
-import java.util.Stack;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * Created by CyberJoe on 4/22/2015.

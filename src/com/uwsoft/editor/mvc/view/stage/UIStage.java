@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -33,9 +34,8 @@ import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
@@ -86,7 +86,7 @@ public class UIStage extends Stage {
         dlg.editAsset(assetName);
     }
 
-    public void editPhysics(IBaseItem item) {
+    public void editPhysics(Entity item) {
         ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         addActor(dlg);
         dlg.editItem(item);
@@ -97,7 +97,7 @@ public class UIStage extends Stage {
     }
 
 
-    public void itemWasSelected(IBaseItem itm) {
+    public void itemWasSelected(Entity itm) {
         //uiMainTable.multiPropertyBox.setItem(itm);
         facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
 

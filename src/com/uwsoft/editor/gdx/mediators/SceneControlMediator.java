@@ -18,21 +18,21 @@
 
 package com.uwsoft.editor.gdx.mediators;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LightActor;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.Essentials;
-import com.uwsoft.editor.renderer.data.SceneVO;
-
-import java.util.ArrayList;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.Essentials;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
  * Mediates scene communication between editor and current runtime
@@ -84,7 +84,7 @@ public class SceneControlMediator {
         }
 
         essentials.physicsStopped = true;
-        sceneLoader = new SceneLoader(essentials);
+        sceneLoader = new SceneLoader();
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
         sceneLoader.setResolution(resolutionManager.currentResolutionName);
 

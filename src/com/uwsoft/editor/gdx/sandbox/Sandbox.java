@@ -18,7 +18,9 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import com.badlogic.gdx.Gdx;
+import java.util.ArrayList;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
@@ -26,30 +28,24 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.gdx.ui.DropDown;
-import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.*;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.ParticleItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
-
-import java.util.ArrayList;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
@@ -72,7 +68,7 @@ public class Sandbox {
      * this part contains legacy params that need to be removed one by one
      */
     public int currTransformType = -1;
-    public IBaseItem currTransformHost;
+    public Entity currTransformHost;
     public boolean isResizing = false;
     public boolean isUsingSelectionTool = false;
     public boolean isItemTouched = false;

@@ -18,6 +18,12 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
@@ -26,17 +32,28 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
+import com.uwsoft.editor.renderer.conponents.MainItemComponent;
+import com.uwsoft.editor.renderer.conponents.TintComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBaseItem, UIBasicItemProperties> {
+public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UIBasicItemProperties> {
     private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+    
+    private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
+    private ComponentMapper<MainItemComponent> mainItemMapper =  ComponentMapper.getFor(MainItemComponent.class);
+    private ComponentMapper<DimensionsComponent> dimensionMapper =  ComponentMapper.getFor(DimensionsComponent.class);
+    private ComponentMapper<TintComponent> tintMapper =  ComponentMapper.getFor(TintComponent.class);
+    private TransformComponent trnasformComponent;
+    private MainItemComponent mainItemComponent;
+    private DimensionsComponent dimensionComponent;
+    private TintComponent tintComponent;
 
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
@@ -75,41 +92,53 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         }
     }
 
-    protected void translateObservableDataToView(IBaseItem item) {
-        MainItemVO vo = item.getDataVO();
+    protected void translateObservableDataToView(Entity entity) {
+    	trnasformComponent = transformMapper.get(entity);
+    	mainItemComponent = mainItemMapper.get(entity);
+    	dimensionComponent = dimensionMapper.get(entity);
+    	tintComponent = tintMapper.get(entity);
 
-        Actor itemAsActor = (Actor) item;
-
-        viewComponent.setIdBoxValue(vo.itemIdentifier);
-        viewComponent.setXValue(itemAsActor.getX() + "");
-        viewComponent.setYValue(itemAsActor.getY() + "");
-        viewComponent.setFlipH(vo.isFlipedH);
-        viewComponent.setFlipV(vo.isFlipedV);
-        viewComponent.setWidthValue(itemAsActor.getWidth() + "");
-        viewComponent.setHeightValue(itemAsActor.getHeight() + "");
-        viewComponent.setRotationValue(((Actor) item).getRotation() + "");
-        viewComponent.setScaleXValue(vo.scaleX + "");
-        viewComponent.setScaleYValue(vo.scaleY + "");
-        viewComponent.setTintColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
+        viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
+        viewComponent.setXValue(trnasformComponent.x + "");
+        viewComponent.setYValue(trnasformComponent.y + "");
+        //TODO no flip anymore
+        //viewComponent.setFlipH(vo.isFlipedH);
+        //viewComponent.setFlipV(vo.isFlipedV);
+        
+        viewComponent.setWidthValue(dimensionComponent.width + "");
+        viewComponent.setHeightValue(dimensionComponent.height + "");
+        viewComponent.setRotationValue(trnasformComponent.rotation + "");
+        viewComponent.setScaleXValue(trnasformComponent.scaleX + "");
+        viewComponent.setScaleYValue(trnasformComponent.scaleY + "");
+        viewComponent.setTintColor(new Color(tintComponent.tint[0], tintComponent.tint[1], tintComponent.tint[2], tintComponent.tint[3]));
     }
 
     @Override
     protected void translateViewToItemData() {
-        MainItemVO vo = observableReference.getDataVO();
+        //MainItemVO vo = observableReference.getDataVO();
+    	Entity entity  = ((Entity) observableReference);
+    	
+    	trnasformComponent = transformMapper.get(entity);
+    	mainItemComponent = mainItemMapper.get(entity);
+    	dimensionComponent = dimensionMapper.get(entity);
+    	tintComponent = tintMapper.get(entity);
 
-        vo.itemIdentifier = viewComponent.getIdBoxValue();
-        vo.x = NumberUtils.toFloat(viewComponent.getXValue(), vo.x);
-        vo.y = NumberUtils.toFloat(viewComponent.getYValue(), vo.y);
-        vo.isFlipedH = viewComponent.getFlipH();
-        vo.isFlipedV = viewComponent.getFlipV();
+    	mainItemComponent.itemIdentifier = viewComponent.getIdBoxValue();
+    	trnasformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), trnasformComponent.x);
+    	trnasformComponent.y = NumberUtils.toFloat(viewComponent.getYValue(), trnasformComponent.y);
+    	
+    	//TODO nor more flip
+    	//vo.isFlipedH = viewComponent.getFlipH();
+    	//vo.isFlipedV = viewComponent.getFlipV();
+    	
         // TODO: manage width and height
-        vo.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), vo.rotation);
-        vo.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), vo.scaleX);
-        vo.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), vo.scaleY);
+    	trnasformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), trnasformComponent.rotation);
+    	trnasformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), trnasformComponent.scaleX);
+    	trnasformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), trnasformComponent.scaleY);
         Color color = viewComponent.getTintColor();
-        vo.tint[0] = color.r;
-        vo.tint[1] = color.g;
-        vo.tint[2] = color.b;
-        vo.tint[3] = color.a;
+        tintComponent.tint[0] = color.r;
+        tintComponent.tint[1] = color.g;
+        tintComponent.tint[2] = color.b;
+        tintComponent.tint[3] = color.a;
     }
 }

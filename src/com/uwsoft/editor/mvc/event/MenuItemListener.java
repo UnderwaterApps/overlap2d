@@ -2,7 +2,6 @@ package com.uwsoft.editor.mvc.event;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**

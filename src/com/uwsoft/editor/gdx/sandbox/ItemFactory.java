@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import java.io.File;
+import java.util.Iterator;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
@@ -26,18 +29,44 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
-import com.uwsoft.editor.renderer.actor.*;
-import com.uwsoft.editor.renderer.data.*;
-
-import java.io.File;
-import java.util.Iterator;
+import com.uwsoft.editor.renderer.actor.CheckBoxItem;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.actor.Image9patchItem;
+import com.uwsoft.editor.renderer.actor.ImageItem;
+import com.uwsoft.editor.renderer.actor.LabelItem;
+import com.uwsoft.editor.renderer.actor.LightActor;
+import com.uwsoft.editor.renderer.actor.ParticleItem;
+import com.uwsoft.editor.renderer.actor.SelectBoxItem;
+import com.uwsoft.editor.renderer.actor.SpineActor;
+import com.uwsoft.editor.renderer.actor.SpriteAnimation;
+import com.uwsoft.editor.renderer.actor.SpriterActor;
+import com.uwsoft.editor.renderer.actor.TextBoxItem;
+import com.uwsoft.editor.renderer.actor.TextButtonItem;
+import com.uwsoft.editor.renderer.legacy.data.ButtonVO;
+import com.uwsoft.editor.renderer.legacy.data.CheckBoxVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
+import com.uwsoft.editor.renderer.legacy.data.Image9patchVO;
+import com.uwsoft.editor.renderer.legacy.data.LabelVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.legacy.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.legacy.data.SelectBoxVO;
+import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
+import com.uwsoft.editor.renderer.legacy.data.TextBoxVO;
 
 /**
  * Provides methods to create panels of different types based on provided tools, and adds them to the scene.

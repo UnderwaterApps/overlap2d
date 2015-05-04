@@ -18,16 +18,20 @@
 
 package com.uwsoft.editor;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+
+import org.apache.commons.lang3.SystemUtils;
+
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.uwsoft.editor.utils.AppConfig;
-import org.apache.commons.lang3.SystemUtils;
-
-import javax.swing.*;
-import java.awt.*;
 
 public class Main {
 

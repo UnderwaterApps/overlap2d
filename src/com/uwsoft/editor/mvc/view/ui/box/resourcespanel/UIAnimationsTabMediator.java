@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
@@ -30,10 +32,7 @@ import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
-
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.

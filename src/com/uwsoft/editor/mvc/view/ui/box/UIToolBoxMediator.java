@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.util.HashMap;
+
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.EditingMode;
@@ -25,8 +27,6 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.mvc.view.ui.box.tools.ToolSettings;
-
-import java.util.HashMap;
 
 /**
  * Created by sargis on 4/9/15.

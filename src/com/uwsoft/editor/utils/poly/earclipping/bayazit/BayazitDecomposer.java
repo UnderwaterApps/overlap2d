@@ -21,10 +21,10 @@ package com.uwsoft.editor.utils.poly.earclipping.bayazit;
 // Taken from BayazitDecomposer.cs (FarseerPhysics.Common.Decomposition.BayazitDecomposer)
 // at http://farseerphysics.codeplex.com
 
+import java.security.InvalidParameterException;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-
-import java.security.InvalidParameterException;
 
 /// <summary>
 /// Convex decomposition algorithm created by Mark Bayazit (http://mnbayazit.com/)

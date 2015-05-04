@@ -18,6 +18,10 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.HashMap;
+
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,10 +34,6 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.ui.widget.InputFileWidget;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 public class AssetsImportDialog extends VisDialog {
     public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".START_IMPORTING_BTN_CLICKED";

@@ -1,16 +1,18 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.actor.LabelItem;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by avetiszakharyan on 4/24/15.
  */
-public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<LabelItem, UILabelItemProperties> {
+public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UILabelItemProperties> {
 
     private static final String TAG = UILabelItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -29,7 +31,9 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
     }
 
     @Override
-    protected void translateObservableDataToView(LabelItem item) {
+    protected void translateObservableDataToView(Entity entity) {
+    	
+    	//TODO
         viewComponent.setFontFamily(item.dataVO.style);
         viewComponent.setFontSize(item.dataVO.size + "");
     }

@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.gdx.ui.layer;
 
+import java.awt.Cursor;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
@@ -33,10 +36,7 @@ import com.uwsoft.editor.gdx.ui.layer.drag.LayerItemTarget;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-
-import java.awt.*;
-import java.util.ArrayList;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 public class UILayerBoxOld extends ExpandableUIBox {
 

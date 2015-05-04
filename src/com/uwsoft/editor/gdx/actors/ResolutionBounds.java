@@ -22,12 +22,12 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
-import com.uwsoft.editor.mvc.view.stage.BaseStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.mvc.view.stage.BaseStage;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 /**
  * Created by sargis on 7/10/14.

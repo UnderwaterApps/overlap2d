@@ -21,10 +21,10 @@ package com.uwsoft.editor.gdx.ui.thumbnailbox;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
-import com.uwsoft.editor.renderer.data.SpriterVO;
+import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 
 /**
  * Created by hayk on 19/12/2014.

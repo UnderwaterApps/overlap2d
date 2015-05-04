@@ -25,6 +25,9 @@ import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.SandboxUI;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 public class SandboxStage extends BaseStage {
     public static SandboxStage instance;
@@ -38,11 +41,20 @@ public class SandboxStage extends BaseStage {
     public Sandbox sandbox;
     private FPSLogger fpsLogger;
 
+    private final Overlap2DFacade facade;
+    public ProjectManager projectManager;
+    public ResourceManager resourceManager;
+    
     public SandboxStage() {
         super();
 
         instance = this;
 
+        
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        
         physiscStopped = true;
     }
 

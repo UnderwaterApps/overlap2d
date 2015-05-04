@@ -18,15 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
+public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
 
     public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
@@ -52,7 +52,8 @@ public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UI
     }
 
     private void afterItemDataModified() {
-        observableReference.renew();
+    	//TODO this was needed with previous runtime don't know will it be needed for new runtime
+    	//observableReference.renew();
 
         Sandbox.getInstance().getSelector().updateSelections();
         Sandbox.getInstance().saveSceneCurrentSceneData();

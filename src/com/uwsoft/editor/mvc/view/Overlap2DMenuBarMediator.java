@@ -31,7 +31,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
  * Created by sargis on 3/25/15.

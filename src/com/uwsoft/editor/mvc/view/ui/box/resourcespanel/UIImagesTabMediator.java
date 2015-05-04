@@ -26,7 +26,6 @@ import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 /**

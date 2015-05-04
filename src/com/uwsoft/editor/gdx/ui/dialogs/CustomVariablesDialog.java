@@ -21,23 +21,21 @@ package com.uwsoft.editor.gdx.ui.dialogs;
 import java.util.Map;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.building.OneRowTableBuilder;
-import com.kotcrab.vis.ui.building.StandardTableBuilder;
-import com.kotcrab.vis.ui.building.TableBuilder;
-import com.kotcrab.vis.ui.building.utilities.CellWidget;
-import com.kotcrab.vis.ui.building.utilities.Padding;
-import com.kotcrab.vis.ui.building.utilities.layouts.ActorLayout;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.Separator;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisList;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
-
-import java.util.Map;
 
 public class CustomVariablesDialog extends VisWindow {
 	

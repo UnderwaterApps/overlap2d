@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.gdx.mediators;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.HashMap;
 
 /**
  * Created by CyberJoe on 3/18/2015.

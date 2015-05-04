@@ -24,8 +24,6 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
 
 /**
  * Created by azakhary on 4/17/2015.

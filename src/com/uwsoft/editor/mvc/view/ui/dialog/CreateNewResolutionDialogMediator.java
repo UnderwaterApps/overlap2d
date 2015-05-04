@@ -25,7 +25,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 /**
  * Created by sargis on 4/9/15.

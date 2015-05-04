@@ -1,11 +1,11 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.util.Stack;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-
-import java.util.Stack;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * Created by CyberJoe on 4/22/2015.

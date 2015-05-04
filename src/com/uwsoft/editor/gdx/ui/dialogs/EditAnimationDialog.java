@@ -18,6 +18,11 @@
 
 package com.uwsoft.editor.gdx.ui.dialogs;
 
+import java.util.Map;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -28,29 +33,31 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
-
-import java.util.Map;
+import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.conponents.TintComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
 
 /**
  * Created by azakhary on 8/28/2014.
  */
 public class EditAnimationDialog extends SimpleDialog {
 
-    private final Map<String, SpriteAnimation.Animation> animations;
+    private final Map<String, SceneLoader.Frames> animations;
     private final Overlap2DFacade facade;
     private final EditorTextureManager textureManager;
     UIStage uiStage;
     private Group listContainer;
     private float maxHeight = 250;
-    private IBaseItem item;
+    private Entity entity;
     private ScrollPane scroll;
     private Group wrapper;
     private Group topWrapper;
-
-    public EditAnimationDialog(UIStage s, final SpriteAnimation item) {
+    
+    private ComponentMapper<SpriteAnimationComponent> spriteAnimationMapper = ComponentMapper.getFor(SpriteAnimationComponent.class);
+    private SpriteAnimationComponent spriteAnimationComponent;
+    
+    public EditAnimationDialog(UIStage s, Entity entity) {
         super(s, 320, 310);
         facade = Overlap2DFacade.getInstance();
         textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
@@ -59,9 +66,11 @@ public class EditAnimationDialog extends SimpleDialog {
         setY(200);
 
         setTitle("Add animation");
-
-        animations = item.getAnimations();
-        this.item = item;
+        
+        this.entity = entity;
+        
+        animations = spriteAnimationComponent.keyFrames;
+        
 
         topWrapper = new Group();
         topWrapper.setX(5);
@@ -110,8 +119,8 @@ public class EditAnimationDialog extends SimpleDialog {
                     int fromValue = Integer.parseInt(newAnimationControl.getTextBoxById("fromValue").getText());
                     int toValue = Integer.parseInt(newAnimationControl.getTextBoxById("toValue").getText());
                     String name = newAnimationControl.getTextBoxById("animationName").getText();
-                    if (!(fromValue > toValue || fromValue < 0 || toValue < 0 || toValue > item.getFramesCount())) {
-                        animations.put(name, new SpriteAnimation.Animation(fromValue, toValue, name));
+                    if (!(fromValue > toValue || fromValue < 0 || toValue < 0 || toValue > entity.getFramesCount())) {
+                        animations.put(name, new SceneLoader.Frames(fromValue, toValue, name));
                         renderMainList();
                     }
 
@@ -127,7 +136,7 @@ public class EditAnimationDialog extends SimpleDialog {
     }
 
     public void renderMainList() {
-        item.updateDataVO();
+        entity.updateDataVO();
         listContainer.clear();
 
         float itmHeight = 25;
@@ -158,9 +167,9 @@ public class EditAnimationDialog extends SimpleDialog {
         }
 
         int iterator = 0;
-        for (Map.Entry<String, SpriteAnimation.Animation> entry : animations.entrySet()) {
+        for (Map.Entry<String, SceneLoader.Frames> entry : animations.entrySet()) {
             final String name = entry.getKey();
-            SpriteAnimation.Animation value = entry.getValue();
+            SceneLoader.Frames value = entry.getValue();
             final CompositeItem itm = null;//stage.sceneLoader.getLibraryAsActor("animationValueControl");
             itm.getLabelById("name").setText("\"" + name + "\" frames: " + value.startFrame + " - " + value.endFrame);
             listContainer.addActor(itm);

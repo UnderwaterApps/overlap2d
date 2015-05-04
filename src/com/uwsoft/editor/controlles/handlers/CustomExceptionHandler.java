@@ -18,6 +18,20 @@
 
 package com.uwsoft.editor.controlles.handlers;
 
+import java.awt.EventQueue;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.PrintWriter;
+import java.io.StringWriter;
+import java.io.Writer;
+import java.lang.Thread.UncaughtExceptionHandler;
+import java.util.HashMap;
+
+import javax.swing.JOptionPane;
+
+import org.apache.commons.lang3.SystemUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Net.HttpMethods;
 import com.badlogic.gdx.Net.HttpRequest;
@@ -25,13 +39,6 @@ import com.badlogic.gdx.Net.HttpResponse;
 import com.badlogic.gdx.Net.HttpResponseListener;
 import com.badlogic.gdx.net.HttpParametersUtils;
 import com.uwsoft.editor.utils.AppConfig;
-import org.apache.commons.lang3.SystemUtils;
-
-import javax.swing.*;
-import java.awt.*;
-import java.io.*;
-import java.lang.Thread.UncaughtExceptionHandler;
-import java.util.HashMap;
 
 
 public class CustomExceptionHandler implements UncaughtExceptionHandler {

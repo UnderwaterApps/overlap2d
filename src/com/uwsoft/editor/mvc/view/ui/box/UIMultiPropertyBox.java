@@ -22,8 +22,6 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 
-import java.util.ArrayList;
-
 /**
  * Created by azakhary on 4/15/2015.
  */

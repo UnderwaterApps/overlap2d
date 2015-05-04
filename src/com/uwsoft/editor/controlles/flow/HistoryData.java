@@ -18,7 +18,7 @@
 
 package com.uwsoft.editor.controlles.flow;
 
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * This is a history tools point created on each user action.

@@ -22,7 +22,14 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.*;
+import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchy;
+import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIGridBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIGridBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIZoomBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIZoomBoxMediator;
 
 /**
  * Created by sargis on 4/8/15.

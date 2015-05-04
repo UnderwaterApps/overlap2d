@@ -55,6 +55,7 @@ project(":overlap2d-runtime-libgdx") {
 
 
     dependencies {
+    	compile project(":spine-runtime-libgdx")
         compile fileTree(dir: 'libs', include: '*.jar')
     }
 }
@@ -110,12 +111,12 @@ task proguard(type: proguard.gradle.ProGuardTask) {
 
 dist.dependsOn classes
 
-eclipse {
-    project {
-        name = appName
-        linkedResource name: 'assets', type: '2', location: 'assets'
-    }
-}
+//eclipse {
+//    project {
+//        name = appName
+//        linkedResource name: 'assets', type: '2', location: 'assets'
+//    }
+//}
 
 idea {
     project {

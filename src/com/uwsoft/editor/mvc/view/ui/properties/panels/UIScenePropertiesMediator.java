@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.badlogic.gdx.graphics.Color;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
@@ -25,10 +28,8 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
+import com.uwsoft.editor.renderer.legacy.data.PhysicsPropertiesVO;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
  * Created by azakhary on 4/16/2015.

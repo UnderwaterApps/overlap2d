@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import java.awt.Cursor;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -37,8 +39,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
-
-import java.awt.*;
 
 /**
  * Created by sargis on 4/20/15.

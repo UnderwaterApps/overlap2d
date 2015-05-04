@@ -25,10 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.actor.SpineActor;
-import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**
  * Created by azakhary on 7/3/2014.

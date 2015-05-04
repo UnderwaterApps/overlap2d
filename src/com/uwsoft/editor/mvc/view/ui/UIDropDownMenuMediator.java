@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
@@ -27,13 +29,9 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-
-import java.util.ArrayList;
-import java.util.HashMap;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 /**
  * Created by azakhary on 4/20/2015.
