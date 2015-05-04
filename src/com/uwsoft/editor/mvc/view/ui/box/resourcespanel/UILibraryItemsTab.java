@@ -46,7 +46,7 @@ public class UILibraryItemsTab extends Tab {
 
     @Override
     public String getTabTitle() {
-        return "Library";
+        return " Library ";
     }
 
     @Override

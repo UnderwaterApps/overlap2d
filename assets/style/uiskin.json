@@ -581,16 +581,13 @@
   },
   "com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle": {
     "default": {
-      "background": "menu-bg",
-      "bottomBar": "list-selection",
+//      "background": "menu-bg",
+//      "bottomBar": "list-selection",
       "buttonStyle": {
-        "down": "button-down",
-        "up": "button",
-        "checked": "button-down",
-        "over": "button-over",
+        "up": "tab-inactive",
+        "checked": "tab-active",
         "font": "default-font",
-        "fontColor": "white",
-        "focusBorder": "border"
+        "fontColor": "white"
       }
     }
   }

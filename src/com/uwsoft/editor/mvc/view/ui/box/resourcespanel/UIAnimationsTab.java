@@ -47,7 +47,7 @@ public class UIAnimationsTab extends Tab {
 
     @Override
     public String getTabTitle() {
-        return "Anims";
+        return "  Animations  ";
     }
 
     @Override

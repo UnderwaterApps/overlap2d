@@ -46,7 +46,7 @@ public class UIImagesTab extends Tab {
 
     @Override
     public String getTabTitle() {
-        return "Images";
+        return " Images ";
     }
 
     @Override
