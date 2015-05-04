@@ -23,24 +23,20 @@ import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UICompositeItemProperties extends UIItemProperties {
+public class UICompositeItemProperties extends UIItemCollapsibleProperties {
 
     private VisCheckBox scissorsEnabledCheckBox;
 
     public UICompositeItemProperties() {
-        super();
-
+        super("Composite");
         scissorsEnabledCheckBox = new VisCheckBox(null);
-
-        add(new VisLabel("Scissors Enabled", Align.right)).padRight(5).width(55).right();
-        add(scissorsEnabledCheckBox).left();
-        row().padTop(5);
-
+        mainTable.add(new VisLabel("Scissors Enabled", Align.right)).padRight(5).width(55).right();
+        mainTable.add(scissorsEnabledCheckBox).left();
         setListeners();
     }
 

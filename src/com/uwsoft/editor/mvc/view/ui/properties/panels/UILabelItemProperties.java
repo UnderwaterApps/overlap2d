@@ -11,12 +11,13 @@ import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
 
 /**
  * Created by azakhary on 4/24/15.
  */
-public class UILabelItemProperties extends UIItemProperties {
+public class UILabelItemProperties extends UIItemCollapsibleProperties {
 
     public static final String prefix = "com.uwsoft.editor.mvc.view.ui.properties.panels.UILabelItemProperties";
 
@@ -28,7 +29,7 @@ public class UILabelItemProperties extends UIItemProperties {
     private VisValidableTextField fontSizeField;
 
     public UILabelItemProperties() {
-        super();
+        super("Label");
 
         Validators.IntegerValidator intValidator = new Validators.IntegerValidator();
 
@@ -39,19 +40,17 @@ public class UILabelItemProperties extends UIItemProperties {
 
         fontFamilySelectBox.setMaxListCount(10);
 
-        add(new VisLabel("Font Family", Align.right)).padRight(5).width(50).left();
-        add(fontFamilySelectBox).width(90).padRight(5);
-        row().padTop(5);
-        add(new VisLabel("Bold", Align.right)).padRight(5).width(50).left();
-        add(boldCheckBox).width(55).padRight(5);
-        row().padTop(5);
-        add(new VisLabel("Italic", Align.right)).padRight(5).width(50).left();
-        add(italicCheckBox).width(55).padRight(5);
-        row().padTop(5);
-        add(new VisLabel("Font Size", Align.right)).padRight(5).width(50).left();
-        add(fontSizeField).width(55).padRight(5);
-        row().padTop(5);
-
+        mainTable.add(new VisLabel("Font Family", Align.right)).padRight(5).width(50).left();
+        mainTable.add(fontFamilySelectBox).width(90).padRight(5);
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Bold", Align.right)).padRight(5).width(50).left();
+        mainTable.add(boldCheckBox).width(55).padRight(5);
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Italic", Align.right)).padRight(5).width(50).left();
+        mainTable.add(italicCheckBox).width(55).padRight(5);
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Font Size", Align.right)).padRight(5).width(50).left();
+        mainTable.add(fontSizeField).width(55).padRight(5);
         setListeners();
     }
 

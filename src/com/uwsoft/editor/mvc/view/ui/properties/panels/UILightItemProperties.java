@@ -19,8 +19,6 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
@@ -28,13 +26,13 @@ import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.renderer.data.LightVO;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class UILightItemProperties extends UIItemProperties {
+public class UILightItemProperties extends UIItemCollapsibleProperties {
 
     private VisCheckBox isStaticCheckBox;
     private VisCheckBox isXRayCheckBox;
@@ -49,8 +47,7 @@ public class UILightItemProperties extends UIItemProperties {
     private VisTable secondaryTable;
 
     public UILightItemProperties() {
-        super();
-
+        super("Light");
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
         isStaticCheckBox = new VisCheckBox(null);
@@ -68,22 +65,19 @@ public class UILightItemProperties extends UIItemProperties {
         types.add("Cone Light");
         lightTypeSelectBox.setItems(types);
 
-        add(new VisLabel("Is Static: ", Align.right)).padRight(5).width(55).right();
-        add(isStaticCheckBox).left();
-        row().padTop(5);
-        add(new VisLabel("Is XRay: ", Align.right)).padRight(5).width(55).right();
-        add(isXRayCheckBox).left();
-        row().padTop(5);
-        add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(55).right();
-        add(rayCountSelector).left();
-        row().padTop(5);
-        add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
-        add(lightTypeSelectBox).left();
-        row().padTop(5);
-
-        add(secondaryTable).colspan(2); row();
-
-
+        mainTable.add(new VisLabel("Is Static: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(isStaticCheckBox).left();
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Is XRay: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(isXRayCheckBox).left();
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(rayCountSelector).left();
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(lightTypeSelectBox).left();
+        mainTable.row().padTop(5);
+        mainTable. add(secondaryTable).colspan(2);
         setListeners();
     }
 
@@ -106,45 +100,21 @@ public class UILightItemProperties extends UIItemProperties {
         secondaryTable.row().padTop(5);
     }
 
-    public void setType(LightVO.LightType type) {
-        if(type == LightVO.LightType.POINT) {
-            lightTypeSelectBox.setSelectedIndex(0);
-            initPointFields();
-        } else if(type == LightVO.LightType.CONE) {
-            lightTypeSelectBox.setSelectedIndex(1);
-            initConeFields();
-        }
-    }
-
-    public void setRayCount(int count) {
-        rayCountSelector.setValue(count);
-    }
-
-    public void setStatic(boolean isStatic) {
-        isStaticCheckBox.setChecked(isStatic);
-    }
-
-    public void setXRay(boolean isXRay) {
-        isXRayCheckBox.setChecked(isXRay);
-    }
-
-    public void setRadius(String radius) {
-        pointLightRadiusField.setText(radius);
-    }
-
-    public void setAngle(String angle) {
-        coneInnerAngleField.setText(angle);
-    }
-
-    public void setDistance(String distance) {
-        coneDistanceField.setText(distance);
-    }
-
     public LightVO.LightType getType() {
-        if(lightTypeSelectBox.getSelectedIndex() == 0) {
+        if (lightTypeSelectBox.getSelectedIndex() == 0) {
             return LightVO.LightType.POINT;
         } else {
             return LightVO.LightType.CONE;
+        }
+    }
+
+    public void setType(LightVO.LightType type) {
+        if (type == LightVO.LightType.POINT) {
+            lightTypeSelectBox.setSelectedIndex(0);
+            initPointFields();
+        } else if (type == LightVO.LightType.CONE) {
+            lightTypeSelectBox.setSelectedIndex(1);
+            initConeFields();
         }
     }
 
@@ -152,24 +122,48 @@ public class UILightItemProperties extends UIItemProperties {
         return rayCountSelector.getValue();
     }
 
+    public void setRayCount(int count) {
+        rayCountSelector.setValue(count);
+    }
+
     public boolean isStatic() {
         return isStaticCheckBox.isChecked();
+    }
+
+    public void setStatic(boolean isStatic) {
+        isStaticCheckBox.setChecked(isStatic);
     }
 
     public boolean isXRay() {
         return isXRayCheckBox.isChecked();
     }
 
+    public void setXRay(boolean isXRay) {
+        isXRayCheckBox.setChecked(isXRay);
+    }
+
     public String getRadius() {
         return pointLightRadiusField.getText();
+    }
+
+    public void setRadius(String radius) {
+        pointLightRadiusField.setText(radius);
     }
 
     public String getAngle() {
         return coneInnerAngleField.getText();
     }
 
+    public void setAngle(String angle) {
+        coneInnerAngleField.setText(angle);
+    }
+
     public String getDistance() {
         return coneDistanceField.getText();
+    }
+
+    public void setDistance(String distance) {
+        coneDistanceField.setText(distance);
     }
 
     private void setListeners() {
@@ -186,7 +180,7 @@ public class UILightItemProperties extends UIItemProperties {
         lightTypeSelectBox.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                if(lightTypeSelectBox.getSelectedIndex() == 0) {
+                if (lightTypeSelectBox.getSelectedIndex() == 0) {
                     initPointFields();
                 } else {
                     initConeFields();
