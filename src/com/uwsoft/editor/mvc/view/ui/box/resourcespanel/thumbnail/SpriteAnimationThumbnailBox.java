@@ -16,46 +16,38 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.thumbnailbox;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
-import com.uwsoft.editor.renderer.actor.SpineActor;
-import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
+import com.uwsoft.editor.renderer.actor.SpriteAnimation;
+import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
+public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
 
 
-    private final Overlap2DFacade facade;
-    private final ProjectManager projectManager;
+    private final String animationName;
     private AssetPayloadObject payload;
 
     private float scaleSize = 1;
 
     private boolean isMouseInside = false;
 
-    private SpineAnimData animData;
-
-    public SpineAnimationThumbnailBox(SpineAnimData animData) {
+    public SpriteAnimationThumbnailBox(String animationName) {
         super();
-        this.animData = animData;
-        facade = Overlap2DFacade.getInstance();
-        projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        SpineVO vo = new SpineVO();
-        vo.animationName = animData.animName;
-        final SpineActor animThumb = new SpineActor(vo, sandbox.getSceneControl().getEssentials());
+        this.animationName = animationName;
+        SpriteAnimationVO vo = new SpriteAnimationVO();
+        vo.animationName = animationName;
+        final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -68,16 +60,12 @@ public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
             }
             scaleSize = scaleFactor;
             animThumb.setScale(scaleFactor);
-
-            animThumb.setX((getWidth() - animThumb.getWidth()) / 2);
-            animThumb.setY((getHeight() - animThumb.getHeight()) / 2);
-        } else {
-            // put it in middle
-            animThumb.setX((getWidth() - animThumb.getWidth()) / 2);
-            animThumb.setY((getHeight() - animThumb.getHeight()) / 2);
         }
+        animThumb.start();
+        // put it in middle
+        animThumb.setX(/*(getWidth() - animThumb.getWidth()) / 2*/0);
+        animThumb.setY(/*(getHeight() - animThumb.getHeight()) / 2*/0);
 
-        animThumb.setAnimation(animThumb.skeletonData.getAnimations().get(0).getName());
 
         addListener(new ClickListener() {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
@@ -91,15 +79,15 @@ public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
             }
         });
 
-
+        animThumb.start();
         addActor(animThumb);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+
+        Image payloadImg = new Image(animThumb.getAtlasRegionAt(0));
         payload = new AssetPayloadObject();
-        payload.assetName = animData.animName;
+        payload.assetName = animationName;
         payload.type = AssetPayloadObject.AssetType.Sprite;
 
-        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpineAnimation(payload.assetName, x, y);
+        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpriteAnimation(payload.assetName, x, y);
 
         initDragDrop(payloadImg, payload, event);
 
@@ -118,6 +106,6 @@ public class SpineAnimationThumbnailBox extends AnimationThumbnailBox {
 
     @Override
     protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animData.animName);
+        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animationName);
     }
 }

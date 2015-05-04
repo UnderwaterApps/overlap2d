@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.thumbnailbox;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;

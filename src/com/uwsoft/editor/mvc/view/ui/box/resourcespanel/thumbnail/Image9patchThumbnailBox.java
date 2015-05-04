@@ -16,9 +16,10 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.thumbnailbox;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.ImageThumbnailBox;
 
 /**
  * Created by sargis on 8/21/14.

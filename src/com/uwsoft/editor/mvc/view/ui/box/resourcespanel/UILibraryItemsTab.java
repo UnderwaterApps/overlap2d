@@ -18,31 +18,16 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisList;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UILibraryItemsTab extends Tab {
-
-    private VisTable contentTable;
+public class UILibraryItemsTab extends UIResourcesTab {
 
     private VisList<String> list;
-
-    public UILibraryItemsTab() {
-        super(false, false);
-
-        contentTable = new VisTable();
-
-        contentTable.setWidth(250);
-
-        list = new VisList<>();
-        contentTable.add(list);
-    }
 
     @Override
     public String getTabTitle() {
@@ -50,8 +35,9 @@ public class UILibraryItemsTab extends Tab {
     }
 
     @Override
-    public Table getContentTable() {
-        return contentTable;
+    protected VisScrollPane crateScrollPane() {
+        list = new VisList<>();
+        return new VisScrollPane(list);
     }
 
     public void setItems(Array<String> items) {

@@ -22,11 +22,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.Image9patchThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.ImageThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 /**

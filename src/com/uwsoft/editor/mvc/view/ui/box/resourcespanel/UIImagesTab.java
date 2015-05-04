@@ -18,30 +18,26 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.ImageThumbnailBox;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIImagesTab extends Tab {
+public class UIImagesTab extends UIResourcesTab {
 
-    private VisTable contentTable;
     private VisTable imagesTable;
-    private VisScrollPane scrollPane;
-
 
     public UIImagesTab() {
-        super(false, false);
-        contentTable = new VisTable();
+        super();
+    }
+
+    @Override
+    protected VisScrollPane crateScrollPane() {
         imagesTable = new VisTable();
-        scrollPane = new VisScrollPane(imagesTable);
-        contentTable.add(scrollPane).width(230).height(350);
-        contentTable.row();
+        return new VisScrollPane(imagesTable);
     }
 
     @Override
@@ -49,15 +45,10 @@ public class UIImagesTab extends Tab {
         return " Images ";
     }
 
-    @Override
-    public Table getContentTable() {
-        return contentTable;
-    }
-
     public void setThumbnailBoxes(Array<ImageThumbnailBox> thumbnailBoxes) {
         imagesTable.clearChildren();
         for (int i = 0; i < thumbnailBoxes.size; i++) {
-            imagesTable.add(thumbnailBoxes.get(i)).pad(3);
+            imagesTable.add(thumbnailBoxes.get(i)).padRight(5).padBottom(5);
             if ((i - 7) % 4 == 0) {
                 imagesTable.row();
             }

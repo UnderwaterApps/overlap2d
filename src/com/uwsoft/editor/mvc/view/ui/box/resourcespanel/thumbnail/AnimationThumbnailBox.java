@@ -16,7 +16,9 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.thumbnailbox;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.DraggableThumbnailBox;
 
 /**
  * Created by azakhary on 4/20/2015.

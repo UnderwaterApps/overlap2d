@@ -24,13 +24,12 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpineAnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpriteAnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpriterAnimationThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
 import java.util.HashMap;
