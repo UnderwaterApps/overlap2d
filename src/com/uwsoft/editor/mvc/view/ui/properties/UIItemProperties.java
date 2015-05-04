@@ -29,7 +29,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
  */
 public abstract class UIItemProperties extends UIAbstractProperties {
 
-    private final Skin skin;
+    final Skin skin;
 
     public UIItemProperties() {
         skin = VisUI.getSkin();

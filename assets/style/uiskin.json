@@ -476,6 +476,10 @@
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "imageUp": "align-edge-left"
+    },
+    "expandable-properties-button": {
+      "imageUp": "expandable-properties-collapse-on",
+      "imageChecked": "expandable-properties-collapse-off"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
