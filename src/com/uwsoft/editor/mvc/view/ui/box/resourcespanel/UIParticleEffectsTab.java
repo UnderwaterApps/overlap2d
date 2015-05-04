@@ -46,7 +46,7 @@ public class UIParticleEffectsTab extends Tab {
 
     @Override
     public String getTabTitle() {
-        return " Particles   ";
+        return " Particles ";
     }
 
     @Override
