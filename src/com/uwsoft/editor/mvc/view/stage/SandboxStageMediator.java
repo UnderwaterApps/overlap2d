@@ -22,23 +22,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.gdx.sandbox.EditingMode;
+import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.tools.*;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Created by sargis on 4/20/15.
@@ -46,11 +51,18 @@ import java.awt.*;
 public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private static final String TAG = SandboxStageMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+
+    private static final String PREFIX =  "com.uwsoft.editor.mvc.view.stage.SandboxStageMediator";
+    public static final String SANDBOX_TOOL_CHANGED = PREFIX + ".SANDBOX_TOOL_CHANGED";
+
     private final Vector2 reducedMoveDirection = new Vector2(0, 0);
-    private EventListener eventListener;
-    private boolean reducedMouseMoveEnabled = false;
-    private float lastX = 0;
-    private float lastY = 0;
+
+    private SandboxStageEventListener stageListener;
+
+    private Tool hotSwapMemory;
+
+    private HashMap<String, Tool> sandboxTools = new HashMap<>();
+    private Tool currentSelectedTool;
 
     public SandboxStageMediator() {
         super(NAME, new SandboxStage());
@@ -59,14 +71,36 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     @Override
     public void onRegister() {
         super.onRegister();
-        eventListener = new SandboxStageEventListener();
+
         facade = Overlap2DFacade.getInstance();
+
+        stageListener = new SandboxStageEventListener();
+
+        initTools();
+    }
+
+    private void initTools() {
+        sandboxTools.put(SelectionTool.NAME, new SelectionTool());
+        sandboxTools.put(TransformTool.NAME, new TransformTool());
+        sandboxTools.put(TextTool.NAME, new TextTool());
+        sandboxTools.put(PointLightTool.NAME, new PointLightTool());
+        sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
+        sandboxTools.put(PanTool.NAME, new PanTool());
+
+    }
+
+    private void setCurrentTool(String toolName) {
+        currentSelectedTool = sandboxTools.get(toolName);
+        facade.sendNotification(SANDBOX_TOOL_CHANGED, currentSelectedTool);
+        currentSelectedTool.initTool();
     }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED
+                SceneDataManager.SCENE_LOADED,
+                UIToolBoxMediator.TOOL_SELECTED,
+                ItemFactory.NEW_ITEM_ADDED
         };
     }
 
@@ -77,13 +111,71 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             case SceneDataManager.SCENE_LOADED:
                 handleSceneLoaded(notification);
                 break;
+            case UIToolBoxMediator.TOOL_SELECTED:
+                setCurrentTool(notification.getBody());
+                break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
+                break;
             default:
                 break;
         }
     }
 
     private void handleSceneLoaded(Notification notification) {
-        viewComponent.addListener(eventListener);
+        viewComponent.addListener(stageListener);
+
+        Sandbox sandbox = Sandbox.getInstance();
+        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
+        for (int i = 0; i < items.size(); i++) {
+            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
+        }
+
+        setCurrentTool(SelectionTool.NAME);
+    }
+
+    public Vector2 getStageCoordinates() {
+        return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+    }
+
+    private class SandboxItemEventListener extends ClickListener {
+
+        private IBaseItem eventItem;
+
+        public SandboxItemEventListener(final IBaseItem eventItem) {
+            this.eventItem = eventItem;
+        }
+
+        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchDown(event, x, y, pointer, button);
+            Vector2 coords = getStageCoordinates();
+
+            event.stop();
+            return currentSelectedTool.itemMouseDown(eventItem, coords.x, coords.y);
+        }
+
+        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+            super.touchUp(event, x, y, pointer, button);
+            Vector2 coords = getStageCoordinates();
+
+            currentSelectedTool.itemMouseUp(eventItem, x, y);
+
+            if (getTapCount() == 2) {
+                // this is double click
+                currentSelectedTool.itemMouseDoubleClick(eventItem, coords.x, coords.y);
+            }
+
+            if (button == Input.Buttons.RIGHT) {
+                // if right clicked on an item, drop down for current selection
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_RIGHT_CLICK);
+            }
+        }
+
+        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+            Vector2 coords = getStageCoordinates();
+            currentSelectedTool.itemMouseDragged(eventItem, coords.x, coords.y);
+        }
+
     }
 
     private class SandboxStageEventListener extends ClickListener {
@@ -102,13 +194,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
-            if (isShiftKey(keycode)) {
-                reducedMouseMoveEnabled = true;
-                System.out.println("pressed");
-            }
 
             // Control pressed as well
-            if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(0) || Gdx.input.isKeyPressed(Input.Keys.SYM)) {
+            if (isControlPressed()) {
                 if (keycode == Input.Keys.UP) {
                     // going to front of next item in z-index ladder
                     sandbox.itemControl.itemZIndexChange(sandbox.getSelector().getCurrentSelection(), true);
@@ -157,6 +245,12 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 return true;
             }
 
+            if (Gdx.input.isKeyPressed(Input.Keys.S) && !isControlPressed()) {
+                setCurrentTool(SelectionTool.NAME);
+                UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                toolBoxMediator.setCurrentTool(SelectionTool.NAME);
+            }
+
             if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                 // if shift is pressed, move boxes by 20 pixels instead of one
                 deltaMove = 20; //pixels
@@ -194,9 +288,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly
             // TODO: this pan is kinda different from what happens when you press middle button, so things need to merge right
-            if (keycode == Input.Keys.SPACE && !sandbox.isItemTouched && !sandbox.isUsingSelectionTool) {
+            if (keycode == Input.Keys.SPACE) {
                 sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
-                sandbox.cameraPanOn = true;
+                toolHotSwap(sandboxTools.get(PanTool.NAME));
             }
 
             // Zoom
@@ -219,14 +313,10 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             }
             if (keycode == Input.Keys.SPACE) {
                 // if pan mode is disabled set cursor back
-                // TODO: this should go to sandbox as well
                 sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
-                sandbox.cameraPanOn = false;
+                toolHotSwapBack();
             }
-            if (!isShiftPressed()) {
-                reducedMoveDirection.setZero();
-                reducedMouseMoveEnabled = false;
-            }
+
             return true;
         }
 
@@ -234,9 +324,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         @Override
         public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
             super.touchDown(event, x, y, pointer, button);
+
             Sandbox sandbox = Sandbox.getInstance();
-            lastX = Gdx.input.getX();
-            lastY = Gdx.input.getY();
+
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
             sandbox.getUIStage().setScrollFocus(sandbox.getSandboxStage().mainBox);
@@ -244,32 +334,26 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if there was a drop down remove it
             // TODO: this is job for front UI to figure out
-            sandbox.getUIStage().mainDropDown.hide();
+            //sandbox.getUIStage().mainDropDown.hide();
 
             switch (button) {
                 case Input.Buttons.MIDDLE:
                     // if middle button is pressed - PAN the scene
-                    sandbox.enablePan();
-                    break;
-                case Input.Buttons.LEFT:
-                    boolean setOpacity = false;
-
-                    //TODO: Anyone can explain what was the purpose of this?
-                    if (!Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-                        setOpacity = true;
-                    }
-
-                    // preparing selection tool rectangle to follow mouse
-                    sandbox.prepareSelectionRectangle(x, y, setOpacity);
-
+                    toolHotSwap(sandboxTools.get(PanTool.NAME));
                     break;
             }
-            return !sandbox.isItemTouched;
+
+            currentSelectedTool.stageMouseDown(x, y);
+
+            return true;
         }
 
         @Override
         public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
             super.touchUp(event, x, y, pointer, button);
+
+            currentSelectedTool.stageMouseUp(x, y);
+
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {
                 // if clicked on empty space, selections need to be cleared
@@ -281,27 +365,14 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 return;
             }
 
-            // Basically if panning but space is not pressed, stop panning.? o_O
-            // TODO: seriously this needs to be figured out, I am not sure we need it
-            if (sandbox.cameraPanOn) {
-                sandbox.cameraPanOn = Gdx.input.isKeyPressed(Input.Keys.SPACE);
-                return;
+            if (button == Input.Buttons.MIDDLE) {
+                toolHotSwapBack();
             }
 
-            // selection is complete, this will check for what get caught in selection rect, and select 'em
-            sandbox.selectionComplete();
             if (getTapCount() == 2 && button == Input.Buttons.LEFT) {
                 doubleClick(event, x, y);
             }
 
-            if(sandbox.editingMode == EditingMode.TEXT) {
-                UIToolBoxMediator toolBox = facade.retrieveMediator(UIToolBoxMediator.NAME);
-                TextToolSettings textToolSettings = (TextToolSettings) toolBox.getCurrentSelectedToolSettings();
-
-                sandbox.getItemFactory().createLabel(textToolSettings, Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
-
-                return;
-            }
         }
 
         private void doubleClick(InputEvent event, float x, float y) {
@@ -316,26 +387,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         @Override
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Sandbox sandbox = Sandbox.getInstance();
-            // if resizing is in progress we are not dealing with this
-            if (sandbox.isResizing) return;
 
-            if (sandbox.cameraPanOn) {
-                // if panning, then just move camera
-                OrthographicCamera camera = (OrthographicCamera) (sandbox.getSandboxStage().getCamera());
-
-                float currX = camera.position.x + (lastX - Gdx.input.getX()) * camera.zoom;
-                float currY = camera.position.y + (Gdx.input.getY() - lastY) * camera.zoom;
-
-                sandbox.getSandboxStage().getCamera().position.set(currX, currY, 0);
-
-                lastX = Gdx.input.getX();
-                lastY = Gdx.input.getY();
-            } else {
-                // else - using selection tool
-                sandbox.isUsingSelectionTool = true;
-                sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
-                sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
-            }
+            currentSelectedTool.stageMouseDragged(x, y);
         }
 
 
@@ -347,6 +400,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // if item is currently being held with mouse (touched in but not touched out)
             // mouse scroll should rotate the selection around it's origin
+            /*
             if (sandbox.isItemTouched) {
                 for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
                     float degreeAmount = 1;
@@ -364,6 +418,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 // if not item is touched then we can use this for zoom
                 sandbox.zoomBy(amount);
             }
+            */
+
             return false;
         }
 
@@ -382,5 +438,15 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                     || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         }
+    }
+
+    private void toolHotSwap(Tool tool) {
+        hotSwapMemory = currentSelectedTool;
+        currentSelectedTool = tool;
+    }
+
+    private void toolHotSwapBack() {
+        currentSelectedTool = hotSwapMemory;
+        hotSwapMemory = null;
     }
 }

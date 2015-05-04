@@ -18,15 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.EditingMode;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
-import com.uwsoft.editor.mvc.view.ui.box.tools.ToolSettings;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
+import com.uwsoft.editor.mvc.view.stage.tools.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by sargis on 4/9/15.
@@ -38,9 +37,10 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String PREFIX =  "com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator.";
     public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
-    private int currentSelectedTool = UIToolBox.SELECTION_TOOL;
 
-    private HashMap<Integer, ToolSettings> toolSettings = new HashMap<>();
+    private String currentTool;
+    private Array<String> toolList;
+
 
     public UIToolBoxMediator() {
         super(NAME, new UIToolBox());
@@ -48,50 +48,46 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
 
     @Override
     public void onRegister() {
-        toolSettings.put(UIToolBox.TEXT_TOOL, new TextToolSettings());
-
         facade = Overlap2DFacade.getInstance();
+
+        toolList = getToolNameList();
+        currentTool = SelectionTool.NAME;
+
+        viewComponent.createToolButtons(toolList);
     }
 
+
+    public Array<String> getToolNameList() {
+        Array<String> toolNames = new Array();
+        toolNames.add(SelectionTool.NAME);
+        toolNames.add(TransformTool.NAME);
+        toolNames.add(TextTool.NAME);
+        toolNames.add(PointLightTool.NAME);
+        toolNames.add(ConeLightTool.NAME);
+        return toolNames;
+    }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                UIToolBox.SELECTING_MODE_BTN_CLICKED,
-                UIToolBox.TRANSFORMING_MODE_BTN_CLICKED,
-                UIToolBox.TEXT_MODE_BTN_CLICKED
+                UIToolBox.TOOL_CLICKED
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
-        Sandbox sandbox = Sandbox.getInstance();
+
         switch (notification.getName()) {
-            case UIToolBox.SELECTING_MODE_BTN_CLICKED:
-                sandbox.setCurrentMode(EditingMode.SELECTION);
-                onToolChanged(notification.getBody());
-                break;
-            case UIToolBox.TRANSFORMING_MODE_BTN_CLICKED:
-                sandbox.setCurrentMode(EditingMode.TRANSFORM);
-                onToolChanged(notification.getBody());
-                break;
-            case UIToolBox.TEXT_MODE_BTN_CLICKED:
-                sandbox.setCurrentMode(EditingMode.TEXT);
-                onToolChanged(notification.getBody());
+            case UIToolBox.TOOL_CLICKED:
+                currentTool = notification.getBody();
+                facade.sendNotification(TOOL_SELECTED, currentTool);
                 break;
         }
     }
 
-    public void onToolChanged(int currentToolId) {
-        currentSelectedTool = currentToolId;
-
-        facade.sendNotification(TOOL_SELECTED, getCurrentSelectedToolSettings());
-    }
-
-    public ToolSettings getCurrentSelectedToolSettings() {
-        ToolSettings currentToolSettings = toolSettings.get(currentSelectedTool);
-
-        return currentToolSettings;
+    public void setCurrentTool(String tool) {
+        viewComponent.setCurrentTool(tool);
+        currentTool = tool;
     }
 }

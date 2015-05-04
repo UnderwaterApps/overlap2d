@@ -92,14 +92,6 @@ public class UIStage extends Stage {
     }
 
 
-    public void itemWasSelected(IBaseItem itm) {
-        //uiMainTable.multiPropertyBox.setItem(itm);
-        facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
-
-        //uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
-    }
-
-
     public void emptyClick() {
         facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }

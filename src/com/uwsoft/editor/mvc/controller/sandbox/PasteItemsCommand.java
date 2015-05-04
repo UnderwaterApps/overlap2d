@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
@@ -83,7 +84,7 @@ public class PasteItemsCommand extends SandboxCommand {
                     ((Actor) itm).setY(pastePlace.y + ((Actor) itm).getY() - offsetY);
                 }
                 itm.updateDataVO();
-                sandbox.getSandboxInputAdapter().initItemListeners(itm);
+                facade.sendNotification(ItemFactory.NEW_ITEM_ADDED, itm);
                 finalItems.add(itm);
             }
 

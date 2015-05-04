@@ -31,8 +31,8 @@ import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
 import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.*;
 
@@ -43,6 +43,9 @@ import java.util.Iterator;
  * Provides methods to create panels of different types based on provided tools, and adds them to the scene.
  */
 public class ItemFactory {
+
+    public static final String PREFIX = "com.uwsoft.editor.gdx.sandbox.ItemFactory";
+    public static final String NEW_ITEM_ADDED = PREFIX + ".NEW_ITEM_ADDED";
 
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
@@ -70,11 +73,12 @@ public class ItemFactory {
     private void addItem(IBaseItem item, MainItemVO vo) {
         Actor itemActor = (Actor) item;
         sceneControl.getCurrentScene().addItem(item);
-        sandbox.getSandboxInputAdapter().initItemListeners(item);
         sandbox.saveSceneCurrentSceneData();
 //        sandbox.getUIStage().getItemsBox().init();
         itemActor.setX(vo.x);
         itemActor.setY(vo.y);
+
+        facade.sendNotification(NEW_ITEM_ADDED, item);
 
         sandbox.getSelector().setSelection(item, true);
     }
@@ -180,7 +184,9 @@ public class ItemFactory {
     public void createLight(LayerItemVO layer, LightVO vo, float x, float y) {
         sceneControl.getCurrentScene().updateDataVO();
 
-        prepareVO(vo, layer.layerName, x, y);
+        vo.layerName = layer.layerName;
+        vo.x = x;
+        vo.y = y;
 
         LightActor itm = new LightActor(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 
@@ -202,12 +208,15 @@ public class ItemFactory {
     }
 
 
-    public void createLabel(TextToolSettings textSettings, float x, float y) {
+    public void createLabel(TextTool textSettings, float x, float y) {
         LayerItemVO layer = getSelectedLayer();
         sceneControl.getCurrentScene().updateDataVO();
 
         LabelVO vo = new LabelVO();
-        prepareVO(vo, layer.layerName, x, y);
+        vo.layerName = layer.layerName;
+
+        vo.x = x;
+        vo.y = y;
 
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
@@ -361,8 +370,8 @@ public class ItemFactory {
 
         sceneControl.getCurrentScene().addItem(item);
 
-        sandbox.getSandboxInputAdapter().initItemListeners(item);
-//        sandbox.getUIStage().getItemsBox().init();
+        facade.sendNotification(NEW_ITEM_ADDED, item);
+
         sandbox.getSelector().setSelection(item, true);
 
         return item;

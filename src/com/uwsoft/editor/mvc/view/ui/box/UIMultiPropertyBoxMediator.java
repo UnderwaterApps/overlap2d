@@ -26,9 +26,9 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.*;
@@ -94,8 +94,8 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
 
-        classToMediatorMap.put(TextToolSettings.class.getName(), new ArrayList<>());
-        classToMediatorMap.get(TextToolSettings.class.getName()).add(UITextToolPropertiesMediator.NAME);
+        classToMediatorMap.put(TextTool.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(TextTool.class.getName()).add(UITextToolPropertiesMediator.NAME);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTED,
-                UIToolBoxMediator.TOOL_SELECTED
+                SandboxStageMediator.SANDBOX_TOOL_CHANGED
         };
     }
 
@@ -121,7 +121,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             case Overlap2D.ITEM_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case SandboxStageMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
             default:

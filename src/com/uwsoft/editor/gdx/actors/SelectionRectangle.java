@@ -25,11 +25,13 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
-import com.uwsoft.editor.gdx.sandbox.EditingMode;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -56,7 +58,6 @@ public class SelectionRectangle extends PixelRect {
     private float[] touchDiff = new float[2];
     private Group transformGroup;
     private Image[] miniRects = new Image[8];
-    private EditingMode mode;
 
     public SelectionRectangle(Sandbox sandbox) {
         super(0, 0);
@@ -64,13 +65,34 @@ public class SelectionRectangle extends PixelRect {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         rm = facade.retrieveProxy(EditorTextureManager.NAME);
         this.sandbox = sandbox;
-        setTouchable(Touchable.disabled);
+        //setTouchable(Touchable.disabled);
         setVisible(false);
         setOpacity(0.4f);
 
         transformGroup = new Group();
+        transformGroup.setVisible(false);
         addActor(transformGroup);
         initTransformGroup();
+
+        addListener(new ClickListener() {
+            @Override
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                ((Actor)host).fire(event);
+                return true;
+            }
+        });
+    }
+
+    public interface SelectionRectangleListener {
+        public void anchorDown(int anchor, float x, float y);
+        public void anchorDragged(int anchor, float x, float y);
+        public void anchorUp(int anchor, float x, float y);
+    }
+
+    private SelectionRectangleListener listener;
+
+    public void setListener(SelectionRectangleListener listener) {
+        this.listener = listener;
     }
 
     @Override
@@ -78,12 +100,13 @@ public class SelectionRectangle extends PixelRect {
         super.act(delta);
 
 
-		  // change size according to zoom
-		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
-		  setThickness(camera.zoom);
+		// change size according to zoom
+		OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		setThickness(camera.zoom);
 
-        if (mode != EditingMode.TRANSFORM) return;
-
+        //if(true) return;
+        //if (mode != EditingMode.TRANSFORM) return;
+/*
         Vector2 mouseCoords = getMouseLocalCoordinates();
 
         sandbox.setCurrentlyTransforming(null, -1);
@@ -128,6 +151,7 @@ public class SelectionRectangle extends PixelRect {
         if (!isOver) {
             sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
         }
+        */
     }
 
     private Vector2 getMouseLocalCoordinates() {
@@ -148,6 +172,34 @@ public class SelectionRectangle extends PixelRect {
         miniRects[B] = getMiniRect();
         miniRects[LB] = getMiniRect();
         miniRects[L] = getMiniRect();
+
+        for(int i = 0; i < miniRects.length; i++) {
+            final int rectId = i;
+            miniRects[i].addListener(new ClickListener() {
+                @Override
+                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                    super.touchDown(event, x, y, pointer, button);
+                    if(listener != null) {
+                        listener.anchorDown(rectId, event.getStageX(), event.getStageY());
+                    }
+                    event.stop();
+                    return true;
+                }
+                @Override
+                public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                    if(listener != null) {
+                        listener.anchorDragged(rectId, event.getStageX(), event.getStageY());
+                    }
+                    update();
+                }
+                @Override
+                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                    if(listener != null) {
+                        listener.anchorUp(rectId, event.getStageX(), event.getStageY());
+                    }
+                }
+            });
+        }
     }
 
     private void positionTransformables() {
@@ -237,9 +289,9 @@ public class SelectionRectangle extends PixelRect {
         return touchDiff;
     }
 
-    public void setMode(EditingMode mode) {
-        this.mode = mode;
-        if (mode == EditingMode.TRANSFORM && !(getHostAsActor() instanceof LabelItem)) {
+    public void setMode(boolean isTransform) {
+
+        if (isTransform) {
             transformGroup.setVisible(true);
         } else {
             transformGroup.setVisible(false);
