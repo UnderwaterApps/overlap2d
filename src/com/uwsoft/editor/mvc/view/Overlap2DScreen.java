@@ -202,4 +202,8 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
+	public Engine getEngine() {
+		return engine;
+	}
 }

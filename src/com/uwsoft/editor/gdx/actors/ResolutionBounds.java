@@ -20,6 +20,7 @@ package com.uwsoft.editor.gdx.actors;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
@@ -40,7 +41,7 @@ public class ResolutionBounds extends Group {
 	 private PixelRect resolutionBounds;
 	 private Label label;
 
-    public ResolutionBounds(BaseStage baseStage) {
+    public ResolutionBounds(Stage baseStage) {
         textureManager = Overlap2DFacade.getInstance().retrieveProxy(EditorTextureManager.NAME);
 
         detectDimensions(baseStage);
@@ -48,7 +49,7 @@ public class ResolutionBounds extends Group {
         crateResolutionIndicator();
     }
 
-    private void detectDimensions(BaseStage baseStage) {
+    private void detectDimensions(Stage baseStage) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
         ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);

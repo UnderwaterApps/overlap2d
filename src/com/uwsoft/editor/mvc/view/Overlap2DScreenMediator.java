@@ -27,7 +27,7 @@ import com.uwsoft.editor.Overlap2D;
  */
 public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
     private static final String TAG = Overlap2DScreenMediator.class.getCanonicalName();
-    private static final String NAME = TAG;
+    public static final String NAME = TAG;
 
     public Overlap2DScreenMediator() {
         super(NAME, null);

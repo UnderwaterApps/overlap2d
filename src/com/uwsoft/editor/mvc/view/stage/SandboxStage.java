@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.stage;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -29,7 +30,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 
-public class SandboxStage extends BaseStage {
+public class SandboxStage extends Stage {
     public static SandboxStage instance;
 
     public UIStage uiStage;
@@ -55,7 +56,7 @@ public class SandboxStage extends BaseStage {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         resourceManager = facade.retrieveProxy(ResourceManager.NAME);
         
-        physiscStopped = true;
+        //physiscStopped = true;
     }
 
     @Override

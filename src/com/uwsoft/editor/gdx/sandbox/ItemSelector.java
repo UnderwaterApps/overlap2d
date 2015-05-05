@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.function.BiConsumer;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
@@ -43,7 +44,7 @@ public class ItemSelector {
     private SceneControlMediator sceneControl;
 
     /** list of current selected panels */
-    private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
+    private HashMap<Entity, SelectionRectangle> currentSelection = new HashMap<Entity, SelectionRectangle>();
 
     public ItemSelector(Sandbox sandbox) {
         this.sandbox = sandbox;
@@ -55,15 +56,15 @@ public class ItemSelector {
     /**
      * @return HashMap of selection rectangles that contain panels
      */
-    public HashMap<IBaseItem, SelectionRectangle> getCurrentSelection() {
+    public HashMap<Entity, SelectionRectangle> getCurrentSelection() {
         return currentSelection;
     }
 
     /**
      * @return list of currently selected panels
      */
-    public ArrayList<IBaseItem> getSelectedItems() {
-        ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
+    public ArrayList<Entity> getSelectedItems() {
+        ArrayList<Entity> items = new ArrayList<Entity>();
         for (SelectionRectangle value : currentSelection.values()) {
             items.add(value.getHost());
         }
@@ -137,12 +138,12 @@ public class ItemSelector {
 
     /**
      * Creates @SelectionRectangle instance that contains current item, and adds it to the frontUI
-     * @param item to be claimed by newly created @SelectionRectangle
+     * @param entity to be claimed by newly created @SelectionRectangle
      * @return newly created @SelectionRectangle
      */
-    private SelectionRectangle createSelectionRect(IBaseItem item) {
+    private SelectionRectangle createSelectionRect(Entity entity) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
-        rect.claim(item);
+        rect.claim(entity);
         rect.setMode(sandbox.getCurrentMode());
         sandbox.getSandboxStage().frontUI.addActor(rect);
         rect.show();
@@ -155,7 +156,7 @@ public class ItemSelector {
      * @param name of the layer
      */
     public void selectItemsByLayerName(String name) {
-        ArrayList<IBaseItem> itemsArr = new ArrayList<IBaseItem>();
+        ArrayList<Entity> itemsArr = new ArrayList<Entity>();
         for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
             if (sceneControl.getCurrentScene().getItems().get(i).getDataVO().layerName.equals(name)) {
                 itemsArr.add(sceneControl.getCurrentScene().getItems().get(i));
@@ -167,19 +168,19 @@ public class ItemSelector {
 
     /**
      * sets selection to particular item
-     * @param item to select
+     * @param entity to select
      * @param removeOthers if set to true this item will become the only selection, otherwise will be added to existing
      */
-    public void setSelection(IBaseItem item, boolean removeOthers) {
-        if (currentSelection.get(item) != null) return;
+    public void setSelection(Entity entity, boolean removeOthers) {
+        if (currentSelection.get(entity) != null) return;
 
         if (removeOthers) clearSelections();
 
-        SelectionRectangle rect = createSelectionRect(item);
+        SelectionRectangle rect = createSelectionRect(entity);
 
-        currentSelection.put(item, rect);
+        currentSelection.put(entity, rect);
 
-        sandbox.getSandboxStage().uiStage.itemWasSelected(item);
+        sandbox.getSandboxStage().uiStage.itemWasSelected(entity);
 
 		  sandbox.getUIStage().mainDropDown.hide();
 
@@ -193,7 +194,7 @@ public class ItemSelector {
      * @param items list of panels to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
-    public void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
+    public void setSelections(ArrayList<Entity> items, boolean alsoShow) {
         clearSelections();
 
         for (int i = 0; i < items.size(); i++) {
@@ -206,11 +207,11 @@ public class ItemSelector {
 
     /**
      * Un-selects item
-     * @param item to un-select
+     * @param entity to un-select
      */
-    public void releaseSelection(IBaseItem item) {
-        currentSelection.get(item).remove();
-        currentSelection.remove(item);
+    public void releaseSelection(Entity entity) {
+        currentSelection.get(entity).remove();
+        currentSelection.remove(entity);
 
         sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
     }
@@ -241,7 +242,7 @@ public class ItemSelector {
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
     public void selectAllItems() {
-        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+        ArrayList<Entity> curr = new ArrayList<Entity>();
         for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
             curr.add(sandbox.getCurrentScene().getItems().get(i));
         }
