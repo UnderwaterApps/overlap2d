@@ -979,6 +979,7 @@ public class ProjectManager extends BaseProxy {
         editorConfigVO.lastOpenedSystemPath = currentWorkingPath;
         saveEditorConfig();
         openProjectAndLoadAllData(projectName);
+        Sandbox.getInstance().loadCurrentProject();
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
     }
 }

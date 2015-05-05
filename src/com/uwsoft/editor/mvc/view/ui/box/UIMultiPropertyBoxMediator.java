@@ -31,12 +31,14 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
+import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UICompositeItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UILabelItemPropertiesMediator;
+import com.uwsoft.editor.mvc.view.ui.properties.panels.UILightItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIScenePropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpineAnimationItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemPropertiesMediator;
@@ -71,38 +73,39 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         Entity asd = new Entity();
         
         classToMediatorMap.put("Entity"+SceneLoader.IMAGE_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.IMAGE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.IMAGE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.LABEL_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.LABEL_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get(SceneLoader.LABEL_TYPE).add(UILabelItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.LABEL_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.LABEL_TYPE).add(UILabelItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.SPRITE_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.SPRITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get(SceneLoader.SPRITE_TYPE).add(UISpriteAnimationItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.SPRITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.SPRITE_TYPE).add(UISpriteAnimationItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.SPINE_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.SPINE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get(SceneLoader.SPINE_TYPE).add(UISpineAnimationItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.SPINE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.SPINE_TYPE).add(UISpineAnimationItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.SPRITER_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.SPRITER_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.SPRITER_TYPE).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.COMPOSITE_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.COMPOSITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get(SceneLoader.COMPOSITE_TYPE).add(UICompositeItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.COMPOSITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.COMPOSITE_TYPE).add(UICompositeItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.PARTICLE_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.PARTICLE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.PARTICLE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put("Entity"+SceneLoader.LIGHT_TYPE, new ArrayList<>());
-        classToMediatorMap.get(SceneLoader.LIGHT_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.LIGHT_TYPE).add(UIBasicItemPropertiesMediator.NAME);
+        classToMediatorMap.get("Entity"+SceneLoader.LIGHT_TYPE).add(UILightItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
 
-        classToMediatorMap.put(TextToolSettings.class.getName(), new ArrayList<>());
-        classToMediatorMap.get(TextToolSettings.class.getName()).add(UITextToolPropertiesMediator.NAME);
+        classToMediatorMap.put(TextTool.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(TextTool.class.getName()).add(UITextToolPropertiesMediator.NAME);
     }
 
     @Override
@@ -112,7 +115,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTED,
-                UIToolBoxMediator.TOOL_SELECTED
+                SandboxStageMediator.SANDBOX_TOOL_CHANGED
         };
     }
 
@@ -128,7 +131,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             case Overlap2D.ITEM_SELECTED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case SandboxStageMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
             default:

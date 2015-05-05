@@ -18,10 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -30,34 +26,37 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
-public class UIItemsTreeBox extends VisWindow {
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
+public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
     private final Overlap2DFacade facade;
+    private final VisTable treeTable;
     private VisTree tree;
-    private VisTable mainTable;
 
     public UIItemsTreeBox() {
-        super("Items Tree");
+        super("Items Tree", 166);
         setMovable(false);
         facade = Overlap2DFacade.getInstance();
-        mainTable = new VisTable();
-        mainTable.addSeparator().padBottom(10);
-        add(mainTable).expandX().fillX();
+        treeTable = new VisTable();
+        treeTable.left();
+        createCollapsibleWidget(treeTable);
     }
 
 
     public void init(CompositeItem rootScene) {
-        mainTable.clear();
+        treeTable.clear();
         tree = new VisTree();
         VisScrollPane scroller = new VisScrollPane(tree);
         scroller.setFlickScroll(false);
-        mainTable.add(scroller).expandX().fillX();
+        treeTable.add(scroller).expandX().fillX();
         //
         Node root = addTreeRoot(rootScene, null);
         root.setExpanded(true);

@@ -26,56 +26,37 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UILayerBox extends VisWindow {
+public class UILayerBox extends UICollapsibleBox {
 
     public static final String LAYER_ROW_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UILayerBox" + ".LAYER_ROW_CLICKED";
     public static final String CREATE_NEW_LAYER = "com.uwsoft.editor.mvc.view.ui.box.UILayerBox" + ".CREATE_NEW_LAYER";
     public static final String DELETE_NEW_LAYER = "com.uwsoft.editor.mvc.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
-
+    public int currentSelectedLayerIndex = 0;
     private Overlap2DFacade facade;
-
-    private VisTable mainTable;
     private VisTable contentTable;
     private VisTable bottomPane;
-
     private VisScrollPane scrollPane;
     private VisTable layersTable;
-
     private Array<UILayerItem> rows = new Array<>();
 
-    public int getCurrentSelectedLayerIndex() {
-        return currentSelectedLayerIndex;
-    }
-
-    public int currentSelectedLayerIndex = 0;
-
     public UILayerBox() {
-        super("Layers");
+        super("Layers", 236);
 
         facade = Overlap2DFacade.getInstance();
 
         setMovable(false);
-        mainTable = new VisTable();
-        mainTable.top();
-        mainTable.addSeparator().padBottom(5);
         contentTable = new VisTable();
-        mainTable.add(contentTable);
 
         layersTable = new VisTable();
         scrollPane = new VisScrollPane(layersTable);
         scrollPane.setFadeScrollBars(false);
         contentTable.add(scrollPane).width(230).height(150);
-        contentTable.row();
-
-        add(contentTable).width(250);
-        row();
 
         scrollPane.layout();
 
@@ -100,7 +81,12 @@ public class UILayerBox extends VisWindow {
             }
         });
 
-        add(bottomPane);
+        contentTable.add(bottomPane);
+        createCollapsibleWidget(contentTable);
+    }
+
+    public int getCurrentSelectedLayerIndex() {
+        return currentSelectedLayerIndex;
     }
 
     public void clearItems() {
@@ -118,8 +104,8 @@ public class UILayerBox extends VisWindow {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
 
-                for(int i = 0; i < rows.size; i++) {
-                    if(i != rows.indexOf(item, true)) {
+                for (int i = 0; i < rows.size; i++) {
+                    if (i != rows.indexOf(item, true)) {
                         rows.get(i).setSelected(false);
                     }
                 }

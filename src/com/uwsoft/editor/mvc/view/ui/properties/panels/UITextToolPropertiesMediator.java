@@ -4,13 +4,13 @@ import org.apache.commons.lang3.math.NumberUtils;
 
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
-import com.uwsoft.editor.mvc.view.ui.box.tools.TextToolSettings;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
 
 /**
  * Created by avetiszakharyan on 4/24/15.
  */
-public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<TextToolSettings, UITextToolProperties> {
+public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<TextTool, UITextToolProperties> {
 
     private static final String TAG = UITextToolPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -29,13 +29,13 @@ public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<T
     }
 
     @Override
-    protected void translateObservableDataToView(TextToolSettings item) {
+    protected void translateObservableDataToView(TextTool item) {
         viewComponent.setFontFamily(item.getFontFamily());
         viewComponent.setFontSize(item.getFontSize() + "");
     }
 
     @Override
-    public void setItem(TextToolSettings settings) {
+    public void setItem(TextTool settings) {
         super.setItem(settings);
         observableReference.setFontFamily(viewComponent.getFontFamily());
 

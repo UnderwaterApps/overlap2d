@@ -26,20 +26,8 @@ import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.mvc.view.ui.UIDropDownMenuMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIGridBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.UIZoomBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.box.*;
+import com.uwsoft.editor.mvc.view.ui.dialog.*;
 
 /**
  * Created by sargis on 4/1/15.
@@ -51,22 +39,23 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade = Overlap2DFacade.getInstance();
         facade.registerMediator(new Overlap2DScreenMediator());
         facade.registerMediator(new Overlap2DMenuBarMediator());
+        facade.registerMediator(new SandboxStageMediator());
+        facade.registerMediator(new UICompositeHierarchyMediator());
+        facade.registerMediator(new UIGridBoxMediator());
+        facade.registerMediator(new UIResolutionBoxMediator());
+        facade.registerMediator(new UIZoomBoxMediator());
+        facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new NewProjectDialogMediator());
         facade.registerMediator(new AssetsImportDialogMediator());
         facade.registerMediator(new ExportSettingsDialogMediator());
         facade.registerMediator(new CreateNewResolutionDialogMediator());
-        facade.registerMediator(new UICompositeHierarchyMediator());
-        facade.registerMediator(new UIGridBoxMediator());
-        facade.registerMediator(new UIResolutionBoxMediator());
-        facade.registerMediator(new UIToolBoxMediator());
         facade.registerMediator(new UIAlignBoxMediator());
         facade.registerMediator(new UIItemsTreeBoxMediator());
         facade.registerMediator(new UIMultiPropertyBoxMediator());
         facade.registerMediator(new UILayerBoxMediator());
         facade.registerMediator(new UIResourcesBoxMediator());
-        facade.registerMediator(new SandboxStageMediator());
-        facade.registerMediator(new UIZoomBoxMediator());
         facade.registerMediator(new UIStageMediator());
         facade.registerMediator(new UIDropDownMenuMediator());
+        facade.registerMediator(new PhysicsEditorDialogMediator());
     }
 }

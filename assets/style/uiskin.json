@@ -17,7 +17,6 @@
       "g": 0.87,
       "r": 0.87
     },
-
     "overlap2d-menuitem-disabled-grey": {
       "a": 1,
       "b": 0.45,
@@ -146,6 +145,19 @@
         "selection": "list-selection",
         "background": "select-box-list-bg"
       }
+    },
+    "white": {
+      "font": "default-font",
+      "fontColor": "black",
+      "background": "default-select-white",
+      "scrollStyle": "default",
+      "listStyle": {
+        "font": "default-font",
+        "fontColorSelected": "black",
+        "fontColorUnselected": "black",
+        "selection": "list-selection-white",
+        "background": "select-box-list-bg-white"
+      }
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SplitPane$SplitPaneStyle": {
@@ -158,20 +170,25 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
     "default": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window",
       "titleFontColor": "white"
     },
     "noborder": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window-noborder",
       "titleFontColor": "white"
     },
     "dialog": {
-      "titleFont": "default-font",
+      "titleFont": "big-font",
       "background": "window",
       "titleFontColor": "white",
       "stageBackground": "dialogDim"
+    },
+    "box": {
+      "titleFont": "big-font",
+      "background": "box",
+      "titleFontColor": "white"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.ProgressBar$ProgressBarStyle": {
@@ -270,6 +287,17 @@
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
+    },
+    "light": {
+      "selection": "selection",
+      "background": "textfield-light",
+      "backgroundOver": "textfield-light-over",
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "default-font",
+      "fontColor": "white",
+      "disabledFontColor": "grey",
+      "cursor": "cursor"
     }
   },
   "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
@@ -339,8 +367,8 @@
       "focusBorder": "border"
     },
     "close-window": {
-      "down": "button-red",
-      "up": "button-window-bg",
+      "down": "button-down",
+      "up": "button",
       "over": "button-over",
       "imageUp": "icon-close"
     },
@@ -349,6 +377,105 @@
       "up": "button",
       "over": "button-over",
       "imageUp": "icon-close"
+    },
+    "close-box": {
+      "imageUp": "box-colapse-on",
+      "imageChecked": "box-colapse-off"
+    },
+    "tool-SELECTION_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-move"
+    },
+    "tool-TRANSFORM_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-transform"
+    },
+    "tool-TEXT_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-label"
+    },
+    "tool-POINT_LIGHT_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-sphericlight"
+    },
+    "tool-CONE_LIGHT_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-conuslight"
+    },
+    "align-center-horisontal": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-center-horisontal"
+    },
+    "align-center-vertical": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-center-vertical"
+    },
+    "align-simple-down": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-down"
+    },
+    "align-simple-up": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-up"
+    },
+    "align-simple-left": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-left"
+    },
+    "align-simple-right": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-simple-right"
+    },
+    "align-edge-down": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-down"
+    },
+    "align-edge-right": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-right"
+    },
+    "align-edge-up": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-up"
+    },
+    "align-edge-left": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "imageUp": "align-edge-left"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
@@ -391,7 +518,6 @@
       "checkboxOnDown": "radio-down-on",
       "checkboxOffDisabled": "radio-off",
       "checkboxOnDisabled": "radio-on-disabled",
-      "focusBorder": "border-circle",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"

@@ -100,7 +100,6 @@ public class AssetsImportDialogMediator extends SimpleMediator<AssetsImportDialo
                 UIStage uiStage = sandbox.getUIStage();
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
                 projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
-//                uiStage.getCompositePanel().initResolutionBox();
                 sandbox.loadCurrentProject();
                 AssetsImportDialogMediator.this.viewComponent.hide();
                 facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);

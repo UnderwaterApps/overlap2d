@@ -16,12 +16,17 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui;
+package com.uwsoft.editor.mvc.controller.sandbox;
+
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
- * Created by azakhary on 4/6/2015.
+ * Created by azakhary on 4/28/2015.
  */
-public class UIZoomBox {
+public class DeleteItemsCommand extends SandboxCommand {
 
-
+    public void execute(Notification notification) {
+        sandbox.getSelector().removeCurrentSelectedItems();
+    }
 }

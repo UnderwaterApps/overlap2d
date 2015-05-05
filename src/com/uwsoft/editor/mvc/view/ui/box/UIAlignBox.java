@@ -20,17 +20,15 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by sargis on 4/10/15.
  */
-public class UIAlignBox extends VisWindow {
+public class UIAlignBox extends UICollapsibleBox {
 
     private static final String prefix = "com.uwsoft.editor.mvc.view.ui.box.UIAlignBox.ALIGN_";
 
@@ -45,10 +43,10 @@ public class UIAlignBox extends VisWindow {
     public static final String ALIGN_RIGHT_BTN_CLICKED = prefix + ALIGN_RIGHT;
 
     //Center Align
-    private static final int ALIGN_CENTER_LEFT = 4;
-    public static final String ALIGN_CENTER_LEFT_BTN_CLICKED = prefix + ALIGN_CENTER_LEFT;
-    private static final int ALIGN_CENTER_BOTTOM = 5;
-    public static final String ALIGN_CENTER_BOTTOM_BTN_CLICKED = prefix + ALIGN_CENTER_BOTTOM;
+    private static final int ALIGN_CENTER_VERTICAL = 4;
+    public static final String ALIGN_CENTER_LEFT_BTN_CLICKED = prefix + ALIGN_CENTER_VERTICAL;
+    private static final int ALIGN_CENTER_HORISONTAL = 5;
+    public static final String ALIGN_CENTER_BOTTOM_BTN_CLICKED = prefix + ALIGN_CENTER_HORISONTAL;
 
     //At Edge Align
     private static final int ALIGN_AT_EDGE_TOP = 6;
@@ -65,41 +63,35 @@ public class UIAlignBox extends VisWindow {
     private final EditorTextureManager textureManager;
 
     public UIAlignBox() {
-        super("Align");
+        super("Align", 166);
         setMovable(false);
         faced = Overlap2DFacade.getInstance();
         textureManager = faced.retrieveProxy(EditorTextureManager.NAME);
-        VisTable mainTable = new VisTable();
+        VisTable alignButtonsTable = new VisTable();
         //
-        mainTable.addSeparator().colspan(5).padBottom(10);
-        mainTable.add("Simple:").padRight(10).right();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_TOP, 90)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_BOTTOM, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconL", ALIGN_RIGHT, 0)).expandX().left();
+        alignButtonsTable.add("Simple:").padRight(8).right();
+        alignButtonsTable.add(createAlignButton("align-simple-up", ALIGN_TOP)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-simple-left", ALIGN_LEFT)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-simple-down", ALIGN_BOTTOM)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-simple-right", ALIGN_RIGHT)).expandX().left();
         //
-        mainTable.row().padTop(10);
-        mainTable.add("Center:").padRight(10).right();
-        mainTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("alignIconCH", ALIGN_CENTER_BOTTOM, 0)).expandX().left().colspan(3);
+        alignButtonsTable.row().padTop(6);
+        alignButtonsTable.add("Center:").padRight(8).right();
+        alignButtonsTable.add(createAlignButton("align-center-vertical", ALIGN_CENTER_VERTICAL)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-center-horisontal", ALIGN_CENTER_HORISONTAL)).expandX().left().colspan(3);
         //
-        mainTable.row().padTop(10);
-        mainTable.add("At Edge:").padRight(10).right();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_LEFT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_TOP, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_RIGHT, 0)).padRight(5).left();
-        mainTable.add(createAlignButton("AlignEdge", ALIGN_AT_EDGE_BOTTOM, 0)).expandX().left();
+        alignButtonsTable.row().padTop(6);
+        alignButtonsTable.add("At Edge:").padRight(8).right();
+        alignButtonsTable.add(createAlignButton("align-edge-left", ALIGN_AT_EDGE_LEFT)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-edge-up", ALIGN_AT_EDGE_TOP)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-edge-left", ALIGN_AT_EDGE_RIGHT)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-edge-down", ALIGN_AT_EDGE_BOTTOM)).expandX().left();
         //
-        add(mainTable).expandX().fillX();
+        createCollapsibleWidget(alignButtonsTable);
     }
 
-    private TextureRegionDrawable getDrawable(String name) {
-        return new TextureRegionDrawable(textureManager.getEditorAsset(name));
-    }
-
-    private VisImageButton createAlignButton(String name, int alignment, int rotation) {
-        VisImageButton visImageButton = new VisImageButton(getDrawable(name));
-        visImageButton.setRotation(rotation);
+    private VisImageButton createAlignButton(String styleName, int alignment) {
+        VisImageButton visImageButton = new VisImageButton(styleName);
         visImageButton.addListener(new AlignmentButtonClickListener(alignment));
         return visImageButton;
     }
@@ -129,10 +121,10 @@ public class UIAlignBox extends VisWindow {
                 case ALIGN_RIGHT:
                     notification = ALIGN_RIGHT_BTN_CLICKED;
                     break;
-                case ALIGN_CENTER_LEFT:
+                case ALIGN_CENTER_VERTICAL:
                     notification = ALIGN_CENTER_LEFT_BTN_CLICKED;
                     break;
-                case ALIGN_CENTER_BOTTOM:
+                case ALIGN_CENTER_HORISONTAL:
                     notification = ALIGN_CENTER_BOTTOM_BTN_CLICKED;
                     break;
                 case ALIGN_AT_EDGE_TOP:

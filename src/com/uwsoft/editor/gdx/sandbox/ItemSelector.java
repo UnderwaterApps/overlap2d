@@ -18,18 +18,19 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.BiConsumer;
-
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
+import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -44,7 +45,7 @@ public class ItemSelector {
     private SceneControlMediator sceneControl;
 
     /** list of current selected panels */
-    private HashMap<Entity, SelectionRectangle> currentSelection = new HashMap<Entity, SelectionRectangle>();
+    private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
 
     public ItemSelector(Sandbox sandbox) {
         this.sandbox = sandbox;
@@ -56,15 +57,47 @@ public class ItemSelector {
     /**
      * @return HashMap of selection rectangles that contain panels
      */
-    public HashMap<Entity, SelectionRectangle> getCurrentSelection() {
+    public HashMap<IBaseItem, SelectionRectangle> getCurrentSelection() {
         return currentSelection;
+    }
+
+    /**
+     * @return one selected item
+     */
+    public IBaseItem getSelectedItem() {
+        ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
+        for (SelectionRectangle value : currentSelection.values()) {
+            items.add(value.getHost());
+            break;
+        }
+        if(items.size() > 0) {
+            return items.get(0);
+        }
+
+        return null;
+    }
+
+    /**
+     * @return one selected item
+     */
+    public SelectionRectangle getSelectedItemSelectionRectangle() {
+        ArrayList<SelectionRectangle> items = new ArrayList<SelectionRectangle>();
+        for (SelectionRectangle value : currentSelection.values()) {
+            items.add(value);
+            break;
+        }
+        if(items.size() > 0) {
+            return items.get(0);
+        }
+
+        return null;
     }
 
     /**
      * @return list of currently selected panels
      */
-    public ArrayList<Entity> getSelectedItems() {
-        ArrayList<Entity> items = new ArrayList<Entity>();
+    public ArrayList<IBaseItem> getSelectedItems() {
+        ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
         for (SelectionRectangle value : currentSelection.values()) {
             items.add(value.getHost());
         }
@@ -138,13 +171,12 @@ public class ItemSelector {
 
     /**
      * Creates @SelectionRectangle instance that contains current item, and adds it to the frontUI
-     * @param entity to be claimed by newly created @SelectionRectangle
+     * @param item to be claimed by newly created @SelectionRectangle
      * @return newly created @SelectionRectangle
      */
-    private SelectionRectangle createSelectionRect(Entity entity) {
+    private SelectionRectangle createSelectionRect(IBaseItem item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
-        rect.claim(entity);
-        rect.setMode(sandbox.getCurrentMode());
+        rect.claim(item);
         sandbox.getSandboxStage().frontUI.addActor(rect);
         rect.show();
 
@@ -156,7 +188,7 @@ public class ItemSelector {
      * @param name of the layer
      */
     public void selectItemsByLayerName(String name) {
-        ArrayList<Entity> itemsArr = new ArrayList<Entity>();
+        ArrayList<IBaseItem> itemsArr = new ArrayList<IBaseItem>();
         for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
             if (sceneControl.getCurrentScene().getItems().get(i).getDataVO().layerName.equals(name)) {
                 itemsArr.add(sceneControl.getCurrentScene().getItems().get(i));
@@ -168,21 +200,21 @@ public class ItemSelector {
 
     /**
      * sets selection to particular item
-     * @param entity to select
+     * @param item to select
      * @param removeOthers if set to true this item will become the only selection, otherwise will be added to existing
      */
-    public void setSelection(Entity entity, boolean removeOthers) {
-        if (currentSelection.get(entity) != null) return;
+    public void setSelection(IBaseItem item, boolean removeOthers) {
+        if (currentSelection.get(item) != null) return;
 
         if (removeOthers) clearSelections();
 
-        SelectionRectangle rect = createSelectionRect(entity);
+        SelectionRectangle rect = createSelectionRect(item);
 
-        currentSelection.put(entity, rect);
+        currentSelection.put(item, rect);
 
-        sandbox.getSandboxStage().uiStage.itemWasSelected(entity);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
 
-		  sandbox.getUIStage().mainDropDown.hide();
+		sandbox.getUIStage().mainDropDown.hide();
 
         sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
 
@@ -194,7 +226,7 @@ public class ItemSelector {
      * @param items list of panels to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
-    public void setSelections(ArrayList<Entity> items, boolean alsoShow) {
+    public void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
         clearSelections();
 
         for (int i = 0; i < items.size(); i++) {
@@ -207,11 +239,11 @@ public class ItemSelector {
 
     /**
      * Un-selects item
-     * @param entity to un-select
+     * @param item to un-select
      */
-    public void releaseSelection(Entity entity) {
-        currentSelection.get(entity).remove();
-        currentSelection.remove(entity);
+    public void releaseSelection(IBaseItem item) {
+        currentSelection.get(item).remove();
+        currentSelection.remove(item);
 
         sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
     }
@@ -242,7 +274,7 @@ public class ItemSelector {
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
     public void selectAllItems() {
-        ArrayList<Entity> curr = new ArrayList<Entity>();
+        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
         for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
             curr.add(sandbox.getCurrentScene().getItems().get(i));
         }
@@ -480,6 +512,14 @@ public class ItemSelector {
         }
 
         sandbox.saveSceneCurrentSceneData();
+    }
+
+    public boolean selectionIsOneItem() {
+        if(getCurrentSelection().values().size() == 1) {
+            return true;
+        }
+
+        return false;
     }
 
     public boolean selectionIsComposite() {

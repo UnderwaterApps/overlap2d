@@ -20,9 +20,9 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -33,33 +33,53 @@ import com.uwsoft.editor.ui.widget.InputFileWidget;
 /**
  * Created by sargis on 7/31/14.
  */
-public class ExportSettingsDialog extends VisDialog {
+public class ExportSettingsDialog extends O2DDialog {
     public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
     public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
-    private final ExportSettingsInputFileWidget exportSettingsInputFileWidget;
-    private final AtlasMaxSizeWidget atlasMaxSizeWidget;
+    private final InputFileWidget exportSettingsInputFileWidget;
+    private VisSelectBox<Integer> widthSelectBox;
+    private VisSelectBox<Integer> heightSelectBox;
 
     public ExportSettingsDialog() {
         super("Export settings");
         addCloseButton();
         VisTable mainTable = new VisTable();
+        mainTable.padTop(6).padRight(6).padBottom(22);
 //        mainTable.debug();
-        exportSettingsInputFileWidget = new ExportSettingsInputFileWidget("Assets folder:", false);
+        mainTable.add("Assets folder:").right().padRight(5);
+        exportSettingsInputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES, false);
+        exportSettingsInputFileWidget.setTextFieldWidth(250);
         mainTable.add(exportSettingsInputFileWidget);
         mainTable.row().padTop(10);
-        atlasMaxSizeWidget = new AtlasMaxSizeWidget();
-        mainTable.add(atlasMaxSizeWidget).right();
-        mainTable.row().padTop(10);
+        mainTable.add("Atlas Max Size:").right().top().padRight(5);;
+        mainTable.add(getDimensionsTable()).left();
+        mainTable.row().padTop(23);
         VisTable buttonsTable = new VisTable();
         VisTextButton saveSettingsBtn = new VisTextButton("Save Settings");
         saveSettingsBtn.addListener(new ExportSettingsDialogBtnListener(SAVE_SETTINGS_BTN_CLICKED));
         VisTextButton saveSettingsAndExportBtn = new VisTextButton("Save Settings and Export");
         saveSettingsAndExportBtn.addListener(new ExportSettingsDialogBtnListener(SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED));
-        buttonsTable.add(saveSettingsBtn).padRight(15);
-        buttonsTable.add(saveSettingsAndExportBtn);
-        mainTable.add(buttonsTable).right();
-        mainTable.pad(15);
+        buttonsTable.add(saveSettingsBtn).padRight(17).height(24).width(100);
+        buttonsTable.add(saveSettingsAndExportBtn).height(24).width(170);
+        mainTable.add(buttonsTable).colspan(2);
         add(mainTable);
+    }
+
+    private Table getDimensionsTable() {
+        Integer[] data = {512, 1024, 2048, 4096};
+        VisTable dimensionsTable = new VisTable();
+        widthSelectBox = new VisSelectBox<>("white");
+        widthSelectBox.setItems(data);
+        widthSelectBox.setSelectedIndex(2);
+        dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
+        dimensionsTable.add(widthSelectBox).width(85).height(21).padRight(3);
+        dimensionsTable.row().padTop(10);
+        heightSelectBox = new VisSelectBox<>("white");
+        heightSelectBox.setItems(data);
+        heightSelectBox.setSelectedIndex(2);
+        dimensionsTable.add(new VisLabel("Height:")).left().padRight(3);
+        dimensionsTable.add(heightSelectBox).width(85).height(21).left();
+        return dimensionsTable;
     }
 
     private class ExportSettingsDialogBtnListener extends ClickListener {
@@ -75,55 +95,10 @@ public class ExportSettingsDialog extends VisDialog {
             super.clicked(event, x, y);
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
             ExportSettingsVO exportSettingsVO = new ExportSettingsVO();
-            exportSettingsVO.width = atlasMaxSizeWidget.widthSelectBox.getSelected();
-            exportSettingsVO.height = atlasMaxSizeWidget.heightSelectBox.getSelected();
+            exportSettingsVO.width = widthSelectBox.getSelected();
+            exportSettingsVO.height = heightSelectBox.getSelected();
             exportSettingsVO.fileHandle = exportSettingsInputFileWidget.getValue();
             facade.sendNotification(command, exportSettingsVO);
-        }
-    }
-
-    private class AtlasMaxSizeWidget extends VisTable {
-        private final VisSelectBox<Integer> widthSelectBox;
-        private final VisSelectBox<Integer> heightSelectBox;
-
-        public AtlasMaxSizeWidget() {
-            Integer[] data = {512, 1024, 2048, 4096};
-//            debug();
-            add("Atlas Max Size : ").padRight(15);
-            widthSelectBox = new VisSelectBox<>();
-            widthSelectBox.setItems(data);
-            widthSelectBox.setSelectedIndex(2);
-            add(widthSelectBox).padRight(5);
-            add("X").padRight(5);
-            heightSelectBox = new VisSelectBox<>();
-            heightSelectBox.setItems(data);
-            heightSelectBox.setSelectedIndex(2);
-            add(heightSelectBox);
-        }
-    }
-
-    private class ExportSettingsInputFileWidget extends VisTable {
-        private final String title;
-        private final InputFileWidget inputFileWidget;
-
-        public ExportSettingsInputFileWidget(String title, boolean multiselectionEnabled) {
-            this.title = title;
-            inputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES, multiselectionEnabled);
-            inputFileWidget.setTextFieldWidth(300);
-            add(title).right().padRight(5);
-            add(inputFileWidget);
-        }
-
-        public FileHandle getValue() {
-            return inputFileWidget.getValue();
-        }
-
-        public Array<FileHandle> getValues() {
-            return inputFileWidget.getValues();
-        }
-
-        public void resetData() {
-            inputFileWidget.resetData();
         }
     }
 

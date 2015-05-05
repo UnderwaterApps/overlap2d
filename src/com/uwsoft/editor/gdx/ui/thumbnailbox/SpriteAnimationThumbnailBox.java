@@ -23,6 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 
@@ -44,7 +46,7 @@ public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
         this.animationName = animationName;
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
-        final SpriteAnimation animThumb = new SpriteAnimation(vo, null);
+        final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -99,5 +101,10 @@ public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
         if (isMouseInside) {
             super.act(delta);
         }
+    }
+
+    @Override
+    protected void showRightClickDropDown() {
+        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animationName);
     }
 }

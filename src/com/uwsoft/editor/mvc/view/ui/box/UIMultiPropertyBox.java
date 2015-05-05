@@ -19,32 +19,22 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIMultiPropertyBox extends VisWindow {
+public class UIMultiPropertyBox extends UICollapsibleBox {
 
-    private final VisTable mainTable;
+
     private final VisTable propertiesTable;
 
+
     public UIMultiPropertyBox() {
-        super("Properties");
-
+        super("Properties", 236);
         setMovable(false);
-        mainTable = new VisTable();
-        mainTable.top();
-        mainTable.addSeparator().padBottom(5);
         propertiesTable = new VisTable();
-        mainTable.add(propertiesTable);
-
-        add(mainTable).width(250);
-    }
-
-    public void initView() {
-
+        createCollapsibleWidget(propertiesTable);
     }
 
     public void clearAll() {

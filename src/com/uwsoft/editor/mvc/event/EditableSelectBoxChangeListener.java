@@ -16,29 +16,27 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.sandbox;
+package com.uwsoft.editor.mvc.event;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.ui.widget.EditableSelectBox;
 
 /**
- * List of editing modes in sandbox
- *
- * Created by azakhary on 3/18/2015.
+ * Created by azakhary on 4/30/2015.
  */
-public enum EditingMode {
+public class EditableSelectBoxChangeListener extends ChangeListener {
 
-	 /**
-	  * user can only select panels
-	  */
-    SELECTION,
+    private final String eventName;
 
-	 /**
-	  * User can scale and rotate panels
-	  */
-    TRANSFORM,
+    public EditableSelectBoxChangeListener(String eventName) {
+        this.eventName = eventName;
+    }
 
-    TEXT,
-
-	 /**
-	  * User is in panning mode so dragging just moves the scene
-	  */
-    PAN
+    @Override
+    public void changed(ChangeEvent changeEvent, Actor actor) {
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        facade.sendNotification(eventName, ((EditableSelectBox) actor).getSelected());
+    }
 }

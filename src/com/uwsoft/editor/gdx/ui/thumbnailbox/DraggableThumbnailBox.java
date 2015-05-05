@@ -18,14 +18,18 @@
 
 package com.uwsoft.editor.gdx.ui.thumbnailbox;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -46,6 +50,8 @@ public class DraggableThumbnailBox extends Group {
         addActor(rc);
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
+
+        initAdditionalListeners();
     }
 
     public void initDragDrop(final Actor thumbnail, final AssetPayloadObject payloadData, DraggableThumbnailEvent event) {
@@ -83,21 +89,32 @@ public class DraggableThumbnailBox extends Group {
                 AssetPayloadObject pld = ((AssetPayloadObject) (payload.getObject()));
                 draggingEvent.drop(pld, x - pld.xOffset, y - pld.yOffset);
             }
-
-//            @Override
-//            public void drop(CustomDragAndDrop.Source source, CustomDragAndDrop.Payload payload, float x, float y, int pointer) {
-
-//            }
-//
-//            @Override
-//            public boolean drag(CustomDragAndDrop.Source arg0, CustomDragAndDrop.Payload arg1, float arg2, float arg3, int arg4) {
-//
-//                return true;
-//            }
         });
     }
 
     public interface DraggableThumbnailEvent {
         public void drop(AssetPayloadObject pld, float x, float y);
     }
+
+    public void initAdditionalListeners() {
+        addListener(new InputListener() {
+
+            @Override
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+                return true;
+            }
+
+            @Override
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if (button == Input.Buttons.RIGHT) {
+                    showRightClickDropDown();
+                }
+                super.touchUp(event, x, y, pointer, button);
+            }
+
+        });
+    }
+
+    protected void showRightClickDropDown() { }
+
 }
