@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -27,15 +26,13 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
-import com.uwsoft.editor.gdx.ui.dialogs.ItemPhysicsDialog;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
 import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
@@ -48,7 +45,6 @@ public class UIStage extends Stage {
 
     public DropDown mainDropDown;
 
-    public Overlap2DMenuBarMediator menuMediator;
 
     public UIStage() {
         super(new ScreenViewport());
@@ -63,8 +59,7 @@ public class UIStage extends Stage {
         addActor(dummyTarget);
 
         contextMenuContainer = new Group();
-        uiMainTable = new UIMainTable(this);
-        menuMediator = uiMainTable.menuMediator;
+        uiMainTable = new UIMainTable();
 
         addActor(uiMainTable);
         addActor(contextMenuContainer);
@@ -81,39 +76,21 @@ public class UIStage extends Stage {
 
 
     public void editPhysics(String assetName) {
-        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-        addActor(dlg);
-        dlg.editAsset(assetName);
+        //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+        //addActor(dlg);
+        //dlg.editAsset(assetName);
     }
 
-    public void editPhysics(Entity item) {
-        ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
-        addActor(dlg);
-        dlg.editItem(item);
+    public void editPhysics(IBaseItem item) {
+        //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
+        //addActor(dlg);
+        //dlg.editItem(item);
     }
 
     public void setKeyboardFocus() {
         setKeyboardFocus(dummyTarget);
     }
 
-
-    public void itemWasSelected(Entity itm) {
-        //uiMainTable.multiPropertyBox.setItem(itm);
-        facade.sendNotification(Overlap2D.ITEM_SELECTED, itm);
-
-        //uiMainTable.layerPanel.selectLayerByName(itm.getDataVO().layerName);
-    }
-
-    public void loadCurrentProject() {
-        // uiMainTable.libraryPanel.initContent();
-//        uiMainTable.lightBox.initContent();
-//        uiMainTable.itemsBox.init();
-//        uiMainTable.compositePanel.initResolutionBox();
-
-        //uiMainTable.layerPanel.initContent();
-
-//        UIController.instance.sendNotification(NameConstants.PROJECT_OPENED, DataManager.getInstance().getCurrentProjectInfoVO());
-    }
 
     public void emptyClick() {
         facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
@@ -144,10 +121,6 @@ public class UIStage extends Stage {
 
     public UIItemsTreeBox getItemsBox() {
         return uiMainTable.itemsBox;
-    }
-
-    public UILayerBox getLayerPanel() {
-        return uiMainTable.layerPanel;
     }
 
     @Override

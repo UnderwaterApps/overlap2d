@@ -36,6 +36,13 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
     private static final String TAG = UIResourcesBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.box";
+
+    public static final String IMAGE_RIGHT_CLICK = "IMAGE_RIGHT_CLICK";
+    public static final String ANIMATION_RIGHT_CLICK = "ANIMATION_RIGHT_CLICK";
+    public static final String LIBRARY_ITEM_RIGHT_CLICK = "LIBRARY_ITEM_RIGHT_CLICK";
+    public static final String PARTICLE_EFFECT_RIGHT_CLICK = "PARTICLE_EFFECT_RIGHT_CLICK";
+
     @Override
     public void onRegister() {
         super.onRegister();

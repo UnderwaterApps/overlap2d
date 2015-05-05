@@ -18,15 +18,14 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
-
-import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
@@ -34,18 +33,17 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.ResourceManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.proxy.*;
 import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.actor.CompositeItem;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.actor.ParticleItem;
+import com.uwsoft.editor.renderer.data.*;
+
+import java.util.ArrayList;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
@@ -58,31 +56,37 @@ public class Sandbox {
 
     private static Sandbox instance = null;
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.gdx.sandbox.Sandbox";
 
-    public EditingMode editingMode;
+    public static final String ACTION_GROUP_ITEMS = CLASS_NAME + "ACTION_GROUP_ITEMS";
+    public static final String ACTION_EDIT_COMPOSITE = CLASS_NAME + "ACTION_EDIT_COMPOSITE";
+    public static final String ACTION_CONVERT_TO_BUTTON = CLASS_NAME + "ACTION_CONVERT_TO_BUTTON";
+    public static final String ACTION_CUT = CLASS_NAME + "ACTION_CUT";
+    public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
+    public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
+    public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
+    public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
+    public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
+    public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
+
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
     public FlowManager flow;
-    public TransformationHandler transformationHandler;
     /**
      * this part contains legacy params that need to be removed one by one
      */
     public int currTransformType = -1;
-    public Entity currTransformHost;
+    public IBaseItem currTransformHost;
     public boolean isResizing = false;
-    public boolean isUsingSelectionTool = false;
-    public boolean isItemTouched = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
     public ArrayList<MainItemVO> tempClipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
-    public boolean cameraPanOn;
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private SandboxStage sandboxStage;
     private UIStage uiStage;
-    private SandboxInputAdapter sandboxInputAdapter;
     private UserActionController uac;
     private ItemFactory itemFactory;
     private ItemSelector selector;
@@ -122,13 +126,9 @@ public class Sandbox {
         uiStage = uiStageMediator.getViewComponent();
         sandboxStage.setUIStage(uiStage);
 
-        editingMode = EditingMode.SELECTION;
-
         sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
         itemControl = new ItemControlMediator(sceneControl);
 
-        transformationHandler = new TransformationHandler();
-        sandboxInputAdapter = new SandboxInputAdapter(this);
         uac = new UserActionController(this);
         selector = new ItemSelector(this);
         itemFactory = new ItemFactory(this);
@@ -161,30 +161,6 @@ public class Sandbox {
         return sceneControl;
     }
 
-    public SandboxInputAdapter getSandboxInputAdapter() {
-        return sandboxInputAdapter;
-    }
-
-
-    /**
-     * Initializers *
-     */
-
-    public EditingMode getCurrentMode() {
-        return editingMode;
-    }
-
-    /**
-     * sets current editing mode, and messages all selection rectangles about it.
-     *
-     * @param currentMode
-     */
-    public void setCurrentMode(EditingMode currentMode) {
-        this.editingMode = currentMode;
-        for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-            value.setMode(currentMode);
-        }
-    }
 
     /**
      * TODO: loading fonts this way is a bit outdated and needs to change
@@ -209,7 +185,6 @@ public class Sandbox {
     public void loadCurrentProject() {
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         loadCurrentProject(projectVO.lastOpenScene.isEmpty() ? "MainScene" : projectVO.lastOpenScene);
-        uiStage.loadCurrentProject();
     }
 
     public void loadScene(String sceneName) {
@@ -245,9 +220,7 @@ public class Sandbox {
 //        if (uiStage.getCompositePanel().isRootScene()) {
 //            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
 //        }
-        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
-            sandboxInputAdapter.initItemListeners(sceneControl.getCurrentScene().getItems().get(i));
-        }
+
         sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
         sceneControl.getCurrentScene().setX(0);
         sceneControl.getCurrentScene().setY(0);
@@ -389,9 +362,9 @@ public class Sandbox {
     }
 
     public void enablePan() {
-        cameraPanOn = true;
-        selector.clearSelections();
-        isItemTouched = false;
+        //cameraPanOn = true;
+        //selector.clearSelections();
+        //isItemTouched = false;
     }
 
     public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
@@ -407,7 +380,7 @@ public class Sandbox {
 
     public void selectionComplete() {
         // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
-        isUsingSelectionTool = false;
+
         // hiding selection rectangle
         getSandboxStage().selectionRec.setOpacity(0.0f);
         ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
@@ -427,6 +400,10 @@ public class Sandbox {
         }
     }
 
+    public int getZoomPercent() {
+        return (int)zoomPercent;
+    }
+
     public void setZoomPercent(float percent) {
         zoomPercent = percent;
         OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
@@ -440,6 +417,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
+        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
     }
 
     public void zoomDevideBy(float amount) {
@@ -449,6 +427,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
+        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
     }
 
     public int getGridSize() {
@@ -458,5 +437,31 @@ public class Sandbox {
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
+    }
+
+
+    /**
+     * TODO: put this in different place, not sandbox specific
+     * @param items
+     */
+    public void putItemsToClipboard(ArrayList<IBaseItem> items) {
+        CompositeVO tempHolder = new CompositeVO();
+        Json json = new Json();
+        json.setOutputType(JsonWriter.OutputType.json);
+        Actor actor = (Actor) items.get(0);
+        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
+        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
+        for (IBaseItem item : items) {
+            tempHolder.addItem(item.getDataVO());
+            actor = (Actor) item;
+            if (actor.getX() - cameraPos.x < vector3.x) {
+                vector3.x = actor.getX() - cameraPos.x;
+            }
+            if (actor.getY() - cameraPos.y < vector3.y) {
+                vector3.y = actor.getY() - cameraPos.y;
+            }
+        }
+        fakeClipboard = json.toJson(tempHolder);
+        copedItemCameraOffset = vector3;
     }
 }

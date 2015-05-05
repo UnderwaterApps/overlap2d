@@ -110,13 +110,13 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case Overlap2DMenuBar.CUT:
-                sandbox.getUac().cutAction();
+                facade.sendNotification(Sandbox.ACTION_CUT);
                 break;
             case Overlap2DMenuBar.COPY:
-                sandbox.getUac().copyAction();
+                facade.sendNotification(Sandbox.ACTION_COPY);
                 break;
             case Overlap2DMenuBar.PAST:
-                sandbox.getUac().pasteAction(0, 0, false);
+                facade.sendNotification(Sandbox.ACTION_PASTE);
                 break;
             case Overlap2DMenuBar.UNDO:
                 sandbox.getUac().undo();
@@ -217,7 +217,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 String path = file.file().getAbsolutePath();
                 if (path.length() > 0) {
                     projectManager.openProjectFromPath(path);
-                    sandbox.loadCurrentProject();
                 }
             }
         });
@@ -230,7 +229,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         prefs.pushHistory(path);
         Sandbox sandbox = Sandbox.getInstance();
         projectManager.openProjectFromPath(path);
-        sandbox.loadCurrentProject();
     }
 
     public void sceneMenuItemClicked(String sceneName) {

@@ -18,84 +18,84 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
-import java.io.File;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
-import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.ui.widget.InputFileWidget;
 
-public class NewProjectDialog extends VisDialog {
+import java.io.File;
+
+public class NewProjectDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
-    private static final String DEFAULT_ORIGIN_WITH = "1920";
+    private static final String DEFAULT_ORIGIN_WIDTH = "1920";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
 
-    private String defaultWorkspacePath;
-
-    private final VisValidableTextField projectName;
+    //    private final VisValidableTextField projectName;
     private final InputFileWidget workspacePathField;
-    private final VisTextField originWithTextField;
-    private final VisTextField originHeightTextField;
+    private final VisValidableTextField projectName;
+    private VisTextField originWidthTextField;
+    private VisTextField originHeightTextField;
+    private String defaultWorkspacePath;
 
     NewProjectDialog() {
         super("Create New Project");
-
         setModal(true);
         addCloseButton();
         VisTable mainTable = new VisTable();
-
-        VisLabel projectNameLavel = new VisLabel("Project Name:");
-        mainTable.add(projectNameLavel).left().padRight(5);
-        projectName = new VisValidableTextField(new SimpleFormValidator.EmptyInputValidator("Cannot be empty"));
-        mainTable.add(projectName).width(120).left().fillX();
-        mainTable.row().padBottom(15);
-
 //        mainTable.debug();
-        VisTable projectPathTable = new VisTable();
-        projectPathTable.add(new VisLabel("Project Folder:")).right().padRight(5);
+        mainTable.padTop(6).padRight(6).padBottom(22);
+        //
+        VisLabel projectNameLavel = new VisLabel("Project Name:");
+        mainTable.add(projectNameLavel).right().padRight(5);
+        projectName = createValidableTextField("", new SimpleFormValidator.EmptyInputValidator("Cannot be empty"));
+        mainTable.add(projectName).height(21).expandX().fillX();
+        //
+        mainTable.row().padTop(10);
+        //
+        mainTable.add(new VisLabel("Project Folder:")).right().padRight(5);
         workspacePathField = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES, false);
-        projectPathTable.add(workspacePathField);
-        mainTable.add(projectPathTable).colspan(2).padBottom(15);
+        workspacePathField.setTextFieldWidth(156);
+        mainTable.add(workspacePathField);
         //
-        mainTable.row();
+        mainTable.row().padTop(10);
         //
-        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
-        VisTable projectResolutionTable = new VisTable();
-        projectResolutionTable.add(new VisLabel("Original Resolution:")).right().padRight(5);
-        originWithTextField = new VisTextField(DEFAULT_ORIGIN_WITH);
-        originWithTextField.setTextFieldFilter(digitsOnlyFilter);
-        projectResolutionTable.add(originWithTextField).width(50).padRight(3);
-        projectResolutionTable.add(new VisLabel("X")).left().padRight(3);
-        originHeightTextField = new VisTextField(DEFAULT_ORIGIN_HEIGHT);
-        originHeightTextField.setTextFieldFilter(digitsOnlyFilter);
-        projectResolutionTable.add(originHeightTextField).width(50).left();
-        mainTable.add(projectResolutionTable).colspan(2).padBottom(15);
+        mainTable.add(new VisLabel("Max. Resolution:")).top().right().padRight(5);
+        mainTable.add(getDimensionsTable()).left();
         //
-        mainTable.row();
+        mainTable.row().padTop(23);
         //
-        VisTextButton createBtn = new VisTextButton("Create New Project");
+        VisTextButton createBtn = new VisTextButton("Create", "orange");
 
-        mainTable.add(createBtn).colspan(2).right();
+        mainTable.add(createBtn).width(93).height(25).colspan(2);
         //
-        add(mainTable).pad(15);
+        add(mainTable);
         //
         createBtn.addListener(new BtnClickListener(CREATE_BTN_CLICKED));
     }
 
+    private Table getDimensionsTable() {
+        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
+        VisTable dimensionsTable = new VisTable();
+        originWidthTextField = createTextField(DEFAULT_ORIGIN_WIDTH, digitsOnlyFilter);
+        dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
+        dimensionsTable.add(originWidthTextField).width(45).height(21).padRight(3);
+        dimensionsTable.row().padTop(10);
+        originHeightTextField = createTextField(DEFAULT_ORIGIN_HEIGHT, digitsOnlyFilter);
+        dimensionsTable.add(new VisLabel("Height:")).left().padRight(3);
+        dimensionsTable.add(originHeightTextField).width(45).height(21).left();
+        return dimensionsTable;
+    }
+
     @Override
     public VisDialog show(Stage stage, Action action) {
-        originWithTextField.setText(DEFAULT_ORIGIN_WITH);
+        originWidthTextField.setText(DEFAULT_ORIGIN_WIDTH);
         originHeightTextField.setText(DEFAULT_ORIGIN_HEIGHT);
         workspacePathField.resetData();
         workspacePathField.setValue(new FileHandle(defaultWorkspacePath));
@@ -103,11 +103,19 @@ public class NewProjectDialog extends VisDialog {
     }
 
     public String getOriginWidth() {
-        return originWithTextField.getText();
+        return originWidthTextField.getText();
     }
 
     public String getOriginHeight() {
         return originHeightTextField.getText();
+    }
+
+    public String getDefaultWorkspacePath() {
+        return defaultWorkspacePath;
+    }
+
+    public void setDefaultWorkspacePath(String defaultWorkspacePath) {
+        this.defaultWorkspacePath = defaultWorkspacePath;
     }
 
     private class BtnClickListener extends ClickListener {
@@ -123,13 +131,5 @@ public class NewProjectDialog extends VisDialog {
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
             facade.sendNotification(command, workspacePathField.getValue().path() + File.separator + projectName.getText());
         }
-    }
-
-    public String getDefaultWorkspacePath() {
-        return defaultWorkspacePath;
-    }
-
-    public void setDefaultWorkspacePath(String defaultWorkspacePath) {
-        this.defaultWorkspacePath = defaultWorkspacePath;
     }
 }

@@ -20,6 +20,7 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -37,13 +38,14 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String CREATE = EVENT_PREFIX + ".CREATE_BTN_CLICKED";
 
     // tmp events
+    public static final String ZOOM_CHANGED = EVENT_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
     public static final String ITEM_DATA_UPDATED = EVENT_PREFIX + ".ITEM_DATA_UPDATED";
     public static final String ITEM_SELECTED = EVENT_PREFIX + ".ITEM_SELECTED";
     public static final String EMPTY_SPACE_CLICKED = EVENT_PREFIX + ".EMPTY_SPACE_CLICKED";
 
-    public static final String SCENE_RIGHT_CLICK = EVENT_PREFIX  + ".SCENE_RIGHT_CLICK";
-    public static final String ITEM_RIGHT_CLICK = EVENT_PREFIX  + ".ITEM_RIGHT_CLICK";
+    public static final String SCENE_RIGHT_CLICK = EVENT_PREFIX + ".SCENE_RIGHT_CLICK";
+    public static final String ITEM_RIGHT_CLICK = EVENT_PREFIX + ".ITEM_RIGHT_CLICK";
 
     public static final String OPENED_COMPOSITE = EVENT_PREFIX + ".OPENED_COMPOSITE";
     public static final String OPENED_PREVIOUS_COMPOSITE = EVENT_PREFIX + ".OPENED_PREVIOUS_COMPOSITE";
@@ -60,6 +62,7 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
 
     public void create() {
         VisUI.load(Gdx.files.internal("style/uiskin.json"));
+        VisUI.setDefaultTitleAlign(Align.center);
         facade = Overlap2DFacade.getInstance();
         facade.startup(this);
         sendNotification(CREATE);
