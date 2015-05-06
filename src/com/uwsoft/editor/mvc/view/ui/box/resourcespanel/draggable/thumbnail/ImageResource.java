@@ -16,21 +16,19 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 
-public class ImageThumbnailBox extends DraggableThumbnailBox {
-
-    private float scaleSize = 1;
+public class ImageResource extends ThumbnailBoxResource {
 
     private AtlasRegion region;
 
-    public ImageThumbnailBox(AtlasRegion region) {
+    public ImageResource(AtlasRegion region) {
         Image img = new Image(region);
         this.region = region;
 
@@ -43,7 +41,6 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
             } else {
                 scaleFactor = 1.0f / (img.getHeight() / thumbnailSize);
             }
-            scaleSize = scaleFactor;
             img.setScale(scaleFactor);
 
             img.setX((getWidth() - img.getWidth() * img.getScaleX()) / 2);
@@ -58,27 +55,20 @@ public class ImageThumbnailBox extends DraggableThumbnailBox {
 
 
         Image payloadImg = new Image(region);
-        AssetPayloadObject payload = new AssetPayloadObject();
+        ResourcePayloadObject payload = new ResourcePayloadObject();
         payload.assetName = region.name;
-        payload.type = AssetPayloadObject.AssetType.Sprite;
-        DraggableThumbnailEvent event = new DraggableThumbnailEvent() {
-            @Override
-            public void drop(AssetPayloadObject pld, float x, float y) {
-                itemDropped(pld.assetName, x, y);
-            }
-        };
-
-        initDragDrop(payloadImg, scaleSize, scaleSize, payload, event);
+        initDragDrop(payloadImg, payload);
         initAdditionalListeners();
     }
 
 
-    public float getScaleSize() {
-        return scaleSize;
-    }
-
     protected void itemDropped(String assetName, float x, float y) {
         sandbox.getUac().createImage(assetName, x, y);
+    }
+
+    @Override
+    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
+        itemDropped(pld.assetName, x, y);
     }
 
     @Override

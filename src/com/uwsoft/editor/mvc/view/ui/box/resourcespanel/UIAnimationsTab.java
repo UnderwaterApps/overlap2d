@@ -21,7 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -35,7 +35,7 @@ public class UIAnimationsTab extends UIResourcesTab {
     }
 
 
-    public void setThumbnailBoxes(Array<AnimationThumbnailBox> thumbnailBoxes) {
+    public void setThumbnailBoxes(Array<DraggableResource> thumbnailBoxes) {
         animationsTable.clearChildren();
         for (int i = 0; i < thumbnailBoxes.size; i++) {
             animationsTable.add(thumbnailBoxes.get(i)).pad(3);

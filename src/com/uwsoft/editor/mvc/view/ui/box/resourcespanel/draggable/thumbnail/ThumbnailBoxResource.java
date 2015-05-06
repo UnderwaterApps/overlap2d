@@ -16,25 +16,25 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.ImageThumbnailBox;
+import com.badlogic.gdx.graphics.Color;
+import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 
 /**
- * Created by sargis on 8/21/14.
+ * Created by sargis on 5/6/15.
  */
-public class Image9patchThumbnailBox extends ImageThumbnailBox {
-    public Image9patchThumbnailBox(TextureAtlas.AtlasRegion region) {
-        super(region);
-    }
+public abstract class ThumbnailBoxResource extends DraggableResource {
+    protected float thumbnailSize = 50;
+    protected PixelRect rc;
 
-    protected void itemDropped(String assetName, float x, float y) {
-        sandbox.getUac().create9Patch(assetName, x, y);
-    }
-
-    @Override
-    public void initAdditionalListeners() {
-        // do nothing for now
+    public ThumbnailBoxResource() {
+        rc = new PixelRect(thumbnailSize, thumbnailSize);
+        rc.setFillColor(new Color(1, 1, 1, 0.2f));
+        rc.setBorderColor(new Color(1, 1, 1, 0.4f));
+        addActor(rc);
+        setWidth(thumbnailSize);
+        setHeight(thumbnailSize);
     }
 }

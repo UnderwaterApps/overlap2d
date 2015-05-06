@@ -16,35 +16,26 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list;
 
-import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemThumbnailBox;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
- * Created by azakhary on 4/17/2015.
+ * Created by azakhary on 7/3/2014.
  */
-public class UILibraryItemsTab extends UIResourcesTab {
+public class LibraryItemThumbnailBox extends ListItemResource {
 
-    private VisTable list;
+    private final CompositeItemVO compositeItemVO;
+    private String key;
 
-    @Override
-    public String getTabTitle() {
-        return " Library ";
+    public LibraryItemThumbnailBox(String key, CompositeItemVO compositeItemVO) {
+        super(key);
+        this.key = key;
+        this.compositeItemVO = compositeItemVO;
     }
 
-    @Override
-    protected VisScrollPane crateScrollPane() {
-        list = new VisTable();
-        return new VisScrollPane(list);
+    public String getKey() {
+        return key;
     }
 
-    public void setItems(Array<LibraryItemThumbnailBox> items) {
-        for (LibraryItemThumbnailBox box : items) {
-            list.add(box).expandX().fillX();
-            list.row();
-        }
-    }
 }

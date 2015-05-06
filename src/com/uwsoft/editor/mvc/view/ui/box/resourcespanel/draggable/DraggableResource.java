@@ -16,50 +16,30 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
-import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
+import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class DraggableThumbnailBox extends Group {
-
-
+public abstract class DraggableResource extends Group {
+    
     protected final Sandbox sandbox;
-    protected float thumbnailSize = 50;
-    protected PixelRect rc;
-    private DraggableThumbnailEvent draggingEvent;
 
-    public DraggableThumbnailBox() {
+    public DraggableResource() {
         sandbox = Sandbox.getInstance();
-        rc = new PixelRect(thumbnailSize, thumbnailSize);
-        rc.setFillColor(new Color(1, 1, 1, 0.2f));
-        rc.setBorderColor(new Color(1, 1, 1, 0.4f));
-        addActor(rc);
-        setWidth(thumbnailSize);
-        setHeight(thumbnailSize);
-
         initAdditionalListeners();
     }
 
-    public void initDragDrop(final Actor thumbnail, final AssetPayloadObject payloadData, DraggableThumbnailEvent event) {
-        initDragDrop(thumbnail, 1, 1, payloadData, event);
-    }
-
-    public void initDragDrop(final Actor thumbnail, final float itemScaleX, final float itemScaleY, final AssetPayloadObject payloadData, DraggableThumbnailEvent event) {
-        this.draggingEvent = event;
+    public void initDragDrop(final Actor thumbnail, final ResourcePayloadObject payloadData) {
         final DragAndDrop dragAndDrop = new DragAndDrop();
 
         dragAndDrop.addSource(new DragAndDrop.Source(this) {
@@ -86,15 +66,14 @@ public class DraggableThumbnailBox extends Group {
 
             @Override
             public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                AssetPayloadObject pld = ((AssetPayloadObject) (payload.getObject()));
-                draggingEvent.drop(pld, x - pld.xOffset, y - pld.yOffset);
+                ResourcePayloadObject pld = ((ResourcePayloadObject) (payload.getObject()));
+                resourceDropped(pld, x - pld.xOffset, y - pld.yOffset);
             }
         });
     }
 
-    public interface DraggableThumbnailEvent {
-        public void drop(AssetPayloadObject pld, float x, float y);
-    }
+    protected abstract void resourceDropped(ResourcePayloadObject pld, float x, float y);
+
 
     public void initAdditionalListeners() {
         addListener(new InputListener() {
@@ -115,6 +94,7 @@ public class DraggableThumbnailBox extends Group {
         });
     }
 
-    protected void showRightClickDropDown() { }
+    protected void showRightClickDropDown() {
+    }
 
 }

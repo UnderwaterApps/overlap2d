@@ -16,27 +16,26 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
 /**
  * Created by hayk on 19/12/2014.
  */
-public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
+public class SpriterAnimationResource extends ThumbnailBoxResource {
 
 
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
-    private AssetPayloadObject payload;
+    private ResourcePayloadObject payload;
 
     private float scaleSize = 1;
 
@@ -44,7 +43,7 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
 
     private String animationName;
 
-    public SpriterAnimationThumbnailBox(String animationName) {
+    public SpriterAnimationResource(String animationName) {
         super();
         this.animationName = animationName;
         facade = Overlap2DFacade.getInstance();
@@ -78,13 +77,10 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
         addActor(animThumb);
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
-        payload = new AssetPayloadObject();
+        payload = new ResourcePayloadObject();
         payload.assetName = animationName;
-        payload.type = AssetPayloadObject.AssetType.Spriter;
 
-        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpriterAnimation(payload.assetName, x, y);
-
-        initDragDrop(payloadImg, payload, event);
+        initDragDrop(payloadImg, payload);
 
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
@@ -97,6 +93,11 @@ public class SpriterAnimationThumbnailBox extends AnimationThumbnailBox {
         if (isMouseInside) {
             super.act(delta);
         }
+    }
+
+    @Override
+    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
+        sandbox.getUac().createSpriterAnimation(payload.assetName, x, y);
     }
 
     @Override

@@ -16,16 +16,11 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.gdx.ui.payloads;
 
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.DraggableThumbnailBox;
 
-/**
- * Created by azakhary on 4/20/2015.
- */
-public class AnimationThumbnailBox extends DraggableThumbnailBox {
-
-    public AnimationThumbnailBox() {
-        super();
-    }
+public class ResourcePayloadObject {
+    public String assetName;
+    public float xOffset;
+    public float yOffset;
 }

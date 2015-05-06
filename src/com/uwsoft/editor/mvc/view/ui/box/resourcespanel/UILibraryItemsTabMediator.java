@@ -25,9 +25,10 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
-import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -37,7 +38,7 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
     private static final String TAG = UILibraryItemsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private HashMap<String, CompositeItemVO> items;
+    private Map<String, CompositeItemVO> items;
 
     public UILibraryItemsTabMediator() {
         super(NAME, new UILibraryItemsTab());
@@ -70,9 +71,9 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
 
     private void initLibraryItems() {
         items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
-        Array<String> itemArray = new Array<>();
-        for (String name : items.keySet()) {
-            itemArray.add(name);
+        Array<LibraryItemThumbnailBox> itemArray = new Array<>();
+        for (String key : items.keySet()) {
+            itemArray.add(new LibraryItemThumbnailBox(key, items.get(key)));
         }
         viewComponent.setItems(itemArray);
     }

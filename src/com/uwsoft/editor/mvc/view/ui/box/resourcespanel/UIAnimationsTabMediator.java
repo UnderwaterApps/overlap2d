@@ -24,13 +24,13 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpineAnimationThumbnailBox;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpriteAnimationThumbnailBox;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.SpriterAnimationThumbnailBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.SpineAnimationResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.SpriteAnimationResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.SpriterAnimationResource;
 
 import java.util.HashMap;
 
@@ -89,18 +89,18 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
         spriteAnimations = resourceManager.getProjectSpriteAnimationsList();
         spriterAnimations = resourceManager.getProjectSpriterAnimationsList();
 
-        Array<AnimationThumbnailBox> animationBoxes = new Array<>();
+        Array<DraggableResource> animationBoxes = new Array<>();
 
         for (String animationName : spineAnimations.keySet()) {
-            SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(spineAnimations.get(animationName));
+            SpineAnimationResource thumb = new SpineAnimationResource(spineAnimations.get(animationName));
             animationBoxes.add(thumb);
         }
         for (String animationName : spriteAnimations.keySet()) {
-            SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(animationName);
+            SpriteAnimationResource thumb = new SpriteAnimationResource(animationName);
             animationBoxes.add(thumb);
         }
         for (String animationName : spriterAnimations.keySet()) {
-            SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(animationName);
+            SpriterAnimationResource thumb = new SpriterAnimationResource(animationName);
             animationBoxes.add(thumb);
         }
 

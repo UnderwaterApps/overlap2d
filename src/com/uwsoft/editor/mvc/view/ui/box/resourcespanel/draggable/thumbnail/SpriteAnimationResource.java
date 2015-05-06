@@ -16,33 +16,32 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
+import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.AnimationThumbnailBox;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
+public class SpriteAnimationResource extends ThumbnailBoxResource {
 
 
     private final String animationName;
-    private AssetPayloadObject payload;
+    private ResourcePayloadObject payload;
 
     private float scaleSize = 1;
 
     private boolean isMouseInside = false;
 
-    public SpriteAnimationThumbnailBox(String animationName) {
+    public SpriteAnimationResource(String animationName) {
         super();
         this.animationName = animationName;
         SpriteAnimationVO vo = new SpriteAnimationVO();
@@ -83,13 +82,10 @@ public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
         addActor(animThumb);
 
         Image payloadImg = new Image(animThumb.getAtlasRegionAt(0));
-        payload = new AssetPayloadObject();
+        payload = new ResourcePayloadObject();
         payload.assetName = animationName;
-        payload.type = AssetPayloadObject.AssetType.Sprite;
 
-        DraggableThumbnailEvent event = (pld, x, y) -> sandbox.getUac().createSpriteAnimation(payload.assetName, x, y);
-
-        initDragDrop(payloadImg, payload, event);
+        initDragDrop(payloadImg, payload);
 
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
@@ -102,6 +98,11 @@ public class SpriteAnimationThumbnailBox extends AnimationThumbnailBox {
         if (isMouseInside) {
             super.act(delta);
         }
+    }
+
+    @Override
+    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
+        sandbox.getUac().createSpriteAnimation(payload.assetName, x, y);
     }
 
     @Override

@@ -16,16 +16,24 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.payloads;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 
-public class AssetPayloadObject {
-	public AssetType type;
-    public String assetName;
-	public float xOffset;
-	public float yOffset;
+/**
+ * Created by sargis on 8/21/14.
+ */
+public class Image9PatchResource extends ImageResource {
+    public Image9PatchResource(TextureAtlas.AtlasRegion region) {
+        super(region);
+    }
 
-    public enum AssetType {
-        Sprite, Particle, Animation, Spriter, Component
+    protected void itemDropped(String assetName, float x, float y) {
+        sandbox.getUac().create9Patch(assetName, x, y);
+    }
+
+    @Override
+    public void initAdditionalListeners() {
+        // do nothing for now
     }
 }

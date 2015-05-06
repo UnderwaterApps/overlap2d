@@ -22,8 +22,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.Image9patchThumbnailBox;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.thumbnail.ImageThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.Image9PatchResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.ImageResource;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
@@ -78,11 +78,11 @@ public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
 
         atlas = resourceManager.getProjectAssetsList();
 
-        Array<ImageThumbnailBox> thumbnailBoxes = new Array<>();
+        Array<ImageResource> thumbnailBoxes = new Array<>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();
         for (TextureAtlas.AtlasRegion region : atlasRegions) {
             boolean is9patch = region.splits != null;
-            ImageThumbnailBox thumbnailBox = is9patch ? new Image9patchThumbnailBox(region) : new ImageThumbnailBox(region);
+            ImageResource thumbnailBox = is9patch ? new Image9PatchResource(region) : new ImageResource(region);
             thumbnailBoxes.add(thumbnailBox);
         }
 
