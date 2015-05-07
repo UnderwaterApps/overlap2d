@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -35,10 +36,12 @@ public class UIAnimationsTab extends UIResourcesTab {
     }
 
 
-    public void setThumbnailBoxes(Array<DraggableResource> thumbnailBoxes) {
+    public void setThumbnailBoxes(Array<DraggableResource> draggableResources) {
         animationsTable.clearChildren();
-        for (int i = 0; i < thumbnailBoxes.size; i++) {
-            animationsTable.add(thumbnailBoxes.get(i)).pad(3);
+        for (int i = 0; i < draggableResources.size; i++) {
+            DraggableResource draggableResource = draggableResources.get(i);
+            draggableResource.initDragDrop();
+            animationsTable.add((Actor) draggableResource.getViewComponent()).pad(3);
             if ((i - 7) % 4 == 0) {
                 animationsTable.row();
             }

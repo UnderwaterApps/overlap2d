@@ -18,24 +18,14 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.LightVO;
-
-import java.util.ArrayList;
 
 /**
  * Provides interface for user actions/intentions like creating panels
@@ -53,20 +43,20 @@ public class UserActionController {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
-    public void createImage(String regionName, float x, float y) {
+    public Boolean createImage(String regionName, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
-
-		  x = MathUtils.floor(x / sandbox.getGridSize())*sandbox.getGridSize();
-		  y = MathUtils.floor(y / sandbox.getGridSize())*sandbox.getGridSize();
-        sandbox.getItemFactory().createImageItem(layer, regionName, x, y);
+        if (layer == null) return false;
+        vector2.x = MathUtils.floor(vector2.x / sandbox.getGridSize()) * sandbox.getGridSize();
+        vector2.y = MathUtils.floor(vector2.y / sandbox.getGridSize()) * sandbox.getGridSize();
+        sandbox.getItemFactory().createImageItem(layer, regionName, vector2.x, vector2.y);
+        return true;
     }
 
-    public void create9Patch(String name, float x, float y) {
+    public Boolean create9Patch(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
-
-        sandbox.getItemFactory().create9patchItem(layer, name, x, y);
+        if (layer == null) return false;
+        sandbox.getItemFactory().create9patchItem(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
     public void createParticleItem(String name, float x, float y) {
@@ -77,25 +67,26 @@ public class UserActionController {
 
     }
 
-    public void createSpriteAnimation(String name, float x, float y) {
+    public Boolean createSpriteAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
-
-        sandbox.getItemFactory().createSpriteAnimation(layer, name, x, y);
+        if (layer == null) return false;
+        sandbox.getItemFactory().createSpriteAnimation(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
-    public void createSpriterAnimation(String name, float x, float y) {
+    public Boolean createSpriterAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
-
-        sandbox.getItemFactory().createSpriterAnimation(layer, name, x, y);
+        if (layer == null) return false;
+        sandbox.getItemFactory().createSpriterAnimation(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
-    public void createSpineAnimation(String name, float x, float y) {
+    public Boolean createSpineAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
+        if (layer == null) return false;
 
-        sandbox.getItemFactory().createSpineAnimation(layer, name, x, y);
+        sandbox.getItemFactory().createSpineAnimation(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
     public void createLight(LightVO vo, float x, float y) {
@@ -106,18 +97,19 @@ public class UserActionController {
     }
 
 
-    public void createItemFromLibrary(String name, float x, float y) {
+    public Boolean createItemFromLibrary(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
+        if (layer == null) return false;
 
-        sandbox.getItemFactory().createItemFromLibrary(layer, name, x, y);
+        sandbox.getItemFactory().createItemFromLibrary(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
     /**
-     * @depricated
      * @param name
      * @param x
      * @param y
+     * @depricated
      */
     public void createComponent(final String name, final float x, final float y) {
         /*

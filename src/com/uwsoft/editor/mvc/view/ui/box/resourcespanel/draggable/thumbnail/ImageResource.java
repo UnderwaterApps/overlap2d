@@ -19,19 +19,19 @@
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 
 public class ImageResource extends ThumbnailBoxResource {
 
-    private AtlasRegion region;
+
+    private final Image payloadImg;
+    private final ResourcePayloadObject payload;
 
     public ImageResource(AtlasRegion region) {
+        setFactoryMethod(sandbox.getUac()::createImage);
         Image img = new Image(region);
-        this.region = region;
-
         if (img.getWidth() > thumbnailSize || img.getHeight() > thumbnailSize) {
             // resizing is needed
             float scaleFactor = 1.0f;
@@ -54,26 +54,18 @@ public class ImageResource extends ThumbnailBoxResource {
         addActor(img);
 
 
-        Image payloadImg = new Image(region);
-        ResourcePayloadObject payload = new ResourcePayloadObject();
-        payload.assetName = region.name;
-        initDragDrop(payloadImg, payload);
-        initAdditionalListeners();
-    }
-
-
-    protected void itemDropped(String assetName, float x, float y) {
-        sandbox.getUac().createImage(assetName, x, y);
+        payloadImg = new Image(region);
+        payload = new ResourcePayloadObject();
+        payload.name = region.name;
     }
 
     @Override
-    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
-        itemDropped(pld.assetName, x, y);
+    public Actor getDragActor() {
+        return payloadImg;
     }
 
     @Override
-    protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.IMAGE_RIGHT_CLICK, region.name);
+    public ResourcePayloadObject getPayloadData() {
+        return payload;
     }
-
 }

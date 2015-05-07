@@ -20,7 +20,7 @@ package com.uwsoft.editor.gdx.ui.payloads;
 
 
 public class ResourcePayloadObject {
-    public String assetName;
+    public String name;
     public float xOffset;
     public float yOffset;
 }

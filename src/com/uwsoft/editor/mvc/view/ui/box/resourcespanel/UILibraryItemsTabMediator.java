@@ -25,6 +25,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemThumbnailBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
@@ -71,9 +72,9 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
 
     private void initLibraryItems() {
         items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
-        Array<LibraryItemThumbnailBox> itemArray = new Array<>();
+        Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
-            itemArray.add(new LibraryItemThumbnailBox(key, items.get(key)));
+            itemArray.add(new DraggableResource(new LibraryItemThumbnailBox(key, items.get(key))));
         }
         viewComponent.setItems(itemArray);
     }

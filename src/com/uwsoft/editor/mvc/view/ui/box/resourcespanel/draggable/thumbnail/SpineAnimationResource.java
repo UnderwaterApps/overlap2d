@@ -22,11 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.SpineActor;
 import com.uwsoft.editor.renderer.data.SpineVO;
 
@@ -36,20 +34,20 @@ import com.uwsoft.editor.renderer.data.SpineVO;
 public class SpineAnimationResource extends ThumbnailBoxResource {
 
 
-    private final Overlap2DFacade facade;
-    private ResourcePayloadObject payload;
+    private final Image payloadImg;
+    private final ResourcePayloadObject payload;
+    private Overlap2DFacade facade;
 
 
     private boolean isMouseInside = false;
 
-    private SpineAnimData animData;
 
-    public SpineAnimationResource(SpineAnimData animData) {
+    public SpineAnimationResource(String animName) {
         super();
-        this.animData = animData;
+        setFactoryMethod(sandbox.getUac()::createSpineAnimation);
         facade = Overlap2DFacade.getInstance();
         SpineVO vo = new SpineVO();
-        vo.animationName = animData.animName;
+        vo.animationName = animName;
         final SpineActor animThumb = new SpineActor(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
@@ -88,16 +86,11 @@ public class SpineAnimationResource extends ThumbnailBoxResource {
 
         addActor(animThumb);
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+        payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
         payload = new ResourcePayloadObject();
-        payload.assetName = animData.animName;
-
-
-        initDragDrop(payloadImg, payload);
-
+        payload.name = animName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
-
         super.act(1f);
     }
 
@@ -109,12 +102,12 @@ public class SpineAnimationResource extends ThumbnailBoxResource {
     }
 
     @Override
-    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
-        sandbox.getUac().createSpineAnimation(payload.assetName, x, y);
+    public Actor getDragActor() {
+        return payloadImg;
     }
 
     @Override
-    protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animData.animName);
+    public ResourcePayloadObject getPayloadData() {
+        return payload;
     }
 }

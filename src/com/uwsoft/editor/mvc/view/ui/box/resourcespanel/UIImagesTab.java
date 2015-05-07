@@ -18,10 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.ImageResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -45,10 +46,12 @@ public class UIImagesTab extends UIResourcesTab {
         return " Images ";
     }
 
-    public void setThumbnailBoxes(Array<ImageResource> thumbnailBoxes) {
+    public void setThumbnailBoxes(Array<DraggableResource> draggableResources) {
         imagesTable.clearChildren();
-        for (int i = 0; i < thumbnailBoxes.size; i++) {
-            imagesTable.add(thumbnailBoxes.get(i)).padRight(5).padBottom(5);
+        for (int i = 0; i < draggableResources.size; i++) {
+            DraggableResource draggableResource = draggableResources.get(i);
+            draggableResource.initDragDrop();
+            imagesTable.add((Actor) draggableResource.getViewComponent()).padRight(5).padBottom(5);
             if ((i - 7) % 4 == 0) {
                 imagesTable.row();
             }

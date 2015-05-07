@@ -18,12 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.SpriterActor;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 
@@ -31,23 +30,14 @@ import com.uwsoft.editor.renderer.data.SpriterVO;
  * Created by hayk on 19/12/2014.
  */
 public class SpriterAnimationResource extends ThumbnailBoxResource {
-
-
     private final Overlap2DFacade facade;
-    private final ProjectManager projectManager;
+    private final Image dragActor;
     private ResourcePayloadObject payload;
-
-    private float scaleSize = 1;
-
     private boolean isMouseInside = true;
 
-    private String animationName;
-
     public SpriterAnimationResource(String animationName) {
-        super();
-        this.animationName = animationName;
+        setFactoryMethod(sandbox.getUac()::createSpriterAnimation);
         facade = Overlap2DFacade.getInstance();
-        projectManager = facade.retrieveProxy(ProjectManager.NAME);
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
         SpriterActor animThumb = new SpriterActor(vo, sandbox.getSceneControl().getEssentials());
@@ -61,7 +51,6 @@ public class SpriterAnimationResource extends ThumbnailBoxResource {
             } else {
                 scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
             }
-            scaleSize = scaleFactor;
             animThumb.setSpriterScale(scaleFactor);
 
 //            animThumb.setX((getWidth()-animThumb.getWidth())/2);
@@ -75,18 +64,16 @@ public class SpriterAnimationResource extends ThumbnailBoxResource {
         }
 
         addActor(animThumb);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+
         payload = new ResourcePayloadObject();
-        payload.assetName = animationName;
-
-        initDragDrop(payloadImg, payload);
-
+        payload.name = animationName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
-
+        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
+        dragActor = new Image(textureManager.getEditorAsset("resizeIconChecked"));
         super.act(1f);
     }
+
 
     @Override
     public void act(float delta) {
@@ -96,12 +83,12 @@ public class SpriterAnimationResource extends ThumbnailBoxResource {
     }
 
     @Override
-    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
-        sandbox.getUac().createSpriterAnimation(payload.assetName, x, y);
+    public Actor getDragActor() {
+        return dragActor;
     }
 
     @Override
-    protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animationName);
+    public ResourcePayloadObject getPayloadData() {
+        return payload;
     }
 }

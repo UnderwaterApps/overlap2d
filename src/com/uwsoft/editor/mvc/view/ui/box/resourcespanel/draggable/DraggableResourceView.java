@@ -16,37 +16,20 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
 /**
- * Created by azakhary on 4/17/2015.
+ * Created by sargis on 5/7/15.
  */
-public class UILibraryItemsTab extends UIResourcesTab {
+public interface DraggableResourceView {
+    Actor getDragActor();
 
-    private VisTable list;
+    ResourcePayloadObject getPayloadData();
 
-    @Override
-    public String getTabTitle() {
-        return " Library ";
-    }
-
-    @Override
-    protected VisScrollPane crateScrollPane() {
-        list = new VisTable();
-        return new VisScrollPane(list);
-    }
-
-    public void setItems(Array<DraggableResource> items) {
-        for (DraggableResource box : items) {
-            box.initDragDrop();
-            list.add((Actor) box.getViewComponent()).expandX().fillX();
-            list.row();
-        }
-    }
+    void drop(DragAndDrop.Payload payload, Vector2 vector2);
 }

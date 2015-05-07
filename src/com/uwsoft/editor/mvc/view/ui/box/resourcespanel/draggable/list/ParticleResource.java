@@ -18,11 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.ThumbnailBoxResource;
 
 /**
@@ -51,18 +51,24 @@ public class ParticleResource extends ThumbnailBoxResource {
 
         Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
         ResourcePayloadObject payload = new ResourcePayloadObject();
-        payload.assetName = particleName;
+        payload.name = particleName;
 
-        initDragDrop(payloadImg, payload);
+//        draggableResource.initDragDrop(this, payloadImg, payload, this::itemDropped);
     }
 
     @Override
-    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
-        sandbox.getUac().createParticleItem(pld.assetName, x, y);
+    public Actor getDragActor() {
+        return null;
     }
 
     @Override
-    protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK, particleName);
+    public ResourcePayloadObject getPayloadData() {
+        return null;
     }
+
+//    protected Boolean itemDropped(DragAndDrop.Payload payload, Vector2 vector2) {
+//        ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
+//        sandbox.getUac().create9Patch(resourcePayloadObject.name, vector2.x - resourcePayloadObject.xOffset, vector2.y - resourcePayloadObject.yOffset);
+//        return true;
+//    }
 }

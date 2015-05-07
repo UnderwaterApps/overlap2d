@@ -90,20 +90,15 @@ public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
         spriterAnimations = resourceManager.getProjectSpriterAnimationsList();
 
         Array<DraggableResource> animationBoxes = new Array<>();
-
         for (String animationName : spineAnimations.keySet()) {
-            SpineAnimationResource thumb = new SpineAnimationResource(spineAnimations.get(animationName));
-            animationBoxes.add(thumb);
+            animationBoxes.add(new DraggableResource(new SpineAnimationResource(animationName)));
         }
         for (String animationName : spriteAnimations.keySet()) {
-            SpriteAnimationResource thumb = new SpriteAnimationResource(animationName);
-            animationBoxes.add(thumb);
+            animationBoxes.add(new DraggableResource(new SpriteAnimationResource(animationName)));
         }
         for (String animationName : spriterAnimations.keySet()) {
-            SpriterAnimationResource thumb = new SpriterAnimationResource(animationName);
-            animationBoxes.add(thumb);
+            animationBoxes.add(new DraggableResource(new SpriterAnimationResource(animationName)));
         }
-
         viewComponent.setThumbnailBoxes(animationBoxes);
     }
 }

@@ -78,7 +78,7 @@ public class UIStage extends Stage {
     public void editPhysics(String assetName) {
         //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         //addActor(dlg);
-        //dlg.editAsset(assetName);
+        //dlg.editAsset(name);
     }
 
     public void editPhysics(IBaseItem item) {

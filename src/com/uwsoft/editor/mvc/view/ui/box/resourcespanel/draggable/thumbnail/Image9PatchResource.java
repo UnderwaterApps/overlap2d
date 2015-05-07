@@ -26,14 +26,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 public class Image9PatchResource extends ImageResource {
     public Image9PatchResource(TextureAtlas.AtlasRegion region) {
         super(region);
+        setFactoryMethod(sandbox.getUac()::create9Patch);
     }
 
-    protected void itemDropped(String assetName, float x, float y) {
-        sandbox.getUac().create9Patch(assetName, x, y);
-    }
-
-    @Override
-    public void initAdditionalListeners() {
-        // do nothing for now
-    }
 }

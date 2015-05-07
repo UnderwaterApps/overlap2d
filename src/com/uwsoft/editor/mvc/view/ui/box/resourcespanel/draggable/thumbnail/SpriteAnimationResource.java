@@ -23,8 +23,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 
@@ -34,16 +32,15 @@ import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 public class SpriteAnimationResource extends ThumbnailBoxResource {
 
 
-    private final String animationName;
+    private final Image payloadImg;
     private ResourcePayloadObject payload;
 
-    private float scaleSize = 1;
 
     private boolean isMouseInside = false;
 
     public SpriteAnimationResource(String animationName) {
         super();
-        this.animationName = animationName;
+        setFactoryMethod(sandbox.getUac()::createSpriteAnimation);
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
         final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getSceneControl().getEssentials());
@@ -57,7 +54,6 @@ public class SpriteAnimationResource extends ThumbnailBoxResource {
             } else {
                 scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
             }
-            scaleSize = scaleFactor;
             animThumb.setScale(scaleFactor);
         }
         animThumb.start();
@@ -81,17 +77,15 @@ public class SpriteAnimationResource extends ThumbnailBoxResource {
         animThumb.start();
         addActor(animThumb);
 
-        Image payloadImg = new Image(animThumb.getAtlasRegionAt(0));
+        payloadImg = new Image(animThumb.getAtlasRegionAt(0));
         payload = new ResourcePayloadObject();
-        payload.assetName = animationName;
+        payload.name = animationName;
 
-        initDragDrop(payloadImg, payload);
-
-        setWidth(thumbnailSize);
         setHeight(thumbnailSize);
 
         super.act(1f);
     }
+
 
     @Override
     public void act(float delta) {
@@ -101,12 +95,12 @@ public class SpriteAnimationResource extends ThumbnailBoxResource {
     }
 
     @Override
-    protected void resourceDropped(ResourcePayloadObject pld, float x, float y) {
-        sandbox.getUac().createSpriteAnimation(payload.assetName, x, y);
+    public Actor getDragActor() {
+        return payloadImg;
     }
 
     @Override
-    protected void showRightClickDropDown() {
-        Overlap2DFacade.getInstance().sendNotification(UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK, animationName);
+    public ResourcePayloadObject getPayloadData() {
+        return payload;
     }
 }

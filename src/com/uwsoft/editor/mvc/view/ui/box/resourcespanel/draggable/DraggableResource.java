@@ -18,47 +18,44 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
-import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
 /**
  * Created by azakhary on 7/3/2014.
  */
-public abstract class DraggableResource extends Group {
-    
-    protected final Sandbox sandbox;
+public class DraggableResource extends DragAndDrop {
 
-    public DraggableResource() {
+    protected final Sandbox sandbox;
+    private final DraggableResourceView viewComponent;
+
+    public DraggableResource(DraggableResourceView viewComponent) {
+        this.viewComponent = viewComponent;
         sandbox = Sandbox.getInstance();
-        initAdditionalListeners();
     }
 
-    public void initDragDrop(final Actor thumbnail, final ResourcePayloadObject payloadData) {
-        final DragAndDrop dragAndDrop = new DragAndDrop();
-
-        dragAndDrop.addSource(new DragAndDrop.Source(this) {
+    public void initDragDrop() {
+        addSource(new DragAndDrop.Source((Actor) viewComponent) {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
-
-                payloadData.xOffset = thumbnail.getWidth() / 2;
-                payloadData.yOffset = thumbnail.getHeight() / 2;
-                payload.setDragActor(thumbnail);
+                Actor dragActor = viewComponent.getDragActor();
+                ResourcePayloadObject payloadData = viewComponent.getPayloadData();
+                payloadData.xOffset = dragActor.getWidth() / 2;
+                payloadData.yOffset = dragActor.getHeight() / 2;
+                payload.setDragActor(dragActor);
                 payload.setObject(payloadData);
                 payload.setInvalidDragActor(null);
-//                payload.setValidDragActor();
-                dragAndDrop.setDragActorPosition(-thumbnail.getWidth() / 2, thumbnail.getHeight() / 2);
-
+                setDragActorPosition(-dragActor.getWidth() / 2, dragActor.getHeight() / 2);
                 return payload;
             }
         });
 
-        dragAndDrop.addTarget(new DragAndDrop.Target(sandbox.getUIStage().dummyTarget) {
+        addTarget(new DragAndDrop.Target(sandbox.getUIStage().dummyTarget) {
             @Override
             public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
                 return true;
@@ -66,35 +63,17 @@ public abstract class DraggableResource extends Group {
 
             @Override
             public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                ResourcePayloadObject pld = ((ResourcePayloadObject) (payload.getObject()));
-                resourceDropped(pld, x - pld.xOffset, y - pld.yOffset);
+                Vector2 vector2 = Pools.obtain(Vector2.class);
+                vector2.x = x;
+                vector2.y = y;
+                viewComponent.drop(payload, vector2);
+                Pools.free(vector2);
             }
         });
     }
 
-    protected abstract void resourceDropped(ResourcePayloadObject pld, float x, float y);
-
-
-    public void initAdditionalListeners() {
-        addListener(new InputListener() {
-
-            @Override
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            @Override
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                if (button == Input.Buttons.RIGHT) {
-                    showRightClickDropDown();
-                }
-                super.touchUp(event, x, y, pointer, button);
-            }
-
-        });
-    }
-
-    protected void showRightClickDropDown() {
+    public DraggableResourceView getViewComponent() {
+        return viewComponent;
     }
 
 }
