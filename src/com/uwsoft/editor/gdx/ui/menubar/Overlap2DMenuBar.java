@@ -23,11 +23,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.widget.Menu;
 import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.menubar.commands.EditMenuCommand;
 import com.uwsoft.editor.gdx.ui.menubar.commands.FileMenuCommand;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -230,6 +232,10 @@ public class Overlap2DMenuBar extends MenuBar {
         	@Override
         	public void changed(ChangeEvent event, Actor actor) {
         		Gdx.app.log(TAG,"recentProject : " + path);
+        		if (!new File(path).exists()) {
+        			DialogUtils.showErrorDialog(Sandbox.getInstance().getUIStage(), "Current project does not exist!");
+        			return;
+        		}
         		mediator.recentProjectItemClicked(path);
         	}
         }
