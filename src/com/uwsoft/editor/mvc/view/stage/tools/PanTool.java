@@ -1,10 +1,10 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 
 /**
  * Created by CyberJoe on 5/1/2015.
@@ -50,22 +50,22 @@ public class PanTool implements Tool {
     }
 
     @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
+    public boolean itemMouseDown(Entity entity, float x, float y) {
         return false;
     }
 
     @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
+    public void itemMouseUp(Entity entity, float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
+    public void itemMouseDragged(Entity entity, float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
+    public void itemMouseDoubleClick(Entity entity, float x, float y) {
 
     }
 }

@@ -18,32 +18,34 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import java.awt.Cursor;
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.stage.tools.*;
+import com.uwsoft.editor.mvc.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
+import com.uwsoft.editor.mvc.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
+import com.uwsoft.editor.mvc.view.stage.tools.Tool;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by sargis on 4/20/15.
@@ -126,7 +128,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         viewComponent.addListener(stageListener);
 
         Sandbox sandbox = Sandbox.getInstance();
-        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
+        ArrayList<Entity> items  = sandbox.getSceneControl().getCurrentScene().getItems();
         for (int i = 0; i < items.size(); i++) {
             ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
         }
@@ -140,9 +142,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
     private class SandboxItemEventListener extends ClickListener {
 
-        private IBaseItem eventItem;
+        private Entity eventItem;
 
-        public SandboxItemEventListener(final IBaseItem eventItem) {
+        public SandboxItemEventListener(final Entity eventItem) {
             this.eventItem = eventItem;
         }
 

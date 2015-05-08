@@ -1,5 +1,16 @@
 package com.uwsoft.editor.mvc.proxy;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -12,23 +23,13 @@ import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.CompositeVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
 
 /**
  * Created by azakhary on 4/26/2015.

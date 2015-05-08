@@ -28,7 +28,6 @@ import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 public class UICompositePanel extends VisTable {

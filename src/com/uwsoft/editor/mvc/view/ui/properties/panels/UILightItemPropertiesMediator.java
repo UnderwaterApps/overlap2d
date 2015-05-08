@@ -18,52 +18,59 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.LightActor;
-import com.uwsoft.editor.renderer.data.LightVO;
 import org.apache.commons.lang3.math.NumberUtils;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<LightActor, UILightItemProperties> {
+public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UILightItemProperties> {
 
     private static final String TAG = UILightItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+    
+    private ComponentMapper<LightObjectComponent> lightObjectMapper;
+    private LightObjectComponent lightObjectComponent; 
 
     public UILightItemPropertiesMediator() {
         super(NAME, new UILightItemProperties());
+        lightObjectMapper = ComponentMapper.getFor(LightObjectComponent.class);
     }
 
     @Override
-    protected void translateObservableDataToView(LightActor item) {
-        LightVO vo = item.getDataVO();
+    protected void translateObservableDataToView(Entity entity) {
+    	lightObjectComponent = lightObjectMapper.get(entity);
 
-        viewComponent.setType(vo.type);
-        viewComponent.setRayCount(vo.rays);
-        viewComponent.setStatic(vo.isStatic);
-        viewComponent.setXRay(vo.isXRay);
-        viewComponent.setRadius(vo.distance + "");
-        viewComponent.setAngle(vo.coneDegree + "");
-        viewComponent.setDistance(vo.distance + "");
+        viewComponent.setType(lightObjectComponent.type);
+        viewComponent.setRayCount(lightObjectComponent.rays);
+        viewComponent.setStatic(lightObjectComponent.isStatic);
+        viewComponent.setXRay(lightObjectComponent.isXRay);
+        viewComponent.setRadius(lightObjectComponent.distance + "");
+        viewComponent.setAngle(lightObjectComponent.coneDegree + "");
+        viewComponent.setDistance(lightObjectComponent.distance + "");
     }
 
     @Override
     protected void translateViewToItemData() {
-        LightVO vo = observableReference.getDataVO();
+    	lightObjectComponent = lightObjectMapper.get(observableReference);
 
-        vo.type = viewComponent.getType();
-        vo.rays = viewComponent.getRayCount();
-        vo.isStatic = viewComponent.isStatic();
-        vo.isXRay = viewComponent.isXRay();
+    	lightObjectComponent.type = viewComponent.getType();
+    	lightObjectComponent.rays = viewComponent.getRayCount();
+    	lightObjectComponent.isStatic = viewComponent.isStatic();
+    	lightObjectComponent.isXRay = viewComponent.isXRay();
 
-        vo.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
+    	lightObjectComponent.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
 
         if(viewComponent.getType() == LightVO.LightType.POINT) {
-            vo.distance = NumberUtils.toFloat(viewComponent.getRadius());
+        	lightObjectComponent.distance = NumberUtils.toFloat(viewComponent.getRadius());
         } else {
-            vo.distance = NumberUtils.toFloat(viewComponent.getDistance());
+        	lightObjectComponent.distance = NumberUtils.toFloat(viewComponent.getDistance());
         }
     }
 }

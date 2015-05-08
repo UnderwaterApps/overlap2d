@@ -18,11 +18,10 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import java.util.ArrayList;
+
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.ArrayList;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -31,8 +30,9 @@ public class CutItemsCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-        sandbox.putItemsToClipboard(items);
-        sandbox.getSelector().removeCurrentSelectedItems();
+    	//TODO fix and uncomment
+//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
+//        sandbox.putItemsToClipboard(items);
+//        sandbox.getSelector().removeCurrentSelectedItems();
     }
 }

@@ -27,7 +27,6 @@ import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.view.stage.BaseStage;
 import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 /**
@@ -50,14 +49,15 @@ public class ResolutionBounds extends Group {
     }
 
     private void detectDimensions(Stage baseStage) {
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
-        if (resolutionEntryVO == null) {
-            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
-        }
-        width = resolutionEntryVO.width;
-        height = resolutionEntryVO.height;
+    	//TODO fix and uncomment 
+//        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+//        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+//        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
+//        if (resolutionEntryVO == null) {
+//            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
+//        }
+//        width = resolutionEntryVO.width;
+//        height = resolutionEntryVO.height;
     }
 
     private void crateResolutionIndicator() {

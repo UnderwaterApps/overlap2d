@@ -18,19 +18,18 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.function.BiConsumer;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.function.BiConsumer;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -45,7 +44,7 @@ public class ItemSelector {
     private SceneControlMediator sceneControl;
 
     /** list of current selected panels */
-    private HashMap<IBaseItem, SelectionRectangle> currentSelection = new HashMap<IBaseItem, SelectionRectangle>();
+    private HashMap<Entity, SelectionRectangle> currentSelection = new HashMap<Entity, SelectionRectangle>();
 
     public ItemSelector(Sandbox sandbox) {
         this.sandbox = sandbox;
@@ -57,15 +56,15 @@ public class ItemSelector {
     /**
      * @return HashMap of selection rectangles that contain panels
      */
-    public HashMap<IBaseItem, SelectionRectangle> getCurrentSelection() {
+    public HashMap<Entity, SelectionRectangle> getCurrentSelection() {
         return currentSelection;
     }
 
     /**
      * @return one selected item
      */
-    public IBaseItem getSelectedItem() {
-        ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
+    public Entity getSelectedItem() {
+        ArrayList<Entity> items = new ArrayList<Entity>();
         for (SelectionRectangle value : currentSelection.values()) {
             items.add(value.getHost());
             break;
@@ -96,8 +95,8 @@ public class ItemSelector {
     /**
      * @return list of currently selected panels
      */
-    public ArrayList<IBaseItem> getSelectedItems() {
-        ArrayList<IBaseItem> items = new ArrayList<IBaseItem>();
+    public ArrayList<Entity> getSelectedItems() {
+        ArrayList<Entity> items = new ArrayList<Entity>();
         for (SelectionRectangle value : currentSelection.values()) {
             items.add(value.getHost());
         }
@@ -174,7 +173,7 @@ public class ItemSelector {
      * @param item to be claimed by newly created @SelectionRectangle
      * @return newly created @SelectionRectangle
      */
-    private SelectionRectangle createSelectionRect(IBaseItem item) {
+    private SelectionRectangle createSelectionRect(Entity item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
         rect.claim(item);
         sandbox.getSandboxStage().frontUI.addActor(rect);
@@ -188,14 +187,15 @@ public class ItemSelector {
      * @param name of the layer
      */
     public void selectItemsByLayerName(String name) {
-        ArrayList<IBaseItem> itemsArr = new ArrayList<IBaseItem>();
-        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
-            if (sceneControl.getCurrentScene().getItems().get(i).getDataVO().layerName.equals(name)) {
-                itemsArr.add(sceneControl.getCurrentScene().getItems().get(i));
-            }
-        }
-
-        setSelections(itemsArr, true);
+    	//TODO fix and uncomment
+//        ArrayList<Entity> itemsArr = new ArrayList<Entity>();
+//        for (int i = 0; i < sceneControl.getCurrentScene().getItems().size(); i++) {
+//            if (sceneControl.getCurrentScene().getItems().get(i).getDataVO().layerName.equals(name)) {
+//                itemsArr.add(sceneControl.getCurrentScene().getItems().get(i));
+//            }
+//        }
+//
+//        setSelections(itemsArr, true);
     }
 
     /**
@@ -203,20 +203,21 @@ public class ItemSelector {
      * @param item to select
      * @param removeOthers if set to true this item will become the only selection, otherwise will be added to existing
      */
-    public void setSelection(IBaseItem item, boolean removeOthers) {
-        if (currentSelection.get(item) != null) return;
-
-        if (removeOthers) clearSelections();
-
-        SelectionRectangle rect = createSelectionRect(item);
-
-        currentSelection.put(item, rect);
-
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
-
-		sandbox.getUIStage().mainDropDown.hide();
-
-        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+    public void setSelection(Entity item, boolean removeOthers) {
+    	//TODO fix and uncomment
+//        if (currentSelection.get(item) != null) return;
+//
+//        if (removeOthers) clearSelections();
+//
+//        SelectionRectangle rect = createSelectionRect(item);
+//
+//        currentSelection.put(item, rect);
+//
+//        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
+//
+//		sandbox.getUIStage().mainDropDown.hide();
+//
+//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
 
     }
 
@@ -226,7 +227,7 @@ public class ItemSelector {
      * @param items list of panels to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
-    public void setSelections(ArrayList<IBaseItem> items, boolean alsoShow) {
+    public void setSelections(ArrayList<Entity> items, boolean alsoShow) {
         clearSelections();
 
         for (int i = 0; i < items.size(); i++) {
@@ -241,23 +242,25 @@ public class ItemSelector {
      * Un-selects item
      * @param item to un-select
      */
-    public void releaseSelection(IBaseItem item) {
-        currentSelection.get(item).remove();
-        currentSelection.remove(item);
-
-        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+    public void releaseSelection(Entity item) {
+    	//TODO fix and uncomment
+//        currentSelection.get(item).remove();
+//        currentSelection.remove(item);
+//
+//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
     }
 
     /**
      * clears all selections
      */
     public void clearSelections() {
-        for (SelectionRectangle value : currentSelection.values()) {
-            value.remove();
-        }
-
-        currentSelection.clear();
-        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+    	//TODO fix and uncomment
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            value.remove();
+//        }
+//
+//        currentSelection.clear();
+//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
     }
 
     /**
@@ -274,12 +277,13 @@ public class ItemSelector {
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
     public void selectAllItems() {
-        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
-            curr.add(sandbox.getCurrentScene().getItems().get(i));
-        }
-
-        setSelections(curr, true);
+    	//TODO fix and uncomment
+//        ArrayList<Entity> curr = new ArrayList<Entity>();
+//        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
+//            curr.add(sandbox.getCurrentScene().getItems().get(i));
+//        }
+//
+//        setSelections(curr, true);
     }
 
 
@@ -290,171 +294,180 @@ public class ItemSelector {
      * Updates VO objects, and physics related tools of all selected objects
      */
     public void flushAllSelectedItems() {
-        for (SelectionRectangle value : getCurrentSelection().values()) {
-            IBaseItem item = ((IBaseItem) value.getHostAsActor());
-            item.updateDataVO();
-
-            // update physics objetcs
-            if (item.isComposite()) {
-                ((CompositeItem) item).positionPhysics();
-            } else if (item.getBody() != null) {
-                item.getBody().setTransform(item.getDataVO().x * sandbox.getCurrentScene().mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * sandbox.getCurrentScene().mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
-            }
-
-        }
+    	//TODO fix and uncomment
+//        for (SelectionRectangle value : getCurrentSelection().values()) {
+//            Entity item = ((Entity) value.getHostAsActor());
+//            item.updateDataVO();
+//
+//            // update physics objetcs
+//            if (item.isComposite()) {
+//                ((CompositeItem) item).positionPhysics();
+//            } else if (item.getBody() != null) {
+//                item.getBody().setTransform(item.getDataVO().x * sandbox.getCurrentScene().mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * sandbox.getCurrentScene().mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
+//            }
+//
+//        }
     }
 
     /**
      * removes all selected panels from the scene
      */
     public void removeCurrentSelectedItems() {
-        for (SelectionRectangle selectionRect : currentSelection.values()) {
-            sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
-            selectionRect.remove();
-        }
-//        sandbox.getSandboxStage().uiStage.getItemsBox().init();
-        currentSelection.clear();
+    	//TODO fix and uncomment
+//        for (SelectionRectangle selectionRect : currentSelection.values()) {
+//            sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
+//            selectionRect.remove();
+//        }
+////        sandbox.getSandboxStage().uiStage.getItemsBox().init();
+//        currentSelection.clear();
     }
 
     public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {
-    	if (relativeTo == null) return;
-
-        final float relativeToX = (toHighestX)? relativeTo.getVisualRightX() : relativeTo.getVisualX();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            final float deltaX = value.getX() - value.getVisualX();
-            final float visualX = relativeToX - ((toHighestX)? 1 : 0) * value.getVisualWidth();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setX(visualX + deltaX);
-            value.setX(actor.getX());
-        }
+    	//TODO fix and uncomment
+//    	if (relativeTo == null) return;
+//
+//        final float relativeToX = (toHighestX)? relativeTo.getVisualRightX() : relativeTo.getVisualX();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            final float deltaX = value.getX() - value.getVisualX();
+//            final float visualX = relativeToX - ((toHighestX)? 1 : 0) * value.getVisualWidth();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setX(visualX + deltaX);
+//            value.setX(actor.getX());
+//        }
     }
 
     public void alignSelectionsByY(SelectionRectangle relativeTo, boolean toHighestY) {
-    	if (relativeTo == null) return;
-
-        final float relativeToY = (toHighestY)? relativeTo.getVisualTopY() : relativeTo.getVisualY();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            final float deltaY = value.getY() - value.getVisualY();
-            final float visualY = relativeToY - ((toHighestY)? 1 : 0) * value.getVisualHeight();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setY(visualY + deltaY);
-            value.setY(actor.getY());
-        }
+    	//TODO fix and uncomment
+//    	if (relativeTo == null) return;
+//
+//        final float relativeToY = (toHighestY)? relativeTo.getVisualTopY() : relativeTo.getVisualY();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            final float deltaY = value.getY() - value.getVisualY();
+//            final float visualY = relativeToY - ((toHighestY)? 1 : 0) * value.getVisualHeight();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setY(visualY + deltaY);
+//            value.setY(actor.getY());
+//        }
     }
 
     public void alignSelectionsAtLeftEdge(SelectionRectangle relativeTo) {
-        if (relativeTo == null) return;
-
-        final float relativeToX = relativeTo.getVisualX();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaX = value.getX() - value.getVisualX();
-            final float visualX = relativeToX - value.getVisualWidth();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setX(visualX + deltaX);
-            value.setX(actor.getX());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToX = relativeTo.getVisualX();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaX = value.getX() - value.getVisualX();
+//            final float visualX = relativeToX - value.getVisualWidth();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setX(visualX + deltaX);
+//            value.setX(actor.getX());
+//        }
     }
 
     public void alignSelectionsAtRightEdge(SelectionRectangle relativeTo) {
-        if (relativeTo == null) return;
-
-        final float relativeToRightX = relativeTo.getVisualRightX();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaX = value.getX() - value.getVisualX();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setX(relativeToRightX + deltaX);
-            value.setX(actor.getX());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToRightX = relativeTo.getVisualRightX();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaX = value.getX() - value.getVisualX();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setX(relativeToRightX + deltaX);
+//            value.setX(actor.getX());
+//        }
     }
 
     public void alignSelectionsAtTopEdge(SelectionRectangle relativeTo) {
-        if (relativeTo == null) return;
-
-        final float relativeToTopY = relativeTo.getVisualTopY();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaY = value.getY() - value.getVisualY();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setY(relativeToTopY + deltaY);
-            value.setY(actor.getY());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToTopY = relativeTo.getVisualTopY();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaY = value.getY() - value.getVisualY();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setY(relativeToTopY + deltaY);
+//            value.setY(actor.getY());
+//        }
     }
 
     public void alignSelectionsAtBottomEdge(SelectionRectangle relativeTo) {
-        if (relativeTo == null) return;
-
-        final float relativeToY = relativeTo.getVisualY();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaY = value.getY() - value.getVisualY();
-            final float visualY = relativeToY - value.getVisualHeight();
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setY(visualY + deltaY);
-            value.setY(actor.getY());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToY = relativeTo.getVisualY();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaY = value.getY() - value.getVisualY();
+//            final float visualY = relativeToY - value.getVisualHeight();
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setY(visualY + deltaY);
+//            value.setY(actor.getY());
+//        }
     }
 
     public void alignSelectionsVerticallyCentered(SelectionRectangle relativeTo) {
-        if (relativeTo == null) return;
-
-        final float relativeToY = relativeTo.getVisualY();
-        final float relativeToHeight = relativeTo.getVisualHeight();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaY = value.getY() - value.getVisualY();
-            final float visualY = relativeToY + (relativeToHeight - value.getVisualHeight()) / 2;
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setY(visualY + deltaY);
-            value.setY(actor.getY());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToY = relativeTo.getVisualY();
+//        final float relativeToHeight = relativeTo.getVisualHeight();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaY = value.getY() - value.getVisualY();
+//            final float visualY = relativeToY + (relativeToHeight - value.getVisualHeight()) / 2;
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setY(visualY + deltaY);
+//            value.setY(actor.getY());
+//        }
     }
 
     public void alignSelectionsHorizontallyCentered(SelectionRectangle relativeTo) {
-
-        if (relativeTo == null) return;
-
-        final float relativeToX = relativeTo.getVisualX();
-        final float relativeToWidth = relativeTo.getVisualWidth();
-
-        for (SelectionRectangle value : currentSelection.values()) {
-            if (value == relativeTo) continue;
-
-            final float deltaX = value.getX() - value.getVisualX();
-            final float visualX = relativeToX + (relativeToWidth - value.getVisualWidth()) / 2;
-
-            Actor actor = value.getHostAsActor();
-
-            actor.setX(visualX + deltaX);
-            value.setX(actor.getX());
-        }
+    	//TODO fix and uncomment
+//        if (relativeTo == null) return;
+//
+//        final float relativeToX = relativeTo.getVisualX();
+//        final float relativeToWidth = relativeTo.getVisualWidth();
+//
+//        for (SelectionRectangle value : currentSelection.values()) {
+//            if (value == relativeTo) continue;
+//
+//            final float deltaX = value.getX() - value.getVisualX();
+//            final float visualX = relativeToX + (relativeToWidth - value.getVisualWidth()) / 2;
+//
+//            Actor actor = value.getHostAsActor();
+//
+//            actor.setX(visualX + deltaX);
+//            value.setX(actor.getX());
+//        }
     }
 
     public void alignSelections(int align) {
@@ -504,14 +517,15 @@ public class ItemSelector {
      * @param y
      */
     public void moveSelectedItemsBy(float x, float y) {
-        for (SelectionRectangle selectionRect : currentSelection.values()) {
-            sandbox.itemControl.moveItemBy(selectionRect.getHostAsActor(), x, y);
-
-            selectionRect.setX(selectionRect.getX() + x);
-            selectionRect.setY(selectionRect.getY() + y);
-        }
-
-        sandbox.saveSceneCurrentSceneData();
+    	//TODO fix and uncomment
+//        for (SelectionRectangle selectionRect : currentSelection.values()) {
+//            sandbox.itemControl.moveItemBy(selectionRect.getHostAsActor(), x, y);
+//
+//            selectionRect.setX(selectionRect.getX() + x);
+//            selectionRect.setY(selectionRect.getY() + y);
+//        }
+//
+//        sandbox.saveSceneCurrentSceneData();
     }
 
     public boolean selectionIsOneItem() {
@@ -523,11 +537,12 @@ public class ItemSelector {
     }
 
     public boolean selectionIsComposite() {
-        for (SelectionRectangle value : getCurrentSelection().values()) {
-            if (value.getHost().isComposite()) {
-                return true;
-            }
-        }
+    	//TODO fix and uncomment
+//        for (SelectionRectangle value : getCurrentSelection().values()) {
+//            if (value.getHost().isComposite()) {
+//                return true;
+//            }
+//        }
 
         return false;
     }

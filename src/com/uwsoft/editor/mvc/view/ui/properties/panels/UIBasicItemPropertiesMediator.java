@@ -21,11 +21,9 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
@@ -36,8 +34,6 @@ import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.MainItemComponent;
 import com.uwsoft.editor.renderer.conponents.TintComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 
 /**
  * Created by azakhary on 4/15/2015.

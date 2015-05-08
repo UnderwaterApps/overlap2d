@@ -21,6 +21,7 @@ package com.uwsoft.editor.gdx.ui.components;
 import java.util.ArrayList;
 import java.util.Collections;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -54,7 +55,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.legacy.data.MeshVO;
 import com.uwsoft.editor.renderer.legacy.data.PhysicsBodyDataVO;
 import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
@@ -76,7 +76,7 @@ public class ItemPhysicsEditor extends Group {
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
     private final Sandbox sandbox;
-    public IBaseItem originalItem;
+    public Entity originalItem;
     public EditMode currentMode;
     public PhysicsBodyDataVO physicsBodyDataVO = new PhysicsBodyDataVO();
     public World physicsEditorWorld;
@@ -103,7 +103,7 @@ public class ItemPhysicsEditor extends Group {
     private int lineIndex = -1;
     private String assetName = null;
     private UIStage stage;
-    private IBaseItem currentItem;
+    private Entity currentItem;
     private Actor currentActor;
     private float timeAcc = 0;
     public Vector2 resVec;
@@ -272,7 +272,7 @@ public class ItemPhysicsEditor extends Group {
         }
     }
 
-    public void editItem(IBaseItem item) {
+    public void editItem(Entity item) {
         currentItem = item;
         currentActor = (Actor) currentItem;
 

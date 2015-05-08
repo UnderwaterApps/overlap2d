@@ -18,6 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
@@ -28,18 +33,18 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import com.uwsoft.editor.renderer.EntityFactory;
+import com.uwsoft.editor.renderer.conponents.MainItemComponent;
+import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
     private final Overlap2DFacade facade;
     private final VisTable treeTable;
     private VisTree tree;
+    
+    private ComponentMapper<MainItemComponent> mainItemMapper;
+    private MainItemComponent mainITemComponent;
 
     public UIItemsTreeBox() {
         super("Items Tree", 166);
@@ -51,7 +56,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     }
 
 
-    public void init(CompositeItem rootScene) {
+    public void init(Entity rootScene) {
         treeTable.clear();
         tree = new VisTree();
         VisScrollPane scroller = new VisScrollPane(tree);
@@ -63,57 +68,61 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         tree.addListener(new TreeChangeListener());
     }
 
-    private String getItemName(IBaseItem baseItem) {
-        String itemIdentifier = baseItem.getDataVO().itemIdentifier;
-        if (itemIdentifier != null && !itemIdentifier.isEmpty()) {
-            return itemIdentifier;
+    private String getItemName(Entity entity) {
+    	mainITemComponent = mainItemMapper.get(entity);
+        if (mainITemComponent.itemIdentifier != null && !mainITemComponent.itemIdentifier.isEmpty()) {
+            return mainITemComponent.itemIdentifier;
         } else {
-            String className = baseItem.getDataVO().getClass().getSimpleName();
-            switch (className) {
-                case "SimpleImageVO":
+            int type = entity.flags;
+            switch (type) {
+                case EntityFactory.IMAGE_TYPE:
                     return "Image";
-                case "Image9patchVO":
+                case EntityFactory.NINE_PATCH:
                     return "9PatchImage";
-                case "TextBoxVO":
-                    return "TextBox";
-                case "ButtonVO":
-                    return "Button";
-                case "LabelVO":
+//                case "TextBoxVO":
+//                    return "TextBox";
+//                case "ButtonVO":
+//                    return "Button";
+                case EntityFactory.LABEL_TYPE:
                     return "Label";
-                case "CompositeItemVO":
+                case EntityFactory.COMPOSITE_TYPE:
                     return "CompositeItem";
-                case "CheckBoxVO":
-                    return "CheckBox";
-                case "SelectBoxVO":
-                    return "SelectBox";
-                case "ParticleEffectVO":
+//                case "CheckBoxVO":
+//                    return "CheckBox";
+//                case "SelectBoxVO":
+//                    return "SelectBox";
+                case EntityFactory.PARTICLE_TYPE:
                     return "ParticleEffect";
-                case "LightVO":
+                case EntityFactory.LIGHT_TYPE:
                     return "Light";
-                case "SpineVO":
+                case EntityFactory.SPINE_TYPE:
                     return "Spine";
-                case "SpriteAnimationVO":
+                case EntityFactory.SPRITE_TYPE:
                     return "SpriteAnimation";
+                case EntityFactory.SPRITER_TYPE:
+                    return "SpriterAnimation";
                 default:
                     return "unknown";
             }
         }
     }
 
-    private Node addTreeRoot(CompositeItem compoiteItem, Node parentNode) {
+    private Node addTreeRoot(Entity compoiteItem, Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
         Node node = addTreeNode(compoiteItem, parentNode);
-        ArrayList<IBaseItem> items = compoiteItem.getItems();
-        for (IBaseItem item : items) {
-            if (item.isComposite()) {
-                addTreeRoot((CompositeItem) item, node);
-            } else {
-                addTreeNode(item, node);
-            }
-        }
+      //TODO fix and uncomment
+//        ArrayList<Entity> items = compoiteItem.getItems();
+//        for (Entity item : items) {
+//        	
+//            if (item.isComposite()) {
+//                addTreeRoot((CompositeItem) item, node);
+//            } else {
+//                addTreeNode(item, node);
+//            }
+//        }
         return node;
     }
 
-    private Node addTreeNode(IBaseItem baseItem, Node parentNode) {
+    private Node addTreeNode(Entity baseItem, Node parentNode) {
         Node node = new Node(new VisLabel(parentNode == null ? "root" : getItemName(baseItem)));
         node.setObject(baseItem);
         if (parentNode != null) {
@@ -125,7 +134,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     }
 
 
-    public void setSelected(HashMap<IBaseItem, SelectionRectangle> currentSelection) {
+    public void setSelected(HashMap<Entity, SelectionRectangle> currentSelection) {
         if (tree == null) return;
         tree.getSelection().clear();
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();

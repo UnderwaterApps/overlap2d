@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -80,7 +81,7 @@ public class UIStage extends Stage {
         //dlg.editAsset(assetName);
     }
 
-    public void editPhysics(IBaseItem item) {
+    public void editPhysics(Entity item) {
         //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         //addActor(dlg);
         //dlg.editItem(item);
@@ -111,10 +112,12 @@ public class UIStage extends Stage {
     }
 
     public LayerItemVO getCurrentSelectedLayer() {
-        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
-        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
-        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
-        return layerVO;
+    	return null;
+    	//TODO fix and uncomment
+//        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+//        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
+//        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
+//        return layerVO;
     }
 
 

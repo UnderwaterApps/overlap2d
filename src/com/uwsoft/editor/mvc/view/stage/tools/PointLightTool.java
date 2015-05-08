@@ -18,13 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.LightVO;
-
-import java.util.HashMap;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -35,11 +30,13 @@ public class PointLightTool extends SimpleTool {
 
     @Override
     public boolean stageMouseDown(float x, float y) {
-        LayerItemVO layer = Sandbox.getInstance().getItemFactory().getSelectedLayer();
+    	//TODO fix and uncomment
+        //LayerItemVO layer = Sandbox.getInstance().getItemFactory().getSelectedLayer();
         LightVO vo = new LightVO();
         vo.type = LightVO.LightType.POINT;
         vo.distance = 300;
-        Sandbox.getInstance().getItemFactory().createLight(layer, vo, x, y);
+      //TODO fix and uncomment
+        //Sandbox.getInstance().getItemFactory().createLight(layer, vo, x, y);
         return false;
     }
 

@@ -20,7 +20,7 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;

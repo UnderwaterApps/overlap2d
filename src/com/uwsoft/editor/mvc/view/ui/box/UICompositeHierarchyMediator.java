@@ -2,12 +2,12 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.util.Stack;
 
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
@@ -71,7 +71,8 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     private void loadScene(CompositeItemVO scene) {
 
         while(scenes.peek() != scene) {
-            updateOriginalItem(scenes.peek(), sandbox.getCurrentScene());
+        	//TODO fix and uncomment
+            //updateOriginalItem(scenes.peek(), sandbox.getCurrentScene());
             viewComponent.removeLastItem();
             scenes.pop();
         }
@@ -80,22 +81,24 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     }
 
     public void updateOriginalItem() {
-        updateOriginalItem(scenes.get(scenes.size() - 1), sandbox.sceneControl.getCurrentScene());
+    	//TODO fix and uncomment
+        //updateOriginalItem(scenes.get(scenes.size() - 1), sandbox.sceneControl.getCurrentScene());
     }
 
-    private void updateOriginalItem(CompositeItemVO updatableVo, CompositeItem currItem) {
-        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
-
-        String libName = currItem.getDataVO().itemName;
-        CompositeItemVO libItem = sandbox.sceneControl.getCurrentSceneVO().libraryItems.get(libName);
-
-        if (libItem != null) {
-            libItem.update(currItem.getDataVO());
-
-
-            //TODO: update other items with same name
-            revursiveUpdateLibraryVO(libName, sandbox.sceneControl.getRootSceneVO(), currItem.getDataVO());
-        }
+    private void updateOriginalItem(CompositeItemVO updatableVo, Entity currItem) {
+    	//TODO fix and uncomment
+//        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
+//
+//        String libName = currItem.getDataVO().itemName;
+//        CompositeItemVO libItem = sandbox.sceneControl.getCurrentSceneVO().libraryItems.get(libName);
+//
+//        if (libItem != null) {
+//            libItem.update(currItem.getDataVO());
+//
+//
+//            //TODO: update other items with same name
+//            revursiveUpdateLibraryVO(libName, sandbox.sceneControl.getRootSceneVO(), currItem.getDataVO());
+//        }
     }
 
     private void revursiveUpdateLibraryVO(String libName, CompositeItemVO initialVO, CompositeItemVO updatingWith) {

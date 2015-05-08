@@ -28,6 +28,7 @@ public class AddToLibraryCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        sandbox.getItemFactory().addCompositeToLibrary();
+    	//TODO fix and uncomment
+        //sandbox.getItemFactory().addCompositeToLibrary();
     }
 }

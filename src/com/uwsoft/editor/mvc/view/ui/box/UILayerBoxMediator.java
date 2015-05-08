@@ -107,14 +107,15 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
     }
 
     private void initLayerData() {
-        CompositeItemVO currentComposite = Sandbox.getInstance().sceneControl.getCurrentScene().getDataVO();
-        layers = currentComposite.composite.layers;
-
-        viewComponent.clearItems();
-
-        for (int i = 0; i < layers.size(); i++) {
-            viewComponent.addItem(new UILayerItem(layers.get(i)));
-        }
+    	//TODO fix and uncomment
+//        CompositeItemVO currentComposite = Sandbox.getInstance().sceneControl.getCurrentScene().getDataVO();
+//        layers = currentComposite.composite.layers;
+//
+//        viewComponent.clearItems();
+//
+//        for (int i = 0; i < layers.size(); i++) {
+//            viewComponent.addItem(new UILayerItem(layers.get(i)));
+//        }
     }
 
     public int getCurrentSelectedLayerIndex() {

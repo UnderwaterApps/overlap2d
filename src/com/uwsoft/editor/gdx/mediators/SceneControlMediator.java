@@ -174,7 +174,7 @@ public class SceneControlMediator {
 		}
 	}
 
-	//TODO support fucntion for lights on of
+	//TODO support function for lights on of
 	
 //	private ArrayList<LightActor> getAllLights(CompositeItem curComposite) {
 //

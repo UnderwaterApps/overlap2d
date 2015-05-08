@@ -20,9 +20,6 @@ package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.ArrayList;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -31,10 +28,11 @@ public class CopyItemsCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        sandbox.getCurrentScene().updateDataVO();
-        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-        if(items.size() > 0) {
-            sandbox.putItemsToClipboard(items);
-        }
+    	//TODO fix and uncomment
+//        sandbox.getCurrentScene().updateDataVO();
+//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
+//        if(items.size() > 0) {
+//            sandbox.putItemsToClipboard(items);
+//        }
     }
 }

@@ -18,27 +18,17 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.brashmonkey.spriter.Timeline;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.SelectionActions;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.PhysicsEditorDialogMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.

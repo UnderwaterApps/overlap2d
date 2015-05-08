@@ -81,13 +81,14 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
         for (String name : spriteAnimationComponent.keyFrames.keySet()) {
             animations.add(name);
         }
-
-        viewComponent.setAnimations(animations);
-        viewComponent.setSelectedAnimation(stateComponent.currentAnimation);
+      //TODO fix and uncomment 
+//        viewComponent.setAnimations(animations);
+//        viewComponent.setSelectedAnimation(stateComponent.currentAnimation);
     }
 
     @Override
     protected void translateViewToItemData() {
-        observableReference.setAnimation(viewComponent.getSelected());
+    	//TODO fix and uncomment 
+        //observableReference.setAnimation(viewComponent.getSelected());
     }
 }

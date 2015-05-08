@@ -49,8 +49,9 @@ public class UICollapsibleBox extends VisWindow {
                 collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
             }
         });
-        getTitleLabel().setAlignment(Align.left);
-        getTitleTable().add(collapsibleButton).right();
+        //TODO fix and uncomment this is some shit of libgdx and visui lib
+//        getTitleLabel().setAlignment(Align.left);
+//        getTitleTable().add(collapsibleButton).right();
         add(mainTable).width(width);
     }
 

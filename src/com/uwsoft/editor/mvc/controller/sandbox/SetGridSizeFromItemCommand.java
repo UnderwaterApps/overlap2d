@@ -29,6 +29,7 @@ public class SetGridSizeFromItemCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        sandbox.setGridSize((int) ((Actor) (sandbox.getSelector().getSelectedItems().get(0))).getWidth());
+    	//TODO fix and uncomment
+        //sandbox.setGridSize((int) ((Actor) (sandbox.getSelector().getSelectedItems().get(0))).getWidth());
     }
 }

@@ -19,17 +19,20 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.NumberSelector;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
-import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
  * Created by azakhary on 4/28/2015.

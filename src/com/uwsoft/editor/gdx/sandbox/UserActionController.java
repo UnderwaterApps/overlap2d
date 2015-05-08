@@ -18,21 +18,11 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
@@ -58,50 +48,52 @@ public class UserActionController {
 
 		  x = MathUtils.floor(x / sandbox.getGridSize())*sandbox.getGridSize();
 		  y = MathUtils.floor(y / sandbox.getGridSize())*sandbox.getGridSize();
-        sandbox.getItemFactory().createImageItem(layer, regionName, x, y);
+		//TODO fix and uncomment 
+        //sandbox.getItemFactory().createImageItem(layer, regionName, x, y);
     }
 
     public void create9Patch(String name, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
-
-        sandbox.getItemFactory().create9patchItem(layer, name, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().create9patchItem(layer, name, x, y);
     }
 
     public void createParticleItem(String name, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
-
-        sandbox.getItemFactory().createParticleItem(layer, name, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createParticleItem(layer, name, x, y);
 
     }
 
     public void createSpriteAnimation(String name, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
-
-        sandbox.getItemFactory().createSpriteAnimation(layer, name, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createSpriteAnimation(layer, name, x, y);
     }
 
     public void createSpriterAnimation(String name, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
-
-        sandbox.getItemFactory().createSpriterAnimation(layer, name, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createSpriterAnimation(layer, name, x, y);
     }
 
     public void createSpineAnimation(String name, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
-
-        sandbox.getItemFactory().createSpineAnimation(layer, name, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createSpineAnimation(layer, name, x, y);
     }
 
     public void createLight(LightVO vo, float x, float y) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
 
-        sandbox.getItemFactory().createLight(layer, vo, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createLight(layer, vo, x, y);
     }
 
 
@@ -109,7 +101,8 @@ public class UserActionController {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
 
-        sandbox.getItemFactory().createItemFromLibrary(layer, name, x, y);
+      //TODO fix and uncomment 
+        //sandbox.getItemFactory().createItemFromLibrary(layer, name, x, y);
     }
 
     /**
@@ -159,7 +152,8 @@ public class UserActionController {
                 sandbox.reconstructFromSceneVo(compositeItemVO);
                 break;
         }
-        sandbox.sceneControl.getCurrentScene().updateDataVO();
+      //TODO fix and uncomment 
+        //sandbox.sceneControl.getCurrentScene().updateDataVO();
     }
 
     public void redo() {
@@ -176,6 +170,7 @@ public class UserActionController {
                 sandbox.reconstructFromSceneVo(compositeItemVO);
                 break;
         }
-        sandbox.sceneControl.getCurrentScene().updateDataVO();
+        //TODO fix and uncomment 
+        //sandbox.sceneControl.getCurrentScene().updateDataVO();
     }
 }

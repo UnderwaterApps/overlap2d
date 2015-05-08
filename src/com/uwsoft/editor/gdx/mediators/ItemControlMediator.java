@@ -20,10 +20,11 @@ package com.uwsoft.editor.gdx.mediators;
 
 import java.util.HashMap;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.conponents.ZindexComponent;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -31,38 +32,42 @@ import com.uwsoft.editor.renderer.actor.IBaseItem;
 public class ItemControlMediator {
 
     private SceneControlMediator sceneControl;
+    
+    private ComponentMapper<TransformComponent> transformMapper;
+    private ComponentMapper<ZindexComponent> zindexMapper;
+    private TransformComponent transformComponent;
+    private ZindexComponent zIndexComponent;
 
     public ItemControlMediator(SceneControlMediator sceneControl) {
         this.sceneControl = sceneControl;
+        transformMapper = ComponentMapper.getFor(TransformComponent.class); 
+        zindexMapper = ComponentMapper.getFor(ZindexComponent.class); 
     }
 
 
-    public void itemZIndexChange( HashMap<IBaseItem, SelectionRectangle> currentSelection, boolean isUp) {
+    public void itemZIndexChange( HashMap<Entity, SelectionRectangle> currentSelection, boolean isUp) {
         for (SelectionRectangle value : currentSelection.values()) {
-            sceneControl.getCurrentScene().updateDataVO();
-
+        	zIndexComponent = zindexMapper.get(value.getHost());
             int ammount = 1;
             if (!isUp) ammount = -1;
 
-            int setting = value.getHostAsActor().getZIndex() + ammount;
+            int setting = zIndexComponent.zIndex + ammount;
             if (setting < 0) setting = 0;
-            Group parent = value.getHostAsActor().getParent();
-            parent.swapActor(value.getHostAsActor().getZIndex(), setting);
-
-            sceneControl.getCurrentScene().updateDataVO();
+            zIndexComponent.zIndex = setting;
         }
     }
 
-    public void moveItemBy(Actor actor, float x, float y) {
-        actor.setX(actor.getX() + x);
-        actor.setY(actor.getY() + y);
+    public void moveItemBy(Entity entity, float x, float y) {
+    	transformComponent = transformMapper.get(entity);
+    	transformComponent.x+=x;
+    	transformComponent.y+=y;
     }
 
-    public void removeItem(Actor actor) {
-        IBaseItem item = (IBaseItem) actor;
-        actor.remove();
-        sceneControl.getCurrentScene().removeItem(item);
-        item.dispose();
+    public void removeItem(Entity entity) {
+    	//TODO and uncomment
+//        actor.remove();
+//        sceneControl.getCurrentScene().removeItem(item);
+//        item.dispose();
     }
 
 }
