@@ -516,6 +516,8 @@ public class Sandbox {
 		  zoomPercent = percent;
 		  OrthographicCamera camera = (OrthographicCamera)(sandboxStage.getCamera());
 		  camera.zoom = 1f/(zoomPercent/100f);
+		  
+		  uiStage.uiMainTable.updateZoom((int)(percent));
 	 }
 
 	 public void zoomBy(float amount) {
