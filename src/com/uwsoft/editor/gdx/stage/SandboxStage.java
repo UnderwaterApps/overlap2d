@@ -18,11 +18,12 @@
 
 package com.uwsoft.editor.gdx.stage;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.FPSLogger;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.TypeConstants;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -39,9 +40,11 @@ public class SandboxStage extends BaseStage implements TypeConstants {
     private FPSLogger fpsLogger;
 
 
-    public Group mainBox = new Group();
+    public Group mainBox;
 
     public Sandbox sandbox;
+    
+    private final static Vector2 temp = new Vector2();
 
     public SandboxStage() {
         super();
@@ -54,6 +57,15 @@ public class SandboxStage extends BaseStage implements TypeConstants {
     @Override
     public void act(float delta) {
         super.act(delta);
+        
+        // update X and Y labels if scene is initialized and not panning
+        if(!sandbox.cameraPanOn
+      	  && mainBox != null)
+        {
+      	  temp.set( Gdx.input.getX(), Gdx.input.getY() );
+      	  uiStage.uiMainTable.updateXandY(this.screenToStageCoordinates(temp));
+        }
+
     }
 
     public void setUIStage(UIStage uiStage) {
@@ -62,7 +74,7 @@ public class SandboxStage extends BaseStage implements TypeConstants {
 
 
     public void initView() {
-        if (mainBox != null) mainBox.clear();
+        mainBox  = new Group();
         clear();
         getCamera().position.set(0, 0, 0);
 
@@ -82,7 +94,6 @@ public class SandboxStage extends BaseStage implements TypeConstants {
         addActor(frontUI);
 
     }
-
 
     public void setKeyboardFocus() {
         setKeyboardFocus(mainBox);

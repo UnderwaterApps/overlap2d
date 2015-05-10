@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.ui;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -43,6 +44,8 @@ public class UIMainTable extends Table {
 	public Table leftTable;
 	private UIToolBox toolPanel;
 	public Label lblZoom;
+	public Label lblX;
+	public Label lblY;
 	
 	private StringBuilder strBuilder;
 
@@ -116,6 +119,14 @@ public class UIMainTable extends Table {
 		//centerTable.debug();
 
 		// UI labels over sandbox
+		lblX = new Label("", DataManager.getInstance().textureManager.editorSkin);
+		lblX.setTouchable(Touchable.disabled);
+		centerTable.add(lblX).top().padRight(10);
+		
+		lblY = new Label("", DataManager.getInstance().textureManager.editorSkin);
+		lblY.setTouchable(Touchable.disabled);
+		centerTable.add(lblY).top().padRight(10);
+		
 		lblZoom = new Label("", DataManager.getInstance().textureManager.editorSkin);
 		lblZoom.setTouchable(Touchable.disabled);
 		centerTable.add(lblZoom).top().padRight(10);
@@ -154,6 +165,19 @@ public class UIMainTable extends Table {
 		strBuilder.append(String.valueOf(zoom));
 		strBuilder.append("%");
 		lblZoom.setText(strBuilder.toString());
+	}
+	
+	public void updateXandY(Vector2 coordinates)
+	{
+		strBuilder.setLength(0);
+		strBuilder.append("x: ");
+		strBuilder.append(String.valueOf((int) coordinates.x));
+		lblX.setText(strBuilder.toString());
+		
+		strBuilder.setLength(0);
+		strBuilder.append("y: ");
+		strBuilder.append(String.valueOf((int) coordinates.y));
+		lblY.setText(strBuilder.toString());
 	}
 
 }
