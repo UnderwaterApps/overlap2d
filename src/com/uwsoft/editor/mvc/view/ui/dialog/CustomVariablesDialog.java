@@ -26,7 +26,7 @@ import com.uwsoft.editor.utils.StandardWidgetsFactory;
 /**
  * Created by azakhary on 5/12/2015.
  */
-public class CustomVariablesDialog extends O2DDialog {
+public class CustomVariablesDialog extends UIDraggablePanel {
 
     private VisTextField keyField;
     private VisTextField valueField;
@@ -51,8 +51,8 @@ public class CustomVariablesDialog extends O2DDialog {
     private VisTable createAddVariableTable() {
         VisTable addVariableTable = new VisTable();
 
-        keyField = createTextField();
-        valueField = createTextField();
+        keyField = StandardWidgetsFactory.createTextField();
+        valueField = StandardWidgetsFactory.createTextField();
         addButton = new VisTextButton("Add");
 
         addVariableTable.add(StandardWidgetsFactory.createLabel("New"));

@@ -20,9 +20,12 @@ package com.uwsoft.editor.utils;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.InputValidator;
 import com.kotcrab.vis.ui.VisUI;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 
 /**
  * Creates standard widgets like labels or text fields with provided standard Overlap2D specific visual style.
@@ -55,5 +58,39 @@ public class StandardWidgetsFactory {
 
     public static VisLabel createLabel(String text) {
         return createLabel(text, Align.right);
+    }
+
+
+    public static  VisTextField createTextField() {
+        return new VisTextField("", "light");
+    }
+
+    public static  VisTextField createTextField(String text) {
+        return new VisTextField(text, "light");
+    }
+
+    public static  VisTextField createTextField(String text, VisTextField.TextFieldFilter textFieldFilter) {
+        VisTextField visTextField = createTextField(text);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
+    }
+
+    public static  VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
+        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+        visTextField.setText(text);
+        Skin skin = VisUI.getSkin();
+        visTextField.setStyle(skin.get("light", VisTextField.VisTextFieldStyle.class));
+        return visTextField;
+    }
+
+    public static  VisValidableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
+        return visTextField;
+    }
+
+    public static  VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
     }
 }
