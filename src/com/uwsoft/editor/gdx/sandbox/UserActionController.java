@@ -59,12 +59,12 @@ public class UserActionController {
         return true;
     }
 
-    public void createParticleItem(String name, float x, float y) {
+    public Boolean createParticleItem(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
+        if (layer == null) return false;
 
-        sandbox.getItemFactory().createParticleItem(layer, name, x, y);
-
+        sandbox.getItemFactory().createParticleItem(layer, name, vector2.x, vector2.y);
+        return true;
     }
 
     public Boolean createSpriteAnimation(String name, Vector2 vector2) {

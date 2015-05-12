@@ -50,7 +50,7 @@ public class UIParticleEffectsTabMediator extends UIResourcesTabMediator<UIParti
         Array<DraggableResource> itemArray = new Array<>();
         for (String name : particles.keySet()) {
             DraggableResource draggableResource = new DraggableResource(new ParticleEffectResource(name));
-            draggableResource.setFactoryFunction(sandbox.getUac()::createItemFromLibrary);
+            draggableResource.setFactoryFunction(sandbox.getUac()::createParticleItem);
             itemArray.add(draggableResource);
         }
         viewComponent.setItems(itemArray);
