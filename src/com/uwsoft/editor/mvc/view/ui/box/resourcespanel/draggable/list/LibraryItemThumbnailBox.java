@@ -34,17 +34,15 @@ public class LibraryItemThumbnailBox extends ListItemResource {
     private String key;
 
     public LibraryItemThumbnailBox(String key, CompositeItemVO compositeItemVO) {
-        super(key);
+        super(key, "library");
         setFactoryMethod(sandbox.getUac()::createItemFromLibrary);
         this.key = key;
         this.compositeItemVO = compositeItemVO;
-
         payloadImg = new Image(getStyle().resourceOver);
         payloadImg.setScale(2);
         payloadImg.getColor().a = .85f;
         payload = new ResourcePayloadObject();
         payload.name = key;
-//        draggableResource.initDragDrop(this, payloadImg, payload);
     }
 
     public String getKey() {

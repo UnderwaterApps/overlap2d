@@ -26,6 +26,8 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.ParticleResource;
 
 import java.util.HashMap;
 
@@ -68,9 +70,9 @@ public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffec
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
         HashMap<String, ParticleEffect> particles = resourceManager.getProjectParticleList();
-        Array<String> itemArray = new Array<>();
+        Array<DraggableResource> itemArray = new Array<>();
         for (String name : particles.keySet()) {
-            itemArray.add(name);
+            itemArray.add(new DraggableResource(new ParticleResource(name)));
         }
         viewComponent.setItems(itemArray);
     }

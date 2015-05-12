@@ -41,8 +41,8 @@ public abstract class ListItemResource extends Button implements DraggableResour
     private final Image icon;
     private BiFunction<String, Vector2, Boolean> factoryFunction;
 
-    public ListItemResource(String name) {
-        super(VisUI.getSkin().get("default", ListItemResourceStyle.class));
+    public ListItemResource(String name, String styleName) {
+        super(VisUI.getSkin().get(styleName, ListItemResourceStyle.class));
         sandbox = Sandbox.getInstance();
         icon = new Image(getStyle().resourceUp);
         add(icon);
