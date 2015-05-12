@@ -56,8 +56,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
 
         switch (notification.getName()) {
             case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
-                EditAnimationDialog dlg = new EditAnimationDialog(Sandbox.getInstance().getUIStage(), observableReference);
-                Sandbox.getInstance().getUIStage().addActor(dlg);
+
                 break;
             default:
                 break;

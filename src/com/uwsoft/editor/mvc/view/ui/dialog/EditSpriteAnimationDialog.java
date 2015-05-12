@@ -19,47 +19,18 @@
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
 /**
  * Created by azakhary on 5/12/2015.
  */
-public class CustomVariablesDialog extends O2DDialog {
+public class EditSpriteAnimationDialog extends O2DDialog {
 
-    private VisTextField keyField;
-    private VisTextField valueField;
-    private VisTextButton addButton;
-
-    public CustomVariablesDialog() {
-        super("Custom Variables");
+    public EditSpriteAnimationDialog() {
+        super("Edit Sprite Animation Ranges");
         addCloseButton();
 
         VisTable mainTable = new VisTable();
 
-        VisTable animationsList = new VisTable();
-
-        mainTable.add(animationsList);
-        mainTable.row();
-        mainTable.add(createNewAnimationTable());
-        mainTable.row();
-
         add(mainTable);
-    }
-
-    private VisTable createNewAnimationTable() {
-        VisTable newAnimationTable = new VisTable();
-
-        keyField = createTextField();
-        valueField = createTextField();
-        addButton = new VisTextButton("Add");
-
-        add(StandardWidgetsFactory.createLabel("New"));
-        add(keyField);
-        add(valueField);
-        add(addButton);
-
-        return newAnimationTable;
     }
 }

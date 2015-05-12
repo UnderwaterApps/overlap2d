@@ -24,16 +24,17 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
+import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
 
 /**
  * Created by azakhary on 5/12/2015.
  */
-public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariablesDialog> {
-    private static final String TAG = CustomVariablesDialogMediator.class.getCanonicalName();
+public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSpriteAnimationDialog> {
+    private static final String TAG = EditSpriteAnimationDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
 
-    public CustomVariablesDialogMediator() {
-        super(NAME, new CustomVariablesDialog());
+    public EditSpriteAnimationDialogMediator() {
+        super(NAME, new EditSpriteAnimationDialog());
     }
 
     @Override
@@ -45,7 +46,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED
+                UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED
         };
     }
 
@@ -57,7 +58,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
         UIStage uiStage = sandbox.getUIStage();
 
         switch (notification.getName()) {
-            case UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED:
+            case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
                 viewComponent.show(uiStage);
                 break;
         }

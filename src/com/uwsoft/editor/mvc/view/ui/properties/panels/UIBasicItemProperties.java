@@ -58,7 +58,6 @@ public class UIBasicItemProperties extends UIItemProperties {
     public UIBasicItemProperties() {
         super();
         padTop(7);
-//        debug();
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
