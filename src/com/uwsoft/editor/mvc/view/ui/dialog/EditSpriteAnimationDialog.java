@@ -28,7 +28,7 @@ import com.uwsoft.editor.utils.StandardWidgetsFactory;
 /**
  * Created by azakhary on 5/12/2015.
  */
-public class EditSpriteAnimationDialog extends O2DDialog {
+public class EditSpriteAnimationDialog extends UIDraggablePanel {
 
     private VisTextField nameField;
     private VisValidableTextField fromFrameField;

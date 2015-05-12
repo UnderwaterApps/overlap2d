@@ -37,11 +37,11 @@ public class UIDraggablePanel extends O2DDialog {
 
     @Override
     public void addCloseButton() {
-        VisImageButton closeButton = new VisImageButton("close-window");
+        VisImageButton closeButton = new VisImageButton("close-panel");
         this.getTitleTable().add(closeButton).padBottom(2);
         closeButton.addListener(new ChangeListener() {
             public void changed(ChangeEvent event, Actor actor) {
-                O2DDialog.this.close();
+                UIDraggablePanel.this.close();
             }
         });
         if (this.getTitleTable().getChildren().size == 2) {

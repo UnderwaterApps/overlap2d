@@ -398,6 +398,12 @@
       "over": "button-over",
       "imageUp": "icon-close"
     },
+    "close-panel": {
+      "down": "icon-close-small",
+      "up": "icon-close-small",
+      "over": "icon-close-small",
+      "imageUp": "icon-close-small"
+    },
     "close": {
       "down": "button-red",
       "up": "button",
