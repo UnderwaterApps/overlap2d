@@ -362,9 +362,9 @@
       "up": "button-resource",
       "over": "button-resource-over",
       "down": "button-resource-over",
-      "resourceUp": "icon-library",
-      "resourceDown": "icon-library-over",
-      "resourceOver": "icon-library-over",
+      "resourceUp": "icon-particle",
+      "resourceDown": "icon-particle-over",
+      "resourceOver": "icon-particle-over",
       "labelStyle": {
         "font": "small-font",
         "fontColor": "white"

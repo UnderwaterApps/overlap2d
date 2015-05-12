@@ -22,7 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -36,8 +35,9 @@ public class ParticleEffectResource extends ListItemResource {
     public ParticleEffectResource(String particleName) {
         super(particleName, "particle");
         facade = Overlap2DFacade.getInstance();
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+        payloadImg = new Image(getStyle().resourceOver);
+        payloadImg.setScale(2);
+        payloadImg.getColor().a = .85f;
         payload = new ResourcePayloadObject();
         payload.name = particleName;
     }
