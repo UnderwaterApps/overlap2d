@@ -97,13 +97,13 @@ public class CustomVariablesDialog extends UIDraggablePanel {
             keyTbl.setBackground(VisUI.getSkin().getDrawable("layer-bg"));
             VisTable valueTbl = new VisTable();
             valueTbl.setBackground(VisUI.getSkin().getDrawable("layer-bg"));
-            keyTbl.add(new VisLabel(key));
-            valueTbl.add(new VisLabel(value));
+            keyTbl.add(new VisLabel(key)).align(Align.left).width(124).padLeft(2);
+            valueTbl.add(new VisLabel(value)).align(Align.left).width(124).padLeft(2);
 
             VisImageButton trashBtn = new VisImageButton("trash-button");
 
-            variablesList.add(keyTbl).width(124).height(20).align(Align.left).padLeft(6);
-            variablesList.add(valueTbl).width(124).height(20).align(Align.left).padLeft(1);
+            variablesList.add(keyTbl).height(20).padLeft(6);
+            variablesList.add(valueTbl).height(20).padLeft(1);
             variablesList.add(trashBtn).padLeft(10);
             variablesList.row().padBottom(2);
 
