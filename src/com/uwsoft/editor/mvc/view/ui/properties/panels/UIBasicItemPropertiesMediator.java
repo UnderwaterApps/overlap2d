@@ -46,7 +46,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
-                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED
+                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
+                UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -68,6 +69,10 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
 
                 picker.setColor(viewComponent.getTintColor());
                 Sandbox.getInstance().getUIStage().addActor(picker.fadeIn());
+
+                break;
+            case UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED:
+                // show custom variables dialog
 
                 break;
             default:

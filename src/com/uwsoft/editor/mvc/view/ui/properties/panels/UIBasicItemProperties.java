@@ -24,10 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.ui.components.TintButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
@@ -39,7 +36,10 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
  */
 public class UIBasicItemProperties extends UIItemProperties {
 
-    public static final String TINT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties" + ".TINT_COLOR_BUTTON_CLICKED";
+    public static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties";
+    public static final String TINT_COLOR_BUTTON_CLICKED = PREFIX + ".TINT_COLOR_BUTTON_CLICKED";
+    public static final String CUSTOM_VARS_BUTTON_CLICKED = PREFIX + ".CUSTOM_VARS_BUTTON_CLICKED";
+
 
     private VisTextField idBox;
 
@@ -53,6 +53,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     private VisCheckBox flipHorizontal;
     private TintButton tintColorComponent;
     private VisTextField rotationValue;
+    private VisTextButton customVarsButton;
 
     public UIBasicItemProperties() {
         super();
@@ -72,6 +73,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         flipHorizontal = new VisCheckBox(null);
         tintColorComponent = new TintButton(29, 21);
         rotationValue = new VisValidableTextField(floatValidator);
+        customVarsButton = new VisTextButton("Custom Vars");
 
         add(createLabel("Identifier:")).padRight(3).fillX();
         add(idBox).width(156).height(21).colspan(2);
@@ -81,12 +83,14 @@ public class UIBasicItemProperties extends UIItemProperties {
         add(getAsTable("Width:", widthValue, "Height:", heightValue)).right();
         row().padTop(6);
         add(createLabel("Rotation:")).padRight(3).left();
-        add(rotationValue).width(45).height(21).colspan(2).left().padLeft(13);
+        add(rotationValue).width(45).height(21).left().padLeft(13);
+        add(getTintTable()).width(45).height(21).right().padLeft(13);
         row().padTop(6);
         add(createLabel("Scale:")).padRight(3).left().top();
-        add(getAsTable("X:", scaleXValue, "Y:", scaleYValue)).left().colspan(2);
+        add(getAsTable("X:", scaleXValue, "Y:", scaleYValue)).left();
+        add(customVarsButton).height(21).left().top().padLeft(13);
         row().padTop(6);
-        add(getTintTable()).right().colspan(3);
+
         setListeners();
     }
 
@@ -213,6 +217,13 @@ public class UIBasicItemProperties extends UIItemProperties {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 facade.sendNotification(TINT_COLOR_BUTTON_CLICKED);
+            }
+        });
+
+        customVarsButton.addListener(new ClickListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                facade.sendNotification(CUSTOM_VARS_BUTTON_CLICKED);
             }
         });
     }
