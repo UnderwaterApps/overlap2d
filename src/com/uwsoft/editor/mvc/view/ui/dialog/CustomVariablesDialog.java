@@ -38,28 +38,30 @@ public class CustomVariablesDialog extends O2DDialog {
 
         VisTable mainTable = new VisTable();
 
-        VisTable animationsList = new VisTable();
+        VisTable variablesList = new VisTable();
 
-        mainTable.add(animationsList);
+        mainTable.add(variablesList);
         mainTable.row();
-        mainTable.add(createNewAnimationTable());
+        mainTable.add(createAddVariableTable());
         mainTable.row();
 
         add(mainTable);
     }
 
-    private VisTable createNewAnimationTable() {
-        VisTable newAnimationTable = new VisTable();
+    private VisTable createAddVariableTable() {
+        VisTable addVariableTable = new VisTable();
 
         keyField = createTextField();
         valueField = createTextField();
         addButton = new VisTextButton("Add");
 
-        add(StandardWidgetsFactory.createLabel("New"));
-        add(keyField);
-        add(valueField);
-        add(addButton);
+        addVariableTable.add(StandardWidgetsFactory.createLabel("New"));
+        addVariableTable.add(keyField);
+        addVariableTable.add(valueField);
+        addVariableTable.add(addButton);
 
-        return newAnimationTable;
+        addVariableTable.row();
+
+        return addVariableTable;
     }
 }

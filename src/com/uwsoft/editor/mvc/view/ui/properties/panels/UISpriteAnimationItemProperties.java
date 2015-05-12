@@ -48,7 +48,7 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
         mainTable.add(new VisLabel("Animations:", Align.right)).padRight(5).fillX();
         mainTable.add(animationsSelectBox).width(120);
         mainTable.row().padTop(5);
-        mainTable.add(editAnimationsButton).colspan(2);
+        mainTable.add(editAnimationsButton).right().colspan(2);
         setListeners();
     }
 
