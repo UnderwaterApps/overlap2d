@@ -26,18 +26,15 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class LibraryItemThumbnailBox extends ListItemResource {
+public class LibraryItemResource extends ListItemResource {
 
-    private final CompositeItemVO compositeItemVO;
     private final Image payloadImg;
     private final ResourcePayloadObject payload;
     private String key;
 
-    public LibraryItemThumbnailBox(String key, CompositeItemVO compositeItemVO) {
+    public LibraryItemResource(String key) {
         super(key, "library");
-        setFactoryMethod(sandbox.getUac()::createItemFromLibrary);
         this.key = key;
-        this.compositeItemVO = compositeItemVO;
         payloadImg = new Image(getStyle().resourceOver);
         payloadImg.setScale(2);
         payloadImg.getColor().a = .85f;

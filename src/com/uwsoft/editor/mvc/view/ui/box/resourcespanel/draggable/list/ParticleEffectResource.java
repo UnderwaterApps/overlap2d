@@ -27,13 +27,13 @@ import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class ParticleResource extends ListItemResource {
+public class ParticleEffectResource extends ListItemResource {
     private final Overlap2DFacade facade;
     private final Image payloadImg;
     private final ResourcePayloadObject payload;
 
 
-    public ParticleResource(String particleName) {
+    public ParticleEffectResource(String particleName) {
         super(particleName, "particle");
         facade = Overlap2DFacade.getInstance();
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);

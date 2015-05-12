@@ -18,19 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResourceView;
-
-import java.util.function.BiFunction;
 
 /**
  * Created by sargis on 5/6/15.
@@ -39,7 +34,6 @@ public abstract class ListItemResource extends Button implements DraggableResour
 
     protected final Sandbox sandbox;
     private final Image icon;
-    private BiFunction<String, Vector2, Boolean> factoryFunction;
 
     public ListItemResource(String name, String styleName) {
         super(VisUI.getSkin().get(styleName, ListItemResourceStyle.class));
@@ -47,10 +41,6 @@ public abstract class ListItemResource extends Button implements DraggableResour
         icon = new Image(getStyle().resourceUp);
         add(icon);
         add(new VisLabel(name, getStyle().labelStyle)).expandX().fillX();
-    }
-
-    protected void setFactoryMethod(BiFunction<String, Vector2, Boolean> factoryFunction) {
-        this.factoryFunction = factoryFunction;
     }
 
 
@@ -69,18 +59,6 @@ public abstract class ListItemResource extends Button implements DraggableResour
         } else {
             icon.setDrawable(getStyle().resourceUp);
         }
-    }
-
-    private Boolean itemDropped(DragAndDrop.Payload payload, Vector2 vector2) {
-        ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
-        vector2.sub(resourcePayloadObject.xOffset, resourcePayloadObject.yOffset);
-        factoryFunction.apply(resourcePayloadObject.name, vector2);
-        return true;
-    }
-
-    @Override
-    public void drop(DragAndDrop.Payload payload, Vector2 vector2) {
-        itemDropped(payload, vector2);
     }
 
     public static class ListItemResourceStyle extends Button.ButtonStyle {

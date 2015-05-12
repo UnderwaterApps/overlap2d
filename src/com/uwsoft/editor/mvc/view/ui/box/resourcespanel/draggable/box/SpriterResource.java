@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -29,14 +29,13 @@ import com.uwsoft.editor.renderer.data.SpriterVO;
 /**
  * Created by hayk on 19/12/2014.
  */
-public class SpriterAnimationResource extends ThumbnailBoxResource {
+public class SpriterResource extends BoxItemResource {
     private final Overlap2DFacade facade;
     private final Image dragActor;
     private ResourcePayloadObject payload;
     private boolean isMouseInside = true;
 
-    public SpriterAnimationResource(String animationName) {
-        setFactoryMethod(sandbox.getUac()::createSpriterAnimation);
+    public SpriterResource(String animationName) {
         facade = Overlap2DFacade.getInstance();
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
