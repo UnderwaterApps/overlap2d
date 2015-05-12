@@ -56,6 +56,6 @@ public class UICollapsibleBox extends VisWindow {
 
     protected void createCollapsibleWidget(Table table) {
         collapsibleWidget = new CollapsibleWidget(table);
-        mainTable.add(collapsibleWidget).expand();
+        mainTable.add(collapsibleWidget).expand().top();
     }
 }
