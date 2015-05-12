@@ -18,27 +18,42 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.*;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
+
+import java.util.Map;
 
 /**
  * Created by azakhary on 5/12/2015.
  */
 public class CustomVariablesDialog extends UIDraggablePanel {
+    public static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.dialog.CustomVariablesDialog";
+    public static final String ADD_BUTTON_PRESSED = PREFIX + ".ADD_BUTTON_PRESSED";
+    public static final String DELETE_BUTTON_PRESSED = PREFIX + ".DELETE_BUTTON_PRESSED";
+
+    private Overlap2DFacade facade;
 
     private VisTextField keyField;
     private VisTextField valueField;
     private VisTextButton addButton;
 
+    private VisTable mainTable;
+    private VisTable variablesList;
+
     public CustomVariablesDialog() {
         super("Custom Variables");
         addCloseButton();
 
-        VisTable mainTable = new VisTable();
+        facade = Overlap2DFacade.getInstance();
 
-        VisTable variablesList = new VisTable();
+        mainTable = new VisTable();
+
+        variablesList = new VisTable();
 
         mainTable.add(variablesList);
         mainTable.row();
@@ -46,6 +61,8 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         mainTable.row();
 
         add(mainTable);
+
+        initListeners();
     }
 
     private VisTable createAddVariableTable() {
@@ -56,12 +73,60 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         addButton = new VisTextButton("Add");
 
         addVariableTable.add(StandardWidgetsFactory.createLabel("New"));
-        addVariableTable.add(keyField);
-        addVariableTable.add(valueField);
-        addVariableTable.add(addButton);
+        addVariableTable.add(keyField).width(100).padLeft(10);
+        addVariableTable.add(valueField).width(100).padLeft(10);
+        addVariableTable.add(addButton).padLeft(10);
 
         addVariableTable.row();
 
         return addVariableTable;
+    }
+
+    public void updateView(CustomVariables vars) {
+        variablesList.clear();
+        for (Map.Entry<String, String> entry : vars.getHashMap().entrySet()) {
+            final String key = entry.getKey();
+            String value = entry.getValue();
+
+            VisImageButton trashBtn = new VisImageButton("trash-button");
+
+            variablesList.add(new VisLabel(key)).width(100).align(Align.left).padLeft(29);
+            variablesList.add(new VisLabel(value)).width(100).align(Align.left).padLeft(10);
+            variablesList.add(trashBtn).padLeft(10);
+            variablesList.row().height(29);
+
+            trashBtn.addListener(new ClickListener() {
+                @Override
+                public void clicked(InputEvent event, float x, float y) {
+                    facade.sendNotification(DELETE_BUTTON_PRESSED, key);
+                }
+            });
+        }
+        invalidateHeight();
+    }
+
+    private void initListeners() {
+        addButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                facade.sendNotification(ADD_BUTTON_PRESSED);
+            }
+        });
+    }
+
+    public String getKey() {
+        return keyField.getText();
+    }
+
+    public String getValue() {
+        return valueField.getText();
+    }
+
+    public void setKeyFieldValue(String key) {
+        keyField.setText(key);
+    }
+
+    public void setValueFieldValue(String value) {
+        valueField.setText(value);
     }
 }

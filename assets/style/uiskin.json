@@ -399,10 +399,14 @@
       "imageUp": "icon-close"
     },
     "close-panel": {
-      "down": "icon-close-small",
-      "up": "icon-close-small",
-      "over": "icon-close-small",
-      "imageUp": "icon-close-small"
+      "imageDown": "icon-close-orange-down",
+      "imageOver": "icon-close-orange-over",
+      "imageUp": "icon-close-orange"
+    },
+    "trash-button": {
+      "imageDown": "icon-trash-disabled",
+      "imageOver": "icon-trash-over",
+      "imageUp": "icon-trash"
     },
     "close": {
       "down": "button-red",

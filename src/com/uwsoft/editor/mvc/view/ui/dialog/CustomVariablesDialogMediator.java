@@ -20,10 +20,13 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
+import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -31,6 +34,8 @@ import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
 public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariablesDialog> {
     private static final String TAG = CustomVariablesDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
+
+    private IBaseItem observable;
 
     public CustomVariablesDialogMediator() {
         super(NAME, new CustomVariablesDialog());
@@ -45,7 +50,10 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED
+                Overlap2D.ITEM_SELECTED,
+                UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED,
+                CustomVariablesDialog.ADD_BUTTON_PRESSED,
+                CustomVariablesDialog.DELETE_BUTTON_PRESSED
         };
     }
 
@@ -60,6 +68,43 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
             case UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED:
                 viewComponent.show(uiStage);
                 break;
+            case Overlap2D.ITEM_SELECTED:
+                setObservable(notification.getBody());
+                break;
+            case CustomVariablesDialog.ADD_BUTTON_PRESSED:
+                setVariable();
+                updateView();
+                break;
+            case CustomVariablesDialog.DELETE_BUTTON_PRESSED:
+                removeVariable(notification.getBody());
+                updateView();
+                break;
         }
+    }
+
+    private void setVariable() {
+        CustomVariables vars = observable.getCustomVariables();
+        String key = viewComponent.getKey();
+        String value = viewComponent.getValue();
+        vars.setVariable(key, value);
+        observable.updateDataVO();
+    }
+
+    private void removeVariable(String key) {
+        CustomVariables vars = observable.getCustomVariables();
+        vars.removeVariable(key);
+        observable.updateDataVO();
+    }
+
+    private void setObservable(IBaseItem item) {
+        observable = item;
+        updateView();
+        viewComponent.setKeyFieldValue("");
+        viewComponent.setValueFieldValue("");
+    }
+
+    private void updateView() {
+        CustomVariables vars = observable.getCustomVariables();
+        viewComponent.updateView(vars);
     }
 }

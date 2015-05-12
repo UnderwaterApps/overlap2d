@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 
@@ -33,6 +34,7 @@ public class UIDraggablePanel extends O2DDialog {
         setMovable(true);
         setModal(false);
         setStyle(VisUI.getSkin().get("box", WindowStyle.class));
+        getTitleLabel().setAlignment(Align.left);
     }
 
     @Override
@@ -47,6 +49,13 @@ public class UIDraggablePanel extends O2DDialog {
         if (this.getTitleTable().getChildren().size == 2) {
             this.getTitleTable().getCell(this.getTitleLabel()).padLeft(closeButton.getWidth() * 2.0F);
         }
+    }
+
+    public void invalidateHeight() {
+        float heightOld = getHeight();
+        pack();
+        float heightDiff = heightOld - getHeight();
+        setPosition(getX(), getY() + heightDiff);
     }
 
 }

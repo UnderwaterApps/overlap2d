@@ -62,34 +62,33 @@ public class StandardWidgetsFactory {
 
 
     public static  VisTextField createTextField() {
-        return new VisTextField("", "light");
+        return new VisTextField("", "default");
     }
 
-    public static  VisTextField createTextField(String text) {
-        return new VisTextField(text, "light");
+    public static  VisTextField createTextField(String style) {
+        return new VisTextField("", style);
     }
 
-    public static  VisTextField createTextField(String text, VisTextField.TextFieldFilter textFieldFilter) {
-        VisTextField visTextField = createTextField(text);
+    public static  VisTextField createTextField(String style, VisTextField.TextFieldFilter textFieldFilter) {
+        VisTextField visTextField = createTextField(style);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
+    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator) {
         VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
-        visTextField.setText(text);
         Skin skin = VisUI.getSkin();
-        visTextField.setStyle(skin.get("light", VisTextField.VisTextFieldStyle.class));
+        visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
         return visTextField;
     }
 
     public static  VisValidableTextField createValidableTextField(InputValidator inputValidator) {
-        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
+        VisValidableTextField visTextField = createValidableTextField("default", inputValidator);
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
-        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidableTextField visTextField = createValidableTextField(style, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }
