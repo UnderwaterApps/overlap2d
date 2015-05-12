@@ -71,7 +71,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
                         if (checkIfNameIsUnique(input)) {
                             LayerItemVO layerVo = new LayerItemVO();
                             layerVo.layerName = input;
-                            viewComponent.addItem(new UILayerItem(layerVo));
+                            viewComponent.addItem(new UILayerBox.UILayerItem(layerVo));
                             //currentSelectedLayerIndex = layers.indexOf(layerVo);
                         } else {
                             // show error dialog
@@ -113,7 +113,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
         viewComponent.clearItems();
 
         for (int i = 0; i < layers.size(); i++) {
-            viewComponent.addItem(new UILayerItem(layers.get(i)));
+            viewComponent.addItem(new UILayerBox.UILayerItem(layers.get(i)));
         }
     }
 

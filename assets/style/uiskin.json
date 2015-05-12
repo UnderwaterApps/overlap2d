@@ -506,6 +506,14 @@
     "expandable-properties-button": {
       "imageUp": "expandable-properties-collapse-on",
       "imageChecked": "expandable-properties-collapse-off"
+    },
+    "layer-lock": {
+      "imageUp": "icon-lock-inactive",
+      "imageChecked": "icon-lock-active"
+    },
+    "layer-visible": {
+      "imageUp": "icon-visible-on",
+      "imageChecked": "icon-visible-off"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
