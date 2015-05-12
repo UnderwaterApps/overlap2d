@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
@@ -55,9 +56,9 @@ public class CustomVariablesDialog extends UIDraggablePanel {
 
         variablesList = new VisTable();
 
-        mainTable.add(variablesList);
-        mainTable.row();
         mainTable.add(createAddVariableTable());
+        mainTable.row();
+        mainTable.add(variablesList);
         mainTable.row();
 
         add(mainTable);
@@ -72,10 +73,9 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         valueField = StandardWidgetsFactory.createTextField();
         addButton = new VisTextButton("Add");
 
-        addVariableTable.add(StandardWidgetsFactory.createLabel("New"));
-        addVariableTable.add(keyField).width(100).padLeft(10);
-        addVariableTable.add(valueField).width(100).padLeft(10);
-        addVariableTable.add(addButton).padLeft(10);
+        addVariableTable.add(keyField).width(120).padLeft(6);
+        addVariableTable.add(valueField).width(120).padLeft(5);
+        addVariableTable.add(addButton).width(38).padLeft(4).padRight(5);
 
         addVariableTable.row();
 
@@ -84,16 +84,28 @@ public class CustomVariablesDialog extends UIDraggablePanel {
 
     public void updateView(CustomVariables vars) {
         variablesList.clear();
+
+        variablesList.add(StandardWidgetsFactory.createLabel("Key name")).width(124).height(20).align(Align.center).padLeft(6);
+        variablesList.add(StandardWidgetsFactory.createLabel("Value")).width(124).height(20).align(Align.center).padLeft(1);
+        variablesList.row();
+
         for (Map.Entry<String, String> entry : vars.getHashMap().entrySet()) {
             final String key = entry.getKey();
             String value = entry.getValue();
 
+            VisTable keyTbl = new VisTable();
+            keyTbl.setBackground(VisUI.getSkin().getDrawable("layer-bg"));
+            VisTable valueTbl = new VisTable();
+            valueTbl.setBackground(VisUI.getSkin().getDrawable("layer-bg"));
+            keyTbl.add(new VisLabel(key));
+            valueTbl.add(new VisLabel(value));
+
             VisImageButton trashBtn = new VisImageButton("trash-button");
 
-            variablesList.add(new VisLabel(key)).width(100).align(Align.left).padLeft(29);
-            variablesList.add(new VisLabel(value)).width(100).align(Align.left).padLeft(10);
+            variablesList.add(keyTbl).width(124).height(20).align(Align.left).padLeft(6);
+            variablesList.add(valueTbl).width(124).height(20).align(Align.left).padLeft(1);
             variablesList.add(trashBtn).padLeft(10);
-            variablesList.row().height(29);
+            variablesList.row().padBottom(2);
 
             trashBtn.addListener(new ClickListener() {
                 @Override
