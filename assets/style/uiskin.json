@@ -346,7 +346,19 @@
     }
   },
   "com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.ListItemResource$ListItemResourceStyle": {
-    "default": {
+    "library": {
+      "up": "button-resource",
+      "over": "button-resource-over",
+      "down": "button-resource-over",
+      "resourceUp": "icon-library",
+      "resourceDown": "icon-library-over",
+      "resourceOver": "icon-library-over",
+      "labelStyle": {
+        "font": "small-font",
+        "fontColor": "white"
+      }
+    },
+    "particle": {
       "up": "button-resource",
       "over": "button-resource-over",
       "down": "button-resource-over",

@@ -16,21 +16,20 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
-public class ImageResource extends ThumbnailBoxResource {
+public class ImageResource extends BoxItemResource {
 
 
     private final Image payloadImg;
     private final ResourcePayloadObject payload;
 
     public ImageResource(AtlasRegion region) {
-        setFactoryMethod(sandbox.getUac()::createImage);
         Image img = new Image(region);
         if (img.getWidth() > thumbnailSize || img.getHeight() > thumbnailSize) {
             // resizing is needed

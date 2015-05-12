@@ -26,6 +26,8 @@ import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
+import java.util.function.BiFunction;
+
 /**
  * Created by azakhary on 7/3/2014.
  */
@@ -33,6 +35,7 @@ public class DraggableResource extends DragAndDrop {
 
     protected final Sandbox sandbox;
     private final DraggableResourceView viewComponent;
+    private BiFunction<String, Vector2, Boolean> factoryFunction;
 
     public DraggableResource(DraggableResourceView viewComponent) {
         this.viewComponent = viewComponent;
@@ -66,14 +69,23 @@ public class DraggableResource extends DragAndDrop {
                 Vector2 vector2 = Pools.obtain(Vector2.class);
                 vector2.x = x;
                 vector2.y = y;
-                viewComponent.drop(payload, vector2);
+                DraggableResource.this.drop(payload, vector2);
                 Pools.free(vector2);
             }
         });
+    }
+
+    private void drop(DragAndDrop.Payload payload, Vector2 vector2) {
+        ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
+        vector2.sub(resourcePayloadObject.xOffset, resourcePayloadObject.yOffset);
+        factoryFunction.apply(resourcePayloadObject.name, vector2);
     }
 
     public DraggableResourceView getViewComponent() {
         return viewComponent;
     }
 
+    public void setFactoryFunction(BiFunction<String, Vector2, Boolean> factoryFunction) {
+        this.factoryFunction = factoryFunction;
+    }
 }

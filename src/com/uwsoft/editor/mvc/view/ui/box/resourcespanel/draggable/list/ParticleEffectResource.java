@@ -23,52 +23,33 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.thumbnail.ThumbnailBoxResource;
 
 /**
  * Created by azakhary on 7/3/2014.
  */
-public class ParticleResource extends ThumbnailBoxResource {
+public class ParticleEffectResource extends ListItemResource {
     private final Overlap2DFacade facade;
+    private final Image payloadImg;
+    private final ResourcePayloadObject payload;
 
-    private String particleName;
 
-    public ParticleResource(String particleName) {
-        super();
-        this.particleName = particleName;
+    public ParticleEffectResource(String particleName) {
+        super(particleName, "particle");
         facade = Overlap2DFacade.getInstance();
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        Image img = new Image(textureManager.getEditorAsset("resizeIconChecked"));
-
-        this.setWidth(thumbnailSize);
-        this.setHeight(thumbnailSize);
-
-        img.setX(getWidth() / 2 - img.getWidth() / 2);
-        img.setY(getHeight() / 2 - img.getHeight() / 2);
-
-        addActor(img);
-
-
-        Image payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
-        ResourcePayloadObject payload = new ResourcePayloadObject();
+        payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+        payload = new ResourcePayloadObject();
         payload.name = particleName;
-
-//        draggableResource.initDragDrop(this, payloadImg, payload, this::itemDropped);
     }
 
     @Override
     public Actor getDragActor() {
-        return null;
+        return payloadImg;
     }
 
     @Override
     public ResourcePayloadObject getPayloadData() {
-        return null;
+        return payload;
     }
 
-//    protected Boolean itemDropped(DragAndDrop.Payload payload, Vector2 vector2) {
-//        ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
-//        sandbox.getUac().create9Patch(resourcePayloadObject.name, vector2.x - resourcePayloadObject.xOffset, vector2.y - resourcePayloadObject.yOffset);
-//        return true;
-//    }
 }

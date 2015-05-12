@@ -18,9 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 
 /**
@@ -30,6 +28,4 @@ public interface DraggableResourceView {
     Actor getDragActor();
 
     ResourcePayloadObject getPayloadData();
-
-    void drop(DragAndDrop.Payload payload, Vector2 vector2);
 }
