@@ -54,10 +54,12 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         facade = Overlap2DFacade.getInstance();
 
         mainTable = new VisTable();
-
+        addVariableTable = new VisTable();
         variablesList = new VisTable();
 
-        mainTable.add(createAddVariableTable());
+        createAddVariableTable();
+
+        mainTable.add(addVariableTable);
         mainTable.row();
         mainTable.add(variablesList);
         mainTable.row();
@@ -67,9 +69,8 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         initListeners();
     }
 
-    private VisTable createAddVariableTable() {
-        addVariableTable = new VisTable();
-
+    private void createAddVariableTable() {
+        addVariableTable.clear();
         keyField = StandardWidgetsFactory.createTextField();
         valueField = StandardWidgetsFactory.createTextField();
         addButton = new VisTextButton("Add");
@@ -79,19 +80,20 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         addVariableTable.add(addButton).width(38).padLeft(4).padRight(5);
 
         addVariableTable.row();
-
-        return addVariableTable;
     }
 
     public void setEmpty() {
         variablesList.clear();
-        variablesList.add(StandardWidgetsFactory.createLabel("No item selected"));
-        addVariableTable.setVisible(false);
+        VisLabel label = StandardWidgetsFactory.createLabel("No item selected");
+        label.setAlignment(Align.center);
+        variablesList.add(label).pad(10).width(278).center();
+        addVariableTable.clear();
         invalidateHeight();
     }
 
     public void updateView(CustomVariables vars) {
         variablesList.clear();
+        createAddVariableTable();
 
         variablesList.add(StandardWidgetsFactory.createLabel("Key name")).width(124).height(20).align(Align.center).padLeft(6);
         variablesList.add(StandardWidgetsFactory.createLabel("Value")).width(124).height(20).align(Align.center).padLeft(1);

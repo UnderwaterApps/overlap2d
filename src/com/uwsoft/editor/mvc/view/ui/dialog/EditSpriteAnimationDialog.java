@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.dialog;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -45,6 +46,7 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
     private VisTextButton addButton;
 
     private VisTable animationsList;
+    private VisTable newAnimationTable;
 
     public EditSpriteAnimationDialog() {
         super("Edit Sprite Animation Ranges");
@@ -55,35 +57,45 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
         VisTable mainTable = new VisTable();
 
         animationsList = new VisTable();
+        newAnimationTable = new VisTable();
+
+        createNewAnimationTable();
 
         mainTable.add(animationsList);
         mainTable.row();
-        mainTable.add(createNewAnimationTable());
+        mainTable.add(newAnimationTable);
         mainTable.row();
 
         add(mainTable);
-
-        initListeners();
     }
 
-    private VisTable createNewAnimationTable() {
-        VisTable newAnimationTable = new VisTable();
-
+    private void createNewAnimationTable() {
+        newAnimationTable.clear();
         nameField = StandardWidgetsFactory.createTextField();
         fromFrameField = StandardWidgetsFactory.createNumberSelector(0, 100);
         toFrameField = StandardWidgetsFactory.createNumberSelector(0, 100);
         addButton = new VisTextButton("Add");
 
-        newAnimationTable.add(nameField).width(100);
-        newAnimationTable.add(fromFrameField);
-        newAnimationTable.add(toFrameField);
-        newAnimationTable.add(addButton).padLeft(5);
+        newAnimationTable.add(nameField).width(120);
+        newAnimationTable.add(fromFrameField).padLeft(5);
+        newAnimationTable.add(toFrameField).padLeft(5);
+        newAnimationTable.add(addButton).padLeft(7).padRight(3);
         newAnimationTable.row();
+        initListeners();
+    }
 
-        return newAnimationTable;
+
+    public void setEmpty(String text) {
+        animationsList.clear();
+        VisLabel label = StandardWidgetsFactory.createLabel(text);
+        label.setAlignment(Align.center);
+        animationsList.add(label).pad(10).width(269).center();
+        newAnimationTable.clear();
+        invalidateHeight();
     }
 
     public void updateView(Map<String, SpriteAnimation.Animation> animations) {
+        createNewAnimationTable();
         animationsList.clear();
 
         for (Map.Entry<String, SpriteAnimation.Animation> entry : animations.entrySet()) {
@@ -93,13 +105,13 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
 
             VisImageButton trashBtn = new VisImageButton("trash-button");
 
-            row.add(StandardWidgetsFactory.createLabel(name)).width(100).left();
-            row.add(StandardWidgetsFactory.createLabel(animationData.startFrame+"")).width(50).left();
-            row.add(StandardWidgetsFactory.createLabel(animationData.endFrame +"")).width(50).left();
+            row.add(StandardWidgetsFactory.createLabel(name)).width(120).left();
+            row.add(StandardWidgetsFactory.createLabel(animationData.startFrame + "")).width(50).left();
+            row.add(StandardWidgetsFactory.createLabel(animationData.endFrame + "")).width(50).left();
             row.add(trashBtn).padLeft(10);
             row.row();
 
-            animationsList.add(row).left().width(254);
+            animationsList.add(row).left();
             animationsList.row();
 
             trashBtn.addListener(new ClickListener() {
@@ -146,4 +158,5 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
     public void setFrameTo(int to) {
         toFrameField.setValue(to);
     }
+
 }

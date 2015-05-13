@@ -53,6 +53,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2D.ITEM_SELECTED,
+                Overlap2D.EMPTY_SPACE_CLICKED,
                 UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED,
                 EditSpriteAnimationDialog.ADD_BUTTON_PRESSED,
                 EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED
@@ -73,8 +74,14 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
             case Overlap2D.ITEM_SELECTED:
                 if(notification.getBody() instanceof SpriteAnimation) {
                     setObservable(notification.getBody());
+                } else {
+                    observable = null;
+                    viewComponent.setEmpty("Selected item is not a sprite animation");
                 }
             break;
+            case Overlap2D.EMPTY_SPACE_CLICKED:
+                setObservable(null);
+                break;
             case EditSpriteAnimationDialog.ADD_BUTTON_PRESSED:
                 addAnimation();
                 updateView();
@@ -95,8 +102,12 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     }
 
     private void updateView() {
-        Map<String, SpriteAnimation.Animation> animations = observable.getAnimations();
-        viewComponent.updateView(animations);
+        if(observable == null) {
+            viewComponent.setEmpty("No item selected");
+        } else {
+            Map<String, SpriteAnimation.Animation> animations = observable.getAnimations();
+            viewComponent.updateView(animations);
+        }
     }
 
     private void addAnimation() {
