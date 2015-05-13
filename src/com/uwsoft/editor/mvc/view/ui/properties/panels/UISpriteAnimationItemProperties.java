@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -37,14 +38,22 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     public static final String EDIT_ANIMATIONS_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties" + ".EDIT_ANIMATIONS_CLICKED";
 
 
+    private NumberSelector fpsSelector;
     private VisSelectBox<String> animationsSelectBox;
     private VisTextButton editAnimationsButton;
 
 
     public UISpriteAnimationItemProperties() {
         super("Sprite Animation");
+
+        fpsSelector = new NumberSelector("", 0, 0, 120);
         animationsSelectBox = new VisSelectBox<>();
         editAnimationsButton = new VisTextButton("Edit animations");
+
+        mainTable.add(new VisLabel("FPS:", Align.right)).padRight(5).fillX();
+        mainTable.add(fpsSelector).width(50).left();
+        mainTable.row().padTop(5);
+
         mainTable.add(new VisLabel("Animations:", Align.right)).padRight(5).fillX();
         mainTable.add(animationsSelectBox).width(120);
         mainTable.row().padTop(5);
@@ -52,6 +61,13 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
         setListeners();
     }
 
+    public void setFPS(int fps) {
+        fpsSelector.setValue(fps);
+    }
+
+    public int getFPS() {
+        return fpsSelector.getValue();
+    }
 
     public Array<String> getAnimations() {
         return animationsSelectBox.getItems();

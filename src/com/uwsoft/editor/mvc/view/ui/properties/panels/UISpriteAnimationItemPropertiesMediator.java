@@ -70,6 +70,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
             animations.add(name);
         }
 
+        viewComponent.setFPS(item.dataVO.fps);
         viewComponent.setAnimations(animations);
         viewComponent.setSelectedAnimation(item.getCurrentAnimationName());
     }
@@ -77,5 +78,6 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     @Override
     protected void translateViewToItemData() {
         observableReference.setAnimation(viewComponent.getSelected());
+        observableReference.dataVO.fps = viewComponent.getFPS();
     }
 }

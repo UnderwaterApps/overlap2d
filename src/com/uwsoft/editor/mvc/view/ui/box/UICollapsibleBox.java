@@ -51,7 +51,7 @@ public class UICollapsibleBox extends VisWindow {
         });
         getTitleLabel().setAlignment(Align.left);
         getTitleTable().add(collapsibleButton).right();
-        add(mainTable).width(width);
+        add(mainTable).width(width).padBottom(4);
     }
 
     protected void createCollapsibleWidget(Table table) {

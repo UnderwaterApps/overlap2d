@@ -61,7 +61,7 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         mainTable.add(variablesList);
         mainTable.row();
 
-        add(mainTable);
+        add(mainTable).padBottom(4);
 
         initListeners();
     }
