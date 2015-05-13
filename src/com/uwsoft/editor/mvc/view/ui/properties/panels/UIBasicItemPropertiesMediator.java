@@ -26,10 +26,12 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.uwsoft.editor.renderer.actor.*;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -38,8 +40,18 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
     private static final String TAG = UIBasicItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private HashMap<String, UIBasicItemProperties.ItemType> itemTypeMap = new HashMap<>();
+
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
+
+        itemTypeMap.put(CompositeItem.class.getName(), UIBasicItemProperties.ItemType.composite);
+        itemTypeMap.put(ImageItem.class.getName(), UIBasicItemProperties.ItemType.texture);
+        itemTypeMap.put(ParticleActor.class.getName(), UIBasicItemProperties.ItemType.particle);
+        itemTypeMap.put(LabelItem.class.getName(), UIBasicItemProperties.ItemType.text);
+        itemTypeMap.put(SpriteAnimation.class.getName(), UIBasicItemProperties.ItemType.spriteAnimation);
+        itemTypeMap.put(SpriterActor.class.getName(), UIBasicItemProperties.ItemType.spriterAnimation);
+        itemTypeMap.put(SpineActor.class.getName(), UIBasicItemProperties.ItemType.spineAnimation);
     }
 
     @Override
@@ -80,6 +92,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
 
         Actor itemAsActor = (Actor) item;
 
+        viewComponent.setItemType(itemTypeMap.get(item.getClass().getName()));
         viewComponent.setIdBoxValue(vo.itemIdentifier);
         viewComponent.setXValue(itemAsActor.getX() + "");
         viewComponent.setYValue(itemAsActor.getY() + "");

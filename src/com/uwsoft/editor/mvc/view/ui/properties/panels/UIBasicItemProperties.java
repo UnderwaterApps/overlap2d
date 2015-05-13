@@ -21,8 +21,12 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.gdx.ui.components.TintButton;
@@ -30,6 +34,8 @@ import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -40,6 +46,22 @@ public class UIBasicItemProperties extends UIItemProperties {
     public static final String TINT_COLOR_BUTTON_CLICKED = PREFIX + ".TINT_COLOR_BUTTON_CLICKED";
     public static final String CUSTOM_VARS_BUTTON_CLICKED = PREFIX + ".CUSTOM_VARS_BUTTON_CLICKED";
 
+    public enum ItemType {
+        group,
+        composite,
+        texture,
+        spriteAnimation,
+        spineAnimation,
+        spriterAnimation,
+        particle,
+        text
+    }
+
+    private HashMap<ItemType, String> itemTypeIconMap = new HashMap<>();
+    private HashMap<ItemType, String> itemTypeNameMap = new HashMap<>();
+
+    private Image itemTypeIcon;
+    private VisLabel itemType;
 
     private VisTextField idBox;
 
@@ -57,9 +79,19 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     public UIBasicItemProperties() {
         super();
+
+        initMaps();
+
         padTop(7);
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
+
+        itemType = createLabel("");
+        itemType.setAlignment(Align.left);
+        itemTypeIcon = new Image();
+
+        VisTable iconContainer = new VisTable();
+        iconContainer.add(itemTypeIcon).width(22).right();
 
         idBox = new VisTextField();
         xValue = new VisValidableTextField(floatValidator);
@@ -74,8 +106,11 @@ public class UIBasicItemProperties extends UIItemProperties {
         rotationValue = new VisValidableTextField(floatValidator);
         customVarsButton = new VisTextButton("Custom Vars");
 
+        add(iconContainer).padRight(3).right().fillX();
+        add(itemType).width(143).height(21).colspan(2).left();
+        row().padTop(13);
         add(createLabel("Identifier:")).padRight(3).fillX();
-        add(idBox).width(156).height(21).colspan(2);
+        add(idBox).width(143).height(21).colspan(2);
         row().padTop(13);
         add(createLabel("Position:")).padRight(3).left().top();
         add(getAsTable("X:", xValue, "Y:", yValue)).left();
@@ -108,6 +143,12 @@ public class UIBasicItemProperties extends UIItemProperties {
         positionTable.add(createLabel(text2)).right().padRight(3);
         positionTable.add(actor2).width(45).height(21).left();
         return positionTable;
+    }
+
+    public void setItemType(ItemType type) {
+        itemType.setText(itemTypeNameMap.get(type));
+        itemTypeIcon.setDrawable(VisUI.getSkin().getDrawable(itemTypeIconMap.get(type)));
+        itemTypeIcon.setWidth(22);
     }
 
     public String getIdBoxValue() {
@@ -225,5 +266,25 @@ public class UIBasicItemProperties extends UIItemProperties {
                 facade.sendNotification(CUSTOM_VARS_BUTTON_CLICKED);
             }
         });
+    }
+
+    private void initMaps() {
+        itemTypeNameMap.put(ItemType.group, "Multiple Selection");
+        itemTypeNameMap.put(ItemType.composite, "Composite item");
+        itemTypeNameMap.put(ItemType.particle, "Particle Effect");
+        itemTypeNameMap.put(ItemType.text, "Text");
+        itemTypeNameMap.put(ItemType.texture, "Texture");
+        itemTypeNameMap.put(ItemType.spineAnimation, "Spine animation");
+        itemTypeNameMap.put(ItemType.spriteAnimation, "Sprite Animation");
+        itemTypeNameMap.put(ItemType.spriterAnimation, "Spriter Animation");
+
+        itemTypeIconMap.put(ItemType.group, "icon-library");
+        itemTypeIconMap.put(ItemType.composite, "icon-library");
+        itemTypeIconMap.put(ItemType.particle, "icon-library");
+        itemTypeIconMap.put(ItemType.text, "icon-library");
+        itemTypeIconMap.put(ItemType.texture, "icon-library");
+        itemTypeIconMap.put(ItemType.spineAnimation, "icon-library");
+        itemTypeIconMap.put(ItemType.spriteAnimation, "icon-library");
+        itemTypeIconMap.put(ItemType.spriterAnimation, "icon-library");
     }
 }
