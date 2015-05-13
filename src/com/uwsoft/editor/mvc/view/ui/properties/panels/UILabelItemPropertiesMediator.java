@@ -39,7 +39,6 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
         resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
 
-        String shortFontName = fontManager.getShortName(viewComponent.getFontFamily());
-        observableReference.setStyle(shortFontName, NumberUtils.toInt(viewComponent.getFontSize()));
+        observableReference.setStyle(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
     }
 }

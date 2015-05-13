@@ -66,7 +66,7 @@ public class CustomVariablesDialog extends UIDraggablePanel {
 
         add(mainTable).padBottom(4);
 
-        initListeners();
+
     }
 
     private void createAddVariableTable() {
@@ -80,6 +80,7 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         addVariableTable.add(addButton).width(38).padLeft(4).padRight(5);
 
         addVariableTable.row();
+        initListeners();
     }
 
     public void setEmpty() {

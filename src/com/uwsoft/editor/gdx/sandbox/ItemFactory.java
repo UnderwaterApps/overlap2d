@@ -223,7 +223,8 @@ public class ItemFactory {
 
         resourceManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
 
-        vo.style = fontManager.getShortName(textSettings.getFontFamily());
+        // using long unique name
+        vo.style = textSettings.getFontFamily();
         vo.text = "LABEL";
         vo.size = textSettings.getFontSize();
         IBaseItem item = new LabelItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
