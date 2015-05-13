@@ -20,9 +20,9 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
@@ -30,7 +30,6 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 
@@ -101,14 +100,14 @@ public class UILayerBox extends UICollapsibleBox {
 
     public void addItem(UILayerItem item) {
         layersTable.add(item).left().expandX().fillX();
-        layersTable.row();
+        layersTable.row().padTop(1);
 
         rows.add(item);
 
         item.addListener(new ClickListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
                 for (int i = 0; i < rows.size; i++) {
                     if (i != rows.indexOf(item, true)) {
                         rows.get(i).setSelected(false);
@@ -124,41 +123,51 @@ public class UILayerBox extends UICollapsibleBox {
 
     public static class UILayerItem extends VisTable {
 
-        private Overlap2DFacade facade;
-        private EditorTextureManager textureManager;
-
-        private Image lock;
-        private Image eye;
-        private String name;
+        private final Drawable normalBg;
+        private final Drawable selectedBg;
+        private final LayerItemVO layerData;
 
         public UILayerItem(LayerItemVO layerData) {
             super();
-            setBackground(VisUI.getSkin().getDrawable("layer-bg"));
-            add(new VisImageButton("layer-lock")).left();
-            add(new VisImageButton("layer-visible")).left().padRight(6);
+            this.layerData = layerData;
+            normalBg = VisUI.getSkin().getDrawable("layer-bg");
+            selectedBg = VisUI.getSkin().getDrawable("layer-bg-over");
+            setBackground(normalBg);
+            VisImageButton lockBtn = new VisImageButton("layer-lock");
+            lockBtn.addListener(new LockClickListener());
+            VisImageButton visibleBtn = new VisImageButton("layer-visible");
+            visibleBtn.addListener(new VisibleClickListener());
+            add(lockBtn).left();
+            add(visibleBtn).left().padRight(6);
             add(layerData.layerName).expandX().fillX();
-//            facade = Overlap2DFacade.getInstance();
-//            textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-//
-//            lock = new Image(textureManager.getEditorAsset("lock"));
-//            add(lock).left().padRight(10);
-//
-//            eye = new Image(textureManager.getEditorAsset("eye"));
-//            add(eye).left().padRight(10);
-//
-//            VisLabel lbl = new VisLabel(layerData.layerName);
-//            add(lbl).fillX();
-//
-//            name = layerData.layerName;
-        }
-
-        @Override
-        public String getName() {
-            return name;
         }
 
         public void setSelected(boolean selected) {
-            // TODO: visual selecting
+            setBackground(selected ? selectedBg : normalBg);
+        }
+
+        public boolean isLocked() {
+            return layerData.isLocked;
+        }
+
+        public boolean isLayerVisible() {
+            return layerData.isVisible;
+        }
+
+        private class LockClickListener extends ClickListener {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                layerData.isLocked = !layerData.isLocked;
+            }
+        }
+
+        private class VisibleClickListener extends ClickListener {
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                layerData.isVisible = !layerData.isVisible;
+            }
         }
     }
 
