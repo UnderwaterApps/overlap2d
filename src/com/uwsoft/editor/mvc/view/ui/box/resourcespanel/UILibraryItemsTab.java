@@ -43,6 +43,7 @@ public class UILibraryItemsTab extends UIResourcesTab {
     }
 
     public void setItems(Array<DraggableResource> items) {
+        list.clear();
         for (DraggableResource box : items) {
             list.add((Actor) box.getViewComponent()).expandX().fillX();
             list.row();
