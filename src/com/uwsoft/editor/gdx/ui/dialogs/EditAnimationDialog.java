@@ -22,7 +22,6 @@ import java.util.Map;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
@@ -34,8 +33,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.conponents.TintComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
 
 /**
@@ -101,42 +98,43 @@ public class EditAnimationDialog extends SimpleDialog {
         topWrapper.addActor(scroll);
         addActor(topWrapper);
 
-
-        final CompositeItem newAnimationControl = null;//stage.sceneLoader.getLibraryAsActor("newAnimationControl");
-        addActor(newAnimationControl);
-        newAnimationControl.setX(getWidth() / 2 - newAnimationControl.getWidth() / 2);
-        newAnimationControl.setY(topWrapper.getY() - newAnimationControl.getHeight() - 5);
-
-        TextButton addBtn = newAnimationControl.getTextButtonById("addBtn");
-
-        addBtn.addListener(new ClickListener() {
-            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                return true;
-            }
-
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                try {
-                    int fromValue = Integer.parseInt(newAnimationControl.getTextBoxById("fromValue").getText());
-                    int toValue = Integer.parseInt(newAnimationControl.getTextBoxById("toValue").getText());
-                    String name = newAnimationControl.getTextBoxById("animationName").getText();
-                    if (!(fromValue > toValue || fromValue < 0 || toValue < 0 || toValue > entity.getFramesCount())) {
-                        animations.put(name, new SceneLoader.Frames(fromValue, toValue, name));
-                        renderMainList();
-                    }
-
-                } catch (NumberFormatException ignored) {
-
-                }
-                newAnimationControl.getTextBoxById("fromValue").setText("");
-                newAnimationControl.getTextBoxById("toValue").setText("");
-                newAnimationControl.getTextBoxById("animationName").setText("");
-            }
-        });
+        //TODO fix and uncomment
+//        final CompositeItem newAnimationControl = null;//stage.sceneLoader.getLibraryAsActor("newAnimationControl");
+//        addActor(newAnimationControl);
+//        newAnimationControl.setX(getWidth() / 2 - newAnimationControl.getWidth() / 2);
+//        newAnimationControl.setY(topWrapper.getY() - newAnimationControl.getHeight() - 5);
+//
+//        TextButton addBtn = newAnimationControl.getTextButtonById("addBtn");
+//
+//        addBtn.addListener(new ClickListener() {
+//            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                return true;
+//            }
+//
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                try {
+//                    int fromValue = Integer.parseInt(newAnimationControl.getTextBoxById("fromValue").getText());
+//                    int toValue = Integer.parseInt(newAnimationControl.getTextBoxById("toValue").getText());
+//                    String name = newAnimationControl.getTextBoxById("animationName").getText();
+//                    if (!(fromValue > toValue || fromValue < 0 || toValue < 0 || toValue > entity.getFramesCount())) {
+//                        animations.put(name, new SceneLoader.Frames(fromValue, toValue, name));
+//                        renderMainList();
+//                    }
+//
+//                } catch (NumberFormatException ignored) {
+//
+//                }
+//                newAnimationControl.getTextBoxById("fromValue").setText("");
+//                newAnimationControl.getTextBoxById("toValue").setText("");
+//                newAnimationControl.getTextBoxById("animationName").setText("");
+//            }
+//        });
 
     }
 
     public void renderMainList() {
-        entity.updateDataVO();
+    	//TODO fix this if needed 
+        //entity.updateDataVO();
         listContainer.clear();
 
         float itmHeight = 25;
@@ -170,22 +168,23 @@ public class EditAnimationDialog extends SimpleDialog {
         for (Map.Entry<String, SceneLoader.Frames> entry : animations.entrySet()) {
             final String name = entry.getKey();
             SceneLoader.Frames value = entry.getValue();
-            final CompositeItem itm = null;//stage.sceneLoader.getLibraryAsActor("animationValueControl");
-            itm.getLabelById("name").setText("\"" + name + "\" frames: " + value.startFrame + " - " + value.endFrame);
-            listContainer.addActor(itm);
-            itm.setX(2);
-            itm.setY(listContainer.getHeight() - (itm.getHeight() + 3) * (iterator + 1));
-            iterator++;
-            itm.getTextButtonById("deleteBtn").addListener(new ClickListener() {
-                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                    return true;
-                }
-
-                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                    animations.remove(name);
-                    renderMainList();
-                }
-            });
+            //TODO fix and uncomment
+//            final CompositeItem itm = null;//stage.sceneLoader.getLibraryAsActor("animationValueControl");
+//            itm.getLabelById("name").setText("\"" + name + "\" frames: " + value.startFrame + " - " + value.endFrame);
+//            listContainer.addActor(itm);
+//            itm.setX(2);
+//            itm.setY(listContainer.getHeight() - (itm.getHeight() + 3) * (iterator + 1));
+//            iterator++;
+//            itm.getTextButtonById("deleteBtn").addListener(new ClickListener() {
+//                public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
+//                    return true;
+//                }
+//
+//                public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                    animations.remove(name);
+//                    renderMainList();
+//                }
+//            });
         }
 
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);

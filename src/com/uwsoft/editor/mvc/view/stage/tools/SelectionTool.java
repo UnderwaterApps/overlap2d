@@ -91,8 +91,8 @@ public class SelectionTool implements Tool {
         sandbox = Sandbox.getInstance();
 
         isCastingRectangle = true;
-        sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
-        sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
+        sandbox.selectionRec.setWidth(x - sandbox.selectionRec.getX());
+        sandbox.selectionRec.setHeight(y - sandbox.selectionRec.getY());
     }
 
     @Override

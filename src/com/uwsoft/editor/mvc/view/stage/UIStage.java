@@ -30,14 +30,12 @@ import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
     private final Overlap2DFacade facade;
-    public SandboxStage sandboxStage;
     public Group dummyTarget;
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;

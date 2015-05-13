@@ -19,13 +19,8 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Created by azakhary on 4/30/2015.

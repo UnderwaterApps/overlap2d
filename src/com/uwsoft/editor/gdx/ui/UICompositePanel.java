@@ -20,6 +20,7 @@ package com.uwsoft.editor.gdx.ui;
 
 import java.util.ArrayList;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -98,7 +99,7 @@ public class UICompositePanel extends VisTable {
         //updateOriginalItem(scenes.get(scenes.size() - 1), stage.getSandbox().getCurrentScene());
     }
 
-    private void updateOriginalItem(CompositeItemVO updatableVo, CompositeItem currItem) {
+    private void updateOriginalItem(CompositeItemVO updatableVo, Entity currItem) {
 //        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
 //
 //        String libName = currItem.getDataVO().itemName;

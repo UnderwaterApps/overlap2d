@@ -20,6 +20,7 @@ package com.uwsoft.editor;
 
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
+import java.io.File;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -62,7 +63,9 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "../art/textures";
+        String input = "art/textures";
+        File file = new File(input);
+        //System.out.println("path " + file.getAbsolutePath());
         String output = "style";
         String packFileName = "uiskin";
         TexturePacker.Settings settings =  new TexturePacker.Settings();

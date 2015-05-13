@@ -18,9 +18,13 @@
 
 package com.uwsoft.editor.mvc.view;
 
+import com.badlogic.ashley.core.Engine;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 
 /**
  * Created by sargis on 3/30/15.
@@ -50,7 +54,12 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case Overlap2D.CREATE:
-                setViewComponent(new Overlap2DScreen());
+            	setViewComponent(new Overlap2DScreen());
+            	//TODO this must be changed to Command 
+            	facade = Overlap2DFacade.getInstance();
+            	SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+            	Engine engine = sandboxMediator.getViewComponent().getEngine();
+            	getViewComponent().setEngine(engine);
                 viewComponent.show();
                 break;
             case Overlap2D.PAUSE:

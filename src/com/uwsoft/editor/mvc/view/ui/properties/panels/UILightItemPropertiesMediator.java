@@ -24,7 +24,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**

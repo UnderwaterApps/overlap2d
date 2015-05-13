@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**

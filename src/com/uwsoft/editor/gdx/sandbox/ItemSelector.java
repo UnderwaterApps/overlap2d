@@ -23,13 +23,9 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.utils.Align;
-import com.uwsoft.editor.Overlap2D;
+import com.badlogic.gdx.utils.Align;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -176,7 +172,7 @@ public class ItemSelector {
     private SelectionRectangle createSelectionRect(Entity item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
         rect.claim(item);
-        sandbox.getSandboxStage().frontUI.addActor(rect);
+        sandbox.frontUI.addActor(rect);
         rect.show();
 
         return rect;

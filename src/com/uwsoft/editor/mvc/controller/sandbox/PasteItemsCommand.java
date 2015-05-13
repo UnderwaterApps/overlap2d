@@ -18,19 +18,8 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.ArrayList;
-
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 
 /**
  * Created by azakhary on 4/28/2015.

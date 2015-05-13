@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.CollapsibleWidget;
 import com.kotcrab.vis.ui.widget.VisImageButton;

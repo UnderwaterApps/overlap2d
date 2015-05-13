@@ -20,31 +20,31 @@ package com.uwsoft.editor.gdx.sandbox;
 
 import java.util.ArrayList;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
+import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.gdx.ui.SandboxUI;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.stage.SandboxStage;
-import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
+import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
+import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
+import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
@@ -80,7 +80,7 @@ public class Sandbox {
      * this part contains legacy params that need to be removed one by one
      */
     public int currTransformType = -1;
-    public IBaseItem currTransformHost;
+    public Entity currTransformHost;
     public boolean isResizing = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
@@ -89,7 +89,6 @@ public class Sandbox {
     public String currentLoadedSceneFileName;
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
-    private SandboxStage sandboxStage;
     private UIStage uiStage;
     private UserActionController uac;
     private ItemFactory itemFactory;
@@ -98,6 +97,14 @@ public class Sandbox {
 
     private ProjectManager projectManager;
     private ResourceManager resourceManager;
+    
+    
+    public PixelRect selectionRec;
+    public Group mainBox = new Group();
+    public SandboxUI ui;
+    public Group frontUI;
+
+	private Engine engine;
 
 
     /**
@@ -124,13 +131,14 @@ public class Sandbox {
     private void init() {
         facade = Overlap2DFacade.getInstance();
         Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
-        SandboxStageMediator sandboxStageMediator = facade.retrieveMediator(SandboxStageMediator.NAME);
-        sandboxStage = sandboxStageMediator.getViewComponent();
+        SandboxMediator sandboxStageMediator = facade.retrieveMediator(SandboxMediator.NAME);
         UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
         uiStage = uiStageMediator.getViewComponent();
-        sandboxStage.setUIStage(uiStage);
+        //setUIStage(uiStage);
 
-        sceneControl = new SceneControlMediator(sandboxStage.sceneLoader, sandboxStage.essentials);
+        engine = new Engine();
+		SceneLoader sceneLoader = new SceneLoader(engine);
+        sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
         uac = new UserActionController(this);
@@ -140,6 +148,42 @@ public class Sandbox {
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         resourceManager = facade.retrieveProxy(ResourceManager.NAME);
     }
+    
+    public void initView() {
+        if (mainBox != null) mainBox.clear();
+        //TODO fix and uncomment
+//        clear();
+//        getCamera().position.set(0, 0, 0);
+
+        frontUI = new Group();
+
+        ui = new SandboxUI(this);
+        //TODO fix and uncomment
+        //addActor(ui);
+
+        selectionRec = new PixelRect(0, 0);
+        selectionRec.setFillColor(new Color(1, 1, 1, 0.1f));
+        selectionRec.setOpacity(0.0f);
+        selectionRec.setTouchable(Touchable.disabled);
+        frontUI.addActor(selectionRec);
+        
+        //TODO fix and uncomment
+        //addActor(mainBox);
+
+        //TODO fix and uncomment
+        //addActor(frontUI);
+
+    }
+    
+    public void setCursor(int cursor) {
+        //UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
+    }
+
+    public void setKeyboardFocus() {
+    	//TODO fix and uncomment
+        //setKeyboardFocus(mainBox);
+    }
+    
 
     /**
      * Getters *
@@ -147,10 +191,6 @@ public class Sandbox {
 
     public UserActionController getUac() {
         return uac;
-    }
-
-    public SandboxStage getSandboxStage() {
-        return sandboxStage;
     }
 
     public UIStage getUIStage() {
@@ -164,6 +204,10 @@ public class Sandbox {
     public SceneControlMediator getSceneControl() {
         return sceneControl;
     }
+    
+    public Engine getEngine() {
+        return engine;
+    }
 
 
     /**
@@ -174,7 +218,8 @@ public class Sandbox {
     public void initData(String sceneName) {
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
+      //TODO fix and uncomment
+        //sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
 
@@ -182,7 +227,8 @@ public class Sandbox {
     }
 
     public void loadCurrentProject(String name) {
-        sceneControl.getEssentials().rm = resourceManager;
+    	//TODO fix and uncomment
+        //sceneControl.getEssentials().rm = resourceManager;
         loadScene(name);
     }
 
@@ -196,7 +242,7 @@ public class Sandbox {
 //        uiStage.getCompositePanel().clearScenes();
         initData(sceneName);
 
-        sandboxStage.initView();
+        initView();
 //        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
         initSceneView(sceneControl.getRootSceneVO());
 //        sandboxInputAdapter.initSandboxEvents();
@@ -204,7 +250,8 @@ public class Sandbox {
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
-        sandboxStage.getCamera().position.set(0, 0, 0);
+      //TODO fix and uncomment
+        //sandboxStage.getCamera().position.set(0, 0, 0);
 
         facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
 
@@ -214,30 +261,33 @@ public class Sandbox {
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
-        initSceneView(sceneControl.initSceneView(compositeItemVO));
+    	//TODO fix and uncomment
+        //initSceneView(sceneControl.initSceneView(compositeItemVO));
     }
 
-    public void initSceneView(CompositeItem composite) {
-        selector.clearSelections();
-        sandboxStage.mainBox.clear();
-        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
-//        if (uiStage.getCompositePanel().isRootScene()) {
-//            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
-//        }
-
-        sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
-        sceneControl.getCurrentScene().setX(0);
-        sceneControl.getCurrentScene().setY(0);
-
-        //uiStage.getLayerPanel().initContent();
-        forceContinuousParticles(composite);
+    public void initSceneView(Entity composite) {
+    	//TODO fix and uncomment
+//        selector.clearSelections();
+//        sandboxStage.mainBox.clear();
+//        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
+////        if (uiStage.getCompositePanel().isRootScene()) {
+////            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
+////        }
+//
+//        sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
+//        sceneControl.getCurrentScene().setX(0);
+//        sceneControl.getCurrentScene().setY(0);
+//
+//        //uiStage.getLayerPanel().initContent();
+//        forceContinuousParticles(composite);
     }
 
     /**
      * if user is currently viewing a composite item, this will go one step up to previous composite in hierarchy
      */
     public void enterIntoPrevComposite() {
-        sandboxStage.getCamera().position.set(0, 0, 0);
+    	//TODO fix and uncomment
+        //sandboxStage.getCamera().position.set(0, 0, 0);
         facade.sendNotification(Overlap2D.OPENED_PREVIOUS_COMPOSITE);
 //        uiStage.getCompositePanel().stepUp();
 //        uiStage.getItemsBox().init();
@@ -248,18 +298,19 @@ public class Sandbox {
      * it will call enterIntoComposite with that time as parameter
      */
     public void enterIntoComposite() {
-        CompositeItem item = null;
-        sceneControl.getCurrentScene().updateDataVO();
-        if (selector.getCurrentSelection().size() == 1) {
-            for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-                if (value.getHost().isComposite()) {
-                    item = (CompositeItem) value.getHost();
-                }
-            }
-        }
-        if (item == null) return;
-        selector.clearSelections();
-        enterIntoComposite(item.getDataVO());
+    	//TODO fix and uncomment
+//        CompositeItem item = null;
+//        sceneControl.getCurrentScene().updateDataVO();
+//        if (selector.getCurrentSelection().size() == 1) {
+//            for (SelectionRectangle value : selector.getCurrentSelection().values()) {
+//                if (value.getHost().isComposite()) {
+//                    item = (CompositeItem) value.getHost();
+//                }
+//            }
+//        }
+//        if (item == null) return;
+//        selector.clearSelections();
+//        enterIntoComposite(item.getDataVO());
     }
 
     /**
@@ -269,7 +320,8 @@ public class Sandbox {
      */
     public void enterIntoComposite(CompositeItemVO compositeItemVO) {
         //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
-        sandboxStage.getCamera().position.set(0, 0, 0);
+    	//TODO fix and uncomment
+        //sandboxStage.getCamera().position.set(0, 0, 0);
         getSceneControl().disableAmbience(true);
 
         facade.sendNotification(Overlap2D.OPENED_COMPOSITE, compositeItemVO);
@@ -285,20 +337,21 @@ public class Sandbox {
      *
      * @param composite composite on screen with particles to be forced to be continuous
      */
-    private void forceContinuousParticles(CompositeItem composite) {
-        ArrayList<IBaseItem> asd = composite.getItems();
-        for (int i = 0; i < asd.size(); i++) {
-            IBaseItem item = asd.get(i);
-            if (item instanceof ParticleItem) {
-                ((ParticleItem) item).forceContinuous();
-                continue;
-            }
-            if (item instanceof CompositeItem) {
-                forceContinuousParticles((CompositeItem) item);
-            }
-
-        }
-    }
+  //TODO fix and uncomment
+//    private void forceContinuousParticles(CompositeItem composite) {
+//        ArrayList<IBaseItem> asd = composite.getItems();
+//        for (int i = 0; i < asd.size(); i++) {
+//            IBaseItem item = asd.get(i);
+//            if (item instanceof ParticleItem) {
+//                ((ParticleItem) item).forceContinuous();
+//                continue;
+//            }
+//            if (item instanceof CompositeItem) {
+//                forceContinuousParticles((CompositeItem) item);
+//            }
+//
+//        }
+//    }
 
     /**
      * Well... that's a bummer, I cannot remember why this was for. but the name speaks for itself sort of.
@@ -308,7 +361,8 @@ public class Sandbox {
      */
     public SceneVO sceneVoFromItems() {
         CompositeItemVO itemVo = sceneControl.getRootSceneVO();
-        itemFactory.cleanComposite(itemVo.composite);
+      //TODO fix and uncomment
+        //itemFactory.cleanComposite(itemVo.composite);
         sceneControl.getCurrentSceneVO().composite = itemVo.composite;
         return sceneControl.getCurrentSceneVO();
     }
@@ -326,9 +380,10 @@ public class Sandbox {
      * TODO: what does this do? seems to be saving as checkpoint of Flow? it so it should be renamed
      */
     public void saveSceneCurrentSceneData() {
-        sceneControl.getCurrentScene().updateDataVO();
-        flow.setPendingHistory(sceneControl.getCurrentScene().dataVO);
-        flow.applyPendingAction();
+    	//TODO fix and uncomment
+//        sceneControl.getCurrentScene().updateDataVO();
+//        flow.setPendingHistory(sceneControl.getCurrentScene().dataVO);
+//        flow.applyPendingAction();
     }
 
     public void setSceneAmbientColor(Color color, boolean showChange) {
@@ -336,7 +391,8 @@ public class Sandbox {
         sceneControl.getCurrentSceneVO().ambientColor[1] = color.g;
         sceneControl.getCurrentSceneVO().ambientColor[2] = color.b;
         sceneControl.getCurrentSceneVO().ambientColor[3] = color.a;
-        if (showChange) sceneControl.getEssentials().rayHandler.setAmbientLight(color);
+      //TODO fix and uncomment
+        //if (showChange) sceneControl.getEssentials().rayHandler.setAmbientLight(color);
     }
 
     public ItemSelector getSelector() {
@@ -355,13 +411,13 @@ public class Sandbox {
         return uiStage.getCurrentSelectedLayer();
     }
 
-    public void setCurrentlyTransforming(IBaseItem item, int transformType) {
+    public void setCurrentlyTransforming(Entity item, int transformType) {
         if (item == null || item.getClass().getSimpleName().equals("LabelItem")) return;
         currTransformType = transformType;
         currTransformHost = item;
     }
 
-    public CompositeItem getCurrentScene() {
+    public Entity getCurrentScene() {
         return sceneControl.getCurrentScene();
     }
 
@@ -374,28 +430,29 @@ public class Sandbox {
     public void prepareSelectionRectangle(float x, float y, boolean setOpacity) {
         // space is panning, so if we are not, then prepare the selection rectangle
         if (setOpacity) {
-            getSandboxStage().selectionRec.setOpacity(0.6f);
+            selectionRec.setOpacity(0.6f);
         }
-        getSandboxStage().selectionRec.setWidth(0);
-        getSandboxStage().selectionRec.setHeight(0);
-        getSandboxStage().selectionRec.setX(x);
-        getSandboxStage().selectionRec.setY(y);
+        selectionRec.setWidth(0);
+        selectionRec.setHeight(0);
+        selectionRec.setX(x);
+        selectionRec.setY(y);
     }
 
     public void selectionComplete() {
         // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
 
         // hiding selection rectangle
-        getSandboxStage().selectionRec.setOpacity(0.0f);
-        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-        Rectangle sR = getSandboxStage().selectionRec.getRect();
-        for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
-            Actor asActor = (Actor) getCurrentScene().getItems().get(i);
-            if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
-                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
-                curr.add(getCurrentScene().getItems().get(i));
-            }
-        }
+        selectionRec.setOpacity(0.0f);
+        ArrayList<Entity> curr = new ArrayList<Entity>();
+        Rectangle sR = selectionRec.getRect();
+      //TODO fix and uncomment
+//        for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
+//            Actor asActor = (Actor) getCurrentScene().getItems().get(i);
+//            if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
+//                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+//                curr.add(getCurrentScene().getItems().get(i));
+//            }
+//        }
 
         selector.setSelections(curr, true);
 
@@ -409,9 +466,10 @@ public class Sandbox {
     }
 
     public void setZoomPercent(float percent) {
-        zoomPercent = percent;
-        OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
-        camera.zoom = 1f / (zoomPercent / 100f);
+    	//TODO fix and uncomment
+//        zoomPercent = percent;
+//        OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
+//        camera.zoom = 1f / (zoomPercent / 100f);
     }
 
     public void zoomBy(float amount) {
@@ -448,24 +506,25 @@ public class Sandbox {
      * TODO: put this in different place, not sandbox specific
      * @param items
      */
-    public void putItemsToClipboard(ArrayList<IBaseItem> items) {
-        CompositeVO tempHolder = new CompositeVO();
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-        Actor actor = (Actor) items.get(0);
-        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
-        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
-        for (IBaseItem item : items) {
-            tempHolder.addItem(item.getDataVO());
-            actor = (Actor) item;
-            if (actor.getX() - cameraPos.x < vector3.x) {
-                vector3.x = actor.getX() - cameraPos.x;
-            }
-            if (actor.getY() - cameraPos.y < vector3.y) {
-                vector3.y = actor.getY() - cameraPos.y;
-            }
-        }
-        fakeClipboard = json.toJson(tempHolder);
-        copedItemCameraOffset = vector3;
+    public void putItemsToClipboard(ArrayList<Entity> items) {
+    	//TODO fix and uncomment
+//        CompositeVO tempHolder = new CompositeVO();
+//        Json json = new Json();
+//        json.setOutputType(JsonWriter.OutputType.json);
+//        Actor actor = (Actor) items.get(0);
+//        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
+//        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
+//        for (IBaseItem item : items) {
+//            tempHolder.addItem(item.getDataVO());
+//            actor = (Actor) item;
+//            if (actor.getX() - cameraPos.x < vector3.x) {
+//                vector3.x = actor.getX() - cameraPos.x;
+//            }
+//            if (actor.getY() - cameraPos.y < vector3.y) {
+//                vector3.y = actor.getY() - cameraPos.y;
+//            }
+//        }
+//        fakeClipboard = json.toJson(tempHolder);
+//        copedItemCameraOffset = vector3;
     }
 }

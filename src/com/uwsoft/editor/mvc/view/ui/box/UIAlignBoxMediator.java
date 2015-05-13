@@ -18,14 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
 import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.ItemSelector;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 /**
  * Created by sargis on 4/10/15.

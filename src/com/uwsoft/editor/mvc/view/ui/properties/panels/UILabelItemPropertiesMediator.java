@@ -1,11 +1,8 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
-import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 
 /**

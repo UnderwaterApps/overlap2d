@@ -50,8 +50,8 @@ import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 /**
  * Created by sargis on 4/20/15.
  */
-public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
-    private static final String TAG = SandboxStageMediator.class.getCanonicalName();
+public class SandboxMediator extends SimpleMediator<Sandbox> {
+    private static final String TAG = SandboxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
     private static final String PREFIX =  "com.uwsoft.editor.mvc.view.stage.SandboxStageMediator";
@@ -66,8 +66,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private HashMap<String, Tool> sandboxTools = new HashMap<>();
     private Tool currentSelectedTool;
 
-    public SandboxStageMediator() {
-        super(NAME, new SandboxStage());
+    public SandboxMediator() {
+        super(NAME, Sandbox.getInstance());
     }
 
     @Override
@@ -125,19 +125,23 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     }
 
     private void handleSceneLoaded(Notification notification) {
-        viewComponent.addListener(stageListener);
+    	//TODO fix and uncomment
+        //viewComponent.addListener(stageListener);
 
         Sandbox sandbox = Sandbox.getInstance();
-        ArrayList<Entity> items  = sandbox.getSceneControl().getCurrentScene().getItems();
-        for (int i = 0; i < items.size(); i++) {
-            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
-        }
+      //TODO fix and uncomment
+//        ArrayList<Entity> items  = sandbox.getSceneControl().getCurrentScene().getItems();
+//        for (int i = 0; i < items.size(); i++) {
+//            items.get(i).addListener(new SandboxItemEventListener(items.get(i)));
+//        }
 
         setCurrentTool(SelectionTool.NAME);
     }
 
     public Vector2 getStageCoordinates() {
-        return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+    	return new Vector2(); //temporary for not getting errors
+    	//TODO fix and uncomment
+        //return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
     private class SandboxItemEventListener extends ClickListener {
@@ -291,7 +295,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             // if space is pressed, that means we are going to pan, so set cursor accordingly
             // TODO: this pan is kinda different from what happens when you press middle button, so things need to merge right
             if (keycode == Input.Keys.SPACE) {
-                sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
+                sandbox.setCursor(Cursor.HAND_CURSOR);
                 toolHotSwap(sandboxTools.get(PanTool.NAME));
             }
 
@@ -315,7 +319,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             }
             if (keycode == Input.Keys.SPACE) {
                 // if pan mode is disabled set cursor back
-                sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
+                sandbox.setCursor(Cursor.DEFAULT_CURSOR);
                 toolHotSwapBack();
             }
 
@@ -331,8 +335,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
-            sandbox.getUIStage().setScrollFocus(sandbox.getSandboxStage().mainBox);
-            sandbox.getSandboxStage().setKeyboardFocus();
+            sandbox.getUIStage().setScrollFocus(sandbox.mainBox);
+            sandbox.setKeyboardFocus();
 
             // if there was a drop down remove it
             // TODO: this is job for front UI to figure out
@@ -382,7 +386,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             // if empty space is double clicked, then get back into previous composite
             // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
             sandbox.enterIntoPrevComposite();
-            sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
+            //TODO fix and uncomment
+            //sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
             sandbox.flow.applyPendingAction();
         }
 

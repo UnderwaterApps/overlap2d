@@ -23,7 +23,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -151,9 +150,9 @@ public class SelectionRectangle extends PixelRect {
 
     private Vector2 getMouseLocalCoordinates() {
         Vector2 vec = new Vector2();
-
-        vec.x = Gdx.input.getX() - (-sandbox.getSandboxStage().getCamera().position.x + sandbox.getSandboxStage().getWidth() / 2) - getX();
-        vec.y = (sandbox.getSandboxStage().getHeight() - Gdx.input.getY()) - (-sandbox.getSandboxStage().getCamera().position.y + sandbox.getSandboxStage().getHeight() / 2) - getY();
+//TODO fix and uncomment
+//        vec.x = Gdx.input.getX() - (-sandbox.getSandboxStage().getCamera().position.x + sandbox.getSandboxStage().getWidth() / 2) - getX();
+//        vec.y = (sandbox.getSandboxStage().getHeight() - Gdx.input.getY()) - (-sandbox.getSandboxStage().getCamera().position.y + sandbox.getSandboxStage().getHeight() / 2) - getY();
 
         return vec;
     }

@@ -22,10 +22,11 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.uwsoft.editor.gdx.actors.GridView;
 import com.uwsoft.editor.gdx.actors.ResolutionBounds;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 public class SandboxUI extends Group {
 
-    public SandboxUI(Stage s) {
+    public SandboxUI(Sandbox s) {
         GridView gridView = new GridView();
         addActor(gridView);
         ResolutionBounds resolutionBounds = new ResolutionBounds(s);

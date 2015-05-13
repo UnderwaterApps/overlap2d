@@ -35,7 +35,6 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.EntityFactory;
 import com.uwsoft.editor.renderer.conponents.MainItemComponent;
-import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";

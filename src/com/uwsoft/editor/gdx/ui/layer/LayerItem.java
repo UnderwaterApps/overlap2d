@@ -102,24 +102,25 @@ public class LayerItem extends Group {
     }
 
     public void initListeners() {
-        lock.addListener(new ClickListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                layerItemVo.isLocked = !layerItemVo.isLocked;
-                updateUI();
-                sandbox.getCurrentScene().reAssembleLayers();
-//                sandbox.getUIStage().getLayerPanel().initContent();
-            }
-        });
-        eye.addListener(new ClickListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                layerItemVo.isVisible = !layerItemVo.isVisible;
-                updateUI();
-                sandbox.getCurrentScene().reAssembleLayers();
-//                sandbox.getUIStage().getLayerPanel().initContent();
-            }
-        });
+    	//TODO fix and uncomment 
+//        lock.addListener(new ClickListener() {
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                super.touchUp(event, x, y, pointer, button);
+//                layerItemVo.isLocked = !layerItemVo.isLocked;
+//                updateUI();
+//                sandbox.getCurrentScene().reAssembleLayers();
+////                sandbox.getUIStage().getLayerPanel().initContent();
+//            }
+//        });
+//        eye.addListener(new ClickListener() {
+//            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+//                super.touchUp(event, x, y, pointer, button);
+//                layerItemVo.isVisible = !layerItemVo.isVisible;
+//                updateUI();
+//                sandbox.getCurrentScene().reAssembleLayers();
+////                sandbox.getUIStage().getLayerPanel().initContent();
+//            }
+//        });
     }
 
     public void showLayerRowSeparator() {

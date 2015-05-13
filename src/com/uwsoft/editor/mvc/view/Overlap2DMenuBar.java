@@ -24,7 +24,6 @@ import java.util.ArrayList;
 
 import org.apache.commons.lang3.SystemUtils;
 
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.Menu;

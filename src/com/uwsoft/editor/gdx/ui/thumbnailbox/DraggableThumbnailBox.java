@@ -28,8 +28,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.AssetPayloadObject;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
 
 /**
  * Created by azakhary on 7/3/2014.

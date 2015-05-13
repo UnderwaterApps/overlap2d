@@ -30,7 +30,6 @@ import com.badlogic.gdx.graphics.GL20;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
@@ -53,7 +52,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
 
     public Overlap2DScreen() {
         facade = Overlap2DFacade.getInstance();
-        engine = new Engine();
     }
 
     @Override
@@ -190,7 +188,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         return false;
     }
 
-	public Engine getEngine() {
-		return engine;
+	public void setEngine(Engine engine) {
+		this.engine = engine;
 	}
 }

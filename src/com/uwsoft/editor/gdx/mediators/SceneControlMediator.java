@@ -68,7 +68,7 @@ public class SceneControlMediator {
 
 	private boolean isLightsEnabled = false;
 
-	public SceneControlMediator(SceneLoader sceneLoader, Essentials essentials) {
+	public SceneControlMediator(SceneLoader sceneLoader) {
 		this.sceneLoader = sceneLoader;
 		// this.essentials = essentials;
 		facade = Overlap2DFacade.getInstance();
@@ -76,11 +76,6 @@ public class SceneControlMediator {
 	}
 
 	public void initScene(String sceneName) {
-		Overlap2DScreenMediator screenMediator = facade
-				.retrieveMediator(Overlap2DScreenMediator.NAME);
-		Engine engine = screenMediator.getViewComponent().getEngine();
-		sceneLoader = new SceneLoader(engine);
-
 		ResolutionManager resolutionManager = facade
 				.retrieveProxy(ResolutionManager.NAME);
 		// TODO: Resolution

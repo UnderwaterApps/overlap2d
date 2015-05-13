@@ -31,16 +31,6 @@ import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor.EditMode;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.actor.CheckBoxItem;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.ImageItem;
-import com.uwsoft.editor.renderer.actor.ParticleItem;
-import com.uwsoft.editor.renderer.actor.SelectBoxItem;
-import com.uwsoft.editor.renderer.actor.SpineActor;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
-import com.uwsoft.editor.renderer.actor.TextBoxItem;
-import com.uwsoft.editor.renderer.actor.TextButtonItem;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.Essentials;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
@@ -55,33 +45,34 @@ public class ItemPhysicsDialog extends SimpleDialog {
     private Group controlPanel;
     private Group propertyPanel;
     private ItemPhysicsEditor itemPhysicsEditor;
-    private TextBoxItem massVal;
-    private TextBoxItem centerOfMassXVal;
-    private TextBoxItem centerOfMassYVal;
-    private TextBoxItem rotationalInertiaVal;
-    private TextBoxItem dampingVal;
-    private TextBoxItem gravityVal;
-    private CheckBoxItem allowSleepVal;
-    private CheckBoxItem awakeVal;
-    private CheckBoxItem bulletVal;
-    private SelectBoxItem<Polygonizer> polygonizerVal;
-    private SelectBoxItem<String> bodyTypeVal;
-    private TextBoxItem hullToleranceVal;
-    private TextBoxItem alphaToleranceVal;
-    private CheckBoxItem multiPartDetectionVal;
-    private CheckBoxItem holeDetectionVal;
-    private float dialogStartPositionX;
-    private float dialogStartPositionY;
-    private TextButtonItem btnSave;
-    private TextButtonItem btnRetrace;
-    private TextBoxItem densityVal;
-    private TextBoxItem frictionVal;
-    private TextBoxItem restitutionVal;
-
-    private TextButtonItem dupliacteBtn;
-    private TextButtonItem clearBtn;
-    private TextButtonItem btnEdit;
-    private TextButtonItem btnTest;
+  //TODO fix and uncomment 
+//    private TextBoxItem massVal;
+//    private TextBoxItem centerOfMassXVal;
+//    private TextBoxItem centerOfMassYVal;
+//    private TextBoxItem rotationalInertiaVal;
+//    private TextBoxItem dampingVal;
+//    private TextBoxItem gravityVal;
+//    private CheckBoxItem allowSleepVal;
+//    private CheckBoxItem awakeVal;
+//    private CheckBoxItem bulletVal;
+//    private SelectBoxItem<Polygonizer> polygonizerVal;
+//    private SelectBoxItem<String> bodyTypeVal;
+//    private TextBoxItem hullToleranceVal;
+//    private TextBoxItem alphaToleranceVal;
+//    private CheckBoxItem multiPartDetectionVal;
+//    private CheckBoxItem holeDetectionVal;
+//    private float dialogStartPositionX;
+//    private float dialogStartPositionY;
+//    private TextButtonItem btnSave;
+//    private TextButtonItem btnRetrace;
+//    private TextBoxItem densityVal;
+//    private TextBoxItem frictionVal;
+//    private TextBoxItem restitutionVal;
+//
+//    private TextButtonItem dupliacteBtn;
+//    private TextButtonItem clearBtn;
+//    private TextButtonItem btnEdit;
+//    private TextButtonItem btnTest;
 
     public ItemPhysicsDialog(UIStage s) {
         super(s, Gdx.graphics.getWidth() * .8f, Gdx.graphics.getHeight() * .8f);
@@ -90,8 +81,9 @@ public class ItemPhysicsDialog extends SimpleDialog {
 
         setX((stage.getWidth() - getWidth()) / 2);
         setY((stage.getHeight() - getHeight()) / 2);
-        dialogStartPositionX = getX();
-        dialogStartPositionY = getY();
+      //TODO fix and uncomment 
+//        dialogStartPositionX = getX();
+//        dialogStartPositionY = getY();
         buildUI();
         updateValues();
     }
@@ -122,208 +114,209 @@ public class ItemPhysicsDialog extends SimpleDialog {
     @SuppressWarnings("unchecked")
     private void buildPropertyPanel() {
         propertyPanel = new Group();
-
-        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsProperties");
-        compositeItem.setX(6);
-        compositeItem.setY(getHeight() - compositeItem.getHeight() - 25);
-        //item property
-        mainLayer.addActor(propertyPanel);
-
-        propertyPanel.addActor(compositeItem);
-        propertyPanel.setWidth(compositeItem.getWidth() + 10);
-        propertyPanel.setHeight(compositeItem.getHeight());
-        massVal = compositeItem.getTextBoxById("massVal");
-
-
-        compositeItem.getLabelById("meshNoticeLbl").setText("clear does not clone mesh");
-
-        centerOfMassXVal = compositeItem.getTextBoxById("centerOfMassXVal");
-
-        centerOfMassYVal = compositeItem.getTextBoxById("centerOfMassYVal");
-
-        rotationalInertiaVal = compositeItem.getTextBoxById("rotationalInertiaVal");
-
-        dampingVal = compositeItem.getTextBoxById("dampingVal");
-
-        gravityVal = compositeItem.getTextBoxById("gravityScaleVal");
-
-        clearBtn = compositeItem.getTextButtonById("clearBtn");
-        dupliacteBtn = compositeItem.getTextButtonById("dupliacteBtn");
-
-
-        //
-        densityVal = compositeItem.getTextBoxById("densityVal");
-
-
-        frictionVal = compositeItem.getTextBoxById("frictionVal");
-
-
-        restitutionVal = compositeItem.getTextBoxById("restitutionVal");
-
-
-        allowSleepVal = compositeItem.getCheckBoxById("allowSleepVal");
-
-        awakeVal = compositeItem.getCheckBoxById("awakeVal");
-
-        bulletVal = compositeItem.getCheckBoxById("bulletVal");
-
-
-        btnSave = compositeItem.getTextButtonById("btnSave");
-        //
-        bodyTypeVal = compositeItem.getSelectBoxById("bodyTypeVal");
-        bodyTypeVal.setWidth(100);
-        bodyTypeVal.setItems("STATIC", "KINEMATIC", "DYNAMIC");
-
-
-        polygonizerVal = compositeItem.getSelectBoxById("polygonizerVal");
-        polygonizerVal.setWidth(100);
-        polygonizerVal.setItems(Polygonizer.BAYAZIT, Polygonizer.EWJORDAN);
-
-
-        hullToleranceVal = compositeItem.getTextBoxById("hullToleranceVal");
-
-        alphaToleranceVal = compositeItem.getTextBoxById("alphaToleranceVal");
-
-        multiPartDetectionVal = compositeItem.getCheckBoxById("multiPartDetectionVal");
-
-        holeDetectionVal = compositeItem.getCheckBoxById("holeDetectionVal");
-
-        btnRetrace = compositeItem.getTextButtonById("btnRetrace");
+      //TODO fix and uncomment 
+//        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsProperties");
+//        compositeItem.setX(6);
+//        compositeItem.setY(getHeight() - compositeItem.getHeight() - 25);
+//        //item property
+//        mainLayer.addActor(propertyPanel);
+//
+//        propertyPanel.addActor(compositeItem);
+//        propertyPanel.setWidth(compositeItem.getWidth() + 10);
+//        propertyPanel.setHeight(compositeItem.getHeight());
+//        massVal = compositeItem.getTextBoxById("massVal");
+//
+//
+//        compositeItem.getLabelById("meshNoticeLbl").setText("clear does not clone mesh");
+//
+//        centerOfMassXVal = compositeItem.getTextBoxById("centerOfMassXVal");
+//
+//        centerOfMassYVal = compositeItem.getTextBoxById("centerOfMassYVal");
+//
+//        rotationalInertiaVal = compositeItem.getTextBoxById("rotationalInertiaVal");
+//
+//        dampingVal = compositeItem.getTextBoxById("dampingVal");
+//
+//        gravityVal = compositeItem.getTextBoxById("gravityScaleVal");
+//
+//        clearBtn = compositeItem.getTextButtonById("clearBtn");
+//        dupliacteBtn = compositeItem.getTextButtonById("dupliacteBtn");
+//
+//
+//        //
+//        densityVal = compositeItem.getTextBoxById("densityVal");
+//
+//
+//        frictionVal = compositeItem.getTextBoxById("frictionVal");
+//
+//
+//        restitutionVal = compositeItem.getTextBoxById("restitutionVal");
+//
+//
+//        allowSleepVal = compositeItem.getCheckBoxById("allowSleepVal");
+//
+//        awakeVal = compositeItem.getCheckBoxById("awakeVal");
+//
+//        bulletVal = compositeItem.getCheckBoxById("bulletVal");
+//
+//
+//        btnSave = compositeItem.getTextButtonById("btnSave");
+//        //
+//        bodyTypeVal = compositeItem.getSelectBoxById("bodyTypeVal");
+//        bodyTypeVal.setWidth(100);
+//        bodyTypeVal.setItems("STATIC", "KINEMATIC", "DYNAMIC");
+//
+//
+//        polygonizerVal = compositeItem.getSelectBoxById("polygonizerVal");
+//        polygonizerVal.setWidth(100);
+//        polygonizerVal.setItems(Polygonizer.BAYAZIT, Polygonizer.EWJORDAN);
+//
+//
+//        hullToleranceVal = compositeItem.getTextBoxById("hullToleranceVal");
+//
+//        alphaToleranceVal = compositeItem.getTextBoxById("alphaToleranceVal");
+//
+//        multiPartDetectionVal = compositeItem.getCheckBoxById("multiPartDetectionVal");
+//
+//        holeDetectionVal = compositeItem.getCheckBoxById("holeDetectionVal");
+//
+//        btnRetrace = compositeItem.getTextButtonById("btnRetrace");
         setListeners();
 
     }
 
 
     public void updateValues() {
-
-        bodyTypeVal.setSelectedIndex(itemPhysicsEditor.physicsBodyDataVO.bodyType);
-
-        massVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.mass));
-        centerOfMassXVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.x));
-        centerOfMassYVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.y));
-        rotationalInertiaVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.rotationalInertia));
-        dampingVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.damping));
-        gravityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.gravityScale));
-        densityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.density));
-        frictionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.friction));
-        restitutionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.restitution));
-        allowSleepVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.allowSleep);
-        awakeVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.awake);
-        bulletVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.bullet);
-        polygonizerVal.setSelectedIndex(0);
-        hullToleranceVal.setText(String.valueOf(2.5f));
-        alphaToleranceVal.setText(String.valueOf(128));
-        multiPartDetectionVal.setChecked(false);
-        holeDetectionVal.setChecked(false);
+    	//TODO fix and uncomment 
+//        bodyTypeVal.setSelectedIndex(itemPhysicsEditor.physicsBodyDataVO.bodyType);
+//
+//        massVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.mass));
+//        centerOfMassXVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.x));
+//        centerOfMassYVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.centerOfMass.y));
+//        rotationalInertiaVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.rotationalInertia));
+//        dampingVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.damping));
+//        gravityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.gravityScale));
+//        densityVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.density));
+//        frictionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.friction));
+//        restitutionVal.setText(String.valueOf(itemPhysicsEditor.physicsBodyDataVO.restitution));
+//        allowSleepVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.allowSleep);
+//        awakeVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.awake);
+//        bulletVal.setChecked(itemPhysicsEditor.physicsBodyDataVO.bullet);
+//        polygonizerVal.setSelectedIndex(0);
+//        hullToleranceVal.setText(String.valueOf(2.5f));
+//        alphaToleranceVal.setText(String.valueOf(128));
+//        multiPartDetectionVal.setChecked(false);
+//        holeDetectionVal.setChecked(false);
     }
 
     private void dataCollect() {
-
-        if (bodyTypeVal.getSelected().equals("STATIC")) {
-            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.StaticBody.getValue();
-        } else if (bodyTypeVal.getSelected().equals("KINEMATIC")) {
-            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.KinematicBody.getValue();
-        } else {
-            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.DynamicBody.getValue();
-        }
-
-        itemPhysicsEditor.physicsBodyDataVO.mass = Float.parseFloat(massVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.centerOfMass.x = Float.parseFloat(centerOfMassXVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.centerOfMass.y = Float.parseFloat(centerOfMassYVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.rotationalInertia = Float.parseFloat(rotationalInertiaVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.damping = Float.parseFloat(dampingVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.gravityScale = Float.parseFloat(gravityVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.density = Float.parseFloat(densityVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.friction = Float.parseFloat(frictionVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.restitution = Float.parseFloat(restitutionVal.getText());
-        itemPhysicsEditor.physicsBodyDataVO.allowSleep = !itemPhysicsEditor.physicsBodyDataVO.allowSleep;
-        itemPhysicsEditor.physicsBodyDataVO.awake = !itemPhysicsEditor.physicsBodyDataVO.awake;
-        itemPhysicsEditor.physicsBodyDataVO.bullet = !itemPhysicsEditor.physicsBodyDataVO.bullet;
+    	//TODO fix and uncomment 
+//        if (bodyTypeVal.getSelected().equals("STATIC")) {
+//            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.StaticBody.getValue();
+//        } else if (bodyTypeVal.getSelected().equals("KINEMATIC")) {
+//            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.KinematicBody.getValue();
+//        } else {
+//            itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.DynamicBody.getValue();
+//        }
+//
+//        itemPhysicsEditor.physicsBodyDataVO.mass = Float.parseFloat(massVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.centerOfMass.x = Float.parseFloat(centerOfMassXVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.centerOfMass.y = Float.parseFloat(centerOfMassYVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.rotationalInertia = Float.parseFloat(rotationalInertiaVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.damping = Float.parseFloat(dampingVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.gravityScale = Float.parseFloat(gravityVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.density = Float.parseFloat(densityVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.friction = Float.parseFloat(frictionVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.restitution = Float.parseFloat(restitutionVal.getText());
+//        itemPhysicsEditor.physicsBodyDataVO.allowSleep = !itemPhysicsEditor.physicsBodyDataVO.allowSleep;
+//        itemPhysicsEditor.physicsBodyDataVO.awake = !itemPhysicsEditor.physicsBodyDataVO.awake;
+//        itemPhysicsEditor.physicsBodyDataVO.bullet = !itemPhysicsEditor.physicsBodyDataVO.bullet;
     }
 
     private void setListeners() {
-
-        btnSave.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                dataCollect();
-                itemPhysicsEditor.save();
-                super.clicked(event, x, y);
-            }
-        });
-
-        btnRetrace.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                itemPhysicsEditor.reTrace();
-                super.clicked(event, x, y);
-            }
-        });
-
-        clearBtn.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                itemPhysicsEditor.clearMesh();
-                super.clicked(event, x, y);
-            }
-        });
-
-        dupliacteBtn.addListener(new ClickListener() {
-
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                itemPhysicsEditor.duplicateMesh();
-                super.clicked(event, x, y);
-            }
-        });
-
-        btnTest.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (itemPhysicsEditor.currentMode == EditMode.Test || !btnEdit.isChecked()) {
-                    btnTest.setChecked(true);
-                    return;
-                }
-                btnEdit.setChecked(false);
-                itemPhysicsEditor.startTest();
-            }
-        });
-
-        btnEdit.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                if (!btnTest.isChecked()) {
-                    btnEdit.setChecked(true);
-                    return;
-                }
-                btnTest.setChecked(false);
-                itemPhysicsEditor.endTest();
-            }
-        });
+    	//TODO fix and uncomment 
+//        btnSave.addListener(new ClickListener() {
+//
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                dataCollect();
+//                itemPhysicsEditor.save();
+//                super.clicked(event, x, y);
+//            }
+//        });
+//
+//        btnRetrace.addListener(new ClickListener() {
+//
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                itemPhysicsEditor.reTrace();
+//                super.clicked(event, x, y);
+//            }
+//        });
+//
+//        clearBtn.addListener(new ClickListener() {
+//
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                itemPhysicsEditor.clearMesh();
+//                super.clicked(event, x, y);
+//            }
+//        });
+//
+//        dupliacteBtn.addListener(new ClickListener() {
+//
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                itemPhysicsEditor.duplicateMesh();
+//                super.clicked(event, x, y);
+//            }
+//        });
+//
+//        btnTest.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                if (itemPhysicsEditor.currentMode == EditMode.Test || !btnEdit.isChecked()) {
+//                    btnTest.setChecked(true);
+//                    return;
+//                }
+//                btnEdit.setChecked(false);
+//                itemPhysicsEditor.startTest();
+//            }
+//        });
+//
+//        btnEdit.addListener(new ClickListener() {
+//            @Override
+//            public void clicked(InputEvent event, float x, float y) {
+//                if (!btnTest.isChecked()) {
+//                    btnEdit.setChecked(true);
+//                    return;
+//                }
+//                btnTest.setChecked(false);
+//                itemPhysicsEditor.endTest();
+//            }
+//        });
 
     }
 
     private void buildControlPanel() {
         controlPanel = new Group();
-        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsToolbar");
-        btnEdit = compositeItem.getTextButtonById("btnEdit");
-        btnTest = compositeItem.getTextButtonById("btnTest");
-        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(btnTest.getStyle());
-        textButtonStyle.checked = textButtonStyle.down;
-        btnEdit.setStyle(textButtonStyle);
-        btnTest.setStyle(textButtonStyle);
-        btnEdit.setChecked(true);
-        compositeItem.setX(0);
-        compositeItem.setY(0);
-        controlPanel.addActor(compositeItem);
-        controlPanel.setWidth(compositeItem.getWidth());
-        controlPanel.setHeight(compositeItem.getHeight());
-
-        controlPanel.setX(220);
-        controlPanel.setY(getHeight() - controlPanel.getHeight() - 30);
+      //TODO fix and uncomment 
+//        CompositeItem compositeItem = null;//stage.sceneLoader.getCompositeElementById("physicsToolbar");
+//        btnEdit = compositeItem.getTextButtonById("btnEdit");
+//        btnTest = compositeItem.getTextButtonById("btnTest");
+//        TextButton.TextButtonStyle textButtonStyle = new TextButton.TextButtonStyle(btnTest.getStyle());
+//        textButtonStyle.checked = textButtonStyle.down;
+//        btnEdit.setStyle(textButtonStyle);
+//        btnTest.setStyle(textButtonStyle);
+//        btnEdit.setChecked(true);
+//        compositeItem.setX(0);
+//        compositeItem.setY(0);
+//        controlPanel.addActor(compositeItem);
+//        controlPanel.setWidth(compositeItem.getWidth());
+//        controlPanel.setHeight(compositeItem.getHeight());
+//
+//        controlPanel.setX(220);
+//        controlPanel.setY(getHeight() - controlPanel.getHeight() - 30);
     }
 
 //    private Button crateButton(String img) {
@@ -336,75 +329,77 @@ public class ItemPhysicsDialog extends SimpleDialog {
 
     @Override
     public void act(float delta) {
-        float diffX = dialogStartPositionX - getX();
-        float diffY = dialogStartPositionY - getY();
-        if (diffX != 0 || diffY != 0) {
-            itemPhysicsEditor.moveRenderer(diffX, diffY);
-            dialogStartPositionX = getX();
-            dialogStartPositionY = getY();
-        }
+    	//TODO fix and uncomment 
+//        float diffX = dialogStartPositionX - getX();
+//        float diffY = dialogStartPositionY - getY();
+//        if (diffX != 0 || diffY != 0) {
+//            itemPhysicsEditor.moveRenderer(diffX, diffY);
+//            dialogStartPositionX = getX();
+//            dialogStartPositionY = getY();
+//        }
         super.act(delta);
     }
 
     public void editAsset(String assetName) {
         itemPhysicsEditor.editAsset(assetName);
         updateValues();
-
-        dupliacteBtn.setVisible(false);
-        dupliacteBtn.setTouchable(Touchable.disabled);
+      //TODO fix and uncomment 
+//        dupliacteBtn.setVisible(false);
+//        dupliacteBtn.setTouchable(Touchable.disabled);
     }
 
     public void editItem(Entity item) {
     	//TODO by entity
-        MainItemVO data = item.getDataVO();
-        String className = data.getClass().getSimpleName();
-
-        itemPhysicsEditor.originalItem = item;
-
-        dupliacteBtn.setVisible(true);
-        dupliacteBtn.setTouchable(Touchable.enabled);
-
-        IBaseItem itemCopy = null;
-        Essentials essentials = stage.sandboxStage.essentials;
-
-        if (className.equals("SimpleImageVO")) {
-            itemCopy = new ImageItem((SimpleImageVO) data, essentials);
-        }
-        if (className.equals("Image9patchVO")) {
-            return;
-        }
-        if (className.equals("TextBoxVO")) {
-            return;
-        }
-        if (className.equals("ButtonVO")) {
-            return;
-        }
-        if (className.equals("LabelVO")) {
-            return;
-        }
-        if (className.equals("CompositeItemVO")) {
-            itemCopy = new CompositeItem((CompositeItemVO) data, stage.sandboxStage.essentials);
-        }
-        if (className.equals("CheckBoxVO")) {
-            return;
-        }
-        if (className.equals("SelectBoxVO")) {
-            return;
-        }
-        if (className.equals("ParticleEffectVO")) {
-            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
-        }
-        if (className.equals("LightVO")) {
-            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
-        }
-        if (className.equals("SpineVO")) {
-            itemCopy = new SpineActor((SpineVO) data, stage.sandboxStage.essentials);
-        }
-        if (className.equals("SpriteAnimationVO")) {
-            itemCopy = new SpriteAnimation((SpriteAnimationVO) data, stage.sandboxStage.essentials);
-        }
-
-        itemPhysicsEditor.editItem(itemCopy);
+    	//TODO fix and uncomment 
+//        MainItemVO data = item.getDataVO();
+//        String className = data.getClass().getSimpleName();
+//
+//        itemPhysicsEditor.originalItem = item;
+//
+//        dupliacteBtn.setVisible(true);
+//        dupliacteBtn.setTouchable(Touchable.enabled);
+//
+//        IBaseItem itemCopy = null;
+//        Essentials essentials = stage.sandboxStage.essentials;
+//
+//        if (className.equals("SimpleImageVO")) {
+//            itemCopy = new ImageItem((SimpleImageVO) data, essentials);
+//        }
+//        if (className.equals("Image9patchVO")) {
+//            return;
+//        }
+//        if (className.equals("TextBoxVO")) {
+//            return;
+//        }
+//        if (className.equals("ButtonVO")) {
+//            return;
+//        }
+//        if (className.equals("LabelVO")) {
+//            return;
+//        }
+//        if (className.equals("CompositeItemVO")) {
+//            itemCopy = new CompositeItem((CompositeItemVO) data, stage.sandboxStage.essentials);
+//        }
+//        if (className.equals("CheckBoxVO")) {
+//            return;
+//        }
+//        if (className.equals("SelectBoxVO")) {
+//            return;
+//        }
+//        if (className.equals("ParticleEffectVO")) {
+//            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
+//        }
+//        if (className.equals("LightVO")) {
+//            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
+//        }
+//        if (className.equals("SpineVO")) {
+//            itemCopy = new SpineActor((SpineVO) data, stage.sandboxStage.essentials);
+//        }
+//        if (className.equals("SpriteAnimationVO")) {
+//            itemCopy = new SpriteAnimation((SpriteAnimationVO) data, stage.sandboxStage.essentials);
+//        }
+//
+//        itemPhysicsEditor.editItem(itemCopy);
         updateValues();
     }
 

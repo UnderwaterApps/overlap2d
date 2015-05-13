@@ -26,7 +26,6 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 

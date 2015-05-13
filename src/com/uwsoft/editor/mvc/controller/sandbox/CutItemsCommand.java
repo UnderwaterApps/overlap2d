@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.ArrayList;
-
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 

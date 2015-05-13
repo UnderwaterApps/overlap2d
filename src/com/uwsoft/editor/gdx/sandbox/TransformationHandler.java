@@ -18,11 +18,8 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 
 /**
  * Provides logic for item size/scale/rotation visual transformation by dragging from selection rectangle corners

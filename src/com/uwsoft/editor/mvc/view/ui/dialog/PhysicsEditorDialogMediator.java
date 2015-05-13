@@ -29,13 +29,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.UIDropDownMenu;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
-import com.uwsoft.editor.renderer.legacy.data.SpineVO;
-import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 
 /**
  * Created by azakhary on 4/28/2015.

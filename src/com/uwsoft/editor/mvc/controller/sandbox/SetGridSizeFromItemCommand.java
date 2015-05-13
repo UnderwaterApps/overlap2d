@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
