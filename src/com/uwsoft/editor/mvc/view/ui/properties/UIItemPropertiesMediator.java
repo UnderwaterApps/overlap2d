@@ -51,7 +51,7 @@ public abstract class UIItemPropertiesMediator<T extends IBaseItem, V extends UI
         }
     }
 
-    private void afterItemDataModified() {
+    protected void afterItemDataModified() {
         observableReference.renew();
 
         Sandbox.getInstance().getSelector().updateSelections();

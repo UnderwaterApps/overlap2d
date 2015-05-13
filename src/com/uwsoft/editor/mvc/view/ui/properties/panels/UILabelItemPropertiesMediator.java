@@ -1,5 +1,6 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
@@ -40,5 +41,14 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
         resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
 
         observableReference.setStyle(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+    }
+
+    @Override
+    protected void afterItemDataModified() {
+        observableReference.setWrap(false);
+        observableReference.renew();
+        observableReference.pack();
+        Sandbox.getInstance().getSelector().updateSelections();
+        Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }
