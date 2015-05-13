@@ -35,7 +35,7 @@ public class UICompositeItemProperties extends UIItemCollapsibleProperties {
     public UICompositeItemProperties() {
         super("Composite");
         scissorsEnabledCheckBox = new VisCheckBox(null);
-        mainTable.add(new VisLabel("Scissors Enabled", Align.right)).padRight(5).width(55).right();
+        mainTable.add(createLabel("Scissors Enabled", Align.right)).padRight(5).width(120).right();
         mainTable.add(scissorsEnabledCheckBox).left();
         setListeners();
     }

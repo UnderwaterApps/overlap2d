@@ -47,7 +47,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
 
         itemTypeMap.put(CompositeItem.class.getName(), UIBasicItemProperties.ItemType.composite);
         itemTypeMap.put(ImageItem.class.getName(), UIBasicItemProperties.ItemType.texture);
-        itemTypeMap.put(ParticleActor.class.getName(), UIBasicItemProperties.ItemType.particle);
+        itemTypeMap.put(ParticleItem.class.getName(), UIBasicItemProperties.ItemType.particle);
         itemTypeMap.put(LabelItem.class.getName(), UIBasicItemProperties.ItemType.text);
         itemTypeMap.put(SpriteAnimation.class.getName(), UIBasicItemProperties.ItemType.spriteAnimation);
         itemTypeMap.put(SpriterActor.class.getName(), UIBasicItemProperties.ItemType.spriterAnimation);

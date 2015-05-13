@@ -50,11 +50,11 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
         animationsSelectBox = new VisSelectBox<>();
         editAnimationsButton = new VisTextButton("Edit animations");
 
-        mainTable.add(new VisLabel("FPS:", Align.right)).padRight(5).fillX();
+        mainTable.add(createLabel("FPS:", Align.right)).padRight(5).fillX();
         mainTable.add(fpsSelector).width(50).left();
         mainTable.row().padTop(5);
 
-        mainTable.add(new VisLabel("Animations:", Align.right)).padRight(5).fillX();
+        mainTable.add(createLabel("Animations:", Align.right)).padRight(5).fillX();
         mainTable.add(animationsSelectBox).width(120);
         mainTable.row().padTop(5);
         mainTable.add(editAnimationsButton).right().colspan(2);

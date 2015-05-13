@@ -40,16 +40,16 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
 
         fontFamilySelectBox.setMaxListCount(10);
 
-        mainTable.add(new VisLabel("Font Family", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Font Family", Align.right)).padRight(5).width(50).left();
         mainTable.add(fontFamilySelectBox).width(90).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Bold", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Bold", Align.right)).padRight(5).width(50).left();
         mainTable.add(boldCheckBox).width(55).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Italic", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Italic", Align.right)).padRight(5).width(50).left();
         mainTable.add(italicCheckBox).width(55).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Font Size", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Font Size", Align.right)).padRight(5).width(50).left();
         mainTable.add(fontSizeField).width(55).padRight(5);
         setListeners();
     }

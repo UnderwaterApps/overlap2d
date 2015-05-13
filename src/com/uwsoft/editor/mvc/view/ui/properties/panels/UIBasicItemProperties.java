@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
@@ -47,7 +46,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     public static final String CUSTOM_VARS_BUTTON_CLICKED = PREFIX + ".CUSTOM_VARS_BUTTON_CLICKED";
 
     public enum ItemType {
-        group,
+        multiple,
         composite,
         texture,
         spriteAnimation,
@@ -270,7 +269,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     }
 
     private void initMaps() {
-        itemTypeNameMap.put(ItemType.group, "Multiple Selection");
+        itemTypeNameMap.put(ItemType.multiple, "Multiple Selection");
         itemTypeNameMap.put(ItemType.composite, "Composite item");
         itemTypeNameMap.put(ItemType.particle, "Particle Effect");
         itemTypeNameMap.put(ItemType.text, "Text");
@@ -280,14 +279,14 @@ public class UIBasicItemProperties extends UIItemProperties {
         itemTypeNameMap.put(ItemType.spriteAnimation, "Sprite Animation");
         itemTypeNameMap.put(ItemType.spriterAnimation, "Spriter Animation");
 
-        itemTypeIconMap.put(ItemType.group, "icon-library");
-        itemTypeIconMap.put(ItemType.composite, "icon-library");
-        itemTypeIconMap.put(ItemType.particle, "icon-library");
-        itemTypeIconMap.put(ItemType.text, "icon-library");
-        itemTypeIconMap.put(ItemType.texture, "icon-library");
-        itemTypeIconMap.put(ItemType.light, "icon-library");
-        itemTypeIconMap.put(ItemType.spineAnimation, "icon-library");
-        itemTypeIconMap.put(ItemType.spriteAnimation, "icon-library");
-        itemTypeIconMap.put(ItemType.spriterAnimation, "icon-library");
+        itemTypeIconMap.put(ItemType.multiple, "icon-multiple");
+        itemTypeIconMap.put(ItemType.composite, "icon-composite");
+        itemTypeIconMap.put(ItemType.particle, "icon-particle-white");
+        itemTypeIconMap.put(ItemType.text, "icon-label");
+        itemTypeIconMap.put(ItemType.texture, "icon-image");
+        itemTypeIconMap.put(ItemType.light, "icon-particle-white");
+        itemTypeIconMap.put(ItemType.spineAnimation, "icon-animation");
+        itemTypeIconMap.put(ItemType.spriteAnimation, "icon-animation");
+        itemTypeIconMap.put(ItemType.spriterAnimation, "icon-animation");
     }
 }

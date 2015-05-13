@@ -92,10 +92,10 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     public void initConeFields() {
         secondaryTable.clear();
 
-        secondaryTable.add(new VisLabel("Distance: ", Align.right)).padRight(5).width(55).right();
+        secondaryTable.add(createLabel("Distance: ", Align.right)).padRight(5).fillX().right();
         secondaryTable.add(coneDistanceField).width(70).left();
         secondaryTable.row().padTop(5);
-        secondaryTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
+        secondaryTable.add(createLabel("Type: ", Align.right)).padRight(5).fillX().right();
         secondaryTable.add(coneInnerAngleField).width(70).left();
         secondaryTable.row().padTop(5);
     }
