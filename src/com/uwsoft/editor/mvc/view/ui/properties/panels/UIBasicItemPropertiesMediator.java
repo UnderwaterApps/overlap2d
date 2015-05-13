@@ -52,6 +52,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
         itemTypeMap.put(SpriteAnimation.class.getName(), UIBasicItemProperties.ItemType.spriteAnimation);
         itemTypeMap.put(SpriterActor.class.getName(), UIBasicItemProperties.ItemType.spriterAnimation);
         itemTypeMap.put(SpineActor.class.getName(), UIBasicItemProperties.ItemType.spineAnimation);
+        itemTypeMap.put(LightActor.class.getName(), UIBasicItemProperties.ItemType.light);
     }
 
     @Override

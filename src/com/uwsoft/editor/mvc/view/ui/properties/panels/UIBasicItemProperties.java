@@ -54,7 +54,8 @@ public class UIBasicItemProperties extends UIItemProperties {
         spineAnimation,
         spriterAnimation,
         particle,
-        text
+        text,
+        light
     }
 
     private HashMap<ItemType, String> itemTypeIconMap = new HashMap<>();
@@ -274,6 +275,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         itemTypeNameMap.put(ItemType.particle, "Particle Effect");
         itemTypeNameMap.put(ItemType.text, "Text");
         itemTypeNameMap.put(ItemType.texture, "Texture");
+        itemTypeNameMap.put(ItemType.light, "Light");
         itemTypeNameMap.put(ItemType.spineAnimation, "Spine animation");
         itemTypeNameMap.put(ItemType.spriteAnimation, "Sprite Animation");
         itemTypeNameMap.put(ItemType.spriterAnimation, "Spriter Animation");
@@ -283,6 +285,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         itemTypeIconMap.put(ItemType.particle, "icon-library");
         itemTypeIconMap.put(ItemType.text, "icon-library");
         itemTypeIconMap.put(ItemType.texture, "icon-library");
+        itemTypeIconMap.put(ItemType.light, "icon-library");
         itemTypeIconMap.put(ItemType.spineAnimation, "icon-library");
         itemTypeIconMap.put(ItemType.spriteAnimation, "icon-library");
         itemTypeIconMap.put(ItemType.spriterAnimation, "icon-library");

@@ -86,6 +86,8 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     }
 
     private void setListeners() {
+        fpsSelector.addChangeListener(number -> facade.sendNotification(PROPERTIES_UPDATED));
+
         animationsSelectBox.addListener(new SelectBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
         editAnimationsButton.addListener(new ClickListener() {
             @Override

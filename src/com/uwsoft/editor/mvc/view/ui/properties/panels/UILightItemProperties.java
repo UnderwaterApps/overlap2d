@@ -169,12 +169,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private void setListeners() {
         isStaticCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
         isXRayCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        rayCountSelector.addChangeListener(new NumberSelector.NumberSelectorListener() {
-            @Override
-            public void changed(int number) {
-                facade.sendNotification(PROPERTIES_UPDATED);
-            }
-        });
+        rayCountSelector.addChangeListener(number -> facade.sendNotification(PROPERTIES_UPDATED));
         lightTypeSelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
 
         lightTypeSelectBox.addListener(new ChangeListener() {
