@@ -57,10 +57,17 @@ public class Overlap2DMenuBar extends MenuBar {
     public static final String UNDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".UNDO";
     public static final String REDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".REDO";
     //
+
+    public static final String WINDOW_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".WINDOW_MENU";
+    public static final String SPRITE_ANIMATIONS_EDITOR_OPEN = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SPRITE_ANIMATIONS_EDITOR_OPEN";
+    public static final String CUSTOM_VARIABLES_EDITOR_OPEN = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CUSTOM_VARIABLES_EDITOR_OPEN";
+
+
     private static final String TAG = Overlap2DMenuBar.class.getCanonicalName();
     private final FileMenu fileMenu;
     private final String maskKey;
     private final EditMenu editMenu;
+    private final WindowMenu windowMenu;
     private final Overlap2DFacade facade;
 
     public Overlap2DMenuBar() {
@@ -68,9 +75,11 @@ public class Overlap2DMenuBar extends MenuBar {
         maskKey = SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC ? "Cmd" : "Ctrl";
         fileMenu = new FileMenu();
         editMenu = new EditMenu();
+        windowMenu = new WindowMenu();
 //        getTable().debug();
         addMenu(fileMenu);
         addMenu(editMenu);
+        addMenu(windowMenu);
         setProjectOpen(false);
     }
 
@@ -90,6 +99,28 @@ public class Overlap2DMenuBar extends MenuBar {
     public void setProjectOpen(boolean open) {
         fileMenu.setProjectOpen(open);
         editMenu.setProjectOpen(open);
+        windowMenu.setProjectOpen(open);
+    }
+
+    private class WindowMenu extends O2DMenu {
+
+
+        private final MenuItem customVars;
+        private final MenuItem animations;
+
+        public WindowMenu() {
+            super("Window");
+            customVars = new MenuItem("Custom Variables", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
+            animations = new MenuItem("Sprite Animations", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            addItem(customVars);
+            addItem(animations);
+        }
+
+        public void setProjectOpen(boolean open) {
+            customVars.setDisabled(!open);
+            animations.setDisabled(!open);
+        }
+
     }
 
     private class EditMenu extends O2DMenu {

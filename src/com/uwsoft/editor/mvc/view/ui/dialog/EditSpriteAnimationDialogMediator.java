@@ -23,6 +23,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
@@ -37,7 +38,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     private static final String TAG = EditSpriteAnimationDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
 
-    private SpriteAnimation observable;
+    private SpriteAnimation observable = null;
 
     public EditSpriteAnimationDialogMediator() {
         super(NAME, new EditSpriteAnimationDialog());
@@ -47,6 +48,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     public void onRegister() {
         super.onRegister();
         facade = Overlap2DFacade.getInstance();
+        viewComponent.setEmpty("No item selected");
     }
 
     @Override
@@ -56,7 +58,8 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED,
                 EditSpriteAnimationDialog.ADD_BUTTON_PRESSED,
-                EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED
+                EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED,
+                Overlap2DMenuBar.SPRITE_ANIMATIONS_EDITOR_OPEN
         };
     }
 
@@ -68,6 +71,9 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         UIStage uiStage = sandbox.getUIStage();
 
         switch (notification.getName()) {
+            case Overlap2DMenuBar.SPRITE_ANIMATIONS_EDITOR_OPEN:
+                viewComponent.show(uiStage);
+                break;
             case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
                 viewComponent.show(uiStage);
                 break;
