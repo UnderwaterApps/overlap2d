@@ -51,6 +51,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2D.ITEM_SELECTED,
+                Overlap2D.EMPTY_SPACE_CLICKED,
                 UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED,
                 CustomVariablesDialog.ADD_BUTTON_PRESSED,
                 CustomVariablesDialog.DELETE_BUTTON_PRESSED
@@ -70,6 +71,9 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
                 break;
             case Overlap2D.ITEM_SELECTED:
                 setObservable(notification.getBody());
+                break;
+            case Overlap2D.EMPTY_SPACE_CLICKED:
+                setObservable(null);
                 break;
             case CustomVariablesDialog.ADD_BUTTON_PRESSED:
                 setVariable();
@@ -104,7 +108,11 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     }
 
     private void updateView() {
-        CustomVariables vars = observable.getCustomVariables();
-        viewComponent.updateView(vars);
+        if(observable == null) {
+            viewComponent.setEmpty();
+        } else {
+            CustomVariables vars = observable.getCustomVariables();
+            viewComponent.updateView(vars);
+        }
     }
 }

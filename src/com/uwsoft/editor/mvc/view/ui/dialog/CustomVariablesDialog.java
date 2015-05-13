@@ -45,9 +45,10 @@ public class CustomVariablesDialog extends UIDraggablePanel {
 
     private VisTable mainTable;
     private VisTable variablesList;
+    private VisTable addVariableTable;
 
     public CustomVariablesDialog() {
-        super("Custom Variables");
+        super("Custom variables");
         addCloseButton();
 
         facade = Overlap2DFacade.getInstance();
@@ -67,7 +68,7 @@ public class CustomVariablesDialog extends UIDraggablePanel {
     }
 
     private VisTable createAddVariableTable() {
-        VisTable addVariableTable = new VisTable();
+        addVariableTable = new VisTable();
 
         keyField = StandardWidgetsFactory.createTextField();
         valueField = StandardWidgetsFactory.createTextField();
@@ -80,6 +81,13 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         addVariableTable.row();
 
         return addVariableTable;
+    }
+
+    public void setEmpty() {
+        variablesList.clear();
+        variablesList.add(StandardWidgetsFactory.createLabel("No item selected"));
+        addVariableTable.setVisible(false);
+        invalidateHeight();
     }
 
     public void updateView(CustomVariables vars) {
@@ -114,6 +122,9 @@ public class CustomVariablesDialog extends UIDraggablePanel {
                 }
             });
         }
+
+        addVariableTable.setVisible(true);
+
         invalidateHeight();
     }
 
@@ -141,4 +152,5 @@ public class CustomVariablesDialog extends UIDraggablePanel {
     public void setValueFieldValue(String value) {
         valueField.setText(value);
     }
+
 }
