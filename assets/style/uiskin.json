@@ -156,12 +156,12 @@
       }
     },
     "white": {
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "black",
       "background": "default-select-white",
       "scrollStyle": "default",
       "listStyle": {
-        "font": "default-font",
+        "font": "default-font-normal",
         "fontColorSelected": "black",
         "fontColorUnselected": "black",
         "selection": "list-selection-white",

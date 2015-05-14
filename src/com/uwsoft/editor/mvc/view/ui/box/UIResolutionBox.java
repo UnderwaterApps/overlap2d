@@ -48,11 +48,6 @@ public class UIResolutionBox extends VisTable {
     private VisSelectBox<ResolutionEntryVO> visSelectBox;
 //    private final ProjectManager projectManager;
 
-    private UIStage stage;
-
-    private SelectBox<String> dropdown;
-
-    private ProjectInfoVO projectInfoVO;
     private VisImageButton deleteBtn;
 
     public UIResolutionBox() {

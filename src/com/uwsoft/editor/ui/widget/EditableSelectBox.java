@@ -61,6 +61,7 @@ public class EditableSelectBox extends VisTable {
         add(selectBox).fillX().expandX();
         addActor(textField);
         textField.setWidth(98);
+        textField.setHeight(selectBox.getHeight());
 
         selectBox.addListener(new ChangeListener() {
             @Override
