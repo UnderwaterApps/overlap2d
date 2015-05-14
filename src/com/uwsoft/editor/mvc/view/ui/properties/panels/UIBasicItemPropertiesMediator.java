@@ -44,7 +44,10 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<IBas
 
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
+    }
 
+    @Override
+    public void onRegister() {
         itemTypeMap.put(CompositeItem.class.getName(), UIBasicItemProperties.ItemType.composite);
         itemTypeMap.put(ImageItem.class.getName(), UIBasicItemProperties.ItemType.texture);
         itemTypeMap.put(ParticleItem.class.getName(), UIBasicItemProperties.ItemType.particle);

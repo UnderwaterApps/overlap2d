@@ -51,7 +51,7 @@ public class UILayerBox extends UICollapsibleBox {
     private Array<UILayerItem> rows = new Array<>();
 
     public UILayerBox() {
-        super("Layers", 236);
+        super("Layers", 222);
 
         facade = Overlap2DFacade.getInstance();
 

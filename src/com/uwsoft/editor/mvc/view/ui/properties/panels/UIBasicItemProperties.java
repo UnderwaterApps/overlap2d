@@ -108,9 +108,10 @@ public class UIBasicItemProperties extends UIItemProperties {
 
         add(iconContainer).padRight(3).right().fillX();
         add(itemType).width(143).height(21).colspan(2).left();
-        row().padTop(13);
-        add(createLabel("Identifier:")).padRight(3).fillX();
-        add(idBox).width(143).height(21).colspan(2);
+        row();
+        addSeparator().padTop(9).padBottom(6).colspan(3);
+        add(createLabel("Identifier:")).padRight(19).fillX();
+        add(idBox).width(153).height(21).colspan(2);
         row().padTop(13);
         add(createLabel("Position:")).padRight(3).left().top();
         add(getAsTable("X:", xValue, "Y:", yValue)).left();
