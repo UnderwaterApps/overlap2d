@@ -63,8 +63,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
 
         switch (notification.getName()) {
             case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
-                EditAnimationDialog dlg = new EditAnimationDialog(Sandbox.getInstance().getUIStage(), observableReference);
-                Sandbox.getInstance().getUIStage().addActor(dlg);
+
                 break;
             default:
                 break;
@@ -82,6 +81,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
             animations.add(name);
         }
       //TODO fix and uncomment 
+        //viewComponent.setFPS(item.dataVO.fps);
 //        viewComponent.setAnimations(animations);
 //        viewComponent.setSelectedAnimation(stateComponent.currentAnimation);
     }
@@ -90,5 +90,6 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     protected void translateViewToItemData() {
     	//TODO fix and uncomment 
         //observableReference.setAnimation(viewComponent.getSelected());
+        //observableReference.dataVO.fps = viewComponent.getFPS();
     }
 }

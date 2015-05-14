@@ -51,7 +51,7 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
         }
     }
 
-    private void afterItemDataModified() {
+    protected void afterItemDataModified() {
     	//TODO this was needed with previous runtime don't know will it be needed for new runtime
     	//observableReference.renew();
 

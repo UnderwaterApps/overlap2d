@@ -18,15 +18,16 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
-import java.util.ArrayList;
-
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+
+import java.util.ArrayList;
 
 
 /**
@@ -70,7 +71,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
                         if (checkIfNameIsUnique(input)) {
                             LayerItemVO layerVo = new LayerItemVO();
                             layerVo.layerName = input;
-                            viewComponent.addItem(new UILayerItem(layerVo));
+                            viewComponent.addItem(new UILayerBox.UILayerItem(layerVo));
                             //currentSelectedLayerIndex = layers.indexOf(layerVo);
                         } else {
                             // show error dialog
@@ -106,15 +107,14 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
     }
 
     private void initLayerData() {
-    	//TODO fix and uncomment
-//        CompositeItemVO currentComposite = Sandbox.getInstance().sceneControl.getCurrentScene().getDataVO();
-//        layers = currentComposite.composite.layers;
-//
-//        viewComponent.clearItems();
-//
-//        for (int i = 0; i < layers.size(); i++) {
-//            viewComponent.addItem(new UILayerItem(layers.get(i)));
-//        }
+        CompositeItemVO currentComposite = Sandbox.getInstance().sceneControl.getCurrentScene().getDataVO();
+        layers = currentComposite.composite.layers;
+
+        viewComponent.clearItems();
+
+        for (int i = 0; i < layers.size(); i++) {
+            viewComponent.addItem(new UILayerBox.UILayerItem(layers.get(i)));
+        }
     }
 
     public int getCurrentSelectedLayerIndex() {

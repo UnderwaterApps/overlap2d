@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
@@ -29,6 +27,8 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.
@@ -107,7 +107,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
                 if (sandbox.getSelector().getCurrentSelection().size() == 1) {
                     if(sandbox.getSelector().selectionIsComposite()) {
-                        actionsSet.add(Sandbox.ACTION_ADD_TO_LIBRARY);
+                        actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
                         actionsSet.add(Sandbox.ACTION_EDIT_COMPOSITE);
                     }
                     actionsSet.add(Sandbox.ACTION_EDIT_PHYSICS);

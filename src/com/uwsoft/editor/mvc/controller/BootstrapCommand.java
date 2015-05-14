@@ -45,9 +45,14 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_PASTE, PasteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_DELETE, DeleteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_EDIT_COMPOSITE, EditCompositeCommand.class);
+        facade.registerCommand(Sandbox.ACTION_COMPOSITE_HIERARCHY_UP, CompositeHierarchyUpCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
         facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
         facade.registerCommand(Sandbox.ACTION_GROUP_ITEMS, GroupItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, SetGridSizeFromItemCommand.class);
+
+        facade.registerCommand(Sandbox.ACTION_SET_SELECTION, SetSelectionCommand.class);
+        facade.registerCommand(Sandbox.ACTION_ADD_SELECTION, AddSelectionCommand.class);
+        facade.registerCommand(Sandbox.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
     }
 }

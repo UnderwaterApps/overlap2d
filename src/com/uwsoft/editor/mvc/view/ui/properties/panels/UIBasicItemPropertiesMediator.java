@@ -30,10 +30,12 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.MainItemComponent;
-import com.uwsoft.editor.renderer.conponents.TintComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.actor.*;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -51,15 +53,26 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     private DimensionsComponent dimensionComponent;
     private TintComponent tintComponent;
 
+    private HashMap<String, UIBasicItemProperties.ItemType> itemTypeMap = new HashMap<>();
+
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
+
+        itemTypeMap.put(CompositeItem.class.getName(), UIBasicItemProperties.ItemType.composite);
+        itemTypeMap.put(ImageItem.class.getName(), UIBasicItemProperties.ItemType.texture);
+        itemTypeMap.put(ParticleItem.class.getName(), UIBasicItemProperties.ItemType.particle);
+        itemTypeMap.put(LabelItem.class.getName(), UIBasicItemProperties.ItemType.text);
+        itemTypeMap.put(SpriteAnimation.class.getName(), UIBasicItemProperties.ItemType.spriteAnimation);
+        itemTypeMap.put(SpriterActor.class.getName(), UIBasicItemProperties.ItemType.spriterAnimation);
+        itemTypeMap.put(SpineActor.class.getName(), UIBasicItemProperties.ItemType.spineAnimation);
+        itemTypeMap.put(LightActor.class.getName(), UIBasicItemProperties.ItemType.light);
     }
 
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
-                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED
+                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -94,6 +107,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	dimensionComponent = dimensionMapper.get(entity);
     	tintComponent = tintMapper.get(entity);
 
+        viewComponent.setItemType(itemTypeMap.get(item.getClass().getName()));
         viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
         viewComponent.setXValue(trnasformComponent.x + "");
         viewComponent.setYValue(trnasformComponent.y + "");

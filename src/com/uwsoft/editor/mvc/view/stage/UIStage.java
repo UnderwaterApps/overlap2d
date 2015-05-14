@@ -76,7 +76,7 @@ public class UIStage extends Stage {
     public void editPhysics(String assetName) {
         //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         //addActor(dlg);
-        //dlg.editAsset(assetName);
+        //dlg.editAsset(name);
     }
 
     public void editPhysics(Entity item) {
@@ -87,11 +87,6 @@ public class UIStage extends Stage {
 
     public void setKeyboardFocus() {
         setKeyboardFocus(dummyTarget);
-    }
-
-
-    public void emptyClick() {
-        facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }
 
     public void loadScene(CompositeItemVO scene) {

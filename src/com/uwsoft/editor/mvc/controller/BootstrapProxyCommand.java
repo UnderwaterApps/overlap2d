@@ -37,6 +37,7 @@ public class BootstrapProxyCommand extends SimpleCommand {
         super.execute(notification);
         facade = Overlap2DFacade.getInstance();
         facade.registerProxy(new FontManager());
+        facade.registerProxy(new CommandManager());
         facade.registerProxy(new ProjectManager());
         facade.registerProxy(new ResolutionManager());
         facade.registerProxy(new SceneDataManager());

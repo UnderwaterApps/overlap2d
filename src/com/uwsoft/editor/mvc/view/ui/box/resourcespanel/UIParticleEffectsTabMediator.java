@@ -18,20 +18,20 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.mediator.SimpleMediator;
-import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.ParticleEffectResource;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffectsTab> {
+public class UIParticleEffectsTabMediator extends UIResourcesTabMediator<UIParticleEffectsTab> {
 
     private static final String TAG = UIParticleEffectsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -41,35 +41,17 @@ public class UIParticleEffectsTabMediator extends SimpleMediator<UIParticleEffec
     }
 
     @Override
-    public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
-        };
-    }
-
-    @Override
-    public void handleNotification(Notification notification) {
-        switch (notification.getName()) {
-            case ProjectManager.PROJECT_OPENED:
-                initParticleEffects();
-                break;
-            case ProjectManager.PROJECT_DATA_UPDATED:
-                initParticleEffects();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void initParticleEffects() {
+    protected void initList() {
+        Sandbox sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
         HashMap<String, ParticleEffect> particles = resourceManager.getProjectParticleList();
-        Array<String> itemArray = new Array<>();
+        Array<DraggableResource> itemArray = new Array<>();
         for (String name : particles.keySet()) {
-            itemArray.add(name);
+            DraggableResource draggableResource = new DraggableResource(new ParticleEffectResource(name));
+            draggableResource.setFactoryFunction(sandbox.getUac()::createParticleItem);
+            itemArray.add(draggableResource);
         }
         viewComponent.setItems(itemArray);
     }

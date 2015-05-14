@@ -18,92 +18,58 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import java.util.HashMap;
-
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.mediator.SimpleMediator;
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpineAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriteAnimationThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.SpriterAnimationThumbnailBox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResourceView;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpineResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpriteResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpriterResource;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIAnimationsTabMediator extends SimpleMediator<UIAnimationsTab> {
+public class UIAnimationsTabMediator extends UIResourcesTabMediator<UIAnimationsTab> {
 
     private static final String TAG = UIAnimationsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-
-    private ResourceManager resourceManager;
-
-    private HashMap<String, SpineAnimData> spineAnimations;
-    private HashMap<String, TextureAtlas> spriteAnimations;
-    private HashMap<String, FileHandle> spriterAnimations;
+    private Array<DraggableResource> animationBoxes;
 
     public UIAnimationsTabMediator() {
         super(NAME, new UIAnimationsTab());
+        animationBoxes = new Array<>();
     }
 
 
     @Override
-    public void onRegister() {
-        super.onRegister();
-
-        facade = Overlap2DFacade.getInstance();
-    }
-
-    @Override
-    public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
-        };
-    }
-
-    @Override
-    public void handleNotification(Notification notification) {
-        switch (notification.getName()) {
-            case ProjectManager.PROJECT_OPENED:
-                initAnimationsList();
-                break;
-            case ProjectManager.PROJECT_DATA_UPDATED:
-                initAnimationsList();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void initAnimationsList() {
-        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-
-        spineAnimations = resourceManager.getProjectSpineAnimationsList();
-        spriteAnimations = resourceManager.getProjectSpriteAnimationsList();
-        spriterAnimations = resourceManager.getProjectSpriterAnimationsList();
-
-        Array<AnimationThumbnailBox> animationBoxes = new Array<>();
-
-        for (String animationName : spineAnimations.keySet()) {
-            SpineAnimationThumbnailBox thumb = new SpineAnimationThumbnailBox(spineAnimations.get(animationName));
-            animationBoxes.add(thumb);
-        }
-        for (String animationName : spriteAnimations.keySet()) {
-            SpriteAnimationThumbnailBox thumb = new SpriteAnimationThumbnailBox(animationName);
-            animationBoxes.add(thumb);
-        }
-        for (String animationName : spriterAnimations.keySet()) {
-            SpriterAnimationThumbnailBox thumb = new SpriterAnimationThumbnailBox(animationName);
-            animationBoxes.add(thumb);
-        }
-
+    protected void initList() {
+        animationBoxes.clear();
+        Sandbox sandbox = Sandbox.getInstance();
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, sandbox.getUac()::createSpineAnimation);
+        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, sandbox.getUac()::createSpriteAnimation);
+        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, sandbox.getUac()::createSpriterAnimation);
         viewComponent.setThumbnailBoxes(animationBoxes);
+    }
+
+    private void createAnimationResources(Set<String> strings, Class resourceClass, BiFunction<String, Vector2, Boolean> factoryFunction) {
+        for (String animationName : strings) {
+            try {
+                Constructor constructor = resourceClass.getConstructor(String.class);
+                DraggableResource draggableResource = new DraggableResource((DraggableResourceView) constructor.newInstance(animationName));
+                draggableResource.initDragDrop();
+                draggableResource.setFactoryFunction(factoryFunction);
+                animationBoxes.add(draggableResource);
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }

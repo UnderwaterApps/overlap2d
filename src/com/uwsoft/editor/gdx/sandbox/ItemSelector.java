@@ -217,9 +217,20 @@ public class ItemSelector {
 
     }
 
+    /**
+     * adds to selection a list of items
+     * @param items list of panels to select
+     */
+    public void addSelections(ArrayList<IBaseItem> items) {
+        for (int i = 0; i < items.size(); i++) {
+            setSelection(items.get(i), false);
+            currentSelection.get(items.get(i)).show();
+        }
+    }
+
 
     /**
-     * set selection to a list of panels
+     * set selection to a list of items
      * @param items list of panels to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
@@ -235,15 +246,27 @@ public class ItemSelector {
     }
 
     /**
+     * remove selection to a list of items
+     * @param items list of panels to remove selection
+     */
+    public void releaseSelections(ArrayList<IBaseItem> items) {
+        for (int i = 0; i < items.size(); i++) {
+            releaseSelection(items.get(i));
+        }
+    }
+
+    /**
      * Un-selects item
      * @param item to un-select
      */
-    public void releaseSelection(Entity item) {
-    	//TODO fix and uncomment
-//        currentSelection.get(item).remove();
-//        currentSelection.remove(item);
-//
-//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+    public void releaseSelection(IBaseItem item) {
+		//TODO fix and uncomment
+        //currentSelection.get(item).remove();
+        //currentSelection.remove(item);
+
+        // TODO: change this to notification
+		//TODO fix and uncomment
+        //sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
     }
 
     /**
@@ -272,14 +295,13 @@ public class ItemSelector {
      * Selects all panels on currently active scene
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
-    public void selectAllItems() {
-    	//TODO fix and uncomment
-//        ArrayList<Entity> curr = new ArrayList<Entity>();
-//        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
-//            curr.add(sandbox.getCurrentScene().getItems().get(i));
-//        }
-//
-//        setSelections(curr, true);
+    public ArrayList<IBaseItem> getAllFreeItems() {
+        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
+            curr.add(sandbox.getCurrentScene().getItems().get(i));
+        }
+
+        return curr;
     }
 
 
@@ -309,13 +331,15 @@ public class ItemSelector {
      * removes all selected panels from the scene
      */
     public void removeCurrentSelectedItems() {
-    	//TODO fix and uncomment
-//        for (SelectionRectangle selectionRect : currentSelection.values()) {
-//            sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
-//            selectionRect.remove();
-//        }
-////        sandbox.getSandboxStage().uiStage.getItemsBox().init();
-//        currentSelection.clear();
+		//TODO fix and uncomment
+		/*
+        for (SelectionRectangle selectionRect : currentSelection.values()) {
+            sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
+            selectionRect.remove();
+        }
+
+        currentSelection.clear();
+		*/
     }
 
     public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {

@@ -18,48 +18,38 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.AnimationThumbnailBox;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIAnimationsTab extends Tab {
-
-    private VisTable contentTable;
+public class UIAnimationsTab extends UIResourcesTab {
     private VisTable animationsTable;
-    private VisScrollPane scrollPane;
-
-    public UIAnimationsTab() {
-        super(false, false);
-        contentTable = new VisTable();
-        animationsTable = new VisTable();
-        scrollPane = new VisScrollPane(animationsTable);
-        contentTable.add(scrollPane).width(230).height(350);
-        contentTable.row();
-    }
 
     @Override
     public String getTabTitle() {
-        return "Anims";
+        return " Animations ";
     }
 
-    @Override
-    public Table getContentTable() {
-        return contentTable;
-    }
 
-    public void setThumbnailBoxes(Array<AnimationThumbnailBox> thumbnailBoxes) {
+    public void setThumbnailBoxes(Array<DraggableResource> draggableResources) {
         animationsTable.clearChildren();
-        for (int i = 0; i < thumbnailBoxes.size; i++) {
-            animationsTable.add(thumbnailBoxes.get(i)).pad(3);
+        for (int i = 0; i < draggableResources.size; i++) {
+            DraggableResource draggableResource = draggableResources.get(i);
+            animationsTable.add((Actor) draggableResource.getViewComponent()).pad(3);
             if ((i - 7) % 4 == 0) {
                 animationsTable.row();
             }
         }
+    }
+
+    @Override
+    protected VisScrollPane crateScrollPane() {
+        animationsTable = new VisTable();
+        return new VisScrollPane(animationsTable);
     }
 }

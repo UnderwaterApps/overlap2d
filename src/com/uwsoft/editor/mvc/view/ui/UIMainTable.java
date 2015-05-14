@@ -79,7 +79,7 @@ public class UIMainTable extends VisTable {
         leftBoxesPanel.row();
         UIItemsTreeBoxMediator uiItemsTreeBoxMediator = facade.retrieveMediator(UIItemsTreeBoxMediator.NAME);
         itemsBox = uiItemsTreeBoxMediator.getViewComponent();
-        leftBoxesPanel.add(itemsBox).expandX().fillX();
+        leftBoxesPanel.add(itemsBox).expandX().fillX().maxHeight(600).top();
         middleTable.add(leftBoxesPanel).top().left().expand().padTop(2).padLeft(2);
     }
 
