@@ -60,6 +60,7 @@ import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
 import com.uwsoft.editor.renderer.utils.LibGdxLoader;
@@ -78,11 +79,11 @@ public class EntityFactory {
 	
 	public RayHandler rayHandler;
 	public World world;
-	public ResourceManager rm = null;
+	public IResourceRetriever rm = null;
 	
 	private ComponentMapper<NodeComponent> nodeComponentMapper;
 	
-	public EntityFactory( RayHandler rayHandler, World world, ResourceManager rm ) {
+	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
 	
 		this.rayHandler = rayHandler;
 		this.world = world;
@@ -96,6 +97,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SimpleImageVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = IMAGE_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -111,7 +113,6 @@ public class EntityFactory {
 		
 		entity.add(textureRegion);
 		entity.add(dimensionsComponent);
-		entity.flags = IMAGE_TYPE;
 		
 		return entity;
 	}
@@ -119,6 +120,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, ParticleEffectVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = PARTICLE_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -135,7 +137,6 @@ public class EntityFactory {
 		
 		entity.add(dimensionsComponent);
 		entity.add(particleComponent);
-		entity.flags = PARTICLE_TYPE;
 		
 		return entity;
 	}
@@ -143,6 +144,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, LightVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = LIGHT_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -187,7 +189,6 @@ public class EntityFactory {
 		
 		entity.add(dimensionsComponent);
 		entity.add(lightObjectComponent);
-		entity.flags = LIGHT_TYPE;
 		
 		return entity;
 	}
@@ -195,6 +196,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpineVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = SPINE_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -220,7 +222,6 @@ public class EntityFactory {
 		
 		entity.add(dimensionsComponent);
 		entity.add(spineDataComponent);
-		entity.flags = SPINE_TYPE;
 		
 		return entity;
 	}
@@ -228,6 +229,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpriteAnimationVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = SPRITE_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -273,7 +275,6 @@ public class EntityFactory {
 		entity.add(animationComponent);
 		entity.add(stateComponent);
 		entity.add(textureRegionComponent);
-		entity.flags = SPRITE_TYPE;
 		
 		return entity;
 	}
@@ -281,6 +282,7 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpriterVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = SPRITER_TYPE;
 		
 		addCommonComponents(entity,vo);
 		addParentComponent(entity,root);
@@ -316,7 +318,6 @@ public class EntityFactory {
 		entity.add(dimensionsComponent);
 		entity.add(spriterComponent);
 		entity.add(spriterDrawer);
-		entity.flags = SPRITER_TYPE;
 		
 		return entity;
 	}
@@ -324,12 +325,11 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, CompositeItemVO vo){
 
 		Entity entity = new Entity();
+		entity.flags = COMPOSITE_TYPE;
 		
-		addCommonComponents(entity,vo);
+		addCommonComponents(entity,vo,vo.composite);
 		addParentComponent(entity,root);
 		addPhysicsComponents(entity, vo);
-		
-		entity.flags = COMPOSITE_TYPE;
 		
 		return entity;
 	}
@@ -395,6 +395,9 @@ public class EntityFactory {
 	}
 	
 	public void addPhysicsComponents(Entity entity, MainItemVO vo){
+		if(vo.physicsBodyData == null){
+			return;
+		}
 		PhysicsBodyPropertiesComponent pysicsComponent = new PhysicsBodyPropertiesComponent();
 		pysicsComponent.allowSleep = vo.physicsBodyData.allowSleep;
 		pysicsComponent.awake = vo.physicsBodyData.awake;
@@ -429,6 +432,11 @@ public class EntityFactory {
 		
 		NodeComponent nodeComponent = nodeComponentMapper.get(root);
 		nodeComponent.children.add(entity);
+		
+		if(entity.flags == COMPOSITE_TYPE){
+			NodeComponent node = new NodeComponent();
+			entity.add(node);
+		}
 	}
 	
 	private Array<AtlasRegion> sortAndGetRegions(String animationName) {
@@ -451,6 +459,12 @@ public class EntityFactory {
 		throw new RuntimeException(
 				"Frame name should be something like this '*0001', but not "
 						+ name + ".");
+	}
+
+
+
+	public void setResourceManager(IResourceRetriever rm) {
+		this.rm = rm;
 	}
 	
 }
