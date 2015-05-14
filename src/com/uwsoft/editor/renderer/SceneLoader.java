@@ -23,6 +23,7 @@ import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.systems.LayerSystem;
 import com.uwsoft.editor.renderer.systems.LightSystem;
@@ -41,7 +42,7 @@ public class SceneLoader {
 
 	private String curResolution = "orig";
 	private SceneVO sceneVO;
-	private ResourceManager rm = null;
+	private IResourceRetriever rm = null;
 	public Engine engine = null;
 	public RayHandler rayHandler;
 	public World world;
@@ -55,7 +56,7 @@ public class SceneLoader {
 	public SceneLoader(Engine engine) {
 		this.engine = engine;
 		rm = new ResourceManager();
-		rm.initAllResources();
+		
 		// world = new World(gravity, doSleep)
 		RayHandler.setGammaCorrection(true);
 		RayHandler.useDiffuseLight(true);
@@ -84,8 +85,9 @@ public class SceneLoader {
 	 */
 	public SceneLoader(String resolution) {
 		rm = new ResourceManager();
-		rm.setWorkingResolution(resolution);
-		rm.initAllResources();
+		//TODO
+//		rm.setWorkingResolution(resolution);
+//		rm.initAllResources();
 		curResolution = resolution;
 	}
 
@@ -148,6 +150,8 @@ public class SceneLoader {
 	 *         this point though...)
 	 */
 	public SceneVO loadScene(String sceneName) {
+		//TODO this must be changed
+		//rm.initAllResources();
 		engine.removeAllEntities();
 		
 		sceneVO = rm.getSceneVO(sceneName);
@@ -345,6 +349,11 @@ public class SceneLoader {
 		}
 	}
 	
+	public void setResourceManager(IResourceRetriever rm) {
+		this.rm = rm;
+		entityFactory.setResourceManager(rm);
+	}
+	
 	public static class Frames {
         public int startFrame;
         public int endFrame;
@@ -368,6 +377,7 @@ public class SceneLoader {
         }
 
         public static Map<String, Frames> constructJsonObject(String animations) {
+        	animations = animations.replace("com.uwsoft.editor.renderer.actor.SpriteAnimation$Animation", "com.uwsoft.editor.renderer.SceneLoader$Frames");
             if (animations.isEmpty()) {
                 return new HashMap<>();
             }
