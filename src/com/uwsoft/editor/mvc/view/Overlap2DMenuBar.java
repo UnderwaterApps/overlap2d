@@ -138,7 +138,7 @@ public class Overlap2DMenuBar extends MenuBar {
             copy = new MenuItem("Copy", new MenuItemListener(COPY, null, EDIT_MENU)).setShortcut(maskKey + " + C");
             paste = new MenuItem("Paste", new MenuItemListener(PAST, null, EDIT_MENU)).setShortcut(maskKey + " + P");
             undo = new MenuItem("Undo", new MenuItemListener(UNDO, null, EDIT_MENU)).setShortcut(maskKey + " + Z");
-            redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(maskKey + " + Y");
+            redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(maskKey + " + Shift + Z");
             addItem(cut);
             addItem(copy);
             addItem(paste);

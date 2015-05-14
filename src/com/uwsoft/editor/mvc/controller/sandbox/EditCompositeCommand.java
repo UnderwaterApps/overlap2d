@@ -30,7 +30,5 @@ public class EditCompositeCommand extends SandboxCommand {
     @Override
     public void execute(Notification notification) {
         sandbox.enterIntoComposite();
-        sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_INTO_COMPOSITE);
-        sandbox.flow.applyPendingAction();
     }
 }

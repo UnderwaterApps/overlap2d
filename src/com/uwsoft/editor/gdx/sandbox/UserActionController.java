@@ -22,6 +22,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -106,69 +107,15 @@ public class UserActionController {
     }
 
     /**
-     * @param name
-     * @param x
-     * @param y
-     * @depricated
-     */
-    public void createComponent(final String name, final float x, final float y) {
-        /*
-        final LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return;
-
-        // creating component requires skin
-        if (!sandbox.isComponentSkinAvailable() && !name.equals("Label")) {
-            DialogUtils.showConfirmDialog(sandbox.getUIStage(),
-                    "Warning",
-                    "There is no style imported yet. Do you want to add default style instead to make this work?",
-                    new String[]{"OK", "Cancel"}, new Integer[]{0, 1},
-                    result -> {
-                        if (result == 0) {
-                            projectManager.copyDefaultStyleIntoProject();
-                            sandbox.getItemFactory().createComponent(layer, name, x, y);
-                        }
-
-                    });
-        } else {
-            sandbox.getItemFactory().createComponent(layer, name, x, y);
-        }
-        */
-    }
-
-    /**
      *
      */
     public void undo() {
-        FlowActionEnum lastFlowAction = sandbox.flow.getFlowLastAction();
-        CompositeItemVO compositeItemVO = sandbox.flow.undo();
-        switch (lastFlowAction) {
-            case GET_INTO_COMPOSITE:
-                sandbox.enterIntoPrevComposite();
-                break;
-            case GET_OUT_COMPOSITE:
-                sandbox.enterIntoComposite(compositeItemVO);
-                break;
-            default:
-                sandbox.reconstructFromSceneVo(compositeItemVO);
-                break;
-        }
-        sandbox.sceneControl.getCurrentScene().updateDataVO();
+        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
+        commandManager.undoCommand();
     }
 
     public void redo() {
-        CompositeItemVO compositeItemVO = sandbox.flow.redo();
-        FlowActionEnum lastFlowAction = sandbox.flow.getFlowLastAction();
-        switch (lastFlowAction) {
-            case GET_INTO_COMPOSITE:
-                sandbox.enterIntoComposite(compositeItemVO);
-                break;
-            case GET_OUT_COMPOSITE:
-                sandbox.enterIntoPrevComposite();
-                break;
-            default:
-                sandbox.reconstructFromSceneVo(compositeItemVO);
-                break;
-        }
-        sandbox.sceneControl.getCurrentScene().updateDataVO();
+        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
+        commandManager.redoCommand();
     }
 }

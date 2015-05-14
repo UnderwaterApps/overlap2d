@@ -34,7 +34,7 @@ import java.util.ArrayList;
  *
  * @author azakhary
  */
-public class FlowManager {
+public class FlowManagerOld {
 
 	 /**
 	  * List of {@link HistoryData} panels, that are basically tools points of user action/scene-snapshot
@@ -51,7 +51,7 @@ public class FlowManager {
 	  */
     private HistoryData pendingHistoryData;
 
-    public FlowManager(CompositeItemVO dataVO) {
+    public FlowManagerOld(CompositeItemVO dataVO) {
         historyPointer = -1;
 
 		  /**

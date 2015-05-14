@@ -20,19 +20,14 @@ package com.uwsoft.editor.mvc.view.stage;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -244,11 +239,12 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 if (keycode == Input.Keys.V) {
                     facade.sendNotification(Sandbox.ACTION_PASTE);
                 }
-                if (keycode == Input.Keys.Z) {
-                    sandbox.getUac().undo();
-                }
-                if (keycode == Input.Keys.Y) {
-                    sandbox.getUac().redo();
+                if(keycode == Input.Keys.Z) {
+                    if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                        sandbox.getUac().redo();
+                    } else {
+                        sandbox.getUac().undo();
+                    }
                 }
 
                 return true;

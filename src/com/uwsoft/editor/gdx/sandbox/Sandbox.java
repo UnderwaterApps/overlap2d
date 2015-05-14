@@ -27,7 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controlles.flow.FlowManager;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
@@ -72,7 +71,6 @@ public class Sandbox {
 
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
-    public FlowManager flow;
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -174,8 +172,6 @@ public class Sandbox {
         sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
 
         sceneControl.initScene(sceneName);
-
-        flow = new FlowManager(sceneControl.getRootSceneVO());
     }
 
     public void loadCurrentProject(String name) {
@@ -322,8 +318,6 @@ public class Sandbox {
      */
     public void saveSceneCurrentSceneData() {
         sceneControl.getCurrentScene().updateDataVO();
-        flow.setPendingHistory(sceneControl.getCurrentScene().dataVO);
-        flow.applyPendingAction();
     }
 
     public void setSceneAmbientColor(Color color, boolean showChange) {

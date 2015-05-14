@@ -110,12 +110,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public boolean keyDown(int keycode) {
         if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
             switch (keycode) {
-                case Input.Keys.Z:
-                    sandbox.getUac().undo();
-                    break;
-                case Input.Keys.Y:
-                    sandbox.getUac().redo();
-                    break;
                 case Input.Keys.N:
                     //uiStage.menuMediator.showDialog("createNewProjectDialog");
                     break;

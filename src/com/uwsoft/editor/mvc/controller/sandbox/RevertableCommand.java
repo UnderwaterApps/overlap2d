@@ -19,17 +19,29 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.mvc.proxy.CommandManager;
 
 /**
  * Created by azakhary on 5/14/2015.
  */
-public class ComositeHierarchyUpCommand extends SandboxCommand {
+public abstract class RevertableCommand extends SandboxCommand {
+
+    private CommandManager commandManager;
+    private Notification notification;
 
     @Override
     public void execute(Notification notification) {
-        // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
-        sandbox.enterIntoPrevComposite();
+        commandManager = facade.retrieveProxy(CommandManager.NAME);
+        this.notification = notification;
+        doAction();
+        commandManager.addCommand(this);
+    }
+
+    public abstract void doAction();
+    public abstract void undoAction();
+
+    public Notification getNotification() {
+        return notification;
     }
 }
