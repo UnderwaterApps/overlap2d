@@ -43,6 +43,7 @@ import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
+import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
@@ -129,7 +130,11 @@ public class Sandbox {
     }
 
     private void init() {
-        facade = Overlap2DFacade.getInstance();
+    	facade = Overlap2DFacade.getInstance();
+    	 projectManager = facade.retrieveProxy(ProjectManager.NAME);
+         resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+    	
+        
         Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
         SandboxMediator sandboxStageMediator = facade.retrieveMediator(SandboxMediator.NAME);
         UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
@@ -137,7 +142,11 @@ public class Sandbox {
         //setUIStage(uiStage);
 
         engine = new Engine();
+        //TODO rendering system must be added in scene loader or idk where
+        Overlap2dRenderer renderer = new Overlap2dRenderer(uiStage.getBatch());
+        engine.addSystem(renderer);
 		SceneLoader sceneLoader = new SceneLoader(engine);
+		sceneLoader.setResourceManager(resourceManager);
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
@@ -145,8 +154,7 @@ public class Sandbox {
         selector = new ItemSelector(this);
         itemFactory = new ItemFactory(this);
 
-        projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+       
     }
     
     public void initView() {

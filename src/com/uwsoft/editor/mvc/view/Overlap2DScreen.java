@@ -40,7 +40,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     
     public UIStage uiStage;
     
-    private Overlap2dRenderer renderer;
 	private Engine engine;
     
     private InputMultiplexer multiplexer;
@@ -88,7 +87,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     public void show() {
         sandbox = Sandbox.getInstance();
         uiStage = sandbox.getUIStage();
-        renderer = new Overlap2dRenderer(uiStage.getBatch());
         //sandboxStage = sandbox.getSandboxStage();
         
         //sandboxStage.sandbox = sandbox;
