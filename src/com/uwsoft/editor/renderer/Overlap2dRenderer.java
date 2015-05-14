@@ -124,7 +124,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 				
 				if(spineDataComponent != null){
 					//TODO parent alpha thing
-					renderer.draw(batch, spineDataComponent.skeleton);
+					//TODO spine renderer
+					//renderer.draw(batch, spineDataComponent.skeleton);
 				}
 				
 				if(childNodeComponent !=null){
