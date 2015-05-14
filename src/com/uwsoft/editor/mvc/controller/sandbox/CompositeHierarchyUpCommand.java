@@ -16,23 +16,19 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.controlles.flow;
+package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
- * This is a history tools point created on each user action.
- *
- * Created by sargis on 7/23/14.
+ * Created by azakhary on 5/14/2015.
  */
-class HistoryData {
-	 /**
-	  * The snapshot of scene, stored as a VO tools object of root element of the scene.
-	  */
-    public CompositeItemVO compositeItemVO;
+public class CompositeHierarchyUpCommand extends SandboxCommand {
 
-	 /**
-	  * The type of user action
-	  */
-    public FlowActionEnum action;
+    @Override
+    public void execute(Notification notification) {
+        // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
+        sandbox.enterIntoPrevComposite();
+    }
 }

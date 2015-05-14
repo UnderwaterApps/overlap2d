@@ -19,7 +19,6 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
 
 /**
