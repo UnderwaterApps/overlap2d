@@ -65,6 +65,7 @@ public class Sandbox {
     public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
     public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
     public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
+    public static final String SHOW_ADD_LIBRARY_DIALOG = CLASS_NAME + "SHOW_ADD_LIBRARY_DIALOG";
     public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
     public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";

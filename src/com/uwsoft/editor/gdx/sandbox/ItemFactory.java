@@ -279,33 +279,6 @@ public class ItemFactory {
         addItem(itm, vo);
     }
 
-    public void addCompositeToLibrary() {
-        CompositeItem item = null;
-        if (sandbox.getSelector().getCurrentSelection().size() == 1) {
-            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-                if (value.getHost().isComposite()) {
-                    item = (CompositeItem) value.getHost();
-                }
-            }
-        }
-
-        if (item == null) return;
-
-        final CompositeItem itemToAdd = item;
-        DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
-            @Override
-            public void finished(String input) {
-                sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
-                facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
-            }
-
-            @Override
-            public void canceled() {
-
-            }
-        });
-    }
-
     public CompositeItem groupItemsIntoComposite() {
         sceneControl.getCurrentScene().updateDataVO();
         CompositeItemVO vo = new CompositeItemVO();

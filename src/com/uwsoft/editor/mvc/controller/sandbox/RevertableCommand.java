@@ -30,11 +30,14 @@ public abstract class RevertableCommand extends SandboxCommand {
     private CommandManager commandManager;
     private Notification notification;
 
+    private boolean stateDone = false;
+
     @Override
     public void execute(Notification notification) {
         commandManager = facade.retrieveProxy(CommandManager.NAME);
         this.notification = notification;
         doAction();
+        stateDone = true;
         commandManager.addCommand(this);
     }
 
@@ -43,5 +46,13 @@ public abstract class RevertableCommand extends SandboxCommand {
 
     public Notification getNotification() {
         return notification;
+    }
+
+    public void setStateDone(boolean state) {
+        stateDone = state;
+    }
+
+    public boolean isStateDone() {
+        return stateDone;
     }
 }

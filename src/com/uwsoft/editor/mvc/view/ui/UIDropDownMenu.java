@@ -18,14 +18,9 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
 
@@ -55,7 +50,7 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(Sandbox.ACTION_COPY, "Copy");
         actionNames.put(Sandbox.ACTION_PASTE, "Paste");
         actionNames.put(Sandbox.ACTION_DELETE, "Delete");
-        actionNames.put(Sandbox.ACTION_ADD_TO_LIBRARY, "Add to library");
+        actionNames.put(Sandbox.SHOW_ADD_LIBRARY_DIALOG, "Add to library");
         actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
         actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");

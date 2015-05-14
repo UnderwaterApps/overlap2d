@@ -53,13 +53,21 @@ public class CommandManager extends BaseProxy {
 
     public void undoCommand() {
         if(cursor < 0) return;
-        commands.get(cursor).undoAction();
+        RevertableCommand command = commands.get(cursor);
+        if(command.isStateDone()) {
+            command.undoAction();
+            command.setStateDone(false);
+        }
         cursor--;
     }
 
     public void redoCommand() {
         if(cursor + 1 >= commands.size()) return;
-        cursor++;
-        commands.get(cursor).doAction();
+        RevertableCommand command = commands.get(cursor+1);
+        if(!command.isStateDone()) {
+            cursor++;
+            command.doAction();
+            command.setStateDone(true);
+        }
     }
 }
