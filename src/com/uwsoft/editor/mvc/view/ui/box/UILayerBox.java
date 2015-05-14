@@ -20,13 +20,18 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 
 /**
@@ -81,7 +86,7 @@ public class UILayerBox extends UICollapsibleBox {
             }
         });
 
-        contentTable.add(bottomPane);
+//        contentTable.add(bottomPane);
         createCollapsibleWidget(contentTable);
     }
 
@@ -95,7 +100,7 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public void addItem(UILayerItem item) {
-        layersTable.add(item).left().expandX();
+        layersTable.add(item).left().expandX().fillX();
         layersTable.row();
 
         rows.add(item);
@@ -116,4 +121,45 @@ public class UILayerBox extends UICollapsibleBox {
             }
         });
     }
+
+    public static class UILayerItem extends VisTable {
+
+        private Overlap2DFacade facade;
+        private EditorTextureManager textureManager;
+
+        private Image lock;
+        private Image eye;
+        private String name;
+
+        public UILayerItem(LayerItemVO layerData) {
+            super();
+            setBackground(VisUI.getSkin().getDrawable("layer-bg"));
+            add(new VisImageButton("layer-lock")).left();
+            add(new VisImageButton("layer-visible")).left().padRight(6);
+            add(layerData.layerName).expandX().fillX();
+//            facade = Overlap2DFacade.getInstance();
+//            textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
+//
+//            lock = new Image(textureManager.getEditorAsset("lock"));
+//            add(lock).left().padRight(10);
+//
+//            eye = new Image(textureManager.getEditorAsset("eye"));
+//            add(eye).left().padRight(10);
+//
+//            VisLabel lbl = new VisLabel(layerData.layerName);
+//            add(lbl).fillX();
+//
+//            name = layerData.layerName;
+        }
+
+        @Override
+        public String getName() {
+            return name;
+        }
+
+        public void setSelected(boolean selected) {
+            // TODO: visual selecting
+        }
+    }
+
 }

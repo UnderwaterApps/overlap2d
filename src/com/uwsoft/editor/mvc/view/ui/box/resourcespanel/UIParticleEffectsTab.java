@@ -18,43 +18,36 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisList;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIParticleEffectsTab extends Tab {
+public class UIParticleEffectsTab extends UIResourcesTab {
 
-    private VisTable contentTable;
+    private VisTable list;
 
-    private VisList<String> list;
-
-    public UIParticleEffectsTab() {
-        super(false, false);
-
-        contentTable = new VisTable();
-
-        contentTable.setWidth(250);
-
-        list = new VisList<>();
-        contentTable.add(list);
+    @Override
+    protected VisScrollPane crateScrollPane() {
+        list = new VisTable();
+        return new VisScrollPane(list);
     }
 
     @Override
     public String getTabTitle() {
-        return "Particles";
+        return " Particles ";
     }
 
-    @Override
-    public Table getContentTable() {
-        return contentTable;
-    }
 
-    public void setItems(Array<String> items) {
-        list.setItems(items);
+    public void setItems(Array<DraggableResource> items) {
+        for (DraggableResource box : items) {
+            box.initDragDrop();
+            list.add((Actor) box.getViewComponent()).expandX().fillX();
+            list.row();
+        }
     }
 }

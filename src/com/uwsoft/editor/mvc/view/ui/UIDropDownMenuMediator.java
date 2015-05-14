@@ -107,7 +107,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
                 if (sandbox.getSelector().getCurrentSelection().size() == 1) {
                     if(sandbox.getSelector().selectionIsComposite()) {
-                        actionsSet.add(Sandbox.ACTION_ADD_TO_LIBRARY);
+                        actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
                         actionsSet.add(Sandbox.ACTION_EDIT_COMPOSITE);
                     }
                     actionsSet.add(Sandbox.ACTION_EDIT_PHYSICS);

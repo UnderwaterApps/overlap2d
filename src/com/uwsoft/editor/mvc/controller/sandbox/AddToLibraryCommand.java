@@ -18,17 +18,37 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class AddToLibraryCommand extends SandboxCommand {
+public class AddToLibraryCommand extends RevertableCommand {
+
+    private String createdLibraryItemName;
+
+    private Entity item = null;
 
     @Override
-    public void execute(Notification notification) {
-    	//TODO fix and uncomment
-        //sandbox.getItemFactory().addCompositeToLibrary();
+    public void doAction() {
+        Object[] payload = getNotification().getBody();
+
+        if(item == null){
+            item = ((Entity) payload[0]);
+            createdLibraryItemName = (String) payload[1];
+        }
+        //TODO fix and uncomment
+//        SceneControlMediator sceneControl = sandbox.getSceneControl();
+//        sceneControl.getCurrentSceneVO().libraryItems.put(createdLibraryItemName, item.getDataVO());
+//        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+    }
+
+    @Override
+    public void undoAction() {
+        SceneControlMediator sceneControl = sandbox.getSceneControl();
+        sceneControl.getCurrentSceneVO().libraryItems.remove(createdLibraryItemName);
+        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
     }
 }

@@ -18,6 +18,19 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
+import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+
 
 /**
  * Provides methods to create panels of different types based on provided tools, and adds them to the scene.
@@ -27,30 +40,29 @@ public class ItemFactory {
     public static final String PREFIX = "com.uwsoft.editor.gdx.sandbox.ItemFactory";
     public static final String NEW_ITEM_ADDED = PREFIX + ".NEW_ITEM_ADDED";
 //
-//    private final Overlap2DFacade facade;
-//    private final ProjectManager projectManager;
-//    private Sandbox sandbox;
-//    private SandboxStage sandboxStage;
-//    private SceneControlMediator sceneControl;
-//    private ItemControlMediator itemControl;
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
+    private Sandbox sandbox;
+    private SceneControlMediator sceneControl;
+    private ItemControlMediator itemControl;
 
     public ItemFactory(Sandbox sandbox) {
-//        this.sandbox = sandbox;
-//        sandboxStage = sandbox.getSandboxStage();
-//        sceneControl = sandbox.getSceneControl();
-//        facade = Overlap2DFacade.getInstance();
-//        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        this.sandbox = sandbox;
+        sceneControl = sandbox.getSceneControl();
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
     }
 
-//    private void prepareVO(MainItemVO vo, String layerName, float x, float y) {
-//        vo.layerName = layerName;
-//
-//		Vector2 stageCoordinates = sandboxStage.screenToStageCoordinates(new Vector2(x, sandboxStage.getHeight()-y));
-//        vo.x = stageCoordinates.x;
-//        vo.y = stageCoordinates.y;
-//    }
-//
-//    private void addItem(IBaseItem item, MainItemVO vo) {
+    private void prepareVO(MainItemVO vo, String layerName, float x, float y) {
+        vo.layerName = layerName;
+        //TODO fix and uncomment
+		//Vector2 stageCoordinates = sandboxStage.screenToStageCoordinates(new Vector2(x, sandboxStage.getHeight()-y));
+        //vo.x = stageCoordinates.x;
+        //vo.y = stageCoordinates.y;
+    }
+
+    private void addItem(Entity item, MainItemVO vo) {
+    	//TODO fix and uncomment
 //        Actor itemActor = (Actor) item;
 //        sceneControl.getCurrentScene().addItem(item);
 //        sandbox.saveSceneCurrentSceneData();
@@ -61,10 +73,11 @@ public class ItemFactory {
 //        facade.sendNotification(NEW_ITEM_ADDED, item);
 //
 //        sandbox.getSelector().setSelection(item, true);
-//    }
-//
-//    private void initSpritePhysicsData(SimpleImageVO vo) {
-//        String regionName = vo.imageName;
+    }
+
+    private void initSpritePhysicsData(SimpleImageVO vo) {
+        String regionName = vo.imageName;
+      //TODO fix and uncomment
 //        if (projectManager.getCurrentProjectInfoVO().assetMeshMap.containsKey(regionName)) {
 //            vo.meshId = projectManager.getCurrentProjectInfoVO().assetMeshMap.get(regionName);
 //            PhysicsBodyDataVO data = projectManager.getCurrentProjectInfoVO().meshes.get(vo.meshId).initialProperties;
@@ -74,9 +87,10 @@ public class ItemFactory {
 //                vo.physicsBodyData = new PhysicsBodyDataVO();
 //            }
 //        }
-//    }
-//
-//    public void createImageItem(LayerItemVO layer, String regionName, float x, float y) {
+    }
+
+    public void createImageItem(LayerItemVO layer, String regionName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        SimpleImageVO vo = new SimpleImageVO();
@@ -88,9 +102,10 @@ public class ItemFactory {
 //        ImageItem itm = new ImageItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //
 //        addItem(itm, vo);
-//    }
-//
-//    public void create9patchItem(LayerItemVO layer, String regionName, float x, float y) {
+    }
+
+    public void create9patchItem(LayerItemVO layer, String regionName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        Image9patchVO vo = new Image9patchVO();
@@ -101,9 +116,10 @@ public class ItemFactory {
 //        Image9patchItem itm = new Image9patchItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //
 //        addItem(itm, vo);
-//    }
-//
-//    public void createParticleItem(LayerItemVO layer, String particleName, float x, float y) {
+    }
+
+    public void createParticleItem(LayerItemVO layer, String particleName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        ParticleEffectVO vo = new ParticleEffectVO();
@@ -117,9 +133,10 @@ public class ItemFactory {
 //
 //        itm.forceContinuous();
 //        itm.start();
-//    }
-//
-//    public void createSpriteAnimation(LayerItemVO layer, String animName, float x, float y) {
+    }
+
+    public void createSpriteAnimation(LayerItemVO layer, String animName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        SpriteAnimationVO vo = new SpriteAnimationVO();
@@ -131,9 +148,10 @@ public class ItemFactory {
 //
 //        addItem(itm, vo);
 //        itm.start();
-//    }
-//
-//    public void createSpriterAnimation(LayerItemVO layer, String animationsName, float x, float y) {
+    }
+
+    public void createSpriterAnimation(LayerItemVO layer, String animationsName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        SpriterVO vo = new SpriterVO();
@@ -144,10 +162,11 @@ public class ItemFactory {
 //        SpriterActor itm = new SpriterActor(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //
 //        addItem(itm, vo);
-//
-//    }
-//
-//    public void createSpineAnimation(LayerItemVO layer, String animName, float x, float y) {
+
+    }
+
+    public void createSpineAnimation(LayerItemVO layer, String animName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        SpineVO vo = new SpineVO();
@@ -159,9 +178,10 @@ public class ItemFactory {
 //        itm.setAnimation(itm.skeletonData.getAnimations().get(0).getName());
 //
 //        addItem(itm, vo);
-//    }
-//
-//    public void createLight(LayerItemVO layer, LightVO vo, float x, float y) {
+    }
+
+    public void createLight(LayerItemVO layer, LightVO vo, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        vo.layerName = layer.layerName;
@@ -171,10 +191,11 @@ public class ItemFactory {
 //        LightActor itm = new LightActor(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //
 //        addItem(itm, vo);
-//
-//    }
-//
-//    public void createItemFromLibrary(LayerItemVO layer, String libraryName, float x, float y) {
+
+    }
+
+    public void createItemFromLibrary(LayerItemVO layer, String libraryName, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        CompositeItemVO vo = sceneControl.getCurrentSceneVO().libraryItems.get(libraryName).clone();
@@ -185,10 +206,11 @@ public class ItemFactory {
 //        CompositeItem itm = new CompositeItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //
 //        addItem(itm, vo);
-//    }
-//
-//
-//    public void createLabel(TextTool textSettings, float x, float y) {
+    }
+
+
+    public void createLabel(TextTool textSettings, float x, float y) {
+    	//TODO fix and uncomment
 //        LayerItemVO layer = getSelectedLayer();
 //        sceneControl.getCurrentScene().updateDataVO();
 //
@@ -203,21 +225,23 @@ public class ItemFactory {
 //
 //        resourceManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
 //
-//        vo.style = fontManager.getShortName(textSettings.getFontFamily());
+//        // using long unique name
+//        vo.style = textSettings.getFontFamily();
 //        vo.text = "LABEL";
 //        vo.size = textSettings.getFontSize();
 //        IBaseItem item = new LabelItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //        addItem(item, vo);
-//    }
-//
-//    /**
-//     * @depricated
-//     * @param layer
-//     * @param type
-//     * @param x
-//     * @param y
-//     */
-//    public void createComponent(LayerItemVO layer, String type, float x, float y) {
+    }
+
+    /**
+     * @depricated
+     * @param layer
+     * @param type
+     * @param x
+     * @param y
+     */
+    public void createComponent(LayerItemVO layer, String type, float x, float y) {
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //
 //        MainItemVO vo = new MainItemVO();
@@ -256,36 +280,11 @@ public class ItemFactory {
 //        }
 //
 //        addItem(itm, vo);
-//    }
-//
-//    public void addCompositeToLibrary() {
-//        CompositeItem item = null;
-//        if (sandbox.getSelector().getCurrentSelection().size() == 1) {
-//            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-//                if (value.getHost().isComposite()) {
-//                    item = (CompositeItem) value.getHost();
-//                }
-//            }
-//        }
-//
-//        if (item == null) return;
-//
-//        final CompositeItem itemToAdd = item;
-//        DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
-//            @Override
-//            public void finished(String input) {
-//                sceneControl.getCurrentSceneVO().libraryItems.put(input, itemToAdd.getDataVO());
-//                facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
-//            }
-//
-//            @Override
-//            public void canceled() {
-//
-//            }
-//        });
-//    }
-//
-//    public CompositeItem groupItemsIntoComposite() {
+    }
+
+    public Entity groupItemsIntoComposite() {
+    	return new Entity();
+    	//TODO fix and uncomment
 //        sceneControl.getCurrentScene().updateDataVO();
 //        CompositeItemVO vo = new CompositeItemVO();
 //
@@ -355,10 +354,11 @@ public class ItemFactory {
 //        sandbox.getSelector().setSelection(item, true);
 //
 //        return item;
-//    }
-//
-//
-//    public void cleanComposite(CompositeVO compositeVO) {
+    }
+
+
+    public void cleanComposite(CompositeVO compositeVO) {
+    	//TODO fix and uncomment
 //        Iterator<CompositeItemVO> compositeItemVOIterator = compositeVO.sComposites.iterator();
 //        while (compositeItemVOIterator.hasNext()) {
 //            CompositeItemVO next = compositeItemVOIterator.next();
@@ -366,22 +366,23 @@ public class ItemFactory {
 //                compositeItemVOIterator.remove();
 //            }
 //        }
-//    }
-//
-//
-//    public boolean isCompositeEmpty(CompositeVO composite) {
-//        if (composite.isEmpty()) {
-//            return true;
-//        }
-//        cleanComposite(composite);
-//        return composite.isEmpty();
-//    }
-//
-//    public LayerItemVO getSelectedLayer() {
+    }
+
+
+    public boolean isCompositeEmpty(CompositeVO composite) {
+        if (composite.isEmpty()) {
+            return true;
+        }
+        cleanComposite(composite);
+        return composite.isEmpty();
+    }
+
+    public LayerItemVO getSelectedLayer() {
+    	//TODO fix and uncomment
 //        UILayerBoxMediator lbm = facade.retrieveMediator(UILayerBoxMediator.NAME);
 //        int selectedLayerIndex = lbm.getCurrentSelectedLayerIndex();
 //        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
-//
-//        return layerVO;
-//    }
+
+        return new LayerItemVO();
+    }
 }

@@ -19,7 +19,6 @@
 package com.uwsoft.editor.gdx.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.uwsoft.editor.gdx.actors.GridView;
 import com.uwsoft.editor.gdx.actors.ResolutionBounds;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;

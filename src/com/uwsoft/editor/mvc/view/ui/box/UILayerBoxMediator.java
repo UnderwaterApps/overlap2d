@@ -26,6 +26,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 
@@ -70,7 +71,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
                         if (checkIfNameIsUnique(input)) {
                             LayerItemVO layerVo = new LayerItemVO();
                             layerVo.layerName = input;
-                            viewComponent.addItem(new UILayerItem(layerVo));
+                            viewComponent.addItem(new UILayerBox.UILayerItem(layerVo));
                             //currentSelectedLayerIndex = layers.indexOf(layerVo);
                         } else {
                             // show error dialog
@@ -113,7 +114,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
 //        viewComponent.clearItems();
 //
 //        for (int i = 0; i < layers.size(); i++) {
-//            viewComponent.addItem(new UILayerItem(layers.get(i)));
+//            viewComponent.addItem(new UILayerBox.UILayerItem(layers.get(i)));
 //        }
     }
 

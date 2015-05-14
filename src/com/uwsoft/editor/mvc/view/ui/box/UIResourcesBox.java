@@ -63,14 +63,14 @@ public class UIResourcesBox extends UICollapsibleBox {
 
         contentTable.add(tabbedPane.getTable());
         contentTable.row();
-        contentTable.add(tabContent);
+        contentTable.add(tabContent).expandX().fillX();
         contentTable.row();
         createCollapsibleWidget(contentTable);
     }
 
     public void setActiveTabContent(Tab tab) {
         tabContent.clear();
-        tabContent.add(tab.getContentTable());
+        tabContent.add(tab.getContentTable()).expandX().fillX();
     }
 
     public void addTab(int index, Tab tab) {

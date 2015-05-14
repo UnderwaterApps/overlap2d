@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -76,7 +75,7 @@ public class UIStage extends Stage {
     public void editPhysics(String assetName) {
         //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         //addActor(dlg);
-        //dlg.editAsset(assetName);
+        //dlg.editAsset(name);
     }
 
     public void editPhysics(Entity item) {
@@ -87,11 +86,6 @@ public class UIStage extends Stage {
 
     public void setKeyboardFocus() {
         setKeyboardFocus(dummyTarget);
-    }
-
-
-    public void emptyClick() {
-        facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
     }
 
     public void loadScene(CompositeItemVO scene) {

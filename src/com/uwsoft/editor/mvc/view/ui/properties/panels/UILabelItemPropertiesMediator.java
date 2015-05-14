@@ -1,8 +1,12 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 
 /**
@@ -27,20 +31,27 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     }
 
     @Override
-    protected void translateObservableDataToView(Entity entity) {
-    	//TODO fix and uncomment 
-    	//TODO
+    protected void translateObservableDataToView(Entity item) {
+    	//TODO fix and uncomment
 //        viewComponent.setFontFamily(item.dataVO.style);
 //        viewComponent.setFontSize(item.dataVO.size + "");
     }
 
     @Override
     protected void translateViewToItemData() {
-    	//TODO fix and uncomment 
-//        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-//        resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
-//
-//        String shortFontName = fontManager.getShortName(viewComponent.getFontFamily());
-//        observableReference.setStyle(shortFontName, NumberUtils.toInt(viewComponent.getFontSize()));
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+      //TODO fix and uncomment
+        //observableReference.setStyle(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+    }
+
+    @Override
+    protected void afterItemDataModified() {
+    	//TODO fix and uncomment
+//        observableReference.setWrap(false);
+//        observableReference.renew();
+//        observableReference.pack();
+        Sandbox.getInstance().getSelector().updateSelections();
+        Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }

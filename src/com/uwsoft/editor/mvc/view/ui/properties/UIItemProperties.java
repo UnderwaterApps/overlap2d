@@ -18,12 +18,30 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties;
 
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
+
 /**
  * Created by azakhary on 4/15/2015.
  */
 public abstract class UIItemProperties extends UIAbstractProperties {
 
-    public UIItemProperties() {
+    final Skin skin;
 
+    public UIItemProperties() {
+        skin = VisUI.getSkin();
+    }
+
+    protected VisLabel createLabel(String text, int alignment) {
+        VisLabel visLabel = new VisLabel(text, alignment);
+        visLabel.setStyle(skin.get("small", Label.LabelStyle.class));
+        return visLabel;
+    }
+
+    protected VisLabel createLabel(String text) {
+        return createLabel(text, Align.right);
     }
 }

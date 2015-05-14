@@ -20,24 +20,24 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import java.util.HashMap;
 
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemResource;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab> {
+public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryItemsTab> {
 
     private static final String TAG = UILibraryItemsTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private HashMap<String, CompositeItemVO> items;
 
     public UILibraryItemsTabMediator() {
         super(NAME, new UILibraryItemsTab());
@@ -45,34 +45,31 @@ public class UILibraryItemsTabMediator extends SimpleMediator<UILibraryItemsTab>
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                SceneDataManager.SCENE_LOADED,
-                ProjectManager.PROJECT_DATA_UPDATED,
-                Overlap2D.LIBRARY_LIST_UPDATED
-        };
+        String[] listNotification = super.listNotificationInterests();
+        return ArrayUtils.add(listNotification, Overlap2D.LIBRARY_LIST_UPDATED);
     }
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
-                initLibraryItems();
-                break;
-            case ProjectManager.PROJECT_DATA_UPDATED:
-                initLibraryItems();
-                break;
             case Overlap2D.LIBRARY_LIST_UPDATED:
-                initLibraryItems();
+                initList();
             default:
                 break;
         }
     }
 
-    private void initLibraryItems() {
-        items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
-        Array<String> itemArray = new Array<>();
-        for (String name : items.keySet()) {
-            itemArray.add(name);
+    @Override
+    protected void initList() {
+        Sandbox sandbox = Sandbox.getInstance();
+        HashMap<String, CompositeItemVO> items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
+        Array<DraggableResource> itemArray = new Array<>();
+        for (String key : items.keySet()) {
+            DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
+            draggableResource.setFactoryFunction(sandbox.getUac()::createItemFromLibrary);
+            draggableResource.initDragDrop();
+            itemArray.add(draggableResource);
         }
         viewComponent.setItems(itemArray);
     }

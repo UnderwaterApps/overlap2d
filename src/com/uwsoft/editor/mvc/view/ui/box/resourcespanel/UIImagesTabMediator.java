@@ -20,70 +20,43 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.mediator.SimpleMediator;
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.Image9patchThumbnailBox;
-import com.uwsoft.editor.gdx.ui.thumbnailbox.ImageThumbnailBox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.ImageResource;
 
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIImagesTabMediator extends SimpleMediator<UIImagesTab> {
+public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
 
     private static final String TAG = UIImagesTabMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private ResourceManager resourceManager;
-
-    private TextureAtlas atlas;
 
     public UIImagesTabMediator() {
         super(NAME, new UIImagesTab());
     }
 
     @Override
-    public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
-        };
-    }
+    protected void initList() {
+        Sandbox sandbox = Sandbox.getInstance();
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-    @Override
-    public void onRegister() {
-        super.onRegister();
+        TextureAtlas atlas = resourceManager.getProjectAssetsList();
 
-        facade = Overlap2DFacade.getInstance();
-    }
-
-    @Override
-    public void handleNotification(Notification notification) {
-        switch (notification.getName()) {
-            case ProjectManager.PROJECT_OPENED:
-                initImagesList();
-                break;
-            case ProjectManager.PROJECT_DATA_UPDATED:
-                initImagesList();
-                break;
-            default:
-                break;
-        }
-    }
-
-    private void initImagesList() {
-        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-
-        atlas = resourceManager.getProjectAssetsList();
-
-        Array<ImageThumbnailBox> thumbnailBoxes = new Array<>();
+        Array<DraggableResource> thumbnailBoxes = new Array<>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();
         for (TextureAtlas.AtlasRegion region : atlasRegions) {
             boolean is9patch = region.splits != null;
-            ImageThumbnailBox thumbnailBox = is9patch ? new Image9patchThumbnailBox(region) : new ImageThumbnailBox(region);
-            thumbnailBoxes.add(thumbnailBox);
+            DraggableResource draggableResource = new DraggableResource(new ImageResource(region));
+            if (is9patch) {
+                draggableResource.setFactoryFunction(sandbox.getUac()::create9Patch);
+            } else {
+                draggableResource.setFactoryFunction(sandbox.getUac()::createImage);
+            }
+            draggableResource.initDragDrop();
+            thumbnailBoxes.add(draggableResource);
         }
 
         viewComponent.setThumbnailBoxes(thumbnailBoxes);

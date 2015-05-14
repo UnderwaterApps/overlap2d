@@ -2,9 +2,7 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
  * Created by CyberJoe on 5/1/2015.

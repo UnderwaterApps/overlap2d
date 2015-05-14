@@ -20,28 +20,23 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpineAnimationItemProperties extends UIItemProperties {
+public class UISpineAnimationItemProperties extends UIItemCollapsibleProperties {
 
     private VisSelectBox<String> animationsSelectBox;
 
     public UISpineAnimationItemProperties() {
-        super();
-
+        super("Spine Animations");
         animationsSelectBox = new VisSelectBox<>();
-
-        add(new VisLabel("Animations:", Align.right)).padRight(5).colspan(2).fillX();
-        add(animationsSelectBox).width(120).colspan(2);
-        row().padTop(5);
-
+        mainTable.add(createLabel("Animations:", Align.right)).padRight(5).colspan(2).fillX();
+        mainTable.add(animationsSelectBox).width(120).colspan(2);
         setListeners();
     }
 

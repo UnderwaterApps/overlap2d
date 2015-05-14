@@ -21,24 +21,10 @@ package com.uwsoft.editor.gdx.ui.dialogs;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
-import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor.EditMode;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.Essentials;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
-import com.uwsoft.editor.renderer.legacy.data.SpineVO;
-import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
-import com.uwsoft.editor.utils.poly.Clipper.Polygonizer;
 
 public class ItemPhysicsDialog extends SimpleDialog {
 

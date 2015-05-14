@@ -27,7 +27,7 @@ import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
-import com.uwsoft.editor.gdx.ui.components.ColorPickerButton;
+import com.uwsoft.editor.gdx.ui.components.TintButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
@@ -45,7 +45,7 @@ public class UISceneProperties extends UIAbstractProperties {
     private VisTextField sleepVelocityTextField;
     private VisCheckBox enableLightsCheckBox;
     private VisCheckBox diffuseCheckBox;
-    private ColorPickerButton ambientColorComponent;
+    private TintButton ambientColorComponent;
 
     public UISceneProperties() {
         super();
@@ -58,7 +58,7 @@ public class UISceneProperties extends UIAbstractProperties {
         sleepVelocityTextField = new VisValidableTextField(floatValidator);
         enableLightsCheckBox = new VisCheckBox(null);
         diffuseCheckBox = new VisCheckBox(null);
-        ambientColorComponent = new ColorPickerButton();
+        ambientColorComponent = new TintButton(29, 21);
 
         pad(5);
         add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);

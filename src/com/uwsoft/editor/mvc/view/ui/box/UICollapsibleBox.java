@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.CollapsibleWidget;
 import com.kotcrab.vis.ui.widget.VisImageButton;
@@ -48,14 +49,13 @@ public class UICollapsibleBox extends VisWindow {
                 collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
             }
         });
-        //TODO fix and uncomment this is some shit of libgdx and visui lib
-//        getTitleLabel().setAlignment(Align.left);
-//        getTitleTable().add(collapsibleButton).right();
-        add(mainTable).width(width);
+        getTitleLabel().setAlignment(Align.left);
+        getTitleTable().add(collapsibleButton).right();
+        add(mainTable).width(width).padBottom(4);
     }
 
     protected void createCollapsibleWidget(Table table) {
         collapsibleWidget = new CollapsibleWidget(table);
-        mainTable.add(collapsibleWidget).expand();
+        mainTable.add(collapsibleWidget).expand().top();
     }
 }

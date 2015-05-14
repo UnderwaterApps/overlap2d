@@ -18,19 +18,64 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import java.util.ArrayList;
+
+import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.uwsoft.editor.gdx.sandbox.ItemFactory;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class CutItemsCommand extends SandboxCommand {
+public class CutItemsCommand extends RevertableCommand {
+
+    private String backup = "";
+
+    private void backup() {
+    	//TODO fix and uncomment
+//        CompositeVO tempHolder = new CompositeVO();
+//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
+//        Json json = new Json();
+//        json.setOutputType(JsonWriter.OutputType.json);
+//
+//        for(int i = 0; i < items.size(); i++) {
+//            tempHolder.addItem(items.get(i).getDataVO());
+//        }
+//        backup = json.toJson(tempHolder);
+    }
 
     @Override
-    public void execute(Notification notification) {
-    	//TODO fix and uncomment
+    public void doAction() {
+        backup();
+      //TODO fix and uncomment
 //        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
 //        sandbox.putItemsToClipboard(items);
 //        sandbox.getSelector().removeCurrentSelectedItems();
+    }
+
+    @Override
+    public void undoAction() {
+    	//TODO fix and uncomment
+//        Json json = new Json();
+//        json.setOutputType(JsonWriter.OutputType.json);
+//        CompositeVO tempHolder = json.fromJson(CompositeVO.class, backup);
+//
+//        CompositeItemVO fakeVO = new CompositeItemVO();
+//
+//        fakeVO.composite = tempHolder;
+//        CompositeItem fakeItem = new CompositeItem(fakeVO, sandbox.sceneControl.getEssentials());
+//        ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
+//
+//        for (int i = 0; i < fakeItem.getItems().size(); i++) {
+//            IBaseItem itm = fakeItem.getItems().get(i);
+//            sandbox.sceneControl.getCurrentScene().addItem(itm);
+//            itm.updateDataVO();
+//            facade.sendNotification(ItemFactory.NEW_ITEM_ADDED, itm);
+//            finalItems.add(itm);
+//        }
+//
+//        sandbox.getSelector().setSelections(finalItems, true);
     }
 }

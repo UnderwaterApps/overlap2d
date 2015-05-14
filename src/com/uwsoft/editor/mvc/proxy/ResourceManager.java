@@ -314,15 +314,13 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 
         FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
 
-        String shortName = fontManager.getShortName(fontfamily);
-
         FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
         parameter.size = fontSize;
 
         FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontManager.getTTFByName(fontfamily));
         BitmapFont font = generator.generateFont(parameter);
 
-        addBitmapFont(shortName, parameter.size, font);
+        addBitmapFont(fontfamily, parameter.size, font);
     }
 
     public HashMap<String, SpineAnimData> getProjectSpineAnimationsList() {

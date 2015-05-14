@@ -19,7 +19,6 @@
 package com.uwsoft.editor.mvc.view.stage;
 
 import java.awt.Cursor;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
@@ -33,7 +32,6 @@ import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controlles.flow.FlowActionEnum;
 import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -102,7 +100,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                ItemFactory.NEW_ITEM_ADDED
+                ItemFactory.NEW_ITEM_ADDED,
+                Overlap2D.OPENED_PREVIOUS_COMPOSITE
         };
     }
 
@@ -119,23 +118,33 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case ItemFactory.NEW_ITEM_ADDED:
                 ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
                 break;
+            case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
+                initItemListeners();
+                break;
             default:
                 break;
         }
     }
 
     private void handleSceneLoaded(Notification notification) {
-    	//TODO fix and uncomment
+		//TODO fix and uncomment
         //viewComponent.addListener(stageListener);
 
-        Sandbox sandbox = Sandbox.getInstance();
-      //TODO fix and uncomment
-//        ArrayList<Entity> items  = sandbox.getSceneControl().getCurrentScene().getItems();
-//        for (int i = 0; i < items.size(); i++) {
-//            items.get(i).addListener(new SandboxItemEventListener(items.get(i)));
-//        }
+        initItemListeners();
 
         setCurrentTool(SelectionTool.NAME);
+    }
+
+    private void initItemListeners() {
+        Sandbox sandbox = Sandbox.getInstance();
+		//TODO fix and uncomment
+		/*
+        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
+        for (int i = 0; i < items.size(); i++) {
+            ((Actor)items.get(i)).clearListeners();
+            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
+        }
+		*/
     }
 
     public Vector2 getStageCoordinates() {
@@ -213,7 +222,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
                 if (keycode == Input.Keys.A) {
                     // Ctrl+A means select all
-                    sandbox.getSelector().selectAllItems();
+                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, sandbox.getSelector().getAllFreeItems());
                 }
                 // Aligning Selections
                 if (keycode == Input.Keys.NUM_1 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
@@ -241,11 +250,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if (keycode == Input.Keys.V) {
                     facade.sendNotification(Sandbox.ACTION_PASTE);
                 }
-                if (keycode == Input.Keys.Z) {
-                    sandbox.getUac().undo();
-                }
-                if (keycode == Input.Keys.Y) {
-                    sandbox.getUac().redo();
+                if(keycode == Input.Keys.Z) {
+                    if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                        sandbox.getUac().redo();
+                    } else {
+                        sandbox.getUac().undo();
+                    }
                 }
 
                 return true;
@@ -383,12 +393,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
         private void doubleClick(InputEvent event, float x, float y) {
             Sandbox sandbox = Sandbox.getInstance();
-            // if empty space is double clicked, then get back into previous composite
-            // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
-            sandbox.enterIntoPrevComposite();
-            //TODO fix and uncomment
-            //sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
-            sandbox.flow.applyPendingAction();
+            currentSelectedTool.stageMouseDoubleClick(x, y);
         }
 
         @Override
