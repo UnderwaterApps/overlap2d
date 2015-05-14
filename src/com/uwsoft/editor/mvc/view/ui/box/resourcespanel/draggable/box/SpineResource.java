@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
@@ -84,8 +85,7 @@ public class SpineResource extends BoxItemResource {
 
 
         addActor(animThumb);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+        payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
         payload = new ResourcePayloadObject();
         payload.name = animName;
         setWidth(thumbnailSize);
