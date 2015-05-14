@@ -1,17 +1,18 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.LabelItem;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by avetiszakharyan on 4/24/15.
  */
-public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<LabelItem, UILabelItemProperties> {
+public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UILabelItemProperties> {
 
     private static final String TAG = UILabelItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -30,24 +31,26 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Labe
     }
 
     @Override
-    protected void translateObservableDataToView(LabelItem item) {
-        viewComponent.setFontFamily(item.dataVO.style);
-        viewComponent.setFontSize(item.dataVO.size + "");
+    protected void translateObservableDataToView(Entity item) {
+    	//TODO fix and uncomment
+//        viewComponent.setFontFamily(item.dataVO.style);
+//        viewComponent.setFontSize(item.dataVO.size + "");
     }
 
     @Override
     protected void translateViewToItemData() {
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
         resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
-
-        observableReference.setStyle(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+      //TODO fix and uncomment
+        //observableReference.setStyle(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
     }
 
     @Override
     protected void afterItemDataModified() {
-        observableReference.setWrap(false);
-        observableReference.renew();
-        observableReference.pack();
+    	//TODO fix and uncomment
+//        observableReference.setWrap(false);
+//        observableReference.renew();
+//        observableReference.pack();
         Sandbox.getInstance().getSelector().updateSelections();
         Sandbox.getInstance().saveSceneCurrentSceneData();
     }

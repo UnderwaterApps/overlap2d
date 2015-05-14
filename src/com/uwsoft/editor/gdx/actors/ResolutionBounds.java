@@ -20,7 +20,6 @@ package com.uwsoft.editor.gdx.actors;
 
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;

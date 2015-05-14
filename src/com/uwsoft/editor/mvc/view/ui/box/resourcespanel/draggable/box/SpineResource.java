@@ -19,14 +19,11 @@
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.renderer.actor.SpineActor;
-import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -86,9 +83,12 @@ public class SpineResource extends BoxItemResource {
 
 
         addActor(animThumb);
+        */
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
         payload = new ResourcePayloadObject();
+        //TODO fix and uncomment
+        /*
         payload.name = animName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);

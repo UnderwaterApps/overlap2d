@@ -24,8 +24,6 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.dialogs.EditAnimationDialog;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;

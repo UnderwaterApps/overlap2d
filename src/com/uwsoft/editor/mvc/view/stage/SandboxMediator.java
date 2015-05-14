@@ -19,7 +19,6 @@
 package com.uwsoft.editor.mvc.view.stage;
 
 import java.awt.Cursor;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Entity;
@@ -28,8 +27,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;

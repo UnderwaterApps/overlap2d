@@ -38,9 +38,10 @@ import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.box.UIZoomBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.CustomVariablesDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.EditSpriteAnimationDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
 import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
-import com.uwsoft.editor.mvc.view.ui.dialog.PhysicsEditorDialogMediator;
 
 /**
  * Created by sargis on 4/1/15.

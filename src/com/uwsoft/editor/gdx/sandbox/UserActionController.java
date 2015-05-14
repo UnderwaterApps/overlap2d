@@ -23,8 +23,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
  * Provides interface for user actions/intentions like creating panels

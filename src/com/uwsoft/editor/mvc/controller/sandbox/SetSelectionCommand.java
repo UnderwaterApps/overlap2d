@@ -18,23 +18,23 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
 import java.util.ArrayList;
+
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
  * Created by azakhary on 5/14/2015.
  */
 public class SetSelectionCommand extends RevertableCommand {
 
-    ArrayList<IBaseItem> previousSelection;
+    ArrayList<Entity> previousSelection;
 
     @Override
     public void doAction() {
         previousSelection = Sandbox.getInstance().getSelector().getSelectedItems();
 
-        ArrayList<IBaseItem> items = getNotification().getBody();
+        ArrayList<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().setSelections(items, true);
     }
 

@@ -20,16 +20,13 @@ package com.uwsoft.editor.gdx.mediators;
 
 import box2dLight.RayHandler;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.Essentials;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**

@@ -18,6 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+import java.util.function.BiFunction;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -27,11 +32,6 @@ import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResou
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpineResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpriteResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.SpriterResource;
-
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
-import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 4/17/2015.

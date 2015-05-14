@@ -25,7 +25,6 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 
 /**
  * Created by sargis on 4/20/15.
@@ -56,23 +55,24 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
         switch (notification.getName()) {
             case Sandbox.SHOW_ADD_LIBRARY_DIALOG:
                 Sandbox sandbox = Sandbox.getInstance();
-                CompositeItem item = notification.getBody();
-
-                SceneControlMediator sceneControl = sandbox.getSceneControl();
-                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
-                    @Override
-                    public void finished(String input) {
-                        Object[] payload = new Object[2];
-                        payload[0] = item;
-                        payload[1] = input;
-                        facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, payload);
-                    }
-
-                    @Override
-                    public void canceled() {
-
-                    }
-                });
+              //TODO fix and uncomment
+//                CompositeItem item = notification.getBody();
+//
+//                SceneControlMediator sceneControl = sandbox.getSceneControl();
+//                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
+//                    @Override
+//                    public void finished(String input) {
+//                        Object[] payload = new Object[2];
+//                        payload[0] = item;
+//                        payload[1] = input;
+//                        facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, payload);
+//                    }
+//
+//                    @Override
+//                    public void canceled() {
+//
+//                    }
+//                });
                 break;
         }
     }

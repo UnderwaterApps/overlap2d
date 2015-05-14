@@ -31,7 +31,6 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 public class Overlap2DScreen implements Screen, InputProcessor {

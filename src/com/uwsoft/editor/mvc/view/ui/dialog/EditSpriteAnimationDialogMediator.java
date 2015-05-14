@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.util.Map;
+
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -25,11 +28,8 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
-
-import java.util.Map;
+import com.uwsoft.editor.renderer.EntityFactory;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -38,7 +38,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     private static final String TAG = EditSpriteAnimationDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
 
-    private SpriteAnimation observable = null;
+    private Entity observable = null;
 
     public EditSpriteAnimationDialogMediator() {
         super(NAME, new EditSpriteAnimationDialog());
@@ -78,7 +78,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                 viewComponent.show(uiStage);
                 break;
             case Overlap2D.ITEM_SELECTED:
-                if(notification.getBody() instanceof SpriteAnimation) {
+                if(((Entity)notification.getBody()).flags == EntityFactory.SPRITE_TYPE) {
                     setObservable(notification.getBody());
                 } else {
                     observable = null;
@@ -99,7 +99,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         }
     }
 
-    private void setObservable(SpriteAnimation animation) {
+    private void setObservable(Entity animation) {
         observable = animation;
         updateView();
         viewComponent.setName("");
@@ -111,8 +111,9 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         if(observable == null) {
             viewComponent.setEmpty("No item selected");
         } else {
-            Map<String, SpriteAnimation.Animation> animations = observable.getAnimations();
-            viewComponent.updateView(animations);
+        	//TODO fix and uncomment
+//            Map<String, SpriteAnimation.Animation> animations = observable.getAnimations();
+//            viewComponent.updateView(animations);
         }
     }
 
@@ -120,14 +121,16 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         String name = viewComponent.getName();
         int frameFrom = viewComponent.getFrameFrom();
         int frameTo = viewComponent.getFrameTo();
-        observable.getAnimations().put(name, new SpriteAnimation.Animation(frameFrom, frameTo, name));
-        observable.updateDataVO();
+        //TODO fix and uncomment
+//        observable.getAnimations().put(name, new SpriteAnimation.Animation(frameFrom, frameTo, name));
+//        observable.updateDataVO();
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
     }
 
     private void removeAnimation(String name) {
-        observable.getAnimations().remove(name);
-        observable.updateDataVO();
+    	 //TODO fix and uncomment
+//        observable.getAnimations().remove(name);
+//        observable.updateDataVO();
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
     }
 }
