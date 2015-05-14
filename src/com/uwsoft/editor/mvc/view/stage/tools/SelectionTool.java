@@ -20,14 +20,19 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.stage.SandboxStage;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -78,9 +83,8 @@ public class SelectionTool implements Tool {
 
     @Override
     public void stageMouseUp(float x, float y) {
-        sandbox = Sandbox.getInstance();
         // selection is complete, this will check for what get caught in selection rect, and select 'em
-        sandbox.selectionComplete();
+        selectionComplete();
 
         isCastingRectangle = false;
 
@@ -103,6 +107,7 @@ public class SelectionTool implements Tool {
     @Override
     public boolean itemMouseDown(IBaseItem item, float x, float y) {
         sandbox = Sandbox.getInstance();
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
         item.updateDataVO();
 
@@ -110,21 +115,25 @@ public class SelectionTool implements Tool {
 
         // if shift is pressed we are in add/remove selection mode
         if (isShiftPressed()) {
-
-            //TODO block selection handling
+            //TODO block selection handling (wat?)
             if (!currentTouchedItemWasSelected) {
                 // item was not selected, adding it to selection
-                sandbox.getSelector().setSelection(item, false);
+                ArrayList<IBaseItem> items = new ArrayList<>();
+                items.add(item);
+                facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
             }
         } else {
 
             if (item.isLockedByLayer()) {
                 // this is considered empty space click and thus should release all selections
+                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
                 sandbox.getSelector().clearSelections();
                 return false;
             } else {
                 // select this item and remove others from selection
-                sandbox.getSelector().setSelection(item, true);
+                ArrayList<IBaseItem> items = new ArrayList<>();
+                items.add(item);
+                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
             }
         }
 
@@ -202,11 +211,14 @@ public class SelectionTool implements Tool {
     @Override
     public void itemMouseUp(IBaseItem item, float x, float y) {
         sandbox = Sandbox.getInstance();
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
         if (currentTouchedItemWasSelected && !isDragging) {
             // item was selected (and no dragging was performed), so we need to release it
             if (isShiftPressed()) {
-                sandbox.getSelector().releaseSelection(item);
+                ArrayList<IBaseItem> items = new ArrayList<>();
+                items.add(item);
+                facade.sendNotification(Sandbox.ACTION_RELEASE_SELECTION, items);
             }
         }
 
@@ -235,5 +247,34 @@ public class SelectionTool implements Tool {
     private boolean isShiftPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
                 || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+    }
+
+
+    private void selectionComplete() {
+        sandbox = Sandbox.getInstance();
+        SandboxStage sandboxStage = sandbox.getSandboxStage();
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+
+        ArrayList<IBaseItem> freeItems = sandbox.getSelector().getAllFreeItems();
+
+        // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
+
+        // hiding selection rectangle
+        sandboxStage.selectionRec.setOpacity(0.0f);
+        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+        Rectangle sR = sandboxStage.selectionRec.getRect();
+        for (int i = 0; i < freeItems.size(); i++) {
+            Actor asActor = (Actor) freeItems.get(i);
+            if (!freeItems.get(i).isLockedByLayer() && Intersector
+                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+                curr.add(freeItems.get(i));
+            }
+        }
+
+        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+
+        if (curr.size() == 0) {
+            facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
+        }
     }
 }

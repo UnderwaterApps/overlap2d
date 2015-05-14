@@ -70,6 +70,10 @@ public class Sandbox {
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
     public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
 
+    public static final String ACTION_SET_SELECTION = CLASS_NAME + "ACTION_SET_SELECTION";
+    public static final String ACTION_ADD_SELECTION = CLASS_NAME + "ACTION_ADD_SELECTION";
+    public static final String ACTION_RELEASE_SELECTION = CLASS_NAME + "ACTION_RELEASE_SELECTION";
+
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
     /**
@@ -372,27 +376,6 @@ public class Sandbox {
         getSandboxStage().selectionRec.setY(y);
     }
 
-    public void selectionComplete() {
-        // when touch is up, selection process stops, and if any panels got "caught" in they should be selected.
-
-        // hiding selection rectangle
-        getSandboxStage().selectionRec.setOpacity(0.0f);
-        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-        Rectangle sR = getSandboxStage().selectionRec.getRect();
-        for (int i = 0; i < getCurrentScene().getItems().size(); i++) {
-            Actor asActor = (Actor) getCurrentScene().getItems().get(i);
-            if (!getCurrentScene().getItems().get(i).isLockedByLayer() && Intersector
-                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
-                curr.add(getCurrentScene().getItems().get(i));
-            }
-        }
-
-        selector.setSelections(curr, true);
-
-        if (curr.size() == 0) {
-            getUIStage().emptyClick();
-        }
-    }
 
     public int getZoomPercent() {
         return (int)zoomPercent;

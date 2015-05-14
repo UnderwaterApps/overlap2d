@@ -42,5 +42,9 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
         facade.registerCommand(Sandbox.ACTION_GROUP_ITEMS, GroupItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, SetGridSizeFromItemCommand.class);
+
+        facade.registerCommand(Sandbox.ACTION_SET_SELECTION, SetSelectionCommand.class);
+        facade.registerCommand(Sandbox.ACTION_ADD_SELECTION, AddSelectionCommand.class);
+        facade.registerCommand(Sandbox.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
     }
 }

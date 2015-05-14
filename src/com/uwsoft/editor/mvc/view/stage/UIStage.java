@@ -91,11 +91,6 @@ public class UIStage extends Stage {
         setKeyboardFocus(dummyTarget);
     }
 
-
-    public void emptyClick() {
-        facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
-    }
-
     public void loadScene(CompositeItemVO scene) {
         Sandbox.getInstance().initSceneView(scene);
     }

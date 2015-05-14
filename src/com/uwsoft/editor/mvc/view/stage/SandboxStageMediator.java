@@ -211,7 +211,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 }
                 if (keycode == Input.Keys.A) {
                     // Ctrl+A means select all
-                    sandbox.getSelector().selectAllItems();
+                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, sandbox.getSelector().getAllFreeItems());
                 }
                 // Aligning Selections
                 if (keycode == Input.Keys.NUM_1 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {

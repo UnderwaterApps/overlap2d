@@ -47,6 +47,10 @@ public class CommandManager extends BaseProxy {
     }
 
     public void addCommand(RevertableCommand revertableCommand) {
+        //remove all commands after the cursor
+        for(int i = commands.size()-1; i > cursor; i--) {
+            commands.remove(i);
+        }
         commands.add(revertableCommand);
         cursor = commands.indexOf(revertableCommand);
     }

@@ -37,17 +37,26 @@ import java.util.ArrayList;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class PasteItemsCommand extends SandboxCommand {
+public class PasteItemsCommand extends RevertableCommand {
+
+    private String clipboardContents;
+    private ArrayList<IBaseItem> finalItems;
 
     @Override
     public void execute(Notification notification) {
-        Vector2 pastePlace = notification.getBody();
+        clipboardContents = new String(sandbox.fakeClipboard);
+        super.execute(notification);
+    }
+
+    @Override
+    public void doAction() {
+        Vector2 pastePlace = getNotification().getBody();
 
         try {
             CompositeVO tempHolder;
             Json json = new Json();
             json.setOutputType(JsonWriter.OutputType.json);
-            tempHolder = json.fromJson(CompositeVO.class, sandbox.fakeClipboard);
+            tempHolder = json.fromJson(CompositeVO.class, clipboardContents);
 
             if (tempHolder == null) return;
 
@@ -56,7 +65,7 @@ public class PasteItemsCommand extends SandboxCommand {
             fakeVO.composite = tempHolder;
             CompositeItem fakeItem = new CompositeItem(fakeVO, sandbox.sceneControl.getEssentials());
 
-            ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
+            finalItems = new ArrayList<>();
             Actor firstItem = (Actor) fakeItem.getItems().get(0);
             float offsetX = firstItem.getX() * sandbox.sceneControl.getCurrentScene().mulX;
             float offsetY = firstItem.getY() * sandbox.sceneControl.getCurrentScene().mulY;
@@ -92,5 +101,10 @@ public class PasteItemsCommand extends SandboxCommand {
         } catch (Exception e) {
 
         }
+    }
+
+    @Override
+    public void undoAction() {
+        sandbox.getSelector().removeCurrentSelectedItems();
     }
 }
