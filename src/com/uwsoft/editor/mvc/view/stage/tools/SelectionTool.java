@@ -97,7 +97,7 @@ public class SelectionTool implements Tool {
 
     @Override
     public void stageMouseDoubleClick(float x, float y) {
-
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_COMPOSITE_HIERARCHY_UP);
     }
 
     @Override
@@ -229,7 +229,7 @@ public class SelectionTool implements Tool {
 
     @Override
     public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
-
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_EDIT_COMPOSITE);
     }
 
     private boolean isShiftPressed() {

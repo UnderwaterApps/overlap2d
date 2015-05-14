@@ -59,6 +59,7 @@ public class Sandbox {
     private static final String CLASS_NAME = "com.uwsoft.editor.gdx.sandbox.Sandbox";
 
     public static final String ACTION_GROUP_ITEMS = CLASS_NAME + "ACTION_GROUP_ITEMS";
+    public static final String ACTION_COMPOSITE_HIERARCHY_UP = CLASS_NAME + "ACTION_COMPOSITE_HIERARCHY_UP";
     public static final String ACTION_EDIT_COMPOSITE = CLASS_NAME + "ACTION_EDIT_COMPOSITE";
     public static final String ACTION_CONVERT_TO_BUTTON = CLASS_NAME + "ACTION_CONVERT_TO_BUTTON";
     public static final String ACTION_CUT = CLASS_NAME + "ACTION_CUT";
@@ -235,8 +236,6 @@ public class Sandbox {
     public void enterIntoPrevComposite() {
         sandboxStage.getCamera().position.set(0, 0, 0);
         facade.sendNotification(Overlap2D.OPENED_PREVIOUS_COMPOSITE);
-//        uiStage.getCompositePanel().stepUp();
-//        uiStage.getItemsBox().init();
     }
 
     /**

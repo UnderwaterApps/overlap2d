@@ -100,7 +100,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                ItemFactory.NEW_ITEM_ADDED
+                ItemFactory.NEW_ITEM_ADDED,
+                Overlap2D.OPENED_PREVIOUS_COMPOSITE
         };
     }
 
@@ -117,6 +118,9 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             case ItemFactory.NEW_ITEM_ADDED:
                 ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
                 break;
+            case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
+                initItemListeners();
+                break;
             default:
                 break;
         }
@@ -125,13 +129,18 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private void handleSceneLoaded(Notification notification) {
         viewComponent.addListener(stageListener);
 
+        initItemListeners();
+
+        setCurrentTool(SelectionTool.NAME);
+    }
+
+    private void initItemListeners() {
         Sandbox sandbox = Sandbox.getInstance();
         ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
         for (int i = 0; i < items.size(); i++) {
+            ((Actor)items.get(i)).clearListeners();
             ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
         }
-
-        setCurrentTool(SelectionTool.NAME);
     }
 
     public Vector2 getStageCoordinates() {
@@ -377,11 +386,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         private void doubleClick(InputEvent event, float x, float y) {
             Sandbox sandbox = Sandbox.getInstance();
-            // if empty space is double clicked, then get back into previous composite
-            // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
-            sandbox.enterIntoPrevComposite();
-            sandbox.flow.setPendingHistory(sandbox.getCurrentScene().getDataVO(), FlowActionEnum.GET_OUT_COMPOSITE);
-            sandbox.flow.applyPendingAction();
+            currentSelectedTool.stageMouseDoubleClick(x, y);
         }
 
         @Override
