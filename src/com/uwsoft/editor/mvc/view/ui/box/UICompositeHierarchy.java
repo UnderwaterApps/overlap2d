@@ -1,7 +1,12 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
+import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.kotcrab.vis.ui.widget.VisImageTextButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
@@ -16,34 +21,49 @@ public class UICompositeHierarchy extends UIBaseBox {
 
     public static final String SCENE_CHOOSEN = PREFIX + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
 
-    private Stack<VisTextButton> buttons = new Stack<>();
+    private Stack<VisImageTextButton> buttons = new Stack<>();
+
+    private HorizontalGroup mainGroup;
 
     public UICompositeHierarchy() {
+        super();
+
+        mainGroup = new HorizontalGroup();
         clearItems();
+
+        add(mainGroup).left().fill();
+
+        add().fill().expand();
+        row();
     }
 
     public void addItem(String name, CompositeItemVO itemVo) {
-        VisTextButton button = new VisTextButton(name);
+        String classType = "hierarchy-item";
+        if(name.equals("root")) classType+="-root";
+
+        VisImageTextButton button = new VisImageTextButton(name, classType);
+        button.getLabelCell().padLeft(3);
+
 
         button.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 facade.sendNotification(SCENE_CHOOSEN, itemVo);
             }
         });
 
-        add(button).left().expandX();
+        button.padLeft(5).padRight(3);
+        mainGroup.addActor(button);
         buttons.add(button);
     }
 
     public void removeLastItem() {
-        VisTextButton button = buttons.pop();
+        VisImageTextButton button = buttons.pop();
         button.remove();
-        layout();
     }
 
     public void clearItems() {
-        clear();
+        mainGroup.clear();
         buttons.clear();
     }
 

@@ -286,7 +286,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         itemTypeIconMap.put(ItemType.text, "icon-label");
         itemTypeIconMap.put(ItemType.texture, "icon-image");
         itemTypeIconMap.put(ItemType.light, "icon-particle-white");
-        itemTypeIconMap.put(ItemType.spineAnimation, "icon-animation");
+        itemTypeIconMap.put(ItemType.spineAnimation, "icon-spine");
         itemTypeIconMap.put(ItemType.spriteAnimation, "icon-animation");
         itemTypeIconMap.put(ItemType.spriterAnimation, "icon-animation");
     }
