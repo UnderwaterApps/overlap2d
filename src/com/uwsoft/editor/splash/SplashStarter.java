@@ -41,7 +41,7 @@ public class SplashStarter {
         SplashScreen splashScreen = new SplashScreen();
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.fullscreen = false;
-        config.width = 446;
+        config.width = 467;
         config.height = 415;
         config.resizable = false;
         SplashFrame splashFrame = new SplashFrame(splashScreen, config);
