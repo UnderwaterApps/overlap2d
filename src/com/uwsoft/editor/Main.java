@@ -20,9 +20,11 @@ package com.uwsoft.editor;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.uwsoft.editor.splash.SplashStarter;
 import com.uwsoft.editor.utils.AppConfig;
 import org.apache.commons.lang3.SystemUtils;
 
@@ -32,6 +34,8 @@ import java.awt.*;
 public class Main {
 
     public Main() {
+        new SplashStarter();
+        /*
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
@@ -48,13 +52,23 @@ public class Main {
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
+
+            System.setProperty("org.lwjgl.opengl.Window.undecorated", "true");
+            config.fullscreen = false;
+            config.width = 100;
+            config.height = 100;
+            config.resizable = false;
+            LwjglApplication mainFrame = new LwjglApplication(overlap2D, config);
+
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
             config.backgroundFPS = 0;
+            config.allowSoftwareMode =true;
             LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
-        }
 
+        }
+        */
     }
 
     public static void main(String[] argv) throws Exception {
