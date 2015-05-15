@@ -33,6 +33,7 @@ import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemProperties;
+import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
 import java.util.HashMap;
 
@@ -93,17 +94,17 @@ public class UIBasicItemProperties extends UIItemProperties {
         VisTable iconContainer = new VisTable();
         iconContainer.add(itemTypeIcon).width(22).right();
 
-        idBox = new VisTextField();
-        xValue = new VisValidableTextField(floatValidator);
-        yValue = new VisValidableTextField(floatValidator);
-        widthValue = new VisValidableTextField(floatValidator);
-        heightValue = new VisValidableTextField(floatValidator);
-        scaleXValue = new VisValidableTextField(floatValidator);
-        scaleYValue = new VisValidableTextField(floatValidator);
+        idBox = StandardWidgetsFactory.createTextField();
+        xValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
+        yValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
+        widthValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
+        heightValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
+        scaleXValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
+        scaleYValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
         flipVertical = new VisCheckBox(null);
         flipHorizontal = new VisCheckBox(null);
         tintColorComponent = new TintButton(29, 21);
-        rotationValue = new VisValidableTextField(floatValidator);
+        rotationValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
         customVarsButton = new VisTextButton("Custom Vars");
 
         add(iconContainer).padRight(3).right().fillX();

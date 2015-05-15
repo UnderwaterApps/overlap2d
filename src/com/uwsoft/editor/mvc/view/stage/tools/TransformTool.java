@@ -25,6 +25,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.actor.LabelItem;
 
@@ -46,6 +47,10 @@ public class TransformTool extends SelectionTool {
         } else {
             sandbox.getSelector().clearSelections();
         }
+
+        // set cursor
+        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(CursorManager.CROSS);
     }
 
     @Override
