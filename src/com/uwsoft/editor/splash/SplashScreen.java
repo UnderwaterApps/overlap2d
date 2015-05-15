@@ -19,22 +19,37 @@
 package com.uwsoft.editor.splash;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 
 /**
  * Created by azakhary on 5/15/2015.
  */
 public class SplashScreen extends ApplicationAdapter {
 
-    public void SplashScreen() {
-        
-    }
+    private Stage stage;
+    private TextureAtlas atlas;
 
     @Override
     public void create () {
+        atlas = new TextureAtlas(Gdx.files.internal("splash/splash.atlas"));
+
+        stage = new Stage();
+        NinePatch backgroundPatch = new NinePatch(atlas.findRegion("background"), atlas.findRegion("background").splits[0], atlas.findRegion("background").splits[1], atlas.findRegion("background").splits[2], atlas.findRegion("background").splits[3]);
+        Image background = new Image(backgroundPatch);
+        background.setWidth(stage.getWidth()+2);
+        background.setX(-1);
+        background.setY(-1);
+
+        stage.addActor(background);
     }
 
     @Override
     public void render () {
-
+        stage.draw();
     }
 }

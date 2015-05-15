@@ -78,8 +78,18 @@ public class Main {
         TexturePacker.Settings settings =  new TexturePacker.Settings();
         settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
+        processSplashScreenTextures();
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+    }
+
+    private static void processSplashScreenTextures() {
+        String input = "../art/splash_textures";
+        String output = "splash";
+        String packFileName = "splash";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
+        TexturePacker.processIfModified(input, output, packFileName);
     }
 
 }

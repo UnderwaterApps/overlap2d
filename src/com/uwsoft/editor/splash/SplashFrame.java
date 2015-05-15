@@ -38,7 +38,7 @@ public class SplashFrame extends JFrame {
     public SplashFrame (ApplicationListener listener, LwjglApplicationConfiguration config) {
         super(config.title);
         setUndecorated(true);
-        setShape(new RoundRectangle2D.Double(0, 0, config.width, config.height, 18, 18));
+        setShape(new RoundRectangle2D.Double(0, 0, config.width, config.height, 21, 21));
         construct(listener, config);
     }
 
