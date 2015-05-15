@@ -21,7 +21,9 @@ package com.uwsoft.editor.mvc.view.stage;
 import java.awt.Cursor;
 import java.util.HashMap;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +38,9 @@ import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.input.EntityClickListener;
+import com.uwsoft.editor.mvc.view.stage.input.InputListener;
+import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.mvc.view.stage.tools.ConeLightTool;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
 import com.uwsoft.editor.mvc.view.stage.tools.PointLightTool;
@@ -116,7 +121,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 setCurrentTool(notification.getBody());
                 break;
             case ItemFactory.NEW_ITEM_ADDED:
-                ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
+            	//TODO add listener and uncomment
+                //((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
                 break;
             case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
                 initItemListeners();
@@ -136,15 +142,19 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     private void initItemListeners() {
-        Sandbox sandbox = Sandbox.getInstance();
-		//TODO fix and uncomment
-		/*
-        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
-        for (int i = 0; i < items.size(); i++) {
-            ((Actor)items.get(i)).clearListeners();
-            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
+        Engine engine = getViewComponent().getEngine();
+        ImmutableArray<Entity> entities = engine.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+        	Entity entity = entities.get(i);
+        	InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
+        	if(inputListenerComponent == null){
+        		
+        		continue;
+        	}
+        	inputListenerComponent.removeAllListener();
+        	inputListenerComponent.addListener(new SandboxItemEventListener(entity));
         }
-		*/
+		
     }
 
     public Vector2 getStageCoordinates() {
@@ -153,31 +163,29 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         //return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
-    private class SandboxItemEventListener extends ClickListener {
+    private class SandboxItemEventListener extends EntityClickListener {
 
-        private Entity eventItem;
+        private Entity targetEntity;
 
-        public SandboxItemEventListener(final Entity eventItem) {
-            this.eventItem = eventItem;
+        public SandboxItemEventListener(final Entity entity) {
+            this.targetEntity = entity;
         }
 
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchDown(event, x, y, pointer, button);
+        public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
+            super.touchDown(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
-
-            event.stop();
-            return currentSelectedTool.itemMouseDown(eventItem, coords.x, coords.y);
+            return currentSelectedTool.itemMouseDown(targetEntity, coords.x, coords.y);
         }
 
-        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchUp(event, x, y, pointer, button);
+        public void touchUp(Entity entity, float x, float y, int pointer, int button) {
+            super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
 
-            currentSelectedTool.itemMouseUp(eventItem, x, y);
+            currentSelectedTool.itemMouseUp(targetEntity, x, y);
 
             if (getTapCount() == 2) {
                 // this is double click
-                currentSelectedTool.itemMouseDoubleClick(eventItem, coords.x, coords.y);
+                currentSelectedTool.itemMouseDoubleClick(targetEntity, coords.x, coords.y);
             }
 
             if (button == Input.Buttons.RIGHT) {
@@ -188,7 +196,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Vector2 coords = getStageCoordinates();
-            currentSelectedTool.itemMouseDragged(eventItem, coords.x, coords.y);
+            currentSelectedTool.itemMouseDragged(targetEntity, coords.x, coords.y);
         }
 
     }
