@@ -30,7 +30,7 @@ public class CursorManager extends BaseProxy {
     private static final String TAG = CursorManager.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public static CursorData NORMAL = new CursorData("normal", 8, 5);
+    public static CursorData NORMAL = new CursorData("fingerpoint", 8, 5);
     public static CursorData CROSS = new CursorData("cross", 0, 0);
     public static CursorData TEXT = new CursorData("label", 2, 26);
 

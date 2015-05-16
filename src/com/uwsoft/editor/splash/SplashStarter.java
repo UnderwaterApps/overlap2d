@@ -19,6 +19,9 @@
 package com.uwsoft.editor.splash;
 
 import com.badlogic.gdx.backends.lwjgl.*;
+import com.uwsoft.editor.Main;
+import org.apache.commons.lang3.SystemUtils;
+import org.lwjgl.openal.AL;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,20 +35,24 @@ import static java.awt.GraphicsDevice.WindowTranslucency.*;
  */
 public class SplashStarter {
 
-    public SplashStarter() {
-        super();
-        initSplashScreen();
-    }
+    private SplashScreen splashScreen;
+    private SplashFrame splashFrame;
 
-    private void initSplashScreen() {
-        SplashScreen splashScreen = new SplashScreen();
+    public SplashStarter(SplashScreen.SplashListener listener) {
+
+        if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
+            // let's work out osx splash screen later, not sure if we can have translucency there.
+            listener.loadingComplete();
+            return;
+        }
+
+        splashScreen = new SplashScreen();
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         config.fullscreen = false;
         config.width = 467;
         config.height = 415;
         config.resizable = false;
-        SplashFrame splashFrame = new SplashFrame(splashScreen, config);
-
+        splashFrame = new SplashFrame(splashScreen, config);
         /*
         GraphicsEnvironment ge =
                 GraphicsEnvironment.getLocalGraphicsEnvironment();
@@ -54,5 +61,17 @@ public class SplashStarter {
         boolean isPerPixelTranslucencySupported = gd.isWindowTranslucencySupported(PERPIXEL_TRANSLUCENT);
         boolean isShapedWindowSupported = gd.isWindowTranslucencySupported(PERPIXEL_TRANSPARENT);
         */
+
+        splashScreen.listener = listener;
+    }
+
+    public SplashScreen getSplashScreen() {
+        return splashScreen;
+    }
+
+    public void kill() {
+        splashScreen.dispose();
+        splashFrame.dispose();
+        AL.destroy();
     }
 }

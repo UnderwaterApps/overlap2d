@@ -15,7 +15,7 @@ background
   index: -1
 devider
   rotate: false
-  xy: 71, 244
+  xy: 2, 141
   size: 1, 2
   orig: 1, 2
   offset: 0, 0
@@ -34,19 +34,26 @@ logo
   orig: 67, 85
   offset: 0, 0
   index: -1
+logoText
+  rotate: false
+  xy: 2, 145
+  size: 63, 14
+  orig: 63, 14
+  offset: 0, 0
+  index: -1
 progressBar
   rotate: false
-  xy: 489, 413
-  size: 14, 7
-  split: 4, 4, 3, 3
-  orig: 14, 7
+  xy: 489, 415
+  size: 12, 5
+  split: 3, 3, 2, 2
+  orig: 12, 5
   offset: 0, 0
   index: -1
 progressBg
   rotate: false
-  xy: 2, 152
-  size: 14, 7
-  split: 5, 5, 3, 3
-  orig: 14, 7
+  xy: 71, 241
+  size: 12, 5
+  split: 4, 4, 2, 2
+  orig: 12, 5
   offset: 0, 0
   index: -1
