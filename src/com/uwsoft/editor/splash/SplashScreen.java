@@ -134,14 +134,12 @@ public class SplashScreen extends ApplicationAdapter {
     }
 
     private void loadData() {
-        // do some server connecting here to check for new versions.
-
-        //VisUI.load(Gdx.files.internal("style/uiskin.json"));
+        //TODO: do some server connecting here to check for new versions.
 
         if(listener != null) {
             setProgress(100);
 
-            stage.addAction(Actions.sequence(Actions.delay(1f), Actions.run(() -> listener.loadingComplete())));
+            stage.addAction(Actions.sequence(Actions.delay(0.3f), Actions.run(() -> listener.loadingComplete())));
         }
     }
 

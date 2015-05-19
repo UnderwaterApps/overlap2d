@@ -128,17 +128,22 @@ public class SelectionTool implements Tool {
                 facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
             }
         } else {
-
+            // normal mode
             if (item.isLockedByLayer()) {
                 // this is considered empty space click and thus should release all selections
                 facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
                 sandbox.getSelector().clearSelections();
                 return false;
             } else {
-                // select this item and remove others from selection
-                ArrayList<IBaseItem> items = new ArrayList<>();
-                items.add(item);
-                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+                // if item is selected do nothing
+                if (currentTouchedItemWasSelected) {
+                    // do nothing
+                } else {
+                    // if item was not selected, deselect others and select it
+                    ArrayList<IBaseItem> items = new ArrayList<>();
+                    items.add(item);
+                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+                }
             }
         }
 
