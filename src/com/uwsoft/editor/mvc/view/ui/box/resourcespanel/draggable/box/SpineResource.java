@@ -20,14 +20,9 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-<<<<<<< HEAD
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
-=======
->>>>>>> 6c58d464b209baeab3e2110fe401981e1282cfe0
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**

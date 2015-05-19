@@ -81,7 +81,7 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "art/textures";
+        String input = "../art/textures";
         File file = new File(input);
         //System.out.println("path " + file.getAbsolutePath());
         String output = "style";

@@ -18,11 +18,12 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
-T
+
 /**
  * Created by azakhary on 4/30/2015.
  */
