@@ -128,8 +128,7 @@ public class ComponentRetriever {
      */
     @SuppressWarnings("unchecked")
     public static <T extends Component> T get(Entity entity, Class<T> type) {
-        ComponentRetriever retriever  = self();
-        return (T)retriever.getMappers().get(type).get(entity);
+        return (T)self().getMappers().get(type).get(entity);
     }
 
     /**
