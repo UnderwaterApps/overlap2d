@@ -121,7 +121,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setRotationValue(trnasformComponent.rotation + "");
         viewComponent.setScaleXValue(trnasformComponent.scaleX + "");
         viewComponent.setScaleYValue(trnasformComponent.scaleY + "");
-        viewComponent.setTintColor(new Color(tintComponent.tint[0], tintComponent.tint[1], tintComponent.tint[2], tintComponent.tint[3]));
+        viewComponent.setTintColor(tintComponent.color);
     }
 
     @Override
@@ -146,10 +146,12 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	trnasformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), trnasformComponent.rotation);
     	trnasformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), trnasformComponent.scaleX);
     	trnasformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), trnasformComponent.scaleY);
-        Color color = viewComponent.getTintColor();
-        tintComponent.tint[0] = color.r;
-        tintComponent.tint[1] = color.g;
-        tintComponent.tint[2] = color.b;
-        tintComponent.tint[3] = color.a;
+    	
+    	//TODO not sure if this is needed because color object is passed by reference
+//        Color color = viewComponent.getTintColor();
+//        tintComponent.color[0] = color.r;
+//        tintComponent.color[1] = color.g;
+//        tintComponent.color[2] = color.b;
+//        tintComponent.color[3] = color.a;
     }
 }

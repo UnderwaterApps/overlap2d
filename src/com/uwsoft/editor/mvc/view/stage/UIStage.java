@@ -41,6 +41,7 @@ public class UIStage extends Stage {
 
 
     public DropDown mainDropDown;
+	public Group sandBoxUIGroup;
 
 
     public UIStage() {
@@ -48,12 +49,16 @@ public class UIStage extends Stage {
 
         facade = Overlap2DFacade.getInstance();
 
+        sandBoxUIGroup = new Group();
+        addActor(sandBoxUIGroup);
+        
         dummyTarget = new Group();
         dummyTarget.setWidth(getWidth());
         dummyTarget.setHeight(getHeight());
         dummyTarget.setY(0);
         dummyTarget.setX(0);
         addActor(dummyTarget);
+               
 
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();

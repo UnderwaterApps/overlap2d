@@ -9,7 +9,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
-import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 
 public class SandboxInputAdapter implements InputProcessor {
 

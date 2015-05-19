@@ -10,13 +10,13 @@ public interface InputListener {
 	
 	public boolean keyTyped(Entity entity, char character);
 
-	public boolean touchDown(Entity entity, int screenX, int screenY, int pointer, int button);
+	public boolean touchDown(Entity entity, float screenX, float screenY, int pointer, int button);
 	
-	public boolean touchUp(Entity entity, int screenX, int screenY, int pointer, int button);
+	public void touchUp(Entity entity, float screenX, float screenY, int pointer, int button);
 	
-	public boolean touchDragged(Entity entity, int screenX, int screenY, int pointer);
+	public void touchDragged(Entity entity, float screenX, float screenY, int pointer);
 	
-	public boolean mouseMoved(Entity entity, int screenX, int screenY);
+	public boolean mouseMoved(Entity entity, float screenX, float screenY);
 	
 	public boolean scrolled(Entity entity, int amount);
 

@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.gdx.actors;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -31,6 +32,8 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
 
 public class SelectionRectangle extends PixelRect {
 
@@ -42,6 +45,7 @@ public class SelectionRectangle extends PixelRect {
     public static final int B = 5;
     public static final int LB = 6;
     public static final int L = 7;
+    
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
     private Entity host;
@@ -50,9 +54,18 @@ public class SelectionRectangle extends PixelRect {
     private float[] touchDiff = new float[2];
     private Group transformGroup;
     private Image[] miniRects = new Image[8];
+    
+    private ComponentMapper<TransformComponent> transformCM; 
+    private ComponentMapper<DimensionsComponent> dimensionsCM;
+    private TransformComponent transformComponent;
+    private DimensionsComponent dimensionsComponent;
 
     public SelectionRectangle(Sandbox sandbox) {
         super(0, 0);
+        
+        transformCM = ComponentMapper.getFor(TransformComponent.class);
+        dimensionsCM = ComponentMapper.getFor(DimensionsComponent.class);
+        
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         rm = facade.retrieveProxy(EditorTextureManager.NAME);
@@ -74,6 +87,8 @@ public class SelectionRectangle extends PixelRect {
                 return true;
             }
         });
+        
+       
     }
 
     public interface SelectionRectangleListener {
@@ -224,32 +239,43 @@ public class SelectionRectangle extends PixelRect {
         return rect;
     }
 
-    public void claim(Entity itm) {
+    public void claim(Entity entity) {
     	//TODO fix and uncomment 
-//        host = itm;
-//        Actor hostAsActor = getHostAsActor();
-//        setX(hostAsActor.getX());
-//        setY(hostAsActor.getY());
-//        setRotation(hostAsActor.getRotation());
-//        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-//        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+        host = entity;
+        
+        transformComponent = transformCM.get(entity);
+        dimensionsComponent = dimensionsCM.get(entity);
+        
+        setX(transformComponent.x);
+        setY(transformComponent.y);
+        setRotation(transformComponent.rotation);
+        //TODO label thing
+        //setWidth(dimensionsComponent.width * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+        //setHeight(dimensionsComponent.height * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+        setWidth(dimensionsComponent.width * transformComponent.scaleX);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY);
     }
 
     public void update() {
         //setX(getHostAsActor().getX() - ((getHostAsActor().getScaleX()-1)*getHostAsActor().getWidth()/2));
         //setY(getHostAsActor().getY() - ((getHostAsActor().getScaleY()-1)*getHostAsActor().getHeight()/2));
     	
-    	////TODO fix and uncomment 
-//        Actor hostAsActor = getHostAsActor();
-//        setX(hostAsActor.getX());
-//        setY(hostAsActor.getY());
+    	transformComponent = transformCM.get(host);
+        dimensionsComponent = dimensionsCM.get(host);
+        
+        setX(transformComponent.x);
+        setY(transformComponent.y);
+        //TODO
 //        setOriginX(hostAsActor.getOriginX());
 //        setOriginY(hostAsActor.getOriginY());
-//        setRotation(hostAsActor.getRotation());
-//        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-//        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
-//
-//        positionTransformables();
+        setRotation(transformComponent.rotation);
+      //TODO label thing
+        //setWidth(dimensionsComponent.width * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+        //setHeight(dimensionsComponent.height * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+        setWidth(dimensionsComponent.width * transformComponent.scaleX);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY);
+
+        positionTransformables();
     }
 
     public void show() {

@@ -103,9 +103,9 @@ public class Sandbox {
     
     
     public PixelRect selectionRec;
-    public Group mainBox = new Group();
-    public SandboxUI ui;
-    public Group frontUI;
+    //public Group mainBox = new Group();
+    //public SandboxUI ui;
+    //public Group frontUI;
 
 	private Engine engine;
 
@@ -160,28 +160,14 @@ public class Sandbox {
     }
     
     public void initView() {
-        if (mainBox != null) mainBox.clear();
         //TODO fix and uncomment
-//        clear();
 //        getCamera().position.set(0, 0, 0);
-
-        frontUI = new Group();
-
-        ui = new SandboxUI(this);
-        //TODO fix and uncomment
-        //addActor(ui);
 
         selectionRec = new PixelRect(0, 0);
         selectionRec.setFillColor(new Color(1, 1, 1, 0.1f));
         selectionRec.setOpacity(0.0f);
         selectionRec.setTouchable(Touchable.disabled);
-        frontUI.addActor(selectionRec);
-        
-        //TODO fix and uncomment
-        //addActor(mainBox);
-
-        //TODO fix and uncomment
-        //addActor(frontUI);
+        uiStage.sandBoxUIGroup.addActor(selectionRec);
 
     }
     
@@ -190,8 +176,7 @@ public class Sandbox {
     }
 
     public void setKeyboardFocus() {
-    	//TODO fix and uncomment
-        //setKeyboardFocus(mainBox);
+        uiStage.setKeyboardFocus(uiStage.sandBoxUIGroup);
     }
     
 

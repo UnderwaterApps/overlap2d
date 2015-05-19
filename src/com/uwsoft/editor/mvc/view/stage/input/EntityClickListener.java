@@ -37,6 +37,7 @@ public class EntityClickListener implements InputListener {
 		this.button = button;
 	}
 
+	@Override
 	public boolean touchDown (Entity entity, float x, float y, int pointer, int button) {
 		if (pressed) return false;
 		if (pointer == 0 && this.button != -1 && button != this.button) return false;
@@ -49,6 +50,7 @@ public class EntityClickListener implements InputListener {
 		return true;
 	}
 
+	@Override
 	public void touchDragged (Entity entity, float x, float y, int pointer) {
 		if (pointer != pressedPointer || cancelled) return;
 		pressed = isOver(entity, x, y);
@@ -59,6 +61,7 @@ public class EntityClickListener implements InputListener {
 		}
 	}
 
+	@Override
 	public void touchUp (Entity entity, float x, float y, int pointer, int button) {
 		if (pointer == pressedPointer) {
 			if (!cancelled) {
@@ -205,30 +208,9 @@ public class EntityClickListener implements InputListener {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	@Override
-	public boolean touchDown(Entity entity, int screenX, int screenY,
-			int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchUp(Entity entity, int screenX, int screenY,
-			int pointer, int button) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean touchDragged(Entity entity, int screenX, int screenY,
-			int pointer) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean mouseMoved(Entity entity, int screenX, int screenY) {
+	public boolean mouseMoved(Entity entity, float screenX, float screenY) {
 		// TODO Auto-generated method stub
 		return false;
 	}
