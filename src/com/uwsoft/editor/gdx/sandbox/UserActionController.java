@@ -23,8 +23,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
  * Provides interface for user actions/intentions like creating panels
@@ -47,44 +47,48 @@ public class UserActionController {
         if (layer == null) return false;
         vector2.x = MathUtils.floor(vector2.x / sandbox.getGridSize()) * sandbox.getGridSize();
         vector2.y = MathUtils.floor(vector2.y / sandbox.getGridSize()) * sandbox.getGridSize();
-        sandbox.getItemFactory().createImageItem(layer, regionName, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createImageItem(layer, regionName, vector2.x, vector2.y);
         return true;
     }
 
     public Boolean create9Patch(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
-        sandbox.getItemFactory().create9patchItem(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().create9patchItem(layer, name, vector2.x, vector2.y);
         return true;
     }
 
     public Boolean createParticleItem(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
-
-        sandbox.getItemFactory().createParticleItem(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createParticleItem(layer, name, vector2.x, vector2.y);
         return true;
     }
 
     public Boolean createSpriteAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
-        sandbox.getItemFactory().createSpriteAnimation(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createSpriteAnimation(layer, name, vector2.x, vector2.y);
         return true;
     }
 
     public Boolean createSpriterAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
-        sandbox.getItemFactory().createSpriterAnimation(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createSpriterAnimation(layer, name, vector2.x, vector2.y);
         return true;
     }
 
     public Boolean createSpineAnimation(String name, Vector2 vector2) {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
-
-        sandbox.getItemFactory().createSpineAnimation(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createSpineAnimation(layer, name, vector2.x, vector2.y);
         return true;
     }
 
@@ -92,7 +96,8 @@ public class UserActionController {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return;
 
-        sandbox.getItemFactory().createLight(layer, vo, x, y);
+        //TODO fix and uncomment 
+        //sandbox.getItemFactory().createLight(layer, vo, x, y);
     }
 
 
@@ -100,7 +105,8 @@ public class UserActionController {
         LayerItemVO layer = sandbox.getSelectedLayer();
         if (layer == null) return false;
 
-        sandbox.getItemFactory().createItemFromLibrary(layer, name, vector2.x, vector2.y);
+		//TODO fix and uncomment
+        //sandbox.getItemFactory().createItemFromLibrary(layer, name, vector2.x, vector2.y);
         return true;
     }
 

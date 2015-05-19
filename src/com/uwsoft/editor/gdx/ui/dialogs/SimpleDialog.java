@@ -25,14 +25,14 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.badlogic.gdx.utils.Align;
 import com.uwsoft.editor.gdx.ui.UIBox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.mvc.view.stage.UIStage;
 
 public class SimpleDialog extends UIBox {
 

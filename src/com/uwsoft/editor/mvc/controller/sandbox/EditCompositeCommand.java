@@ -28,6 +28,7 @@ public class EditCompositeCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        sandbox.enterIntoComposite();
+		//TODO fix and uncomment
+        //sandbox.enterIntoComposite();
     }
 }

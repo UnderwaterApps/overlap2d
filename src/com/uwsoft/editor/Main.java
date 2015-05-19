@@ -18,6 +18,15 @@
 
 package com.uwsoft.editor;
 
+import java.awt.GraphicsEnvironment;
+import java.awt.Rectangle;
+import java.io.File;
+
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+
+import org.apache.commons.lang3.SystemUtils;
+
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
@@ -27,9 +36,6 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.uwsoft.editor.splash.*;
 import com.uwsoft.editor.splash.SplashScreen;
 import com.uwsoft.editor.utils.AppConfig;
-import org.apache.commons.lang3.SystemUtils;
-
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.InputEvent;
 
@@ -75,7 +81,9 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "../art/textures";
+        String input = "art/textures";
+        File file = new File(input);
+        //System.out.println("path " + file.getAbsolutePath());
         String output = "style";
         String packFileName = "uiskin";
         TexturePacker.Settings settings =  new TexturePacker.Settings();

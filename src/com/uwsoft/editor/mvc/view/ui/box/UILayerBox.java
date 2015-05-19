@@ -32,8 +32,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 /**
  * Created by azakhary on 4/17/2015.

@@ -18,10 +18,10 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
 import java.util.ArrayList;
+
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
  * Created by azakhary on 5/14/2015.
@@ -29,13 +29,13 @@ import java.util.ArrayList;
 public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void doAction() {
-        ArrayList<IBaseItem> items = getNotification().getBody();
+        ArrayList<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().releaseSelections(items);
     }
 
     @Override
     public void undoAction() {
-        ArrayList<IBaseItem> items = getNotification().getBody();
+        ArrayList<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().addSelections(items);
     }
 }

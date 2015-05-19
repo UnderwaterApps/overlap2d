@@ -18,35 +18,43 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.Animation;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.SpineActor;
+import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<SpineActor, UISpineAnimationItemProperties> {
+public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpineAnimationItemProperties> {
     private static final String TAG = UISpineAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+    
+    private ComponentMapper<SpineDataComponent> spinDataMapper =  ComponentMapper.getFor(SpineDataComponent.class);
+    private SpineDataComponent spineDataComponent;
 
     public UISpineAnimationItemPropertiesMediator() {
         super(NAME, new UISpineAnimationItemProperties());
     }
 
     @Override
-    protected void translateObservableDataToView(SpineActor item) {
+    protected void translateObservableDataToView(Entity entity) {
+    	
+    	spineDataComponent = spinDataMapper.get(entity);
+    	
         Array<String> animations = new Array<>();
-        for (Animation animation : item.getAnimations()) {
+        for (Animation animation : spineDataComponent.getAnimations()) {
             animations.add(animation.getName());
         }
 
         viewComponent.setAnimations(animations);
-        viewComponent.setSelectedAnimation(item.getCurrentAnimationName());
+        viewComponent.setSelectedAnimation(spineDataComponent.currentAnimationName);
     }
 
     @Override
     protected void translateViewToItemData() {
-        observableReference.setAnimation(viewComponent.getSelected());
+    	spineDataComponent.setAnimation(viewComponent.getSelected());
     }
 }

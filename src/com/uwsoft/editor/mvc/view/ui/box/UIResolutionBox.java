@@ -33,8 +33,8 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 public class UIResolutionBox extends VisTable {
     public static final String CREATE_NEW_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox" + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";

@@ -18,21 +18,22 @@
 
 package com.uwsoft.editor.data.migrations.migrators;
 
+import java.io.File;
+import java.io.IOException;
+
+import org.apache.commons.io.FileUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
 import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
+import com.uwsoft.editor.mvc.proxy.ResolutionManager;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 /**
  * Created by azakhary on 9/28/2014.

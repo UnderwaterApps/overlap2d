@@ -18,16 +18,20 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.util.Map;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
-
-import java.util.Map;
 
 /**
  * Created by azakhary on 5/12/2015.

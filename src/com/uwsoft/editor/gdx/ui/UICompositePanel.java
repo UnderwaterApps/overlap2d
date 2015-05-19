@@ -18,18 +18,18 @@
 
 package com.uwsoft.editor.gdx.ui;
 
+import java.util.ArrayList;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBox;
 import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-
-import java.util.ArrayList;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 public class UICompositePanel extends VisTable {
 
@@ -99,7 +99,7 @@ public class UICompositePanel extends VisTable {
         //updateOriginalItem(scenes.get(scenes.size() - 1), stage.getSandbox().getCurrentScene());
     }
 
-    private void updateOriginalItem(CompositeItemVO updatableVo, CompositeItem currItem) {
+    private void updateOriginalItem(CompositeItemVO updatableVo, Entity currItem) {
 //        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
 //
 //        String libName = currItem.getDataVO().itemName;

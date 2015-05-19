@@ -1,5 +1,7 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.util.Stack;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.VerticalGroup;
@@ -8,9 +10,7 @@ import com.kotcrab.vis.ui.widget.VisImageTextButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-
-import java.util.Stack;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * Created by CyberJoe on 4/22/2015.

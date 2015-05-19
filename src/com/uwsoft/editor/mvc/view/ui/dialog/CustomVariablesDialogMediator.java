@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -26,7 +27,6 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**
@@ -36,7 +36,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     private static final String TAG = CustomVariablesDialogMediator.class.getCanonicalName();
     private static final String NAME = TAG;
 
-    private IBaseItem observable = null;
+    private Entity observable = null;
 
     public CustomVariablesDialogMediator() {
         super(NAME, new CustomVariablesDialog());
@@ -93,20 +93,22 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     }
 
     private void setVariable() {
-        CustomVariables vars = observable.getCustomVariables();
-        String key = viewComponent.getKey();
-        String value = viewComponent.getValue();
-        vars.setVariable(key, value);
-        observable.updateDataVO();
+    	//TODO fix and uncomment
+//        CustomVariables vars = observable.getCustomVariables();
+//        String key = viewComponent.getKey();
+//        String value = viewComponent.getValue();
+//        vars.setVariable(key, value);
+//        observable.updateDataVO();
     }
 
     private void removeVariable(String key) {
-        CustomVariables vars = observable.getCustomVariables();
-        vars.removeVariable(key);
-        observable.updateDataVO();
+    	//TODO fix and uncomment
+//        CustomVariables vars = observable.getCustomVariables();
+//        vars.removeVariable(key);
+//        observable.updateDataVO();
     }
 
-    private void setObservable(IBaseItem item) {
+    private void setObservable(Entity item) {
         observable = item;
         updateView();
         viewComponent.setKeyFieldValue("");
@@ -117,8 +119,9 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
         if(observable == null) {
             viewComponent.setEmpty();
         } else {
-            CustomVariables vars = observable.getCustomVariables();
-            viewComponent.updateView(vars);
+        	//TODO fix and uncomment
+            //CustomVariables vars = observable.getCustomVariables();
+            //viewComponent.updateView(vars);
         }
     }
 }

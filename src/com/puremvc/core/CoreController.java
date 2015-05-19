@@ -18,12 +18,12 @@
 package com.puremvc.core;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.puremvc.patterns.command.Command;
 import com.puremvc.patterns.observer.BaseObserver;
 import com.puremvc.patterns.observer.Notification;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * A Singleton <code>Controller</code> implementation.

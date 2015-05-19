@@ -18,27 +18,19 @@
 
 package com.uwsoft.editor.gdx.actors;
 
-import com.badlogic.gdx.Gdx;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.LabelItem;
-
-import java.awt.*;
 
 public class SelectionRectangle extends PixelRect {
 
@@ -52,7 +44,7 @@ public class SelectionRectangle extends PixelRect {
     public static final int L = 7;
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
-    private IBaseItem host;
+    private Entity host;
     private EditorTextureManager rm;
     private Sandbox sandbox;
     private float[] touchDiff = new float[2];
@@ -77,7 +69,8 @@ public class SelectionRectangle extends PixelRect {
         addListener(new ClickListener() {
             @Override
             public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                ((Actor)host).fire(event);
+            	//TODO fix and uncomment 
+                //((Actor)host).fire(event);
                 return true;
             }
         });
@@ -156,9 +149,9 @@ public class SelectionRectangle extends PixelRect {
 
     private Vector2 getMouseLocalCoordinates() {
         Vector2 vec = new Vector2();
-
-        vec.x = Gdx.input.getX() - (-sandbox.getSandboxStage().getCamera().position.x + sandbox.getSandboxStage().getWidth() / 2) - getX();
-        vec.y = (sandbox.getSandboxStage().getHeight() - Gdx.input.getY()) - (-sandbox.getSandboxStage().getCamera().position.y + sandbox.getSandboxStage().getHeight() / 2) - getY();
+//TODO fix and uncomment
+//        vec.x = Gdx.input.getX() - (-sandbox.getSandboxStage().getCamera().position.x + sandbox.getSandboxStage().getWidth() / 2) - getX();
+//        vec.y = (sandbox.getSandboxStage().getHeight() - Gdx.input.getY()) - (-sandbox.getSandboxStage().getCamera().position.y + sandbox.getSandboxStage().getHeight() / 2) - getY();
 
         return vec;
     }
@@ -231,29 +224,32 @@ public class SelectionRectangle extends PixelRect {
         return rect;
     }
 
-    public void claim(IBaseItem itm) {
-        host = itm;
-        Actor hostAsActor = getHostAsActor();
-        setX(hostAsActor.getX());
-        setY(hostAsActor.getY());
-        setRotation(hostAsActor.getRotation());
-        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+    public void claim(Entity itm) {
+    	//TODO fix and uncomment 
+//        host = itm;
+//        Actor hostAsActor = getHostAsActor();
+//        setX(hostAsActor.getX());
+//        setY(hostAsActor.getY());
+//        setRotation(hostAsActor.getRotation());
+//        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+//        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
     }
 
     public void update() {
         //setX(getHostAsActor().getX() - ((getHostAsActor().getScaleX()-1)*getHostAsActor().getWidth()/2));
         //setY(getHostAsActor().getY() - ((getHostAsActor().getScaleY()-1)*getHostAsActor().getHeight()/2));
-        Actor hostAsActor = getHostAsActor();
-        setX(hostAsActor.getX());
-        setY(hostAsActor.getY());
-        setOriginX(hostAsActor.getOriginX());
-        setOriginY(hostAsActor.getOriginY());
-        setRotation(hostAsActor.getRotation());
-        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
-        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
-
-        positionTransformables();
+    	
+    	////TODO fix and uncomment 
+//        Actor hostAsActor = getHostAsActor();
+//        setX(hostAsActor.getX());
+//        setY(hostAsActor.getY());
+//        setOriginX(hostAsActor.getOriginX());
+//        setOriginY(hostAsActor.getOriginY());
+//        setRotation(hostAsActor.getRotation());
+//        setWidth(hostAsActor.getWidth() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleX()));
+//        setHeight(hostAsActor.getHeight() * (hostAsActor instanceof LabelItem ? 1 : hostAsActor.getScaleY()));
+//
+//        positionTransformables();
     }
 
     public void show() {
@@ -272,13 +268,13 @@ public class SelectionRectangle extends PixelRect {
         remove();
     }
 
-    public IBaseItem getHost() {
+    public Entity getHost() {
         return host;
     }
 
-    public Actor getHostAsActor() {
-        return (Actor) host;
-    }
+//    public Actor getHostAsActor() {
+//        return (Actor) host;
+//    }
 
     public void setTouchDiff(float x, float y) {
         touchDiff[0] = x;

@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
 
 /**
  * Created by azakhary on 7/3/2014.

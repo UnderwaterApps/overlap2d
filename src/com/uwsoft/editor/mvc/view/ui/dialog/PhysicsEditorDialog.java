@@ -18,16 +18,21 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.gdx.ui.components.ItemPhysicsEditor;
 import com.uwsoft.editor.mvc.event.ClickNotifier;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import org.apache.commons.lang3.math.NumberUtils;
 
 
 /**
@@ -248,7 +253,7 @@ public class PhysicsEditorDialog extends O2DDialog {
         controlsTable.row().padBottom(20);
     }
 
-    public void setItem(IBaseItem item) {
+    public void setItem(Entity item) {
         itemPhysicsEditor.editItem(item);
     }
 

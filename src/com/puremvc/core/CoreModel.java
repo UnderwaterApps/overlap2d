@@ -18,10 +18,10 @@
 package com.puremvc.core;
 
 
-import com.puremvc.patterns.proxy.Proxy;
-
 import java.util.HashMap;
 import java.util.Map;
+
+import com.puremvc.patterns.proxy.Proxy;
 
 /**
  * A Singleton <code>IModel</code> implementation.

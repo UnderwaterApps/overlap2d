@@ -19,15 +19,16 @@
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+<<<<<<< HEAD
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
+=======
+>>>>>>> 6c58d464b209baeab3e2110fe401981e1282cfe0
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.renderer.actor.SpineActor;
-import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -48,6 +49,8 @@ public class SpineResource extends BoxItemResource {
         facade = Overlap2DFacade.getInstance();
         SpineVO vo = new SpineVO();
         vo.animationName = animName;
+		//TODO fix and uncomment
+		/*
         final SpineActor animThumb = new SpineActor(vo, sandbox.getSceneControl().getEssentials());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
@@ -85,11 +88,17 @@ public class SpineResource extends BoxItemResource {
 
 
         addActor(animThumb);
+
+        */
         payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+
         payload = new ResourcePayloadObject();
+        //TODO fix and uncomment
+        /*
         payload.name = animName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
+		*/
         super.act(1f);
     }
 

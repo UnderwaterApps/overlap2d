@@ -18,17 +18,20 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.util.Map;
+
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.NumberSelector;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
-import com.uwsoft.editor.renderer.utils.CustomVariables;
+import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
-
-import java.util.Map;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -94,14 +97,14 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
         invalidateHeight();
     }
 
-    public void updateView(Map<String, SpriteAnimation.Animation> animations) {
+    public void updateView(Map<String, SceneLoader.Frames> animations) {
         createNewAnimationTable();
         animationsList.clear();
 
-        for (Map.Entry<String, SpriteAnimation.Animation> entry : animations.entrySet()) {
+        for (Map.Entry<String, SceneLoader.Frames> entry : animations.entrySet()) {
             VisTable row = new VisTable();
             final String name = entry.getKey();
-            SpriteAnimation.Animation animationData = entry.getValue();
+            SceneLoader.Frames animationData = entry.getValue();
 
             VisImageButton trashBtn = new VisImageButton("trash-button");
 

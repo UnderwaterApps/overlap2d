@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIAnimationsTabMediator;

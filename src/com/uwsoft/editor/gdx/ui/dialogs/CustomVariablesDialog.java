@@ -20,28 +20,26 @@ package com.uwsoft.editor.gdx.ui.dialogs;
 
 import java.util.Map;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.building.OneRowTableBuilder;
-import com.kotcrab.vis.ui.building.StandardTableBuilder;
-import com.kotcrab.vis.ui.building.TableBuilder;
-import com.kotcrab.vis.ui.building.utilities.CellWidget;
-import com.kotcrab.vis.ui.building.utilities.Padding;
-import com.kotcrab.vis.ui.building.utilities.layouts.ActorLayout;
 import com.kotcrab.vis.ui.util.TableUtils;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogAdapter;
-import com.kotcrab.vis.ui.widget.*;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.kotcrab.vis.ui.widget.Separator;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisList;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
-
-import java.util.Map;
 
 public class CustomVariablesDialog extends VisWindow {
 	
-	private IBaseItem item;
+	private Entity item;
 	private CustomVariables vars;
 	private VisList<String> varNames;
 	
@@ -56,7 +54,7 @@ public class CustomVariablesDialog extends VisWindow {
 	private VisTextField keyVal;
 	private VisTextButton addVar;
 	
-	public CustomVariablesDialog(final IBaseItem item) {
+	public CustomVariablesDialog(final Entity item) {
 		super("Custom Variables Dialog");
 		
 		setModal(true);
@@ -66,7 +64,8 @@ public class CustomVariablesDialog extends VisWindow {
 		TableUtils.setSpacingDefaults(this);
 		columnDefaults(0).left();
 		this.item = item;
-		vars = item.getCustomVariables();
+		//TODO fix and uncomment
+		//vars = item.getCustomVariables();
 		
 		buildLayout();
 		
@@ -156,7 +155,8 @@ public class CustomVariablesDialog extends VisWindow {
 						// Change the Variable name here.
 						vars.removeVariable(varName.getText());
 						vars.setVariable(input, varVal.getText());
-						item.updateDataVO();
+						//TODO fix if needed
+						//item.updateDataVO();
 						renderNames();
 						varNames.setSelected(input);
 						varName.setText(input);
@@ -169,7 +169,8 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.setVariable(varName.getText(),varVal.getText());
-				item.updateDataVO();
+				//TODO fix if needed
+				//item.updateDataVO();
 			}
 		});
 		
@@ -177,7 +178,8 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.removeVariable(varName.getText());
-				item.updateDataVO();
+				//TODO fix if needed
+				//item.updateDataVO();
 				varName.setText("");
 				varVal.setText("");
 				renderNames();
@@ -189,7 +191,8 @@ public class CustomVariablesDialog extends VisWindow {
 			@Override
 			public void changed(ChangeEvent event, Actor actor) {
 				vars.setVariable(keyName.getText(), keyVal.getText());
-				item.updateDataVO();
+				//TODO fix if needed
+				//item.updateDataVO();
 				keyName.setText("");
 				keyVal.setText("");
 				renderNames();

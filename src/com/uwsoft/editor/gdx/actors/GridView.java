@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.gdx.actors;
 
+import java.util.AbstractList;
+import java.util.ArrayList;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
@@ -26,10 +29,6 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.stage.BaseStage;
-
-import java.util.AbstractList;
-import java.util.ArrayList;
 
 public class GridView extends Group {
 

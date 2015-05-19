@@ -22,10 +22,11 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
-import com.uwsoft.editor.mvc.view.stage.tools.*;
-
-import java.util.ArrayList;
+import com.uwsoft.editor.mvc.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 
 /**
  * Created by sargis on 4/9/15.

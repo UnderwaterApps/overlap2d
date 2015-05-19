@@ -18,16 +18,17 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
+import java.util.HashMap;
+
+import org.apache.commons.lang3.ArrayUtils;
+
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemResource;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import org.apache.commons.lang3.ArrayUtils;
-
-import java.util.HashMap;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 
 /**
  * Created by azakhary on 4/17/2015.

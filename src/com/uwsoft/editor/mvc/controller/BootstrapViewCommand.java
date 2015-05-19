@@ -23,11 +23,25 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.mvc.view.Overlap2DScreenMediator;
-import com.uwsoft.editor.mvc.view.stage.SandboxStageMediator;
+import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.mvc.view.ui.UIDropDownMenuMediator;
-import com.uwsoft.editor.mvc.view.ui.box.*;
-import com.uwsoft.editor.mvc.view.ui.dialog.*;
+import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIGridBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIResolutionBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIZoomBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.AssetsImportDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.CreateNewResolutionDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.CustomVariablesDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.EditSpriteAnimationDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.ExportSettingsDialogMediator;
+import com.uwsoft.editor.mvc.view.ui.dialog.NewProjectDialogMediator;
 
 /**
  * Created by sargis on 4/1/15.
@@ -39,7 +53,6 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade = Overlap2DFacade.getInstance();
         facade.registerMediator(new Overlap2DScreenMediator());
         facade.registerMediator(new Overlap2DMenuBarMediator());
-        facade.registerMediator(new SandboxStageMediator());
         facade.registerMediator(new UICompositeHierarchyMediator());
         facade.registerMediator(new UIGridBoxMediator());
         facade.registerMediator(new UIResolutionBoxMediator());
@@ -60,7 +73,9 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UILayerBoxMediator());
         facade.registerMediator(new UIResourcesBoxMediator());
         facade.registerMediator(new UIStageMediator());
+        facade.registerMediator(new SandboxMediator());
         facade.registerMediator(new UIDropDownMenuMediator());
-        facade.registerMediator(new PhysicsEditorDialogMediator());
+        //TODO fix and uncomment
+        //facade.registerMediator(new PhysicsEditorDialogMediator());
     }
 }

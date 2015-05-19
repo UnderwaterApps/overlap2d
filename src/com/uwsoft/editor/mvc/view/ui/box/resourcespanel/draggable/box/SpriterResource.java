@@ -22,9 +22,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.renderer.actor.SpriterActor;
-import com.uwsoft.editor.renderer.data.SpriterVO;
 
 /**
  * Created by hayk on 19/12/2014.
@@ -37,6 +34,8 @@ public class SpriterResource extends BoxItemResource {
 
     public SpriterResource(String animationName) {
         facade = Overlap2DFacade.getInstance();
+		//TODO fix and uncomment
+		/*
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
         SpriterActor animThumb = new SpriterActor(vo, sandbox.getSceneControl().getEssentials());
@@ -63,13 +62,16 @@ public class SpriterResource extends BoxItemResource {
         }
 
         addActor(animThumb);
-
+		*/
         payload = new ResourcePayloadObject();
         payload.name = animationName;
+        dragActor = new Image(); //TEMPORARY
+        /*
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
         EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
         dragActor = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+		*/
         super.act(1f);
     }
 

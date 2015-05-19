@@ -22,12 +22,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
-import com.uwsoft.editor.mvc.view.stage.BaseStage;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by sargis on 7/10/14.
@@ -40,23 +38,24 @@ public class ResolutionBounds extends Group {
 	 private PixelRect resolutionBounds;
 	 private Label label;
 
-    public ResolutionBounds(BaseStage baseStage) {
+    public ResolutionBounds(Sandbox sandbox) {
         textureManager = Overlap2DFacade.getInstance().retrieveProxy(EditorTextureManager.NAME);
 
-        detectDimensions(baseStage);
+        detectDimensions(sandbox);
         crateBoundsRectangle();
         crateResolutionIndicator();
     }
 
-    private void detectDimensions(BaseStage baseStage) {
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
-        if (resolutionEntryVO == null) {
-            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
-        }
-        width = resolutionEntryVO.width;
-        height = resolutionEntryVO.height;
+    private void detectDimensions(Sandbox baseStage) {
+    	//TODO fix and uncomment 
+//        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+//        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+//        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
+//        if (resolutionEntryVO == null) {
+//            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
+//        }
+//        width = resolutionEntryVO.width;
+//        height = resolutionEntryVO.height;
     }
 
     private void crateResolutionIndicator() {

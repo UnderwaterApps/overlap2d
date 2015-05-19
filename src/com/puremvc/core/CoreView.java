@@ -18,14 +18,14 @@
 package com.puremvc.core;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.BaseObserver;
 import com.puremvc.patterns.observer.Notification;
 import com.puremvc.patterns.observer.Observer;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 /**
  * A Singleton <code>IView</code> implementation.

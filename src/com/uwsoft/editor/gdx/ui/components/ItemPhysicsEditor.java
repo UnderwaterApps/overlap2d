@@ -18,6 +18,10 @@
 
 package com.uwsoft.editor.gdx.ui.components;
 
+import java.util.ArrayList;
+import java.util.Collections;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -28,7 +32,17 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer.ShapeType;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.CircleShape;
+import com.badlogic.gdx.physics.box2d.Contact;
+import com.badlogic.gdx.physics.box2d.ContactImpulse;
+import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.EdgeShape;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,21 +52,17 @@ import com.badlogic.gdx.scenes.scene2d.utils.ScissorStack;
 import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.MeshVO;
-import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.MeshVO;
+import com.uwsoft.editor.renderer.legacy.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.utils.poly.Clipper.Polygonizer;
 import com.uwsoft.editor.utils.poly.PolygonUtils;
 import com.uwsoft.editor.utils.poly.tracer.Tracer;
-
-import java.util.ArrayList;
-import java.util.Collections;
 
 public class ItemPhysicsEditor extends Group {
     public static final int POINT_WIDTH = 10;
@@ -66,7 +76,7 @@ public class ItemPhysicsEditor extends Group {
     private final Overlap2DFacade facade;
     private final ProjectManager projectManager;
     private final Sandbox sandbox;
-    public IBaseItem originalItem;
+    public Entity originalItem;
     public EditMode currentMode;
     public PhysicsBodyDataVO physicsBodyDataVO = new PhysicsBodyDataVO();
     public World physicsEditorWorld;
@@ -93,7 +103,7 @@ public class ItemPhysicsEditor extends Group {
     private int lineIndex = -1;
     private String assetName = null;
     private UIStage stage;
-    private IBaseItem currentItem;
+    private Entity currentItem;
     private Actor currentActor;
     private float timeAcc = 0;
     public Vector2 resVec;
@@ -158,7 +168,8 @@ public class ItemPhysicsEditor extends Group {
                 }
             }
         });
-        currentItemBody = PhysicsBodyLoader.createBody(physicsEditorWorld, physicsBodyDataVO, vo, new Vector2(1, 1));
+        //TODO fix and uncomment
+        //currentItemBody = PhysicsBodyLoader.createBody(physicsEditorWorld, physicsBodyDataVO, vo, new Vector2(1, 1));
         //
         crateEdgPlatform(0, 0, getWidth(), 0);
         crateEdgPlatform(0, 0, 0, getHeight());
@@ -262,9 +273,10 @@ public class ItemPhysicsEditor extends Group {
         }
     }
 
-    public void editItem(IBaseItem item) {
+    public void editItem(Entity item) {
         currentItem = item;
-        currentActor = (Actor) currentItem;
+        //TODO fix and uncomment 
+        //currentActor = (Actor) currentItem;
 
         if (currentActor.getWidth() > this.getWidth() || currentActor.getHeight() > this.getHeight()) {
             if (currentActor.getWidth() > currentActor.getHeight()) {
@@ -282,35 +294,35 @@ public class ItemPhysicsEditor extends Group {
         currentActor.setY((getHeight() - currentActor.getHeight() * zoomFactor) / 2);
         addActor(currentActor);
 
-
-        if (currentItem.getDataVO().physicsBodyData != null) {
-            physicsBodyDataVO = new PhysicsBodyDataVO(currentItem.getDataVO().physicsBodyData);
-        }
-
-        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
-        if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {
-            Vector2 localToGlobal = new Vector2();
-            currentActor.localToStageCoordinates(localToGlobal);
-            MeshVO mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
-            minPolies = new Vector2[mesh.minPolygonData.length][];
-            //System.arraycopy(mesh.minPolygonData, 0, minPolies, 0, mesh.minPolygonData.length);
-            arrayCopy(mesh.minPolygonData, minPolies, false);
-            for (Vector2[] poly : minPolies) {
-                for (int i = 0; i < poly.length; i++) {
-                    if (!verticesList.contains(poly[i]))
-                        verticesList.add(poly[i]);
-                }
-            }
-
-            for (Vector2 poly : verticesList) {
-                poly.scl(resVec).add(localToGlobal);
-            }
-
-            currentMode = EditMode.Edit;
-        }
-        Collections.reverse(verticesList);
-        vertices = verticesList.toArray(new Vector2[0]);
-        stage.setScrollFocus(this);
+      //TODO fix and uncomment 
+//        if (currentItem.getDataVO().physicsBodyData != null) {
+//            physicsBodyDataVO = new PhysicsBodyDataVO(currentItem.getDataVO().physicsBodyData);
+//        }
+//
+//        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
+//        if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {
+//            Vector2 localToGlobal = new Vector2();
+//            currentActor.localToStageCoordinates(localToGlobal);
+//            MeshVO mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
+//            minPolies = new Vector2[mesh.minPolygonData.length][];
+//            //System.arraycopy(mesh.minPolygonData, 0, minPolies, 0, mesh.minPolygonData.length);
+//            arrayCopy(mesh.minPolygonData, minPolies, false);
+//            for (Vector2[] poly : minPolies) {
+//                for (int i = 0; i < poly.length; i++) {
+//                    if (!verticesList.contains(poly[i]))
+//                        verticesList.add(poly[i]);
+//                }
+//            }
+//
+//            for (Vector2 poly : verticesList) {
+//                poly.scl(resVec).add(localToGlobal);
+//            }
+//
+//            currentMode = EditMode.Edit;
+//        }
+//        Collections.reverse(verticesList);
+//        vertices = verticesList.toArray(new Vector2[0]);
+//        stage.setScrollFocus(this);
     }
 
     public void reTrace() {
@@ -347,7 +359,8 @@ public class ItemPhysicsEditor extends Group {
     }
 
     public void save() {
-        World world = Sandbox.getInstance().getSandboxStage().getWorld();
+    	//TODO fix and uncomment 
+        //World world = Sandbox.getInstance().getSandboxStage().getWorld();
 
         ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
@@ -380,31 +393,32 @@ public class ItemPhysicsEditor extends Group {
 
             }
         } else if (currentItem != null) {
-            if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {
-                mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
-                mesh.minPolygonData = new Vector2[minPolies.length][];
-                arrayCopy(minPolies, mesh.minPolygonData, true);
-            } else {
-                if (minPolies == null) {
-                    currentItem.getDataVO().meshId = "-1";
-                } else {
-                    mesh = new MeshVO();
-                    mesh.minPolygonData = new Vector2[minPolies.length][];
-                    arrayCopy(minPolies, mesh.minPolygonData, true);
-                    String meshKey = projectInfo.addNewMesh(mesh);
-                    currentItem.getDataVO().meshId = meshKey;
-                }
-            }
-            Vector2 resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
-
-            if (mesh != null) {
-                if (originalItem.getBody() != null) {
-                    world.destroyBody(originalItem.getBody());
-                }
-                currentItem.getDataVO().physicsBodyData = new PhysicsBodyDataVO(physicsBodyDataVO);
-                originalItem.setBody(PhysicsBodyLoader.createBody(world, physicsBodyDataVO, mesh, resVec));
-                originalItem.getBody().setTransform(currentItem.getDataVO().x * PhysicsBodyLoader.SCALE, currentItem.getDataVO().y * PhysicsBodyLoader.SCALE, (float) Math.toRadians(currentItem.getDataVO().rotation));
-            }
+        	//TODO fix and uncomment 
+//            if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {
+//                mesh = projectInfo.meshes.get(currentItem.getDataVO().meshId);
+//                mesh.minPolygonData = new Vector2[minPolies.length][];
+//                arrayCopy(minPolies, mesh.minPolygonData, true);
+//            } else {
+//                if (minPolies == null) {
+//                    currentItem.getDataVO().meshId = "-1";
+//                } else {
+//                    mesh = new MeshVO();
+//                    mesh.minPolygonData = new Vector2[minPolies.length][];
+//                    arrayCopy(minPolies, mesh.minPolygonData, true);
+//                    String meshKey = projectInfo.addNewMesh(mesh);
+//                    currentItem.getDataVO().meshId = meshKey;
+//                }
+//            }
+//            Vector2 resVec = new Vector2(sandbox.getCurrentScene().mulX, sandbox.getCurrentScene().mulY);
+//
+//            if (mesh != null) {
+//                if (originalItem.getBody() != null) {
+//                    world.destroyBody(originalItem.getBody());
+//                }
+//                currentItem.getDataVO().physicsBodyData = new PhysicsBodyDataVO(physicsBodyDataVO);
+//                originalItem.setBody(PhysicsBodyLoader.createBody(world, physicsBodyDataVO, mesh, resVec));
+//                originalItem.getBody().setTransform(currentItem.getDataVO().x * PhysicsBodyLoader.SCALE, currentItem.getDataVO().y * PhysicsBodyLoader.SCALE, (float) Math.toRadians(currentItem.getDataVO().rotation));
+//            }
 
             System.out.println("asd");
         }
@@ -803,8 +817,9 @@ public class ItemPhysicsEditor extends Group {
                 projectInfo.assetMeshMap.remove(assetName);
             }
         } else if (currentItem != null) {
-            if (currentItem != null) currentItem.getDataVO().meshId = "-1";
-            currentItem.getDataVO().physicsBodyData = null;
+        	//TODO fix and uncomment 
+//            if (currentItem != null) currentItem.getDataVO().meshId = "-1";
+//            currentItem.getDataVO().physicsBodyData = null;
         }
         minPolies = null;
         vertices = new Vector2[0];
@@ -814,10 +829,11 @@ public class ItemPhysicsEditor extends Group {
 
     public void duplicateMesh() {
         // start a fresh copy;
-        if (currentItem != null) {
-            ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
-            currentItem.getDataVO().meshId = projectInfo.cloneMesh(currentItem.getDataVO().meshId);
-        }
+    	//TODO fix and uncomment 
+//        if (currentItem != null) {
+//            ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
+//            currentItem.getDataVO().meshId = projectInfo.cloneMesh(currentItem.getDataVO().meshId);
+//        }
     }
 
     @Override

@@ -18,47 +18,50 @@
 
 package com.uwsoft.editor.mvc.proxy;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.data.JarUtils;
-import com.uwsoft.editor.data.SpineAnimData;
-import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
-import com.uwsoft.editor.data.vo.EditorConfigVO;
-import com.uwsoft.editor.data.vo.ProjectVO;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.ProgressHandler;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.*;
-import com.uwsoft.editor.renderer.resources.IResourceRetriever;
-import com.uwsoft.editor.renderer.utils.MySkin;
-import com.uwsoft.editor.utils.Overlap2DUtils;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
+import com.uwsoft.editor.data.vo.EditorConfigVO;
+import com.uwsoft.editor.data.vo.ProjectVO;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.gdx.ui.ProgressHandler;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.MeshVO;
+import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.utils.MySkin;
+import com.uwsoft.editor.utils.Overlap2DUtils;
 
 
 public class ProjectManager extends BaseProxy {

@@ -1,10 +1,11 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import org.apache.commons.lang3.math.NumberUtils;
+
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractPropertiesMediator;
-import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by avetiszakharyan on 4/24/15.

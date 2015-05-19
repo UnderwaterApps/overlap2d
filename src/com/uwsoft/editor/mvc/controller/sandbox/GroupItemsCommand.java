@@ -28,7 +28,8 @@ public class GroupItemsCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-        sandbox.getItemFactory().groupItemsIntoComposite();
-        sandbox.saveSceneCurrentSceneData();
+    	//TODO fix and uncomment
+//        sandbox.getItemFactory().groupItemsIntoComposite();
+//        sandbox.saveSceneCurrentSceneData();
     }
 }

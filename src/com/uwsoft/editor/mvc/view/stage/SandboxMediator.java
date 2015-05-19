@@ -18,13 +18,19 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import java.awt.Cursor;
+import java.util.HashMap;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -32,19 +38,23 @@ import com.uwsoft.editor.gdx.sandbox.ItemFactory;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
-import com.uwsoft.editor.mvc.view.stage.tools.*;
+import com.uwsoft.editor.mvc.view.stage.input.EntityClickListener;
+import com.uwsoft.editor.mvc.view.stage.input.InputListener;
+import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
+import com.uwsoft.editor.mvc.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
+import com.uwsoft.editor.mvc.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.mvc.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
+import com.uwsoft.editor.mvc.view.stage.tools.Tool;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by sargis on 4/20/15.
  */
-public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
-    private static final String TAG = SandboxStageMediator.class.getCanonicalName();
+public class SandboxMediator extends SimpleMediator<Sandbox> {
+    private static final String TAG = SandboxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
     private static final String PREFIX =  "com.uwsoft.editor.mvc.view.stage.SandboxStageMediator";
@@ -59,8 +69,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     private HashMap<String, Tool> sandboxTools = new HashMap<>();
     private Tool currentSelectedTool;
 
-    public SandboxStageMediator() {
-        super(NAME, new SandboxStage());
+    public SandboxMediator() {
+        super(NAME, Sandbox.getInstance());
     }
 
     @Override
@@ -111,7 +121,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
                 setCurrentTool(notification.getBody());
                 break;
             case ItemFactory.NEW_ITEM_ADDED:
-                ((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
+            	//TODO add listener and uncomment
+                //((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
                 break;
             case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
                 initItemListeners();
@@ -122,7 +133,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     }
 
     private void handleSceneLoaded(Notification notification) {
-        viewComponent.addListener(stageListener);
+		//TODO fix and uncomment
+        //viewComponent.addListener(stageListener);
 
         initItemListeners();
 
@@ -130,43 +142,50 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
     }
 
     private void initItemListeners() {
-        Sandbox sandbox = Sandbox.getInstance();
-        ArrayList<IBaseItem> items  = sandbox.getSceneControl().getCurrentScene().getItems();
-        for (int i = 0; i < items.size(); i++) {
-            ((Actor)items.get(i)).clearListeners();
-            ((Actor)items.get(i)).addListener(new SandboxItemEventListener(items.get(i)));
+        Engine engine = getViewComponent().getEngine();
+        ImmutableArray<Entity> entities = engine.getEntities();
+        for (int i = 0; i < entities.size(); i++) {
+        	Entity entity = entities.get(i);
+        	InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
+        	if(inputListenerComponent == null){
+        		
+        		continue;
+        	}
+        	inputListenerComponent.removeAllListener();
+        	inputListenerComponent.addListener(new SandboxItemEventListener(entity));
         }
+		
     }
 
     public Vector2 getStageCoordinates() {
-        return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+    	return new Vector2(); //temporary for not getting errors
+    	//TODO fix and uncomment
+        //return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
-    private class SandboxItemEventListener extends ClickListener {
+    private class SandboxItemEventListener extends EntityClickListener {
 
-        private IBaseItem eventItem;
+        private Entity targetEntity;
 
-        public SandboxItemEventListener(final IBaseItem eventItem) {
-            this.eventItem = eventItem;
+        public SandboxItemEventListener(final Entity entity) {
+            this.targetEntity = entity;
         }
 
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchDown(event, x, y, pointer, button);
+        public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
+            super.touchDown(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
-
-            event.stop();
-            return currentSelectedTool.itemMouseDown(eventItem, coords.x, coords.y);
+            return currentSelectedTool.itemMouseDown(targetEntity, coords.x, coords.y);
         }
 
-        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchUp(event, x, y, pointer, button);
+        public void touchUp(Entity entity, float x, float y, int pointer, int button) {
+            super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
 
-            currentSelectedTool.itemMouseUp(eventItem, x, y);
+            currentSelectedTool.itemMouseUp(targetEntity, x, y);
 
             if (getTapCount() == 2) {
                 // this is double click
-                currentSelectedTool.itemMouseDoubleClick(eventItem, coords.x, coords.y);
+                currentSelectedTool.itemMouseDoubleClick(targetEntity, coords.x, coords.y);
             }
 
             if (button == Input.Buttons.RIGHT) {
@@ -177,7 +196,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
         public void touchDragged(InputEvent event, float x, float y, int pointer) {
             Vector2 coords = getStageCoordinates();
-            currentSelectedTool.itemMouseDragged(eventItem, coords.x, coords.y);
+            currentSelectedTool.itemMouseDragged(targetEntity, coords.x, coords.y);
         }
 
     }
@@ -294,7 +313,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             // if space is pressed, that means we are going to pan, so set cursor accordingly
             // TODO: this pan is kinda different from what happens when you press middle button, so things need to merge right
             if (keycode == Input.Keys.SPACE) {
-                sandbox.getSandboxStage().setCursor(Cursor.HAND_CURSOR);
+                sandbox.setCursor(Cursor.HAND_CURSOR);
                 toolHotSwap(sandboxTools.get(PanTool.NAME));
             }
 
@@ -318,7 +337,7 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
             }
             if (keycode == Input.Keys.SPACE) {
                 // if pan mode is disabled set cursor back
-                sandbox.getSandboxStage().setCursor(Cursor.DEFAULT_CURSOR);
+                sandbox.setCursor(Cursor.DEFAULT_CURSOR);
                 toolHotSwapBack();
             }
 
@@ -334,8 +353,8 @@ public class SandboxStageMediator extends SimpleMediator<SandboxStage> {
 
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
-            sandbox.getUIStage().setScrollFocus(sandbox.getSandboxStage().mainBox);
-            sandbox.getSandboxStage().setKeyboardFocus();
+            sandbox.getUIStage().setScrollFocus(sandbox.mainBox);
+            sandbox.setKeyboardFocus();
 
             // if there was a drop down remove it
             // TODO: this is job for front UI to figure out

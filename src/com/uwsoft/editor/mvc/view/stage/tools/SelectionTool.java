@@ -18,6 +18,10 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
@@ -30,11 +34,6 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
-import com.uwsoft.editor.mvc.view.stage.SandboxStage;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -59,7 +58,7 @@ public class SelectionTool implements Tool {
     @Override
     public void initTool() {
         sandbox = Sandbox.getInstance();
-        HashMap<IBaseItem, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
+        HashMap<Entity, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
         for (SelectionRectangle value : currSelection.values()) {
             value.setMode(false);
         }
@@ -100,8 +99,9 @@ public class SelectionTool implements Tool {
         sandbox = Sandbox.getInstance();
 
         isCastingRectangle = true;
-        sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
-        sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
+      //TODO fix and uncomment
+//        sandbox.getSandboxStage().selectionRec.setWidth(x - sandbox.getSandboxStage().selectionRec.getX());
+//        sandbox.getSandboxStage().selectionRec.setHeight(y - sandbox.getSandboxStage().selectionRec.getY());
     }
 
     @Override
@@ -110,58 +110,54 @@ public class SelectionTool implements Tool {
     }
 
     @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
+    public boolean itemMouseDown(Entity item, float x, float y) {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        item.updateDataVO();
-
-        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
-
-        // if shift is pressed we are in add/remove selection mode
-        if (isShiftPressed()) {
-            //TODO block selection handling (wat?)
-            if (!currentTouchedItemWasSelected) {
-                // item was not selected, adding it to selection
-                ArrayList<IBaseItem> items = new ArrayList<>();
-                items.add(item);
-                facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
-            }
-        } else {
-            // normal mode
-            if (item.isLockedByLayer()) {
-                // this is considered empty space click and thus should release all selections
-                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
-                sandbox.getSelector().clearSelections();
-                return false;
-            } else {
-                // if item is selected do nothing
-                if (currentTouchedItemWasSelected) {
-                    // do nothing
-                } else {
-                    // if item was not selected, deselect others and select it
-                    ArrayList<IBaseItem> items = new ArrayList<>();
-                    items.add(item);
-                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
-                }
-            }
-        }
-
-        // remembering local touch position for each of selected boxes, if planning to drag
-        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-            value.setTouchDiff(x - value.getHostAsActor().getX(), y - value.getHostAsActor().getY());
-        }
-
-        dragStartPosition = new Vector2(x, y);
-
-        // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+      //TODO fix and uncomment
+//        item.updateDataVO();
+//
+//        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
+//
+//        // if shift is pressed we are in add/remove selection mode
+//        if (isShiftPressed()) {
+//            //TODO block selection handling (wat?)
+//            if (!currentTouchedItemWasSelected) {
+//                // item was not selected, adding it to selection
+//                ArrayList<Entity> items = new ArrayList<>();
+//                items.add(item);
+//                facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+//            }
+//        } else {
+//
+//            if (item.isLockedByLayer()) {
+//                // this is considered empty space click and thus should release all selections
+//                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
+//                sandbox.getSelector().clearSelections();
+//                return false;
+//            } else {
+//                // select this item and remove others from selection
+//                ArrayList<Entity> items = new ArrayList<>();
+//                items.add(item);
+//                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+//            }
+//        }
+//
+//        // remembering local touch position for each of selected boxes, if planning to drag
+//        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+//            value.setTouchDiff(x - value.getHostAsActor().getX(), y - value.getHostAsActor().getY());
+//        }
+//
+//        dragStartPosition = new Vector2(x, y);
+//
+//        // pining UI to update current item properties tools
+//        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
 
         return true;
     }
 
     @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
+    public void itemMouseDragged(Entity item, float x, float y) {
         sandbox = Sandbox.getInstance();
 
         int gridSize = Sandbox.getInstance().getGridSize();
@@ -206,9 +202,9 @@ public class SelectionTool implements Tool {
 
                 diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
                 diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
-
-                value.getHostAsActor().setX(newX - diff[0]);
-                value.getHostAsActor().setY(newY - diff[1]);
+              //TODO fix and uncomment
+//                value.getHostAsActor().setX(newX - diff[0]);
+//                value.getHostAsActor().setY(newY - diff[1]);
                 value.hide();
             }
         }
@@ -219,14 +215,14 @@ public class SelectionTool implements Tool {
 
 
     @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
+    public void itemMouseUp(Entity item, float x, float y) {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
         if (currentTouchedItemWasSelected && !isDragging) {
             // item was selected (and no dragging was performed), so we need to release it
             if (isShiftPressed()) {
-                ArrayList<IBaseItem> items = new ArrayList<>();
+                ArrayList<Entity> items = new ArrayList<>();
                 items.add(item);
                 facade.sendNotification(Sandbox.ACTION_RELEASE_SELECTION, items);
             }
@@ -250,7 +246,7 @@ public class SelectionTool implements Tool {
     }
 
     @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
+    public void itemMouseDoubleClick(Entity item, float x, float y) {
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_EDIT_COMPOSITE);
     }
 
@@ -262,29 +258,30 @@ public class SelectionTool implements Tool {
 
     private void selectionComplete() {
         sandbox = Sandbox.getInstance();
-        SandboxStage sandboxStage = sandbox.getSandboxStage();
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-
-        ArrayList<IBaseItem> freeItems = sandbox.getSelector().getAllFreeItems();
-
-        // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
-
-        // hiding selection rectangle
-        sandboxStage.selectionRec.setOpacity(0.0f);
-        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
-        Rectangle sR = sandboxStage.selectionRec.getRect();
-        for (int i = 0; i < freeItems.size(); i++) {
-            Actor asActor = (Actor) freeItems.get(i);
-            if (!freeItems.get(i).isLockedByLayer() && Intersector
-                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
-                curr.add(freeItems.get(i));
-            }
-        }
-
-        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
-
-        if (curr.size() == 0) {
-            facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
-        }
+      //TODO fix and uncomment
+//        SandboxStage sandboxStage = sandbox.getSandboxStage();
+//        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+//
+//        ArrayList<IBaseItem> freeItems = sandbox.getSelector().getAllFreeItems();
+//
+//        // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
+//
+//        // hiding selection rectangle
+//        sandboxStage.selectionRec.setOpacity(0.0f);
+//        ArrayList<IBaseItem> curr = new ArrayList<IBaseItem>();
+//        Rectangle sR = sandboxStage.selectionRec.getRect();
+//        for (int i = 0; i < freeItems.size(); i++) {
+//            Actor asActor = (Actor) freeItems.get(i);
+//            if (!freeItems.get(i).isLockedByLayer() && Intersector
+//                    .overlaps(sR, new Rectangle(asActor.getX(), asActor.getY(), asActor.getWidth(), asActor.getHeight()))) {
+//                curr.add(freeItems.get(i));
+//            }
+//        }
+//
+//        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+//
+//        if (curr.size() == 0) {
+//            facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
+//        }
     }
 }

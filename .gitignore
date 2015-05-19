@@ -53,3 +53,4 @@ gradle/
 ## OS Specific
 .DS_Store
 /local
+/bin/

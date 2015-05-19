@@ -18,13 +18,13 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<CompositeItem, UICompositeItemProperties> {
+public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UICompositeItemProperties> {
 
     private static final String TAG = UICompositeItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -34,7 +34,7 @@ public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<
     }
 
     @Override
-    protected void translateObservableDataToView(CompositeItem item) {
+    protected void translateObservableDataToView(Entity item) {
 
     }
 

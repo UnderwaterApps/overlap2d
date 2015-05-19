@@ -18,14 +18,14 @@
 
 package com.uwsoft.editor.utils.poly;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.utils.poly.earclipping.bayazit.BayazitDecomposer;
 import com.uwsoft.editor.utils.poly.earclipping.ewjordan.EwjordanDecomposer;
-
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
 
 /**
  *

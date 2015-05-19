@@ -18,12 +18,11 @@
 
 package com.uwsoft.editor.mvc.proxy;
 
+import java.util.ArrayList;
+
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.sandbox.RevertableCommand;
-
-import java.util.ArrayList;
-import java.util.Stack;
 
 /**
  * Created by azakhary on 5/14/2015.

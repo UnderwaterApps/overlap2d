@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
+import java.util.function.BiFunction;
+
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -25,8 +27,6 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
-
-import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 7/3/2014.

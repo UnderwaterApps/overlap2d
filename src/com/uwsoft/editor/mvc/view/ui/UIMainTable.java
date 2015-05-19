@@ -24,7 +24,18 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBarMediator;
-import com.uwsoft.editor.mvc.view.ui.box.*;
+import com.uwsoft.editor.mvc.view.ui.box.UIAlignBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIAlignBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBox;
+import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIMultiPropertyBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIResourcesBoxMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBox;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.ui.widget.O2DLogo;
 
 /**

@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc;
 import com.puremvc.patterns.facade.SimpleFacade;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.mvc.controller.BootstrapCommand;
 import com.uwsoft.editor.mvc.controller.StartupCommand;
 
 /**

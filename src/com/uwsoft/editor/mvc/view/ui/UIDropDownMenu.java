@@ -18,13 +18,13 @@
 
 package com.uwsoft.editor.mvc.view.ui;
 
+import java.util.HashMap;
+
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
-
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.

@@ -18,17 +18,11 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.actor.LabelItem;
-
+T
 /**
  * Created by azakhary on 4/30/2015.
  */
@@ -74,8 +68,8 @@ public class TransformTool extends SelectionTool {
     }
 
     @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
-        super.itemMouseDown(item, x, y);
+    public boolean itemMouseDown(Entity entity, float x, float y) {
+        super.itemMouseDown(entity, x, y);
         Sandbox sandbox = Sandbox.getInstance();
 
         currentSelection = sandbox.getSelector().getSelectedItemSelectionRectangle();
@@ -90,75 +84,77 @@ public class TransformTool extends SelectionTool {
         selectionRect.setListener(new SelectionRectangle.SelectionRectangleListener() {
 
             private int anchorId;
-            private Actor host;
+            private Entity host;
 
             @Override
             public void anchorDown(int anchor, float x, float y) {
                 Sandbox sandbox = Sandbox.getInstance();
                 this.anchorId = anchor;
-                this.host = (Actor) sandbox.getSelector().getSelectedItem();
+                //TODO fix and uncomment
+                //this.host = (Actor) sandbox.getSelector().getSelectedItem();
             }
 
             @Override
             public void anchorDragged(int anchor, float x, float y) {
-                float pseudoWidth = host.getWidth() * (host instanceof LabelItem ? 1 : host.getScaleX());
-                float pseudoHeight = host.getHeight() * (host instanceof LabelItem ? 1 : host.getScaleY());
-                float currPseudoWidth = pseudoWidth;
-                float currPseudoHeight = pseudoHeight;
-                switch (anchorId) {
-                    case SelectionRectangle.LB:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
-                        break;
-                    case SelectionRectangle.L:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
-                        break;
-                    case SelectionRectangle.LT:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        pseudoHeight = y - host.getY();
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
-                        break;
-                    case SelectionRectangle.T:
-                        pseudoHeight = y - host.getY();
-                        break;
-                    case SelectionRectangle.B:
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
-                        break;
-                    case SelectionRectangle.RB:
-                        pseudoWidth = x - host.getX();
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
-                        break;
-                    case SelectionRectangle.R:
-                        pseudoWidth = x - host.getX();
-                        break;
-                    case SelectionRectangle.RT:
-                        pseudoWidth = x - host.getX();
-                        pseudoHeight = y - host.getY();
-                        break;
-                    default:
-                        return;
-                }
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    float enclosingRectSize = Math.max(pseudoWidth, pseudoHeight);
-                    if (host.getWidth() >= host.getHeight()) {
-                        pseudoWidth = enclosingRectSize;
-                        pseudoHeight = (pseudoWidth / host.getWidth()) * host.getHeight();
-                    }
-                    if (host.getHeight() > host.getWidth()) {
-                        pseudoHeight = enclosingRectSize;
-                        pseudoWidth = (pseudoHeight / host.getHeight()) * host.getWidth();
-                    }
-
-                }
-
-                host.setScale(pseudoWidth / host.getWidth(), pseudoHeight / host.getHeight());
-                ((IBaseItem)host).updateDataVO();
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+            	//TODO fix and uncomment
+//                float pseudoWidth = host.getWidth() * (host instanceof LabelItem ? 1 : host.getScaleX());
+//                float pseudoHeight = host.getHeight() * (host instanceof LabelItem ? 1 : host.getScaleY());
+//                float currPseudoWidth = pseudoWidth;
+//                float currPseudoHeight = pseudoHeight;
+//                switch (anchorId) {
+//                    case SelectionRectangle.LB:
+//                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
+//                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
+//                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
+//                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+//                        break;
+//                    case SelectionRectangle.L:
+//                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
+//                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
+//                        break;
+//                    case SelectionRectangle.LT:
+//                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
+//                        pseudoHeight = y - host.getY();
+//                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
+//                        break;
+//                    case SelectionRectangle.T:
+//                        pseudoHeight = y - host.getY();
+//                        break;
+//                    case SelectionRectangle.B:
+//                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
+//                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+//                        break;
+//                    case SelectionRectangle.RB:
+//                        pseudoWidth = x - host.getX();
+//                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
+//                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+//                        break;
+//                    case SelectionRectangle.R:
+//                        pseudoWidth = x - host.getX();
+//                        break;
+//                    case SelectionRectangle.RT:
+//                        pseudoWidth = x - host.getX();
+//                        pseudoHeight = y - host.getY();
+//                        break;
+//                    default:
+//                        return;
+//                }
+//                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+//                    float enclosingRectSize = Math.max(pseudoWidth, pseudoHeight);
+//                    if (host.getWidth() >= host.getHeight()) {
+//                        pseudoWidth = enclosingRectSize;
+//                        pseudoHeight = (pseudoWidth / host.getWidth()) * host.getHeight();
+//                    }
+//                    if (host.getHeight() > host.getWidth()) {
+//                        pseudoHeight = enclosingRectSize;
+//                        pseudoWidth = (pseudoHeight / host.getHeight()) * host.getWidth();
+//                    }
+//
+//                }
+//
+//                host.setScale(pseudoWidth / host.getWidth(), pseudoHeight / host.getHeight());
+//                ((IBaseItem)host).updateDataVO();
+//                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
             }
 
             @Override

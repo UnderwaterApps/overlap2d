@@ -1,10 +1,10 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import java.util.HashMap;
+
+import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.HashMap;
 
 /**
  * Created by CyberJoe on 5/2/2015.
@@ -14,7 +14,7 @@ public abstract class SimpleTool implements Tool {
     @Override
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
-        HashMap<IBaseItem, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
+        HashMap<Entity, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
         for (SelectionRectangle value : currSelection.values()) {
             value.setMode(false);
         }
@@ -32,22 +32,22 @@ public abstract class SimpleTool implements Tool {
     }
 
     @Override
-    public boolean itemMouseDown(IBaseItem item, float x, float y) {
+    public boolean itemMouseDown(Entity entity, float x, float y) {
         return false;
     }
 
     @Override
-    public void itemMouseUp(IBaseItem item, float x, float y) {
+    public void itemMouseUp(Entity entity, float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDragged(IBaseItem item, float x, float y) {
+    public void itemMouseDragged(Entity entity, float x, float y) {
 
     }
 
     @Override
-    public void itemMouseDoubleClick(IBaseItem item, float x, float y) {
+    public void itemMouseDoubleClick(Entity entity, float x, float y) {
 
     }
 }

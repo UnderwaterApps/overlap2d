@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.utils;
 
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.lang3.SystemUtils;
-
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
+
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Created by sargis on 4/1/15.

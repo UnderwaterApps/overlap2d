@@ -18,26 +18,23 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
     private final Overlap2DFacade facade;
-    public SandboxStage sandboxStage;
     public Group dummyTarget;
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
@@ -81,7 +78,7 @@ public class UIStage extends Stage {
         //dlg.editAsset(name);
     }
 
-    public void editPhysics(IBaseItem item) {
+    public void editPhysics(Entity item) {
         //ItemPhysicsDialog dlg = new ItemPhysicsDialog(this);
         //addActor(dlg);
         //dlg.editItem(item);
@@ -107,10 +104,12 @@ public class UIStage extends Stage {
     }
 
     public LayerItemVO getCurrentSelectedLayer() {
-        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
-        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
-        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
-        return layerVO;
+    	return null;
+    	//TODO fix and uncomment
+//        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+//        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
+//        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
+//        return layerVO;
     }
 
 

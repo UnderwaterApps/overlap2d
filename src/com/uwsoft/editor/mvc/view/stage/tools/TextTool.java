@@ -20,11 +20,6 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Align;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
-
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -57,7 +52,8 @@ public class TextTool extends SimpleTool {
 
     @Override
     public void stageMouseUp(float x, float y) {
-        Sandbox.getInstance().getItemFactory().createLabel(this, x, y);
+    	//TODO fix and uncomment
+       // Sandbox.getInstance().getItemFactory().createLabel(this, x, y);
 
         return;
     }

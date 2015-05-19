@@ -18,17 +18,17 @@
 
 package com.uwsoft.editor.mvc.proxy;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import org.apache.commons.io.FileUtils;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.resources.FontSizePair;
-import org.apache.commons.io.FileUtils;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
  * Created by sargis on 3/23/15.

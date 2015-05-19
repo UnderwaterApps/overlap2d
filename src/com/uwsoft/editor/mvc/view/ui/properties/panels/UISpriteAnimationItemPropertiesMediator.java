@@ -18,23 +18,28 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.color.ColorPicker;
-import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.dialogs.EditAnimationDialog;
-import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.actor.SpriteAnimation;
 import org.apache.commons.lang3.ArrayUtils;
+
+import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
+import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<SpriteAnimation, UISpriteAnimationItemProperties> {
+public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpriteAnimationItemProperties> {
     private static final String TAG = UISpriteAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
+    
+    private ComponentMapper<SpriteAnimationComponent> spriteAnimationMapper = ComponentMapper.getFor(SpriteAnimationComponent.class);
+    private ComponentMapper<SpriteAnimationStateComponent> stateMapper =  ComponentMapper.getFor(SpriteAnimationStateComponent.class);
+    
+    private SpriteAnimationComponent spriteAnimationComponent;
+    private SpriteAnimationStateComponent stateComponent;
 
     public UISpriteAnimationItemPropertiesMediator() {
         super(NAME, new UISpriteAnimationItemProperties());
@@ -64,20 +69,25 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     }
 
     @Override
-    protected void translateObservableDataToView(SpriteAnimation item) {
+    protected void translateObservableDataToView(Entity entity) {
+
+    	spriteAnimationComponent = spriteAnimationMapper.get(entity);
+    	stateComponent = stateMapper.get(entity);
+    	
         Array<String> animations = new Array<>();
-        for (String name : item.getAnimations().keySet()) {
+        for (String name : spriteAnimationComponent.keyFrames.keySet()) {
             animations.add(name);
         }
-
-        viewComponent.setFPS(item.dataVO.fps);
-        viewComponent.setAnimations(animations);
-        viewComponent.setSelectedAnimation(item.getCurrentAnimationName());
+      //TODO fix and uncomment 
+        //viewComponent.setFPS(item.dataVO.fps);
+//        viewComponent.setAnimations(animations);
+//        viewComponent.setSelectedAnimation(stateComponent.currentAnimation);
     }
 
     @Override
     protected void translateViewToItemData() {
-        observableReference.setAnimation(viewComponent.getSelected());
-        observableReference.dataVO.fps = viewComponent.getFPS();
+    	//TODO fix and uncomment 
+        //observableReference.setAnimation(viewComponent.getSelected());
+        //observableReference.dataVO.fps = viewComponent.getFPS();
     }
 }

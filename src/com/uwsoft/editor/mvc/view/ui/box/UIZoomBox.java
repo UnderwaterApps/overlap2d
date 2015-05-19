@@ -23,11 +23,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.event.EditableSelectBoxChangeListener;
-import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.ui.widget.EditableSelectBox;
 
 /**
