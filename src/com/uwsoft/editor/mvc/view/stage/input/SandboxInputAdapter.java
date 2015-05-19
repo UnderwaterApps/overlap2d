@@ -9,7 +9,9 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 public class SandboxInputAdapter implements InputProcessor {
 
@@ -17,7 +19,6 @@ public class SandboxInputAdapter implements InputProcessor {
 	private Family family;
 	private Engine engine;
 	private ImmutableArray<Entity> entities;
-	private ComponentMapper<InputListenerComponent> inputListenerCM; 
 	private InputListenerComponent inpputListenerComponent;
 	private Entity target;
 
@@ -26,7 +27,6 @@ public class SandboxInputAdapter implements InputProcessor {
 		SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
 		engine = sandboxMediator.getViewComponent().getEngine();
 		family = Family.all(InputListenerComponent.class).get();
-		inputListenerCM = ComponentMapper.getFor(InputListenerComponent.class);
 	}
 
 	@Override
@@ -52,7 +52,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(family);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = inputListenerCM.get(entity);
+			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).touchDown(entity, screenX, screenY, pointer, button)){
@@ -70,7 +70,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		if(target == null){
 			return false;
 		}
-		inpputListenerComponent = inputListenerCM.get(target);
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchUp(target, screenX, screenY, pointer, button);
@@ -84,7 +84,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		if(target == null){
 			return false;
 		}
-		inpputListenerComponent = inputListenerCM.get(target);
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);;
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchDragged(target, screenX, screenY, pointer);
@@ -97,7 +97,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(family);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = inputListenerCM.get(entity);
+			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).mouseMoved(entity, screenX, screenY)){
@@ -114,7 +114,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(family);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = inputListenerCM.get(entity);
+			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);;
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).scrolled(entity,amount)){

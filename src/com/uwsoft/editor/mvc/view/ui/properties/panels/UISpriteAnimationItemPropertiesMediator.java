@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -34,10 +35,7 @@ import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponen
 public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpriteAnimationItemProperties> {
     private static final String TAG = UISpriteAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-    
-    private ComponentMapper<SpriteAnimationComponent> spriteAnimationMapper = ComponentMapper.getFor(SpriteAnimationComponent.class);
-    private ComponentMapper<SpriteAnimationStateComponent> stateMapper =  ComponentMapper.getFor(SpriteAnimationStateComponent.class);
-    
+
     private SpriteAnimationComponent spriteAnimationComponent;
     private SpriteAnimationStateComponent stateComponent;
 
@@ -71,8 +69,8 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     @Override
     protected void translateObservableDataToView(Entity entity) {
 
-    	spriteAnimationComponent = spriteAnimationMapper.get(entity);
-    	stateComponent = stateMapper.get(entity);
+    	spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
+    	stateComponent = ComponentRetriever.get(entity, SpriteAnimationStateComponent.class);
     	
         Array<String> animations = new Array<>();
         for (String name : spriteAnimationComponent.keyFrames.keySet()) {

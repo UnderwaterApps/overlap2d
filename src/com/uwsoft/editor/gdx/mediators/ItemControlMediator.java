@@ -20,11 +20,11 @@ package com.uwsoft.editor.gdx.mediators;
 
 import java.util.HashMap;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.ZindexComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -33,21 +33,18 @@ public class ItemControlMediator {
 
     private SceneControlMediator sceneControl;
     
-    private ComponentMapper<TransformComponent> transformMapper;
-    private ComponentMapper<ZindexComponent> zindexMapper;
     private TransformComponent transformComponent;
     private ZindexComponent zIndexComponent;
 
     public ItemControlMediator(SceneControlMediator sceneControl) {
         this.sceneControl = sceneControl;
-        transformMapper = ComponentMapper.getFor(TransformComponent.class); 
-        zindexMapper = ComponentMapper.getFor(ZindexComponent.class); 
     }
 
 
     public void itemZIndexChange( HashMap<Entity, SelectionRectangle> currentSelection, boolean isUp) {
         for (SelectionRectangle value : currentSelection.values()) {
-        	zIndexComponent = zindexMapper.get(value.getHost());
+        	zIndexComponent = ComponentRetriever.get(value.getHost(), ZindexComponent.class);
+
             int ammount = 1;
             if (!isUp) ammount = -1;
 
@@ -58,7 +55,7 @@ public class ItemControlMediator {
     }
 
     public void moveItemBy(Entity entity, float x, float y) {
-    	transformComponent = transformMapper.get(entity);
+    	transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
     	transformComponent.x+=x;
     	transformComponent.y+=y;
     }
