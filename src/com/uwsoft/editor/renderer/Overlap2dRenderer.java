@@ -47,10 +47,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 
 	private CompositeTransformComponent compositeTransformComponent;
 	private NodeComponent nodeComponent;
+	private TransformComponent curTransform;
 	
 	private Entity currentComposite = null;
 	
 	public Batch batch;
+	
 	public Overlap2dRenderer(Batch batch) {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
@@ -75,6 +77,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		
 		currentComposite = rootEntity;
 		compositeTransformComponent = compositeTransformMapper.get(currentComposite);
+		curTransform = transformMapper.get(currentComposite);
 		nodeComponent = nodeMapper.get(currentComposite);
 		
 		if (compositeTransformComponent.transform) applyTransform(batch, computeTransform());
@@ -135,9 +138,9 @@ public class Overlap2dRenderer extends IteratingSystem {
 		} else {
 			// No transform for this group, offset each child.
 
-			float offsetX = compositeTransformComponent.x, offsetY = compositeTransformComponent.y;
-			compositeTransformComponent.x = 0;
-			compositeTransformComponent.y = 0;
+			float offsetX = curTransform.x, offsetY = curTransform.y;
+			curTransform.x = 0;
+			curTransform.y = 0;
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 				
@@ -165,8 +168,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 					drawRecursively(child);
 				}
 			}
-			compositeTransformComponent.x = offsetX;
-			compositeTransformComponent.y = offsetY;
+			curTransform.x = offsetX;
+			curTransform.y = offsetY;
 		}
 	}
 
@@ -177,11 +180,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 		//TODO orogin thing
 		float originX = 0;
 		float originY = 0;
-		float rotation = compositeTransformComponent.rotation;
-		float scaleX = compositeTransformComponent.scaleX;
-		float scaleY = compositeTransformComponent.scaleY;
+		float rotation = curTransform.rotation;
+		float scaleX = curTransform.scaleX;
+		float scaleY = curTransform.scaleY;
 
-		worldTransform.setToTrnRotScl(compositeTransformComponent.x + originX, compositeTransformComponent.y + originY, rotation, scaleX, scaleY);
+		worldTransform.setToTrnRotScl(curTransform.x + originX, curTransform.y + originY, rotation, scaleX, scaleY);
 		if (originX != 0 || originY != 0) worldTransform.translate(-originX, -originY);
 
 		// Find the first parent that transforms.

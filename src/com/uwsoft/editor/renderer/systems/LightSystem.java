@@ -7,8 +7,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.conponents.NodeComponent;
 import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
@@ -19,7 +17,6 @@ import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 public class LightSystem extends IteratingSystem {
 	private ComponentMapper<LightObjectComponent> lightObjectComponentMapper = ComponentMapper.getFor(LightObjectComponent.class);
     private ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
-    private ComponentMapper<CompositeTransformComponent> compositeTransformComponentMapper = ComponentMapper.getFor(CompositeTransformComponent.class);
     private ComponentMapper<ParentNodeComponent> parentNodeComponentMapper = ComponentMapper.getFor(ParentNodeComponent.class);
     private ComponentMapper<NodeComponent> nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
 	//private 
@@ -42,7 +39,7 @@ public class LightSystem extends IteratingSystem {
 		float relativeRotation = 0;
 		
 		Entity parentEntity = parentNodeComponent.parentEntity;
-		TransformComponent parentTransformComponent = compositeTransformComponentMapper.get(parentEntity);
+		TransformComponent parentTransformComponent = transformComponentMapper.get(parentEntity);
 		while (parentEntity != null) {
 			relativeX+=parentTransformComponent.x;
 			relativeY+=parentTransformComponent.y;

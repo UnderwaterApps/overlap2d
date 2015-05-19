@@ -240,6 +240,10 @@ public class EntityFactory {
 		spriteComponent.animations = vo.animations;
 		spriteComponent.fps = vo.fps;
 		
+		DimensionsComponent dimensionsComponent = new DimensionsComponent();
+		dimensionsComponent.height = 100;
+		dimensionsComponent.width = 100;
+		
 		Array<AtlasRegion> regions = sortAndGetRegions(spriteComponent.animationName);
 
 		AnimationComponent animationComponent = new AnimationComponent();
@@ -331,6 +335,10 @@ public class EntityFactory {
 		addParentComponent(entity,root);
 		addPhysicsComponents(entity, vo);
 		
+		DimensionsComponent dimensionsComponent = new DimensionsComponent();
+		dimensionsComponent.height = 100;
+		dimensionsComponent.width = 100;
+		
 		return entity;
 	}
 
@@ -349,7 +357,7 @@ public class EntityFactory {
 		transform.y = vo.y;
 
 		TintComponent tint = new TintComponent();
-		tint.tint = vo.tint;
+		tint.color.set(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]);
 
 		ZindexComponent zComponent = new ZindexComponent();
 		zComponent.layerName = vo.layerName;
@@ -369,15 +377,17 @@ public class EntityFactory {
 		mainComponent.itemName = vo.itemName;
 		mainComponent.tags = vo.tags;
 
-		CompositeTransformComponent transform = new CompositeTransformComponent();
+		TransformComponent transform = new TransformComponent();
 		transform.rotation = vo.rotation;
 		transform.scaleX = vo.scaleX;
 		transform.scaleY = vo.scaleY;
 		transform.x = vo.x;
 		transform.y = vo.y;
+		
+		CompositeTransformComponent compositetransform = new CompositeTransformComponent();
 
 		TintComponent tint = new TintComponent();
-		tint.tint = vo.tint;
+		tint.color.set(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]);
 
 		ZindexComponent zComponent = new ZindexComponent();
 		zComponent.layerName = vo.layerName;
@@ -388,6 +398,7 @@ public class EntityFactory {
 		
 		entity.add(mainComponent);
 		entity.add(transform);
+		entity.add(compositetransform);
 		entity.add(tint);
 		entity.add(zComponent);
 		entity.add(layerMap);

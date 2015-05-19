@@ -16,8 +16,11 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.MainItemComponent;
 import com.uwsoft.editor.renderer.conponents.NodeComponent;
+import com.uwsoft.editor.renderer.conponents.TintComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
@@ -172,8 +175,15 @@ public class SceneLoader {
 		invalidateSceneVO(sceneVO);
 
 		MainItemComponent mainComponent = new MainItemComponent();
-		CompositeTransformComponent transform = new CompositeTransformComponent();
+		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
+		TransformComponent trnasform = new TransformComponent();
 		NodeComponent node = new NodeComponent();
+		
+		DimensionsComponent dimensionsComponent = new DimensionsComponent();
+		dimensionsComponent.height = 100;
+		dimensionsComponent.width = 100;
+		
+		TintComponent tint = new TintComponent();
 		
 		ViewPortComponent viewPortComponent = new ViewPortComponent();
 		viewPortComponent.viewPort = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
@@ -182,7 +192,10 @@ public class SceneLoader {
 		
 		Entity entity = new Entity();
 		entity.add(mainComponent);
-		entity.add(transform);
+		entity.add(compositeTransform);
+		entity.add(trnasform);
+		entity.add(dimensionsComponent);
+		entity.add(tint);
 		entity.add(node);
 		entity.add(viewPortComponent);
 		entity.flags = EntityFactory.COMPOSITE_TYPE;
