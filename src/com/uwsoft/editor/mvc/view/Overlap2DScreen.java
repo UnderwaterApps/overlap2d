@@ -31,6 +31,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
+import com.uwsoft.editor.mvc.view.stage.input.SandboxInputAdapter;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 public class Overlap2DScreen implements Screen, InputProcessor {
@@ -103,8 +104,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(this);
         multiplexer.addProcessor(uiStage);
-        //TODO listeners 
-        //multiplexer.addProcessor(sandboxStage);
+        multiplexer.addProcessor(new SandboxInputAdapter());
         Gdx.input.setInputProcessor(multiplexer);
     }
 

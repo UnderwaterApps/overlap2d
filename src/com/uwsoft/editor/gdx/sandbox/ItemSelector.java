@@ -23,9 +23,12 @@ import java.util.HashMap;
 import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -172,8 +175,7 @@ public class ItemSelector {
     private SelectionRectangle createSelectionRect(Entity item) {
         SelectionRectangle rect = new SelectionRectangle(sandbox);
         rect.claim(item);
-        //TODO fix and uncomment
-        //sandbox.frontUI.addActor(rect);
+        sandbox.getUIStage().sandBoxUIGroup.addActor(rect);
         rect.show();
 
         return rect;
@@ -201,20 +203,19 @@ public class ItemSelector {
      * @param removeOthers if set to true this item will become the only selection, otherwise will be added to existing
      */
     public void setSelection(Entity item, boolean removeOthers) {
-    	//TODO fix and uncomment
-//        if (currentSelection.get(item) != null) return;
-//
-//        if (removeOthers) clearSelections();
-//
-//        SelectionRectangle rect = createSelectionRect(item);
-//
-//        currentSelection.put(item, rect);
-//
-//        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
-//
-//		sandbox.getUIStage().mainDropDown.hide();
-//
-//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+        if (currentSelection.get(item) != null) return;
+
+        if (removeOthers) clearSelections();
+
+        SelectionRectangle rect = createSelectionRect(item);
+
+        currentSelection.put(item, rect);
+
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
+
+		sandbox.getUIStage().mainDropDown.hide();
+
+        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
 
     }
 
@@ -261,26 +262,23 @@ public class ItemSelector {
      * @param item to un-select
      */
     public void releaseSelection(Entity item) {
-		//TODO fix and uncomment
-        //currentSelection.get(item).remove();
-        //currentSelection.remove(item);
+        currentSelection.get(item).remove();
+        currentSelection.remove(item);
 
         // TODO: change this to notification
-		//TODO fix and uncomment
-        //sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
     }
 
     /**
      * clears all selections
      */
     public void clearSelections() {
-    	//TODO fix and uncomment
-//        for (SelectionRectangle value : currentSelection.values()) {
-//            value.remove();
-//        }
-//
-//        currentSelection.clear();
-//        sandbox.getSandboxStage().uiStage.getItemsBox().setSelected(currentSelection);
+        for (SelectionRectangle value : currentSelection.values()) {
+            value.remove();
+        }
+
+        currentSelection.clear();
+        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
     }
 
     /**
@@ -296,14 +294,8 @@ public class ItemSelector {
      * Selects all panels on currently active scene
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
-    public ArrayList<Entity> getAllFreeItems() {
-        ArrayList<Entity> curr = new ArrayList<Entity>();
-      //TODO fix and uncomment
-//        for (int i = 0; i < sandbox.getCurrentScene().getItems().size(); i++) {
-//            curr.add(sandbox.getCurrentScene().getItems().get(i));
-//        }
-
-        return curr;
+    public ImmutableArray<Entity> getAllFreeItems() {
+        return sandbox.getEngine().getEntities();
     }
 
 
@@ -311,37 +303,15 @@ public class ItemSelector {
     /************************ Manipulate selected panels  ******************************/
 
     /**
-     * Updates VO objects, and physics related tools of all selected objects
-     */
-    public void flushAllSelectedItems() {
-    	//TODO fix and uncomment
-//        for (SelectionRectangle value : getCurrentSelection().values()) {
-//            Entity item = ((Entity) value.getHostAsActor());
-//            item.updateDataVO();
-//
-//            // update physics objetcs
-//            if (item.isComposite()) {
-//                ((CompositeItem) item).positionPhysics();
-//            } else if (item.getBody() != null) {
-//                item.getBody().setTransform(item.getDataVO().x * sandbox.getCurrentScene().mulX * PhysicsBodyLoader.SCALE, item.getDataVO().y * sandbox.getCurrentScene().mulY * PhysicsBodyLoader.SCALE, (float) Math.toRadians(item.getDataVO().rotation));
-//            }
-//
-//        }
-    }
-
-    /**
      * removes all selected panels from the scene
      */
     public void removeCurrentSelectedItems() {
-		//TODO fix and uncomment
-		/*
         for (SelectionRectangle selectionRect : currentSelection.values()) {
-            sandbox.itemControl.removeItem(selectionRect.getHostAsActor());
+            sandbox.itemControl.removeItem(selectionRect.getHost());
             selectionRect.remove();
         }
 
         currentSelection.clear();
-		*/
     }
 
     public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {
@@ -539,15 +509,14 @@ public class ItemSelector {
      * @param y
      */
     public void moveSelectedItemsBy(float x, float y) {
-    	//TODO fix and uncomment
-//        for (SelectionRectangle selectionRect : currentSelection.values()) {
-//            sandbox.itemControl.moveItemBy(selectionRect.getHostAsActor(), x, y);
-//
-//            selectionRect.setX(selectionRect.getX() + x);
-//            selectionRect.setY(selectionRect.getY() + y);
-//        }
-//
-//        sandbox.saveSceneCurrentSceneData();
+        for (SelectionRectangle selectionRect : currentSelection.values()) {
+            sandbox.itemControl.moveItemBy(selectionRect.getHost(), x, y);
+
+            selectionRect.setX(selectionRect.getX() + x);
+            selectionRect.setY(selectionRect.getY() + y);
+        }
+
+        sandbox.saveSceneCurrentSceneData();
     }
 
     public boolean selectionIsOneItem() {

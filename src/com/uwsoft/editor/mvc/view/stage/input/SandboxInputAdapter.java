@@ -1,6 +1,5 @@
 package com.uwsoft.editor.mvc.view.stage.input;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -9,8 +8,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 public class SandboxInputAdapter implements InputProcessor {

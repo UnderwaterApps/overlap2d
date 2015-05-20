@@ -118,10 +118,12 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         
         viewComponent.setWidthValue(dimensionComponent.width + "");
         viewComponent.setHeightValue(dimensionComponent.height + "");
+
         viewComponent.setRotationValue(transformComponent.rotation + "");
         viewComponent.setScaleXValue(transformComponent.scaleX + "");
         viewComponent.setScaleYValue(transformComponent.scaleY + "");
-        viewComponent.setTintColor(new Color(tintComponent.tint[0], tintComponent.tint[1], tintComponent.tint[2], tintComponent.tint[3]));
+        viewComponent.setTintColor(tintComponent.color);
+
     }
 
     @Override
@@ -143,13 +145,16 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	//vo.isFlipedV = viewComponent.getFlipV();
     	
         // TODO: manage width and height
-    	transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
-    	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
-    	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
-        Color color = viewComponent.getTintColor();
-        tintComponent.tint[0] = color.r;
-        tintComponent.tint[1] = color.g;
-        tintComponent.tint[2] = color.b;
-        tintComponent.tint[3] = color.a;
+
+        transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
+        transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
+        transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
+    	
+    	//TODO not sure if this is needed because color object is passed by reference
+//        Color color = viewComponent.getTintColor();
+//        tintComponent.color[0] = color.r;
+//        tintComponent.color[1] = color.g;
+//        tintComponent.color[2] = color.b;
+//        tintComponent.color[3] = color.a;
     }
 }

@@ -148,8 +148,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         	Entity entity = entities.get(i);
         	InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
         	if(inputListenerComponent == null){
-        		
-        		continue;
+        		inputListenerComponent = new InputListenerComponent();
+        		entity.add(inputListenerComponent);
         	}
         	inputListenerComponent.removeAllListener();
         	inputListenerComponent.addListener(new SandboxItemEventListener(entity));
@@ -163,7 +163,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         //return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
     }
 
-    private class SandboxItemEventListener extends EntityClickListener {
+    public class SandboxItemEventListener extends EntityClickListener {
 
         private Entity targetEntity;
 
@@ -171,12 +171,14 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             this.targetEntity = entity;
         }
 
+        @Override
         public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
-            super.touchDown(entity, x, y, pointer, button);
+            //super.touchDown(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
             return currentSelectedTool.itemMouseDown(targetEntity, coords.x, coords.y);
         }
-
+        
+        @Override
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
@@ -194,7 +196,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             }
         }
 
-        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        @Override
+        public void touchDragged(Entity entity, float x, float y, int pointer) {
             Vector2 coords = getStageCoordinates();
             currentSelectedTool.itemMouseDragged(targetEntity, coords.x, coords.y);
         }
@@ -353,7 +356,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
-            sandbox.getUIStage().setScrollFocus(sandbox.mainBox);
+            sandbox.getUIStage().setScrollFocus(sandbox.getUIStage().sandBoxUIGroup);
             sandbox.setKeyboardFocus();
 
             // if there was a drop down remove it

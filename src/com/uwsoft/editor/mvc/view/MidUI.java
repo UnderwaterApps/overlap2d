@@ -26,4 +26,8 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 public class MidUI extends Group {
 
 
+    public MidUI() {
+
+    }
+
 }
