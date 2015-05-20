@@ -36,6 +36,10 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
+import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
+import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -52,15 +56,13 @@ public class SelectionTool implements Tool {
 
     private Vector2 directionVector = null;
     private Vector2 dragStartPosition;
-    
-    private ComponentMapper<TransformComponent> transformCM; 
-    private ComponentMapper<DimensionsComponent> dimensionsCM;
-    private TransformComponent transformComponent;
-    private DimensionsComponent dimensionsComponent;
+
+	private TransformComponent transformComponent;
+
+	private DimensionsComponent dimensionsComponent;
 
     public SelectionTool() {
-    	transformCM = ComponentMapper.getFor(TransformComponent.class);
-    	dimensionsCM = ComponentMapper.getFor(DimensionsComponent.class);
+    
     }
 
     @Override
@@ -149,7 +151,7 @@ public class SelectionTool implements Tool {
 
         // remembering local touch position for each of selected boxes, if planning to drag
         for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-        	transformComponent = transformCM.get(value.getHost());
+        	transformComponent = ComponentRetriever.get(value.getHost(), TransformComponent.class);
             value.setTouchDiff(x - transformComponent.x, y - transformComponent.y);
         }
 
@@ -203,7 +205,7 @@ public class SelectionTool implements Tool {
 
             // Selection rectangles should move and follow along
             for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-            	transformComponent = transformCM.get(value.getHost());
+            	transformComponent = ComponentRetriever.get(value.getHost(), TransformComponent.class);
             	
                 float[] diff = value.getTouchDiff();
 
@@ -276,8 +278,8 @@ public class SelectionTool implements Tool {
         Rectangle sR = sandbox.selectionRec.getRect();
         for (int i = 0; i < freeItems.size(); i++) {
             Entity entity = freeItems.get(i);
-            transformComponent = transformCM.get(entity);
-            dimensionsComponent = dimensionsCM.get(entity);
+            transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
             //TODO fix layer lock thing
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
             if (Intersector.overlaps(sR, new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {

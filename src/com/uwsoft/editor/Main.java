@@ -83,6 +83,10 @@ public class Main {
     public static void main(String[] argv) throws Exception {
         String input = "../art/textures";
         File file = new File(input);
+        if(!file.exists()){
+        	 input = "art/textures";
+             file = new File(input);
+        }
         //System.out.println("path " + file.getAbsolutePath());
         String output = "style";
         String packFileName = "uiskin";
@@ -96,6 +100,12 @@ public class Main {
 
     private static void processSplashScreenTextures() {
         String input = "../art/splash_textures";
+        File file = new File(input);
+        if(!file.exists()){
+        	 input = "art/splash_textures";
+             file = new File(input);
+        }
+        
         String output = "splash";
         String packFileName = "splash";
         TexturePacker.Settings settings =  new TexturePacker.Settings();

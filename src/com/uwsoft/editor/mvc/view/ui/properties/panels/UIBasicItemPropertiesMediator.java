@@ -147,9 +147,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
     	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
         Color color = viewComponent.getTintColor();
-        tintComponent.tint[0] = color.r;
-        tintComponent.tint[1] = color.g;
-        tintComponent.tint[2] = color.b;
-        tintComponent.tint[3] = color.a;
+        tintComponent.color.set(color);
+       
     }
 }
