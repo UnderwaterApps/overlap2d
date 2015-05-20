@@ -864,42 +864,7 @@ radio-over-on
   orig: 15, 15
   offset: 0, 0
   index: -1
-roboto-Medium
-  rotate: false
-  xy: 2, 444
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-roboto-medium-no-stroke
-  rotate: false
-  xy: 2, 444
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-roboto-medium-small
-  rotate: false
-  xy: 2, 444
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-roboto-medium-small-no-stroke
-  rotate: false
-  xy: 2, 444
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-roboto-medium-big
-  rotate: false
-  xy: 2, 444
-  size: 512, 512
-  orig: 512, 512
-  offset: 0, 0
-  index: -1
-roboto-medium-big-no-stroke
+roboto-medium
   rotate: false
   xy: 2, 444
   size: 512, 512
@@ -1291,5 +1256,70 @@ window-noborder
   size: 27, 34
   split: 5, 4, 26, 3
   orig: 27, 34
+  offset: 0, 0
+  index: -1
+
+uiskin2.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roboto-medium-big
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+uiskin3.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roboto-medium-big-no-stroke
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+uiskin4.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roboto-medium-no-stroke
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+uiskin5.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roboto-medium-small
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
+  offset: 0, 0
+  index: -1
+
+uiskin6.png
+size: 1024,1024
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+roboto-medium-small-no-stroke
+  rotate: false
+  xy: 2, 2
+  size: 512, 512
+  orig: 512, 512
   offset: 0, 0
   index: -1
