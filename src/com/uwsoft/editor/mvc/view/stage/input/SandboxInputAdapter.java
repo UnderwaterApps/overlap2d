@@ -91,6 +91,7 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean mouseMoved(int screenX, int screenY) {
+		/*
 		entities = engine.getEntitiesFor(family);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
@@ -102,7 +103,7 @@ public class SandboxInputAdapter implements InputProcessor {
 				}
 			}
 			
-		}
+		}*/
 		return false;
 	}
 
