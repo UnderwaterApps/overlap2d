@@ -27,6 +27,7 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
 import com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
@@ -49,7 +50,8 @@ public class UIStage extends Stage {
 
         facade = Overlap2DFacade.getInstance();
 
-        sandBoxUIGroup = new Group();
+        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
+        sandBoxUIGroup = midUIMediator.getViewComponent();
         addActor(sandBoxUIGroup);
         
         dummyTarget = new Group();

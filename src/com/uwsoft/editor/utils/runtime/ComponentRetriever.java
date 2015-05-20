@@ -21,6 +21,7 @@ package com.uwsoft.editor.utils.runtime;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.renderer.conponents.*;
 import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
 import com.uwsoft.editor.renderer.conponents.physics.MeshComponont;
@@ -92,6 +93,8 @@ public class ComponentRetriever {
         mappers.put(ScissorComponent.class, ComponentMapper.getFor(ScissorComponent.class));
         mappers.put(TintComponent.class, ComponentMapper.getFor(TintComponent.class));
         mappers.put(ZindexComponent.class, ComponentMapper.getFor(ZindexComponent.class));
+        mappers.put(InputListenerComponent.class, ComponentMapper.getFor(InputListenerComponent.class));
+        mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
     }
 
     /**
