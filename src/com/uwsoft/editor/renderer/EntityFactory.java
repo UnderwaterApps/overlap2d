@@ -276,6 +276,7 @@ public class EntityFactory {
 		
 		
 		entity.add(spriteComponent);
+		entity.add(dimensionsComponent);
 		entity.add(animationComponent);
 		entity.add(stateComponent);
 		entity.add(textureRegionComponent);
@@ -338,6 +339,8 @@ public class EntityFactory {
 		DimensionsComponent dimensionsComponent = new DimensionsComponent();
 		dimensionsComponent.height = 100;
 		dimensionsComponent.width = 100;
+		
+		entity.add(dimensionsComponent);
 		
 		return entity;
 	}
