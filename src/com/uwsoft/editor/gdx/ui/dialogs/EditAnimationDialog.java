@@ -49,7 +49,6 @@ public class EditAnimationDialog extends SimpleDialog {
     private Group wrapper;
     private Group topWrapper;
     
-    private ComponentMapper<SpriteAnimationComponent> spriteAnimationMapper = ComponentMapper.getFor(SpriteAnimationComponent.class);
     private SpriteAnimationComponent spriteAnimationComponent;
     
     public EditAnimationDialog(UIStage s, Entity entity) {

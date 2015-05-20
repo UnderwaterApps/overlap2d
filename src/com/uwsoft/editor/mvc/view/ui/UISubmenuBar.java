@@ -40,28 +40,28 @@ public class UISubmenuBar extends VisTable {
     public UISubmenuBar() {
         Skin skin = VisUI.getSkin();
         facade = Overlap2DFacade.getInstance();
-//        debug();
+        //debug();
         setBackground(skin.getDrawable("sub-menu-bg"));
 
         //hierarchy
         UICompositeHierarchyMediator uiCompositeHierarchyMediator = facade.retrieveMediator(UICompositeHierarchyMediator.NAME);
         UICompositeHierarchy uiCompositeHierarchy = uiCompositeHierarchyMediator.getViewComponent();
-        add(uiCompositeHierarchy).left().expandX();
+        add(uiCompositeHierarchy).left().expand().fill().padRight(6);
 
         //grid
         UIGridBoxMediator uiGridBoxMediator = facade.retrieveMediator(UIGridBoxMediator.NAME);
         UIGridBox uiGridBox = uiGridBoxMediator.getViewComponent();
-        add(uiGridBox).right().padRight(8);
+        add(uiGridBox).padRight(8);
         //
 
         //grid
         UIZoomBoxMediator uiZoomBoxMediator = facade.retrieveMediator(UIZoomBoxMediator.NAME);
         UIZoomBox uiZoomBox = uiZoomBoxMediator.getViewComponent();
-        add(uiZoomBox).right().padRight(8);
+        add(uiZoomBox).padRight(8);
 
         //resolution box
         UIResolutionBoxMediator uiResolutionBoxMediator = facade.retrieveMediator(UIResolutionBoxMediator.NAME);
         UIResolutionBox uiResolutionBox = uiResolutionBoxMediator.getViewComponent();
-        add(uiResolutionBox).right();
+        add(uiResolutionBox);
     }
 }

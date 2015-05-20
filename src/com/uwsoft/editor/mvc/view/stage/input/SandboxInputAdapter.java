@@ -10,9 +10,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
-import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 public class SandboxInputAdapter implements InputProcessor {
 
@@ -20,8 +20,6 @@ public class SandboxInputAdapter implements InputProcessor {
 	private Family root;
 	private Engine engine;
 	private ImmutableArray<Entity> entities;
-	private ComponentMapper<NodeComponent> nodeCM; 
-	private ComponentMapper<InputListenerComponent> inputListenerCM; 
 	private InputListenerComponent inpputListenerComponent;
 	private Entity target;
 	private Vector2 hitTargetLocalCoordinates = new Vector2();
@@ -30,9 +28,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		facade = Overlap2DFacade.getInstance();
 		SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
 		engine = sandboxMediator.getViewComponent().getEngine();
-		//family = Family.all(InputListenerComponent.class).get();
-		root = Family.all(ViewPortComponent.class).get();
-		inputListenerCM = ComponentMapper.getFor(InputListenerComponent.class);
+		family = Family.all(InputListenerComponent.class).get();
 	}
 
 	@Override
@@ -59,17 +55,12 @@ public class SandboxInputAdapter implements InputProcessor {
 		hitTargetLocalCoordinates.set(screenY, screenY);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			
-			NodeComponent nodeComponent = nodeCM.get(entity); 
-			Entity hit = nodeComponent.hit(hitTargetLocalCoordinates);
-			if(hit != null){
-				inpputListenerComponent = inputListenerCM.get(hit);
-				Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-				for (int j = 0, s = asd.size; j < s; j++){
-					if (asd.get(j).touchDown(entity, screenX, screenY, pointer, button)){
-						target = entity;
-						return true;
-					}
+			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
+			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
+			for (int j = 0, s = asd.size; j < s; j++){
+				if (asd.get(j).touchDown(entity, screenX, screenY, pointer, button)){
+					target = entity;
+					return true;
 				}
 			}
 			
@@ -82,7 +73,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		if(target == null){
 			return false;
 		}
-		inpputListenerComponent = inputListenerCM.get(target);
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchUp(target, screenX, screenY, pointer, button);
@@ -96,7 +87,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		if(target == null){
 			return false;
 		}
-		inpputListenerComponent = inputListenerCM.get(target);
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);;
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchDragged(target, screenX, screenY, pointer);
@@ -109,7 +100,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(root);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = inputListenerCM.get(entity);
+			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).mouseMoved(entity, screenX, screenY)){
@@ -126,7 +117,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(root);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = inputListenerCM.get(entity);
+			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);;
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).scrolled(entity,amount)){

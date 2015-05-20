@@ -8,6 +8,15 @@
     },
     "big-font": {
       "file": "roboto-medium-big.fnt"
+    },
+    "default-font-normal": {
+      "file": "roboto-medium-no-stroke.fnt"
+    },
+    "small-font-normal": {
+      "file": "roboto-medium-small-no-stroke.fnt"
+    },
+    "big-font-normal": {
+      "file": "roboto-medium-big-no-stroke.fnt"
     }
   },
   "com.badlogic.gdx.graphics.Color": {
@@ -30,10 +39,10 @@
       "r": 0.72
     },
     "overlap2d-button-text-black": {
-      "a": 1,
-      "b": 0.33,
-      "g": 0.33,
-      "r": 0.33
+      "a": 0.9,
+      "b": 0.1,
+      "g": 0.1,
+      "r": 0.1
     },
     "green": {
       "a": 1,
@@ -147,12 +156,12 @@
       }
     },
     "white": {
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "black",
       "background": "default-select-white",
       "scrollStyle": "default",
       "listStyle": {
-        "font": "default-font",
+        "font": "default-font-normal",
         "fontColorSelected": "black",
         "fontColorUnselected": "black",
         "selection": "list-selection-white",
@@ -300,13 +309,27 @@
       "cursor": "cursor"
     }
   },
+  "com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle": {
+    "hierarchy-item-root": {
+      "imageUp": "icon-root",
+      "imageDown": "icon-root",
+      "imageOver": "icon-root",
+      "font": "big-font-normal"
+    },
+    "hierarchy-item": {
+      "imageUp": "icon-composite2",
+      "imageDown": "icon-composite2",
+      "imageOver": "icon-composite2",
+      "font": "big-font-normal"
+    }
+  },
   "com.kotcrab.vis.ui.widget.VisTextButton$VisTextButtonStyle": {
     "default": {
       "down": "button-down",
       "up": "button",
       "over": "button-over",
       "disabled": "button",
-      "font": "big-font",
+      "font": "big-font-normal",
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
@@ -324,7 +347,7 @@
       "up": "button-orange",
       "over": "button-orange-over",
       "disabled": "button-orange",
-      "font": "big-font",
+      "font": "big-font-normal",
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },

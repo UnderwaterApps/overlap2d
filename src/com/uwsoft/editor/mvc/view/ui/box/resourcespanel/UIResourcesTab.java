@@ -38,8 +38,8 @@ public abstract class UIResourcesTab extends Tab {
     public UIResourcesTab() {
         super(false, false);
         contentTable = new VisTable();
-        contentTable.add(createLabel("Search:")).padRight(3);
-        contentTable.add(new VisTextField()).expandX().fillX().padBottom(4);
+        contentTable.add(createLabel("Search:")).padLeft(1).padBottom(6);
+        contentTable.add(new VisTextField()).padLeft(0).padRight(7).fillX().padBottom(4);
         contentTable.row();
         scrollPane = crateScrollPane();
         contentTable.add(scrollPane).colspan(2).maxHeight(350).expandX().fillX();

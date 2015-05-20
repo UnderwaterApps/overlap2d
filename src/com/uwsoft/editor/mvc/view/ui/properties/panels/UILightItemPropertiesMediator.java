@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.ashley.core.ComponentMapper;
@@ -33,18 +35,16 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     private static final String TAG = UILightItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-    
-    private ComponentMapper<LightObjectComponent> lightObjectMapper;
+
     private LightObjectComponent lightObjectComponent; 
 
     public UILightItemPropertiesMediator() {
         super(NAME, new UILightItemProperties());
-        lightObjectMapper = ComponentMapper.getFor(LightObjectComponent.class);
     }
 
     @Override
     protected void translateObservableDataToView(Entity entity) {
-    	lightObjectComponent = lightObjectMapper.get(entity);
+    	lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
 
         viewComponent.setType(lightObjectComponent.type);
         viewComponent.setRayCount(lightObjectComponent.rays);
@@ -57,7 +57,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     @Override
     protected void translateViewToItemData() {
-    	lightObjectComponent = lightObjectMapper.get(observableReference);
+        lightObjectComponent = ComponentRetriever.get(observableReference, LightObjectComponent.class);
 
     	lightObjectComponent.type = viewComponent.getType();
     	lightObjectComponent.rays = viewComponent.getRayCount();

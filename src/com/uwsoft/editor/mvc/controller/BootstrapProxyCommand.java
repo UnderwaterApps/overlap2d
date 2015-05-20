@@ -21,13 +21,7 @@ package com.uwsoft.editor.mvc.controller;
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.CommandManager;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.proxy.FontManager;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.proxy.ResourceManager;
-import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.proxy.*;
 
 /**
  * Created by sargis on 4/1/15.
@@ -39,6 +33,7 @@ public class BootstrapProxyCommand extends SimpleCommand {
         facade = Overlap2DFacade.getInstance();
         facade.registerProxy(new FontManager());
         facade.registerProxy(new CommandManager());
+        facade.registerProxy(new CursorManager());
         facade.registerProxy(new ProjectManager());
         facade.registerProxy(new ResolutionManager());
         facade.registerProxy(new SceneDataManager());

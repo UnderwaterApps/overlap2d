@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.Animation;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -32,7 +32,6 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
     private static final String TAG = UISpineAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
     
-    private ComponentMapper<SpineDataComponent> spinDataMapper =  ComponentMapper.getFor(SpineDataComponent.class);
     private SpineDataComponent spineDataComponent;
 
     public UISpineAnimationItemPropertiesMediator() {
@@ -42,7 +41,7 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
     @Override
     protected void translateObservableDataToView(Entity entity) {
     	
-    	spineDataComponent = spinDataMapper.get(entity);
+    	spineDataComponent = ComponentRetriever.get(entity, SpineDataComponent.class);
     	
         Array<String> animations = new Array<>();
         for (Animation animation : spineDataComponent.getAnimations()) {

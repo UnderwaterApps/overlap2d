@@ -29,18 +29,33 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.uwsoft.editor.splash.*;
+import com.uwsoft.editor.splash.SplashScreen;
 import com.uwsoft.editor.utils.AppConfig;
+import java.awt.*;
+import java.awt.event.InputEvent;
 
 public class Main {
 
+    private SplashStarter splash;
+    private LwjglFrame mainFrame;
+
     public Main() {
+        splash = new SplashStarter(() -> startLoadingEditor());
+    }
+
+    private void startLoadingEditor() {
+        //first, kill off the splash
+        splash.kill();
+
+        Overlap2D overlap2D = new Overlap2D();
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
-        Overlap2D overlap2D = new Overlap2D();
         if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
@@ -53,17 +68,20 @@ public class Main {
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
+            config.fullscreen = true;
+            config.resizable = false;
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
             config.backgroundFPS = 0;
-            LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
+            mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            toggleVisible();
         }
 
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "art/textures";
+        String input = "../art/textures";
         File file = new File(input);
         //System.out.println("path " + file.getAbsolutePath());
         String output = "style";
@@ -71,8 +89,44 @@ public class Main {
         TexturePacker.Settings settings =  new TexturePacker.Settings();
         settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
+        processSplashScreenTextures();
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
 
+    private static void processSplashScreenTextures() {
+        String input = "../art/splash_textures";
+        String output = "splash";
+        String packFileName = "splash";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
+        TexturePacker.processIfModified(input, output, packFileName);
+    }
+
+
+    private void toggleVisible() {
+        mainFrame.setVisible(!mainFrame.isVisible());
+        if (mainFrame.isVisible()) {
+            mainFrame.toFront();
+            mainFrame.requestFocus();
+            mainFrame.setAlwaysOnTop(true);
+            try {
+                //remember the last location of mouse
+                final Point oldMouseLocation = MouseInfo.getPointerInfo().getLocation();
+
+                //simulate a mouse click on title bar of window
+                Robot robot = new Robot();
+                robot.mouseMove(mainFrame.getX() + 100, mainFrame.getY() + 5);
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+                //move mouse to old location
+                robot.mouseMove((int) oldMouseLocation.getX(), (int) oldMouseLocation.getY());
+            } catch (Exception ex) {
+                //just ignore exception, or you can handle it as you want
+            } finally {
+                mainFrame.setAlwaysOnTop(false);
+            }
+        }
+    }
 }

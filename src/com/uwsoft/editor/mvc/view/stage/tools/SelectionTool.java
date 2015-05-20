@@ -35,9 +35,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.mvc.proxy.CursorManager;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -72,6 +70,10 @@ public class SelectionTool implements Tool {
         for (SelectionRectangle value : currSelection.values()) {
             value.setMode(false);
         }
+
+        // set cursor
+        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(CursorManager.NORMAL);
     }
 
     @Override

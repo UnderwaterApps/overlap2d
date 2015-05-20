@@ -20,9 +20,9 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**
@@ -83,9 +83,10 @@ public class SpineResource extends BoxItemResource {
 
 
         addActor(animThumb);
+
         */
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        payloadImg = new Image(textureManager.getEditorAsset("resizeIconChecked"));
+        payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+
         payload = new ResourcePayloadObject();
         //TODO fix and uncomment
         /*

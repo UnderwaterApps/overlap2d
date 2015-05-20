@@ -42,6 +42,8 @@ public class PasteItemsCommand extends RevertableCommand {
 
     @Override
     public void execute(Notification notification) {
+        if(sandbox.fakeClipboard == null || sandbox.fakeClipboard.equals("")) return;
+
         clipboardContents = new String(sandbox.fakeClipboard);
         super.execute(notification);
     }

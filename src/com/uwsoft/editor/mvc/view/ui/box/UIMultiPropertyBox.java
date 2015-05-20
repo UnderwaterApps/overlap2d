@@ -31,7 +31,7 @@ public class UIMultiPropertyBox extends UICollapsibleBox {
 
 
     public UIMultiPropertyBox() {
-        super("Properties", 236);
+        super("Properties", 222);
         setMovable(false);
         propertiesTable = new VisTable();
         createCollapsibleWidget(propertiesTable);
