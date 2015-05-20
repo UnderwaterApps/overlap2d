@@ -83,7 +83,6 @@ public class ComponentRetriever {
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
         mappers.put(SpineObjectComponent.class, ComponentMapper.getFor(SpineObjectComponent.class));
         mappers.put(AnimationComponent.class, ComponentMapper.getFor(AnimationComponent.class));
-        mappers.put(AnimationComponent.class, ComponentMapper.getFor(AnimationComponent.class));
         mappers.put(SpriteAnimationComponent.class, ComponentMapper.getFor(SpriteAnimationComponent.class));
         mappers.put(SpriteAnimationStateComponent.class, ComponentMapper.getFor(SpriteAnimationStateComponent.class));
         mappers.put(DimensionsComponent.class, ComponentMapper.getFor(DimensionsComponent.class));
