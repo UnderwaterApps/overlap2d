@@ -62,7 +62,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
-                //createFollowersForAllItems();
+                createFollowersForAllItems();
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 BasicFollower follower = followers.get(notification.getBody());
@@ -85,6 +85,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     private void removeAllfollowers() {
         followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::remove);
         followers.clear();
+    }
+
+    private void updateAllFollowers() {
+        followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::update);
     }
 
     private void createFollower(Entity entity) {

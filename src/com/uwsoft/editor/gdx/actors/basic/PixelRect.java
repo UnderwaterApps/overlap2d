@@ -33,6 +33,10 @@ public class PixelRect extends Group {
     private PixelLine[] lines = new PixelLine[4];
     private Image fill;
 
+    public PixelRect() {
+        this(0, 0);
+    }
+
     public PixelRect(float width, float height) {
         facade = Overlap2DFacade.getInstance();
         projectManager = facade.retrieveProxy(ProjectManager.NAME);

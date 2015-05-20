@@ -19,11 +19,14 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 
 /**
  * Created by azakhary on 5/20/2015.
  */
 public class SelectionFollower extends BasicFollower {
+
+    PixelRect pixelRect;
 
     public SelectionFollower(Entity entity) {
         super(entity);
@@ -32,6 +35,10 @@ public class SelectionFollower extends BasicFollower {
     @Override
     public void create() {
         //TODO: create all the actors
+        pixelRect = new PixelRect();
+        pixelRect.setOpacity(0.4f);
+        addActor(pixelRect);
+        hide();
     }
 
     @Override
@@ -39,5 +46,7 @@ public class SelectionFollower extends BasicFollower {
         super.update();
 
         //Update actor dimensions and positions, according to this actor width and height
+        pixelRect.setWidth(getWidth());
+        pixelRect.setHeight(getHeight());
     }
 }

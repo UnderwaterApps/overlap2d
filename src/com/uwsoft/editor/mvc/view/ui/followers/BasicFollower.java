@@ -35,20 +35,20 @@ public abstract class BasicFollower extends Group {
     public BasicFollower(Entity entity) {
         setItem(entity);
         create();
+        update();
     }
 
     private void setItem(Entity entity) {
         transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-        update();
     }
 
     public void update() {
         // TODO: get items absolute position, calculate width based on current zoom, scale and item width
         setX(transformComponent.x);
         setY(transformComponent.y);
-        setWidth(dimensionsComponent.width);
-        setHeight(dimensionsComponent.height);
+        setWidth(dimensionsComponent.width * transformComponent.scaleX);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY);
     }
 
     public void show() {
