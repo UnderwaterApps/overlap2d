@@ -338,6 +338,8 @@ public class EntityFactory {
 		DimensionsComponent dimensionsComponent = new DimensionsComponent();
 		dimensionsComponent.height = 100;
 		dimensionsComponent.width = 100;
+
+		entity.add(dimensionsComponent);
 		
 		return entity;
 	}
