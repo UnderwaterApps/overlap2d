@@ -478,7 +478,7 @@ public class ItemSelector {
         for (Entity item : currentSelection) {
             sandbox.itemControl.moveItemBy(item, x, y);
 
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
         }
 
         sandbox.saveSceneCurrentSceneData();

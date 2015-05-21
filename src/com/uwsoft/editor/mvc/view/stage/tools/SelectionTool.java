@@ -224,7 +224,7 @@ public class SelectionTool implements Tool {
         }
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
     }
 
 
@@ -255,7 +255,7 @@ public class SelectionTool implements Tool {
         sandbox.dirty = false;
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
     }
 
     @Override
