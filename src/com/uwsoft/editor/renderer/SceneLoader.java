@@ -28,6 +28,7 @@ import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
+import com.uwsoft.editor.renderer.systems.CompositeSystem;
 import com.uwsoft.editor.renderer.systems.LayerSystem;
 import com.uwsoft.editor.renderer.systems.LightSystem;
 import com.uwsoft.editor.renderer.systems.ParticleSystem;
@@ -225,12 +226,14 @@ public class SceneLoader {
 		LayerSystem layerSystem = new LayerSystem();
 		PhysicsSystem physicsSystem = new PhysicsSystem();
 		SpineSystem spineSystem = new SpineSystem();
+		CompositeSystem compositeSystem = new CompositeSystem();
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
 		engine.addSystem(layerSystem);
 		engine.addSystem(physicsSystem);
 		engine.addSystem(spineSystem);
+		engine.addSystem(compositeSystem);
 	}
 
 	//TODO this function should be changed later 
