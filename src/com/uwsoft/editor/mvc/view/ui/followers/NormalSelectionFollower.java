@@ -24,11 +24,11 @@ import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 /**
  * Created by azakhary on 5/20/2015.
  */
-public class SelectionFollower extends BasicFollower {
+public class NormalSelectionFollower extends BasicFollower {
 
     PixelRect pixelRect;
 
-    public SelectionFollower(Entity entity) {
+    public NormalSelectionFollower(Entity entity) {
         super(entity);
     }
 
@@ -48,5 +48,10 @@ public class SelectionFollower extends BasicFollower {
         //Update actor dimensions and positions, according to this actor width and height
         pixelRect.setWidth(getWidth());
         pixelRect.setHeight(getHeight());
+    }
+
+    @Override
+    public void setMode(FollowerMode mode) {
+
     }
 }

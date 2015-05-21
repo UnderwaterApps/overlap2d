@@ -26,7 +26,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
-import com.uwsoft.editor.mvc.view.ui.followers.SelectionFollower;
+import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -123,7 +123,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     }
 
     private void createFollower(Entity entity) {
-        BasicFollower follower = new SelectionFollower(entity);
+        BasicFollower follower = FollowerFactory.createFollower(entity);
         viewComponent.addActor(follower);
         followers.put(entity, follower);
     }
