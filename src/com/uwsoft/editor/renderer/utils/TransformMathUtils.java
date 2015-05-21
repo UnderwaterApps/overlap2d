@@ -8,25 +8,16 @@ import com.uwsoft.editor.renderer.conponents.TransformComponent;
 
 public class TransformMathUtils {
 	
-//	public static Vector2 screenToLocalCoordinates(Entity entity, Vector2 screenXY){
-//		Vector2 localCoords = new Vector2(); 
-//		Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
-//		TransformComponent parentTrnasform = entity.getComponent(TransformComponent.class);
-//		localCoords = parentToLocalCoordinates(entity, new Vector2(parentTrnasform.x, parentTrnasform.y));
-//		return screenToScreenCoordinates.;
-//	}
-	
-
-	/** Transforms the specified point in the screen's coordinates to the entity's local coordinate system. */
-	public static Vector2 stageToLocalCoordinates (Entity entity, Vector2 screenCoords) {
+	/** Transforms the specified point in the scene's coordinates to the entity's local coordinate system. */
+	public static Vector2 sceneToLocalCoordinates (Entity entity, Vector2 sceneCoords) {
 		ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
 		Entity parentEntity = null;
 		if(parentNodeComponent != null){
 			parentEntity = parentNodeComponent.parentEntity;
 		}
-		if (parentEntity != null) stageToLocalCoordinates(parentEntity, screenCoords);
-		parentToLocalCoordinates(entity, screenCoords);
-		return screenCoords;
+		if (parentEntity != null) sceneToLocalCoordinates(parentEntity, sceneCoords);
+		parentToLocalCoordinates(entity, sceneCoords);
+		return sceneCoords;
 	}
 
 	
@@ -62,6 +53,59 @@ public class TransformMathUtils {
 			parentCoords.y = (tox * -sin + toy * cos) / scaleY + originY;
 		}
 		return parentCoords;
+	}
+	
+	/** Transforms the specified point in the entity's coordinates to be in the scene's coordinates.*/
+	public static Vector2 localToSceneCoordinates (Entity entity, Vector2 localCoords) {
+		return localToAscendantCoordinates(null, entity, localCoords);
+	}
+	
+	/** Converts coordinates for this entity to those of a parent entity. The ascendant does not need to be a direct parent. */
+	public static Vector2 localToAscendantCoordinates (Entity ascendant, Entity entity, Vector2 localCoords) {
+		while (entity != null) {
+			localToParentCoordinates(entity, localCoords);
+			ParentNodeComponent parentNode = entity.getComponent(ParentNodeComponent.class);
+			if(parentNode == null){
+				break;
+			}
+			entity = parentNode.parentEntity;
+			if (entity == ascendant) break;
+		}
+		return localCoords;
+	}
+	
+	/** Transforms the specified point in the actor's coordinates to be in the parent's coordinates. */
+	public static Vector2 localToParentCoordinates (Entity entity, Vector2 localCoords) {
+		TransformComponent trnasform = entity.getComponent(TransformComponent.class); 
+		
+		final float rotation = -trnasform.rotation;
+		final float scaleX = trnasform.scaleX;
+		final float scaleY = trnasform.scaleY;
+		final float x = trnasform.x;
+		final float y = trnasform.y;
+		if (rotation == 0) {
+			if (scaleX == 1 && scaleY == 1) {
+				localCoords.x += x;
+				localCoords.y += y;
+			} else {
+				//TODO origin
+				final float originX = 0;
+				final float originY = 0;
+				localCoords.x = (localCoords.x - originX) * scaleX + originX + x;
+				localCoords.y = (localCoords.y - originY) * scaleY + originY + y;
+			}
+		} else {
+			final float cos = (float)Math.cos(rotation * MathUtils.degreesToRadians);
+			final float sin = (float)Math.sin(rotation * MathUtils.degreesToRadians);
+			//TODO origin
+			final float originX = 0;
+			final float originY = 0;
+			final float tox = (localCoords.x - originX) * scaleX;
+			final float toy = (localCoords.y - originY) * scaleY;
+			localCoords.x = (tox * cos + toy * sin) + originX + x;
+			localCoords.y = (tox * -sin + toy * cos) + originY + y;
+		}
+		return localCoords;
 	}
 	
 }
