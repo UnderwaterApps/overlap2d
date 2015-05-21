@@ -54,7 +54,9 @@ public class Main {
 
     private void startLoadingEditor() {
         //first, kill off the splash
-        splash.kill();
+    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC)) {
+    		splash.kill();
+    	}
 
         Overlap2D overlap2D = new Overlap2D();
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
