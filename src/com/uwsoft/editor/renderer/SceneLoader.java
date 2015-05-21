@@ -49,6 +49,7 @@ public class SceneLoader {
 	public Engine engine = null;
 	public RayHandler rayHandler;
 	public World world;
+	public Entity rootEntity;
 	private EntityFactory entityFactory;
 
 	/**
@@ -190,19 +191,19 @@ public class SceneLoader {
 		viewPortComponent.viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		
-		Entity entity = new Entity();
-		entity.add(mainComponent);
-		entity.add(compositeTransform);
-		entity.add(trnasform);
-		entity.add(dimensionsComponent);
-		entity.add(tint);
-		entity.add(node);
-		entity.add(viewPortComponent);
-		entity.flags = EntityFactory.COMPOSITE_TYPE;
+		rootEntity = new Entity();
+		rootEntity.add(mainComponent);
+		rootEntity.add(compositeTransform);
+		rootEntity.add(trnasform);
+		rootEntity.add(dimensionsComponent);
+		rootEntity.add(tint);
+		rootEntity.add(node);
+		rootEntity.add(viewPortComponent);
+		rootEntity.flags = EntityFactory.COMPOSITE_TYPE;
 
-		engine.addEntity(entity);
+		engine.addEntity(rootEntity);
 
-		initWithAshley(entity, sceneVO.composite);
+		initWithAshley(rootEntity, sceneVO.composite);
 
 		// if (createActors) {
 		// sceneActor = getSceneAsActor();
