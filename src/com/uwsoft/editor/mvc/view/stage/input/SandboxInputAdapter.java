@@ -180,10 +180,10 @@ public class SandboxInputAdapter implements InputProcessor {
 		for (int i = 0, n = childrenEntities.size; i < n; i++){
 			Entity childEntity = childrenEntities.get(i);
 			childLocalCoordinates.set(localCoordinates);
-			NodeComponent childNodeComponent = ComponentRetriever.get(childEntity, NodeComponent.class);
-			if(childNodeComponent != null){
-				return hit(childEntity, childLocalCoordinates.x, childLocalCoordinates.y);
-			}
+//			NodeComponent childNodeComponent = ComponentRetriever.get(childEntity, NodeComponent.class);
+//			if(childNodeComponent != null){
+//				return hit(childEntity, childLocalCoordinates.x, childLocalCoordinates.y);
+//			}
 			
 			TransformMathUtils.parentToLocalCoordinates(childEntity, childLocalCoordinates);
 			
