@@ -23,6 +23,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.renderer.conponents.*;
+import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
 import com.uwsoft.editor.renderer.conponents.physics.MeshComponont;
 import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyComponent;
@@ -69,31 +70,40 @@ public class ComponentRetriever {
      * it might be a good idea to use Reflections library later to create this list from all classes in components package of runtime, all in favour?
      */
     private void init() {
-        mappers.put(ViewPortComponent.class, ComponentMapper.getFor(ViewPortComponent.class));
-        mappers.put(CompositeTransformComponent.class, ComponentMapper.getFor(CompositeTransformComponent.class));
-        mappers.put(NodeComponent.class, ComponentMapper.getFor(NodeComponent.class));
-        mappers.put(TransformComponent.class, ComponentMapper.getFor(TransformComponent.class));
-        mappers.put(TextureRegionComponent.class, ComponentMapper.getFor(TextureRegionComponent.class));
-        mappers.put(ParticleCompononet.class, ComponentMapper.getFor(ParticleCompononet.class));
-        mappers.put(SpriterDrawerComponent.class, ComponentMapper.getFor(SpriterDrawerComponent.class));
-        mappers.put(SpriterComponent.class, ComponentMapper.getFor(SpriterComponent.class));
-        mappers.put(SpineDataComponent.class, ComponentMapper.getFor(SpineDataComponent.class));
-        mappers.put(MeshComponont.class, ComponentMapper.getFor(MeshComponont.class));
-        mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
+    	mappers.put(LightObjectComponent.class, ComponentMapper.getFor(LightObjectComponent.class));
+    	
+    	mappers.put(ParticleCompononet.class, ComponentMapper.getFor(ParticleCompononet.class));
+    	
+    	mappers.put(MeshComponont.class, ComponentMapper.getFor(MeshComponont.class));
+    	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
+    	
+        mappers.put(SpineDataComponent.class, ComponentMapper.getFor(SpineDataComponent.class));
         mappers.put(SpineObjectComponent.class, ComponentMapper.getFor(SpineObjectComponent.class));
+        
         mappers.put(AnimationComponent.class, ComponentMapper.getFor(AnimationComponent.class));
         mappers.put(SpriteAnimationComponent.class, ComponentMapper.getFor(SpriteAnimationComponent.class));
         mappers.put(SpriteAnimationStateComponent.class, ComponentMapper.getFor(SpriteAnimationStateComponent.class));
+        
+        mappers.put(SpriterDrawerComponent.class, ComponentMapper.getFor(SpriterDrawerComponent.class));
+        mappers.put(SpriterComponent.class, ComponentMapper.getFor(SpriterComponent.class));
+        
+        mappers.put(CompositeTransformComponent.class, ComponentMapper.getFor(CompositeTransformComponent.class));
         mappers.put(DimensionsComponent.class, ComponentMapper.getFor(DimensionsComponent.class));
         mappers.put(LayerMapComponent.class, ComponentMapper.getFor(LayerMapComponent.class));
+        mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
         mappers.put(NinePatchComponnent.class, ComponentMapper.getFor(NinePatchComponnent.class));
+        mappers.put(NodeComponent.class, ComponentMapper.getFor(NodeComponent.class));
         mappers.put(ParentNodeComponent.class, ComponentMapper.getFor(ParentNodeComponent.class));
         mappers.put(ScissorComponent.class, ComponentMapper.getFor(ScissorComponent.class));
+        mappers.put(TextureRegionComponent.class, ComponentMapper.getFor(TextureRegionComponent.class));
         mappers.put(TintComponent.class, ComponentMapper.getFor(TintComponent.class));
+        mappers.put(TransformComponent.class, ComponentMapper.getFor(TransformComponent.class));
+        mappers.put(ViewPortComponent.class, ComponentMapper.getFor(ViewPortComponent.class));
         mappers.put(ZindexComponent.class, ComponentMapper.getFor(ZindexComponent.class));
         mappers.put(InputListenerComponent.class, ComponentMapper.getFor(InputListenerComponent.class));
-        mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
+        
+        
     }
 
     /**
