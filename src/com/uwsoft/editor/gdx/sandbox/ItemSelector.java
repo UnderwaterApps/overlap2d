@@ -475,10 +475,9 @@ public class ItemSelector {
      * @param y
      */
     public void moveSelectedItemsBy(float x, float y) {
-        for (Entity item : currentSelection) {
-            sandbox.itemControl.moveItemBy(item, x, y);
-
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
+        for (Entity entity : currentSelection) {
+            sandbox.itemControl.moveItemBy(entity, x, y);
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
         }
 
         sandbox.saveSceneCurrentSceneData();
