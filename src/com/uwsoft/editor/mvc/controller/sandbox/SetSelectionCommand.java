@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -28,13 +29,13 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
  */
 public class SetSelectionCommand extends RevertableCommand {
 
-    ArrayList<Entity> previousSelection;
+    Set<Entity> previousSelection;
 
     @Override
     public void doAction() {
         previousSelection = Sandbox.getInstance().getSelector().getSelectedItems();
 
-        ArrayList<Entity> items = getNotification().getBody();
+        Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().setSelections(items, true);
     }
 

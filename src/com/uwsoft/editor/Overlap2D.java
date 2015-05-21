@@ -41,7 +41,12 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String ZOOM_CHANGED = EVENT_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
     public static final String ITEM_DATA_UPDATED = EVENT_PREFIX + ".ITEM_DATA_UPDATED";
-    public static final String ITEM_SELECTED = EVENT_PREFIX + ".ITEM_SELECTED";
+
+
+    // this should move
+    public static final String HIDE_SELECTIONS = EVENT_PREFIX + ".HIDE_SELECTIONS";
+    public static final String SHOW_SELECTIONS = EVENT_PREFIX + ".SHOW_SELECTIONS";
+    public static final String ITEM_SELECTION_CHANGED = EVENT_PREFIX + ".ITEM_SELECTION_CHANGED";
     public static final String EMPTY_SPACE_CLICKED = EVENT_PREFIX + ".EMPTY_SPACE_CLICKED";
 
     public static final String SCENE_RIGHT_CLICK = EVENT_PREFIX + ".SCENE_RIGHT_CLICK";

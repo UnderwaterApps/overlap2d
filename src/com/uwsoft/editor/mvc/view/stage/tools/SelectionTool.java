@@ -20,6 +20,8 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -68,9 +70,9 @@ public class SelectionTool implements Tool {
     @Override
     public void initTool() {
         sandbox = Sandbox.getInstance();
-        HashMap<Entity, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
-        for (SelectionRectangle value : currSelection.values()) {
-            value.setMode(false);
+        Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
+        for (Entity item : currSelection) {
+            //value.setMode(false);
         }
 
         // set cursor
@@ -122,7 +124,7 @@ public class SelectionTool implements Tool {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().get(item) != null;
+        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(item);
 
         // if shift is pressed we are in add/remove selection mode
         if (isShiftPressed()) {
@@ -143,16 +145,17 @@ public class SelectionTool implements Tool {
 //                return false;
 //            } else {
                 // select this item and remove others from selection
-                ArrayList<Entity> items = new ArrayList<>();
+                Set<Entity> items = new HashSet<>();
                 items.add(item);
                 facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
             //}
         }
 
         // remembering local touch position for each of selected boxes, if planning to drag
-        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-        	transformComponent = ComponentRetriever.get(value.getHost(), TransformComponent.class);
-            value.setTouchDiff(x - transformComponent.x, y - transformComponent.y);
+        for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
+        	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
+            //TODO: fix that
+            //value.setTouchDiff(x - transformComponent.x, y - transformComponent.y);
         }
 
         dragStartPosition = new Vector2(x, y);
@@ -204,17 +207,18 @@ public class SelectionTool implements Tool {
             }
 
             // Selection rectangles should move and follow along
-            for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-            	transformComponent = ComponentRetriever.get(value.getHost(), TransformComponent.class);
-            	
-                float[] diff = value.getTouchDiff();
+            for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
+            	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
 
-                diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
-                diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
+                //TODO: fix this shit
+                //float[] diff = value.getTouchDiff();
+
+                //diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
+                //diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
               
-                transformComponent.x = (newX - diff[0]);
-                transformComponent.y = (newY - diff[1]);
-                value.hide();
+                //transformComponent.x = (newX - diff[0]);
+                //transformComponent.y = (newY - diff[1]);
+                //value.hide();
             }
         }
 
@@ -238,9 +242,10 @@ public class SelectionTool implements Tool {
         }
 
         // re-show all selection rectangles as clicking/dragging is finished
-        for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
-            value.show();
-        }
+        // TODO: this has to be done via notification
+        //for (SelectionRectangle value : sandbox.getSelector().getCurrentSelection().values()) {
+        //   value.show();
+        //}
 
         if (sandbox.dirty) {
             sandbox.saveSceneCurrentSceneData();

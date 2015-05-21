@@ -27,7 +27,8 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
-import com.uwsoft.editor.renderer.utils.CustomVariables;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -52,7 +53,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_SELECTED,
+                Overlap2D.ITEM_SELECTION_CHANGED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED,
                 CustomVariablesDialog.ADD_BUTTON_PRESSED,
@@ -75,8 +76,11 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
             case UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED:
                 viewComponent.show(uiStage);
                 break;
-            case Overlap2D.ITEM_SELECTED:
-                setObservable(notification.getBody());
+            case Overlap2D.ITEM_SELECTION_CHANGED:
+                Set<Entity> selection = notification.getBody();
+                if(selection.size() == 1) {
+                    setObservable(selection.iterator().next());
+                }
                 break;
             case Overlap2D.EMPTY_SPACE_CLICKED:
                 setObservable(null);

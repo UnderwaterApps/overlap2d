@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -29,13 +30,13 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void doAction() {
-        ArrayList<Entity> items = getNotification().getBody();
+        Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().releaseSelections(items);
     }
 
     @Override
     public void undoAction() {
-        ArrayList<Entity> items = getNotification().getBody();
+        Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().addSelections(items);
     }
 }

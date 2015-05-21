@@ -26,10 +26,10 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
-import com.uwsoft.editor.mvc.view.ui.followers.LightFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.SelectionFollower;
 
 import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -53,7 +53,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public String[] listNotificationInterests() {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
-                Overlap2D.ITEM_DATA_UPDATED
+                Overlap2D.ITEM_DATA_UPDATED,
+                Overlap2D.ITEM_SELECTION_CHANGED,
+                Overlap2D.SHOW_SELECTIONS,
+                Overlap2D.HIDE_SELECTIONS
         };
     }
 
@@ -70,6 +73,22 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                     follower.update();
                 }
                 break;
+            case Overlap2D.ITEM_SELECTION_CHANGED:
+                setNewSelectionConfiguration(notification.getBody());
+                break;
+            case Overlap2D.HIDE_SELECTIONS:
+                hideAllFollowers(notification.getBody());
+                break;
+            case Overlap2D.SHOW_SELECTIONS:
+                showAllFollowers(notification.getBody());
+                break;
+        }
+    }
+
+    private void setNewSelectionConfiguration(Set<Entity> items) {
+        followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::hide);
+        for (Entity item : items) {
+            followers.get(item).show();
         }
     }
 
@@ -87,6 +106,18 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         followers.clear();
     }
 
+    private void hideAllFollowers(Set<Entity> items) {
+        for (Entity item : items) {
+            followers.get(item).hide();
+        }
+    }
+
+    private void showAllFollowers(Set<Entity> items) {
+        for (Entity item : items) {
+            followers.get(item).show();
+        }
+    }
+
     private void updateAllFollowers() {
         followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::update);
     }
@@ -97,7 +128,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         followers.put(entity, follower);
     }
 
-    private void removeFollower(Entity entity) {
+    public void removeFollower(Entity entity) {
         followers.get(entity).remove();
         followers.remove(entity);
     }

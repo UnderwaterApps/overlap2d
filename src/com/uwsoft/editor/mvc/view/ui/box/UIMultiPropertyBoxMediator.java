@@ -114,7 +114,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 SceneDataManager.SCENE_LOADED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
-                Overlap2D.ITEM_SELECTED,
+                Overlap2D.ITEM_SELECTION_CHANGED,
                 SandboxMediator.SANDBOX_TOOL_CHANGED
         };
     }
@@ -128,7 +128,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
             case Overlap2D.EMPTY_SPACE_CLICKED:
                 initAllPropertyBoxes(null);
                 break;
-            case Overlap2D.ITEM_SELECTED:
+            case Overlap2D.ITEM_SELECTION_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
             case SandboxMediator.SANDBOX_TOOL_CHANGED:

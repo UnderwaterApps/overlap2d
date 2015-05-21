@@ -19,6 +19,7 @@
 package com.uwsoft.editor.gdx.mediators;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
@@ -41,9 +42,9 @@ public class ItemControlMediator {
     }
 
 
-    public void itemZIndexChange( HashMap<Entity, SelectionRectangle> currentSelection, boolean isUp) {
-        for (SelectionRectangle value : currentSelection.values()) {
-        	zIndexComponent = ComponentRetriever.get(value.getHost(), ZindexComponent.class);
+    public void itemZIndexChange( Set<Entity> currentSelection, boolean isUp) {
+        for (Entity item : currentSelection) {
+        	zIndexComponent = ComponentRetriever.get(item, ZindexComponent.class);
 
             int ammount = 1;
             if (!isUp) ammount = -1;

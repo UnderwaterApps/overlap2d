@@ -38,7 +38,7 @@ public class TransformTool extends SelectionTool {
         Sandbox sandbox = Sandbox.getInstance();
 
         if(sandbox.getSelector().selectionIsOneItem()){
-            sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
+            //sandbox.getSelector().getSelectedItemSelectionRectangle().setMode(true);
         } else {
             sandbox.getSelector().clearSelections();
         }
@@ -73,7 +73,7 @@ public class TransformTool extends SelectionTool {
         super.itemMouseDown(entity, x, y);
         Sandbox sandbox = Sandbox.getInstance();
 
-        currentSelection = sandbox.getSelector().getSelectedItemSelectionRectangle();
+        //currentSelection = sandbox.getSelector().getSelectedItemSelectionRectangle();
 
         currentSelection.setMode(true);
         setListeners(currentSelection);
