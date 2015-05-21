@@ -38,4 +38,9 @@ public class LightFollower extends BasicFollower {
         icon.setY(dimensionsComponent.height/2);
         addActor(icon);
     }
+
+    @Override
+    public void hide() {
+        // you cannot hide light folower
+    }
 }

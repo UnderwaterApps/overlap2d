@@ -82,13 +82,16 @@ public class SandboxInputAdapter implements InputProcessor {
 			screenToStageCoordinates(entity, hitTargetLocalCoordinates);
 			
 			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+			if(inpputListenerComponent == null) continue;
+			// TODO: please fix "asd"
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
-			for (int j = 0, s = asd.size; j < s; j++){
-				if(asd.get(j).touchDown(entity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)){
+			for (int j = 0, s = asd.size; j < s; j++) {
+				if (asd.get(j).touchDown(entity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)) {
 					return true;
 				}
 			}
+
 			
 		}
 		return false;
@@ -100,6 +103,7 @@ public class SandboxInputAdapter implements InputProcessor {
 			return false;
 		}
 		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		if(inpputListenerComponent == null) return false;
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchUp(target, screenX, screenY, pointer, button);
@@ -113,7 +117,8 @@ public class SandboxInputAdapter implements InputProcessor {
 		if(target == null){
 			return false;
 		}
-		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);;
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		if(inpputListenerComponent == null) return false;
 		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = asd.size; j < s; j++){
 			asd.get(j).touchDragged(target, screenX, screenY, pointer);
@@ -143,7 +148,8 @@ public class SandboxInputAdapter implements InputProcessor {
 		entities = engine.getEntitiesFor(root);
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
-			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);;
+			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
+			if(inpputListenerComponent == null) continue;
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).scrolled(entity,amount)){

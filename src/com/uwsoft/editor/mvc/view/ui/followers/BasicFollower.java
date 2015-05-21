@@ -49,7 +49,8 @@ public abstract class BasicFollower extends Group {
 
     public void update() {
         // TODO: get items position based on current zoom
-    	Vector2 localCoords = new Vector2(transformComponent.x, transformComponent.y);
+        // TODO: Make poolable vector
+    	Vector2 localCoords = new Vector2(0, 0);
     	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
         setX(localCoords.x);
         setY(localCoords.y);
@@ -59,6 +60,7 @@ public abstract class BasicFollower extends Group {
 
     public void show() {
         setVisible(true);
+        update();
     }
 
     public void hide() {

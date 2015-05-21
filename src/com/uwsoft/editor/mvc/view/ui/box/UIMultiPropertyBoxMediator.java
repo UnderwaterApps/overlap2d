@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -129,7 +130,10 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
                 initAllPropertyBoxes(null);
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
-                initAllPropertyBoxes(notification.getBody());
+                Set<Entity> selection = notification.getBody();
+                if(selection.size() == 1) {
+                    initAllPropertyBoxes(selection.iterator().next());
+                }
                 break;
             case SandboxMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
