@@ -167,9 +167,16 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     public Vector2 getStageCoordinates() {
-    	return new Vector2(); //temporary for not getting errors
-    	//TODO fix and uncomment
-        //return Sandbox.getInstance().getSandboxStage().screenToStageCoordinates(new Vector2(Gdx.input.getX(), Gdx.input.getY()));
+        // TODO: remove this shit
+        Engine engine = getViewComponent().getEngine();
+        Family rootFamily = Family.all(ViewPortComponent.class).get();
+        Entity rootEntity = engine.getEntitiesFor(rootFamily).iterator().next();
+
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(rootEntity, ViewPortComponent.class);
+        Vector2 vec = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        viewPortComponent.viewPort.unproject(vec);
+
+        return vec;
     }
 
     public class SandboxItemEventListener extends EntityClickListener {
