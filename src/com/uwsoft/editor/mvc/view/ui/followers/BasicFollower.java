@@ -19,9 +19,11 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
@@ -31,6 +33,7 @@ public abstract class BasicFollower extends Group {
 
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
+    protected Entity entity;
 
     public BasicFollower(Entity entity) {
         setItem(entity);
@@ -41,12 +44,15 @@ public abstract class BasicFollower extends Group {
     private void setItem(Entity entity) {
         transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        this.entity = entity;
     }
 
     public void update() {
-        // TODO: get items absolute position, calculate width based on current zoom, scale and item width
-        setX(transformComponent.x);
-        setY(transformComponent.y);
+        // TODO: get items position based on current zoom
+    	Vector2 localCoords = new Vector2(transformComponent.x, transformComponent.y);
+    	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
+        setX(localCoords.x);
+        setY(localCoords.y);
         setWidth(dimensionsComponent.width * transformComponent.scaleX);
         setHeight(dimensionsComponent.height * transformComponent.scaleY);
     }
