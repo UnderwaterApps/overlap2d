@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
-import java.util.Map;
-
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -30,6 +28,8 @@ import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.EntityFactory;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -54,7 +54,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_SELECTED,
+                Overlap2D.ITEM_SELECTION_CHANGED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED,
                 EditSpriteAnimationDialog.ADD_BUTTON_PRESSED,
@@ -77,13 +77,18 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
             case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
                 viewComponent.show(uiStage);
                 break;
-            case Overlap2D.ITEM_SELECTED:
-                if(((Entity)notification.getBody()).flags == EntityFactory.SPRITE_TYPE) {
-                    setObservable(notification.getBody());
-                } else {
-                    observable = null;
-                    viewComponent.setEmpty("Selected item is not a sprite animation");
+            case Overlap2D.ITEM_SELECTION_CHANGED:
+                Set<Entity> selection = notification.getBody();
+                if(selection.size() == 1) {
+                    Entity entity = selection.iterator().next();
+                    if(entity.flags == EntityFactory.SPRITE_TYPE) {
+                        setObservable(entity);
+                    } else {
+                        observable = null;
+                        viewComponent.setEmpty("Selected item is not a sprite animation");
+                    }
                 }
+
             break;
             case Overlap2D.EMPTY_SPACE_CLICKED:
                 setObservable(null);

@@ -55,7 +55,8 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
     	//TODO this was needed with previous runtime don't know will it be needed for new runtime
     	//observableReference.renew();
 
-        Sandbox.getInstance().getSelector().updateSelections();
+        // TODO: add this back
+        //Sandbox.getInstance().getSelector().updateSelections();
         Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }

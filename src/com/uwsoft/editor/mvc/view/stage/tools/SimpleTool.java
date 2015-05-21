@@ -1,6 +1,7 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import java.util.HashMap;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
@@ -14,10 +15,7 @@ public abstract class SimpleTool implements Tool {
     @Override
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
-        HashMap<Entity, SelectionRectangle> currSelection = sandbox.getSelector().getCurrentSelection();
-        for (SelectionRectangle value : currSelection.values()) {
-            value.setMode(false);
-        }
+        Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
     }
 
 

@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Json;
@@ -36,7 +37,7 @@ public class DeleteItemsCommand extends RevertableCommand {
 
     private void backup() {
         CompositeVO tempHolder = new CompositeVO();
-        ArrayList<Entity> items = sandbox.getSelector().getSelectedItems();
+        Set<Entity> items = sandbox.getSelector().getSelectedItems();
         Json json = new Json();
         json.setOutputType(JsonWriter.OutputType.json);
       //TODO fix and uncomment

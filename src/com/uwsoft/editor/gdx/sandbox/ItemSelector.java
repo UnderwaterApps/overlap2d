@@ -18,17 +18,17 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.utils.Align;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -43,11 +43,15 @@ public class ItemSelector {
     private SceneControlMediator sceneControl;
 
     /** list of current selected panels */
-    private HashMap<Entity, SelectionRectangle> currentSelection = new HashMap<Entity, SelectionRectangle>();
+    private Set<Entity> currentSelection = new HashSet<>();
+
+    private MidUIMediator midUIMediator;
 
     public ItemSelector(Sandbox sandbox) {
         this.sandbox = sandbox;
         sceneControl = sandbox.sceneControl;
+
+        midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
     }
 
     /***************************** Getters *********************************/
@@ -55,7 +59,7 @@ public class ItemSelector {
     /**
      * @return HashMap of selection rectangles that contain panels
      */
-    public HashMap<Entity, SelectionRectangle> getCurrentSelection() {
+    public Set<Entity> getCurrentSelection() {
         return currentSelection;
     }
 
@@ -63,21 +67,14 @@ public class ItemSelector {
      * @return one selected item
      */
     public Entity getSelectedItem() {
-        ArrayList<Entity> items = new ArrayList<Entity>();
-        for (SelectionRectangle value : currentSelection.values()) {
-            items.add(value.getHost());
-            break;
-        }
-        if(items.size() > 0) {
-            return items.get(0);
+        if(currentSelection.size() > 0) {
+            return currentSelection.iterator().next();
         }
 
         return null;
     }
 
     /**
-     * @return one selected item
-     */
     public SelectionRectangle getSelectedItemSelectionRectangle() {
         ArrayList<SelectionRectangle> items = new ArrayList<SelectionRectangle>();
         for (SelectionRectangle value : currentSelection.values()) {
@@ -90,16 +87,13 @@ public class ItemSelector {
 
         return null;
     }
+     */
 
     /**
      * @return list of currently selected panels
      */
-    public ArrayList<Entity> getSelectedItems() {
-        ArrayList<Entity> items = new ArrayList<Entity>();
-        for (SelectionRectangle value : currentSelection.values()) {
-            items.add(value.getHost());
-        }
-        return items;
+    public Set<Entity> getSelectedItems() {
+        return currentSelection;
     }
 
     public BiConsumer<SelectionRectangle, AccContainer> broadestItem = (i, acc) -> {
@@ -155,6 +149,7 @@ public class ItemSelector {
         }
     };
 
+    /*
     public SelectionRectangle get(BiConsumer<SelectionRectangle, AccContainer> checkSelection) {
         final AccContainer acc = new AccContainer();
 
@@ -163,25 +158,9 @@ public class ItemSelector {
         }
         return acc.carry;
     }
+    */
 
-    /***************************** Selectors *********************************/
-
-
-    /**
-     * Creates @SelectionRectangle instance that contains current item, and adds it to the frontUI
-     * @param item to be claimed by newly created @SelectionRectangle
-     * @return newly created @SelectionRectangle
-     */
-    private SelectionRectangle createSelectionRect(Entity item) {
-        SelectionRectangle rect = new SelectionRectangle(sandbox);
-        rect.claim(item);
-        sandbox.getUIStage().sandBoxUIGroup.addActor(rect);
-        rect.show();
-
-        return rect;
-    }
-
-    /**
+     /**
      * Finds all panels that are on particular layer and selects them
      * @param name of the layer
      */
@@ -203,19 +182,15 @@ public class ItemSelector {
      * @param removeOthers if set to true this item will become the only selection, otherwise will be added to existing
      */
     public void setSelection(Entity item, boolean removeOthers) {
-        if (currentSelection.get(item) != null) return;
+        if (currentSelection.contains(item)) return;
 
         if (removeOthers) clearSelections();
 
-        SelectionRectangle rect = createSelectionRect(item);
+        currentSelection.add(item);
 
-        currentSelection.put(item, rect);
-
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTED, item);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
 
 		sandbox.getUIStage().mainDropDown.hide();
-
-        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
 
     }
 
@@ -223,10 +198,9 @@ public class ItemSelector {
      * adds to selection a list of items
      * @param items list of panels to select
      */
-    public void addSelections(ArrayList<Entity> items) {
-        for (int i = 0; i < items.size(); i++) {
-            setSelection(items.get(i), false);
-            currentSelection.get(items.get(i)).show();
+    public void addSelections(Set<Entity> items) {
+        for (Entity item : items) {
+            setSelection(item, false);
         }
     }
 
@@ -236,13 +210,15 @@ public class ItemSelector {
      * @param items list of panels to select
      * @param alsoShow if false, selection will remain hidden at this moment
      */
-    public void setSelections(ArrayList<Entity> items, boolean alsoShow) {
+    public void setSelections(Set<Entity> items, boolean alsoShow) {
         clearSelections();
 
-        for (int i = 0; i < items.size(); i++) {
-            setSelection(items.get(i), false);
+        for (Entity item : items) {
+            setSelection(item, false);
             if (alsoShow) {
-                currentSelection.get(items.get(i)).show();
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.SHOW_SELECTIONS, currentSelection);
+            } else {
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.HIDE_SELECTIONS, currentSelection);
             }
         }
     }
@@ -251,9 +227,9 @@ public class ItemSelector {
      * remove selection to a list of items
      * @param items list of panels to remove selection
      */
-    public void releaseSelections(ArrayList<Entity> items) {
-        for (int i = 0; i < items.size(); i++) {
-            releaseSelection(items.get(i));
+    public void releaseSelections(Set<Entity> items) {
+        for (Entity item : items) {
+            releaseSelection(item);
         }
     }
 
@@ -262,33 +238,20 @@ public class ItemSelector {
      * @param item to un-select
      */
     public void releaseSelection(Entity item) {
-        currentSelection.get(item).remove();
         currentSelection.remove(item);
 
-        // TODO: change this to notification
-        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
     /**
      * clears all selections
      */
     public void clearSelections() {
-        for (SelectionRectangle value : currentSelection.values()) {
-            value.remove();
-        }
-
         currentSelection.clear();
-        sandbox.getUIStage().getItemsBox().setSelected(currentSelection);
+
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
-    /**
-     * updates all selection rectangles depending on their hosts.
-     */
-    public void updateSelections() {
-        for (SelectionRectangle value : currentSelection.values()) {
-            value.update();
-        }
-    }
 
     /**
      * Selects all panels on currently active scene
@@ -306,9 +269,9 @@ public class ItemSelector {
      * removes all selected panels from the scene
      */
     public void removeCurrentSelectedItems() {
-        for (SelectionRectangle selectionRect : currentSelection.values()) {
-            sandbox.itemControl.removeItem(selectionRect.getHost());
-            selectionRect.remove();
+        for (Entity item : currentSelection) {
+            midUIMediator.removeFollower(item);
+            sandbox.itemControl.removeItem(item);
         }
 
         currentSelection.clear();
@@ -464,6 +427,7 @@ public class ItemSelector {
 
     public void alignSelections(int align) {
         //ResolutionEntryVO resolutionEntryVO = dataManager.getCurrentProjectInfoVO().getResolution(dataManager.currentResolutionName);
+        /*
         switch (align) {
             case Align.top:
                 alignSelectionsByY(get(topmostItem), true);
@@ -483,10 +447,11 @@ public class ItemSelector {
             case Align.center | Align.bottom: //vertical
                 alignSelectionsVerticallyCentered(get(highestItem));
                 break;
-        }
+        }*/
     }
 
     public void alignSelectionsAtEdge(int align) {
+        /*
         switch (align) {
             case Align.top:
                 alignSelectionsAtTopEdge(get(bottommostItem));
@@ -501,6 +466,7 @@ public class ItemSelector {
                 alignSelectionsAtRightEdge(get(leftmostItem));
                 break;
         }
+        */
     }
 
     /**
@@ -509,18 +475,17 @@ public class ItemSelector {
      * @param y
      */
     public void moveSelectedItemsBy(float x, float y) {
-        for (SelectionRectangle selectionRect : currentSelection.values()) {
-            sandbox.itemControl.moveItemBy(selectionRect.getHost(), x, y);
+        for (Entity item : currentSelection) {
+            sandbox.itemControl.moveItemBy(item, x, y);
 
-            selectionRect.setX(selectionRect.getX() + x);
-            selectionRect.setY(selectionRect.getY() + y);
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
         }
 
         sandbox.saveSceneCurrentSceneData();
     }
 
     public boolean selectionIsOneItem() {
-        if(getCurrentSelection().values().size() == 1) {
+        if(getCurrentSelection().size() == 1) {
             return true;
         }
 

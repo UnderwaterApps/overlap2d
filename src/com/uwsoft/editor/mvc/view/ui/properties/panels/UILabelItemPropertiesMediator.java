@@ -51,7 +51,7 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 //        observableReference.setWrap(false);
 //        observableReference.renew();
 //        observableReference.pack();
-        Sandbox.getInstance().getSelector().updateSelections();
+        //Sandbox.getInstance().getSelector().updateSelections();
         Sandbox.getInstance().saveSceneCurrentSceneData();
     }
 }
