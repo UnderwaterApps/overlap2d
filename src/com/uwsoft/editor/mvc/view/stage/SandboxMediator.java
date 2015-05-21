@@ -147,6 +147,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     private void initItemListeners() {
+        // TODO: remove this shit
         Engine engine = getViewComponent().getEngine();
         Family rootFamily = Family.all(ViewPortComponent.class).get();
         Entity rootEntity = engine.getEntitiesFor(rootFamily).iterator().next();

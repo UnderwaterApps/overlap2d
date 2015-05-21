@@ -82,7 +82,7 @@ public class SandboxInputAdapter implements InputProcessor {
 			screenToStageCoordinates(entity, hitTargetLocalCoordinates);
 			
 			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
-			if(inpputListenerComponent == null) return false;
+			if(inpputListenerComponent == null) continue;
 			// TODO: please fix "asd"
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
@@ -149,7 +149,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		for (int i = 0, n = entities.size(); i < n; i++){
 			Entity entity = entities.get(i);
 			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
-			if(inpputListenerComponent == null) return false;
+			if(inpputListenerComponent == null) continue;
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
 			for (int j = 0, s = asd.size; j < s; j++){
 				if (asd.get(j).scrolled(entity,amount)){
