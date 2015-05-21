@@ -163,7 +163,7 @@ public class SelectionTool implements Tool {
         dragStartPosition = new Vector2(x, y);
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
 
         return true;
     }
@@ -212,7 +212,6 @@ public class SelectionTool implements Tool {
             for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
             	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
 
-                //TODO: fix this shit
                 float[] diff = getTouchDiff();
 
                 diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
