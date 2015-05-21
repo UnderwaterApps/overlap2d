@@ -35,6 +35,11 @@ public abstract class BasicFollower extends Group {
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
 
+    public enum FollowerMode {
+        normal, transform
+    }
+    private FollowerMode mode = FollowerMode.normal;
+
     public BasicFollower(Entity entity) {
         setItem(entity);
         create();
@@ -61,6 +66,10 @@ public abstract class BasicFollower extends Group {
     public void show() {
         setVisible(true);
         update();
+    }
+
+    public void setMode(FollowerMode mode) {
+        this.mode = mode;
     }
 
     public void hide() {

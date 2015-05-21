@@ -23,7 +23,7 @@ import com.badlogic.ashley.core.Entity;
 /**
  * Created by azakhary on 5/20/2015.
  */
-public class LabelFollower extends TransformFollower {
+public class LabelFollower extends NormalSelectionFollower {
 
     public LabelFollower(Entity entity) {
         super(entity);
