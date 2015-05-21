@@ -23,6 +23,7 @@ import java.util.HashMap;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -31,6 +32,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
@@ -49,6 +51,9 @@ import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.mvc.view.stage.tools.Tool;
 import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.renderer.conponents.NodeComponent;
+import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by sargis on 4/20/15.
@@ -143,16 +148,20 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
     private void initItemListeners() {
         Engine engine = getViewComponent().getEngine();
+        Family rootFamily = Family.all(ViewPortComponent.class).get();
+        Entity rootEntity = engine.getEntitiesFor(rootFamily).iterator().next();
+        NodeComponent nodeComponent = ComponentRetriever.get(rootEntity, NodeComponent.class);
+        SnapshotArray<Entity> childrenEntities = nodeComponent.children;
+
         ImmutableArray<Entity> entities = engine.getEntities();
-        for (int i = 0; i < entities.size(); i++) {
-        	Entity entity = entities.get(i);
-        	InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
+        for (Entity child: childrenEntities) {
+        	InputListenerComponent inputListenerComponent = child.getComponent(InputListenerComponent.class);
         	if(inputListenerComponent == null){
         		inputListenerComponent = new InputListenerComponent();
-        		entity.add(inputListenerComponent);
+                child.add(inputListenerComponent);
         	}
         	inputListenerComponent.removeAllListener();
-        	inputListenerComponent.addListener(new SandboxItemEventListener(entity));
+        	inputListenerComponent.addListener(new SandboxItemEventListener(child));
         }
 		
     }
