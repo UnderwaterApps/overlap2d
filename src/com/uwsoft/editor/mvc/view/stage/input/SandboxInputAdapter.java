@@ -83,7 +83,7 @@ public class SandboxInputAdapter implements InputProcessor {
 			
 			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-			TransformMathUtils.stageToLocalCoordinates(target, hitTargetLocalCoordinates);
+			TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
 			for (int j = 0, s = asd.size; j < s; j++){
 				if(asd.get(j).touchDown(entity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)){
 					return true;
