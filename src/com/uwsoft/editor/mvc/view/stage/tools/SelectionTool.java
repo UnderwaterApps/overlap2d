@@ -63,6 +63,8 @@ public class SelectionTool implements Tool {
 
 	private DimensionsComponent dimensionsComponent;
 
+    private float[] touchDiff = new float[2];
+
     public SelectionTool() {
     
     }
@@ -155,7 +157,7 @@ public class SelectionTool implements Tool {
         for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
         	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
             //TODO: fix that
-            //value.setTouchDiff(x - transformComponent.x, y - transformComponent.y);
+            setTouchDiff(x - transformComponent.x, y - transformComponent.y);
         }
 
         dragStartPosition = new Vector2(x, y);
@@ -211,13 +213,13 @@ public class SelectionTool implements Tool {
             	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
 
                 //TODO: fix this shit
-                //float[] diff = value.getTouchDiff();
+                float[] diff = getTouchDiff();
 
-                //diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
-                //diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
+                diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
+                diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
               
-                //transformComponent.x = (newX - diff[0]);
-                //transformComponent.y = (newY - diff[1]);
+                transformComponent.x = (newX - diff[0]);
+                transformComponent.y = (newY - diff[1]);
                 //value.hide();
             }
         }
@@ -297,5 +299,14 @@ public class SelectionTool implements Tool {
         if (curr.size() == 0) {
             facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
         }
+    }
+
+    private void setTouchDiff(float x, float y) {
+        touchDiff[0] = x;
+        touchDiff[1] = y;
+    }
+
+    private float[] getTouchDiff() {
+        return touchDiff;
     }
 }
