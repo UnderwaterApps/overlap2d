@@ -153,7 +153,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         NodeComponent nodeComponent = ComponentRetriever.get(rootEntity, NodeComponent.class);
         SnapshotArray<Entity> childrenEntities = nodeComponent.children;
 
-        ImmutableArray<Entity> entities = engine.getEntities();
         for (Entity child: childrenEntities) {
         	InputListenerComponent inputListenerComponent = child.getComponent(InputListenerComponent.class);
         	if(inputListenerComponent == null){
