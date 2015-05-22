@@ -35,6 +35,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 public abstract class UIResourcesTab extends Tab {
     private VisTable contentTable;
     private VisScrollPane scrollPane;
+    private VisTextField visTextField;
     public String searchString  =   "";
     public static final String SEARCH = "com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIResourcesTab" + ".SEARCH";
     public UIResourcesTab() {
@@ -54,7 +55,7 @@ public abstract class UIResourcesTab extends Tab {
         return visLabel;
     }
     protected VisTextField createTextField() {
-        VisTextField visTextField = new VisTextField();
+        visTextField = new VisTextField();
         final String notification = SEARCH;
         visTextField.setTextFieldListener(new VisTextField.TextFieldListener() {
 
@@ -78,4 +79,5 @@ public abstract class UIResourcesTab extends Tab {
     }
 
     protected abstract VisScrollPane crateScrollPane();
+
 }

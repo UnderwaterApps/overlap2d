@@ -53,7 +53,7 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
         super.handleNotification(notification);
         switch (notification.getName()) {
             case Overlap2D.LIBRARY_LIST_UPDATED:
-                initList("");
+                initList(viewComponent.searchString);
 
             default:
                 break;
