@@ -171,4 +171,8 @@ public abstract class ComponentFactory {
         return component;
     }
 
+    public void setResourceManager(IResourceRetriever rm) {
+        this.rm = rm;
+    }
+
 }
