@@ -12,10 +12,9 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
-import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 

@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
@@ -30,8 +29,8 @@ import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerTransformationListener;
 import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
@@ -117,13 +116,13 @@ public class TransformTool extends SelectionTool {
                 float newWidth = dimensionsComponent.width * transformComponent.scaleX;
                 float newHeight = dimensionsComponent.height * transformComponent.scaleY;
 
-                float newOriginX;
-                float newOriginY;
+                float newOriginX = transformComponent.originX;
+                float newOriginY = transformComponent.originY;
 
                 switch (anchorId) {
                     case NormalSelectionFollower.ORIGIN:
-                        newOriginX = x;
-                        newOriginY = y;
+                        newOriginX = x - transformComponent.x;
+                        newOriginY = y - transformComponent.y;
                         break;
                     case NormalSelectionFollower.LB:
                         newX = x;
@@ -169,11 +168,17 @@ public class TransformTool extends SelectionTool {
                     newHeight = Math.max(newWidth, newHeight);
                 }
 
+                if(anchorId != NormalSelectionFollower.ORIGIN) {
+                    newOriginX = (newWidth/(dimensionsComponent.width * transformComponent.scaleX)) * newOriginX;
+                    newOriginY = (newHeight/(dimensionsComponent.height * transformComponent.scaleY)) * newOriginY;
+                }
 
                 transformComponent.x = newX;
                 transformComponent.y = newY;
                 transformComponent.scaleX = newWidth/dimensionsComponent.width;
                 transformComponent.scaleY = newHeight/dimensionsComponent.height;
+                transformComponent.originX = newOriginX;
+                transformComponent.originY = newOriginY;
 
                 Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
 

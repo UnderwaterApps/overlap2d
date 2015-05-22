@@ -21,13 +21,12 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.ArrayUtils;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
 
 /**
  * Created by azakhary on 4/16/2015.

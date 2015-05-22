@@ -19,22 +19,16 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
-import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -110,8 +104,8 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[L].setX(-w);
         miniRects[L].setY((int)(getHeight() / 2) - h);
 
-        miniRects[ORIGIN].setX((int) (getWidth() / 2 - w));
-        miniRects[ORIGIN].setY((int)(getHeight()/2-h));
+        miniRects[ORIGIN].setX((int) (transformComponent.originX));
+        miniRects[ORIGIN].setY((int)(transformComponent.originY));
     }
 
     private void initTransformGroup() {

@@ -33,10 +33,10 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.MainItemComponent;
-import com.uwsoft.editor.renderer.conponents.TintComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 
 /**
  * Created by azakhary on 4/15/2015.

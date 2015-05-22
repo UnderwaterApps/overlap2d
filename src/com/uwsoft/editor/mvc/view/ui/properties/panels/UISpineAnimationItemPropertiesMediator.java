@@ -22,7 +22,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.Animation;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**

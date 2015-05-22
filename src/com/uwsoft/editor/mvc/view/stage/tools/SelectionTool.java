@@ -19,11 +19,9 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
@@ -32,17 +30,14 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
-import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**

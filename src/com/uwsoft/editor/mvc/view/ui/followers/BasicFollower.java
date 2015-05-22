@@ -22,8 +22,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 

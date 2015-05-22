@@ -18,13 +18,11 @@
 
 package com.uwsoft.editor.gdx.mediators;
 
-import java.util.HashMap;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.ZindexComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ZindexComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**

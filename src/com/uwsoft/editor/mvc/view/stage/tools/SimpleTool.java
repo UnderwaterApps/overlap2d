@@ -1,10 +1,8 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
-import java.util.HashMap;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
