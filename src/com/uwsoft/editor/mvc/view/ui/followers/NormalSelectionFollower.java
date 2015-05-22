@@ -104,8 +104,8 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[L].setX(-w);
         miniRects[L].setY((int)(getHeight() / 2) - h);
 
-        miniRects[ORIGIN].setX((int) (transformComponent.originX));
-        miniRects[ORIGIN].setY((int)(transformComponent.originY));
+        miniRects[ORIGIN].setX((int) (transformComponent.originX) - w);
+        miniRects[ORIGIN].setY((int)(transformComponent.originY) - h);
     }
 
     private void initTransformGroup() {
