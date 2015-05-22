@@ -124,11 +124,11 @@ public class SelectionTool implements Tool {
     }
 
     @Override
-    public boolean itemMouseDown(Entity item, float x, float y) {
+    public boolean itemMouseDown(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(item);
+        currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
 
         // if shift is pressed we are in add/remove selection mode
         if (isShiftPressed()) {
@@ -136,7 +136,7 @@ public class SelectionTool implements Tool {
             if (!currentTouchedItemWasSelected) {
                 // item was not selected, adding it to selection
                 Set<Entity> items = new HashSet<>();
-                items.add(item);
+                items.add(entity);
                 facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
             }
         } else {
@@ -150,7 +150,7 @@ public class SelectionTool implements Tool {
 //            } else {
                 // select this item and remove others from selection
                 Set<Entity> items = new HashSet<>();
-                items.add(item);
+                items.add(entity);
                 facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
             //}
         }
@@ -165,13 +165,13 @@ public class SelectionTool implements Tool {
         dragStartPosition = new Vector2(x, y);
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
 
         return true;
     }
 
     @Override
-    public void itemMouseDragged(Entity item, float x, float y) {
+    public void itemMouseDragged(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
 
         int gridSize = Sandbox.getInstance().getGridSize();
@@ -226,12 +226,12 @@ public class SelectionTool implements Tool {
         }
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
 
     @Override
-    public void itemMouseUp(Entity item, float x, float y) {
+    public void itemMouseUp(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
@@ -239,7 +239,7 @@ public class SelectionTool implements Tool {
             // item was selected (and no dragging was performed), so we need to release it
             if (isShiftPressed()) {
                 ArrayList<Entity> items = new ArrayList<>();
-                items.add(item);
+                items.add(entity);
                 facade.sendNotification(Sandbox.ACTION_RELEASE_SELECTION, items);
             }
         }
@@ -257,7 +257,7 @@ public class SelectionTool implements Tool {
         sandbox.dirty = false;
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, item);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
     @Override
@@ -282,7 +282,8 @@ public class SelectionTool implements Tool {
 
         // hiding selection rectangle
         sandbox.selectionRec.setOpacity(0.0f);
-        ArrayList<Entity> curr = new ArrayList<Entity>();
+        //ArrayList<Entity> curr = new ArrayList<Entity>();
+        Set<Entity> curr = new HashSet<>();
         Rectangle sR = sandbox.selectionRec.getRect();
         for (int i = 0; i < freeItems.size(); i++) {
             Entity entity = freeItems.get(i);

@@ -83,11 +83,10 @@ public class SandboxInputAdapter implements InputProcessor {
 			
 			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 			if(inpputListenerComponent == null) continue;
-			// TODO: please fix "asd"
-			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
+			Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
 			TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
-			for (int j = 0, s = asd.size; j < s; j++) {
-				if (asd.get(j).touchDown(entity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)) {
+			for (int j = 0, s = listeners.size; j < s; j++) {
+				if (listeners.get(j).touchDown(target, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)) {
 					return true;
 				}
 			}
@@ -104,9 +103,9 @@ public class SandboxInputAdapter implements InputProcessor {
 		}
 		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
-		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-		for (int j = 0, s = asd.size; j < s; j++){
-			asd.get(j).touchUp(target, screenX, screenY, pointer, button);
+		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+		for (int j = 0, s = listeners.size; j < s; j++){
+			listeners.get(j).touchUp(target, screenX, screenY, pointer, button);
 		}
 		target = null;
 		return true;
@@ -119,9 +118,9 @@ public class SandboxInputAdapter implements InputProcessor {
 		}
 		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
-		Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-		for (int j = 0, s = asd.size; j < s; j++){
-			asd.get(j).touchDragged(target, screenX, screenY, pointer);
+		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+		for (int j = 0, s = listeners.size; j < s; j++){
+			listeners.get(j).touchDragged(target, screenX, screenY, pointer);
 		}
 		return true;
 	}
@@ -132,9 +131,9 @@ public class SandboxInputAdapter implements InputProcessor {
 //		for (int i = 0, n = entities.size(); i < n; i++){
 //			Entity entity = entities.get(i);
 //			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
-//			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-//			for (int j = 0, s = asd.size; j < s; j++){
-//				if (asd.get(j).mouseMoved(entity, screenX, screenY)){
+//			Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+//			for (int j = 0, s = listeners.size; j < s; j++){
+//				if (listeners.get(j).mouseMoved(entity, screenX, screenY)){
 //					return true;
 //				}
 //			}
@@ -150,9 +149,9 @@ public class SandboxInputAdapter implements InputProcessor {
 			Entity entity = entities.get(i);
 			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
 			if(inpputListenerComponent == null) continue;
-			Array<InputListener> asd = inpputListenerComponent.getAllListeners();
-			for (int j = 0, s = asd.size; j < s; j++){
-				if (asd.get(j).scrolled(entity,amount)){
+			Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+			for (int j = 0, s = listeners.size; j < s; j++){				
+				if (listeners.get(j).scrolled(entity,amount)){
 					return true;
 				}
 			}
@@ -162,16 +161,10 @@ public class SandboxInputAdapter implements InputProcessor {
 	}
 	
 	public Entity hit(Entity root, float x, float y){
-		System.out.println("                         ");
-		System.out.println("HIT TEST FOR X="+x+" Y="+y);
-		System.out.println("                         ");
 		Vector2 localCoordinates  = new Vector2(x, y); 
 		
 		TransformMathUtils.parentToLocalCoordinates(root, localCoordinates);
-		
-		System.out.println("                         ");
-		System.out.println("AFTER PARENT TO LOCAL X="+localCoordinates.x+" Y="+localCoordinates.y);
-		
+				
 		DimensionsComponent dimentionsComponent;
 		NodeComponent nodeComponent = ComponentRetriever.get(root, NodeComponent.class);
 		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
@@ -186,9 +179,6 @@ public class SandboxInputAdapter implements InputProcessor {
 //			}
 			
 			TransformMathUtils.parentToLocalCoordinates(childEntity, childLocalCoordinates);
-			
-			System.out.println("                         ");
-			System.out.println("AFTER CHILDE TO LOCAL X="+childLocalCoordinates.x+" Y="+childLocalCoordinates.y);
 			
 			dimentionsComponent = ComponentRetriever.get(childEntity, DimensionsComponent.class);
 			

@@ -21,7 +21,10 @@ package com.uwsoft.editor;
 import java.awt.GraphicsEnvironment;
 import java.awt.Rectangle;
 import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -36,6 +39,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.uwsoft.editor.splash.*;
 import com.uwsoft.editor.splash.SplashScreen;
 import com.uwsoft.editor.utils.AppConfig;
+
 import java.awt.*;
 import java.awt.event.InputEvent;
 
@@ -50,12 +54,15 @@ public class Main {
 
     private void startLoadingEditor() {
         //first, kill off the splash
-        splash.kill();
+    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC)) {
+    		splash.kill();
+    	}
 
         Overlap2D overlap2D = new Overlap2D();
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
+        
         if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
@@ -77,6 +84,8 @@ public class Main {
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             toggleVisible();
         }
+        
+        setIcon();
 
     }
 
@@ -138,5 +147,40 @@ public class Main {
                 mainFrame.setAlwaysOnTop(false);
             }
         }
+    }
+    
+    //THIS IS JUST FOR FUN
+    private void setIcon(){
+    	String logoPath = "../art/splash_textures/";
+        File file = new File(logoPath);
+        if(!file.exists()){
+        	 logoPath = "art/splash_textures/";
+             file = new File(logoPath);
+        }
+        logoPath+="icon.png";
+    	
+    	if(mainFrame != null){
+    		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(logoPath));
+    		return;
+    	}
+    	
+    	 try {
+             Class util = Class.forName("com.apple.eawt.Application");
+             Method getApplication = util.getMethod("getApplication", new Class[0]);
+             Object application = getApplication.invoke(util);
+             Class params[] = new Class[1];
+             params[0] = Image.class;
+             Method setDockIconImage = util.getMethod("setDockIconImage", params);
+             Image image = Toolkit.getDefaultToolkit().getImage(logoPath);
+             setDockIconImage.invoke(application, image);
+         } catch (ClassNotFoundException e) {
+             // log exception
+         } catch (NoSuchMethodException e) {
+             // log exception
+         } catch (InvocationTargetException e) {
+             // log exception
+         } catch (IllegalAccessException e) {
+             // log exception
+         }
     }
 }

@@ -163,6 +163,15 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         	inputListenerComponent.removeAllListener();
         	inputListenerComponent.addListener(new SandboxItemEventListener(child));
         }
+        
+        InputListenerComponent inputListenerComponent = rootEntity.getComponent(InputListenerComponent.class);
+    	if(inputListenerComponent == null){
+    		inputListenerComponent = new InputListenerComponent();
+    		rootEntity.add(inputListenerComponent);
+    	}
+    	inputListenerComponent.removeAllListener();
+    	inputListenerComponent.addListener(new SandboxStageEventListener());
+        
 		
     }
 
@@ -181,17 +190,16 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
     public class SandboxItemEventListener extends EntityClickListener {
 
-        private Entity targetEntity;
-
         public SandboxItemEventListener(final Entity entity) {
-            this.targetEntity = entity;
+        	
         }
 
         @Override
         public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
-            //super.touchDown(entity, x, y, pointer, button);
+        	
+            super.touchDown(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
-            return currentSelectedTool.itemMouseDown(targetEntity, coords.x, coords.y);
+            return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
         
         @Override
@@ -199,11 +207,11 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
 
-            currentSelectedTool.itemMouseUp(targetEntity, x, y);
+            currentSelectedTool.itemMouseUp(entity, x, y);
 
             if (getTapCount() == 2) {
                 // this is double click
-                currentSelectedTool.itemMouseDoubleClick(targetEntity, coords.x, coords.y);
+                currentSelectedTool.itemMouseDoubleClick(entity, coords.x, coords.y);
             }
 
             if (button == Input.Buttons.RIGHT) {
@@ -215,18 +223,18 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         @Override
         public void touchDragged(Entity entity, float x, float y, int pointer) {
             Vector2 coords = getStageCoordinates();
-            currentSelectedTool.itemMouseDragged(targetEntity, coords.x, coords.y);
+            currentSelectedTool.itemMouseDragged(entity, coords.x, coords.y);
         }
 
     }
 
-    private class SandboxStageEventListener extends ClickListener {
+    private class SandboxStageEventListener extends EntityClickListener {
         public SandboxStageEventListener() {
             setTapCountInterval(.5f);
         }
 
         @Override
-        public boolean keyDown(InputEvent event, int keycode) {
+        public boolean keyDown(Entity entity, int keycode) {
             boolean isControlPressed = isControlPressed();
             Sandbox sandbox = Sandbox.getInstance();
             // the amount of pixels by which to move item if moving
@@ -348,7 +356,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         }
 
         @Override
-        public boolean keyUp(InputEvent event, int keycode) {
+        public boolean keyUp(Entity entity, int keycode) {
             Sandbox sandbox = Sandbox.getInstance();
             if (keycode == Input.Keys.DEL) {
                 // delete selected item
@@ -365,8 +373,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
 
         @Override
-        public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchDown(event, x, y, pointer, button);
+        public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
+            super.touchDown(entity, x, y, pointer, button);
 
             Sandbox sandbox = Sandbox.getInstance();
 
@@ -392,8 +400,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         }
 
         @Override
-        public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-            super.touchUp(event, x, y, pointer, button);
+        public void touchUp(Entity entity, float x, float y, int pointer, int button) {
+            super.touchUp(entity, x, y, pointer, button);
 
             currentSelectedTool.stageMouseUp(x, y);
 
@@ -403,7 +411,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 sandbox.getSelector().clearSelections();
 
                 // show default dropdown
-                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(event.getStageX(), event.getStageY()));
+                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(x, y));
 
                 return;
             }
@@ -413,18 +421,18 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             }
 
             if (getTapCount() == 2 && button == Input.Buttons.LEFT) {
-                doubleClick(event, x, y);
+                doubleClick(entity, x, y);
             }
 
         }
 
-        private void doubleClick(InputEvent event, float x, float y) {
+        private void doubleClick(Entity entity, float x, float y) {
             Sandbox sandbox = Sandbox.getInstance();
             currentSelectedTool.stageMouseDoubleClick(x, y);
         }
 
         @Override
-        public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        public void touchDragged(Entity entity, float x, float y, int pointer) {
             Sandbox sandbox = Sandbox.getInstance();
 
             currentSelectedTool.stageMouseDragged(x, y);
@@ -432,7 +440,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
 
         @Override
-        public boolean scrolled(InputEvent event, float x, float y, int amount) {
+        public boolean scrolled(Entity entity, int amount) {
             Sandbox sandbox = Sandbox.getInstance();
             // well, duh
             if (amount == 0) return false;
