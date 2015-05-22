@@ -24,8 +24,8 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.renderer.conponents.*;
 import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
-import com.uwsoft.editor.renderer.conponents.physics.MeshComponont;
+import com.uwsoft.editor.renderer.conponents.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.conponents.physics.MeshComponent;
 import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
@@ -72,9 +72,9 @@ public class ComponentRetriever {
     private void init() {
     	mappers.put(LightObjectComponent.class, ComponentMapper.getFor(LightObjectComponent.class));
     	
-    	mappers.put(ParticleCompononet.class, ComponentMapper.getFor(ParticleCompononet.class));
+    	mappers.put(ParticleComponent.class, ComponentMapper.getFor(ParticleComponent.class));
     	
-    	mappers.put(MeshComponont.class, ComponentMapper.getFor(MeshComponont.class));
+    	mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
     	

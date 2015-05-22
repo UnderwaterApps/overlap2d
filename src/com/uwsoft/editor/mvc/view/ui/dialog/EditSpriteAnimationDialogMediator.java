@@ -27,7 +27,7 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
-import com.uwsoft.editor.renderer.EntityFactory;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 import java.util.Set;
 

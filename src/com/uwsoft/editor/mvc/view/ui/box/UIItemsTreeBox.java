@@ -33,7 +33,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.EntityFactory;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.conponents.MainItemComponent;
 
 public class UIItemsTreeBox extends UICollapsibleBox {

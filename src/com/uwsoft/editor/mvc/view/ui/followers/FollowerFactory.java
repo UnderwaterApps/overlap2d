@@ -19,7 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.renderer.EntityFactory;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 /**
  * Created by azakhary on 5/21/2015.
