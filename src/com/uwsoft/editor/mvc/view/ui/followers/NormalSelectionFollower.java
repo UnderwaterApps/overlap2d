@@ -22,14 +22,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -38,6 +42,7 @@ public class NormalSelectionFollower extends BasicFollower {
 
     private Overlap2DFacade facade;
     private EditorTextureManager tm;
+    private CursorManager cursorManager;
 
     private PixelRect pixelRect;
 
@@ -63,6 +68,7 @@ public class NormalSelectionFollower extends BasicFollower {
     public void create() {
         facade = Overlap2DFacade.getInstance();
         tm = facade.retrieveProxy(EditorTextureManager.NAME);
+        cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
 
         transformGroup = new Group();
         transformGroup.setVisible(false);
@@ -123,22 +129,21 @@ public class NormalSelectionFollower extends BasicFollower {
 
         for(int i = 0; i < miniRects.length; i++) {
             final int rectId = i;
-            miniRects[i].addListener(new ClickListener() {
-                @Override
-                public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
-                    super.touchDown(event, x, y, pointer, button);
-                    listener.anchorDown(rectId, event.getStageX(), event.getStageY());
-                    event.stop();
-                    return true;
-                }
+            miniRects[i].addListener(new AnchorListener(listener, rectId) {
                 @Override
                 public void touchDragged (InputEvent event, float x, float y, int pointer) {
-                    listener.anchorDragged(rectId, event.getStageX(), event.getStageY());
+                    super.touchDragged(event, x, y, pointer);
                     update();
                 }
                 @Override
-                public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                    listener.anchorUp(rectId, event.getStageX(), event.getStageY());
+                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event, x, y, pointer, fromActor);
+                    cursorManager.setOverrideCursor(CursorManager.NORMAL);
+                }
+                @Override
+                public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    super.exit(event, x, y, pointer, toActor);
+                    cursorManager.removeOverrideCursor();
                 }
             });
         }

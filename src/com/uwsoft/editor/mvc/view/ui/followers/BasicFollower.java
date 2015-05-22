@@ -60,8 +60,8 @@ public abstract class BasicFollower extends Group {
         // TODO: Make poolable vector
     	Vector2 localCoords = new Vector2(0, 0);
     	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
-        setX(localCoords.x);
-        setY(localCoords.y);
+        setX((int)(localCoords.x));
+        setY((int)(localCoords.y));
         setWidth(dimensionsComponent.width * transformComponent.scaleX);
         setHeight(dimensionsComponent.height * transformComponent.scaleY);
     }
@@ -82,7 +82,7 @@ public abstract class BasicFollower extends Group {
     public abstract void create();
 
 
-    public void setListener(FollowerTransformationListener listener) {
+    public void setFollowerListener(FollowerTransformationListener listener) {
         this.listener = listener;
     }
 }

@@ -36,4 +36,14 @@ public class EmptyTransformationListener implements FollowerTransformationListen
     public void anchorUp(int anchor, float x, float y) {
 
     }
+
+    @Override
+    public void mouseEnter(int anchor, float x, float y) {
+
+    }
+
+    @Override
+    public void mouseExit(int anchor, float x, float y) {
+
+    }
 }

@@ -31,7 +31,7 @@ public class CursorManager extends BaseProxy {
     public static final String NAME = TAG;
 
     public static CursorData NORMAL = new CursorData("normal", 8, 6);
-    public static CursorData CROSS = new CursorData("cross", 16, 16);
+    public static CursorData CROSS = new CursorData("cross", 14, 14);
     public static CursorData TEXT = new CursorData("label", 15, 17);
     public static CursorData TEXT_TOOL = new CursorData("label-tool", 15, 17);
     public static CursorData FINGER = new CursorData("fingerpoint", 16, 9);
@@ -53,6 +53,10 @@ public class CursorManager extends BaseProxy {
     public void setOverrideCursor(CursorData cursor) {
         overrideCursor = cursor;
         setCursorPixmap();
+    }
+
+    public void removeOverrideCursor() {
+        setOverrideCursor(null);
     }
 
     private void setCursorPixmap() {

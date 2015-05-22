@@ -85,7 +85,7 @@ public class TransformTool extends SelectionTool {
     }
 
     private void setListeners() {
-        selectionFollower.setListener(new FollowerTransformationListener() {
+        selectionFollower.setFollowerListener(new FollowerTransformationListener() {
 
             private int anchorId;
 
@@ -160,6 +160,16 @@ public class TransformTool extends SelectionTool {
 
             @Override
             public void anchorUp(int anchor, float x, float y) {
+
+            }
+
+            @Override
+            public void mouseEnter(int anchor, float x, float y) {
+
+            }
+
+            @Override
+            public void mouseExit(int anchor, float x, float y) {
 
             }
         });

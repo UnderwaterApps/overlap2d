@@ -25,4 +25,6 @@ public interface FollowerTransformationListener {
     void anchorDown(int anchor, float x, float y);
     void anchorDragged(int anchor, float x, float y);
     void anchorUp(int anchor, float x, float y);
+    void mouseEnter(int anchor, float x, float y);
+    void mouseExit(int anchor, float x, float y);
 }
