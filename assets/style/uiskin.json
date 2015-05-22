@@ -361,9 +361,9 @@
       "focusBorder": "border"
     },
     "menu-bar": {
-      "down": "button-down",
-      "up": "button",
-      "over": "button-over",
+      "down": "menu-bg-down",
+      "up": "menu-bg-up",
+      "over": "menu-bg-over",
       "font": "big-font",
       "fontColor": "overlap2d-menuitem-grey"
     }
