@@ -18,29 +18,22 @@
 
 package com.uwsoft.editor.mvc.view.ui.followers;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.kotcrab.vis.ui.VisUI;
-
 /**
- * Created by azakhary on 5/20/2015.
+ * Created by azakhary on 5/22/2015.
  */
-public class LightFollower extends BasicFollower {
+public class EmptyTransformationListener implements FollowerTransformationListener {
+    @Override
+    public void anchorDown(int anchor, float x, float y) {
 
-    public LightFollower(Entity entity) {
-        super(entity);
     }
 
     @Override
-    public void create() {
-        Image icon = new Image(VisUI.getSkin().getDrawable("tool-sphericlight"));
-        icon.setX(dimensionsComponent.width/2);
-        icon.setY(dimensionsComponent.height/2);
-        addActor(icon);
+    public void anchorDragged(int anchor, float x, float y) {
+
     }
 
     @Override
-    public void hide() {
-        // you cannot hide light folower
+    public void anchorUp(int anchor, float x, float y) {
+
     }
 }

@@ -35,6 +35,9 @@ public abstract class BasicFollower extends Group {
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
 
+
+    protected FollowerTransformationListener listener = new EmptyTransformationListener();
+
     public enum FollowerMode {
         normal, transform
     }
@@ -77,4 +80,9 @@ public abstract class BasicFollower extends Group {
     }
 
     public abstract void create();
+
+
+    public void setListener(FollowerTransformationListener listener) {
+        this.listener = listener;
+    }
 }

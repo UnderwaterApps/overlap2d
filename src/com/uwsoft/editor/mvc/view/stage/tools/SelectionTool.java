@@ -38,7 +38,9 @@ import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
+import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -73,13 +75,13 @@ public class SelectionTool implements Tool {
     public void initTool() {
         sandbox = Sandbox.getInstance();
         Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
-        for (Entity item : currSelection) {
-            //value.setMode(false);
-        }
 
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         cursorManager.setCursor(CursorManager.NORMAL);
+
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        midUIMediator.setMode(BasicFollower.FollowerMode.normal);
     }
 
     @Override
@@ -133,7 +135,7 @@ public class SelectionTool implements Tool {
             //TODO block selection handling (wat?)
             if (!currentTouchedItemWasSelected) {
                 // item was not selected, adding it to selection
-                ArrayList<Entity> items = new ArrayList<>();
+                Set<Entity> items = new HashSet<>();
                 items.add(item);
                 facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
             }

@@ -25,8 +25,10 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
+import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -85,6 +87,12 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         }
     }
 
+    public void setMode(BasicFollower.FollowerMode mode) {
+        for (BasicFollower follower : followers.values()) {
+            follower.setMode(mode);
+        }
+    }
+
     private void setNewSelectionConfiguration(Set<Entity> items) {
         followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::hide);
         for (Entity item : items) {
@@ -131,5 +139,9 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public void removeFollower(Entity entity) {
         followers.get(entity).remove();
         followers.remove(entity);
+    }
+
+    public BasicFollower getFollower(Entity entity) {
+        return followers.get(entity);
     }
 }
