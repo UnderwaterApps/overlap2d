@@ -25,6 +25,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -75,6 +76,7 @@ public class NormalSelectionFollower extends BasicFollower {
 
         pixelRect = new PixelRect();
         pixelRect.setOpacity(0.4f);
+        pixelRect.setTouchable(Touchable.disabled);
         addActor(pixelRect);
         addActor(transformGroup);
         initTransformGroup();
@@ -126,9 +128,13 @@ public class NormalSelectionFollower extends BasicFollower {
         Image originAnchor = new Image(VisUI.getSkin().getDrawable("origin-anchor"));
         transformGroup.addActor(originAnchor);
         miniRects[ORIGIN] = originAnchor;
+    }
 
+    @Override
+    public void setFollowerListener(FollowerTransformationListener listener) {
         for(int i = 0; i < miniRects.length; i++) {
             final int rectId = i;
+            miniRects[i].clearListeners();
             miniRects[i].addListener(new AnchorListener(listener, rectId) {
                 @Override
                 public void touchDragged (InputEvent event, float x, float y, int pointer) {
@@ -138,12 +144,12 @@ public class NormalSelectionFollower extends BasicFollower {
                 @Override
                 public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event, x, y, pointer, fromActor);
-                    cursorManager.setOverrideCursor(CursorManager.NORMAL);
+                    //cursorManager.setOverrideCursor(CursorManager.NORMAL);
                 }
                 @Override
                 public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event, x, y, pointer, toActor);
-                    cursorManager.removeOverrideCursor();
+                    //cursorManager.removeOverrideCursor();
                 }
             });
         }

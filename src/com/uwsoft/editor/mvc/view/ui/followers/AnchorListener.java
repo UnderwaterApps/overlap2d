@@ -39,7 +39,6 @@ public class AnchorListener extends ClickListener {
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         super.touchDown(event, x, y, pointer, button);
         listener.anchorDown(anchorId, event.getStageX(), event.getStageY());
-        event.stop();
         return true;
     }
     @Override

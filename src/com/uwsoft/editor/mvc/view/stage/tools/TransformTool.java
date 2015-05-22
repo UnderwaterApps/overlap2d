@@ -19,6 +19,9 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -27,6 +30,9 @@ import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerTransformationListener;
 import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
+import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
+import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -35,7 +41,11 @@ public class TransformTool extends SelectionTool {
 
     public static final String NAME = "TRANSFORM_TOOL";
 
-    BasicFollower selectionFollower;
+    private BasicFollower selectionFollower;
+    private Entity currentEntity;
+
+    private TransformComponent transformComponent;
+    private DimensionsComponent dimensionsComponent;
 
     @Override
     public void initTool() {
@@ -47,7 +57,7 @@ public class TransformTool extends SelectionTool {
 
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
-        cursorManager.setCursor(CursorManager.CROSS);
+        //cursorManager.setCursor(CursorManager.CROSS);
 
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         midUIMediator.setMode(BasicFollower.FollowerMode.transform);
@@ -77,6 +87,10 @@ public class TransformTool extends SelectionTool {
     public boolean itemMouseDown(Entity entity, float x, float y) {
         super.itemMouseDown(entity, x, y);
 
+        currentEntity = entity;
+        transformComponent = ComponentRetriever.get(currentEntity, TransformComponent.class);
+        dimensionsComponent = ComponentRetriever.get(currentEntity, DimensionsComponent.class);
+
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         selectionFollower = midUIMediator.getFollower(entity);
         setListeners();
@@ -98,64 +112,71 @@ public class TransformTool extends SelectionTool {
             @Override
             public void anchorDragged(int anchor, float x, float y) {
 
-                /*float pseudoWidth = host.getWidth() * (host instanceof LabelItem ? 1 : host.getScaleX());
-                float pseudoHeight = host.getHeight() * (host instanceof LabelItem ? 1 : host.getScaleY());
-                float currPseudoWidth = pseudoWidth;
-                float currPseudoHeight = pseudoHeight;
+                float newX = transformComponent.x;
+                float newY = transformComponent.y;
+                float newWidth = dimensionsComponent.width * transformComponent.scaleX;
+                float newHeight = dimensionsComponent.height * transformComponent.scaleY;
+
+                float newOriginX;
+                float newOriginY;
+
                 switch (anchorId) {
-                    case SelectionRectangle.LB:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+                    case NormalSelectionFollower.ORIGIN:
+                        newOriginX = x;
+                        newOriginY = y;
                         break;
-                    case SelectionRectangle.L:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
+                    case NormalSelectionFollower.LB:
+                        newX = x;
+                        newY = y;
+                        newWidth = newWidth + (transformComponent.x - x);
+                        newHeight = newHeight + (transformComponent.y - y);
                         break;
-                    case SelectionRectangle.LT:
-                        pseudoWidth = (host.getX() + currPseudoWidth) - x;
-                        pseudoHeight = y - host.getY();
-                        host.setX(host.getX() - (pseudoWidth - currPseudoWidth));
+                    case NormalSelectionFollower.L:
+                        newX = x;
+                        newWidth = newWidth + (transformComponent.x - x);
                         break;
-                    case SelectionRectangle.T:
-                        pseudoHeight = y - host.getY();
+                    case NormalSelectionFollower.LT:
+                        newX = x;
+                        newWidth = newWidth + (transformComponent.x - x);
+                        newHeight = y - transformComponent.y;
                         break;
-                    case SelectionRectangle.B:
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+                    case NormalSelectionFollower.T:
+                        newHeight = y - transformComponent.y;
                         break;
-                    case SelectionRectangle.RB:
-                        pseudoWidth = x - host.getX();
-                        pseudoHeight = (host.getY() + currPseudoHeight) - y;
-                        host.setY(host.getY() - (pseudoHeight - currPseudoHeight));
+                    case NormalSelectionFollower.B:
+                        newY = y;
+                        newHeight = newHeight + (transformComponent.y - y);
                         break;
-                    case SelectionRectangle.R:
-                        pseudoWidth = x - host.getX();
+                    case NormalSelectionFollower.RB:
+                        newY = y;
+                        newWidth = x - selectionFollower.getX();
+                        newHeight = newHeight + (transformComponent.y - y);
                         break;
-                    case SelectionRectangle.RT:
-                        pseudoWidth = x - host.getX();
-                        pseudoHeight = y - host.getY();
+                    case NormalSelectionFollower.R:
+                        newWidth = x - transformComponent.x;
+                        break;
+                    case NormalSelectionFollower.RT:
+                        newHeight = y - transformComponent.y;
+                        newWidth = x - transformComponent.x;
                         break;
                     default:
                         return;
                 }
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    float enclosingRectSize = Math.max(pseudoWidth, pseudoHeight);
-                    if (host.getWidth() >= host.getHeight()) {
-                        pseudoWidth = enclosingRectSize;
-                        pseudoHeight = (pseudoWidth / host.getWidth()) * host.getHeight();
-                    }
-                    if (host.getHeight() > host.getWidth()) {
-                        pseudoHeight = enclosingRectSize;
-                        pseudoWidth = (pseudoHeight / host.getHeight()) * host.getWidth();
-                    }
 
+
+                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                    newWidth = Math.max(newWidth, newHeight);
+                    newHeight = Math.max(newWidth, newHeight);
                 }
 
-                host.setScale(pseudoWidth / host.getWidth(), pseudoHeight / host.getHeight());
-                ((IBaseItem)host).updateDataVO();
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);*/
+
+                transformComponent.x = newX;
+                transformComponent.y = newY;
+                transformComponent.scaleX = newWidth/dimensionsComponent.width;
+                transformComponent.scaleY = newHeight/dimensionsComponent.height;
+
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+
             }
 
             @Override

@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
@@ -34,9 +35,6 @@ public abstract class BasicFollower extends Group {
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
-
-
-    protected FollowerTransformationListener listener = new EmptyTransformationListener();
 
     public enum FollowerMode {
         normal, transform
@@ -83,6 +81,15 @@ public abstract class BasicFollower extends Group {
 
 
     public void setFollowerListener(FollowerTransformationListener listener) {
-        this.listener = listener;
+
+    }
+
+    @Override
+    public Actor hit (float x, float y, boolean touchable) {
+        Actor hitActor = super.hit(x, y, touchable);
+        if(hitActor == null) return null;
+        if(hitActor.equals(this)) return null;
+
+        return hitActor;
     }
 }
