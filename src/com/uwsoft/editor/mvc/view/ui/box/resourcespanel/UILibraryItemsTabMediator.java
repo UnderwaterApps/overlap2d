@@ -53,18 +53,20 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
         super.handleNotification(notification);
         switch (notification.getName()) {
             case Overlap2D.LIBRARY_LIST_UPDATED:
-                initList();
+                initList("");
+
             default:
                 break;
         }
     }
 
     @Override
-    protected void initList() {
+    protected void initList(String searchText) {
         Sandbox sandbox = Sandbox.getInstance();
         HashMap<String, CompositeItemVO> items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
         Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
+            if(!key.contains(searchText))continue;
             DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
             draggableResource.setFactoryFunction(sandbox.getUac()::createItemFromLibrary);
             draggableResource.initDragDrop();

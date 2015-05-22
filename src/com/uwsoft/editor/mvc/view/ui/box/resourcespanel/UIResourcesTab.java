@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 
 /**
  * Created by sargis on 5/4/15.
@@ -34,12 +35,13 @@ import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 public abstract class UIResourcesTab extends Tab {
     private VisTable contentTable;
     private VisScrollPane scrollPane;
-
+    public String searchString  =   "";
+    public static final String SEARCH = "com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIResourcesTab" + ".SEARCH";
     public UIResourcesTab() {
         super(false, false);
         contentTable = new VisTable();
         contentTable.add(createLabel("Search:")).padLeft(1).padBottom(6);
-        contentTable.add(new VisTextField()).padLeft(0).padRight(7).fillX().padBottom(4);
+        contentTable.add(createTextField()).padLeft(0).padRight(7).fillX().padBottom(4);
         contentTable.row();
         scrollPane = crateScrollPane();
         contentTable.add(scrollPane).colspan(2).maxHeight(350).expandX().fillX();
@@ -50,6 +52,20 @@ public abstract class UIResourcesTab extends Tab {
         VisLabel visLabel = new VisLabel(text, alignment);
         visLabel.setStyle(VisUI.getSkin().get("small", Label.LabelStyle.class));
         return visLabel;
+    }
+    protected VisTextField createTextField() {
+        VisTextField visTextField = new VisTextField();
+        final String notification = SEARCH;
+        visTextField.setTextFieldListener(new VisTextField.TextFieldListener() {
+
+            @Override
+            public void keyTyped(VisTextField textField, char c) {
+                searchString    =   textField.getText();
+                Overlap2DFacade facade = Overlap2DFacade.getInstance();
+                facade.sendNotification(notification);
+            }
+        });
+        return visTextField;
     }
 
     @Override

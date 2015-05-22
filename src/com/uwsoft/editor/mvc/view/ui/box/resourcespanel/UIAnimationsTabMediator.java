@@ -49,18 +49,19 @@ public class UIAnimationsTabMediator extends UIResourcesTabMediator<UIAnimations
 
 
     @Override
-    protected void initList() {
+    protected void initList(String searchText) {
         animationBoxes.clear();
         Sandbox sandbox = Sandbox.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, sandbox.getUac()::createSpineAnimation);
-        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, sandbox.getUac()::createSpriteAnimation);
-        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, sandbox.getUac()::createSpriterAnimation);
+        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, sandbox.getUac()::createSpineAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, sandbox.getUac()::createSpriteAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, sandbox.getUac()::createSpriterAnimation, searchText);
         viewComponent.setThumbnailBoxes(animationBoxes);
     }
 
-    private void createAnimationResources(Set<String> strings, Class resourceClass, BiFunction<String, Vector2, Boolean> factoryFunction) {
+    private void createAnimationResources(Set<String> strings, Class resourceClass, BiFunction<String, Vector2, Boolean> factoryFunction, String searchText) {
         for (String animationName : strings) {
+            if(!animationName.contains(searchText))continue;
             try {
                 Constructor constructor = resourceClass.getConstructor(String.class);
                 DraggableResource draggableResource = new DraggableResource((DraggableResourceView) constructor.newInstance(animationName));
