@@ -22,6 +22,7 @@ import com.uwsoft.editor.renderer.conponents.NodeComponent;
 import com.uwsoft.editor.renderer.conponents.TintComponent;
 import com.uwsoft.editor.renderer.conponents.TransformComponent;
 import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
