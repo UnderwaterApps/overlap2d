@@ -4,8 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
 
 public class SpineSystem extends IteratingSystem {
 

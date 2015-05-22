@@ -3,8 +3,8 @@ package com.uwsoft.editor.renderer.utils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 
 public class TransformMathUtils {
 	

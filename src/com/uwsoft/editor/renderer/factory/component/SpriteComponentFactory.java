@@ -23,17 +23,13 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.*;
-import com.esotericsoftware.spine.Animation;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.AnimationComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -52,7 +48,7 @@ public class SpriteComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-        createCommonComponents(root, entity, vo);
+        createCommonComponents(entity, vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

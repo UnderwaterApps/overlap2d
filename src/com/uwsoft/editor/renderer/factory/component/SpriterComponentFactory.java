@@ -24,13 +24,10 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.brashmonkey.spriter.Player;
 import com.brashmonkey.spriter.SCMLReader;
-import com.esotericsoftware.spine.*;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterDrawerComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
@@ -47,7 +44,7 @@ public class SpriterComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-        createCommonComponents(root, entity, vo);
+        createCommonComponents(entity, vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

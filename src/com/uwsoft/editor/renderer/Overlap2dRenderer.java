@@ -9,15 +9,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.brashmonkey.spriter.Player;
-import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.particle.ParticleComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterDrawerComponent;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
 
 
 //TODO drawabale mechanics

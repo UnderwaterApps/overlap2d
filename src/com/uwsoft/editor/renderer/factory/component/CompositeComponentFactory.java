@@ -21,13 +21,11 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.LayerMapComponent;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -42,7 +40,7 @@ public class CompositeComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-        createCommonComponents(root, entity, vo);
+        createCommonComponents(entity, vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

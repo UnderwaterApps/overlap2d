@@ -23,11 +23,10 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.conponents.*;
-import com.uwsoft.editor.renderer.conponents.physics.MeshComponent;
-import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.MeshComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -52,12 +51,12 @@ public abstract class ComponentFactory {
 
     public abstract void createComponents(Entity root, Entity entity, MainItemVO vo);
 
-    protected void createCommonComponents(Entity root, Entity entity, MainItemVO vo) {
+    protected void createCommonComponents(Entity entity, MainItemVO vo) {
+        DimensionsComponent dimensionsComponent = createDimensionsComponent(entity, vo);
         createMainItemComponent(entity, vo);
-        createTransformComponent(entity, vo);
+        createTransformComponent(entity, vo, dimensionsComponent);
         createTintComponent(entity, vo);
         createZIndexComponent(entity, vo);
-        createDimensionsComponent(entity, vo);
     }
 
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo) {
@@ -72,13 +71,19 @@ public abstract class ComponentFactory {
         return component;
     }
 
-    protected TransformComponent createTransformComponent(Entity entity, MainItemVO vo) {
+    protected TransformComponent createTransformComponent(Entity entity, MainItemVO vo, DimensionsComponent dimensionsComponent) {
         TransformComponent component = new TransformComponent();
         component.rotation = vo.rotation;
         component.scaleX = vo.scaleX;
         component.scaleY = vo.scaleY;
         component.x = vo.x;
         component.y = vo.y;
+
+        if(Float.isNaN(vo.originX)) component.originX = dimensionsComponent.width/2f;
+        else component.originX = vo.originX;
+
+        if(Float.isNaN(vo.originY)) component.originY = dimensionsComponent.height/2f;
+        else component.originY = vo.originY;
 
         entity.add(component);
 
