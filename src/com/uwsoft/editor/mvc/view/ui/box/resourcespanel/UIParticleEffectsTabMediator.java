@@ -41,14 +41,15 @@ public class UIParticleEffectsTabMediator extends UIResourcesTabMediator<UIParti
     }
 
     @Override
-    protected void initList() {
+    protected void initList(String searchText) {
         Sandbox sandbox = Sandbox.getInstance();
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        //Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
         HashMap<String, ParticleEffect> particles = resourceManager.getProjectParticleList();
         Array<DraggableResource> itemArray = new Array<>();
         for (String name : particles.keySet()) {
+            if(!name.contains(searchText))continue;
             DraggableResource draggableResource = new DraggableResource(new ParticleEffectResource(name));
             draggableResource.setFactoryFunction(sandbox.getUac()::createParticleItem);
             itemArray.add(draggableResource);

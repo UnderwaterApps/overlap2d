@@ -18,25 +18,23 @@
 
 package com.uwsoft.editor.mvc.view;
 
-
 import java.io.File;
 import java.util.ArrayList;
 
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.Menu;
-import com.kotcrab.vis.ui.widget.MenuBar;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.ui.widget.CustomMenu;
+import com.uwsoft.editor.ui.widget.CustomMenuBar;
 
-
-public class Overlap2DMenuBar extends MenuBar {
+public class Overlap2DMenuBar extends CustomMenuBar {
     public static final String FILE_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".FILE_MENU";
     public static final String NEW_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".NEW_PROJECT";
     public static final String OPEN_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".OPEN_PROJECT";
@@ -268,7 +266,7 @@ public class Overlap2DMenuBar extends MenuBar {
 //        }
     }
 
-    class O2DMenu extends Menu {
+    class O2DMenu extends CustomMenu {
 
         public O2DMenu(String title) {
             super(title);

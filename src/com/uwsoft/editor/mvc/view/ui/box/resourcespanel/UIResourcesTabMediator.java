@@ -47,7 +47,8 @@ public abstract class UIResourcesTabMediator<T extends UIResourcesTab> extends S
     public String[] listNotificationInterests() {
         return new String[]{
                 ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
+                ProjectManager.PROJECT_DATA_UPDATED,
+                UIResourcesTab.SEARCH
         };
     }
 
@@ -57,12 +58,15 @@ public abstract class UIResourcesTabMediator<T extends UIResourcesTab> extends S
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
             case ProjectManager.PROJECT_DATA_UPDATED:
-                initList();
+                initList(viewComponent.searchString);
                 break;
+            case UIResourcesTab.SEARCH:
+                initList(viewComponent.searchString);
             default:
                 break;
         }
     }
 
-    protected abstract void initList();
+    protected abstract void initList(String searchText);
+
 }

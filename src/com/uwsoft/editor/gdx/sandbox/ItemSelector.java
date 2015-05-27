@@ -27,7 +27,6 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
@@ -100,6 +99,7 @@ public class ItemSelector {
         return currentSelection;
     }
 
+    /*
     public BiConsumer<SelectionRectangle, AccContainer> broadestItem = (i, acc) -> {
         if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
         final float width = i.getVisualWidth();
@@ -152,6 +152,8 @@ public class ItemSelector {
             acc.carry = i;
         }
     };
+
+    */
 
     /*
     public SelectionRectangle get(BiConsumer<SelectionRectangle, AccContainer> checkSelection) {
@@ -283,7 +285,7 @@ public class ItemSelector {
         currentSelection.clear();
     }
 
-    public void alignSelectionsByX(SelectionRectangle relativeTo, boolean toHighestX) {
+    public void alignSelectionsByX(NormalSelectionFollower relativeTo, boolean toHighestX) {
     	//TODO fix and uncomment
 //    	if (relativeTo == null) return;
 //
@@ -300,7 +302,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsByY(SelectionRectangle relativeTo, boolean toHighestY) {
+    public void alignSelectionsByY(NormalSelectionFollower relativeTo, boolean toHighestY) {
     	//TODO fix and uncomment
 //    	if (relativeTo == null) return;
 //
@@ -317,7 +319,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsAtLeftEdge(SelectionRectangle relativeTo) {
+    public void alignSelectionsAtLeftEdge(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -336,7 +338,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsAtRightEdge(SelectionRectangle relativeTo) {
+    public void alignSelectionsAtRightEdge(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -354,7 +356,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsAtTopEdge(SelectionRectangle relativeTo) {
+    public void alignSelectionsAtTopEdge(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -372,7 +374,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsAtBottomEdge(SelectionRectangle relativeTo) {
+    public void alignSelectionsAtBottomEdge(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -391,7 +393,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsVerticallyCentered(SelectionRectangle relativeTo) {
+    public void alignSelectionsVerticallyCentered(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -411,7 +413,7 @@ public class ItemSelector {
 //        }
     }
 
-    public void alignSelectionsHorizontallyCentered(SelectionRectangle relativeTo) {
+    public void alignSelectionsHorizontallyCentered(NormalSelectionFollower relativeTo) {
     	//TODO fix and uncomment
 //        if (relativeTo == null) return;
 //
@@ -513,7 +515,7 @@ public class ItemSelector {
      */
     private static class AccContainer {
         public Float carryVal = null;
-        public SelectionRectangle carry = null;
+        public NormalSelectionFollower carry = null;
     }
 
 }

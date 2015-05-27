@@ -22,19 +22,19 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.renderer.conponents.*;
-import com.uwsoft.editor.renderer.conponents.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
-import com.uwsoft.editor.renderer.conponents.physics.MeshComponont;
-import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.conponents.spine.SpineObjectComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.AnimationComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterDrawerComponent;
+import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.components.physics.MeshComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineObjectComponent;
+import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,9 +72,9 @@ public class ComponentRetriever {
     private void init() {
     	mappers.put(LightObjectComponent.class, ComponentMapper.getFor(LightObjectComponent.class));
     	
-    	mappers.put(ParticleCompononet.class, ComponentMapper.getFor(ParticleCompononet.class));
+    	mappers.put(ParticleComponent.class, ComponentMapper.getFor(ParticleComponent.class));
     	
-    	mappers.put(MeshComponont.class, ComponentMapper.getFor(MeshComponont.class));
+    	mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
     	

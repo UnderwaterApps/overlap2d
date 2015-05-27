@@ -31,10 +31,10 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
-import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.EntityFactory;
-import com.uwsoft.editor.renderer.conponents.MainItemComponent;
+import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
@@ -133,7 +133,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     }
 
 
-    public void setSelected(HashMap<Entity, SelectionRectangle> currentSelection) {
+    public void setSelected(HashMap<Entity, NormalSelectionFollower> currentSelection) {
         if (tree == null) return;
         tree.getSelection().clear();
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();

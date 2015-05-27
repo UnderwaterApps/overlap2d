@@ -18,20 +18,32 @@
 
 package com.uwsoft.editor.mvc.view.ui.followers;
 
-import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
-
 /**
- * Created by azakhary on 5/21/2015.
+ * Created by azakhary on 5/22/2015.
  */
-public class FollowerFactory {
+public class EmptyTransformationListener implements FollowerTransformationListener {
+    @Override
+    public void anchorDown(int anchor, float x, float y) {
 
-    public static BasicFollower createFollower(Entity entity) {
-        switch (entity.flags) {
-            case EntityFactory.LIGHT_TYPE:
-                return new LightFollower(entity);
-        }
+    }
 
-        return new NormalSelectionFollower(entity);
+    @Override
+    public void anchorDragged(int anchor, float x, float y) {
+
+    }
+
+    @Override
+    public void anchorUp(int anchor, float x, float y) {
+
+    }
+
+    @Override
+    public void mouseEnter(int anchor, float x, float y) {
+
+    }
+
+    @Override
+    public void mouseExit(int anchor, float x, float y) {
+
     }
 }

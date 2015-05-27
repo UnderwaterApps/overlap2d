@@ -20,9 +20,10 @@ package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -57,8 +58,8 @@ public abstract class BasicFollower extends Group {
         // TODO: Make poolable vector
     	Vector2 localCoords = new Vector2(0, 0);
     	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
-        setX(localCoords.x);
-        setY(localCoords.y);
+        setX((int)(localCoords.x));
+        setY((int)(localCoords.y));
         setWidth(dimensionsComponent.width * transformComponent.scaleX);
         setHeight(dimensionsComponent.height * transformComponent.scaleY);
     }
@@ -77,4 +78,18 @@ public abstract class BasicFollower extends Group {
     }
 
     public abstract void create();
+
+
+    public void setFollowerListener(FollowerTransformationListener listener) {
+
+    }
+
+    @Override
+    public Actor hit (float x, float y, boolean touchable) {
+        Actor hitActor = super.hit(x, y, touchable);
+        if(hitActor == null) return null;
+        if(hitActor.equals(this)) return null;
+
+        return hitActor;
+    }
 }

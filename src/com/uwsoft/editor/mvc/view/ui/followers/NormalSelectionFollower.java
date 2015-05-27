@@ -19,14 +19,41 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.CursorManager;
+import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
 /**
  * Created by azakhary on 5/20/2015.
  */
 public class NormalSelectionFollower extends BasicFollower {
 
-    PixelRect pixelRect;
+    private Overlap2DFacade facade;
+    private EditorTextureManager tm;
+    private CursorManager cursorManager;
+
+    private PixelRect pixelRect;
+
+    private Group transformGroup;
+    private Image[] miniRects;
+
+    public static final int LT = 0;
+    public static final int T = 1;
+    public static final int RT = 2;
+    public static final int R = 3;
+    public static final int RB = 4;
+    public static final int B = 5;
+    public static final int LB = 6;
+    public static final int L = 7;
+
+    public static final int ORIGIN = 8;
 
     public NormalSelectionFollower(Entity entity) {
         super(entity);
@@ -34,11 +61,92 @@ public class NormalSelectionFollower extends BasicFollower {
 
     @Override
     public void create() {
-        //TODO: create all the actors
+        facade = Overlap2DFacade.getInstance();
+        tm = facade.retrieveProxy(EditorTextureManager.NAME);
+        cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+
+        transformGroup = new Group();
+        transformGroup.setVisible(false);
+
         pixelRect = new PixelRect();
         pixelRect.setOpacity(0.4f);
+        pixelRect.setTouchable(Touchable.disabled);
         addActor(pixelRect);
+        addActor(transformGroup);
+        initTransformGroup();
+
         hide();
+    }
+
+    private Image getMiniRect() {
+        Image rect = new Image(VisUI.getSkin().getDrawable("selection-anchor"));
+        transformGroup.addActor(rect);
+        return rect;
+    }
+
+    private void positionTransformables() {
+        int w = (int) (miniRects[LT].getWidth()/2);
+        int h = (int) (miniRects[LT].getHeight()/2);
+        miniRects[LT].setX(-w);
+        miniRects[LT].setY(getHeight() - h);
+        miniRects[T].setX((int)(getWidth() / 2) - w);
+        miniRects[T].setY(getHeight() - h);
+        miniRects[RT].setX(getWidth() - w);
+        miniRects[RT].setY(getHeight() - h);
+        miniRects[R].setX(getWidth() - w);
+        miniRects[R].setY((int)(getHeight() / 2) - h);
+        miniRects[RB].setX(getWidth() - w);
+        miniRects[RB].setY(-h);
+        miniRects[B].setX((int)(getWidth() / 2) - w);
+        miniRects[B].setY(-h);
+        miniRects[LB].setX(-w);
+        miniRects[LB].setY(-h);
+        miniRects[L].setX(-w);
+        miniRects[L].setY((int)(getHeight() / 2) - h);
+
+        miniRects[ORIGIN].setX((int) (transformComponent.originX) - w);
+        miniRects[ORIGIN].setY((int)(transformComponent.originY) - h);
+    }
+
+    private void initTransformGroup() {
+        miniRects = new Image[9];
+        miniRects[LT] = getMiniRect();
+        miniRects[T] = getMiniRect();
+        miniRects[RT] = getMiniRect();
+        miniRects[R] = getMiniRect();
+        miniRects[RB] = getMiniRect();
+        miniRects[B] = getMiniRect();
+        miniRects[LB] = getMiniRect();
+        miniRects[L] = getMiniRect();
+
+        Image originAnchor = new Image(VisUI.getSkin().getDrawable("origin-anchor"));
+        transformGroup.addActor(originAnchor);
+        miniRects[ORIGIN] = originAnchor;
+    }
+
+    @Override
+    public void setFollowerListener(FollowerTransformationListener listener) {
+        for(int i = 0; i < miniRects.length; i++) {
+            final int rectId = i;
+            miniRects[i].clearListeners();
+            miniRects[i].addListener(new AnchorListener(listener, rectId) {
+                @Override
+                public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                    super.touchDragged(event, x, y, pointer);
+                    update();
+                }
+                @Override
+                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                    super.enter(event, x, y, pointer, fromActor);
+                    //cursorManager.setOverrideCursor(CursorManager.NORMAL);
+                }
+                @Override
+                public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                    super.exit(event, x, y, pointer, toActor);
+                    //cursorManager.removeOverrideCursor();
+                }
+            });
+        }
     }
 
     @Override
@@ -48,10 +156,18 @@ public class NormalSelectionFollower extends BasicFollower {
         //Update actor dimensions and positions, according to this actor width and height
         pixelRect.setWidth(getWidth());
         pixelRect.setHeight(getHeight());
+
+        positionTransformables();
     }
 
     @Override
     public void setMode(FollowerMode mode) {
+        super.setMode(mode);
 
+        if(mode == FollowerMode.normal) {
+            transformGroup.setVisible(false);
+        } else {
+            transformGroup.setVisible(true);
+        }
     }
 }

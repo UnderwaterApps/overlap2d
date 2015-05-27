@@ -33,7 +33,7 @@ public class LightFollower extends BasicFollower {
 
     @Override
     public void create() {
-        Image icon = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+        Image icon = new Image(VisUI.getSkin().getDrawable("tool-sphericlight"));
         icon.setX(dimensionsComponent.width/2);
         icon.setY(dimensionsComponent.height/2);
         addActor(icon);

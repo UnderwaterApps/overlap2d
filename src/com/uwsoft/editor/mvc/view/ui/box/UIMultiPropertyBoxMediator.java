@@ -44,7 +44,7 @@ import com.uwsoft.editor.mvc.view.ui.properties.panels.UIScenePropertiesMediator
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpineAnimationItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemPropertiesMediator;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UITextToolPropertiesMediator;
-import com.uwsoft.editor.renderer.EntityFactory;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 
 /**
