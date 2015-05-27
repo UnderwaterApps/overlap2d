@@ -215,6 +215,10 @@ public class SceneControlMediator {
 	public SceneVO getCurrentSceneVO() {
 		return currentSceneVo;
 	}
+	
+	public Entity getRootEntity() {
+		return sceneLoader.rootEntity;
+	}
 
 //	public CompositeItem getCompositeElement(CompositeItemVO vo) {
 //		return sceneLoader.getCompositeElement(vo);

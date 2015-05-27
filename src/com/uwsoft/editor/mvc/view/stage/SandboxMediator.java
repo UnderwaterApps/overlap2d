@@ -164,13 +164,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         	inputListenerComponent.addListener(new SandboxItemEventListener(child));
         }
         
-        InputListenerComponent inputListenerComponent = rootEntity.getComponent(InputListenerComponent.class);
-    	if(inputListenerComponent == null){
-    		inputListenerComponent = new InputListenerComponent();
-    		rootEntity.add(inputListenerComponent);
-    	}
-    	inputListenerComponent.removeAllListener();
-    	inputListenerComponent.addListener(new SandboxStageEventListener());
+        getViewComponent().addListener(new SandboxStageEventListener());
         
 		
     }

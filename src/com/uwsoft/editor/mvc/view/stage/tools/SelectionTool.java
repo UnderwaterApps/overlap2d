@@ -33,6 +33,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -95,7 +96,6 @@ public class SelectionTool implements Tool {
 
         // preparing selection tool rectangle to follow mouse
         sandbox.prepareSelectionRectangle(x, y, setOpacity);
-
         return true;
     }
 
@@ -274,7 +274,7 @@ public class SelectionTool implements Tool {
        
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        ImmutableArray<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
+        SnapshotArray<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
 
         // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
 
@@ -283,7 +283,8 @@ public class SelectionTool implements Tool {
         //ArrayList<Entity> curr = new ArrayList<Entity>();
         Set<Entity> curr = new HashSet<>();
         Rectangle sR = sandbox.selectionRec.getRect();
-        for (int i = 0; i < freeItems.size(); i++) {
+         
+        for (int i = 0; i < freeItems.size; i++) {
             Entity entity = freeItems.get(i);
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
@@ -294,11 +295,12 @@ public class SelectionTool implements Tool {
             }
         }
 
-        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
-
         if (curr.size() == 0) {
             facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
+            return;
         }
+        
+        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
     }
 
     private void setTouchDiff(float x, float y) {

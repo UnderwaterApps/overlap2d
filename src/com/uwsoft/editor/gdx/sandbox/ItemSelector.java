@@ -24,11 +24,15 @@ import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.actors.SelectionRectangle;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
+import com.uwsoft.editor.renderer.conponents.NodeComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -257,8 +261,10 @@ public class ItemSelector {
      * Selects all panels on currently active scene
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
-    public ImmutableArray<Entity> getAllFreeItems() {
-        return sandbox.getEngine().getEntities();
+    public SnapshotArray<Entity> getAllFreeItems() {
+    	NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getRootEntity(), NodeComponent.class);
+		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
+        return childrenEntities;
     }
 
 

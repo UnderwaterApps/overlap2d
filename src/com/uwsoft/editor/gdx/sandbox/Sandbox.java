@@ -26,6 +26,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
@@ -40,6 +41,7 @@ import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
+import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
@@ -108,6 +110,7 @@ public class Sandbox {
     //public Group frontUI;
 
 	private Engine engine;
+	private Array<InputListener> listeners = new Array<InputListener>(1);
 
 
     /**
@@ -494,4 +497,31 @@ public class Sandbox {
 //        fakeClipboard = json.toJson(tempHolder);
 //        copedItemCameraOffset = vector3;
     }
+    
+    public Entity getRootEntity(){
+    	return sceneControl.getRootEntity();
+    }
+    
+    
+    //Global Listeners part
+    
+    public void addListener(InputListener listener){
+		if (!listeners.contains(listener, true)) {
+			listeners.add(listener);
+		}
+		
+	}
+	
+	public void removeListener(InputListener listener){
+		listeners.removeValue(listener, true);
+	}
+	
+	public void removeAllListener(){
+		listeners.clear();
+	}
+	
+	public Array<InputListener> getAllListeners(){
+		listeners.shrink();
+		return listeners;
+	}
 }

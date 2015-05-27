@@ -2,7 +2,6 @@ package com.uwsoft.editor.mvc.view.stage.input;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
@@ -10,11 +9,11 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.renderer.conponents.DimensionsComponent;
 import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
 import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -22,83 +21,117 @@ import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 public class SandboxInputAdapter implements InputProcessor {
 
 	private Overlap2DFacade facade;
-	private Family root;
+	private Entity rootEntity;
 	private Engine engine;
 	private ImmutableArray<Entity> entities;
 	private InputListenerComponent inpputListenerComponent;
 	private Entity target;
 	private Vector2 hitTargetLocalCoordinates = new Vector2();
+	private Sandbox sandbox;
 
 	public SandboxInputAdapter() {
 		facade = Overlap2DFacade.getInstance();
 		SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
-		engine = sandboxMediator.getViewComponent().getEngine();
-		root = Family.all(ViewPortComponent.class).get();
+		sandbox = sandboxMediator.getViewComponent();
+		engine = sandbox.getEngine();
 	}
 
 	@Override
 	public boolean keyDown(int keycode) {
-		// TODO Auto-generated method stub
+		Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+			sandboxListeners.get(i).keyDown(null, keycode);
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean keyUp(int keycode) {
-		// TODO Auto-generated method stub
+		Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+			sandboxListeners.get(i).keyUp(null, keycode);
+		}
 		return false;
 	}
 
 	@Override
 	public boolean keyTyped(char character) {
-		// TODO Auto-generated method stub
+		Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+			sandboxListeners.get(i).keyTyped(null, character);
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
 		
-		entities = engine.getEntitiesFor(root);
+		//Handle Global Listeners than others
+		rootEntity = sandbox.getRootEntity();
 		
-		for (int i = 0, n = entities.size(); i < n; i++){
-			Entity entity = entities.get(i);
-			
-			Viewport viewPort = ComponentRetriever.get(entity, ViewPortComponent.class).viewPort;
-			if (screenX < viewPort.getScreenX() || screenX >= viewPort.getScreenX() + viewPort.getScreenWidth()) return false;
-			if (Gdx.graphics.getHeight() - screenY < viewPort.getScreenY()
-				|| Gdx.graphics.getHeight() - screenY >= viewPort.getScreenY() + viewPort.getScreenHeight()) return false;
-			
-			hitTargetLocalCoordinates.set(screenX, screenY);
-			screenToStageCoordinates(entity, hitTargetLocalCoordinates);
-			
-			System.out.println("SCREEN TO STAGE X="+ hitTargetLocalCoordinates.x +" Y=" + hitTargetLocalCoordinates.y);
-			
-			target = hit(entity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y);
-			if(target == null){
-				System.out.println("############################## no hit ####################################"); 
-				continue;
-			}
-			
-			hitTargetLocalCoordinates.set(screenX, screenY);
-			screenToStageCoordinates(entity, hitTargetLocalCoordinates);
-			
-			inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
-			if(inpputListenerComponent == null) continue;
-			Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
-			TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
-			for (int j = 0, s = listeners.size; j < s; j++) {
-				if (listeners.get(j).touchDown(target, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)) {
-					return true;
-				}
-			}
-
-			
+		if(rootEntity == null){
+			return false;
 		}
+				
+		Viewport viewPort = ComponentRetriever.get(rootEntity, ViewPortComponent.class).viewPort;
+		if (screenX < viewPort.getScreenX() || screenX >= viewPort.getScreenX() + viewPort.getScreenWidth()) return false;
+		if (Gdx.graphics.getHeight() - screenY < viewPort.getScreenY()
+			|| Gdx.graphics.getHeight() - screenY >= viewPort.getScreenY() + viewPort.getScreenHeight()) return false;
+		
+		hitTargetLocalCoordinates.set(screenX, screenY);
+		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
+		
+		System.out.println("SCREEN TO STAGE X="+ hitTargetLocalCoordinates.x +" Y=" + hitTargetLocalCoordinates.y);
+		
+		target = hit(rootEntity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y);
+		if(target == null){ 
+			
+			hitTargetLocalCoordinates.set(screenX, screenY);
+			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
+			
+			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+				sandboxListeners.get(i).touchDown(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button);
+			}
+			
+			return false;
+		}
+		
+		hitTargetLocalCoordinates.set(screenX, screenY);
+		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
+		
+		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		if(inpputListenerComponent == null) return false;
+		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+		TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
+		for (int j = 0, s = listeners.size; j < s; j++) {
+			if (listeners.get(j).touchDown(target, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button)) {
+				return true;
+			}
+		}
+		
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+		rootEntity = sandbox.getRootEntity();
+		
+		if(rootEntity == null){
+			return false;
+		}
+		
 		if(target == null){
+			hitTargetLocalCoordinates.set(screenX, screenY);
+			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
+			
+			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+				sandboxListeners.get(i).touchUp(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button);
+			}
+			
 			return false;
 		}
 		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
@@ -113,9 +146,23 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		if(target == null){
+		rootEntity = sandbox.getRootEntity();
+		
+		if(rootEntity == null){
 			return false;
 		}
+		
+		if(target == null){
+			hitTargetLocalCoordinates.set(screenX, screenY);
+			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
+			
+			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+				sandboxListeners.get(i).touchDragged(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer);
+			}
+			return false;
+		}
+		
 		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
@@ -144,19 +191,28 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		entities = engine.getEntitiesFor(root);
-		for (int i = 0, n = entities.size(); i < n; i++){
-			Entity entity = entities.get(i);
-			inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
-			if(inpputListenerComponent == null) continue;
-			Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
-			for (int j = 0, s = listeners.size; j < s; j++){				
-				if (listeners.get(j).scrolled(entity,amount)){
-					return true;
-				}
-			}
-			
+		rootEntity = sandbox.getRootEntity();
+		
+		if(rootEntity == null){
+			return false;
 		}
+		
+		Array<InputListener> sandboxListeners = sandbox.getAllListeners();
+		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
+			sandboxListeners.get(i).scrolled(null, amount);
+		}
+		
+		//TODO scroll for other Entities don't know how deep tis should go all entities or only hit tested 
+//		inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
+//		if(inpputListenerComponent == null) continue;
+//		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
+//		for (int j = 0, s = listeners.size; j < s; j++){				
+//			if (listeners.get(j).scrolled(entity,amount)){
+//				return true;
+//			}
+//		}
+			
+		
 		return false;
 	}
 	
@@ -187,13 +243,13 @@ public class SandboxInputAdapter implements InputProcessor {
 			}
 		}
 		dimentionsComponent = ComponentRetriever.get(root, DimensionsComponent.class);
-		if(dimentionsComponent.hit(localCoordinates.x, localCoordinates.y)){
-			return root;
-		}
+//		if(dimentionsComponent.hit(localCoordinates.x, localCoordinates.y)){
+//			return root;
+//		}
 		return null;
 	}
 	
-	public Vector2 screenToStageCoordinates (Entity root, Vector2 screenCoords) {
+	public Vector2 screenToSceneCoordinates (Entity root, Vector2 screenCoords) {
 		ViewPortComponent viewPortComponent = ComponentRetriever.get(root, ViewPortComponent.class);
 		viewPortComponent.viewPort.unproject(screenCoords);
 		return screenCoords;
