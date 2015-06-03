@@ -20,17 +20,15 @@ package com.uwsoft.editor.gdx.sandbox;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.function.BiConsumer;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
+import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
+import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
