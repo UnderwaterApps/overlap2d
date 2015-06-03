@@ -39,7 +39,7 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
     }
 
     @Override
-    protected void initList() {
+    protected void initList(String searchText) {
         Sandbox sandbox = Sandbox.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
@@ -48,6 +48,7 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
         Array<DraggableResource> thumbnailBoxes = new Array<>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();
         for (TextureAtlas.AtlasRegion region : atlasRegions) {
+            if(!region.name.contains(searchText))continue;
             boolean is9patch = region.splits != null;
             DraggableResource draggableResource = new DraggableResource(new ImageResource(region));
             if (is9patch) {

@@ -44,6 +44,7 @@ public class UIParticleEffectsTab extends UIResourcesTab {
 
 
     public void setItems(Array<DraggableResource> items) {
+        list.clearChildren();
         for (DraggableResource box : items) {
             box.initDragDrop();
             list.add((Actor) box.getViewComponent()).expandX().fillX();

@@ -162,10 +162,17 @@ public class TransformTool extends SelectionTool {
                         return;
                 }
 
-
                 if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    newWidth = Math.max(newWidth, newHeight);
-                    newHeight = Math.max(newWidth, newHeight);
+                    float enclosingRectSize = Math.max(newWidth, newHeight);
+                    if (dimensionsComponent.width >= dimensionsComponent.height) {
+                        newWidth = enclosingRectSize;
+                        newHeight = (newWidth / dimensionsComponent.width) * dimensionsComponent.height;
+                    }
+                    if (dimensionsComponent.height > dimensionsComponent.width) {
+                        newHeight = enclosingRectSize;
+                        newWidth = (newHeight / dimensionsComponent.height) * dimensionsComponent.width;
+                    }
+
                 }
 
                 if(anchorId != NormalSelectionFollower.ORIGIN) {
