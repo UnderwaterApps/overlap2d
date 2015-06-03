@@ -1,8 +1,0 @@
-package com.uwsoft.editor.renderer.conponents;
-
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.viewport.Viewport;
-
-public class ViewPortComponent extends Component {
-	public Viewport viewPort;
-}

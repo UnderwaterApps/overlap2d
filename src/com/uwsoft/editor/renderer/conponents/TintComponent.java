@@ -1,8 +1,0 @@
-package com.uwsoft.editor.renderer.conponents;
-
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.graphics.Color;
-
-public class TintComponent extends Component {
-	public Color color = new Color();
-}

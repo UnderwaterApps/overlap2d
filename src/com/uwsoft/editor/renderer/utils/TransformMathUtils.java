@@ -3,8 +3,8 @@ package com.uwsoft.editor.renderer.utils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.renderer.conponents.ParentNodeComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 
 public class TransformMathUtils {
 	
@@ -76,13 +76,13 @@ public class TransformMathUtils {
 	
 	/** Transforms the specified point in the actor's coordinates to be in the parent's coordinates. */
 	public static Vector2 localToParentCoordinates (Entity entity, Vector2 localCoords) {
-		TransformComponent trnasform = entity.getComponent(TransformComponent.class); 
+		TransformComponent transform = entity.getComponent(TransformComponent.class);
 		
-		final float rotation = -trnasform.rotation;
-		final float scaleX = trnasform.scaleX;
-		final float scaleY = trnasform.scaleY;
-		final float x = trnasform.x;
-		final float y = trnasform.y;
+		final float rotation = -transform.rotation;
+		final float scaleX = transform.scaleX;
+		final float scaleY = transform.scaleY;
+		final float x = transform.x;
+		final float y = transform.y;
 		if (rotation == 0) {
 			if (scaleX == 1 && scaleY == 1) {
 				localCoords.x += x;

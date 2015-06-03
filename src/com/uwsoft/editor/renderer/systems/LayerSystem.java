@@ -8,10 +8,10 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.conponents.LayerMapComponent;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.ZindexComponent;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ZindexComponent;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 
 public class LayerSystem extends IteratingSystem {

@@ -4,8 +4,8 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
 
 public class SpriteAnimationSystem extends IteratingSystem {
 	private ComponentMapper<TextureRegionComponent> tm;

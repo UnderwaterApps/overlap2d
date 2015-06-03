@@ -12,6 +12,8 @@ public class MainItemVO {
 	public float y;
 	public float scaleX	=	1f; 
 	public float scaleY	=	1f;
+	public float originX	=	Float.NaN;
+	public float originY	=	Float.NaN;
 	public float rotation;
 	public int zIndex = 0;
 	public String layerName = "";

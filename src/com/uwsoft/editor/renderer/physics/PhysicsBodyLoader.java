@@ -6,9 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.conponents.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.legacy.data.MeshVO;
-import com.uwsoft.editor.renderer.legacy.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 
 /**
  * Created by azakhary on 9/28/2014.

@@ -1,35 +1,23 @@
 package com.uwsoft.editor.renderer;
 
-import java.util.Comparator;
-
 import com.badlogic.ashley.core.ComponentMapper;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.SnapshotArray;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.brashmonkey.spriter.Player;
-import com.uwsoft.editor.renderer.conponents.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.conponents.LayerMapComponent;
-import com.uwsoft.editor.renderer.conponents.ViewPortComponent;
-import com.uwsoft.editor.renderer.conponents.ZindexComponent;
-import com.uwsoft.editor.renderer.conponents.NodeComponent;
-import com.uwsoft.editor.renderer.conponents.TextureRegionComponent;
-import com.uwsoft.editor.renderer.conponents.TransformComponent;
-import com.uwsoft.editor.renderer.conponents.particle.ParticleCompononet;
-import com.uwsoft.editor.renderer.conponents.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.conponents.sprite.SpriteAnimationStateComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.conponents.spriter.SpriterDrawerComponent;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
+import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
 
 
 //TODO drawabale mechanics
@@ -40,7 +28,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
 	private ComponentMapper<TextureRegionComponent> textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
-	private ComponentMapper<ParticleCompononet> particleMapper = ComponentMapper.getFor(ParticleCompononet.class);
+	private ComponentMapper<ParticleComponent> particleMapper = ComponentMapper.getFor(ParticleComponent.class);
 	private ComponentMapper<SpriterDrawerComponent> spriterDrawerMapper = ComponentMapper.getFor(SpriterDrawerComponent.class);
 	private ComponentMapper<SpriterComponent> spriterMapper = ComponentMapper.getFor(SpriterComponent.class);
 	private ComponentMapper<SpineDataComponent> spineMapper = ComponentMapper.getFor(SpineDataComponent.class);
@@ -98,7 +86,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 				 
 				TextureRegionComponent childTextureRegionComponent = textureRegionMapper.get(child);
 				TransformComponent childTransformComponent = transformMapper.get(child); 
-				ParticleCompononet particleComponent = particleMapper.get(child);
+				ParticleComponent particleComponent = particleMapper.get(child);
 				SpriterDrawerComponent spriterDrawerComponent = spriterDrawerMapper.get(child);
 				SpineDataComponent spineDataComponent = spineMapper.get(child);
 				
