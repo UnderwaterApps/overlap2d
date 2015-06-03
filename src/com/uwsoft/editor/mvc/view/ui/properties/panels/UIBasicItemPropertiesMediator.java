@@ -20,6 +20,10 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import java.util.HashMap;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -128,10 +132,10 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         //MainItemVO vo = observableReference.getDataVO();
     	Entity entity  = ((Entity) observableReference);
 
-        transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-        mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-        dimensionComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-        tintComponent = ComponentRetriever.get(entity, TintComponent.class);
+        transformComponent = ComponentCloner.get(ComponentRetriever.get(entity, TransformComponent.class));
+        mainItemComponent = ComponentCloner.get(ComponentRetriever.get(entity, MainItemComponent.class));
+        dimensionComponent = ComponentCloner.get(ComponentRetriever.get(entity, DimensionsComponent.class));
+        tintComponent = ComponentCloner.get(ComponentRetriever.get(entity, TintComponent.class));
 
     	mainItemComponent.itemIdentifier = viewComponent.getIdBoxValue();
     	transformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), transformComponent.x);
@@ -147,6 +151,15 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
         Color color = viewComponent.getTintColor();
         tintComponent.color.set(color);
-       
+
+        Array<Component> componentsToUpdate = new Array<>();
+        componentsToUpdate.add(transformComponent);
+        componentsToUpdate.add(mainItemComponent);
+        componentsToUpdate.add(dimensionComponent);
+        componentsToUpdate.add(tintComponent);
+        Object[] payload = new Object[2];
+        payload[0] = entity;
+        payload[1] = componentsToUpdate;
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_ITEM_DATA, payload);
     }
 }
