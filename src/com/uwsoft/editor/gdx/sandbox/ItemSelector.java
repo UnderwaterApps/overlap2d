@@ -217,6 +217,8 @@ public class ItemSelector {
     public void setSelections(Set<Entity> items, boolean alsoShow) {
         clearSelections();
 
+        if(items == null) return;
+
         for (Entity item : items) {
             setSelection(item, false);
             if (alsoShow) {

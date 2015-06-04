@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -29,6 +30,7 @@ import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -54,13 +56,14 @@ public class SelectionTool implements Tool {
     private boolean isCastingRectangle = false;
 
     private Vector2 directionVector = null;
-    private Vector2 dragStartPosition;
+
+    private Vector2 dragMouseStartPosition;
+    private HashMap<Entity, Vector2> dragStartPositions = new HashMap<>();
+    private HashMap<Entity, Vector2> dragTouchDiff = new HashMap<>();
 
 	private TransformComponent transformComponent;
 
 	private DimensionsComponent dimensionsComponent;
-
-    private float[] touchDiff = new float[2];
 
     public SelectionTool() {
     
@@ -142,21 +145,26 @@ public class SelectionTool implements Tool {
 //                sandbox.getSelector().clearSelections();
 //                return false;
 //            } else {
-                // select this item and remove others from selection
-                Set<Entity> items = new HashSet<>();
-                items.add(entity);
-                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+                if(!currentTouchedItemWasSelected) {
+                    // get selection, add this item to selection
+                    Set<Entity> items = new HashSet<>();
+                    items.add(entity);
+                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+                }
             //}
         }
 
         // remembering local touch position for each of selected boxes, if planning to drag
+        dragStartPositions.clear();
+        dragTouchDiff.clear();
         for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
         	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
-            //TODO: fix that
-            setTouchDiff(x - transformComponent.x, y - transformComponent.y);
+
+            dragTouchDiff.put(itemInstance, new Vector2(x - transformComponent.x, y - transformComponent.y));
+            dragStartPositions.put(itemInstance, new Vector2(transformComponent.x, transformComponent.y));
         }
 
-        dragStartPosition = new Vector2(x, y);
+        dragMouseStartPosition = new Vector2(x, y);
 
         // pining UI to update current item properties tools
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
@@ -168,13 +176,15 @@ public class SelectionTool implements Tool {
     public void itemMouseDragged(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
 
+        isDragging = true;
+
         int gridSize = Sandbox.getInstance().getGridSize();
 
         if (isShiftPressed()) {
             // check if we have a direction vector
             if(directionVector == null) {
                 directionVector = new Vector2();
-                if(Math.abs(x - dragStartPosition.x) >= Math.abs(y - dragStartPosition.y)) {
+                if(Math.abs(x - dragMouseStartPosition.x) >= Math.abs(y - dragMouseStartPosition.y)) {
                     directionVector.x = 1;
                     directionVector.y = 0;
                 } else {
@@ -197,10 +207,10 @@ public class SelectionTool implements Tool {
 
             if (isShiftPressed()) {
                 if(directionVector.x == 0) {
-                    newX = dragStartPosition.x;
+                    newX = dragMouseStartPosition.x;
                 }
                 if(directionVector.y == 0) {
-                    newY = dragStartPosition.y;
+                    newY = dragMouseStartPosition.y;
                 }
             }
 
@@ -208,19 +218,20 @@ public class SelectionTool implements Tool {
             for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
             	transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
 
-                float[] diff = getTouchDiff();
 
-                diff[0] = MathUtils.floor(diff[0] / gridSize) * gridSize;
-                diff[1] = MathUtils.floor(diff[1] / gridSize) * gridSize;
+                Vector2 diff = new Vector2(dragTouchDiff.get(itemInstance));
+                diff.x = MathUtils.floor(diff.x / gridSize) * gridSize;
+                diff.y = MathUtils.floor(diff.y/ gridSize) * gridSize;
               
-                transformComponent.x = (newX - diff[0]);
-                transformComponent.y = (newY - diff[1]);
+                transformComponent.x = (newX - diff.x);
+                transformComponent.y = (newY - diff.y);
                 //value.hide();
+
+                // pining UI to update current item properties tools
+                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, itemInstance);
             }
         }
 
-        // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
 
@@ -232,7 +243,7 @@ public class SelectionTool implements Tool {
         if (currentTouchedItemWasSelected && !isDragging) {
             // item was selected (and no dragging was performed), so we need to release it
             if (isShiftPressed()) {
-                ArrayList<Entity> items = new ArrayList<>();
+                Set<Entity> items = new HashSet<>();
                 items.add(entity);
                 facade.sendNotification(Sandbox.ACTION_RELEASE_SELECTION, items);
             }
@@ -250,8 +261,27 @@ public class SelectionTool implements Tool {
 
         sandbox.dirty = false;
 
-        // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        // if we were dragging, need to remember new position
+        if(isDragging) {
+            // sets item position, and puts things into undo-redo que
+            Array<Object[]> payloads = new Array<>();
+            for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
+                transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
+                Vector2 newPosition = new Vector2(transformComponent.x, transformComponent.y);
+                Vector2 oldPosition = dragStartPositions.get(itemInstance);
+
+                Object payload[] = new Object[3];
+                payload[0] = itemInstance;
+                payload[1] = newPosition;
+                payload[2] = oldPosition;
+                payloads.add(payload);
+            }
+
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_ITEMS_MOVE_TO, payloads);
+        }
+
+        isDragging = false;
+
     }
 
     @Override
@@ -293,18 +323,13 @@ public class SelectionTool implements Tool {
 
         if (curr.size() == 0) {
             facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
+
+            //remove visual selection command
+            facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
             return;
         }
         
         facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
     }
 
-    private void setTouchDiff(float x, float y) {
-        touchDiff[0] = x;
-        touchDiff[1] = y;
-    }
-
-    private float[] getTouchDiff() {
-        return touchDiff;
-    }
 }
