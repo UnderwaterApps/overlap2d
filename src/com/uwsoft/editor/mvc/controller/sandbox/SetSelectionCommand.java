@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -33,7 +34,7 @@ public class SetSelectionCommand extends RevertableCommand {
 
     @Override
     public void doAction() {
-        previousSelection = Sandbox.getInstance().getSelector().getSelectedItems();
+        previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
 
         Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().setSelections(items, true);

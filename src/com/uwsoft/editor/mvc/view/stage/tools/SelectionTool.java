@@ -176,6 +176,8 @@ public class SelectionTool implements Tool {
     public void itemMouseDragged(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
 
+        isDragging = true;
+
         int gridSize = Sandbox.getInstance().getGridSize();
 
         if (isShiftPressed()) {
@@ -259,19 +261,26 @@ public class SelectionTool implements Tool {
 
         sandbox.dirty = false;
 
-        // sets item position, and puts things into undo-redo que
-        Array<Object[]> payloads = new Array<>();
-        for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
-            transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
-            Vector2 newPosition = new Vector2(transformComponent.x, transformComponent.y);
-            Vector2 oldPosition = dragStartPositions.get(itemInstance);
+        // if we were dragging, need to remember new position
+        if(isDragging) {
+            // sets item position, and puts things into undo-redo que
+            Array<Object[]> payloads = new Array<>();
+            for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
+                transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
+                Vector2 newPosition = new Vector2(transformComponent.x, transformComponent.y);
+                Vector2 oldPosition = dragStartPositions.get(itemInstance);
 
-            Object payload[] = new Object[3];
-            payload[0] = itemInstance; payload[1] = newPosition; payload[2] = oldPosition;
-            payloads.add(payload);
+                Object payload[] = new Object[3];
+                payload[0] = itemInstance;
+                payload[1] = newPosition;
+                payload[2] = oldPosition;
+                payloads.add(payload);
+            }
+
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_ITEMS_MOVE_TO, payloads);
         }
 
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_ITEMS_MOVE_TO, payloads);
+        isDragging = false;
 
     }
 

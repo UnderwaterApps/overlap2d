@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
@@ -30,7 +31,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void doAction() {
-        Set<Entity> items = getNotification().getBody();
+        Set<Entity> items = new HashSet<>(getNotification().getBody());
         Sandbox.getInstance().getSelector().releaseSelections(items);
     }
 
