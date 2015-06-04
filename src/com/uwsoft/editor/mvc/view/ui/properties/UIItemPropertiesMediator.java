@@ -34,8 +34,6 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
 
     @Override
     public void handleNotification(Notification notification) {
-        super.handleNotification(notification);
-
         switch (notification.getName()) {
             case UIAbstractProperties.PROPERTIES_UPDATED:
                 if(!lockUpdates) {

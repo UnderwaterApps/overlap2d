@@ -22,6 +22,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -32,6 +33,8 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 public class KeyboardListener implements EventListener {
 
     private final String eventName;
+
+    private String lastValue;
 
     public KeyboardListener(String eventName) {
         this.eventName = eventName;
@@ -55,15 +58,23 @@ public class KeyboardListener implements EventListener {
             case keyUp:
                 if (event.getKeyCode() == Input.Keys.ENTER) {
                     keyboardHandler((VisTextField) event.getTarget());
+                    VisTextField field = (VisTextField) event.getTarget();
+                    lastValue = field.getText();
                 }
                 break;
         }
     }
 
     private void handleFocusListener(FocusListener.FocusEvent event) {
+        VisTextField field = (VisTextField) event.getTarget();
+        if(event.isFocused()) {
+            //it was a focus in event, which is no change
+            lastValue = field.getText();
+            return;
+        }
         switch (event.getType()) {
             case keyboard:
-                keyboardHandler((VisTextField) event.getTarget());
+                keyboardHandler(field);
                 break;
             case scroll:
                 break;
@@ -75,6 +86,12 @@ public class KeyboardListener implements EventListener {
         if(!target.isInputValid()) {
             return;
         }
+        // check for change
+        if(lastValue.equals(target.getText())) {
+            // no change = no event;
+            return;
+        }
+
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         facade.sendNotification(eventName, target.getText());
     }
