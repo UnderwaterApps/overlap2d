@@ -439,7 +439,7 @@ public class ItemSelector {
             EntityBounds entityBounds = new EntityBounds(entity);
 
             final float deltaY = entityBounds.getY() - entityBounds.getVisualY();
-            final float visualY = relativeToY + (entityBounds.getVisualHeight()) / 2;
+            final float visualY = relativeToY + (relativeToHeight - entityBounds.getVisualHeight()) / 2;
 
             moveCommandBuilder.setY(entity, visualY + deltaY);
         }
@@ -462,7 +462,7 @@ public class ItemSelector {
             final float deltaX = entityBounds.getX() - entityBounds.getVisualX();
             final float visualX = relativeToX + (relativeToWidth - entityBounds.getVisualWidth()) / 2;
 
-            moveCommandBuilder.setY(entity, visualX + deltaX);
+            moveCommandBuilder.setX(entity, visualX + deltaX);
         }
         moveCommandBuilder.execute();
     }
