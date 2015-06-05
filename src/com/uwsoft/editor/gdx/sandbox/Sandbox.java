@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
@@ -147,7 +148,7 @@ public class Sandbox {
 
         engine = new Engine();
         //TODO rendering system must be added in scene loader or idk where
-        Overlap2dRenderer renderer = new Overlap2dRenderer(uiStage.getBatch());
+        Overlap2dRenderer renderer = new Overlap2dRenderer(new SpriteBatch());
         engine.addSystem(renderer);
 		SceneLoader sceneLoader = new SceneLoader(engine);
 		sceneLoader.setResourceManager(resourceManager);
