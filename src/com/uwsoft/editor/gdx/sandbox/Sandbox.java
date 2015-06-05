@@ -24,6 +24,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -44,10 +45,12 @@ import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
@@ -494,4 +497,10 @@ public class Sandbox {
 		listeners.shrink();
 		return listeners;
 	}
+
+    public OrthographicCamera getCamera() {
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(getRootEntity(), ViewPortComponent.class);
+
+        return (OrthographicCamera) viewPortComponent.viewPort.getCamera();
+    }
 }

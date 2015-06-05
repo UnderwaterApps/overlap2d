@@ -2,7 +2,10 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.renderer.Overlap2dRenderer;
 
 /**
  * Created by CyberJoe on 5/1/2015.
@@ -32,15 +35,16 @@ public class PanTool implements Tool {
     @Override
     public void stageMouseDragged(float x, float y) {
     	//TODO fix and uncomment
-//        Sandbox sandbox = Sandbox.getInstance();
-//        OrthographicCamera camera = (OrthographicCamera) (sandbox.getCamera());
-//
-//        float currX = camera.position.x + (lastCoordinates.x - Gdx.input.getX()) * camera.zoom;
-//        float currY = camera.position.y + (Gdx.input.getY() - lastCoordinates.y) * camera.zoom;
-//
-//        sandbox.getCamera().position.set(currX, currY, 0);
-//
-//        lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+        Sandbox sandbox = Sandbox.getInstance();
+
+        OrthographicCamera camera = sandbox.getCamera();
+
+        float currX = camera.position.x + (lastCoordinates.x - Gdx.input.getX()) * camera.zoom;
+        float currY = camera.position.y + (Gdx.input.getY() - lastCoordinates.y) * camera.zoom;
+
+        sandbox.getCamera().position.set(currX, currY, 0);
+
+        lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
     }
 
     @Override
