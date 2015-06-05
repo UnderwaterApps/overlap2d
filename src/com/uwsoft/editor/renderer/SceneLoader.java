@@ -52,6 +52,7 @@ public class SceneLoader {
 	public RayHandler rayHandler;
 	public World world;
 	public Entity rootEntity;
+
 	private EntityFactory entityFactory;
 
 	/**
@@ -403,6 +404,10 @@ public class SceneLoader {
             return json.fromJson(HashMap.class, animations);
         }
     }
+
+	public EntityFactory getEntityFactory() {
+		return entityFactory;
+	}
 
 	/**
 	 * Creates CompositeItem from sceneVo *
