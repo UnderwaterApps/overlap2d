@@ -32,7 +32,7 @@ import java.util.Map;
 /**
  * Created by azakhary on 6/4/2015.
  */
-public class ItemMassMoveCommand extends RevertableCommand {
+public class ItemsMoveCommand extends RevertableCommand {
 
     private HashMap<Entity, Vector2> prevLocations = new HashMap<>();
 
