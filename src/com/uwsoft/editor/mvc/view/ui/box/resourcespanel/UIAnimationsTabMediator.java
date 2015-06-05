@@ -26,6 +26,7 @@ import java.util.function.BiFunction;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResourceView;
@@ -53,9 +54,9 @@ public class UIAnimationsTabMediator extends UIResourcesTabMediator<UIAnimations
         animationBoxes.clear();
         Sandbox sandbox = Sandbox.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, sandbox.getUac()::createSpineAnimation, searchText);
-        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, sandbox.getUac()::createSpriteAnimation, searchText);
-        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, sandbox.getUac()::createSpriterAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, ItemFactory.get()::createSpineAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, ItemFactory.get()::createSpriteAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, ItemFactory.get()::createSpriterAnimation, searchText);
         viewComponent.setThumbnailBoxes(animationBoxes);
     }
 

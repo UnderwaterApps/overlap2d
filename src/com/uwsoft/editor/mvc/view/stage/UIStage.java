@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;

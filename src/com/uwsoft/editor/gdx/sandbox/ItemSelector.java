@@ -193,9 +193,6 @@ public class ItemSelector {
         currentSelection.add(item);
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
-
-		sandbox.getUIStage().mainDropDown.hide();
-
     }
 
     /**

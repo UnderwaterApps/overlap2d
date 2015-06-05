@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import java.util.HashMap;
 
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.gdx.utils.Array;
@@ -69,7 +70,7 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
         for (String key : items.keySet()) {
             if(!key.contains(searchText))continue;
             DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
-            draggableResource.setFactoryFunction(sandbox.getUac()::createItemFromLibrary);
+            draggableResource.setFactoryFunction(ItemFactory.get()::createItemFromLibrary);
             draggableResource.initDragDrop();
             itemArray.add(draggableResource);
         }
