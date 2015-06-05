@@ -53,8 +53,8 @@ public class UIStage extends Stage {
         dummyTarget.setHeight(getHeight());
         dummyTarget.setY(0);
         dummyTarget.setX(0);
-        //TODO: Not sure about this...
-        dummyTarget.setTouchable(Touchable.disabled);
+
+        //dummy target is basically the target of drop of items from resoruce panel
         addActor(dummyTarget);
                
 

@@ -300,7 +300,7 @@ public class SelectionTool implements Tool {
        
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        SnapshotArray<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
+        HashSet<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
 
         // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
 
@@ -309,15 +309,14 @@ public class SelectionTool implements Tool {
         //ArrayList<Entity> curr = new ArrayList<Entity>();
         Set<Entity> curr = new HashSet<>();
         Rectangle sR = sandbox.selectionRec.getRect();
-         
-        for (int i = 0; i < freeItems.size; i++) {
-            Entity entity = freeItems.get(i);
+
+        for (Entity entity : freeItems) {
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
             //TODO fix layer lock thing
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
             if (Intersector.overlaps(sR, new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
-                curr.add(freeItems.get(i));
+                curr.add(entity);
             }
         }
 

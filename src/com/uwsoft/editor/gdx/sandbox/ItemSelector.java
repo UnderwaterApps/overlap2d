@@ -18,8 +18,11 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -216,14 +219,14 @@ public class ItemSelector {
 
         if(items == null) return;
 
-        for (Entity item : items) {
-            setSelection(item, false);
-            if (alsoShow) {
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.SHOW_SELECTIONS, currentSelection);
-            } else {
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.HIDE_SELECTIONS, currentSelection);
-            }
+        currentSelection.addAll(items.stream().collect(Collectors.toList()));
+
+        if (alsoShow) {
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.SHOW_SELECTIONS, currentSelection);
+        } else {
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.HIDE_SELECTIONS, currentSelection);
         }
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
     /**
@@ -260,10 +263,13 @@ public class ItemSelector {
      * Selects all panels on currently active scene
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
-    public SnapshotArray<Entity> getAllFreeItems() {
+    public HashSet<Entity> getAllFreeItems() {
     	NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getRootEntity(), NodeComponent.class);
 		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
-        return childrenEntities;
+
+        Entity[] array = childrenEntities.toArray();
+        HashSet<Entity> result = new HashSet<>(Arrays.asList(array));
+        return result;
     }
 
 

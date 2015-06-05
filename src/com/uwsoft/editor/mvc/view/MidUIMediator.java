@@ -24,6 +24,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
@@ -58,7 +59,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 Overlap2D.SHOW_SELECTIONS,
-                Overlap2D.HIDE_SELECTIONS
+                Overlap2D.HIDE_SELECTIONS,
+                ItemFactory.NEW_ITEM_ADDED
         };
     }
 
@@ -68,6 +70,9 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 createFollowersForAllItems();
+                break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                createFollower(notification.getBody());
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 BasicFollower follower = followers.get(notification.getBody());

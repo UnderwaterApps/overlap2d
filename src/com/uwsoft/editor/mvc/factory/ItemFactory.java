@@ -22,15 +22,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 
 /**
  * Created by azakhary on 6/5/2015.
  */
 public class ItemFactory {
+
+    private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.factory.ItemFactory";
+    public static final String NEW_ITEM_ADDED = EVENT_PREFIX + ".NEW_ITEM_ADDED";
 
     private EntityFactory entityFactory;
     private SceneLoader sceneLoader;
@@ -52,23 +56,40 @@ public class ItemFactory {
         return instance;
     }
 
-    public boolean createSimpleImage(String regionName, Vector2 position) {
-        LayerItemVO layer = sandbox.getSelectedLayer();
-        if (layer == null) return false;
+    private boolean setEssentialData(MainItemVO vo, Vector2 position) {
+        // TODO: sort out how layers work now
+        //LayerItemVO layer = sandbox.getSelectedLayer();
+        //if (layer == null) return false;
+
+        vo.layerName = "default";
+
+        // This is for grid
         position.x = MathUtils.floor(position.x / sandbox.getGridSize()) * sandbox.getGridSize();
         position.y = MathUtils.floor(position.y / sandbox.getGridSize()) * sandbox.getGridSize();
 
-        SimpleImageVO vo = new SimpleImageVO();
-        vo.imageName = regionName;
-        vo.layerName = layer.layerName;
-        // TODO: screent o stage coordinates
+        // TODO: screen to stage coordinates
+
         vo.x = position.x;
         vo.y = position.y;
 
-        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        return true;
+    }
 
+    public boolean createSimpleImage(String regionName, Vector2 position) {
+        SimpleImageVO vo = new SimpleImageVO();
+        vo.imageName = regionName;
+
+        if(!setEssentialData(vo, position)) return false;
+
+        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
         sandbox.getEngine().addEntity(entity);
 
+        Overlap2DFacade.getInstance().sendNotification(NEW_ITEM_ADDED, entity);
+
+        return true;
+    }
+
+    public boolean create9Patch(String regionName, Vector2 position) {
         return true;
     }
 
@@ -89,6 +110,10 @@ public class ItemFactory {
     }
 
     public boolean createParticleItem(String regionName, Vector2 position) {
+        return true;
+    }
+
+    public boolean createLabel(String regionName, Vector2 position) {
         return true;
     }
 }

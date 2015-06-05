@@ -53,7 +53,7 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
             boolean is9patch = region.splits != null;
             DraggableResource draggableResource = new DraggableResource(new ImageResource(region));
             if (is9patch) {
-                //draggableResource.setFactoryFunction(ItemFactory.get()::create9Patch);
+                draggableResource.setFactoryFunction(ItemFactory.get()::create9Patch);
             } else {
                 draggableResource.setFactoryFunction(ItemFactory.get()::createSimpleImage);
             }
