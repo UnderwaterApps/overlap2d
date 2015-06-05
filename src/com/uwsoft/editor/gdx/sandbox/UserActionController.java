@@ -109,17 +109,4 @@ public class UserActionController {
         //sandbox.getItemFactory().createItemFromLibrary(layer, name, vector2.x, vector2.y);
         return true;
     }
-
-    /**
-     *
-     */
-    public void undo() {
-        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
-        commandManager.undoCommand();
-    }
-
-    public void redo() {
-        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
-        commandManager.redoCommand();
-    }
 }

@@ -24,7 +24,6 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2D;
@@ -32,7 +31,6 @@ import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.gdx.ui.SandboxUI;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
@@ -97,8 +95,7 @@ public class Sandbox {
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private UIStage uiStage;
-    private UserActionController uac;
-    private ItemFactory itemFactory;
+    private ItemFactoryOld itemFactory;
     private ItemSelector selector;
     private Overlap2DFacade facade;
 
@@ -157,9 +154,8 @@ public class Sandbox {
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
-        uac = new UserActionController(this);
         selector = new ItemSelector(this);
-        itemFactory = new ItemFactory(this);
+        itemFactory = new ItemFactoryOld(this);
 
        
     }
@@ -189,15 +185,11 @@ public class Sandbox {
      * Getters *
      */
 
-    public UserActionController getUac() {
-        return uac;
-    }
-
     public UIStage getUIStage() {
         return uiStage;
     }
 
-    public ItemFactory getItemFactory() {
+    public ItemFactoryOld getItemFactory() {
         return itemFactory;
     }
 

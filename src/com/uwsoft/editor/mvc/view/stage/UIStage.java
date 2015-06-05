@@ -37,8 +37,6 @@ public class UIStage extends Stage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
-
-    public DropDown mainDropDown;
 	public Group sandBoxUIGroup;
 
 
@@ -68,9 +66,6 @@ public class UIStage extends Stage {
         addActor(contextMenuContainer);
 
         setListeners();
-
-
-        mainDropDown = new DropDown(contextMenuContainer);
     }
 
     public void resize(int width, int height) {
@@ -103,7 +98,6 @@ public class UIStage extends Stage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                mainDropDown.hide();
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
         });

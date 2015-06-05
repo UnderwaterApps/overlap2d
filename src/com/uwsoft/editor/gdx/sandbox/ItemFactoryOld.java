@@ -35,9 +35,9 @@ import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 /**
  * Provides methods to create panels of different types based on provided tools, and adds them to the scene.
  */
-public class ItemFactory {
+public class ItemFactoryOld {
 
-    public static final String PREFIX = "com.uwsoft.editor.gdx.sandbox.ItemFactory";
+    public static final String PREFIX = "com.uwsoft.editor.gdx.sandbox.ItemFactoryOld";
     public static final String NEW_ITEM_ADDED = PREFIX + ".NEW_ITEM_ADDED";
 //
     private final Overlap2DFacade facade;
@@ -46,7 +46,7 @@ public class ItemFactory {
     private SceneControlMediator sceneControl;
     private ItemControlMediator itemControl;
 
-    public ItemFactory(Sandbox sandbox) {
+    public ItemFactoryOld(Sandbox sandbox) {
         this.sandbox = sandbox;
         sceneControl = sandbox.getSceneControl();
         facade = Overlap2DFacade.getInstance();

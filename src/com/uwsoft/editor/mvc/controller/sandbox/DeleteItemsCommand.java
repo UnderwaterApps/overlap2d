@@ -18,14 +18,11 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.ArrayList;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.gdx.sandbox.ItemFactory;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 
 /**
@@ -70,7 +67,7 @@ public class DeleteItemsCommand extends RevertableCommand {
 //            IBaseItem itm = fakeItem.getItems().get(i);
 //            sandbox.sceneControl.getCurrentScene().addItem(itm);
 //            itm.updateDataVO();
-//            facade.sendNotification(ItemFactory.NEW_ITEM_ADDED, itm);
+//            facade.sendNotification(ItemFactoryOld.NEW_ITEM_ADDED, itm);
 //            finalItems.add(itm);
 //        }
 //

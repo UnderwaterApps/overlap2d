@@ -29,6 +29,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
@@ -119,10 +120,12 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 facade.sendNotification(Sandbox.ACTION_PASTE);
                 break;
             case Overlap2DMenuBar.UNDO:
-                sandbox.getUac().undo();
+                CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
+                commandManager.undoCommand();
                 break;
             case Overlap2DMenuBar.REDO:
-                sandbox.getUac().redo();
+                commandManager = facade.retrieveProxy(CommandManager.NAME);
+                commandManager.redoCommand();
                 break;
         }
     }

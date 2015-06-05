@@ -32,7 +32,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.sandbox.ItemFactory;
+import com.uwsoft.editor.gdx.sandbox.ItemFactoryOld;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -105,7 +105,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                ItemFactory.NEW_ITEM_ADDED,
+                ItemFactoryOld.NEW_ITEM_ADDED,
                 Overlap2D.OPENED_PREVIOUS_COMPOSITE
         };
     }
@@ -120,7 +120,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case UIToolBoxMediator.TOOL_SELECTED:
                 setCurrentTool(notification.getBody());
                 break;
-            case ItemFactory.NEW_ITEM_ADDED:
+            case ItemFactoryOld.NEW_ITEM_ADDED:
             	//TODO add listener and uncomment
                 //((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
                 break;

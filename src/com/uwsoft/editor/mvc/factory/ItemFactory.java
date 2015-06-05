@@ -16,11 +16,25 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.dialogs;
+package com.uwsoft.editor.mvc.factory;
+
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 /**
- * Created by CyberJoe on 3/18/2015.
+ * Created by azakhary on 6/5/2015.
  */
-public interface DialogListener {
+public class ItemFactory {
+
+    private EntityFactory entityFactory;
+
+    private static ItemFactory instance;
+
+    private ItemFactory() {
+
+    }
+
+    public static ItemFactory get() {
+
+    }
 
 }
