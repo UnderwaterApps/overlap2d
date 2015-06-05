@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,7 +30,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void doAction() {
-        Set<Entity> items = new HashSet<>(getNotification().getBody());
+        Set<Entity> items = new HashSet<Entity>(getNotification().getBody());
         Sandbox.getInstance().getSelector().releaseSelections(items);
     }
 
