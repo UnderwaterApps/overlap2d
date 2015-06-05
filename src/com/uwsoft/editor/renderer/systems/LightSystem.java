@@ -44,7 +44,10 @@ public class LightSystem extends IteratingSystem {
 			relativeX+=parentTransformComponent.x;
 			relativeY+=parentTransformComponent.y;
 			relativeRotation+=parentTransformComponent.rotation;
-			parentNodeComponent = nodeComponentMapper.get(parentEntity);
+			parentNodeComponent = parentNodeComponentMapper.get(parentEntity);
+			if(parentNodeComponent == null){
+				break;
+			}
 			parentEntity = parentNodeComponent.parentEntity;
 		}
 		

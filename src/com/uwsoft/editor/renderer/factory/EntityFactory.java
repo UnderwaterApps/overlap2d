@@ -45,7 +45,7 @@ public class EntityFactory {
 		simpleImageComponentFactory = new SimpleImageComponentFactory(rayHandler, world, rm);
 		spineComponentFactory = new SpineComponentFactory(rayHandler, world, rm);
 		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
-		spriterComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
+		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
 	}
 
 

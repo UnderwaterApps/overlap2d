@@ -10,6 +10,8 @@ import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.brashmonkey.spriter.Player;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
@@ -26,6 +28,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<ViewPortComponent> viewPortMapper = ComponentMapper.getFor(ViewPortComponent.class);
 	private ComponentMapper<CompositeTransformComponent> compositeTransformMapper = ComponentMapper.getFor(CompositeTransformComponent.class);
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
+	private ComponentMapper<ParentNodeComponent> parentNodeMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
 	private ComponentMapper<TextureRegionComponent> textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
 	private ComponentMapper<ParticleComponent> particleMapper = ComponentMapper.getFor(ParticleComponent.class);
@@ -33,11 +36,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<SpriterComponent> spriterMapper = ComponentMapper.getFor(SpriterComponent.class);
 	private ComponentMapper<SpineDataComponent> spineMapper = ComponentMapper.getFor(SpineDataComponent.class);
 
-	private CompositeTransformComponent compositeTransformComponent;
-	private NodeComponent nodeComponent;
-	private TransformComponent curTransform;
+//	private CompositeTransformComponent curCompositeTransformComponent;
+//	private NodeComponent nodeComponent;
+//	private TransformComponent curTransform;
 	
-	private Entity currentComposite = null;
+	//private Entity currentComposite = null;
 	
 	public Batch batch;
 	
@@ -63,19 +66,22 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private void drawRecursively(Entity rootEntity) {
 		
 		
-		currentComposite = rootEntity;
-		compositeTransformComponent = compositeTransformMapper.get(currentComposite);
-		curTransform = transformMapper.get(currentComposite);
-		nodeComponent = nodeMapper.get(currentComposite);
+		//currentComposite = rootEntity;
+		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		
-		if (compositeTransformComponent.transform) applyTransform(batch, computeTransform());
-		drawChildren(rootEntity, batch);
-		if (compositeTransformComponent.transform) resetTransform(batch);
+		
+		if (curCompositeTransformComponent.transform){
+			computeTransform(rootEntity);
+			applyTransform(rootEntity, batch);
+		}
+		drawChildren(rootEntity, batch, curCompositeTransformComponent);
+		if (curCompositeTransformComponent.transform) resetTransform(rootEntity, batch);
 	}
 
-	private void drawChildren(Entity rootEntity, Batch batch) {
+	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent) {
+		NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		Entity[] children = nodeComponent.children.begin();
-		if (compositeTransformComponent.transform) {
+		if (curCompositeTransformComponent.transform) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 				
@@ -121,89 +127,116 @@ public class Overlap2dRenderer extends IteratingSystem {
 				
 				if(childNodeComponent !=null){
 					drawRecursively(child);
+					//currentComposite = rootEntity;
 				}
 			}
 		} else {
 			// No transform for this group, offset each child.
 
-			float offsetX = curTransform.x, offsetY = curTransform.y;
-			curTransform.x = 0;
-			curTransform.y = 0;
-			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
-				Entity child = children[i];
-				
-				TextureRegionComponent childTextureRegionComponent = textureRegionMapper.get(child);
-				TransformComponent childTransformComponent = transformMapper.get(child); 
-				NodeComponent childNodeComponent = nodeMapper.get(child);
-				
-				//TODO visibility and parent Alpha thing
-				//if (!child.isVisible()) continue;
-				//if (!child.isVisible()) continue;
-				
-				float cx = childTransformComponent.x, cy = childTransformComponent.y;
-				childTransformComponent.x = cx + offsetX;
-				childTransformComponent.y = cy + offsetY;
-				if(childTextureRegionComponent != null){
-					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, 0, 0, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
-				}
-				childTransformComponent.x = cx;
-				childTransformComponent.y = cy;
-				
-				
-				//TODO other things lights, particles, sprite spine
-				
-				if(childNodeComponent !=null){
-					drawRecursively(child);
-				}
-			}
-			curTransform.x = offsetX;
-			curTransform.y = offsetY;
+//			float offsetX = curTransform.x, offsetY = curTransform.y;
+//			curTransform.x = 0;
+//			curTransform.y = 0;
+//			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
+//				Entity child = children[i];
+//				
+//				TextureRegionComponent childTextureRegionComponent = textureRegionMapper.get(child);
+//				TransformComponent childTransformComponent = transformMapper.get(child); 
+//				NodeComponent childNodeComponent = nodeMapper.get(child);
+//				
+//				//TODO visibility and parent Alpha thing
+//				//if (!child.isVisible()) continue;
+//				//if (!child.isVisible()) continue;
+//				
+//				float cx = childTransformComponent.x, cy = childTransformComponent.y;
+//				childTransformComponent.x = cx + offsetX;
+//				childTransformComponent.y = cy + offsetY;
+//				if(childTextureRegionComponent != null){
+//					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, 0, 0, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
+//				}
+//				childTransformComponent.x = cx;
+//				childTransformComponent.y = cy;
+//				
+//				
+//				//TODO other things lights, particles, sprite spine
+//				
+//				if(childNodeComponent !=null){
+//					drawRecursively(child);
+//				}
+//			}
+//			curTransform.x = offsetX;
+//			curTransform.y = offsetY;
 		}
+		nodeComponent.children.end();
 	}
 
-	/** Returns the transform for this group's coordinate system. */
-	protected Matrix4 computeTransform () {
-		
-		Affine2 worldTransform = compositeTransformComponent.worldTransform;
+	/** Returns the transform for this group's coordinate system. 
+	 * @param rootEntity */
+	protected Matrix4 computeTransform (Entity rootEntity) {
+		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
+		//NodeComponent nodeComponent = nodeMapper.get(rootEntity);
+		ParentNodeComponent parentNodeComponent = parentNodeMapper.get(rootEntity);
+		TransformComponent curTransform = transformMapper.get(rootEntity);
+		Affine2 worldTransform = curCompositeTransformComponent.worldTransform;
 		//TODO orogin thing
 		float originX = 0;
 		float originY = 0;
+		float x = curTransform.x;
+		float y = curTransform.y;
 		float rotation = curTransform.rotation;
 		float scaleX = curTransform.scaleX;
 		float scaleY = curTransform.scaleY;
 
-		worldTransform.setToTrnRotScl(curTransform.x + originX, curTransform.y + originY, rotation, scaleX, scaleY);
+		worldTransform.setToTrnRotScl(x + originX, y + originY, rotation, scaleX, scaleY);
 		if (originX != 0 || originY != 0) worldTransform.translate(-originX, -originY);
 
 		// Find the first parent that transforms.
 		
 		CompositeTransformComponent parentTransformComponent = null;
-		NodeComponent parentNodeComponent;
+		//NodeComponent parentNodeComponent;
 		
-		Entity parentEntity = nodeComponent.parentEntity;
-		while (parentEntity != null) {
-			parentTransformComponent = compositeTransformMapper.get(parentEntity);
-			parentNodeComponent = nodeMapper.get(parentEntity);
-			if (parentTransformComponent.transform) break;
+		Entity parentEntity = null;
+		if(parentNodeComponent != null){
 			parentEntity = parentNodeComponent.parentEntity;
 		}
-		if (parentEntity != null) compositeTransformComponent.worldTransform.preMul(parentTransformComponent.worldTransform);
+//		if (parentEntity != null){
+//			
+//		}
+		
+//		while (parentEntity != null) {
+//			parentNodeComponent = nodeMapper.get(parentEntity);
+//			if (parentTransformComponent.transform) break;
+//			System.out.println("Gand");
+//			parentEntity = parentNodeComponent.parentEntity;
+//			parentTransformComponent = compositeTransformMapper.get(parentEntity);
+//			
+//		}
+		
+		if (parentEntity != null){
+			parentTransformComponent = compositeTransformMapper.get(parentEntity);
+			worldTransform.preMul(parentTransformComponent.worldTransform);
+			MainItemComponent main = parentEntity.getComponent(MainItemComponent.class);
+			System.out.println("NAME " + main.itemIdentifier);
+		}
 
-		compositeTransformComponent.computedTransform.set(worldTransform);
-		return compositeTransformComponent.computedTransform;
+		curCompositeTransformComponent.computedTransform.set(worldTransform);
+		return curCompositeTransformComponent.computedTransform;
 	}
 
 	/** Set the batch's transformation matrix, often with the result of {@link #computeTransform()}. Note this causes the batch to
-	 * be flushed. {@link #resetTransform(Batch)} will restore the transform to what it was before this call. */
-	protected void applyTransform (Batch batch, Matrix4 transform) {
-		compositeTransformComponent.oldTransform.set(batch.getTransformMatrix());
-		batch.setTransformMatrix(transform);
+	 * be flushed. {@link #resetTransform(Batch)} will restore the transform to what it was before this call. 
+	 * @param rootEntity */
+	protected void applyTransform (Entity rootEntity, Batch batch) {
+		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
+		curCompositeTransformComponent.oldTransform.set(batch.getTransformMatrix());
+		batch.setTransformMatrix(curCompositeTransformComponent.computedTransform);
 	}
 
 	/** Restores the batch transform to what it was before {@link #applyTransform(Batch, Matrix4)}. Note this causes the batch to be
-	 * flushed. */
-	protected void resetTransform (Batch batch) {
-		batch.setTransformMatrix(compositeTransformComponent.oldTransform);
+	 * flushed. 
+	 * @param rootEntity */
+	protected void resetTransform (Entity rootEntity, Batch batch) {
+		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
+		batch.setTransformMatrix(curCompositeTransformComponent.oldTransform);
 	}
 	
 }
