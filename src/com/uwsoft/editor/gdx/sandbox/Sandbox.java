@@ -19,6 +19,7 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
@@ -466,32 +467,6 @@ public class Sandbox {
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
     }
 
-
-    /**
-     * TODO: put this in different place, not sandbox specific
-     * @param items
-     */
-    public void putItemsToClipboard(ArrayList<Entity> items) {
-    	//TODO fix and uncomment
-//        CompositeVO tempHolder = new CompositeVO();
-//        Json json = new Json();
-//        json.setOutputType(JsonWriter.OutputType.json);
-//        Actor actor = (Actor) items.get(0);
-//        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
-//        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
-//        for (IBaseItem item : items) {
-//            tempHolder.addItem(item.getDataVO());
-//            actor = (Actor) item;
-//            if (actor.getX() - cameraPos.x < vector3.x) {
-//                vector3.x = actor.getX() - cameraPos.x;
-//            }
-//            if (actor.getY() - cameraPos.y < vector3.y) {
-//                vector3.y = actor.getY() - cameraPos.y;
-//            }
-//        }
-//        fakeClipboard = json.toJson(tempHolder);
-//        copedItemCameraOffset = vector3;
-    }
     
     public Entity getRootEntity(){
     	return sceneControl.getRootEntity();
