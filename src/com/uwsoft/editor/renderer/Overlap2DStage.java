@@ -3,6 +3,7 @@ package com.uwsoft.editor.renderer;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -133,7 +134,13 @@ public class Overlap2DStage extends Stage {
         }
 
         if(essentials.rayHandler != null) {
-            essentials.rayHandler.setCombinedMatrix(getCamera().combined.scl(1/PhysicsBodyLoader.SCALE));
+        	OrthographicCamera camera = (OrthographicCamera) getCamera();
+        	essentials.rayHandler.setCombinedMatrix(camera.combined.scl(1/PhysicsBodyLoader.SCALE),
+        			camera.position.x,
+    				camera.position.y,
+    				camera.viewportWidth * camera.zoom,
+    				camera.viewportHeight * camera.zoom); 
+            //essentials.rayHandler.setCombinedMatrix(getCamera().combined.scl(1/PhysicsBodyLoader.SCALE));
         }
 
 		super.act(delta);
