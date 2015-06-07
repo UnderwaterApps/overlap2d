@@ -4,6 +4,7 @@ package com.uwsoft.editor.renderer;
 import box2dLight.RayHandler;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -114,7 +115,7 @@ public class Overlap2DStage extends Stage {
 		rayHandler.setBlur(true);
 		rayHandler.setBlurNum(3);
 		rayHandler.setShadows(true);
-		rayHandler.setCombinedMatrix(getCamera().combined);
+		rayHandler.setCombinedMatrix((OrthographicCamera) getCamera());
 
         essentials.rayHandler = rayHandler;
 	}
