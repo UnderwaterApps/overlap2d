@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
@@ -55,7 +56,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 		Camera camera = ViewPortComponent.viewPort.getCamera();
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
-		
 		batch.begin();
 		drawRecursively(entity);
 		batch.end();
@@ -214,8 +214,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 		if (parentEntity != null){
 			parentTransformComponent = compositeTransformMapper.get(parentEntity);
 			worldTransform.preMul(parentTransformComponent.worldTransform);
-			MainItemComponent main = parentEntity.getComponent(MainItemComponent.class);
-			System.out.println("NAME " + main.itemIdentifier);
+			//MainItemComponent main = parentEntity.getComponent(MainItemComponent.class);
+			//System.out.println("NAME " + main.itemIdentifier);
 		}
 
 		curCompositeTransformComponent.computedTransform.set(worldTransform);

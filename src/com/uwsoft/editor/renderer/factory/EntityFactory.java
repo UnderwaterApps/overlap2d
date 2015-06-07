@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LabelVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
@@ -31,7 +32,7 @@ public class EntityFactory {
 	public IResourceRetriever rm = null;
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
-			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory;
+			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory;
 	
 	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
 	
@@ -46,6 +47,7 @@ public class EntityFactory {
 		spineComponentFactory = new SpineComponentFactory(rayHandler, world, rm);
 		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
 		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
+		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
 	}
 
 
@@ -56,6 +58,13 @@ public class EntityFactory {
 
 		simpleImageComponentFactory.createComponents(root, entity, vo);
 		
+		return entity;
+	}
+	
+	public Entity createEntity(Entity root, LabelVO vo) {
+		Entity entity = new Entity();
+		entity.flags = LABEL_TYPE;
+		labelComponentFactory.createComponents(root, entity, vo);
 		return entity;
 	}
 	

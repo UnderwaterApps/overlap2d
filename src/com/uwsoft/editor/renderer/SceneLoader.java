@@ -265,7 +265,8 @@ public class SceneLoader {
 		}
 
 		for (int i = 0; i < vo.sLabels.size(); i++) {
-
+			Entity entity = entityFactory.createEntity(root, vo.sLabels.get(i));
+			engine.addEntity(entity);
 		}
 
 		for (int i = 0; i < vo.sParticleEffects.size(); i++) {

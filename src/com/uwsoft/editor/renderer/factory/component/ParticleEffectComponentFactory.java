@@ -40,11 +40,11 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
+    	createParticleCompononet(entity, (ParticleEffectVO) vo);
         createCommonComponents(entity, vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
-        createParticleCompononet(entity, (ParticleEffectVO) vo);
     }
 
     @Override
