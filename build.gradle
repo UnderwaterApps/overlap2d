@@ -5,15 +5,17 @@ sourceCompatibility = 1.7
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
-    gdxVersion = '1.5.3'
-    box2dlightsVersion = '1.3'
+    gdxVersion = '1.6.2'
+    box2DLightsVersion = '1.4'
+    reflectasmVersion = '1.10.0'
 }
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
-    compile "com.badlogicgames.box2dlights:box2dlights:$box2dlightsVersion"
+    compile "com.esotericsoftware:reflectasm:$reflectasmVersion"
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+    compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
 }
 
 repositories {
