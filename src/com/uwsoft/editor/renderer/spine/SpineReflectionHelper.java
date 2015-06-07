@@ -1,11 +1,12 @@
 package com.uwsoft.editor.renderer.spine;
 
-import java.lang.reflect.Constructor;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.esotericsoftware.reflectasm.ConstructorAccess;
-import com.esotericsoftware.reflectasm.MethodAccess;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.Constructor;
+import com.badlogic.gdx.utils.reflect.Method;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 
 public class SpineReflectionHelper {
 	public boolean isSpineAviable = true;
@@ -17,183 +18,74 @@ public class SpineReflectionHelper {
 	public Class<?> animationClass;
 	public Class<?> slotClass;
 	public Class<?> regionAttachmentClass;
+	private Class<?> skeletonDataClass;
 	private Class<?> skeletonRendererClass;
 	
-	public Constructor<?> animationStateConstructorAccess;
-	public Constructor<?> skeletonConstructorAccess;
-	public Constructor<?> animationStateDataConstructorAccess;
-	public Constructor<?> skeletonJsonConstructorAccess;
-	private ConstructorAccess<?> skeletonRendererConstructorAccess;
+	public Constructor animationStateConstructorAccess;
+	public Constructor skeletonConstructorAccess;
+	public Constructor animationStateDataConstructorAccess;
+	public Constructor skeletonJsonConstructorAccess;
+	private Constructor skeletonRendererConstructorAccess;
 	
-	public MethodAccess skeletonClassMethodAccess;
-	public MethodAccess stateObjectMethodAccess;
-	public MethodAccess animationClassMethodAccess;
-	public MethodAccess slotClassMethodAccess;
-	public MethodAccess regionAttachmentMethodAccess;
-	public MethodAccess skeletonRendererMethodAccess;
-	
-	public int updateWorldTransformMethodIndex;
-	public int setAnimationMethodIndex;
-	public int updateMethodIndex;
-	public int applyMethodIndex;
-	public int setPositionMethodIndex;
-	public int getAnimNameMethodIndex;
-	public int getSlotsMethodIndex;
-	public int getAttachmentMethodIndex;
-	public int updateWorldVerticesMethodIndex;
-	public int getWorldVerticesIndex;
-	public int skeletonRendererDrawMethodIndex;
-	
+	public Method updateWorldTransformMethodIndex;
+	public Method setAnimationMethodIndex;
+	public Method updateMethodIndex;
+	public Method applyMethodIndex;
+	public Method setPositionMethodIndex;
+	public Method getAnimNameMethodIndex;
+	public Method getSlotsMethodIndex;
+	public Method getAttachmentMethodIndex;
+	public Method updateWorldVerticesMethodIndex;
+	public Method getWorldVerticesIndex;
+	public Method skeletonRendererDrawMethodIndex;
+	public Method getAnimationMethodIndex;
 
 	public Object skeletonRendererObject;
 
-	private Class<?> skeletonDataClass;
-
-	public int getAnimationMethodIndex;
-
-	public MethodAccess skeletonDataClassMethodAccess;
-
 	public SpineReflectionHelper(){
-		try {
-			skeletonJsonClass = Class.forName("com.esotericsoftware.spine.SkeletonJson");
-		} catch (ClassNotFoundException e) {
+		try{
+			//all needed classes
+			skeletonJsonClass = ClassReflection.forName("com.esotericsoftware.spine.SkeletonJson");
+			skeletonClass = ClassReflection.forName("com.esotericsoftware.spine.Skeleton");
+			skeletonDataClass = ClassReflection.forName("com.esotericsoftware.spine.SkeletonData");
+			animationStateDataClass = ClassReflection.forName("com.esotericsoftware.spine.AnimationStateData");
+			stateClass = ClassReflection.forName("com.esotericsoftware.spine.AnimationState");
+			animationClass = ClassReflection.forName("com.esotericsoftware.spine.Animation");
+			skeletonRendererClass = ClassReflection.forName("com.esotericsoftware.spine.SkeletonRenderer");
+			slotClass = ClassReflection.forName("com.esotericsoftware.spine.Slot");
+			regionAttachmentClass = ClassReflection.forName("com.esotericsoftware.spine.attachments.RegionAttachment");
+			
+			//all needed constructors
+			skeletonJsonConstructorAccess = ClassReflection.getConstructor(skeletonJsonClass, TextureAtlas.class);
+			skeletonConstructorAccess = ClassReflection.getConstructor(skeletonClass, skeletonDataClass);
+			animationStateDataConstructorAccess = ClassReflection.getConstructor(animationStateDataClass, skeletonDataClass);
+			animationStateConstructorAccess = ClassReflection.getConstructor(stateClass, animationStateDataClass);
+			skeletonRendererConstructorAccess = ClassReflection.getConstructor(skeletonRendererClass);
+			
+			//all needed methods
+			updateWorldTransformMethodIndex = ClassReflection.getMethod(skeletonClass, "updateWorldTransform");		
+			setPositionMethodIndex = ClassReflection.getMethod(skeletonClass,"setPosition", float.class, float.class);
+			getSlotsMethodIndex = ClassReflection.getMethod(skeletonClass, "getSlots");
+			getAnimationMethodIndex = ClassReflection.getMethod(skeletonDataClass,"getAnimations");
+			setAnimationMethodIndex = ClassReflection.getMethod(stateClass, "setAnimation", int.class, String.class, boolean.class);
+			updateMethodIndex = ClassReflection.getMethod(stateClass,"update", float.class);
+			applyMethodIndex = ClassReflection.getMethod(stateClass,"apply", skeletonClass);
+			getAnimNameMethodIndex = ClassReflection.getMethod(animationClass, "getName");
+			getAttachmentMethodIndex = ClassReflection.getMethod(slotClass, "getAttachment");
+			updateWorldVerticesMethodIndex = ClassReflection.getMethod(regionAttachmentClass, "updateWorldVertices", slotClass, boolean.class);
+			getWorldVerticesIndex = ClassReflection.getMethod(regionAttachmentClass, "getWorldVertices");
+			
+			//skeletonRendererMethodAccess = MethodAccess.get(skeletonRendererClass);
+			skeletonRendererDrawMethodIndex = ClassReflection.getMethod(skeletonRendererClass, "draw", Batch.class, skeletonClass);
+			
+			//instance of SkeletonRenderrer
+			skeletonRendererObject = skeletonRendererConstructorAccess.newInstance();
+			
+		}catch (ReflectionException e) {
 			isSpineAviable = false;
-			//e.printStackTrace();
+			e.printStackTrace();
 			return;
 		}
 		
-		try {
-			skeletonJsonConstructorAccess = skeletonJsonClass.getConstructor(TextureAtlas.class);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			//e1.printStackTrace();
-		}
-		
-		try {
-			skeletonClass = Class.forName("com.esotericsoftware.spine.Skeleton");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			skeletonDataClass = Class.forName("com.esotericsoftware.spine.SkeletonData");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-
-		try {
-			skeletonConstructorAccess = skeletonClass.getConstructor(skeletonDataClass);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			//e1.printStackTrace();
-		}
-		
-		try {
-			animationStateDataClass = Class.forName("com.esotericsoftware.spine.AnimationStateData");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			animationStateDataConstructorAccess = animationStateDataClass.getConstructor(skeletonDataClass);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			//e1.printStackTrace();
-		}
-		
-		try {
-			stateClass = Class.forName("com.esotericsoftware.spine.AnimationState");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			animationStateConstructorAccess = stateClass.getConstructor(animationStateDataClass);
-		} catch (NoSuchMethodException | SecurityException e1) {
-			isSpineAviable = false;
-			//e1.printStackTrace();
-		}
-		
-		try {
-			animationClass = Class.forName("com.esotericsoftware.spine.Animation");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			skeletonClassMethodAccess = MethodAccess.get(skeletonClass);
-		}catch(Exception e){
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			skeletonRendererClass = Class.forName("com.esotericsoftware.spine.SkeletonRenderer");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		try {
-			slotClass = Class.forName("com.esotericsoftware.spine.Slot");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		updateWorldTransformMethodIndex = skeletonClassMethodAccess.getIndex("updateWorldTransform");		
-		setPositionMethodIndex = skeletonClassMethodAccess.getIndex("setPosition");
-		
-		skeletonDataClassMethodAccess = MethodAccess.get(skeletonDataClass);
-		getAnimationMethodIndex = skeletonDataClassMethodAccess.getIndex("getAnimations");
-		
-		
-		stateObjectMethodAccess = MethodAccess.get(stateClass);
-		setAnimationMethodIndex = stateObjectMethodAccess.getIndex("setAnimation",int.class,String.class,boolean.class);
-		
-		updateMethodIndex = stateObjectMethodAccess.getIndex("update");
-		applyMethodIndex = stateObjectMethodAccess.getIndex("apply");
-		
-		animationClassMethodAccess = MethodAccess.get(animationClass);
-		getAnimNameMethodIndex = animationClassMethodAccess.getIndex("getName");
-		
-		
-		getSlotsMethodIndex = skeletonClassMethodAccess.getIndex("getSlots");
-		
-		slotClassMethodAccess = MethodAccess.get(slotClass);
-		getAttachmentMethodIndex = slotClassMethodAccess.getIndex("getAttachment");
-		
-		try {
-			regionAttachmentClass = Class.forName("com.esotericsoftware.spine.attachments.RegionAttachment");
-		} catch (ClassNotFoundException e) {
-			isSpineAviable = false;
-			//e.printStackTrace();
-			return;
-		}
-		
-		regionAttachmentMethodAccess = MethodAccess.get(regionAttachmentClass);
-		updateWorldVerticesMethodIndex = regionAttachmentMethodAccess.getIndex("updateWorldVertices");
-		
-		getWorldVerticesIndex = regionAttachmentMethodAccess.getIndex("getWorldVertices");
-		
-		
-		
-		
-		skeletonRendererConstructorAccess = ConstructorAccess.get(skeletonRendererClass);
-		
-		skeletonRendererMethodAccess = MethodAccess.get(skeletonRendererClass);
-		skeletonRendererDrawMethodIndex = skeletonRendererMethodAccess.getIndex("draw",Batch.class, skeletonClass);
-		
-		skeletonRendererObject = skeletonRendererConstructorAccess.newInstance();
 	}
 }
