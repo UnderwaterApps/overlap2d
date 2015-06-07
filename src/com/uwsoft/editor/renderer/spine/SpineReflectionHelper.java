@@ -83,7 +83,7 @@ public class SpineReflectionHelper {
 			
 		}catch (ReflectionException e) {
 			isSpineAviable = false;
-			e.printStackTrace();
+			//e.printStackTrace();
 			return;
 		}
 		
