@@ -44,20 +44,19 @@ public class UIStage extends Stage {
 
         facade = Overlap2DFacade.getInstance();
 
-        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
-        sandBoxUIGroup = midUIMediator.getViewComponent();
-        addActor(sandBoxUIGroup);
-        
+        //dummy target is basically the target of drop of items from resoruce panel
         dummyTarget = new Group();
         dummyTarget.setWidth(getWidth());
         dummyTarget.setHeight(getHeight());
         dummyTarget.setY(0);
         dummyTarget.setX(0);
 
-        //dummy target is basically the target of drop of items from resoruce panel
         addActor(dummyTarget);
-               
 
+        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
+        sandBoxUIGroup = midUIMediator.getViewComponent();
+        addActor(sandBoxUIGroup);
+        
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();
 

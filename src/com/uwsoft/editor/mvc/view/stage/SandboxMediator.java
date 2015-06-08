@@ -199,6 +199,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             Vector2 coords = getStageCoordinates();
             return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
+
         
         @Override
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
