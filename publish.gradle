@@ -102,6 +102,11 @@ uploadArchives {
                            name 'Gevorg Kopalyan'
 						   email 'gevorg.kopalyan@gmail.com'
                        }
+                       developer {
+                           id 'azakhary'
+                           name 'Avetis Zakharyan'
+						   email 'avetis.zakharyan@gmail.com'
+                       }
                    }
                }
             }
