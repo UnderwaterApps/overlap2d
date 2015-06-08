@@ -27,6 +27,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
@@ -62,7 +63,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 Overlap2D.SHOW_SELECTIONS,
                 Overlap2D.HIDE_SELECTIONS,
                 ItemFactory.NEW_ITEM_ADDED,
-                PanTool.SCENE_PANNED
+                PanTool.SCENE_PANNED,
+                UIToolBoxMediator.TOOL_SELECTED
         };
     }
 
@@ -93,6 +95,13 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 break;
             case Overlap2D.SHOW_SELECTIONS:
                 showAllFollowers(notification.getBody());
+                break;
+            case UIToolBoxMediator.TOOL_SELECTED:
+                if(notification.getBody().equals(TransformTool.NAME)) {
+                    setMode(BasicFollower.FollowerMode.transform);
+                } else {
+                    setMode(BasicFollower.FollowerMode.normal);
+                }
                 break;
         }
     }

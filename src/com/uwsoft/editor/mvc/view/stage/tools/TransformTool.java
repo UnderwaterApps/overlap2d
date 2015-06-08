@@ -57,9 +57,6 @@ public class TransformTool extends SelectionTool {
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         //cursorManager.setCursor(CursorManager.CROSS);
-
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.setMode(BasicFollower.FollowerMode.transform);
     }
 
     @Override

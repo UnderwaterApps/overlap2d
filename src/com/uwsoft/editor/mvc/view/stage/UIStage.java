@@ -56,7 +56,7 @@ public class UIStage extends Stage {
         MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
         sandBoxUIGroup = midUIMediator.getViewComponent();
         addActor(sandBoxUIGroup);
-        
+
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();
 
