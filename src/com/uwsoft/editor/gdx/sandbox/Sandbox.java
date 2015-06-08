@@ -26,9 +26,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
@@ -499,8 +501,20 @@ public class Sandbox {
 	}
 
     public OrthographicCamera getCamera() {
-        ViewPortComponent viewPortComponent = ComponentRetriever.get(getRootEntity(), ViewPortComponent.class);
+        return (OrthographicCamera) getViewport().getCamera();
+    }
 
-        return (OrthographicCamera) viewPortComponent.viewPort.getCamera();
+    public Viewport getViewport() {
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(getRootEntity(), ViewPortComponent.class);
+        return viewPortComponent.viewPort;
+    }
+
+    public Vector2 stageToScreenCoordinates(float x, float y) {
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+        x = x + (viewport.getScreenWidth()/2 - camera.position.x);
+        y = y + (viewport.getScreenHeight()/2 - camera.position.y);
+
+        return new Vector2(x, y);
     }
 }

@@ -19,11 +19,15 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -54,14 +58,17 @@ public abstract class BasicFollower extends Group {
     }
 
     public void update() {
-        // TODO: get items position based on current zoom
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+
         // TODO: Make poolable vector
     	Vector2 localCoords = new Vector2(0, 0);
     	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
-        setX((int)(localCoords.x));
-        setY((int)(localCoords.y));
-        setWidth(dimensionsComponent.width * transformComponent.scaleX);
-        setHeight(dimensionsComponent.height * transformComponent.scaleY);
+
+        setX((int)(localCoords.x + (viewport.getScreenWidth()/2 - camera.position.x)));
+        setY((int)(localCoords.y + (viewport.getScreenHeight()/2 - camera.position.y)));
+        setWidth(dimensionsComponent.width * transformComponent.scaleX * camera.zoom);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY * camera.zoom);
     }
 
     public void show() {
