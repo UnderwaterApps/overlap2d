@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
@@ -15,6 +16,8 @@ import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class LabelComponentFactory extends ComponentFactory{
+	
+	private int labelDefaultSize = 12;
 
 	public LabelComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
 		super(rayHandler, world, rm);
@@ -30,21 +33,31 @@ public class LabelComponentFactory extends ComponentFactory{
 		 createLabelCompononet(entity, (LabelVO) vo);
 	}
 
-	 @Override
-	    protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
-	        DimensionsComponent component = new DimensionsComponent();
-	        component.height = 100;
-	        component.width = 100;
+	@Override
+	protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
+        DimensionsComponent component = new DimensionsComponent();
+        component.height = ((LabelVO) vo).height;
+        component.width = ((LabelVO) vo).width;
 
-	        entity.add(component);
-	        return component;
-	    }
+        entity.add(component);
+        return component;
+    }
 
-	    protected LabelComponent createLabelCompononet(Entity entity, LabelVO vo) {
-	        //TODO
-	    	LabelComponent component = new LabelComponent();
-	        entity.add(component);
-	        return component;
-	    }
+    protected LabelComponent createLabelCompononet(Entity entity, LabelVO vo) {
+        //TODO
+    	LabelComponent component = new LabelComponent(vo.text, generateStyle(rm, vo.style, vo.size));
+        entity.add(component);
+        return component;
+    }
+    
+    
+    private LabelStyle generateStyle(IResourceRetriever rManager, String fontName, int size) {
+
+        if (size == 0) {
+            size = labelDefaultSize;
+        }
+        LabelStyle style = new LabelStyle(rManager.getBitmapFont(fontName, size), null);
+        return style;
+    }
 
 }
