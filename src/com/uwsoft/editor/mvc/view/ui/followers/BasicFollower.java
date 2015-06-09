@@ -65,6 +65,9 @@ public abstract class BasicFollower extends Group {
         setY((int)(localCoords.y + (viewport.getScreenHeight()/2 - camera.position.y)));
         setWidth(dimensionsComponent.width * transformComponent.scaleX * camera.zoom);
         setHeight(dimensionsComponent.height * transformComponent.scaleY * camera.zoom);
+
+        //setOrigin(transformComponent.originX, transformComponent.originY);
+        setRotation(transformComponent.rotation);
     }
 
     public void show() {

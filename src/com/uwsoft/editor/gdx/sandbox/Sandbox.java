@@ -517,4 +517,13 @@ public class Sandbox {
 
         return new Vector2(x, y);
     }
+
+    public Vector2 screenToStageCoordinates(float x, float y) {
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+        x = x - (viewport.getScreenWidth()/2 - camera.position.x);
+        y = y - (viewport.getScreenHeight()/2 - camera.position.y);
+
+        return new Vector2(x, y);
+    }
 }

@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -43,10 +44,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     public static final String NAME = "TRANSFORM_TOOL";
 
-    private TransformComponent transformComponent;
-    private DimensionsComponent dimensionsComponent;
-
-
+    private float lastTransformAngle = 0;
+    private float lastEntityAngle = 0;
 
     @Override
     public void initTool() {
@@ -55,6 +54,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         if(!sandbox.getSelector().selectionIsOneItem()){
             sandbox.getSelector().clearSelections();
         }
+
+        updateListeners();
 
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
@@ -90,10 +91,25 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
+
+        if(anchor == NormalSelectionFollower.ROTATION_LT ||
+                anchor == NormalSelectionFollower.ROTATION_RT ||
+                anchor == NormalSelectionFollower.ROTATION_RB ||
+                anchor == NormalSelectionFollower.ROTATION_LB) {
+
+            // get mouse stage coordinates
+            TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
+
+            lastTransformAngle = mousePoint.angle();
+            lastEntityAngle = transformComponent.rotation;
+        }
     }
 
     @Override
     public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
+        Sandbox sandbox = Sandbox.getInstance();
         TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
 
@@ -144,8 +160,6 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
                 newHeight = y - transformComponent.y;
                 newWidth = x - transformComponent.x;
                 break;
-            default:
-                return;
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
@@ -164,6 +178,15 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         if(anchor != NormalSelectionFollower.ORIGIN) {
             newOriginX = (newWidth/(dimensionsComponent.width * transformComponent.scaleX)) * newOriginX;
             newOriginY = (newHeight/(dimensionsComponent.height * transformComponent.scaleY)) * newOriginY;
+        }
+
+        if(anchor >= NormalSelectionFollower.ROTATION_LT && anchor <= NormalSelectionFollower.ROTATION_LB) {
+            // get mouse stage coordinates
+            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
+            float currentAngle = mousePoint.angle();
+            float angleDiff = currentAngle - lastTransformAngle;
+            transformComponent.rotation = lastEntityAngle - angleDiff;
         }
 
         transformComponent.x = newX;
