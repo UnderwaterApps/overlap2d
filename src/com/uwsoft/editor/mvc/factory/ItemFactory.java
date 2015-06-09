@@ -134,7 +134,7 @@ public class ItemFactory {
         vo.size = textSettings.getFontSize();
 
         //Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        //Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
