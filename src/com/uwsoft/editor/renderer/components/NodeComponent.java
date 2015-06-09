@@ -6,4 +6,12 @@ import com.badlogic.gdx.utils.SnapshotArray;
 
 public class NodeComponent extends Component {
 	public SnapshotArray<Entity> children = new SnapshotArray<Entity>(true, 1, Entity.class);
+
+	public void removeChild(Entity entity) {
+		children.removeValue(entity, false);
+	}
+
+	public void addChild(Entity entity) {
+		children.add(entity);
+	}
 }

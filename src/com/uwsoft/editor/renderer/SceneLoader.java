@@ -1,5 +1,6 @@
 package com.uwsoft.editor.renderer;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -7,6 +8,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -15,13 +17,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
@@ -236,6 +232,24 @@ public class SceneLoader {
 		engine.addSystem(physicsSystem);
 		engine.addSystem(spineSystem);
 		engine.addSystem(compositeSystem);
+
+		addEntityRemoveListener();
+	}
+
+	private void addEntityRemoveListener() {
+		engine.addEntityListener(new EntityListener() {
+			@Override
+			public void entityAdded(Entity entity) {
+				// TODO: Gev knows what to do. (do this for all entities)
+			}
+
+			@Override
+			public void entityRemoved(Entity entity) {
+				Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
+				NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+				nodeComponent.removeChild(entity);
+			}
+		});
 	}
 
 	//TODO this function should be changed later 
@@ -243,6 +257,7 @@ public class SceneLoader {
 		//NodeComponent nodeComponent = nodeComponentMapper.get(root);
 		for (int i = 0; i < vo.sImages.size(); i++) {
 			Entity entity = entityFactory.createEntity(root, vo.sImages.get(i));
+
 			engine.addEntity(entity);
 		}
 		

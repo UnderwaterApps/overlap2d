@@ -148,6 +148,12 @@ public class EntityFactory {
 		entities.put(mainItemComponent.uniqueId, entity);
 	}
 
+	public void updateMap(Entity entity) {
+		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
+		entities.put(mainItemComponent.uniqueId, entity);
+	}
+
 	public Entity getEntityByUniqueId(Integer id) {
 		return entities.get(id);
 	}
