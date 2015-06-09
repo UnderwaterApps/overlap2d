@@ -22,28 +22,29 @@ package com.uwsoft.editor.mvc.view.ui.followers;
  * Created by azakhary on 5/22/2015.
  */
 public class EmptyTransformationListener implements FollowerTransformationListener {
+
     @Override
-    public void anchorDown(int anchor, float x, float y) {
+    public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
 
     }
 
     @Override
-    public void anchorDragged(int anchor, float x, float y) {
+    public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
 
     }
 
     @Override
-    public void anchorUp(int anchor, float x, float y) {
+    public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
 
     }
 
     @Override
-    public void mouseEnter(int anchor, float x, float y) {
+    public void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y) {
 
     }
 
     @Override
-    public void mouseExit(int anchor, float x, float y) {
+    public void anchorMouseExit(NormalSelectionFollower follower, int anchor, float x, float y) {
 
     }
 }

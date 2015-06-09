@@ -30,33 +30,36 @@ public class AnchorListener extends ClickListener {
     private int anchorId;
     protected FollowerTransformationListener listener = new EmptyTransformationListener();
 
-    public AnchorListener(FollowerTransformationListener listener, int anchorId) {
+    protected NormalSelectionFollower follower;
+
+    public AnchorListener(NormalSelectionFollower follower, FollowerTransformationListener listener, int anchorId) {
         this.listener = listener;
         this.anchorId = anchorId;
+        this.follower = follower;
     }
 
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         super.touchDown(event, x, y, pointer, button);
-        listener.anchorDown(anchorId, event.getStageX(), event.getStageY());
+        listener.anchorDown(follower, anchorId, event.getStageX(), event.getStageY());
         return true;
     }
     @Override
     public void touchDragged (InputEvent event, float x, float y, int pointer) {
-        listener.anchorDragged(anchorId, event.getStageX(), event.getStageY());
+        listener.anchorDragged(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        listener.anchorUp(anchorId, event.getStageX(), event.getStageY());
+        listener.anchorUp(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
         super.enter(event, x, y, pointer, fromActor);
-        listener.mouseEnter(anchorId, event.getStageX(), event.getStageY());
+        listener.anchorMouseEnter(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
         super.exit(event, x, y, pointer, toActor);
-        listener.mouseExit(anchorId, event.getStageX(), event.getStageY());
+        listener.anchorMouseExit(follower, anchorId, event.getStageX(), event.getStageY());
     }
 }

@@ -25,10 +25,13 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.VisUI;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -54,6 +57,11 @@ public class NormalSelectionFollower extends BasicFollower {
     public static final int L = 7;
 
     public static final int ORIGIN = 8;
+
+    public enum SelectionMode {
+        normal, transform
+    }
+    private SelectionMode mode = SelectionMode.normal;
 
     public NormalSelectionFollower(Entity entity) {
         super(entity);
@@ -97,15 +105,15 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[R].setY((int)(getHeight() / 2) - h);
         miniRects[RB].setX(getWidth() - w);
         miniRects[RB].setY(-h);
-        miniRects[B].setX((int)(getWidth() / 2) - w);
+        miniRects[B].setX((int) (getWidth() / 2) - w);
         miniRects[B].setY(-h);
         miniRects[LB].setX(-w);
         miniRects[LB].setY(-h);
         miniRects[L].setX(-w);
-        miniRects[L].setY((int)(getHeight() / 2) - h);
+        miniRects[L].setY((int) (getHeight() / 2) - h);
 
         miniRects[ORIGIN].setX((int) (transformComponent.originX) - w);
-        miniRects[ORIGIN].setY((int)(transformComponent.originY) - h);
+        miniRects[ORIGIN].setY((int) (transformComponent.originY) - h);
     }
 
     private void initTransformGroup() {
@@ -129,7 +137,7 @@ public class NormalSelectionFollower extends BasicFollower {
         for(int i = 0; i < miniRects.length; i++) {
             final int rectId = i;
             miniRects[i].clearListeners();
-            miniRects[i].addListener(new AnchorListener(listener, rectId) {
+            miniRects[i].addListener(new AnchorListener(this, listener, rectId) {
                 @Override
                 public void touchDragged (InputEvent event, float x, float y, int pointer) {
                     super.touchDragged(event, x, y, pointer);
@@ -138,14 +146,19 @@ public class NormalSelectionFollower extends BasicFollower {
                 @Override
                 public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event, x, y, pointer, fromActor);
-                    //cursorManager.setOverrideCursor(CursorManager.NORMAL);
                 }
                 @Override
                 public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event, x, y, pointer, toActor);
-                    //cursorManager.removeOverrideCursor();
                 }
             });
+        }
+    }
+
+    @Override
+    public void clearFollowerListener() {
+        for(int i = 0; i < miniRects.length; i++) {
+            miniRects[i].clearListeners();
         }
     }
 
@@ -161,10 +174,20 @@ public class NormalSelectionFollower extends BasicFollower {
     }
 
     @Override
-    public void setMode(FollowerMode mode) {
-        super.setMode(mode);
+    public void handleNotification(Notification notification) {
+        switch (notification.getName()) {
+            case UIToolBoxMediator.TOOL_SELECTED:
+                if(notification.getBody().equals(TransformTool.NAME)) {
+                    setMode(SelectionMode.transform);
+                } else {
+                    setMode(SelectionMode.normal);
+                }
+                break;
+        }
+    }
 
-        if(mode == FollowerMode.normal) {
+    public void setMode(SelectionMode mode) {
+        if(mode == SelectionMode.normal) {
             transformGroup.setVisible(false);
         } else {
             transformGroup.setVisible(true);

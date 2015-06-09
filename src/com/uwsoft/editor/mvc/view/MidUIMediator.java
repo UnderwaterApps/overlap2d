@@ -97,18 +97,14 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 showAllFollowers(notification.getBody());
                 break;
             case UIToolBoxMediator.TOOL_SELECTED:
-                if(notification.getBody().equals(TransformTool.NAME)) {
-                    setMode(BasicFollower.FollowerMode.transform);
-                } else {
-                    setMode(BasicFollower.FollowerMode.normal);
-                }
+                pushNotificationToFollowers(notification);
                 break;
         }
     }
 
-    public void setMode(BasicFollower.FollowerMode mode) {
+    public void pushNotificationToFollowers(Notification notification) {
         for (BasicFollower follower : followers.values()) {
-            follower.setMode(mode);
+            follower.handleNotification(notification);
         }
     }
 
@@ -158,6 +154,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public void removeFollower(Entity entity) {
         followers.get(entity).remove();
         followers.remove(entity);
+    }
+
+    public void clearAllListeners() {
+        followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::clearFollowerListener);
     }
 
     public BasicFollower getFollower(Entity entity) {

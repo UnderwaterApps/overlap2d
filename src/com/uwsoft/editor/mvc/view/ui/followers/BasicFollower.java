@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -39,11 +40,6 @@ public abstract class BasicFollower extends Group {
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
-
-    public enum FollowerMode {
-        normal, transform
-    }
-    private FollowerMode mode = FollowerMode.normal;
 
     public BasicFollower(Entity entity) {
         setItem(entity);
@@ -76,10 +72,6 @@ public abstract class BasicFollower extends Group {
         update();
     }
 
-    public void setMode(FollowerMode mode) {
-        this.mode = mode;
-    }
-
     public void hide() {
         setVisible(false);
     }
@@ -91,6 +83,10 @@ public abstract class BasicFollower extends Group {
 
     }
 
+    public void clearFollowerListener() {
+
+    }
+
     @Override
     public Actor hit (float x, float y, boolean touchable) {
         Actor hitActor = super.hit(x, y, touchable);
@@ -98,5 +94,13 @@ public abstract class BasicFollower extends Group {
         if(hitActor.equals(this)) return null;
 
         return hitActor;
+    }
+
+    public void handleNotification(Notification notification) {
+        // This method is meant to be overridden.
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 }

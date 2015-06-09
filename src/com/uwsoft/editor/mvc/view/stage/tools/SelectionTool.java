@@ -81,7 +81,6 @@ public class SelectionTool implements Tool {
         cursorManager.setCursor(CursorManager.NORMAL);
 
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.setMode(BasicFollower.FollowerMode.normal);
     }
 
     @Override
