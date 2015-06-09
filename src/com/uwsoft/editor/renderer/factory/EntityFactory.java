@@ -36,7 +36,7 @@ public class EntityFactory {
 	public IResourceRetriever rm = null;
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
-			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory;
+			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory;
 
 	private int entityIterator = 0;
 
@@ -68,13 +68,6 @@ public class EntityFactory {
 
 		postProcessEntity(entity);
 		
-		return entity;
-	}
-	
-	public Entity createEntity(Entity root, LabelVO vo) {
-		Entity entity = new Entity();
-		entity.flags = LABEL_TYPE;
-		labelComponentFactory.createComponents(root, entity, vo);
 		return entity;
 	}
 	
@@ -187,6 +180,7 @@ public class EntityFactory {
 		spineComponentFactory.setResourceManager(rm);
 		spriteComponentFactory.setResourceManager(rm);
 		spriterComponentFactory.setResourceManager(rm);
+		labelComponentFactory.setResourceManager(rm);
 	}
 	
 }
