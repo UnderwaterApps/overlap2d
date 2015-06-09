@@ -215,7 +215,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 			parentTransformComponent = compositeTransformMapper.get(parentEntity);
 			worldTransform.preMul(parentTransformComponent.worldTransform);
 			MainItemComponent main = parentEntity.getComponent(MainItemComponent.class);
-			System.out.println("NAME " + main.itemIdentifier);
+			//System.out.println("NAME " + main.itemIdentifier);
 		}
 
 		curCompositeTransformComponent.computedTransform.set(worldTransform);
