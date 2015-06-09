@@ -32,9 +32,11 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.sandbox.ItemFactory;
+import com.uwsoft.editor.gdx.sandbox.ItemFactoryOld;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.input.EntityClickListener;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
@@ -121,8 +123,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 setCurrentTool(notification.getBody());
                 break;
             case ItemFactory.NEW_ITEM_ADDED:
-            	//TODO add listener and uncomment
-                //((Actor)notification.getBody()).addListener(new SandboxItemEventListener(notification.getBody()));
+                addListenerToItem(notification.getBody());
                 break;
             case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
                 initItemListeners();
@@ -150,18 +151,26 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         SnapshotArray<Entity> childrenEntities = nodeComponent.children;
 
         for (Entity child: childrenEntities) {
-        	InputListenerComponent inputListenerComponent = child.getComponent(InputListenerComponent.class);
-        	if(inputListenerComponent == null){
-        		inputListenerComponent = new InputListenerComponent();
-                child.add(inputListenerComponent);
-        	}
-        	inputListenerComponent.removeAllListener();
-        	inputListenerComponent.addListener(new SandboxItemEventListener(child));
+            addListenerToItem(child);
         }
         
         getViewComponent().addListener(new SandboxStageEventListener());
-        
-		
+    }
+
+    /**
+     * TODO: this can be changed, as in ideal world entity factory should be adding listener component to ALL entities,
+     * problem is currently this component is not part of runtime. but it will be.
+     *
+     * @param entity
+     */
+    private void addListenerToItem(Entity entity) {
+        InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
+        if(inputListenerComponent == null){
+            inputListenerComponent = new InputListenerComponent();
+            entity.add(inputListenerComponent);
+        }
+        inputListenerComponent.removeAllListener();
+        inputListenerComponent.addListener(new SandboxItemEventListener(entity));
     }
 
     public Vector2 getStageCoordinates() {
@@ -190,6 +199,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             Vector2 coords = getStageCoordinates();
             return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
+
         
         @Override
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
@@ -276,9 +286,11 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
                 if(keycode == Input.Keys.Z) {
                     if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                        sandbox.getUac().redo();
+                        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
+                        commandManager.redoCommand();
                     } else {
-                        sandbox.getUac().undo();
+                        CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
+                        commandManager.undoCommand();
                     }
                 }
 

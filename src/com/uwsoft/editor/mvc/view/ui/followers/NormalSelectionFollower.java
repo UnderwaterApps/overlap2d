@@ -25,10 +25,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.VisUI;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
+import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
+import com.uwsoft.editor.ui.widget.EmptyTarget;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -42,7 +46,7 @@ public class NormalSelectionFollower extends BasicFollower {
     private PixelRect pixelRect;
 
     private Group transformGroup;
-    private Image[] miniRects;
+    private Actor[] miniRects;
 
     public static final int LT = 0;
     public static final int T = 1;
@@ -54,6 +58,16 @@ public class NormalSelectionFollower extends BasicFollower {
     public static final int L = 7;
 
     public static final int ORIGIN = 8;
+
+    public static final int ROTATION_LT = 9;
+    public static final int ROTATION_RT = 10;
+    public static final int ROTATION_RB = 11;
+    public static final int ROTATION_LB = 12;
+
+    public enum SelectionMode {
+        normal, transform
+    }
+    private SelectionMode mode = SelectionMode.normal;
 
     public NormalSelectionFollower(Entity entity) {
         super(entity);
@@ -78,8 +92,17 @@ public class NormalSelectionFollower extends BasicFollower {
         hide();
     }
 
+    private Actor getRotationAnchor() {
+        EmptyTarget emptyTarget = new EmptyTarget(20, 20);
+        transformGroup.addActor(emptyTarget);
+        return emptyTarget;
+    }
+
     private Image getMiniRect() {
         Image rect = new Image(VisUI.getSkin().getDrawable("selection-anchor"));
+        int w = (int) (rect.getWidth()/2);
+        int h = (int) (rect.getHeight()/2);
+        rect.setOrigin(w, h);
         transformGroup.addActor(rect);
         return rect;
     }
@@ -89,27 +112,44 @@ public class NormalSelectionFollower extends BasicFollower {
         int h = (int) (miniRects[LT].getHeight()/2);
         miniRects[LT].setX(-w);
         miniRects[LT].setY(getHeight() - h);
-        miniRects[T].setX((int)(getWidth() / 2) - w);
+        miniRects[T].setX((int) (getWidth() / 2) - w);
         miniRects[T].setY(getHeight() - h);
         miniRects[RT].setX(getWidth() - w);
         miniRects[RT].setY(getHeight() - h);
         miniRects[R].setX(getWidth() - w);
-        miniRects[R].setY((int)(getHeight() / 2) - h);
+        miniRects[R].setY((int) (getHeight() / 2) - h);
         miniRects[RB].setX(getWidth() - w);
         miniRects[RB].setY(-h);
-        miniRects[B].setX((int)(getWidth() / 2) - w);
+        miniRects[B].setX((int) (getWidth() / 2) - w);
         miniRects[B].setY(-h);
         miniRects[LB].setX(-w);
         miniRects[LB].setY(-h);
         miniRects[L].setX(-w);
-        miniRects[L].setY((int)(getHeight() / 2) - h);
+        miniRects[L].setY((int) (getHeight() / 2) - h);
 
         miniRects[ORIGIN].setX((int) (transformComponent.originX) - w);
-        miniRects[ORIGIN].setY((int)(transformComponent.originY) - h);
+        miniRects[ORIGIN].setY((int) (transformComponent.originY) - h);
+
+        miniRects[ROTATION_LT].setX(-w*2);
+        miniRects[ROTATION_LT].setY(getHeight());
+        miniRects[ROTATION_RT].setX(getWidth());
+        miniRects[ROTATION_RT].setY(getHeight());
+        miniRects[ROTATION_RB].setX(getWidth());
+        miniRects[ROTATION_RB].setY(-h*2);
+        miniRects[ROTATION_LB].setX(-w*2);
+        miniRects[ROTATION_LB].setY(-h*2);
     }
 
     private void initTransformGroup() {
-        miniRects = new Image[9];
+        miniRects = new Actor[13];
+
+        // rotation
+        miniRects[ROTATION_LT] = getRotationAnchor();
+        miniRects[ROTATION_RT] = getRotationAnchor();
+        miniRects[ROTATION_RB] = getRotationAnchor();
+        miniRects[ROTATION_LB] = getRotationAnchor();
+
+        //scale
         miniRects[LT] = getMiniRect();
         miniRects[T] = getMiniRect();
         miniRects[RT] = getMiniRect();
@@ -119,6 +159,7 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[LB] = getMiniRect();
         miniRects[L] = getMiniRect();
 
+        // origin point
         Image originAnchor = new Image(VisUI.getSkin().getDrawable("origin-anchor"));
         transformGroup.addActor(originAnchor);
         miniRects[ORIGIN] = originAnchor;
@@ -129,7 +170,7 @@ public class NormalSelectionFollower extends BasicFollower {
         for(int i = 0; i < miniRects.length; i++) {
             final int rectId = i;
             miniRects[i].clearListeners();
-            miniRects[i].addListener(new AnchorListener(listener, rectId) {
+            miniRects[i].addListener(new AnchorListener(this, listener, rectId) {
                 @Override
                 public void touchDragged (InputEvent event, float x, float y, int pointer) {
                     super.touchDragged(event, x, y, pointer);
@@ -138,14 +179,19 @@ public class NormalSelectionFollower extends BasicFollower {
                 @Override
                 public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event, x, y, pointer, fromActor);
-                    //cursorManager.setOverrideCursor(CursorManager.NORMAL);
                 }
                 @Override
                 public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event, x, y, pointer, toActor);
-                    //cursorManager.removeOverrideCursor();
                 }
             });
+        }
+    }
+
+    @Override
+    public void clearFollowerListener() {
+        for(int i = 0; i < miniRects.length; i++) {
+            miniRects[i].clearListeners();
         }
     }
 
@@ -158,13 +204,27 @@ public class NormalSelectionFollower extends BasicFollower {
         pixelRect.setHeight(getHeight());
 
         positionTransformables();
+
+        for(int i = 0; i <= 7; i++) {
+            miniRects[i].setRotation(-getRotation());
+        }
     }
 
     @Override
-    public void setMode(FollowerMode mode) {
-        super.setMode(mode);
+    public void handleNotification(Notification notification) {
+        switch (notification.getName()) {
+            case UIToolBoxMediator.TOOL_SELECTED:
+                if(notification.getBody().equals(TransformTool.NAME)) {
+                    setMode(SelectionMode.transform);
+                } else {
+                    setMode(SelectionMode.normal);
+                }
+                break;
+        }
+    }
 
-        if(mode == FollowerMode.normal) {
+    public void setMode(SelectionMode mode) {
+        if(mode == SelectionMode.normal) {
             transformGroup.setVisible(false);
         } else {
             transformGroup.setVisible(true);

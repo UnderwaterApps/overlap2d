@@ -23,18 +23,21 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 5/14/2015.
  */
 public class SetSelectionCommand extends RevertableCommand {
 
-    Set<Entity> previousSelection;
+    private Array<Integer> previousSelectionIds;
 
     @Override
     public void doAction() {
-        previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
+        HashSet<Entity> previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
+        previousSelectionIds = EntityUtils.getEntityId(previousSelection);
 
         Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().setSelections(items, true);
@@ -42,6 +45,6 @@ public class SetSelectionCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-        Sandbox.getInstance().getSelector().setSelections(previousSelection, true);
+        Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
     }
 }

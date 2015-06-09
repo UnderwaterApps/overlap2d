@@ -21,6 +21,8 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -33,18 +35,18 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
+import java.util.HashSet;
+import java.util.Set;
+
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class TransformTool extends SelectionTool {
+public class TransformTool extends SelectionTool implements FollowerTransformationListener {
 
     public static final String NAME = "TRANSFORM_TOOL";
 
-    private BasicFollower selectionFollower;
-    private Entity currentEntity;
-
-    private TransformComponent transformComponent;
-    private DimensionsComponent dimensionsComponent;
+    private float lastTransformAngle = 0;
+    private float lastEntityAngle = 0;
 
     @Override
     public void initTool() {
@@ -54,157 +56,169 @@ public class TransformTool extends SelectionTool {
             sandbox.getSelector().clearSelections();
         }
 
+        updateListeners();
+
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         //cursorManager.setCursor(CursorManager.CROSS);
-
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.setMode(BasicFollower.FollowerMode.transform);
-    }
-
-    @Override
-    public boolean stageMouseDown(float x, float y) {
-        return false;
     }
 
     @Override
     public void stageMouseUp(float x, float y) {
-
+        super.stageMouseUp(x, y);
+        updateListeners();
     }
 
     @Override
-    public void stageMouseDragged(float x, float y) {
-
+    public void itemMouseUp(Entity entity, float x, float y) {
+        super.itemMouseUp(entity, x, y);
+        updateListeners();
     }
 
-    @Override
-    public void stageMouseDoubleClick(float x, float y) {
+    private void updateListeners() {
+        Sandbox sandbox = Sandbox.getInstance();
 
-    }
-
-    @Override
-    public boolean itemMouseDown(Entity entity, float x, float y) {
-        super.itemMouseDown(entity, x, y);
-
-        currentEntity = entity;
-        transformComponent = ComponentRetriever.get(currentEntity, TransformComponent.class);
-        dimensionsComponent = ComponentRetriever.get(currentEntity, DimensionsComponent.class);
+        Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
 
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        selectionFollower = midUIMediator.getFollower(entity);
-        setListeners();
+        midUIMediator.clearAllListeners();
 
-        return true;
+        for(Entity entity: selectedEntities) {
+            midUIMediator.getFollower(entity).setFollowerListener(this);
+        }
     }
 
-    private void setListeners() {
-        selectionFollower.setFollowerListener(new FollowerTransformationListener() {
 
-            private int anchorId;
+    @Override
+    public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
+        Sandbox sandbox = Sandbox.getInstance();
 
-            @Override
-            public void anchorDown(int anchor, float x, float y) {
-                Sandbox sandbox = Sandbox.getInstance();
-                this.anchorId = anchor;
+        if(anchor == NormalSelectionFollower.ROTATION_LT ||
+                anchor == NormalSelectionFollower.ROTATION_RT ||
+                anchor == NormalSelectionFollower.ROTATION_RB ||
+                anchor == NormalSelectionFollower.ROTATION_LB) {
+
+            // get mouse stage coordinates
+            TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
+
+            lastTransformAngle = mousePoint.angle();
+            lastEntityAngle = transformComponent.rotation;
+        }
+    }
+
+    @Override
+    public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
+        Sandbox sandbox = Sandbox.getInstance();
+        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
+
+        float newX = transformComponent.x;
+        float newY = transformComponent.y;
+        float newWidth = dimensionsComponent.width * transformComponent.scaleX;
+        float newHeight = dimensionsComponent.height * transformComponent.scaleY;
+
+        float newOriginX = transformComponent.originX;
+        float newOriginY = transformComponent.originY;
+
+        switch (anchor) {
+            case NormalSelectionFollower.ORIGIN:
+                newOriginX = x - transformComponent.x;
+                newOriginY = y - transformComponent.y;
+                // TODO: adjust coordinates
+                //final float cos = (float)Math.cos(transformComponent.rotation * MathUtils.degreesToRadians);
+                //final float sin = (float)Math.sin(transformComponent.rotation * MathUtils.degreesToRadians);
+                //final float tox = (localCoords.x - originX) * scaleX;
+                //final float toy = (localCoords.y - originY) * scaleY;
+                //newX = (newX * cos + newY * sin)+newX;
+                //newY = (newX * -sin + newY * cos)+newY;
+                break;
+            case NormalSelectionFollower.LB:
+                newX = x;
+                newY = y;
+                newWidth = newWidth + (transformComponent.x - x);
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.L:
+                newX = x;
+                newWidth = newWidth + (transformComponent.x - x);
+                break;
+            case NormalSelectionFollower.LT:
+                newX = x;
+                newWidth = newWidth + (transformComponent.x - x);
+                newHeight = y - transformComponent.y;
+                break;
+            case NormalSelectionFollower.T:
+                newHeight = y - transformComponent.y;
+                break;
+            case NormalSelectionFollower.B:
+                newY = y;
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.RB:
+                newY = y;
+                newWidth = x - follower.getX();
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.R:
+                newWidth = x - transformComponent.x;
+                break;
+            case NormalSelectionFollower.RT:
+                newHeight = y - transformComponent.y;
+                newWidth = x - transformComponent.x;
+                break;
+        }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            float enclosingRectSize = Math.max(newWidth, newHeight);
+            if (dimensionsComponent.width >= dimensionsComponent.height) {
+                newWidth = enclosingRectSize;
+                newHeight = (newWidth / dimensionsComponent.width) * dimensionsComponent.height;
+            }
+            if (dimensionsComponent.height > dimensionsComponent.width) {
+                newHeight = enclosingRectSize;
+                newWidth = (newHeight / dimensionsComponent.height) * dimensionsComponent.width;
             }
 
-            @Override
-            public void anchorDragged(int anchor, float x, float y) {
+        }
 
-                float newX = transformComponent.x;
-                float newY = transformComponent.y;
-                float newWidth = dimensionsComponent.width * transformComponent.scaleX;
-                float newHeight = dimensionsComponent.height * transformComponent.scaleY;
+        if(anchor != NormalSelectionFollower.ORIGIN) {
+            newOriginX = (newWidth/(dimensionsComponent.width * transformComponent.scaleX)) * newOriginX;
+            newOriginY = (newHeight/(dimensionsComponent.height * transformComponent.scaleY)) * newOriginY;
+        }
 
-                float newOriginX = transformComponent.originX;
-                float newOriginY = transformComponent.originY;
+        if(anchor >= NormalSelectionFollower.ROTATION_LT && anchor <= NormalSelectionFollower.ROTATION_LB) {
+            // get mouse stage coordinates
+            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
+            float currentAngle = mousePoint.angle();
+            float angleDiff = currentAngle - lastTransformAngle;
+            transformComponent.rotation = lastEntityAngle - angleDiff;
+        }
 
-                switch (anchorId) {
-                    case NormalSelectionFollower.ORIGIN:
-                        newOriginX = x - transformComponent.x;
-                        newOriginY = y - transformComponent.y;
-                        break;
-                    case NormalSelectionFollower.LB:
-                        newX = x;
-                        newY = y;
-                        newWidth = newWidth + (transformComponent.x - x);
-                        newHeight = newHeight + (transformComponent.y - y);
-                        break;
-                    case NormalSelectionFollower.L:
-                        newX = x;
-                        newWidth = newWidth + (transformComponent.x - x);
-                        break;
-                    case NormalSelectionFollower.LT:
-                        newX = x;
-                        newWidth = newWidth + (transformComponent.x - x);
-                        newHeight = y - transformComponent.y;
-                        break;
-                    case NormalSelectionFollower.T:
-                        newHeight = y - transformComponent.y;
-                        break;
-                    case NormalSelectionFollower.B:
-                        newY = y;
-                        newHeight = newHeight + (transformComponent.y - y);
-                        break;
-                    case NormalSelectionFollower.RB:
-                        newY = y;
-                        newWidth = x - selectionFollower.getX();
-                        newHeight = newHeight + (transformComponent.y - y);
-                        break;
-                    case NormalSelectionFollower.R:
-                        newWidth = x - transformComponent.x;
-                        break;
-                    case NormalSelectionFollower.RT:
-                        newHeight = y - transformComponent.y;
-                        newWidth = x - transformComponent.x;
-                        break;
-                    default:
-                        return;
-                }
+        transformComponent.x = newX;
+        transformComponent.y = newY;
+        transformComponent.scaleX = newWidth/dimensionsComponent.width;
+        transformComponent.scaleY = newHeight/dimensionsComponent.height;
+        transformComponent.originX = newOriginX;
+        transformComponent.originY = newOriginY;
 
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    float enclosingRectSize = Math.max(newWidth, newHeight);
-                    if (dimensionsComponent.width >= dimensionsComponent.height) {
-                        newWidth = enclosingRectSize;
-                        newHeight = (newWidth / dimensionsComponent.width) * dimensionsComponent.height;
-                    }
-                    if (dimensionsComponent.height > dimensionsComponent.width) {
-                        newHeight = enclosingRectSize;
-                        newWidth = (newHeight / dimensionsComponent.height) * dimensionsComponent.width;
-                    }
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+    }
 
-                }
+    @Override
+    public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
 
-                if(anchorId != NormalSelectionFollower.ORIGIN) {
-                    newOriginX = (newWidth/(dimensionsComponent.width * transformComponent.scaleX)) * newOriginX;
-                    newOriginY = (newHeight/(dimensionsComponent.height * transformComponent.scaleY)) * newOriginY;
-                }
+    }
 
-                transformComponent.x = newX;
-                transformComponent.y = newY;
-                transformComponent.scaleX = newWidth/dimensionsComponent.width;
-                transformComponent.scaleY = newHeight/dimensionsComponent.height;
-                transformComponent.originX = newOriginX;
-                transformComponent.originY = newOriginY;
+    @Override
+    public void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y) {
 
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+    }
 
-            }
+    @Override
+    public void anchorMouseExit(NormalSelectionFollower follower, int anchor, float x, float y) {
 
-            @Override
-            public void anchorUp(int anchor, float x, float y) {
-
-            }
-
-            @Override
-            public void mouseEnter(int anchor, float x, float y) {
-
-            }
-
-            @Override
-            public void mouseExit(int anchor, float x, float y) {
-
-            }
-        });
     }
 }

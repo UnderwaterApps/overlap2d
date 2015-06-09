@@ -19,21 +19,23 @@
 package com.uwsoft.editor.gdx.sandbox;
 
 import java.util.ArrayList;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.gdx.actors.basic.PixelRect;
 import com.uwsoft.editor.gdx.mediators.ItemControlMediator;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
-import com.uwsoft.editor.gdx.ui.SandboxUI;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
@@ -45,10 +47,12 @@ import com.uwsoft.editor.mvc.view.stage.UIStageMediator;
 import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "sandbox" the part of editor where
@@ -71,6 +75,7 @@ public class Sandbox {
     public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
     public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
     public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
+    public static final String ACTION_CREATE_ITEM = CLASS_NAME + "ACTION_CREATE_ITEM";
     public static final String SHOW_ADD_LIBRARY_DIALOG = CLASS_NAME + "SHOW_ADD_LIBRARY_DIALOG";
     public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
@@ -98,8 +103,7 @@ public class Sandbox {
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
     private UIStage uiStage;
-    private UserActionController uac;
-    private ItemFactory itemFactory;
+    private ItemFactoryOld itemFactory;
     private ItemSelector selector;
     private Overlap2DFacade facade;
 
@@ -158,9 +162,8 @@ public class Sandbox {
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
-        uac = new UserActionController(this);
         selector = new ItemSelector(this);
-        itemFactory = new ItemFactory(this);
+        itemFactory = new ItemFactoryOld(this);
 
        
     }
@@ -190,15 +193,11 @@ public class Sandbox {
      * Getters *
      */
 
-    public UserActionController getUac() {
-        return uac;
-    }
-
     public UIStage getUIStage() {
         return uiStage;
     }
 
-    public ItemFactory getItemFactory() {
+    public ItemFactoryOld getItemFactory() {
         return itemFactory;
     }
 
@@ -474,32 +473,6 @@ public class Sandbox {
         facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
     }
 
-
-    /**
-     * TODO: put this in different place, not sandbox specific
-     * @param items
-     */
-    public void putItemsToClipboard(ArrayList<Entity> items) {
-    	//TODO fix and uncomment
-//        CompositeVO tempHolder = new CompositeVO();
-//        Json json = new Json();
-//        json.setOutputType(JsonWriter.OutputType.json);
-//        Actor actor = (Actor) items.get(0);
-//        Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
-//        Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
-//        for (IBaseItem item : items) {
-//            tempHolder.addItem(item.getDataVO());
-//            actor = (Actor) item;
-//            if (actor.getX() - cameraPos.x < vector3.x) {
-//                vector3.x = actor.getX() - cameraPos.x;
-//            }
-//            if (actor.getY() - cameraPos.y < vector3.y) {
-//                vector3.y = actor.getY() - cameraPos.y;
-//            }
-//        }
-//        fakeClipboard = json.toJson(tempHolder);
-//        copedItemCameraOffset = vector3;
-    }
     
     public Entity getRootEntity(){
     	return sceneControl.getRootEntity();
@@ -527,4 +500,31 @@ public class Sandbox {
 		listeners.shrink();
 		return listeners;
 	}
+
+    public OrthographicCamera getCamera() {
+        return (OrthographicCamera) getViewport().getCamera();
+    }
+
+    public Viewport getViewport() {
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(getRootEntity(), ViewPortComponent.class);
+        return viewPortComponent.viewPort;
+    }
+
+    public Vector2 stageToScreenCoordinates(float x, float y) {
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+        x = x + (viewport.getScreenWidth()/2 - camera.position.x);
+        y = y + (viewport.getScreenHeight()/2 - camera.position.y);
+
+        return new Vector2(x, y);
+    }
+
+    public Vector2 screenToStageCoordinates(float x, float y) {
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+        x = x - (viewport.getScreenWidth()/2 - camera.position.x);
+        y = y - (viewport.getScreenHeight()/2 - camera.position.y);
+
+        return new Vector2(x, y);
+    }
 }

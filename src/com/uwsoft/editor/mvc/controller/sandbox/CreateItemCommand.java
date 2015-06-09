@@ -19,34 +19,34 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
- * Created by azakhary on 4/28/2015.
+ * Created by azakhary on 6/9/2015.
  */
-public class AddToLibraryCommand extends RevertableCommand {
+public class CreateItemCommand extends RevertableCommand {
 
-    private String createdLibraryItemName;
+    private Integer entityId;
 
     @Override
     public void doAction() {
-        Object[] payload = getNotification().getBody();
+        Entity entity = getNotification().getBody();
 
-        Entity item = ((Entity) payload[0]);
-        createdLibraryItemName = (String) payload[1];
+        entityId = EntityUtils.getEntityId(entity);
 
-
-        //TODO fix and uncomment
-//        SceneControlMediator sceneControl = sandbox.getSceneControl();
-//        sceneControl.getCurrentSceneVO().libraryItems.put(createdLibraryItemName, item.getDataVO());
-//        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        sandbox.getEngine().addEntity(entity);
+        Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
     }
 
     @Override
     public void undoAction() {
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        sceneControl.getCurrentSceneVO().libraryItems.remove(createdLibraryItemName);
-        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        Entity entity = EntityUtils.getByUniqueId(entityId);
+
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        midUIMediator.removeFollower(entity);
+        sandbox.getEngine().removeEntity(entity);
     }
 }

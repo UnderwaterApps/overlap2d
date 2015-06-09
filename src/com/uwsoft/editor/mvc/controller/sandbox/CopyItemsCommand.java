@@ -18,8 +18,11 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -28,11 +31,27 @@ public class CopyItemsCommand extends SandboxCommand {
 
     @Override
     public void execute(Notification notification) {
-    	//TODO fix and uncomment
-//        sandbox.getCurrentScene().updateDataVO();
-//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-//        if(items.size() > 0) {
-//            sandbox.putItemsToClipboard(items);
-//        }
+        Set<Entity> items = sandbox.getSelector().getSelectedItems();
+        if(items.size() > 0) {
+            /*
+            CompositeVO tempHolder = new CompositeVO();
+            Json json = new Json();
+            json.setOutputType(JsonWriter.OutputType.json);
+            Actor actor = (Actor) items.get(0);
+            Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
+            Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
+            for (IBaseItem item : items) {
+                tempHolder.addItem(item.getDataVO());
+                actor = (Actor) item;
+                if (actor.getX() - cameraPos.x < vector3.x) {
+                    vector3.x = actor.getX() - cameraPos.x;
+                }
+                if (actor.getY() - cameraPos.y < vector3.y) {
+                    vector3.y = actor.getY() - cameraPos.y;
+                }
+            }
+            fakeClipboard = json.toJson(tempHolder);
+            copedItemCameraOffset = vector3;*/
+        }
     }
 }

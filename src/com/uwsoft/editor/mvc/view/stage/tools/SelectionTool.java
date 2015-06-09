@@ -26,12 +26,14 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -79,7 +81,6 @@ public class SelectionTool implements Tool {
         cursorManager.setCursor(CursorManager.NORMAL);
 
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.setMode(BasicFollower.FollowerMode.normal);
     }
 
     @Override
@@ -93,8 +94,11 @@ public class SelectionTool implements Tool {
             setOpacity = true;
         }
 
+        // transform stage coordinates to screen coordinates
+        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+
         // preparing selection tool rectangle to follow mouse
-        sandbox.prepareSelectionRectangle(x, y, setOpacity);
+        sandbox.prepareSelectionRectangle(screenCoords.x, screenCoords.y, setOpacity);
         return true;
     }
 
@@ -111,8 +115,12 @@ public class SelectionTool implements Tool {
     public void stageMouseDragged(float x, float y) {
         sandbox = Sandbox.getInstance();
         isCastingRectangle = true;
-        sandbox.selectionRec.setWidth(x - sandbox.selectionRec.getX());
-        sandbox.selectionRec.setHeight(y - sandbox.selectionRec.getY());
+
+        // transform stage coordinates to screen coordinates
+        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+
+        sandbox.selectionRec.setWidth(screenCoords.x - sandbox.selectionRec.getX());
+        sandbox.selectionRec.setHeight(screenCoords.y - sandbox.selectionRec.getY());
     }
 
     @Override
@@ -299,8 +307,11 @@ public class SelectionTool implements Tool {
         sandbox = Sandbox.getInstance();
        
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
 
-        SnapshotArray<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
+
+        HashSet<Entity> freeItems = sandbox.getSelector().getAllFreeItems();
 
         // when touch is up, selection process stops, and if any items got "caught" in they should be selected.
 
@@ -309,15 +320,16 @@ public class SelectionTool implements Tool {
         //ArrayList<Entity> curr = new ArrayList<Entity>();
         Set<Entity> curr = new HashSet<>();
         Rectangle sR = sandbox.selectionRec.getRect();
-         
-        for (int i = 0; i < freeItems.size; i++) {
-            Entity entity = freeItems.get(i);
+        sR.x = sR.x - (viewport.getScreenWidth()/2 - camera.position.x);
+        sR.y = sR.y - (viewport.getScreenHeight()/2 - camera.position.y);
+
+        for (Entity entity : freeItems) {
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
             //TODO fix layer lock thing
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
             if (Intersector.overlaps(sR, new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
-                curr.add(freeItems.get(i));
+                curr.add(entity);
             }
         }
 

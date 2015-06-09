@@ -41,7 +41,7 @@ public class SceneControlMediator {
 	/**
 	 * main holder of the scene
 	 */
-	private SceneLoader sceneLoader;
+	public SceneLoader sceneLoader;
 
 	/**
 	 * runtime essentials

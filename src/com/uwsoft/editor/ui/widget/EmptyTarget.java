@@ -16,11 +16,17 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.dialogs;
+package com.uwsoft.editor.ui.widget;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
- * Created by CyberJoe on 3/18/2015.
+ * Created by azakhary on 6/9/2015.
  */
-public interface DialogListener {
+public class EmptyTarget extends Actor {
 
+    public EmptyTarget(float width, float height) {
+        this.setWidth(width);
+        this.setHeight(height);
+    }
 }

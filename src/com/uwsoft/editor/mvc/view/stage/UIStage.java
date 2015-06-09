@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.DropDown;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.mvc.view.ui.UIMainTable;
@@ -37,8 +36,6 @@ public class UIStage extends Stage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
-
-    public DropDown mainDropDown;
 	public Group sandBoxUIGroup;
 
 
@@ -47,19 +44,18 @@ public class UIStage extends Stage {
 
         facade = Overlap2DFacade.getInstance();
 
-        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
-        sandBoxUIGroup = midUIMediator.getViewComponent();
-        addActor(sandBoxUIGroup);
-        
+        //dummy target is basically the target of drop of items from resoruce panel
         dummyTarget = new Group();
         dummyTarget.setWidth(getWidth());
         dummyTarget.setHeight(getHeight());
         dummyTarget.setY(0);
         dummyTarget.setX(0);
-        //TODO: Not sure about this...
-        dummyTarget.setTouchable(Touchable.disabled);
+
         addActor(dummyTarget);
-               
+
+        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
+        sandBoxUIGroup = midUIMediator.getViewComponent();
+        addActor(sandBoxUIGroup);
 
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();
@@ -68,9 +64,6 @@ public class UIStage extends Stage {
         addActor(contextMenuContainer);
 
         setListeners();
-
-
-        mainDropDown = new DropDown(contextMenuContainer);
     }
 
     public void resize(int width, int height) {
@@ -103,7 +96,6 @@ public class UIStage extends Stage {
         addListener(new InputListener() {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
-                mainDropDown.hide();
                 return event.getTarget() != getRoot() && event.getTarget() != dummyTarget;
             }
         });

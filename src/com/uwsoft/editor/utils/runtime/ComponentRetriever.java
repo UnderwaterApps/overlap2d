@@ -18,8 +18,7 @@
 
 package com.uwsoft.editor.utils.runtime;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
@@ -154,6 +153,17 @@ public class ComponentRetriever {
     @SuppressWarnings("unchecked")
     public static <T extends Component> T get(Entity entity, Class<T> type) {
         return (T)self().getMappers().get(type).get(entity);
+    }
+
+
+    @SuppressWarnings("unchecked")
+    public static  Collection<Component> getComponents(Entity entity) {
+        Collection<Component> components = new ArrayList<>();
+        for (ComponentMapper<? extends Component> mapper : self().getMappers().values()) {
+            if(mapper.get(entity) != null) components.add(mapper.get(entity));
+        }
+
+        return components;
     }
 
     /**

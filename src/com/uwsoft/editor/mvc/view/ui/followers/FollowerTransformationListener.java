@@ -22,9 +22,9 @@ package com.uwsoft.editor.mvc.view.ui.followers;
  * Created by azakhary on 5/22/2015.
  */
 public interface FollowerTransformationListener {
-    void anchorDown(int anchor, float x, float y);
-    void anchorDragged(int anchor, float x, float y);
-    void anchorUp(int anchor, float x, float y);
-    void mouseEnter(int anchor, float x, float y);
-    void mouseExit(int anchor, float x, float y);
+    void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y);
+    void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y);
+    void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y);
+    void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y);
+    void anchorMouseExit(NormalSelectionFollower follower, int anchor, float x, float y);
 }

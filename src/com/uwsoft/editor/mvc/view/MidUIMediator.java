@@ -24,7 +24,10 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
+import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
@@ -58,7 +61,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 Overlap2D.SHOW_SELECTIONS,
-                Overlap2D.HIDE_SELECTIONS
+                Overlap2D.HIDE_SELECTIONS,
+                ItemFactory.NEW_ITEM_ADDED,
+                PanTool.SCENE_PANNED,
+                UIToolBoxMediator.TOOL_SELECTED
         };
     }
 
@@ -69,11 +75,17 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
             case SceneDataManager.SCENE_LOADED:
                 createFollowersForAllItems();
                 break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                createFollower(notification.getBody());
+                break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 BasicFollower follower = followers.get(notification.getBody());
                 if(follower != null) {
                     follower.update();
                 }
+                break;
+            case PanTool.SCENE_PANNED:
+                updateAllFollowers();
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
                 setNewSelectionConfiguration(notification.getBody());
@@ -84,12 +96,15 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
             case Overlap2D.SHOW_SELECTIONS:
                 showAllFollowers(notification.getBody());
                 break;
+            case UIToolBoxMediator.TOOL_SELECTED:
+                pushNotificationToFollowers(notification);
+                break;
         }
     }
 
-    public void setMode(BasicFollower.FollowerMode mode) {
+    public void pushNotificationToFollowers(Notification notification) {
         for (BasicFollower follower : followers.values()) {
-            follower.setMode(mode);
+            follower.handleNotification(notification);
         }
     }
 
@@ -139,6 +154,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public void removeFollower(Entity entity) {
         followers.get(entity).remove();
         followers.remove(entity);
+    }
+
+    public void clearAllListeners() {
+        followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::clearFollowerListener);
     }
 
     public BasicFollower getFollower(Entity entity) {

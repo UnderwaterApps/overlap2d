@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box.ImageResource;
@@ -52,9 +53,9 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
             boolean is9patch = region.splits != null;
             DraggableResource draggableResource = new DraggableResource(new ImageResource(region));
             if (is9patch) {
-                draggableResource.setFactoryFunction(sandbox.getUac()::create9Patch);
+                draggableResource.setFactoryFunction(ItemFactory.get()::create9Patch);
             } else {
-                draggableResource.setFactoryFunction(sandbox.getUac()::createImage);
+                draggableResource.setFactoryFunction(ItemFactory.get()::createSimpleImage);
             }
             draggableResource.initDragDrop();
             thumbnailBoxes.add(draggableResource);

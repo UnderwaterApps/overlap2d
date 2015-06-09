@@ -21,6 +21,9 @@ package com.uwsoft.editor.utils.runtime;
 import com.badlogic.ashley.core.Component;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
+import java.util.ArrayList;
+import java.util.Collection;
 
 /**
  * Created by azakhary on 6/3/2015.
@@ -36,7 +39,9 @@ public class ComponentCloner {
             Field[] sourceFields = source.getClass().getDeclaredFields();
             Field[] targetFields = target.getClass().getDeclaredFields();
             for(int i = 0; i < targetFields.length; i++) {
-                targetFields[i].set(target, sourceFields[i].get(source));
+                if(Modifier.isPublic(targetFields[i].getModifiers())) {
+                    targetFields[i].set(target, sourceFields[i].get(source));
+                }
             }
         } catch (InstantiationException e) {
             e.printStackTrace();
@@ -53,10 +58,21 @@ public class ComponentCloner {
             Field[] sourceFields = source.getClass().getDeclaredFields();
             Field[] targetFields = target.getClass().getDeclaredFields();
             for(int i = 0; i < targetFields.length; i++) {
-                targetFields[i].set(target, sourceFields[i].get(source));
+                if(targetFields[i].isAccessible()) {
+                    targetFields[i].set(target, sourceFields[i].get(source));
+                }
             }
         } catch (IllegalAccessException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Collection<Component> cloneAll(Collection<Component> components) {
+        Collection<Component> clones = new ArrayList<>();
+        for(Component component: components) {
+            clones.add(get(component));
+        }
+
+        return clones;
     }
 }

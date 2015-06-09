@@ -19,11 +19,16 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -35,11 +40,6 @@ public abstract class BasicFollower extends Group {
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
-
-    public enum FollowerMode {
-        normal, transform
-    }
-    private FollowerMode mode = FollowerMode.normal;
 
     public BasicFollower(Entity entity) {
         setItem(entity);
@@ -54,23 +54,25 @@ public abstract class BasicFollower extends Group {
     }
 
     public void update() {
-        // TODO: get items position based on current zoom
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+
         // TODO: Make poolable vector
     	Vector2 localCoords = new Vector2(0, 0);
     	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
-        setX((int)(localCoords.x));
-        setY((int)(localCoords.y));
-        setWidth(dimensionsComponent.width * transformComponent.scaleX);
-        setHeight(dimensionsComponent.height * transformComponent.scaleY);
+
+        setX((int)(localCoords.x + (viewport.getScreenWidth()/2 - camera.position.x)));
+        setY((int)(localCoords.y + (viewport.getScreenHeight()/2 - camera.position.y)));
+        setWidth(dimensionsComponent.width * transformComponent.scaleX * camera.zoom);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY * camera.zoom);
+
+        //setOrigin(transformComponent.originX, transformComponent.originY);
+        setRotation(transformComponent.rotation);
     }
 
     public void show() {
         setVisible(true);
         update();
-    }
-
-    public void setMode(FollowerMode mode) {
-        this.mode = mode;
     }
 
     public void hide() {
@@ -84,6 +86,10 @@ public abstract class BasicFollower extends Group {
 
     }
 
+    public void clearFollowerListener() {
+
+    }
+
     @Override
     public Actor hit (float x, float y, boolean touchable) {
         Actor hitActor = super.hit(x, y, touchable);
@@ -91,5 +97,13 @@ public abstract class BasicFollower extends Group {
         if(hitActor.equals(this)) return null;
 
         return hitActor;
+    }
+
+    public void handleNotification(Notification notification) {
+        // This method is meant to be overridden.
+    }
+
+    public Entity getEntity() {
+        return entity;
     }
 }

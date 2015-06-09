@@ -23,6 +23,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 6/3/2015.
@@ -30,13 +31,14 @@ import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 public class UpdateEntityComponentsCommand extends RevertableCommand {
 
     private Array<Component> backupComponents = new Array<>();
-    private Entity entity;
+    private Integer entityId;
 
     @Override
     public void doAction() {
         Object[] payload = getNotification().getBody();
 
-        entity = (Entity) payload[0];
+        Entity entity = (Entity) payload[0];
+        entityId = EntityUtils.getEntityId(entity);
         Array<Component> components = (Array<Component>) payload[1];
 
         for(int i = 0; i < components.size; i++) {
@@ -52,7 +54,7 @@ public class UpdateEntityComponentsCommand extends RevertableCommand {
     @Override
     public void undoAction() {
         for(int i = 0; i < backupComponents.size; i++) {
-            Component entityComponent = ComponentRetriever.get(entity, backupComponents.get(i).getClass());
+            Component entityComponent = ComponentRetriever.get(EntityUtils.getByUniqueId(entityId), backupComponents.get(i).getClass());
             ComponentCloner.set(entityComponent, backupComponents.get(i));
         }
     }
