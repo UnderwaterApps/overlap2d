@@ -98,7 +98,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
 				if(childTextureRegionComponent != null){
-					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, 0, 0, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
+					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, childTransformComponent.originX, childTransformComponent.originY, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
 				}
 				
 				if(particleComponent != null){
