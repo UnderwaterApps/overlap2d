@@ -53,7 +53,7 @@ public class SceneLoader {
 	public World world;
 	public Entity rootEntity;
 
-	private EntityFactory entityFactory;
+	public EntityFactory entityFactory;
 
 	/**
 	 * Empty constructor is intended for easy use, it will create default

@@ -2,8 +2,10 @@ package com.uwsoft.editor.renderer.factory;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
@@ -13,6 +15,8 @@ import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.legacy.data.SpriterVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+
+import java.util.HashMap;
 
 public class EntityFactory {
 	
@@ -32,6 +36,10 @@ public class EntityFactory {
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
 			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory;
+
+	private int entityIterator = 0;
+
+	private HashMap<Integer, Entity> entities = new HashMap<>();
 	
 	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
 	
@@ -55,6 +63,8 @@ public class EntityFactory {
 		entity.flags = IMAGE_TYPE;
 
 		simpleImageComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -65,6 +75,8 @@ public class EntityFactory {
 		entity.flags = PARTICLE_TYPE;
 		
 		particleEffectComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -75,6 +87,8 @@ public class EntityFactory {
 		entity.flags = LIGHT_TYPE;
 
 		lightComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -85,6 +99,8 @@ public class EntityFactory {
 		entity.flags = SPINE_TYPE;
 
 		spineComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -95,6 +111,8 @@ public class EntityFactory {
 		entity.flags = SPRITE_TYPE;
 
 		spriteComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -105,6 +123,8 @@ public class EntityFactory {
 		entity.flags = SPRITER_TYPE;
 
 		spriterComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
 	}
@@ -115,8 +135,21 @@ public class EntityFactory {
 		entity.flags = COMPOSITE_TYPE;
 
 		compositeComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
 		
 		return entity;
+	}
+
+	private void postProcessEntity(Entity entity) {
+		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
+		mainItemComponent.uniqueId = entityIterator++;
+		entities.put(mainItemComponent.uniqueId, entity);
+	}
+
+	public Entity getEntityByUniqueId(Integer id) {
+		return entities.get(id);
 	}
 
 	public void setResourceManager(IResourceRetriever rm) {
