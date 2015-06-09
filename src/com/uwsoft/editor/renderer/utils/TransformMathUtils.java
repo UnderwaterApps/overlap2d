@@ -88,18 +88,16 @@ public class TransformMathUtils {
 				localCoords.x += x;
 				localCoords.y += y;
 			} else {
-				//TODO origin
-				final float originX = 0;
-				final float originY = 0;
+				final float originX = transform.originX;
+				final float originY = transform.originY;
 				localCoords.x = (localCoords.x - originX) * scaleX + originX + x;
 				localCoords.y = (localCoords.y - originY) * scaleY + originY + y;
 			}
 		} else {
 			final float cos = (float)Math.cos(rotation * MathUtils.degreesToRadians);
 			final float sin = (float)Math.sin(rotation * MathUtils.degreesToRadians);
-			//TODO origin
-			final float originX = 0;
-			final float originY = 0;
+			final float originX = transform.originX;
+			final float originY = transform.originY;
 			final float tox = (localCoords.x - originX) * scaleX;
 			final float toy = (localCoords.y - originY) * scaleY;
 			localCoords.x = (tox * cos + toy * sin) + originX + x;

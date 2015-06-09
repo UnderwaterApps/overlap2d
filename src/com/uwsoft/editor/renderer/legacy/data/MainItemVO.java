@@ -17,7 +17,7 @@ public class MainItemVO {
 	public float rotation;
 	public int zIndex = 0;
 	public String layerName = "";
-	public float[] tint = null;
+	public float[] tint = {1, 1, 1, 1};
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
 	
