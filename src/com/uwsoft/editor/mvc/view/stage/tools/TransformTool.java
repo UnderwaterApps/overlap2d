@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -125,6 +126,13 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             case NormalSelectionFollower.ORIGIN:
                 newOriginX = x - transformComponent.x;
                 newOriginY = y - transformComponent.y;
+                // TODO: adjust coordinates
+                //final float cos = (float)Math.cos(transformComponent.rotation * MathUtils.degreesToRadians);
+                //final float sin = (float)Math.sin(transformComponent.rotation * MathUtils.degreesToRadians);
+                //final float tox = (localCoords.x - originX) * scaleX;
+                //final float toy = (localCoords.y - originY) * scaleY;
+                //newX = (newX * cos + newY * sin)+newX;
+                //newY = (newX * -sin + newY * cos)+newY;
                 break;
             case NormalSelectionFollower.LB:
                 newX = x;

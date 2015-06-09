@@ -18,30 +18,38 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.Set;
+import java.util.*;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
 public class DeleteItemsCommand extends RevertableCommand {
 
-   private String backup = "";
+   private HashMap<Integer, Collection<Component>> backup;
 
     private void backup() {
-        CompositeVO tempHolder = new CompositeVO();
+        backup = new HashMap<>();
+
         Set<Entity> items = sandbox.getSelector().getSelectedItems();
-        Json json = new Json();
-        json.setOutputType(JsonWriter.OutputType.json);
-      //TODO fix and uncomment
-//        for(int i = 0; i < items.size(); i++) {
-//            tempHolder.addItem(items.get(i).getDataVO());
-//        }
-        backup = json.toJson(tempHolder);
+
+        for(Entity entity: items) {
+            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+            backup.put(EntityUtils.getEntityId(entity), components);
+        }
     }
 
     @Override
@@ -52,25 +60,17 @@ public class DeleteItemsCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-    	//TODO fix and uncomment
-//        Json json = new Json();
-//        json.setOutputType(JsonWriter.OutputType.json);
-//        CompositeVO tempHolder = json.fromJson(CompositeVO.class, backup);
-//
-//        CompositeItemVO fakeVO = new CompositeItemVO();
-//
-//        fakeVO.composite = tempHolder;
-//        CompositeItem fakeItem = new CompositeItem(fakeVO, sandbox.sceneControl.getEssentials());
-//        ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
-//
-//        for (int i = 0; i < fakeItem.getItems().size(); i++) {
-//            IBaseItem itm = fakeItem.getItems().get(i);
-//            sandbox.sceneControl.getCurrentScene().addItem(itm);
-//            itm.updateDataVO();
-//            facade.sendNotification(ItemFactoryOld.NEW_ITEM_ADDED, itm);
-//            finalItems.add(itm);
-//        }
-//
-//        sandbox.getSelector().setSelections(finalItems, true);
+        for (Collection<Component> components : backup.values()) {
+            Entity entity = new Entity();
+            for(Component component: components) {
+                entity.add(component);
+            }
+            sandbox.getEngine().addEntity(entity);
+            sandbox.getSceneControl().sceneLoader.entityFactory.updateMap(entity);
+            Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
+            NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+            nodeComponent.addChild(entity);
+            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        }
     }
 }

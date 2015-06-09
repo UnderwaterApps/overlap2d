@@ -22,10 +22,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
+import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +39,7 @@ import java.util.Map;
  */
 public class ItemsMoveCommand extends RevertableCommand {
 
-    private HashMap<Entity, Vector2> prevLocations = new HashMap<>();
+    private HashMap<Integer, Vector2> prevLocations = new HashMap<>();
 
     @Override
     public void doAction() {
@@ -53,7 +58,7 @@ public class ItemsMoveCommand extends RevertableCommand {
             if(itemData.length > 2) {
                 prevLocation = (Vector2) itemData[2];
             }
-            prevLocations.put(entity, prevLocation);
+            prevLocations.put(EntityUtils.getEntityId(entity), prevLocation);
 
             transformComponent.x = newLocation.x;
             transformComponent.y = newLocation.y;
@@ -65,9 +70,11 @@ public class ItemsMoveCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-        for (Map.Entry<Entity, Vector2> entry : prevLocations.entrySet()) {
-            Entity entity = entry.getKey();
+        for (Map.Entry<Integer, Vector2> entry : prevLocations.entrySet()) {
+            Integer entityUniqueId = entry.getKey();
             Vector2 prevLocation = entry.getValue();
+
+            Entity entity = EntityUtils.getByUniqueId(entityUniqueId);
 
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             transformComponent.x = prevLocation.x;

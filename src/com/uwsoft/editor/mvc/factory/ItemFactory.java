@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -82,9 +83,8 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return false;
 
         Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
-        sandbox.getEngine().addEntity(entity);
 
-        Overlap2DFacade.getInstance().sendNotification(NEW_ITEM_ADDED, entity);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
     }

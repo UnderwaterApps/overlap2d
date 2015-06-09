@@ -287,10 +287,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if(keycode == Input.Keys.Z) {
                     if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                         CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
-                        commandManager.undoCommand();
+                        commandManager.redoCommand();
                     } else {
                         CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
-                        commandManager.redoCommand();
+                        commandManager.undoCommand();
                     }
                 }
 

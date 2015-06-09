@@ -19,25 +19,34 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 5/14/2015.
  */
 public class AddSelectionCommand extends RevertableCommand {
 
+    private Array<Integer> entityIds;
+
     @Override
     public void doAction() {
         Set<Entity> items = getNotification().getBody();
         Sandbox.getInstance().getSelector().addSelections(items);
+
+        entityIds = EntityUtils.getEntityId(items);
     }
 
     @Override
     public void undoAction() {
-        Set<Entity> items = getNotification().getBody();
+        Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
         Sandbox.getInstance().getSelector().releaseSelections(items);
     }
 

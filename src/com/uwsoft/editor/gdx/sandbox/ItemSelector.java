@@ -305,7 +305,7 @@ public class ItemSelector {
     public void removeCurrentSelectedItems() {
         for (Entity item : currentSelection) {
             midUIMediator.removeFollower(item);
-            sandbox.itemControl.removeItem(item);
+            sandbox.getEngine().removeEntity(item);
         }
 
         currentSelection.clear();
