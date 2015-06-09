@@ -24,8 +24,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.FontManager;
+import com.uwsoft.editor.mvc.proxy.ResourceManager;
+import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.legacy.data.LabelVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 
@@ -113,7 +118,24 @@ public class ItemFactory {
         return true;
     }
 
-    public boolean createLabel(String regionName, Vector2 position) {
+    public boolean createLabel(TextTool textSettings, Vector2 position) {
+        LabelVO vo = new LabelVO();
+        if(!setEssentialData(vo, position)) return false;
+
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+
+        resourceManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
+
+        // using long unique name
+        vo.style = textSettings.getFontFamily();
+        vo.text = "LABEL";
+        vo.size = textSettings.getFontSize();
+
+        //Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
         return true;
     }
 }

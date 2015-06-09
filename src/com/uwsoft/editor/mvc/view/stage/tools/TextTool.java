@@ -19,7 +19,9 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -52,8 +54,7 @@ public class TextTool extends SimpleTool {
 
     @Override
     public void stageMouseUp(float x, float y) {
-    	//TODO fix and uncomment
-       // Sandbox.getInstance().getItemFactory().createLabel(this, x, y);
+        ItemFactory.get().createLabel(this, new Vector2(x, y));
 
         return;
     }
