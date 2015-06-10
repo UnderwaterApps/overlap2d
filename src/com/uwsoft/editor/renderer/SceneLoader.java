@@ -187,7 +187,7 @@ public class SceneLoader {
 		
 		ViewPortComponent viewPortComponent = new ViewPortComponent();
 		viewPortComponent.viewPort = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-		viewPortComponent.viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+		//viewPortComponent.viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
 		
 		rootEntity = new Entity();
