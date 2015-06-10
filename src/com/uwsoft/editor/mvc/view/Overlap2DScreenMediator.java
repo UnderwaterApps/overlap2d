@@ -22,8 +22,12 @@ import com.badlogic.ashley.core.Engine;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.actors.basic.SandboxBackUI;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
+import com.uwsoft.editor.renderer.Overlap2dRenderer;
 
 /**
  * Created by sargis on 3/30/15.
@@ -45,6 +49,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
                 Overlap2D.RENDER,
                 Overlap2D.RESIZE,
                 Overlap2D.DISPOSE,
+                SceneDataManager.SCENE_LOADED
         };
     }
 
@@ -57,9 +62,18 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
             	//TODO this must be changed to Command 
             	facade = Overlap2DFacade.getInstance();
             	SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
-            	Engine engine = sandboxMediator.getViewComponent().getEngine();
+
+                Engine engine = sandboxMediator.getViewComponent().getEngine();
+
             	getViewComponent().setEngine(engine);
                 viewComponent.show();
+                break;
+            case SceneDataManager.SCENE_LOADED:
+                facade = Overlap2DFacade.getInstance();
+                sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+                engine = sandboxMediator.getViewComponent().getEngine();
+                SandboxBackUI sandboxBackUI = new SandboxBackUI(engine.getSystem(Overlap2dRenderer.class).batch);
+                getViewComponent().setBackUI(sandboxBackUI);
                 break;
             case Overlap2D.PAUSE:
                 viewComponent.pause();

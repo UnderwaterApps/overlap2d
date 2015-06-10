@@ -97,7 +97,7 @@ public class Sandbox {
     public boolean isResizing = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
-    public ArrayList<MainItemVO> tempClipboard;
+    private Object clipboard;
     public String fakeClipboard;
     public String currentLoadedSceneFileName;
     private int gridSize = 1; // pixels
@@ -526,5 +526,15 @@ public class Sandbox {
         y = y - (viewport.getScreenHeight()/2 - camera.position.y);
 
         return new Vector2(x, y);
+    }
+
+    public void copyToClipboard(Object data) {
+        //TODO: make this an actual clipboard call (dunno how though, need to make all serializable?)
+        this.clipboard = data;
+    }
+
+    public Object retrieveFromClipboard() {
+        //TODO: make this an actual clipboard call (dunno how though, need to make all serializable?)
+        return clipboard;
     }
 }

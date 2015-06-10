@@ -27,6 +27,7 @@ import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.uwsoft.editor.gdx.actors.basic.SandboxBackUI;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
@@ -48,6 +49,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     private boolean paused = false;
 
     private Sandbox sandbox;
+    private SandboxBackUI sandboxBackUI;
 
     public Overlap2DScreen() {
         facade = Overlap2DFacade.getInstance();
@@ -61,6 +63,8 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         GL20 gl = Gdx.gl;
         gl.glClearColor(0.129f, 0.129f, 0.129f, 1.0f);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        if(sandboxBackUI != null) sandboxBackUI.render(deltaTime);
 
         engine.update(deltaTime);
         
@@ -97,9 +101,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         if (demoDir.isDirectory() && demoDir.exists()) {
             projectManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
             sandbox.loadCurrentProject();
-            //uiStage.loadCurrentProject();
-            //TODO set camer to it's place
-            //renderer.viewPort.getCamera().position.set(400, 200, 0);
         }
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(this);
@@ -182,4 +183,8 @@ public class Overlap2DScreen implements Screen, InputProcessor {
 	public void setEngine(Engine engine) {
 		this.engine = engine;
 	}
+
+    public void setBackUI(SandboxBackUI sandboxBackUI) {
+        this.sandboxBackUI = sandboxBackUI;
+    }
 }

@@ -123,7 +123,6 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return false;
 
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        FontManager fontManager = facade.retrieveProxy(FontManager.NAME);
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
         resourceManager.prepareEmbeddingFont(textSettings.getFontFamily(), textSettings.getFontSize());
@@ -133,8 +132,8 @@ public class ItemFactory {
         vo.text = "LABEL";
         vo.size = textSettings.getFontSize();
 
-        //Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
-        //Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
     }

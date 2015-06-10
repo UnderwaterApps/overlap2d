@@ -140,6 +140,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         initItemListeners();
 
         setCurrentTool(SelectionTool.NAME);
+
+        Sandbox.getInstance().getCamera().position.set(new Vector2(0, 0), 0);
     }
 
     private void initItemListeners() {

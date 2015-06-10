@@ -18,56 +18,50 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.ashley.core.Component;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.Collection;
+import java.util.HashMap;
+
 /**
  * Created by azakhary on 4/28/2015.
  */
 public class CutItemsCommand extends RevertableCommand {
 
-    private String backup = "";
-
-    private void backup() {
-    	//TODO fix and uncomment
-//        CompositeVO tempHolder = new CompositeVO();
-//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-//        Json json = new Json();
-//        json.setOutputType(JsonWriter.OutputType.json);
-//
-//        for(int i = 0; i < items.size(); i++) {
-//            tempHolder.addItem(items.get(i).getDataVO());
-//        }
-//        backup = json.toJson(tempHolder);
-    }
+    private HashMap<Integer, Collection<Component>> backup;
 
     @Override
     public void doAction() {
-        backup();
-      //TODO fix and uncomment
-//        ArrayList<IBaseItem> items = sandbox.getSelector().getSelectedItems();
-//        sandbox.putItemsToClipboard(items);
-//        sandbox.getSelector().removeCurrentSelectedItems();
+        backup = EntityUtils.cloneEntities(sandbox.getSelector().getSelectedItems());
+        HashMap<Integer, Collection<Component>> data = EntityUtils.cloneEntities(sandbox.getSelector().getSelectedItems());
+        Object[] payload = new Object[2];
+        payload[0] = new Vector2(Sandbox.getInstance().getCamera().position.x,Sandbox.getInstance().getCamera().position.y);
+        payload[1] = data;
+        Sandbox.getInstance().copyToClipboard(payload);
+        sandbox.getSelector().removeCurrentSelectedItems();
     }
 
     @Override
     public void undoAction() {
-    	//TODO fix and uncomment
-//        Json json = new Json();
-//        json.setOutputType(JsonWriter.OutputType.json);
-//        CompositeVO tempHolder = json.fromJson(CompositeVO.class, backup);
-//
-//        CompositeItemVO fakeVO = new CompositeItemVO();
-//
-//        fakeVO.composite = tempHolder;
-//        CompositeItem fakeItem = new CompositeItem(fakeVO, sandbox.sceneControl.getEssentials());
-//        ArrayList<IBaseItem> finalItems = new ArrayList<IBaseItem>();
-//
-//        for (int i = 0; i < fakeItem.getItems().size(); i++) {
-//            IBaseItem itm = fakeItem.getItems().get(i);
-//            sandbox.sceneControl.getCurrentScene().addItem(itm);
-//            itm.updateDataVO();
-//            facade.sendNotification(ItemFactoryOld.NEW_ITEM_ADDED, itm);
-//            finalItems.add(itm);
-//        }
-//
-//        sandbox.getSelector().setSelections(finalItems, true);
+        for (Collection<Component> components : backup.values()) {
+            Entity entity = new Entity();
+            for(Component component: components) {
+                entity.add(component);
+            }
+            sandbox.getEngine().addEntity(entity);
+            sandbox.getSceneControl().sceneLoader.entityFactory.updateMap(entity);
+            Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
+            NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+            nodeComponent.addChild(entity);
+            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        }
     }
 }

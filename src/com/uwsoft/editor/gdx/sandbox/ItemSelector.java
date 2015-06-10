@@ -231,7 +231,6 @@ public class ItemSelector {
         }
     }
 
-
     /**
      * set selection to a list of items
      * @param items list of panels to select

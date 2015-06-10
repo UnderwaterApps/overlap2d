@@ -19,84 +19,68 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
 public class PasteItemsCommand extends RevertableCommand {
 
-    private String clipboardContents;
-    private ArrayList<Entity> finalItems;
-
-    @Override
-    public void execute(Notification notification) {
-        if(sandbox.fakeClipboard == null || sandbox.fakeClipboard.equals("")) return;
-
-        clipboardContents = new String(sandbox.fakeClipboard);
-        super.execute(notification);
-    }
+    private Array<Integer> pastedEntityIds = new Array<>();
 
     @Override
     public void doAction() {
-        Vector2 pastePlace = getNotification().getBody();
-      //TODO fix and uncomment
-//        try {
-//            CompositeVO tempHolder;
-//            Json json = new Json();
-//            json.setOutputType(JsonWriter.OutputType.json);
-//            tempHolder = json.fromJson(CompositeVO.class, clipboardContents);
-//
-//            if (tempHolder == null) return;
-//
-//            CompositeItemVO fakeVO = new CompositeItemVO();
-//
-//            fakeVO.composite = tempHolder;
-//            CompositeItem fakeItem = new CompositeItem(fakeVO, sandbox.sceneControl.getEssentials());
-//
-//            finalItems = new ArrayList<>();
-//            Actor firstItem = (Actor) fakeItem.getItems().get(0);
-//            float offsetX = firstItem.getX() * sandbox.sceneControl.getCurrentScene().mulX;
-//            float offsetY = firstItem.getY() * sandbox.sceneControl.getCurrentScene().mulY;
-//            for (int i = 1; i < fakeItem.getItems().size(); i++) {
-//                Actor item = (Actor) fakeItem.getItems().get(i);
-//                if (item.getX() * sandbox.sceneControl.getCurrentScene().mulX < offsetX) {
-//                    offsetX = item.getX() * sandbox.sceneControl.getCurrentScene().mulX;
-//                }
-//                if (item.getY() * sandbox.sceneControl.getCurrentScene().mulY < offsetY) {
-//                    offsetY = item.getY() * sandbox.sceneControl.getCurrentScene().mulY;
-//                }
-//            }
-//
-//            Vector3 cameraPos = ((OrthographicCamera) sandbox.getSandboxStage().getCamera()).position;
-//
-//            for (int i = 0; i < fakeItem.getItems().size(); i++) {
-//                IBaseItem itm = fakeItem.getItems().get(i);
-//                itm.getDataVO().layerName = sandbox.getUIStage().getCurrentSelectedLayer().layerName;
-//                sandbox.sceneControl.getCurrentScene().addItem(itm);
-//                if(pastePlace == null) {
-//                    ((Actor) itm).setX(((Actor) itm).getX() - offsetX + (cameraPos.x + sandbox.copedItemCameraOffset.x));
-//                    ((Actor) itm).setY(((Actor) itm).getY() - offsetY + (cameraPos.y + sandbox.copedItemCameraOffset.y));
-//                } else {
-//                    ((Actor) itm).setX(pastePlace.x + ((Actor) itm).getX() - offsetX);
-//                    ((Actor) itm).setY(pastePlace.y + ((Actor) itm).getY() - offsetY);
-//                }
-//                itm.updateDataVO();
-//                facade.sendNotification(ItemFactoryOld.NEW_ITEM_ADDED, itm);
-//                finalItems.add(itm);
-//            }
-//
-//            sandbox.getSelector().setSelections(finalItems, true);
-//        } catch (Exception e) {
-//
-//        }
+        Object[] payload = (Object[]) Sandbox.getInstance().retrieveFromClipboard();
+        Vector2 cameraPrevPosition = (Vector2) payload[0];
+        Vector2 cameraCurrPosition = new Vector2(Sandbox.getInstance().getCamera().position.x,Sandbox.getInstance().getCamera().position.y);
+
+        Vector2 diff = cameraCurrPosition.sub(cameraPrevPosition);
+
+        HashMap<Integer, Collection<Component>> backup = (HashMap<Integer, Collection<Component>>) payload[1];
+        for (Collection<Component> components : backup.values()) {
+            Entity entity = new Entity();
+            for(Component component: components) {
+                entity.add(component);
+            }
+            sandbox.getEngine().addEntity(entity);
+            int uniquId = sandbox.getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
+            Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
+            NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+
+            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            transformComponent.x += diff.x;
+            transformComponent.y += diff.y;
+
+            nodeComponent.addChild(entity);
+            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+
+            pastedEntityIds.add(uniquId);
+        }
     }
 
     @Override
     public void undoAction() {
-        sandbox.getSelector().removeCurrentSelectedItems();
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        for (Integer entityId : pastedEntityIds) {
+            Entity entity = EntityUtils.getByUniqueId(entityId);
+            midUIMediator.removeFollower(entity);
+            sandbox.getEngine().removeEntity(entity);
+        }
     }
 }

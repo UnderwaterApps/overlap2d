@@ -16,16 +16,41 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
+package com.uwsoft.editor.gdx.actors.basic;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.gdx.actors.GridView;
 
 /**
- * Created by sargis on 5/7/15.
+ * Created by azakhary on 6/10/2015.
  */
-public interface DraggableResourceView {
-    Actor getDragActor();
+public class SandboxBackUI {
 
-    ResourcePayloadObject getPayloadData();
+    private Array<Actor> actors = new Array<>();
+
+    private Batch batch;
+
+    public SandboxBackUI(Batch batch) {
+        this.batch = batch;
+
+        GridView gridView = new GridView();
+        addActor(gridView);
+    }
+
+    public void addActor(Actor actor) {
+        actors.add(actor);
+    }
+
+    public void render(float delta) {
+        batch.begin();
+        for(Actor actor: actors) {
+            actor.act(delta);
+            actor.draw(batch, 1);
+        }
+        batch.setColor(Color.WHITE);
+        batch.end();
+    }
 }

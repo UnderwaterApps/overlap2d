@@ -25,10 +25,7 @@ import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -61,6 +58,17 @@ public class EntityUtils {
             entities.add(entity);
         }
         return entities;
+    }
+
+    public static HashMap<Integer, Collection<Component>> cloneEntities(Set<Entity> entities) {
+        HashMap<Integer, Collection<Component>> data = new HashMap<>();
+
+        for(Entity entity: entities) {
+            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+            data.put(EntityUtils.getEntityId(entity), components);
+        }
+
+        return data;
     }
 
 

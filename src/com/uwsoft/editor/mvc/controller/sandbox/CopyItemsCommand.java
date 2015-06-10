@@ -18,40 +18,36 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.Set;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class CopyItemsCommand extends SandboxCommand {
+public class CopyItemsCommand extends RevertableCommand {
 
     @Override
-    public void execute(Notification notification) {
-        Set<Entity> items = sandbox.getSelector().getSelectedItems();
-        if(items.size() > 0) {
-            /*
-            CompositeVO tempHolder = new CompositeVO();
-            Json json = new Json();
-            json.setOutputType(JsonWriter.OutputType.json);
-            Actor actor = (Actor) items.get(0);
-            Vector3 cameraPos = ((OrthographicCamera) getSandboxStage().getCamera()).position;
-            Vector3 vector3 = new Vector3(actor.getX() - cameraPos.x, actor.getY() - cameraPos.y, 0);
-            for (IBaseItem item : items) {
-                tempHolder.addItem(item.getDataVO());
-                actor = (Actor) item;
-                if (actor.getX() - cameraPos.x < vector3.x) {
-                    vector3.x = actor.getX() - cameraPos.x;
-                }
-                if (actor.getY() - cameraPos.y < vector3.y) {
-                    vector3.y = actor.getY() - cameraPos.y;
-                }
-            }
-            fakeClipboard = json.toJson(tempHolder);
-            copedItemCameraOffset = vector3;*/
-        }
+    public void doAction() {
+        HashMap<Integer, Collection<Component>> data = EntityUtils.cloneEntities(sandbox.getSelector().getSelectedItems());
+        Object[] payload = new Object[2];
+        payload[0] = new Vector2(Sandbox.getInstance().getCamera().position.x,Sandbox.getInstance().getCamera().position.y);
+        payload[1] = data;
+        Sandbox.getInstance().copyToClipboard(payload);
+    }
+
+    @Override
+    public void undoAction() {
+        // we do not restore clipboard at this time, as it is not a string but a reference, which honestly sucks ass
     }
 }

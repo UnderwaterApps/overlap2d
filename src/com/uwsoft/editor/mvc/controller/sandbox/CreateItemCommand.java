@@ -39,6 +39,9 @@ public class CreateItemCommand extends RevertableCommand {
 
         sandbox.getEngine().addEntity(entity);
         Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+
+        // select newly created item
+        sandbox.getSelector().setSelection(entity, true);
     }
 
     @Override
