@@ -29,10 +29,7 @@ import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.LabelVO;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.*;
 
 /**
  * Created by azakhary on 6/5/2015.
@@ -86,9 +83,7 @@ public class ItemFactory {
         vo.imageName = regionName;
 
         if(!setEssentialData(vo, position)) return false;
-
         Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
-
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
@@ -115,6 +110,13 @@ public class ItemFactory {
     }
 
     public boolean createParticleItem(String regionName, Vector2 position) {
+        ParticleEffectVO vo = new ParticleEffectVO();
+        vo.particleName = regionName;
+
+        if(!setEssentialData(vo, position)) return false;
+        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
         return true;
     }
 

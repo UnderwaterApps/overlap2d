@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.VisUI;
 
@@ -34,6 +35,7 @@ public class LightFollower extends BasicFollower {
     @Override
     public void create() {
         Image icon = new Image(VisUI.getSkin().getDrawable("tool-sphericlight"));
+        icon.setTouchable(Touchable.disabled);
         icon.setX(dimensionsComponent.width/2);
         icon.setY(dimensionsComponent.height/2);
         addActor(icon);

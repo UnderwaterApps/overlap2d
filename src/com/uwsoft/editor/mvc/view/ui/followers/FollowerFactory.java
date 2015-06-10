@@ -30,6 +30,8 @@ public class FollowerFactory {
         switch (entity.flags) {
             case EntityFactory.LIGHT_TYPE:
                 return new LightFollower(entity);
+            case EntityFactory.PARTICLE_TYPE:
+                return new ParticleFollower(entity);
         }
 
         return new NormalSelectionFollower(entity);
