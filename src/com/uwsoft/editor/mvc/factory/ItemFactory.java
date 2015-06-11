@@ -109,9 +109,17 @@ public class ItemFactory {
         return true;
     }
 
-    public boolean createParticleItem(String regionName, Vector2 position) {
+    public Entity createCompositeItem(Vector2 position) {
+        CompositeItemVO vo = new CompositeItemVO();
+        if(!setEssentialData(vo, position)) return null;
+        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+
+        return entity;
+    }
+
+    public boolean createParticleItem(String particleName, Vector2 position) {
         ParticleEffectVO vo = new ParticleEffectVO();
-        vo.particleName = regionName;
+        vo.particleName = particleName;
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);

@@ -30,6 +30,8 @@ public abstract class RevertableCommand extends SandboxCommand {
     private CommandManager commandManager;
     private Notification notification;
 
+    private boolean isCancelled = false;
+
     private boolean stateDone = false;
 
     @Override
@@ -38,7 +40,7 @@ public abstract class RevertableCommand extends SandboxCommand {
         this.notification = notification;
         doAction();
         stateDone = true;
-        commandManager.addCommand(this);
+        if(!isCancelled) commandManager.addCommand(this);
     }
 
     public abstract void doAction();
@@ -54,5 +56,9 @@ public abstract class RevertableCommand extends SandboxCommand {
 
     public boolean isStateDone() {
         return stateDone;
+    }
+
+    public void cancel() {
+        isCancelled = true;
     }
 }
