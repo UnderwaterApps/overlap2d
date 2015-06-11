@@ -89,6 +89,12 @@ public class Sandbox {
 
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
+
+    private Object clipboard;
+
+
+    private Entity currentViewingEntity;
+
     /**
      * this part contains legacy params that need to be removed one by one
      */
@@ -97,8 +103,7 @@ public class Sandbox {
     public boolean isResizing = false;
     public boolean dirty = false;
     public Vector3 copedItemCameraOffset;
-    private Object clipboard;
-    public String fakeClipboard;
+
     public String currentLoadedSceneFileName;
     private int gridSize = 1; // pixels
     private float zoomPercent = 100;
@@ -252,6 +257,8 @@ public class Sandbox {
         //sandboxStage.getCamera().position.set(0, 0, 0);
 
         facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+
+        currentViewingEntity = getRootEntity();
 
         //TODO: move this into SceneDataManager!
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
@@ -505,8 +512,21 @@ public class Sandbox {
         return (OrthographicCamera) getViewport().getCamera();
     }
 
+    public Entity getCurrentViewingEntity() {
+        return currentViewingEntity;
+    }
+
+    public void setCurrentViewingEntity(Entity entity) {
+        currentViewingEntity = entity;
+    }
+
+    public ViewPortComponent getViewportComponent() {
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(), ViewPortComponent.class);
+        return viewPortComponent;
+    }
+
     public Viewport getViewport() {
-        ViewPortComponent viewPortComponent = ComponentRetriever.get(getRootEntity(), ViewPortComponent.class);
+        ViewPortComponent viewPortComponent = getViewportComponent();
         return viewPortComponent.viewPort;
     }
 

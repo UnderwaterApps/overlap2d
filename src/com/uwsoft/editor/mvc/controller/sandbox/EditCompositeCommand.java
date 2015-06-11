@@ -18,17 +18,53 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class EditCompositeCommand extends SandboxCommand {
+public class EditCompositeCommand extends RevertableCommand {
+
+    private static final String CLASS_NAME = "com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand";
+    public static final String VIEW_COMPOSITE_CHANGED = CLASS_NAME + "VIEW_COMPOSITE_CHANGED";
+
+    private Integer previousViewEntityId;
+    private Integer enteringInto;
 
     @Override
-    public void execute(Notification notification) {
-		//TODO fix and uncomment
-        //sandbox.enterIntoComposite();
+    public void doAction() {
+        Entity entity = getNotification().getBody();
+        Entity oldEntity = sandbox.getCurrentViewingEntity();
+        previousViewEntityId = EntityUtils.getEntityId(oldEntity);
+        enteringInto = EntityUtils.getEntityId(entity);
+
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(oldEntity, ViewPortComponent.class);
+        oldEntity.remove(ViewPortComponent.class);
+        entity.add(viewPortComponent);
+        sandbox.setCurrentViewingEntity(entity);
+
+        sandbox.getSelector().clearSelections();
+        facade.sendNotification(VIEW_COMPOSITE_CHANGED);
+    }
+
+    @Override
+    public void undoAction() {
+        Entity oldEntity = EntityUtils.getByUniqueId(previousViewEntityId);
+        Entity currEntity = sandbox.getCurrentViewingEntity();
+
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(currEntity, ViewPortComponent.class);
+        currEntity.remove(ViewPortComponent.class);
+        oldEntity.add(viewPortComponent);
+        sandbox.setCurrentViewingEntity(oldEntity);
+
+        sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
+        facade.sendNotification(VIEW_COMPOSITE_CHANGED);
     }
 }
