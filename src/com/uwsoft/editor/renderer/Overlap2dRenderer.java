@@ -4,22 +4,22 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
+import com.badlogic.gdx.scenes.scene2d.utils.Align;
 import com.brashmonkey.spriter.Player;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
@@ -142,12 +142,21 @@ public class Overlap2dRenderer extends IteratingSystem {
 					if (labelComponent.style.background != null) {
 						batch.setColor(tint.color.r, tint.color.g, tint.color.b, tint.color.a);
 						labelComponent.style.background.draw(batch, childTransformComponent.x, childTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
+						//System.out.println("LAbel BG");
 					}
 					//TODO we need tmp color here
-					if (labelComponent.style.fontColor != null) tint.color.mul(labelComponent.style.fontColor);
-					labelComponent.cache.tint(tint.color);
+					//if (labelComponent.style.fontColor != null) tint.color.mul(labelComponent.style.fontColor);
+					//labelComponent.cache.tint(tint.color);
+					
+					BitmapFont font = labelComponent.cache.getFont();
+					//font.draw(batch, labelComponent.text, childTransformComponent.x, childTransformComponent.y-50);
+					labelComponent.layout.setText(font, labelComponent.text, 0, labelComponent.text.length, Color.WHITE, dimenstionsComponent.width, Align.center, labelComponent.wrap, null);
+					labelComponent.cache.setText(labelComponent.layout, 0, 0);
+					
+					labelComponent.cache.tint(Color.WHITE);
 					labelComponent.cache.setPosition(childTransformComponent.x, childTransformComponent.y);
 					labelComponent.cache.draw(batch);
+					
 				}
 				
 				if(childNodeComponent !=null){

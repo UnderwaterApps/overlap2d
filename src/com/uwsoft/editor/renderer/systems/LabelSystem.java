@@ -13,7 +13,6 @@ import com.badlogic.gdx.utils.StringBuilder;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
 
 public class LabelSystem extends IteratingSystem {
 	private ComponentMapper<LabelComponent> labelComponentMapper = ComponentMapper.getFor(LabelComponent.class);
@@ -33,7 +32,7 @@ public class LabelSystem extends IteratingSystem {
 		transformComponent =  transformComponentMapper.get(entity);
 		labelComponent =  labelComponentMapper.get(entity);
 		dimensionsComponent = dimensionComponentMapper.get(entity);
-		layout ();
+		//layout ();
 	}
 	
 	private void scaleAndComputePrefSize () {
