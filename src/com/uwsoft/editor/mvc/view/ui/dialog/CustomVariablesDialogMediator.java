@@ -27,6 +27,9 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 import java.util.Set;
 
@@ -97,19 +100,21 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     }
 
     private void setVariable() {
-    	//TODO fix and uncomment
-//        CustomVariables vars = observable.getCustomVariables();
-//        String key = viewComponent.getKey();
-//        String value = viewComponent.getValue();
-//        vars.setVariable(key, value);
-//        observable.updateDataVO();
+        MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);
+        CustomVariables vars = new CustomVariables();
+        vars.loadFromString(mainItemComponent.customVars);
+        String key = viewComponent.getKey();
+        String value = viewComponent.getValue();
+        vars.setVariable(key, value);
+        mainItemComponent.customVars = vars.saveAsString();
     }
 
     private void removeVariable(String key) {
-    	//TODO fix and uncomment
-//        CustomVariables vars = observable.getCustomVariables();
-//        vars.removeVariable(key);
-//        observable.updateDataVO();
+        MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);
+        CustomVariables vars = new CustomVariables();
+        vars.loadFromString(mainItemComponent.customVars);
+        vars.removeVariable(key);
+        mainItemComponent.customVars = vars.saveAsString();
     }
 
     private void setObservable(Entity item) {
@@ -123,9 +128,10 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
         if(observable == null) {
             viewComponent.setEmpty();
         } else {
-        	//TODO fix and uncomment
-            //CustomVariables vars = observable.getCustomVariables();
-            //viewComponent.updateView(vars);
+            CustomVariables vars = new CustomVariables();
+            MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);
+            vars.loadFromString(mainItemComponent.customVars);
+            viewComponent.updateView(vars);
         }
     }
 }

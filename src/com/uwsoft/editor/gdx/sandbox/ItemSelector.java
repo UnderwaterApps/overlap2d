@@ -237,7 +237,7 @@ public class ItemSelector {
      * @param alsoShow if false, selection will remain hidden at this moment
      */
     public void setSelections(Set<Entity> items, boolean alsoShow) {
-        clearSelections();
+        currentSelection.clear();
 
         if(items == null) return;
 
