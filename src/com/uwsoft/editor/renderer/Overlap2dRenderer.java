@@ -148,10 +148,9 @@ public class Overlap2dRenderer extends IteratingSystem {
 					//if (labelComponent.style.fontColor != null) tint.color.mul(labelComponent.style.fontColor);
 					//labelComponent.cache.tint(tint.color);
 					
-					BitmapFont font = labelComponent.cache.getFont();
-					//font.draw(batch, labelComponent.text, childTransformComponent.x, childTransformComponent.y-50);
-					labelComponent.layout.setText(font, labelComponent.text, 0, labelComponent.text.length, Color.WHITE, dimenstionsComponent.width, Align.center, labelComponent.wrap, null);
-					labelComponent.cache.setText(labelComponent.layout, 0, 0);
+//					BitmapFont font = labelComponent.cache.getFont();
+//					labelComponent.layout.setText(font, labelComponent.text, 0, labelComponent.text.length, Color.WHITE, dimenstionsComponent.width, Align.center, labelComponent.wrap, null);
+//					labelComponent.cache.setText(labelComponent.layout, 0, 50);
 					
 					labelComponent.cache.tint(Color.WHITE);
 					labelComponent.cache.setPosition(childTransformComponent.x, childTransformComponent.y);

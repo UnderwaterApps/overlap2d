@@ -44,7 +44,6 @@ public class LabelComponentFactory extends ComponentFactory{
     }
 
     protected LabelComponent createLabelCompononet(Entity entity, LabelVO vo) {
-        //TODO
     	LabelComponent component = new LabelComponent(vo.text, generateStyle(rm, vo.style, vo.size));
         entity.add(component);
         return component;

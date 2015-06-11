@@ -4,10 +4,8 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFontCache;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
-import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 
@@ -16,12 +14,12 @@ public class LabelComponent extends Component {
 	public final GlyphLayout layout = new GlyphLayout();
 	public final StringBuilder text = new StringBuilder();
 	public BitmapFontCache cache;
-	public int labelAlign = Align.left;
-	public int lineAlign = Align.left;
+	public int labelAlign = Align.center;
+	public int lineAlign = Align.center;
 	public boolean wrap;
-	public float fontScaleX;
-	public float fontScaleY;
-	public Vector2 prefSize;
+	public float fontScaleX = 1f;
+	public float fontScaleY = 1f;
+	//public Vector2 prefSize;
 	
 	
 	public LabelComponent (CharSequence text, Skin skin) {
@@ -47,8 +45,6 @@ public class LabelComponent extends Component {
 	public LabelComponent (CharSequence text, LabelStyle style) {
 		if (text != null) this.text.append(text);
 		setStyle(style);
-		//TODO
-		//if (text != null && text.length() > 0) setSize(getPrefWidth(), getPrefHeight());
 	}
 
 	public void setStyle (LabelStyle style) {
@@ -87,6 +83,42 @@ public class LabelComponent extends Component {
 
 	public StringBuilder getText () {
 		return text;
+	}
+	
+	public GlyphLayout getGlyphLayout () {
+		return layout;
+	}
+
+	/** If false, the text will only wrap where it contains newlines (\n). The preferred size of the label will be the text bounds.
+	 * If true, the text will word wrap using the width of the label. The preferred width of the label will be 0, it is expected
+	 * that the something external will set the width of the label. Wrapping will not occur when ellipsis is true. Default is
+	 * false.
+	 * <p>
+	 * When wrap is enabled, the label's preferred height depends on the width of the label. In some cases the parent of the label
+	 * will need to layout twice: once to set the width of the label and a second time to adjust to the label's new preferred
+	 * height. */
+	public void setWrap (boolean wrap) {
+		this.wrap = wrap;
+	}
+
+	/** @param alignment Aligns each line of text horizontally and all the text vertically.
+	 * @see Align */
+	public void setAlignment (int alignment) {
+		setAlignment(alignment, alignment);
+	}
+
+	/** @param labelAlign Aligns all the text with the label widget.
+	 * @param lineAlign Aligns each line of text (left, right, or center).
+	 * @see Align */
+	public void setAlignment (int labelAlign, int lineAlign) {
+		this.labelAlign = labelAlign;
+
+		if ((lineAlign & Align.left) != 0)
+			this.lineAlign = Align.left;
+		else if ((lineAlign & Align.right) != 0)
+			this.lineAlign = Align.right;
+		else
+			this.lineAlign = Align.center;
 	}
 	
 	public void setFontScale (float fontScale) {
