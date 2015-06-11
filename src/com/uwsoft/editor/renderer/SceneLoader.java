@@ -26,6 +26,7 @@ import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.systems.CompositeSystem;
+import com.uwsoft.editor.renderer.systems.LabelSystem;
 import com.uwsoft.editor.renderer.systems.LayerSystem;
 import com.uwsoft.editor.renderer.systems.LightSystem;
 import com.uwsoft.editor.renderer.systems.ParticleSystem;
@@ -225,6 +226,7 @@ public class SceneLoader {
 		PhysicsSystem physicsSystem = new PhysicsSystem();
 		SpineSystem spineSystem = new SpineSystem();
 		CompositeSystem compositeSystem = new CompositeSystem();
+		LabelSystem labelSystem = new LabelSystem();
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
@@ -232,6 +234,7 @@ public class SceneLoader {
 		engine.addSystem(physicsSystem);
 		engine.addSystem(spineSystem);
 		engine.addSystem(compositeSystem);
+		engine.addSystem(labelSystem);
 
 		addEntityRemoveListener();
 	}
@@ -245,11 +248,16 @@ public class SceneLoader {
 
 			@Override
 			public void entityRemoved(Entity entity) {
-				Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
-				if(parentEntity != null){
-					NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
-					nodeComponent.removeChild(entity);
+				ParentNodeComponent parentComponent = entity.getComponent(ParentNodeComponent.class);
+				
+				if(parentComponent == null){
+					return;
 				}
+				
+				Entity parentEntity = parentComponent.parentEntity;
+				NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+				nodeComponent.removeChild(entity);
+				
 			}
 		});
 	}
