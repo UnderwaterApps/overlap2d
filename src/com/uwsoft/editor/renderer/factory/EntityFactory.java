@@ -150,17 +150,21 @@ public class EntityFactory {
 		return entity;
 	}
 
-	private void postProcessEntity(Entity entity) {
+	public Integer postProcessEntity(Entity entity) {
 		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
 		mainItemComponent.uniqueId = entityIterator++;
 		entities.put(mainItemComponent.uniqueId, entity);
+
+		return mainItemComponent.uniqueId;
 	}
 
-	public void updateMap(Entity entity) {
+	public Integer updateMap(Entity entity) {
 		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
 		entities.put(mainItemComponent.uniqueId, entity);
+
+		return mainItemComponent.uniqueId;
 	}
 
 	public Entity getEntityByUniqueId(Integer id) {
