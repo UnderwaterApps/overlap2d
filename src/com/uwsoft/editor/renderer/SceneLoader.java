@@ -201,6 +201,7 @@ public class SceneLoader {
 		rootEntity.flags = EntityFactory.COMPOSITE_TYPE;
 
 		engine.addEntity(rootEntity);
+		entityFactory.postProcessEntity(rootEntity);
 
 		initWithAshley(rootEntity, sceneVO.composite);
 
