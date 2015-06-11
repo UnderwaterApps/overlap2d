@@ -21,14 +21,12 @@ package com.uwsoft.editor.utils.runtime;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.*;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -63,5 +61,83 @@ public class EntityUtils {
         return entities;
     }
 
+    public static HashMap<Integer, Collection<Component>> cloneEntities(Set<Entity> entities) {
+        HashMap<Integer, Collection<Component>> data = new HashMap<>();
 
+        for(Entity entity: entities) {
+            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+            data.put(EntityUtils.getEntityId(entity), components);
+        }
+
+        return data;
+    }
+
+    public static Vector2 getPosition(Entity entity) {
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        return new Vector2(transformComponent.x, transformComponent.y);
+    }
+
+    public static Vector2 getRightTopPoint(Set<Entity> entities) {
+        if(entities.size() == 0) return null;
+
+        Vector2 rightTopPoint = getPosition(entities.stream().findFirst().get());
+
+        for(Entity entity: entities) {
+            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+
+            if(rightTopPoint.x < transformComponent.x+dimensionsComponent.width) {
+                rightTopPoint.x = transformComponent.x+dimensionsComponent.width;
+            }
+            if(rightTopPoint.y < transformComponent.y+dimensionsComponent.height) {
+                rightTopPoint.y = transformComponent.y+dimensionsComponent.height;
+            }
+        }
+
+        return rightTopPoint;
+    }
+
+    public static Vector2 getLeftBottomPoint(Set<Entity> entities) {
+        if(entities.size() == 0) return null;
+
+        Vector2 leftBottomPoint = getPosition(entities.stream().findFirst().get());
+
+        for(Entity entity: entities) {
+            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            if(leftBottomPoint.x > transformComponent.x) {
+                leftBottomPoint.x = transformComponent.x;
+            }
+            if(leftBottomPoint.y > transformComponent.y) {
+                leftBottomPoint.y = transformComponent.y;
+            }
+        }
+
+        return leftBottomPoint;
+    }
+
+    public static void changeParent(HashSet<Entity> entities, Entity parent) {
+        for(Entity entity: entities) {
+            ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+
+            //remove me from previous parent children list
+            NodeComponent nodeComponent = ComponentRetriever.get(parentNodeComponent.parentEntity, NodeComponent.class);
+            nodeComponent.children.removeValue(entity, true);
+
+            //add me to new parent child list
+            NodeComponent rootNodeComponent = ComponentRetriever.get(parent, NodeComponent.class);
+            rootNodeComponent.children.add(entity);
+
+            //change my parent
+            parentNodeComponent.parentEntity = parent;
+        }
+    }
+
+    public static HashSet<Entity> getChildren(Entity entity) {
+        HashSet<Entity> entities;
+        NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+        Entity[] children = nodeComponent.children.toArray();
+        entities = new HashSet<>(Arrays.asList(children));
+
+        return entities;
+    }
 }

@@ -42,14 +42,7 @@ public class DeleteItemsCommand extends RevertableCommand {
    private HashMap<Integer, Collection<Component>> backup;
 
     private void backup() {
-        backup = new HashMap<>();
-
-        Set<Entity> items = sandbox.getSelector().getSelectedItems();
-
-        for(Entity entity: items) {
-            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
-            backup.put(EntityUtils.getEntityId(entity), components);
-        }
+        backup = EntityUtils.cloneEntities(sandbox.getSelector().getSelectedItems());
     }
 
     @Override

@@ -18,18 +18,91 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
+import com.uwsoft.editor.mvc.view.MidUIMediator;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashSet;
 
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class GroupItemsCommand extends SandboxCommand {
+public class GroupItemsCommand extends RevertableCommand {
+
+    private Integer entityId;
+    private Integer parentEntityId;
 
     @Override
-    public void execute(Notification notification) {
-    	//TODO fix and uncomment
-//        sandbox.getItemFactory().groupItemsIntoComposite();
-//        sandbox.saveSceneCurrentSceneData();
+    public void doAction() {
+        // get entity list
+        HashSet<Entity> entities = (HashSet<Entity>) sandbox.getSelector().getSelectedItems();
+
+        // what will be the position of new composite?
+        Vector2 position = EntityUtils.getLeftBottomPoint(entities);
+
+        //create new entity
+        Entity entity = ItemFactory.get().createCompositeItem(position);
+        entityId = EntityUtils.getEntityId(entity);
+        sandbox.getEngine().addEntity(entity);
+
+        // what was the parent component of entities
+        // TODO: this will change as we will know our current working parent.
+        ParentNodeComponent parentEntityComponent = ComponentRetriever.get(entities.stream().findFirst().get(), ParentNodeComponent.class);
+        parentEntityId = EntityUtils.getEntityId(parentEntityComponent.parentEntity);
+
+        // rebase children
+        EntityUtils.changeParent(entities, entity);
+
+        //reposition children
+        for(Entity tmpEntity: entities) {
+            TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
+            transformComponent.x-=position.x;
+            transformComponent.y-=position.y;
+        }
+        // recalculate composite size
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        Vector2 newSize = EntityUtils.getRightTopPoint(entities);
+        dimensionsComponent.width = newSize.x;
+        dimensionsComponent.height = newSize.y;
+
+        //let everyone know
+        Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        sandbox.getSelector().setSelection(entity, true);
+    }
+
+    @Override
+    public void undoAction() {
+        //get the entity
+        Entity entity = EntityUtils.getByUniqueId(entityId);
+        Entity oldParentEntity = EntityUtils.getByUniqueId(parentEntityId);
+        HashSet<Entity> children = EntityUtils.getChildren(entity);
+
+        // what will be the position diff of children?
+        Vector2 positionDiff = EntityUtils.getPosition(entity);
+
+        //rebase children back to root
+        EntityUtils.changeParent(children, oldParentEntity);
+
+        //reposition children
+        for(Entity tmpEntity: children) {
+            TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
+            transformComponent.x+=positionDiff.x;
+            transformComponent.y+=positionDiff.y;
+        }
+
+        // remove composite
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        midUIMediator.removeFollower(entity);
+        sandbox.getEngine().removeEntity(entity);
     }
 }

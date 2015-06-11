@@ -20,13 +20,14 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable;
 
 import java.util.function.BiFunction;
 
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Pools;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.gdx.ui.payloads.ResourcePayloadObject;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -67,8 +68,9 @@ public class DraggableResource extends DragAndDrop {
             @Override
             public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
                 Vector2 vector2 = Pools.obtain(Vector2.class);
-                vector2.x = x;
-                vector2.y = y;
+                OrthographicCamera camera = sandbox.getCamera();
+                vector2.x = x - (-camera.position.x+sandbox.getViewport().getScreenWidth()/2);
+                vector2.y = y - (-camera.position.y+sandbox.getViewport().getScreenHeight()/2);
                 DraggableResource.this.drop(payload, vector2);
                 Pools.free(vector2);
             }

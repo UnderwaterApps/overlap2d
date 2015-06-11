@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.gdx.ui.payloads;
+package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads;
 
 
 public class ResourcePayloadObject {

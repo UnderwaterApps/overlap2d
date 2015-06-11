@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.uwsoft.editor.gdx.actors.basic.PixelLine;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
 
@@ -85,7 +86,7 @@ public class GridView extends Group {
 	 @Override
 	 public void act(float delta) {
 		  super.act(delta);
-		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
+		  OrthographicCamera camera = Sandbox.getInstance().getCamera();
 		  for(int i = 0; i <lines.size(); i++) {
 				lines.get(i).setThickness(camera.zoom);
 		  }

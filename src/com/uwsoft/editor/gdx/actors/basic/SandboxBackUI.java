@@ -16,33 +16,41 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.view.ui.followers;
+package com.uwsoft.editor.gdx.actors.basic;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.kotcrab.vis.ui.VisUI;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.gdx.actors.GridView;
 
 /**
- * Created by azakhary on 5/20/2015.
+ * Created by azakhary on 6/10/2015.
  */
-public class ParticleFollower extends BasicFollower {
+public class SandboxBackUI {
 
-    public ParticleFollower(Entity entity) {
-        super(entity);
+    private Array<Actor> actors = new Array<>();
+
+    private Batch batch;
+
+    public SandboxBackUI(Batch batch) {
+        this.batch = batch;
+
+        GridView gridView = new GridView();
+        addActor(gridView);
     }
 
-    @Override
-    public void create() {
-        Image icon = new Image(VisUI.getSkin().getDrawable("icon-particle-over"));
-        icon.setTouchable(Touchable.disabled);
-        icon.setX(dimensionsComponent.width/2);
-        icon.setY(dimensionsComponent.height/2);
-        addActor(icon);
+    public void addActor(Actor actor) {
+        actors.add(actor);
     }
 
-    @Override
-    public void hide() {
-        // you cannot hide particle follower
+    public void render(float delta) {
+        batch.begin();
+        for(Actor actor: actors) {
+            actor.act(delta);
+            actor.draw(batch, 1);
+        }
+        batch.setColor(Color.WHITE);
+        batch.end();
     }
 }
