@@ -142,6 +142,10 @@ public class ItemFactory {
         vo.text = "LABEL";
         vo.size = textSettings.getFontSize();
 
+        // need to calculate minimum bounds size here
+        vo.width = 100;
+        vo.height = 100;
+
         Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
