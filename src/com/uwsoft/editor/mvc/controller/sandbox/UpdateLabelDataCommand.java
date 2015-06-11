@@ -18,50 +18,40 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.renderer.components.label.LabelComponent;
+import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
- * Created by azakhary on 6/3/2015.
+ * Created by azakhary on 6/11/2015.
  */
-public class UpdateEntityComponentsCommand extends RevertableCommand {
+public class UpdateLabelDataCommand extends RevertableCommand {
 
-    private Array<Component> backupComponents = new Array<>();
-    private Integer entityId;
+    Integer entityId;
 
     @Override
     public void doAction() {
         Object[] payload = getNotification().getBody();
-
         Entity entity = (Entity) payload[0];
         entityId = EntityUtils.getEntityId(entity);
-        Array<Component> components = (Array<Component>) payload[1];
 
-        for(int i = 0; i < components.size; i++) {
-            //backup the original component
-            Component originalComponent = ComponentRetriever.get(entity, components.get(i).getClass());
-            backupComponents.add(ComponentCloner.get(originalComponent));
+        LabelComponent labelComponent = ComponentRetriever.get(entity, LabelComponent.class);
 
-            //now modify the entity component from provided data
-            ComponentCloner.set(originalComponent, components.get(i));
-        }
+        labelComponent.fontName = (String) payload[1];
+        labelComponent.fontSize = (int) payload[2];
+        labelComponent.setAlignment((Integer) payload[3]);
 
+        labelComponent.setStyle(LabelComponentFactory.generateStyle(Sandbox.getInstance().getSceneControl().sceneLoader.getRm(), labelComponent.fontName, labelComponent.fontSize));
 
+        facade.sendNotification(Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING, entity);
     }
 
     @Override
     public void undoAction() {
-        Entity entity = EntityUtils.getByUniqueId(entityId);
-        for(int i = 0; i < backupComponents.size; i++) {
-            Component entityComponent = ComponentRetriever.get(entity, backupComponents.get(i).getClass());
-            ComponentCloner.set(entityComponent, backupComponents.get(i));
-        }
 
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 }

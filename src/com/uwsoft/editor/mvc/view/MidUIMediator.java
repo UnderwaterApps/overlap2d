@@ -66,7 +66,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 ItemFactory.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                EditCompositeCommand.VIEW_COMPOSITE_CHANGED
+                EditCompositeCommand.VIEW_COMPOSITE_CHANGED,
+                Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING
         };
     }
 
@@ -80,8 +81,14 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
             case ItemFactory.NEW_ITEM_ADDED:
                 createFollower(notification.getBody());
                 break;
-            case Overlap2D.ITEM_DATA_UPDATED:
+            case Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING:
                 BasicFollower follower = followers.get(notification.getBody());
+                if(follower != null) {
+                    follower.update();
+                }
+                break;
+            case Overlap2D.ITEM_DATA_UPDATED:
+                follower = followers.get(notification.getBody());
                 if(follower != null) {
                     follower.update();
                 }

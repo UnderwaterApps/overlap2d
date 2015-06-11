@@ -41,6 +41,7 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String ZOOM_CHANGED = EVENT_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
     public static final String ITEM_DATA_UPDATED = EVENT_PREFIX + ".ITEM_DATA_UPDATED";
+    public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = EVENT_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
 
 
     // this should move

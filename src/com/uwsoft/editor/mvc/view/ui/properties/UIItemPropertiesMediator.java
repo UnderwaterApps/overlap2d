@@ -42,6 +42,7 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
                 }
                 break;
             case Overlap2D.ITEM_DATA_UPDATED:
+                if(observableReference == null) return;
                 onItemDataUpdate();
                 break;
             default:
