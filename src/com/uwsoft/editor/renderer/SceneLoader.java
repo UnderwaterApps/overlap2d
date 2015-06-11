@@ -246,8 +246,10 @@ public class SceneLoader {
 			@Override
 			public void entityRemoved(Entity entity) {
 				Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
-				NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
-				nodeComponent.removeChild(entity);
+				if(parentEntity != null){
+					NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+					nodeComponent.removeChild(entity);
+				}
 			}
 		});
 	}
