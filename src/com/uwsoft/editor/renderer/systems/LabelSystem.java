@@ -49,13 +49,13 @@ public class LabelSystem extends IteratingSystem {
 	}
 
 	private void computePrefSize () {
-//		if (labelComponent.wrap) {
-//			float width = dimensionsComponent.width;
-//			if (labelComponent.style.background != null) width -= labelComponent.style.background.getLeftWidth() + labelComponent.style.background.getRightWidth();
-//			labelComponent.layout.setText(labelComponent.cache.getFont(), labelComponent.text, Color.WHITE, width, Align.left, true);
-//		} else
-//			labelComponent.layout.setText(labelComponent.cache.getFont(), labelComponent.text);
-//		labelComponent.prefSize.set(labelComponent.layout.width, labelComponent.layout.height);
+		if (labelComponent.wrap) {
+			float width = dimensionsComponent.width;
+			if (labelComponent.style.background != null) width -= labelComponent.style.background.getLeftWidth() + labelComponent.style.background.getRightWidth();
+			labelComponent.layout.setText(labelComponent.cache.getFont(), labelComponent.text, Color.WHITE, width, Align.left, true);
+		} else
+			labelComponent.layout.setText(labelComponent.cache.getFont(), labelComponent.text);
+		labelComponent.prefSize.set(labelComponent.layout.width, labelComponent.layout.height);
 	}
 	
 	public float getPrefWidth () {
@@ -76,62 +76,62 @@ public class LabelSystem extends IteratingSystem {
 	}
 	
 	public void layout () {
-//		BitmapFont font = labelComponent.cache.getFont();
-//		float oldScaleX = font.getScaleX();
-//		float oldScaleY = font.getScaleY();
-//		float fontScaleX = labelComponent.fontScaleX;
-//		float fontScaleY = labelComponent.fontScaleY;
-//		if (fontScaleX != 1 || fontScaleY != 1) font.getData().setScale(fontScaleX, fontScaleY);
-//
-//		boolean wrap = labelComponent.wrap;
-//
-//		float width = dimensionsComponent.width, height = dimensionsComponent.height;
-//		Drawable background = labelComponent.style.background;
-//		float x = 0, y = 0;
-//		if (background != null) {
-//			x = background.getLeftWidth();
-//			y = background.getBottomHeight();
-//			width -= background.getLeftWidth() + background.getRightWidth();
-//			height -= background.getBottomHeight() + background.getTopHeight();
-//		}
-//
-//		GlyphLayout layout = labelComponent.layout;
-//		float textWidth, textHeight;
-//		StringBuilder text = labelComponent.text;
-//		int labelAlign = labelComponent.labelAlign;
-//		int lineAlign = labelComponent.lineAlign;
-//		if (wrap || text .indexOf("\n") != -1) {
-//			// If the text can span multiple lines, determine the text's actual size so it can be aligned within the label.
-//			layout.setText(font, text, 0, text.length, Color.WHITE, width, lineAlign , wrap, null);
-//			textWidth = layout.width;
-//			textHeight = layout.height;
-//
-//			if ((labelAlign  & Align.left) == 0) {
-//				if ((labelAlign & Align.right) != 0)
-//					x += width - textWidth;
-//				else
-//					x += (width - textWidth) / 2;
-//			}
-//		} else {
-//			textWidth = width;
-//			textHeight = font.getData().capHeight;
-//		}
-//
-//		if ((labelAlign & Align.top) != 0) {
-//			y += labelComponent.cache.getFont().isFlipped() ? 0 : height - textHeight;
-//			y += labelComponent.style.font.getDescent();
-//		} else if ((labelAlign & Align.bottom) != 0) {
-//			y += labelComponent.cache.getFont().isFlipped() ? height - textHeight : 0;
-//			y -= labelComponent.style.font.getDescent();
-//		} else {
-//			y += (height - textHeight) / 2;
-//		}
-//		if (!labelComponent.cache.getFont().isFlipped()) y += textHeight;
-//
-//		layout.setText(font, text, 0, text.length, Color.WHITE, textWidth, lineAlign, wrap, null);
-//		labelComponent.cache.setText(layout, x, y);
-//
-//		if (fontScaleX != 1 || fontScaleY != 1) font.getData().setScale(oldScaleX, oldScaleY);
+		BitmapFont font = labelComponent.cache.getFont();
+		float oldScaleX = font.getScaleX();
+		float oldScaleY = font.getScaleY();
+		float fontScaleX = labelComponent.fontScaleX;
+		float fontScaleY = labelComponent.fontScaleY;
+		if (fontScaleX != 1 || fontScaleY != 1) font.getData().setScale(fontScaleX, fontScaleY);
+
+		boolean wrap = labelComponent.wrap;
+
+		float width = dimensionsComponent.width, height = dimensionsComponent.height;
+		Drawable background = labelComponent.style.background;
+		float x = 0, y = 0;
+		if (background != null) {
+			x = background.getLeftWidth();
+			y = background.getBottomHeight();
+			width -= background.getLeftWidth() + background.getRightWidth();
+			height -= background.getBottomHeight() + background.getTopHeight();
+		}
+
+		GlyphLayout layout = labelComponent.layout;
+		float textWidth, textHeight;
+		StringBuilder text = labelComponent.text;
+		int labelAlign = labelComponent.labelAlign;
+		int lineAlign = labelComponent.lineAlign;
+		if (wrap || text .indexOf("\n") != -1) {
+			// If the text can span multiple lines, determine the text's actual size so it can be aligned within the label.
+			layout.setText(font, text, 0, text.length, Color.WHITE, width, lineAlign , wrap, null);
+			textWidth = layout.width;
+			textHeight = layout.height;
+
+			if ((labelAlign  & Align.left) == 0) {
+				if ((labelAlign & Align.right) != 0)
+					x += width - textWidth;
+				else
+					x += (width - textWidth) / 2;
+			}
+		} else {
+			textWidth = width;
+			textHeight = font.getData().capHeight;
+		}
+
+		if ((labelAlign & Align.top) != 0) {
+			y += labelComponent.cache.getFont().isFlipped() ? 0 : height - textHeight;
+			y += labelComponent.style.font.getDescent();
+		} else if ((labelAlign & Align.bottom) != 0) {
+			y += labelComponent.cache.getFont().isFlipped() ? height - textHeight : 0;
+			y -= labelComponent.style.font.getDescent();
+		} else {
+			y += (height - textHeight) / 2;
+		}
+		if (!labelComponent.cache.getFont().isFlipped()) y += textHeight;
+
+		layout.setText(font, text, 0, text.length, Color.WHITE, textWidth, lineAlign, wrap, null);
+		labelComponent.cache.setText(layout, x, y);
+
+		if (fontScaleX != 1 || fontScaleY != 1) font.getData().setScale(oldScaleX, oldScaleY);
 	}
 
 }
