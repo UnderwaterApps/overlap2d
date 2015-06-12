@@ -75,6 +75,9 @@ public class EntityFactory {
 		Entity entity = new Entity();
 		entity.flags = LABEL_TYPE;
 		labelComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
+
 		return entity;
 	}
 	

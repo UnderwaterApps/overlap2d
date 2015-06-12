@@ -17,7 +17,7 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class LabelComponentFactory extends ComponentFactory{
 	
-	private int labelDefaultSize = 12;
+	private static int labelDefaultSize = 12;
 
 	public LabelComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
 		super(rayHandler, world, rm);
@@ -30,7 +30,7 @@ public class LabelComponentFactory extends ComponentFactory{
 		 createParentNodeComponent(root, entity);
 		 createNodeComponent(root, entity);
 		 createPhysicsComponents(entity, vo);
-		 createLabelCompononet(entity, (LabelVO) vo);
+        createLabelComponent(entity, (LabelVO) vo);
 	}
 
 	@Override
@@ -43,14 +43,16 @@ public class LabelComponentFactory extends ComponentFactory{
         return component;
     }
 
-    protected LabelComponent createLabelCompononet(Entity entity, LabelVO vo) {
+    protected LabelComponent createLabelComponent(Entity entity, LabelVO vo) {
     	LabelComponent component = new LabelComponent(vo.text, generateStyle(rm, vo.style, vo.size));
+        component.fontName = vo.style;
+        component.fontSize = vo.size;
         entity.add(component);
         return component;
     }
     
     
-    private LabelStyle generateStyle(IResourceRetriever rManager, String fontName, int size) {
+    public static LabelStyle generateStyle(IResourceRetriever rManager, String fontName, int size) {
 
         if (size == 0) {
             size = labelDefaultSize;

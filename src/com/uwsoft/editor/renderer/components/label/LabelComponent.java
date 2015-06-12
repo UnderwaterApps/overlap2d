@@ -12,15 +12,17 @@ import com.badlogic.gdx.utils.StringBuilder;
 public class LabelComponent extends Component {
 	public  LabelStyle style;
 	public final GlyphLayout layout = new GlyphLayout();
-	public final StringBuilder text = new StringBuilder();
 	public BitmapFontCache cache;
+
+	public final StringBuilder text = new StringBuilder();
+	public String fontName;
+	public int fontSize;
 	public int labelAlign = Align.center;
 	public int lineAlign = Align.center;
 	public boolean wrap;
 	public float fontScaleX = 1f;
 	public float fontScaleY = 1f;
-	//public Vector2 prefSize;
-	
+
 	
 	public LabelComponent (CharSequence text, Skin skin) {
 		this(text, skin.get(LabelStyle.class));

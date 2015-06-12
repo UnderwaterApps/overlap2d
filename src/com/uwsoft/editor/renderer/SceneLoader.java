@@ -521,9 +521,9 @@ public class SceneLoader {
 	 * @return IResourceRetriever instance to load any resources already in
 	 *         memory
 	 */
-	// public IResourceRetriever getRm() {
-	// return essentials.rm;
-	// }
+	 public IResourceRetriever getRm() {
+	 	return rm;
+	 }
 	//
 	// /**
 	// *
