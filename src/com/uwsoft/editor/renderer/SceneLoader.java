@@ -1,6 +1,5 @@
 package com.uwsoft.editor.renderer;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -17,7 +16,14 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
