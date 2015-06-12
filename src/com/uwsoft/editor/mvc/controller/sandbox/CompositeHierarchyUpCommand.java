@@ -24,11 +24,21 @@ import com.uwsoft.editor.mvc.controller.SandboxCommand;
 /**
  * Created by azakhary on 5/14/2015.
  */
-public class CompositeHierarchyUpCommand extends SandboxCommand {
+public class CompositeHierarchyUpCommand extends RevertableCommand {
 
     @Override
     public void execute(Notification notification) {
         // TODO: do not do if we are on root item ( this is somehow impossible to implement o_O )
         sandbox.enterIntoPrevComposite();
+    }
+
+    @Override
+    public void doAction() {
+
+    }
+
+    @Override
+    public void undoAction() {
+
     }
 }
