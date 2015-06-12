@@ -1,28 +1,19 @@
-package com.uwsoft.editor.renderer;
+package com.uwsoft.editor.renderer.systems.render;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
-import com.brashmonkey.spriter.Player;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
-import com.uwsoft.editor.renderer.components.spriter.SpriterDrawerComponent;
+import com.uwsoft.editor.renderer.systems.render.logic.DrawableLogicMapper;
 
 
 //TODO drawabale mechanics
@@ -33,27 +24,15 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
 	private ComponentMapper<ParentNodeComponent> parentNodeMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
-	private ComponentMapper<TextureRegionComponent> textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
-	private ComponentMapper<ParticleComponent> particleMapper = ComponentMapper.getFor(ParticleComponent.class);
-	private ComponentMapper<SpriterDrawerComponent> spriterDrawerMapper = ComponentMapper.getFor(SpriterDrawerComponent.class);
-	private ComponentMapper<SpriterComponent> spriterMapper = ComponentMapper.getFor(SpriterComponent.class);
-	private ComponentMapper<SpineDataComponent> spineMapper = ComponentMapper.getFor(SpineDataComponent.class);
-	private ComponentMapper<LabelComponent> labelComponentMapper = ComponentMapper.getFor(LabelComponent.class);
-	private ComponentMapper<TintComponent> tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
-	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
 	
-//	private CompositeTransformComponent curCompositeTransformComponent;
-//	private NodeComponent nodeComponent;
-//	private TransformComponent curTransform;
-	
-	//private Entity currentComposite = null;
+	private DrawableLogicMapper drawableLogicMapper;
 	
 	public Batch batch;
-	
 	
 	public Overlap2dRenderer(Batch batch) {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
+		drawableLogicMapper = new DrawableLogicMapper();
 	}
 
 	@Override
@@ -95,70 +74,15 @@ public class Overlap2dRenderer extends IteratingSystem {
 				//if (!child.isVisible()) continue;
 				//child.draw(batch, parentAlpha);
 				//new Group()
-				 
-				TextureRegionComponent childTextureRegionComponent = textureRegionMapper.get(child);
-				TransformComponent childTransformComponent = transformMapper.get(child); 
-				ParticleComponent particleComponent = particleMapper.get(child);
-				SpriterDrawerComponent spriterDrawerComponent = spriterDrawerMapper.get(child);
-				SpineDataComponent spineDataComponent = spineMapper.get(child);
-				LabelComponent labelComponent = labelComponentMapper.get(child);
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
-				if(childTextureRegionComponent != null){
-					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, childTransformComponent.originX, childTransformComponent.originY, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
-				}
 				
-				if(particleComponent != null){
-					//TODO need to add transformation matrixes for scaling and rotation now thay dosn't work
-					particleComponent.particleEffect.draw(batch);
-				}
-				
-				if(spriterDrawerComponent != null){
-					SpriterComponent spriter = spriterMapper.get(child);
-					Player player = spriter.player;
-					
-					player.setPosition(childTransformComponent.x, childTransformComponent.y);
-					//TODO dimentions 
-					//player.setPivot(getWidth() / 2, getHeight() / 2);
-					player.setScale(spriter.scale );
-					player.rotate(childTransformComponent.rotation - player.getAngle());
-					player.update();
-					spriterDrawerComponent.drawer.beforeDraw(player, batch);
-				}
-				
-				if(spineDataComponent != null){
-					//TODO parent alpha thing
-					//TODO spine renderer
-					//renderer.draw(batch, spineDataComponent.skeleton);
-				}
-				
-				if(labelComponent != null){
-					DimensionsComponent dimenstionsComponent = dimensionsComponentMapper.get(child);
-					TintComponent tint = tintComponentMapper.get(child);
-					//TODO parent alpha thing
-					//tint.color.a *= parentAlpha;
-					if (labelComponent.style.background != null) {
-						batch.setColor(tint.color.r, tint.color.g, tint.color.b, tint.color.a);
-						labelComponent.style.background.draw(batch, childTransformComponent.x, childTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
-						//System.out.println("LAbel BG");
-					}
-					//TODO we need tmp color here
-					//if (labelComponent.style.fontColor != null) tint.color.mul(labelComponent.style.fontColor);
-					//labelComponent.cache.tint(tint.color);
-					
-//					BitmapFont font = labelComponent.cache.getFont();
-//					labelComponent.layout.setText(font, labelComponent.text, 0, labelComponent.text.length, Color.WHITE, dimenstionsComponent.width, Align.center, labelComponent.wrap, null);
-//					labelComponent.cache.setText(labelComponent.layout, 0, 50);
-					
-					labelComponent.cache.tint(Color.WHITE);
-					labelComponent.cache.setPosition(childTransformComponent.x, childTransformComponent.y);
-					labelComponent.cache.draw(batch);
-					
-				}
-				
-				if(childNodeComponent !=null){
+				if(childNodeComponent ==null){
+					//Finde the logic from mapper and draw it
+					drawableLogicMapper.getDrawable(child.flags).draw(batch, child);
+				}else{
+					//Step into Composite
 					drawRecursively(child);
-					//currentComposite = rootEntity;
 				}
 			}
 		} else {
