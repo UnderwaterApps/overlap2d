@@ -18,17 +18,10 @@
 
 package com.uwsoft.editor.splash;
 
-import com.badlogic.gdx.backends.lwjgl.*;
-import com.uwsoft.editor.Main;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.openal.AL;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-import java.awt.geom.RoundRectangle2D;
-import static java.awt.GraphicsDevice.WindowTranslucency.*;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 /**
  * Created by azakhary on 5/15/2015.

@@ -18,15 +18,11 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**

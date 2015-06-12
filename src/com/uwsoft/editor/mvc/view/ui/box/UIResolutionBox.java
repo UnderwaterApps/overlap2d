@@ -20,7 +20,6 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -32,8 +31,6 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.mvc.view.stage.UIStage;
-import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
 
 public class UIResolutionBox extends VisTable {

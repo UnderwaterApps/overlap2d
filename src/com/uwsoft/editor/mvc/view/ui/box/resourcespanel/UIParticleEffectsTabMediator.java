@@ -23,7 +23,6 @@ import java.util.HashMap;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;

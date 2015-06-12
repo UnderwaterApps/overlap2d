@@ -22,13 +22,16 @@ package com.uwsoft.editor.splash;
  * Created by azakhary on 5/15/2015.
  */
 
+import java.awt.Dimension;
+import java.awt.EventQueue;
+import java.awt.Point;
+import java.awt.geom.RoundRectangle2D;
+
+import javax.swing.JFrame;
+
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglCanvas;
-
-import javax.swing.*;
-import java.awt.*;
-import java.awt.geom.RoundRectangle2D;
 
 /** Wraps an {@link LwjglCanvas} in a resizable {@link JFrame}. */
 public class SplashFrame extends JFrame {

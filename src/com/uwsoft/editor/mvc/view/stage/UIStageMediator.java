@@ -18,11 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 

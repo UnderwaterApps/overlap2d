@@ -18,20 +18,15 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**

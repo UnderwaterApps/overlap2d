@@ -21,8 +21,8 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.kotcrab.vis.ui.VisUI;
-import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 
 /**

@@ -24,7 +24,6 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
-import com.uwsoft.editor.mvc.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;

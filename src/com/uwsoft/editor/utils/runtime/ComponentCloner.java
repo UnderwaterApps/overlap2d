@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.utils.runtime;
 
-import com.badlogic.ashley.core.Component;
-
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collection;
+
+import com.badlogic.ashley.core.Component;
 
 /**
  * Created by azakhary on 6/3/2015.

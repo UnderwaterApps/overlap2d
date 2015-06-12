@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -30,8 +32,6 @@ import com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
-
-import java.util.Set;
 
 /**
  * Created by azakhary on 5/12/2015.

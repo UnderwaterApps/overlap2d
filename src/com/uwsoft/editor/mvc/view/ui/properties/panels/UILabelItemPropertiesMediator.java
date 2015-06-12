@@ -1,12 +1,5 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.ashley.core.Entity;
@@ -15,6 +8,8 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.renderer.components.label.LabelComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by avetiszakharyan on 4/24/15.

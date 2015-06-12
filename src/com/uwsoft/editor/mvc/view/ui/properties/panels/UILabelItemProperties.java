@@ -1,6 +1,8 @@
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import java.util.HashMap;
+import java.util.Map;
+
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
@@ -11,9 +13,6 @@ import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
-
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by azakhary on 4/24/15.

@@ -19,10 +19,6 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.badlogic.ashley.core.Entity;
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;

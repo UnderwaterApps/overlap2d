@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.ui.widget;
 
-import com.badlogic.gdx.math.Vector2;
 
 /**
  * Created by azakhary on 5/15/2015.

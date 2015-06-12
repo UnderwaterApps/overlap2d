@@ -32,7 +32,6 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.gdx.sandbox.ItemFactoryOld;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.factory.ItemFactory;

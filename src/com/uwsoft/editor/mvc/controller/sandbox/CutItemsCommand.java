@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import java.util.Collection;
+import java.util.HashMap;
+
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -27,9 +30,6 @@ import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
-
-import java.util.Collection;
-import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/28/2015.

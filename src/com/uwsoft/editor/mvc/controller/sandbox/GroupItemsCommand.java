@@ -18,21 +18,18 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
+import java.util.HashSet;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
-
-import java.util.HashSet;
 
 /**
  * Created by azakhary on 4/28/2015.

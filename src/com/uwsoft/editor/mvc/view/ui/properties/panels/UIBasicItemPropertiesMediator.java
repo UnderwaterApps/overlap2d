@@ -20,27 +20,27 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import java.util.HashMap;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/15/2015.

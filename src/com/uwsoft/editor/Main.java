@@ -19,12 +19,17 @@
 package com.uwsoft.editor;
 
 import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
 import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
@@ -32,16 +37,11 @@ import org.apache.commons.lang3.SystemUtils;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.uwsoft.editor.splash.*;
-import com.uwsoft.editor.splash.SplashScreen;
+import com.uwsoft.editor.splash.SplashStarter;
 import com.uwsoft.editor.utils.AppConfig;
-
-import java.awt.*;
-import java.awt.event.InputEvent;
 
 public class Main {
 

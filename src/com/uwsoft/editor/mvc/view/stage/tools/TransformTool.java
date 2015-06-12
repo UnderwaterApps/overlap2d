@@ -18,25 +18,22 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
-import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerTransformationListener;
 import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
-
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created by azakhary on 4/30/2015.

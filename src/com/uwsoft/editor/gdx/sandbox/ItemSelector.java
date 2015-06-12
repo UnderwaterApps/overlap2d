@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,18 +25,13 @@ import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
-import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;

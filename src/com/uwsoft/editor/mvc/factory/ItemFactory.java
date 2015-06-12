@@ -21,15 +21,17 @@ package com.uwsoft.editor.mvc.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.FontManager;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.*;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LabelVO;
+import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 
 /**
  * Created by azakhary on 6/5/2015.

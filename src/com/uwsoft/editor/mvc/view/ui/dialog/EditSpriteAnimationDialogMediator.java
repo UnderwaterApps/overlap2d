@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.dialog;
 
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -28,8 +30,6 @@ import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-
-import java.util.Set;
 
 /**
  * Created by azakhary on 5/12/2015.

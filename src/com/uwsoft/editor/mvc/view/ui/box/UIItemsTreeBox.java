@@ -33,8 +33,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";

@@ -18,9 +18,6 @@
 
 package com.uwsoft.editor.gdx.sandbox;
 
-import java.util.ArrayList;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
@@ -50,7 +47,6 @@ import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 

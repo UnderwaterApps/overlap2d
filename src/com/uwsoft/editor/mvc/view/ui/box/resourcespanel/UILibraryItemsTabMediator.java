@@ -20,13 +20,13 @@ package com.uwsoft.editor.mvc.view.ui.box.resourcespanel;
 
 import java.util.HashMap;
 
-import com.uwsoft.editor.mvc.factory.ItemFactory;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.LibraryItemResource;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;

@@ -18,19 +18,13 @@
 
 package com.uwsoft.editor.mvc.controller.sandbox;
 
-import com.badlogic.ashley.core.Component;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
-import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.controller.SandboxCommand;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
-
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.Set;
+
+import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 4/28/2015.

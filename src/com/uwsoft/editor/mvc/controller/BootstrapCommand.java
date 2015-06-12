@@ -22,7 +22,23 @@ import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.sandbox.*;
+import com.uwsoft.editor.mvc.controller.sandbox.AddSelectionCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.AddToLibraryCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeHierarchyUpCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.ConvertToButtonCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CopyItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CreateItemCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CutItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.DeleteItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.GroupItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.ItemsMoveCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.PasteItemsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.ReleaseSelectionCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.SetGridSizeFromItemCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.SetSelectionCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.UpdateEntityComponentsCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.UpdateLabelDataCommand;
 
 /**
  * Created by azakhary on 4/28/2015.

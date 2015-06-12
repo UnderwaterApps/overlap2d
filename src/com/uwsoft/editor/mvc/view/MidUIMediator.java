@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.view;
 
+import java.util.HashMap;
+import java.util.Set;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
@@ -28,14 +31,9 @@ import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
-import com.uwsoft.editor.mvc.view.stage.tools.TransformTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
-import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
-
-import java.util.HashMap;
-import java.util.Set;
 
 /**
  * Created by azakhary on 5/20/2015.

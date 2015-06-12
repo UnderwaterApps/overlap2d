@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.renderer.Overlap2dRenderer;
 
 /**
  * Created by CyberJoe on 5/1/2015.

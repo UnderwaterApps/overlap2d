@@ -21,7 +21,6 @@ package com.uwsoft.editor.mvc.view;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
@@ -31,6 +30,7 @@ import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.event.MenuItemListener;
+import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.ui.widget.CustomMenu;
 import com.uwsoft.editor.ui.widget.CustomMenuBar;
 
