@@ -286,7 +286,7 @@ public class ItemSelector {
      * TODO: This should not select locked panels, check if it's true and remove this comment
      */
     public HashSet<Entity> getAllFreeItems() {
-    	NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getRootEntity(), NodeComponent.class);
+    	NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
 		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
 
         Entity[] array = childrenEntities.toArray();
