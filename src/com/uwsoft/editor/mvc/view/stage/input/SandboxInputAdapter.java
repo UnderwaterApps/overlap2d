@@ -117,7 +117,7 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-		rootEntity = sandbox.getRootEntity();
+		rootEntity = sandbox.getCurrentViewingEntity();
 		
 		if(rootEntity == null){
 			return false;
@@ -146,7 +146,7 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
-		rootEntity = sandbox.getRootEntity();
+		rootEntity = sandbox.getCurrentViewingEntity();
 		
 		if(rootEntity == null){
 			return false;
@@ -191,7 +191,7 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	@Override
 	public boolean scrolled(int amount) {
-		rootEntity = sandbox.getRootEntity();
+		rootEntity = sandbox.getCurrentViewingEntity();
 		
 		if(rootEntity == null){
 			return false;

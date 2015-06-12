@@ -23,6 +23,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.SandboxCommand;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -37,6 +38,7 @@ public class EditCompositeCommand extends RevertableCommand {
 
     private Integer previousViewEntityId;
     private Integer enteringInto;
+    private TransformComponent curTransformBackup = new TransformComponent();
 
     @Override
     public void doAction() {
@@ -52,6 +54,23 @@ public class EditCompositeCommand extends RevertableCommand {
 
         sandbox.getSelector().clearSelections();
         facade.sendNotification(VIEW_COMPOSITE_CHANGED);
+        
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        
+        // Back up current Trnasform Component
+        curTransformBackup.x = transformComponent.x;
+        curTransformBackup.y = transformComponent.y;
+        curTransformBackup.scaleX = transformComponent.scaleX;
+        curTransformBackup.scaleY = transformComponent.scaleY;
+        curTransformBackup.rotation = transformComponent.rotation;
+        
+        // set all to 0 for current Trnasform Component
+        transformComponent.x = 0;
+        transformComponent.y = 0;
+        transformComponent.scaleX = 1f;
+        transformComponent.scaleY = 1f;
+        transformComponent.rotation = 0;
+        
     }
 
     @Override
@@ -66,5 +85,14 @@ public class EditCompositeCommand extends RevertableCommand {
 
         sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
         facade.sendNotification(VIEW_COMPOSITE_CHANGED);
+        
+        TransformComponent transformComponent = ComponentRetriever.get(currEntity, TransformComponent.class);
+        
+        //revert from back up
+        transformComponent.x = curTransformBackup.x;
+        transformComponent.y = curTransformBackup.y;
+        transformComponent.scaleX = curTransformBackup.scaleX;
+        transformComponent.scaleY = curTransformBackup.scaleY;
+        transformComponent.rotation = curTransformBackup.rotation;
     }
 }
