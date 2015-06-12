@@ -39,6 +39,7 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_CREATE_ITEM, CreateItemCommand.class);
         facade.registerCommand(Sandbox.ACTION_EDIT_COMPOSITE, EditCompositeCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
         facade.registerCommand(Sandbox.ACTION_COMPOSITE_HIERARCHY_UP, CompositeHierarchyUpCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);

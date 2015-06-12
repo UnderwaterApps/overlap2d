@@ -37,6 +37,7 @@ import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.components.ZindexComponent;
+import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.components.physics.MeshComponent;
@@ -85,7 +86,9 @@ public class ComponentRetriever {
     	mappers.put(LightObjectComponent.class, ComponentMapper.getFor(LightObjectComponent.class));
     	
     	mappers.put(ParticleComponent.class, ComponentMapper.getFor(ParticleComponent.class));
-    	
+
+        mappers.put(LabelComponent.class, ComponentMapper.getFor(LabelComponent.class));
+
     	mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));

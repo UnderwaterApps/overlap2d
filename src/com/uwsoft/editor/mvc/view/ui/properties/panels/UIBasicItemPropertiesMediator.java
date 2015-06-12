@@ -140,13 +140,16 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	mainItemComponent.itemIdentifier = viewComponent.getIdBoxValue();
     	transformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), transformComponent.x);
     	transformComponent.y = NumberUtils.toFloat(viewComponent.getYValue(), transformComponent.y);
+
+        dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
+        dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
     	
     	//TODO nor more flip
     	//vo.isFlipedH = viewComponent.getFlipH();
     	//vo.isFlipedV = viewComponent.getFlipV();
     	
         // TODO: manage width and height
-    	transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
+        transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
     	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
     	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
         Color color = viewComponent.getTintColor();
