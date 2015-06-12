@@ -85,7 +85,7 @@ public class ItemFactory {
         vo.imageName = regionName;
 
         if(!setEssentialData(vo, position)) return false;
-        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
@@ -114,7 +114,7 @@ public class ItemFactory {
     public Entity createCompositeItem(Vector2 position) {
         CompositeItemVO vo = new CompositeItemVO();
         if(!setEssentialData(vo, position)) return null;
-        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
 
         return entity;
     }
@@ -124,7 +124,7 @@ public class ItemFactory {
         vo.particleName = particleName;
 
         if(!setEssentialData(vo, position)) return false;
-        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
@@ -148,7 +148,7 @@ public class ItemFactory {
         vo.width = 100;
         vo.height = 100;
 
-        Entity entity = entityFactory.createEntity(sceneLoader.rootEntity, vo);
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;
