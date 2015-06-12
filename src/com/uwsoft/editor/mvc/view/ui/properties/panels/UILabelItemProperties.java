@@ -6,11 +6,13 @@ import java.util.Map;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
+import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
+import com.uwsoft.editor.mvc.event.NumberSelectorOverlapListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 
@@ -29,7 +31,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     private VisSelectBox<String> alignSelectBox;
     private VisCheckBox boldCheckBox;
     private VisCheckBox italicCheckBox;
-    private VisValidableTextField fontSizeField;
+    private NumberSelector fontSizeField;
 
     public UILabelItemProperties() {
         super("Label");
@@ -40,7 +42,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         alignSelectBox = new VisSelectBox<>();
         boldCheckBox = new VisCheckBox(null);
         italicCheckBox = new VisCheckBox(null);
-        fontSizeField = new VisValidableTextField(intValidator);
+        fontSizeField = new NumberSelector("", 12, 0, 100);
 
         fontFamilySelectBox.setMaxListCount(10);
         alignSelectBox.setMaxListCount(10);
@@ -126,12 +128,12 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         italicCheckBox.setChecked(italic);
     }
 
-    public String getFontSize() {
-        return fontSizeField.getText();
+    public int getFontSize() {
+        return fontSizeField.getValue();
     }
 
-    public void setFontSize(String fontSize) {
-        fontSizeField.setText(fontSize);
+    public void setFontSize(int fontSize) {
+        fontSizeField.setValue(fontSize);
     }
 
 
@@ -140,6 +142,6 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         alignSelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
         boldCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
         italicCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        fontSizeField.addListener(new KeyboardListener(PROPERTIES_UPDATED));
+        fontSizeField.addChangeListener(new NumberSelectorOverlapListener(PROPERTIES_UPDATED));
     }
 }

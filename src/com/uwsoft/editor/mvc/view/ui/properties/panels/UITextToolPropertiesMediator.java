@@ -31,7 +31,7 @@ public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<T
     @Override
     protected void translateObservableDataToView(TextTool item) {
         viewComponent.setFontFamily(item.getFontFamily());
-        viewComponent.setFontSize(item.getFontSize() + "");
+        viewComponent.setFontSize(item.getFontSize());
     }
 
     @Override
@@ -44,6 +44,6 @@ public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<T
     @Override
     protected void translateViewToItemData() {
         observableReference.setFontFamily(viewComponent.getFontFamily());
-        observableReference.setFontSize(NumberUtils.toInt(viewComponent.getFontSize()));
+        observableReference.setFontSize(viewComponent.getFontSize());
     }
 }

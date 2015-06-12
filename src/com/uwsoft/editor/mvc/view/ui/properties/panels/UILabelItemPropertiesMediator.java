@@ -38,19 +38,19 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     protected void translateObservableDataToView(Entity item) {
         LabelComponent labelComponent = ComponentRetriever.get(item, LabelComponent.class);
         viewComponent.setFontFamily(labelComponent.fontName);
-        viewComponent.setFontSize(labelComponent.fontSize + "");
+        viewComponent.setFontSize(labelComponent.fontSize);
         viewComponent.setAlignValue(labelComponent.labelAlign);
     }
 
     @Override
     protected void translateViewToItemData() {
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-        resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(), NumberUtils.toInt(viewComponent.getFontSize()));
+        resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(),viewComponent.getFontSize());
 
         Object[] payload = new Object[4];
         payload[0] = observableReference;
         payload[1] = viewComponent.getFontFamily();
-        payload[2] = Integer.parseInt(viewComponent.getFontSize());
+        payload[2] = viewComponent.getFontSize();
         payload[3] = viewComponent.getAlignValue();
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
     }
