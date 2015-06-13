@@ -21,12 +21,10 @@ package com.uwsoft.editor.gdx.ui.properties;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
 import com.kotcrab.vis.ui.widget.color.ColorPicker;
 import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -38,6 +36,7 @@ import com.uwsoft.editor.renderer.data.LabelVO;
 import com.uwsoft.editor.renderer.data.SelectBoxVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.data.TextBoxVO;
+import static com.uwsoft.editor.gdx.ui.UIWidgetPreparer.textFieldBroker;
 
 public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBaseItem> {
 
@@ -61,7 +60,7 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
     private ColorPickerButton tintColorComponent;
 
     private Actor itemActor;
-    private TextBoxItem rotationVal;
+    private TextField rotationVal;
 
     public BasicItemProperties(Sandbox sandbox, SceneLoader scene) {
         super(scene, "BasicItemProperties");
@@ -179,145 +178,14 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
             }
         });
 
-        idBox.addListener(new FocusListener() {
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemId(idBox.getText());
-                }
-            }
-        });
-
-        idBox.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemId(idBox.getText());
-                }
-                return true;
-            }
-        });
-
-
-        widthVal.addListener(new FocusListener() {
-
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemWidth(getFloatValue(widthVal.getText(), ((Actor) item).getWidth()), className);
-                }
-            }
-        });
-
-        widthVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemWidth(getFloatValue(widthVal.getText(), ((Actor) item).getWidth()), className);
-                }
-                return true;
-            }
-        });
-
-        heightVal.addListener(new FocusListener() {
-
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemHeight(getFloatValue(heightVal.getText(), ((Actor) item).getHeight()), className);
-                }
-            }
-        });
-
-        heightVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemHeight(getFloatValue(heightVal.getText(), ((Actor) item).getHeight()), className);
-                }
-                return true;
-            }
-        });
-
-        xVal.addListener(new FocusListener() {
-
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemX(getFloatValue(xVal.getText(), ((Actor) item).getX()));
-                }
-            }
-
-        });
-
-        xVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemX(getFloatValue(xVal.getText(), ((Actor) item).getX()));
-                }
-                return true;
-            }
-        });
-
-        yVal.addListener(new FocusListener() {
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemY(getFloatValue(yVal.getText(), ((Actor) item).getY()));
-                }
-            }
-        });
-
-
-        yVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemY(getFloatValue(yVal.getText(), ((Actor) item).getY()));
-                }
-                return true;
-            }
-        });
-
-        scalexVal.addListener(new FocusListener() {
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemScaleX(getFloatValue(scalexVal.getText(), ((Actor) item).getScaleX()));
-                }
-            }
-        });
-
-        scalexVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemScaleX(getFloatValue(scalexVal.getText(), ((Actor) item).getScaleX()));
-                }
-                return true;
-            }
-        });
-
-        scaleyVal.addListener(new FocusListener() {
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemScaleY(getFloatValue(scaleyVal.getText(), ((Actor) item).getScaleY()));
-                }
-            }
-
-        });
-
-        scaleyVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemScaleY(getFloatValue(scaleyVal.getText(), ((Actor) item).getScaleY()));
-                }
-                return true;
-            }
-        });
+        textFieldBroker(idBox, false, (text) -> setItemId(text));
+        textFieldBroker(widthVal, true, (text) -> setItemWidth(getFloatValue(text, ((Actor) item).getWidth()), className));
+        textFieldBroker(heightVal, true, (text) -> setItemHeight(getFloatValue(text, ((Actor) item).getHeight()), className));
+        textFieldBroker(xVal, true, (text) -> setItemX(getFloatValue(text, ((Actor) item).getX())));
+        textFieldBroker(yVal, true, (text) -> setItemY(getFloatValue(text, ((Actor) item).getY())));
+        textFieldBroker(scalexVal, true, (text) -> setItemScaleX(getFloatValue(text, ((Actor) item).getScaleX())));
+        textFieldBroker(scaleyVal, true, (text) -> setItemScaleY(getFloatValue(scaleyVal.getText(), ((Actor) item).getScaleY())));
+        textFieldBroker(rotationVal, true, (text) -> setItemRotation(getFloatValue(rotationVal.getText(), ((Actor) item).getRotation())));
 
 
         flipV.addListener(new ClickListener() {
@@ -361,26 +229,26 @@ public class BasicItemProperties extends PropertyBox implements IPropertyBox<IBa
                 sandbox.getUIStage().addActor(picker.fadeIn());
             }
         });
-
-        rotationVal.addListener(new FocusListener() {
-            public void keyboardFocusChanged(FocusListener.FocusEvent event,
-                                             Actor actor,
-                                             boolean focused) {
-                if (!focused) {
-                    setItemRotation(getFloatValue(rotationVal.getText(), ((Actor) item).getRotation()));
-                }
-            }
-
-        });
-
-        rotationVal.addListener(new InputListener() {
-            public boolean keyUp(InputEvent event, int keycode) {
-                if (keycode == 66) {
-                    setItemRotation(getFloatValue(rotationVal.getText(), ((Actor) item).getRotation()));
-                }
-                return true;
-            }
-        });
+//
+//        rotationVal.addListener(new FocusListener() {
+//            public void keyboardFocusChanged(FocusListener.FocusEvent event,
+//                                             Actor actor,
+//                                             boolean focused) {
+//                if (!focused) {
+//                    setItemRotation(getFloatValue(rotationVal.getText(), ((Actor) item).getRotation()));
+//                }
+//            }
+//
+//        });
+//
+//        rotationVal.addListener(new InputListener() {
+//            public boolean keyUp(InputEvent event, int keycode) {
+//                if (keycode == 66) {
+//                    setItemRotation(getFloatValue(rotationVal.getText(), ((Actor) item).getRotation()));
+//                }
+//                return true;
+//            }
+//        });
     }
 
     private void setItemRotation(float rotation) {
