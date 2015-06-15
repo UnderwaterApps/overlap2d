@@ -62,7 +62,7 @@ public class LightSystem extends IteratingSystem {
 				yy=trnasformCompononet.y-yy;
 				xx=trnasformCompononet.x-xx;
 			}
-			light.setPosition((relativeX-xx+20)*PhysicsBodyLoader.SCALE, (relativeY-yy+20)*PhysicsBodyLoader.SCALE);
+			light.setPosition((relativeX-xx)*PhysicsBodyLoader.SCALE, (relativeY-yy)*PhysicsBodyLoader.SCALE);
 		}
 		if(lightObjectComponent.type == LightType.CONE){
 			light.setDirection(lightObjectComponent.directionDegree+relativeRotation);

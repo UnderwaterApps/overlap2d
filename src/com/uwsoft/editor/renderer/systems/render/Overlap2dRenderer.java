@@ -20,7 +20,6 @@ import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.systems.render.logic.DrawableLogicMapper;
 
 
-//TODO drawabale mechanics
 public class Overlap2dRenderer extends IteratingSystem {
 	
 	private ComponentMapper<ViewPortComponent> viewPortMapper = ComponentMapper.getFor(ViewPortComponent.class);
