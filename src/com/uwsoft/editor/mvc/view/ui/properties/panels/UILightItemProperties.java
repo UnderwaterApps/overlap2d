@@ -171,11 +171,16 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         coneDistanceField.setText(distance);
     }
 
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
+
     private void setListeners() {
-        isStaticCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        isXRayCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        rayCountSelector.addChangeListener(number -> facade.sendNotification(PROPERTIES_UPDATED));
-        lightTypeSelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
+        isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        lightTypeSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
 
         lightTypeSelectBox.addListener(new ChangeListener() {
             @Override

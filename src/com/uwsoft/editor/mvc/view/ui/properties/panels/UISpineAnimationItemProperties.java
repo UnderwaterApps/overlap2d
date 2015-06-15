@@ -56,7 +56,12 @@ public class UISpineAnimationItemProperties extends UIItemCollapsibleProperties 
         animationsSelectBox.setSelected(currentAnimationName);
     }
 
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
+
     private void setListeners() {
-        animationsSelectBox.addListener(new SelectBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        animationsSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
     }
 }

@@ -37,6 +37,7 @@ import com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties;
  */
 public class UISceneProperties extends UIAbstractProperties {
 
+
     public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.mvc.view.ui.properties.panels.UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
 
     private VisCheckBox physicsEnabledCheckBox;
@@ -143,13 +144,18 @@ public class UISceneProperties extends UIAbstractProperties {
         ambientColorComponent.setColorValue(tintColor);
     }
 
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
+
     private void setListeners() {
-        physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        gravityXTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        gravityYTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        sleepVelocityTextField.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        enableLightsCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        diffuseCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        physicsEnabledCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        gravityXTextField.addListener(new KeyboardListener(getUpdateEventName()));
+        gravityYTextField.addListener(new KeyboardListener(getUpdateEventName()));
+        sleepVelocityTextField.addListener(new KeyboardListener(getUpdateEventName()));
+        enableLightsCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        diffuseCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
 
         ambientColorComponent.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

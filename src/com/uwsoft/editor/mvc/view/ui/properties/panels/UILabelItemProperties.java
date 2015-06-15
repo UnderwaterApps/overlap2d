@@ -136,12 +136,16 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         fontSizeField.setValue(fontSize);
     }
 
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
 
     private void setListeners() {
-        fontFamilySelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
-        alignSelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
-        boldCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        italicCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        fontSizeField.addChangeListener(new NumberSelectorOverlapListener(PROPERTIES_UPDATED));
+        fontFamilySelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
+        alignSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
+        boldCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        italicCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        fontSizeField.addChangeListener(new NumberSelectorOverlapListener(getUpdateEventName()));
     }
 }

@@ -92,7 +92,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setTintColor(newColor);
-                        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
+                        facade.sendNotification(viewComponent.getUpdateEventName());
                     }
                 });
 
