@@ -44,7 +44,7 @@ public class UIDropDownMenu extends PopupMenu {
 
     public UIDropDownMenu() {
         actionNames.put(Sandbox.ACTION_GROUP_ITEMS, "Convert into composite");
-        actionNames.put(Sandbox.ACTION_EDIT_COMPOSITE, "Edit composite");
+        actionNames.put(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, "Edit composite");
         actionNames.put(Sandbox.ACTION_CONVERT_TO_BUTTON, "Convert to button");
         actionNames.put(Sandbox.ACTION_CUT, "Cut");
         actionNames.put(Sandbox.ACTION_COPY, "Copy");

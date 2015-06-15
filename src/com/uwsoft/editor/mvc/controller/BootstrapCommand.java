@@ -22,23 +22,8 @@ import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.sandbox.AddSelectionCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.AddToLibraryCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.CompositeHierarchyUpCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.ConvertToButtonCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.CopyItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.CreateItemCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.CutItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.DeleteItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.GroupItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.ItemsMoveCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.PasteItemsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.ReleaseSelectionCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.SetGridSizeFromItemCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.SetSelectionCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.UpdateEntityComponentsCommand;
-import com.uwsoft.editor.mvc.controller.sandbox.UpdateLabelDataCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.*;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -53,11 +38,10 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_PASTE, PasteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_DELETE, DeleteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_CREATE_ITEM, CreateItemCommand.class);
-        facade.registerCommand(Sandbox.ACTION_EDIT_COMPOSITE, EditCompositeCommand.class);
+        facade.registerCommand(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
-        facade.registerCommand(Sandbox.ACTION_COMPOSITE_HIERARCHY_UP, CompositeHierarchyUpCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
         facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
         facade.registerCommand(Sandbox.ACTION_GROUP_ITEMS, GroupItemsCommand.class);

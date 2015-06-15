@@ -53,9 +53,6 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
     public static final String SCENE_RIGHT_CLICK = EVENT_PREFIX + ".SCENE_RIGHT_CLICK";
     public static final String ITEM_RIGHT_CLICK = EVENT_PREFIX + ".ITEM_RIGHT_CLICK";
 
-    public static final String OPENED_COMPOSITE = EVENT_PREFIX + ".OPENED_COMPOSITE";
-    public static final String OPENED_PREVIOUS_COMPOSITE = EVENT_PREFIX + ".OPENED_PREVIOUS_COMPOSITE";
-
     public static final String LIBRARY_LIST_UPDATED = EVENT_PREFIX + ".LIBRARY_LIST_UPDATED";
 
     //

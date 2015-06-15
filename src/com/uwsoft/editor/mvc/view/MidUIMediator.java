@@ -27,7 +27,6 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
@@ -64,7 +63,6 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 ItemFactory.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                EditCompositeCommand.VIEW_COMPOSITE_CHANGED,
                 Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING
         };
     }
@@ -105,8 +103,6 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 break;
             case UIToolBoxMediator.TOOL_SELECTED:
                 pushNotificationToFollowers(notification);
-                break;
-            case EditCompositeCommand.VIEW_COMPOSITE_CHANGED:
                 break;
         }
     }

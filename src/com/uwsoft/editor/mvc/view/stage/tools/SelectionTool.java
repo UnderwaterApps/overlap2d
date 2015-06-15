@@ -37,7 +37,9 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.CursorManager;
 import com.uwsoft.editor.mvc.view.MidUIMediator;
+import com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchyMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -122,7 +124,11 @@ public class SelectionTool implements Tool {
 
     @Override
     public void stageMouseDoubleClick(float x, float y) {
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_COMPOSITE_HIERARCHY_UP);
+        Entity currentView = sandbox.getCurrentViewingEntity();
+        ParentNodeComponent parentNodeComponent = ComponentRetriever.get(currentView, ParentNodeComponent.class);
+        if(parentNodeComponent != null) {
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, parentNodeComponent.parentEntity);
+        }
     }
 
     @Override
@@ -291,7 +297,7 @@ public class SelectionTool implements Tool {
 
     @Override
     public void itemMouseDoubleClick(Entity item, float x, float y) {
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_EDIT_COMPOSITE, item);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, item);
     }
 
     private boolean isShiftPressed() {

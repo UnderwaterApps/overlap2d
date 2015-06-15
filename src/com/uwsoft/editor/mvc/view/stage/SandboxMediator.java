@@ -34,7 +34,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -108,8 +108,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 SceneDataManager.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
                 ItemFactory.NEW_ITEM_ADDED,
-                Overlap2D.OPENED_PREVIOUS_COMPOSITE,
-                EditCompositeCommand.VIEW_COMPOSITE_CHANGED
+                CompositeCameraChangeCommand.DONE,
         };
     }
 
@@ -126,10 +125,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case ItemFactory.NEW_ITEM_ADDED:
                 addListenerToItem(notification.getBody());
                 break;
-            case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
-                initItemListeners();
-                break;
-            case EditCompositeCommand.VIEW_COMPOSITE_CHANGED:
+            case CompositeCameraChangeCommand.DONE:
                 initItemListeners();
                 break;
             default:

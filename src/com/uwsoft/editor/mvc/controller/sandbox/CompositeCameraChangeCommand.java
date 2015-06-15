@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -27,10 +28,10 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class EditCompositeCommand extends RevertableCommand {
+public class CompositeCameraChangeCommand extends RevertableCommand {
 
-    private static final String CLASS_NAME = "com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand";
-    public static final String VIEW_COMPOSITE_CHANGED = CLASS_NAME + "VIEW_COMPOSITE_CHANGED";
+    private static final String CLASS_NAME = "com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
 
     private Integer previousViewEntityId;
     private Integer enteringInto;
@@ -49,23 +50,12 @@ public class EditCompositeCommand extends RevertableCommand {
         sandbox.setCurrentViewingEntity(entity);
 
         sandbox.getSelector().clearSelections();
-        facade.sendNotification(VIEW_COMPOSITE_CHANGED);
+        facade.sendNotification(DONE, enteringInto);
         
-        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-        
-        // Back up current Trnasform Component
-        curTransformBackup.x = transformComponent.x;
-        curTransformBackup.y = transformComponent.y;
-        curTransformBackup.scaleX = transformComponent.scaleX;
-        curTransformBackup.scaleY = transformComponent.scaleY;
-        curTransformBackup.rotation = transformComponent.rotation;
-        
-        // set all to 0 for current Trnasform Component
-        transformComponent.x = 0;
-        transformComponent.y = 0;
-        transformComponent.scaleX = 1f;
-        transformComponent.scaleY = 1f;
-        transformComponent.rotation = 0;
+        CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(entity, CompositeTransformComponent.class);
+        CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
+        //previousCompositeTransformComponent.transform = true;
+        //compositeTransformComponent.transform = false;
         
     }
 
@@ -80,15 +70,11 @@ public class EditCompositeCommand extends RevertableCommand {
         sandbox.setCurrentViewingEntity(oldEntity);
 
         sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
-        facade.sendNotification(VIEW_COMPOSITE_CHANGED);
-        
-        TransformComponent transformComponent = ComponentRetriever.get(currEntity, TransformComponent.class);
-        
-        //revert from back up
-        transformComponent.x = curTransformBackup.x;
-        transformComponent.y = curTransformBackup.y;
-        transformComponent.scaleX = curTransformBackup.scaleX;
-        transformComponent.scaleY = curTransformBackup.scaleY;
-        transformComponent.rotation = curTransformBackup.rotation;
+        facade.sendNotification(DONE, previousViewEntityId);
+
+        CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(currEntity, CompositeTransformComponent.class);
+        CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
+        //previousCompositeTransformComponent.transform = false;
+        //compositeTransformComponent.transform = true;
     }
 }
