@@ -270,7 +270,7 @@ public class SceneLoader {
 	}
 
 	//TODO this function should be changed later 
-	private void initWithAshley(Entity root, CompositeVO vo) {
+	public void initWithAshley(Entity root, CompositeVO vo) {
 		//NodeComponent nodeComponent = nodeComponentMapper.get(root);
 		for (int i = 0; i < vo.sImages.size(); i++) {
 			Entity entity = entityFactory.createEntity(root, vo.sImages.get(i));
