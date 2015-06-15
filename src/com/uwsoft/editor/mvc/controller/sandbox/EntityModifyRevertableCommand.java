@@ -57,5 +57,7 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
             itemVO.loadFromEntity(entity);
             libraryItems.put(mainItemComponent.itemName, itemVO);
         }
+
+        // change inners of all other entities with same library name
     }
 }

@@ -30,11 +30,7 @@ import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.LabelVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.*;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -142,6 +138,14 @@ public class ItemFactory {
     public Entity createCompositeItem(Vector2 position) {
         CompositeItemVO vo = new CompositeItemVO();
         Entity entity = createCompositeItem(vo, position);
+        return entity;
+    }
+
+    public Entity createLightItem(LightVO vo, Vector2 position) {
+        if(!setEssentialData(vo, position)) return null;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
         return entity;
     }
 
