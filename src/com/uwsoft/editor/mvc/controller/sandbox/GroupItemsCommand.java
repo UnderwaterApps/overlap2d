@@ -34,7 +34,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class GroupItemsCommand extends RevertableCommand {
+public class GroupItemsCommand extends EntityModifyRevertableCommand {
 
     private Integer entityId;
     private Integer parentEntityId;

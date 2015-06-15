@@ -29,7 +29,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 6/11/2015.
  */
-public class UpdateLabelDataCommand extends RevertableCommand {
+public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
 
     Integer entityId;
 

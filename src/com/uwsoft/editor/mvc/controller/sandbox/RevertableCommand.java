@@ -38,13 +38,21 @@ public abstract class RevertableCommand extends SandboxCommand {
     public void execute(Notification notification) {
         commandManager = facade.retrieveProxy(CommandManager.NAME);
         this.notification = notification;
-        doAction();
+        callDoAction();
         stateDone = true;
         if(!isCancelled) commandManager.addCommand(this);
     }
 
     public abstract void doAction();
     public abstract void undoAction();
+
+    public void callDoAction() {
+        doAction();
+    }
+
+    public void callUndoAction() {
+        callUndoAction();
+    }
 
     public Notification getNotification() {
         return notification;
