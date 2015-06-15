@@ -1,10 +1,13 @@
 package com.uwsoft.editor.renderer.systems.render;
 
+import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
@@ -13,6 +16,7 @@ import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.systems.render.logic.DrawableLogicMapper;
 
 
@@ -24,10 +28,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
 	private ComponentMapper<ParentNodeComponent> parentNodeMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
-	
 	private DrawableLogicMapper drawableLogicMapper;
+	private RayHandler rayHandler;
 	
 	public Batch batch;
+	
 	
 	public Overlap2dRenderer(Batch batch) {
 		super(Family.all(ViewPortComponent.class).get());
@@ -44,8 +49,18 @@ public class Overlap2dRenderer extends IteratingSystem {
 		batch.begin();
 		drawRecursively(entity);
 		batch.end();
+		//TODO kinda not cool
+		if(rayHandler != null) {
+			OrthographicCamera orthoCamera = (OrthographicCamera) camera;
+			rayHandler.setCombinedMatrix(camera.combined.scl(1/PhysicsBodyLoader.SCALE),
+					camera.position.x,
+					camera.position.y,
+					camera.viewportWidth * orthoCamera.zoom,
+					camera.viewportHeight * orthoCamera.zoom); 
+			rayHandler.updateAndRender();
+		}
 		
-		//TODO add rayHandler thing and Spine rendere thing
+		//TODO Spine rendere thing
 	}
 
 	private void drawRecursively(Entity rootEntity) {
@@ -196,6 +211,10 @@ public class Overlap2dRenderer extends IteratingSystem {
 	protected void resetTransform (Entity rootEntity, Batch batch) {
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		batch.setTransformMatrix(curCompositeTransformComponent.oldTransform);
+	}
+	
+	public void setRayHandler(RayHandler rayHandler){
+		this.rayHandler = rayHandler;
 	}
 	
 }
