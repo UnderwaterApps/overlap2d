@@ -96,8 +96,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 				offsetY = 0;
 			}
 			
-			compositeTransform.x = 0;
-			compositeTransform.y = 0;
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
@@ -126,8 +124,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 					drawRecursively(child);
 				}
 			}
-			compositeTransform.x = offsetX;
-			compositeTransform.y = offsetY;
 		}
 		nodeComponent.children.end();
 	}
