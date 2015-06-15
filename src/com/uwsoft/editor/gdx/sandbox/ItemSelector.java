@@ -36,6 +36,8 @@ import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
+import javax.xml.soap.Node;
+
 /**
  * Managing item selections, selecting by criteria and so on
  *
@@ -527,15 +529,12 @@ public class ItemSelector {
     }
 
     public boolean selectionIsComposite() {
-    	//TODO fix and uncomment
-//        for (SelectionRectangle value : getCurrentSelection().values()) {
-//            if (value.getHost().isComposite()) {
-//                return true;
-//            }
-//        }
+        Entity entity = currentSelection.stream().findFirst().get();
+        NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
+        if(nodeComponent != null) {
+            return true;
+        }
 
         return false;
     }
-
-
 }

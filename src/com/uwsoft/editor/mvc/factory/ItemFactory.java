@@ -21,17 +21,24 @@ package com.uwsoft.editor.mvc.factory;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LabelVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 6/5/2015.
@@ -107,15 +114,34 @@ public class ItemFactory {
         return true;
     }
 
-    public boolean createItemFromLibrary(String regionName, Vector2 position) {
+    public boolean createItemFromLibrary(String libraryName, Vector2 position) {
+        SceneControlMediator sceneControl = sandbox.getSceneControl();
+        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+
+        CompositeItemVO itemVO = libraryItems.get(libraryName);
+        Entity entity = createCompositeItem(itemVO, position);
+
+        //adding library name
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        mainItemComponent.itemName = libraryName;
+
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
         return true;
+    }
+
+    public Entity createCompositeItem(CompositeItemVO vo, Vector2 position) {
+        if(!setEssentialData(vo, position)) return null;
+
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        sceneLoader.initWithAshley(entity, vo.composite);
+
+        return entity;
     }
 
     public Entity createCompositeItem(Vector2 position) {
         CompositeItemVO vo = new CompositeItemVO();
-        if(!setEssentialData(vo, position)) return null;
-        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-
+        Entity entity = createCompositeItem(vo, position);
         return entity;
     }
 

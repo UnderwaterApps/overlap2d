@@ -19,11 +19,16 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -49,13 +54,13 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         sandbox.setCurrentViewingEntity(entity);
 
         sandbox.getSelector().clearSelections();
-        facade.sendNotification(DONE, enteringInto);
-        
+
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         TransformComponent previousTransformComponent = ComponentRetriever.get(oldEntity, TransformComponent.class);
         previousTransformComponent.enableTransform();
         transformComponent.disableTransform();
-        
+
+        facade.sendNotification(DONE, enteringInto);
     }
 
     @Override

@@ -21,6 +21,12 @@ package com.uwsoft.editor.mvc.controller.sandbox;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -28,6 +34,7 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 public class AddToLibraryCommand extends RevertableCommand {
 
     private String createdLibraryItemName;
+    private CompositeItemVO overwritten;
 
     @Override
     public void doAction() {
@@ -36,17 +43,35 @@ public class AddToLibraryCommand extends RevertableCommand {
         Entity item = ((Entity) payload[0]);
         createdLibraryItemName = (String) payload[1];
 
+        SceneControlMediator sceneControl = sandbox.getSceneControl();
+        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
 
-        //TODO fix and uncomment
-//        SceneControlMediator sceneControl = sandbox.getSceneControl();
-//        sceneControl.getCurrentSceneVO().libraryItems.put(createdLibraryItemName, item.getDataVO());
-//        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        if(libraryItems.containsKey(createdLibraryItemName)) {
+            overwritten = libraryItems.get(createdLibraryItemName);
+        }
+
+        CompositeItemVO newVO = new CompositeItemVO();
+        newVO.loadFromEntity(item);
+        libraryItems.put(createdLibraryItemName, newVO);
+
+        //mark this entity as belonging to library
+        MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
+        mainItemComponent.itemName = createdLibraryItemName;
+
+        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
     }
 
     @Override
     public void undoAction() {
         SceneControlMediator sceneControl = sandbox.getSceneControl();
-        sceneControl.getCurrentSceneVO().libraryItems.remove(createdLibraryItemName);
+        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+
+        libraryItems.remove(createdLibraryItemName);
+
+        if(overwritten != null) {
+            libraryItems.put(createdLibraryItemName, overwritten);
+        }
+
         facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
     }
 }
