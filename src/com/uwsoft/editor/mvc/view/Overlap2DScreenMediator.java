@@ -26,7 +26,7 @@ import com.uwsoft.editor.gdx.actors.basic.SandboxBackUI;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
-import com.uwsoft.editor.renderer.Overlap2dRenderer;
+import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 
 /**
  * Created by sargis on 3/30/15.
