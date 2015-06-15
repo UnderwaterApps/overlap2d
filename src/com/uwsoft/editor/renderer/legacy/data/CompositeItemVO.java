@@ -1,5 +1,7 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
+import com.badlogic.ashley.core.Entity;
+
 public class CompositeItemVO extends MainItemVO {
 
 	public CompositeVO composite;
@@ -46,5 +48,14 @@ public class CompositeItemVO extends MainItemVO {
         tmp.scissorHeight = scissorHeight;
 		
 		return tmp;
+	}
+
+	@Override
+	public void loadFromEntity(Entity entity) {
+		super.loadFromEntity(entity);
+		//scissorsX
+		//scissorsY
+		composite = new CompositeVO();
+		composite.loadFromEntity(entity);
 	}
 }

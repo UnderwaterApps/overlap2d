@@ -1,5 +1,11 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+
 import java.util.Arrays;
 
 
@@ -51,4 +57,26 @@ public class MainItemVO {
 		}
 	}
 
+	public void loadFromEntity(Entity entity) {
+		MainItemComponent mainItemComponent = entity.getComponent(MainItemComponent.class);
+		TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
+		TintComponent tintComponent = entity.getComponent(TintComponent.class);
+
+		itemIdentifier = mainItemComponent.itemIdentifier;
+		itemName = mainItemComponent.itemName;
+		tags = mainItemComponent.tags;
+		customVars = mainItemComponent.customVars;
+
+		x = transformComponent.x;
+		y = transformComponent.y;
+		scaleX = transformComponent.scaleX;
+		scaleY = transformComponent.scaleY;
+		originX = transformComponent.originX;
+		originY = transformComponent.originY;
+		rotation = transformComponent.rotation;
+		//zIndex =
+		//layerName
+		//tint = tintComponent.color;
+
+	}
 }

@@ -1,5 +1,8 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 
 import java.util.ArrayList;
@@ -336,5 +339,58 @@ public class CompositeVO {
         }
 
         return itemsList;
+    }
+
+    public void loadFromEntity(Entity compositeEntity) {
+        NodeComponent nodeComponent = compositeEntity.getComponent(NodeComponent.class);
+        for(Entity entity: nodeComponent.children) {
+            if(entity.flags == EntityFactory.COMPOSITE_TYPE) {
+                CompositeItemVO vo = new CompositeItemVO();
+                vo.loadFromEntity(entity);
+                sComposites.add(vo);
+            }
+            if(entity.flags == EntityFactory.IMAGE_TYPE) {
+                SimpleImageVO vo = new SimpleImageVO();
+                vo.loadFromEntity(entity);
+                sImages.add(vo);
+            }
+            if(entity.flags == EntityFactory.NINE_PATCH) {
+                Image9patchVO vo = new Image9patchVO();
+                vo.loadFromEntity(entity);
+                sImage9patchs.add(vo);
+            }
+            if(entity.flags == EntityFactory.LABEL_TYPE) {
+                LabelVO vo = new LabelVO();
+                vo.loadFromEntity(entity);
+                sLabels.add(vo);
+            }
+            if(entity.flags == EntityFactory.PARTICLE_TYPE) {
+                ParticleEffectVO vo = new ParticleEffectVO();
+                vo.loadFromEntity(entity);
+                sParticleEffects.add(vo);
+            }
+            if(entity.flags == EntityFactory.SPRITE_TYPE) {
+                SpriteAnimationVO vo = new SpriteAnimationVO();
+                vo.loadFromEntity(entity);
+                sSpriteAnimations.add(vo);
+            }
+            if(entity.flags == EntityFactory.SPRITER_TYPE) {
+                SpriterVO vo = new SpriterVO();
+                vo.loadFromEntity(entity);
+                sSpriterAnimations.add(vo);
+            }
+            if(entity.flags == EntityFactory.SPINE_TYPE) {
+                SpineVO vo = new SpineVO();
+                vo.loadFromEntity(entity);
+                sSpineAnimations.add(vo);
+            }
+            if(entity.flags == EntityFactory.LIGHT_TYPE) {
+                CompositeItemVO vo = new CompositeItemVO();
+                vo.loadFromEntity(entity);
+                sComposites.add(vo);
+            }
+
+            //TODO: layers
+        }
     }
 }
