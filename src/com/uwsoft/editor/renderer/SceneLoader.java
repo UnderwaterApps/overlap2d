@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -39,6 +40,7 @@ import com.uwsoft.editor.renderer.systems.ParticleSystem;
 import com.uwsoft.editor.renderer.systems.PhysicsSystem;
 import com.uwsoft.editor.renderer.systems.SpineSystem;
 import com.uwsoft.editor.renderer.systems.SpriteAnimationSystem;
+import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 
 /**
  * SceneLoader is importatn part of runtime that utilizes provided
@@ -221,9 +223,7 @@ public class SceneLoader {
 		setAmbienceInfo(sceneVO);
 		
 		return sceneVO;
-	}
-	
-	//TODO optimize this function 
+	} 
 
 	private void addSystems() {
 		ParticleSystem particleSystem = new ParticleSystem();
@@ -234,6 +234,8 @@ public class SceneLoader {
 		SpineSystem spineSystem = new SpineSystem();
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
+		Overlap2dRenderer renderer = new Overlap2dRenderer(new SpriteBatch());
+		renderer.setRayHandler(rayHandler);
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
@@ -242,6 +244,7 @@ public class SceneLoader {
 		engine.addSystem(spineSystem);
 		engine.addSystem(compositeSystem);
 		engine.addSystem(labelSystem);
+		engine.addSystem(renderer);
 
 		addEntityRemoveListener();
 	}
