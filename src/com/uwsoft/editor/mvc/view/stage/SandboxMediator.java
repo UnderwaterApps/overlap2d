@@ -34,7 +34,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.controller.sandbox.EditCompositeCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.CommandManager;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
@@ -82,6 +82,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         facade = Overlap2DFacade.getInstance();
 
         stageListener = new SandboxStageEventListener();
+        getViewComponent().addListener(stageListener);
 
         initTools();
     }
@@ -108,8 +109,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 SceneDataManager.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
                 ItemFactory.NEW_ITEM_ADDED,
-                Overlap2D.OPENED_PREVIOUS_COMPOSITE,
-                EditCompositeCommand.VIEW_COMPOSITE_CHANGED
+                CompositeCameraChangeCommand.DONE,
         };
     }
 
@@ -126,10 +126,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case ItemFactory.NEW_ITEM_ADDED:
                 addListenerToItem(notification.getBody());
                 break;
-            case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
-                initItemListeners();
-                break;
-            case EditCompositeCommand.VIEW_COMPOSITE_CHANGED:
+            case CompositeCameraChangeCommand.DONE:
                 initItemListeners();
                 break;
             default:
@@ -149,7 +146,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     private void initItemListeners() {
-        // TODO: remove this shit
         Engine engine = getViewComponent().getEngine();
         Family rootFamily = Family.all(ViewPortComponent.class).get();
         Entity rootEntity = engine.getEntitiesFor(rootFamily).iterator().next();
@@ -159,8 +155,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         for (Entity child: childrenEntities) {
             addListenerToItem(child);
         }
-        
-        getViewComponent().addListener(new SandboxStageEventListener());
     }
 
     /**
@@ -410,7 +404,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
 
-            currentSelectedTool.stageMouseUp(x, y);
+            if(currentSelectedTool != null) {
+                currentSelectedTool.stageMouseUp(x, y);
+            }
 
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {

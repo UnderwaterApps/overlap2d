@@ -34,7 +34,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class CutItemsCommand extends RevertableCommand {
+public class CutItemsCommand extends EntityModifyRevertableCommand {
 
     private HashMap<Integer, Collection<Component>> backup;
 

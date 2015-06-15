@@ -15,7 +15,7 @@ public class UICompositeHierarchy extends UIBaseBox {
 
     private static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.box.UICompositeHierarchy";
 
-    public static final String SCENE_CHOOSEN = PREFIX + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
+    public static final String SWITCH_VIEW_COMPOSITE_CLICKED = PREFIX + ".SWITCH_VIEW_COMPOSITE_CLICKED";
 
     private Stack<VisImageTextButton> buttons = new Stack<>();
 
@@ -33,7 +33,7 @@ public class UICompositeHierarchy extends UIBaseBox {
         row();
     }
 
-    public void addItem(String name, CompositeItemVO itemVo) {
+    public void addItem(String name, Integer id) {
         String classType = "hierarchy-item";
         if(name.equals("root")) classType+="-root";
 
@@ -44,7 +44,7 @@ public class UICompositeHierarchy extends UIBaseBox {
         button.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
-                facade.sendNotification(SCENE_CHOOSEN, itemVo);
+                facade.sendNotification(SWITCH_VIEW_COMPOSITE_CLICKED, id);
             }
         });
 

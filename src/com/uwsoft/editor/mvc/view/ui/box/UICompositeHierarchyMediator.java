@@ -3,12 +3,18 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import java.util.Stack;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.proxy.ProjectManager;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by CyberJoe on 4/22/2015.
@@ -16,9 +22,6 @@ import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHierarchy> {
     private static final String TAG = UICompositeHierarchyMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-
-    // Stack of scenes in the current hierarchy
-    private Stack<CompositeItemVO> scenes = new Stack<>();
 
     private Sandbox sandbox;
 
@@ -29,9 +32,8 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     public String[] listNotificationInterests() {
         return new String[]{
                 ProjectManager.PROJECT_OPENED,
-                Overlap2D.OPENED_COMPOSITE,
-                Overlap2D.OPENED_PREVIOUS_COMPOSITE,
-                UICompositeHierarchy.SCENE_CHOOSEN
+                CompositeCameraChangeCommand.DONE,
+                UICompositeHierarchy.SWITCH_VIEW_COMPOSITE_CLICKED
         };
     }
 
@@ -43,41 +45,46 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
 
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
-                CompositeItemVO compositeItemVO = Sandbox.getInstance().sceneControl.getRootSceneVO();
-                addScene("root", compositeItemVO);
+                buildCompositeTree(sandbox.getRootEntity());
                 break;
-            case Overlap2D.OPENED_COMPOSITE:
-                compositeItemVO = notification.getBody();
-                addScene("composite 1", compositeItemVO);
+            case CompositeCameraChangeCommand.DONE:
+                Integer entityId = notification.getBody();
+                changeComposite(entityId);
                 break;
-            case Overlap2D.OPENED_PREVIOUS_COMPOSITE:
-                if(scenes.size() < 2) return;
-                loadScene(scenes.get(scenes.size()-2));
-                break;
-            case UICompositeHierarchy.SCENE_CHOOSEN:
-                compositeItemVO = notification.getBody();
-                loadScene(compositeItemVO);
+            case UICompositeHierarchy.SWITCH_VIEW_COMPOSITE_CLICKED:
+                entityId = notification.getBody();
+                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, EntityUtils.getByUniqueId(entityId));
                 break;
             default:
                 break;
         }
     }
 
-    private void addScene(String name, CompositeItemVO scene) {
-        scenes.add(scene);
-        viewComponent.addItem(name, scene);
-    }
+    private void buildCompositeTree(Entity entity) {
+        Array<Integer> composites = new Array<>();
+        viewComponent.clearItems();
 
-    private void loadScene(CompositeItemVO scene) {
-
-        while(scenes.peek() != scene) {
-        	//TODO fix and uncomment
-            //updateOriginalItem(scenes.peek(), sandbox.getCurrentScene());
-            viewComponent.removeLastItem();
-            scenes.pop();
+        while(true) {
+            Integer entityId = EntityUtils.getEntityId(entity);
+            composites.add(entityId);
+            ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+            if (parentNodeComponent == null) {
+                break;
+            }
+            entity = parentNodeComponent.parentEntity;
         }
 
-        sandbox.getUIStage().loadScene(scene);
+        for(int i = composites.size - 1; i >= 0 ; i--) {
+            if(i == composites.size - 1) {
+                viewComponent.addItem("root", composites.get(i));
+            } else {
+                viewComponent.addItem("composite", composites.get(i));
+            }
+        }
+    }
+
+    private void changeComposite(Integer entityId) {
+        buildCompositeTree(EntityUtils.getByUniqueId(entityId));
     }
 
     public void updateOriginalItem() {
@@ -101,6 +108,7 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
 //        }
     }
 
+    /*
     private void revursiveUpdateLibraryVO(String libName, CompositeItemVO initialVO, CompositeItemVO updatingWith) {
         for (int i = 0; i < initialVO.composite.sComposites.size(); i++) {
             if (initialVO.composite.sComposites.get(i).itemName.equals(libName)) {
@@ -109,5 +117,5 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
                 revursiveUpdateLibraryVO(libName, initialVO.composite.sComposites.get(i), updatingWith);
             }
         }
-    }
+    }*/
 }

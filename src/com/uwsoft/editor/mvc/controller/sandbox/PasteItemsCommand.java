@@ -38,7 +38,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class PasteItemsCommand extends RevertableCommand {
+public class PasteItemsCommand extends EntityModifyRevertableCommand {
 
     private Array<Integer> pastedEntityIds = new Array<>();
 
@@ -58,14 +58,16 @@ public class PasteItemsCommand extends RevertableCommand {
             }
             sandbox.getEngine().addEntity(entity);
             int uniquId = sandbox.getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
-            Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
-            NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
+
+            ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+            parentNodeComponent.parentEntity = sandbox.getCurrentViewingEntity();
+            NodeComponent nodeComponent =  parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
+            nodeComponent.addChild(entity);
 
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             transformComponent.x += diff.x;
             transformComponent.y += diff.y;
 
-            nodeComponent.addChild(entity);
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
 
             pastedEntityIds.add(uniquId);

@@ -45,6 +45,7 @@ import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
@@ -64,8 +65,7 @@ public class Sandbox {
     private static final String CLASS_NAME = "com.uwsoft.editor.gdx.sandbox.Sandbox";
 
     public static final String ACTION_GROUP_ITEMS = CLASS_NAME + "ACTION_GROUP_ITEMS";
-    public static final String ACTION_COMPOSITE_HIERARCHY_UP = CLASS_NAME + "ACTION_COMPOSITE_HIERARCHY_UP";
-    public static final String ACTION_EDIT_COMPOSITE = CLASS_NAME + "ACTION_EDIT_COMPOSITE";
+    public static final String ACTION_CAMERA_CHANGE_COMPOSITE = CLASS_NAME + "ACTION_CAMERA_CHANGE_COMPOSITE";
     public static final String ACTION_CONVERT_TO_BUTTON = CLASS_NAME + "ACTION_CONVERT_TO_BUTTON";
     public static final String ACTION_CUT = CLASS_NAME + "ACTION_CUT";
     public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
@@ -282,53 +282,6 @@ public class Sandbox {
     }
 
     /**
-     * if user is currently viewing a composite item, this will go one step up to previous composite in hierarchy
-     */
-    public void enterIntoPrevComposite() {
-		//TODO fix and uncomment
-        //sandboxStage.getCamera().position.set(0, 0, 0);
-        facade.sendNotification(Overlap2D.OPENED_PREVIOUS_COMPOSITE);
-    }
-
-    /**
-     * If current selection contains only one item that is a composite item,
-     * it will call enterIntoComposite with that time as parameter
-     */
-    public void enterIntoComposite() {
-    	//TODO fix and uncomment
-//        CompositeItem item = null;
-//        sceneControl.getCurrentScene().updateDataVO();
-//        if (selector.getCurrentSelection().size() == 1) {
-//            for (SelectionRectangle value : selector.getCurrentSelection().values()) {
-//                if (value.getHost().isComposite()) {
-//                    item = (CompositeItem) value.getHost();
-//                }
-//            }
-//        }
-//        if (item == null) return;
-//        selector.clearSelections();
-//        enterIntoComposite(item.getDataVO());
-    }
-
-    /**
-     * Opens up provided composite item, sets it as a main view, and focuses editing on it's contents.
-     *
-     * @param compositeItemVO tools object of composite to enter into
-     */
-    public void enterIntoComposite(CompositeItemVO compositeItemVO) {
-        //rootSceneVO.update(new CompositeItemVO(currentSceneVo.composite));
-    	//TODO fix and uncomment
-        //sandboxStage.getCamera().position.set(0, 0, 0);
-        getSceneControl().disableAmbience(true);
-
-        facade.sendNotification(Overlap2D.OPENED_COMPOSITE, compositeItemVO);
-        //uiStage.getCompositePanel().addScene(compositeItemVO);
-
-        initSceneView(compositeItemVO);
-//        uiStage.getItemsBox().init();
-    }
-
-    /**
      * Some particle panels might not be continuous, so they will stop after first iteration, which is ok
      * This method will make sure they look continuous while in editor, so user will find and see them easily.
      *
@@ -357,10 +310,9 @@ public class Sandbox {
      * @return SceneVO
      */
     public SceneVO sceneVoFromItems() {
-        CompositeItemVO itemVo = sceneControl.getRootSceneVO();
-      //TODO fix and uncomment
-        //itemFactory.cleanComposite(itemVo.composite);
-        sceneControl.getCurrentSceneVO().composite = itemVo.composite;
+        sceneControl.getCurrentSceneVO().composite = new CompositeVO();
+        sceneControl.getCurrentSceneVO().composite.loadFromEntity(getRootEntity());
+
         return sceneControl.getCurrentSceneVO();
     }
 

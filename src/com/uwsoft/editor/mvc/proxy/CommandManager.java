@@ -58,7 +58,7 @@ public class CommandManager extends BaseProxy {
         if(cursor < 0) return;
         RevertableCommand command = commands.get(cursor);
         if(command.isStateDone()) {
-            command.undoAction();
+            command.callUndoAction();
             command.setStateDone(false);
         }
         cursor--;
@@ -69,7 +69,7 @@ public class CommandManager extends BaseProxy {
         RevertableCommand command = commands.get(cursor+1);
         if(!command.isStateDone()) {
             cursor++;
-            command.doAction();
+            command.callDoAction();
             command.setStateDone(true);
         }
     }

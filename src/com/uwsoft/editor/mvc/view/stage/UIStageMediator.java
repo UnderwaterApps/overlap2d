@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.mvc.view.stage;
 
+import com.badlogic.ashley.core.Entity;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -52,24 +55,23 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
         switch (notification.getName()) {
             case Sandbox.SHOW_ADD_LIBRARY_DIALOG:
                 Sandbox sandbox = Sandbox.getInstance();
-              //TODO fix and uncomment
-//                CompositeItem item = notification.getBody();
-//
-//                SceneControlMediator sceneControl = sandbox.getSceneControl();
-//                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
-//                    @Override
-//                    public void finished(String input) {
-//                        Object[] payload = new Object[2];
-//                        payload[0] = item;
-//                        payload[1] = input;
-//                        facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, payload);
-//                    }
-//
-//                    @Override
-//                    public void canceled() {
-//
-//                    }
-//                });
+
+                Entity item = notification.getBody();
+
+                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
+                    @Override
+                    public void finished(String input) {
+                        Object[] payload = new Object[2];
+                        payload[0] = item;
+                        payload[1] = input;
+                        facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, payload);
+                    }
+
+                    @Override
+                    public void canceled() {
+
+                    }
+                });
                 break;
         }
     }

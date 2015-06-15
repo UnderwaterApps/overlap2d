@@ -33,7 +33,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 6/4/2015.
  */
-public class ItemsMoveCommand extends RevertableCommand {
+public class ItemsMoveCommand extends EntityModifyRevertableCommand {
 
     private HashMap<Integer, Vector2> prevLocations = new HashMap<>();
 
