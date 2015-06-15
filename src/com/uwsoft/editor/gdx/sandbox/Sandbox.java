@@ -45,6 +45,7 @@ import com.uwsoft.editor.mvc.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
@@ -312,10 +313,9 @@ public class Sandbox {
      * @return SceneVO
      */
     public SceneVO sceneVoFromItems() {
-        CompositeItemVO itemVo = sceneControl.getRootSceneVO();
-      //TODO fix and uncomment
-        //itemFactory.cleanComposite(itemVo.composite);
-        sceneControl.getCurrentSceneVO().composite = itemVo.composite;
+        sceneControl.getCurrentSceneVO().composite = new CompositeVO();
+        sceneControl.getCurrentSceneVO().composite.loadFromEntity(getRootEntity());
+
         return sceneControl.getCurrentSceneVO();
     }
 
