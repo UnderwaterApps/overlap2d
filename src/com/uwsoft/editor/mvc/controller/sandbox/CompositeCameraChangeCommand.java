@@ -35,7 +35,6 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
 
     private Integer previousViewEntityId;
     private Integer enteringInto;
-    private TransformComponent curTransformBackup = new TransformComponent();
 
     @Override
     public void doAction() {
@@ -54,8 +53,8 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         
         CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(entity, CompositeTransformComponent.class);
         CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
-        //previousCompositeTransformComponent.transform = true;
-        //compositeTransformComponent.transform = false;
+        previousCompositeTransformComponent.transform = true;
+        compositeTransformComponent.transform = false;
         
     }
 
@@ -74,7 +73,7 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
 
         CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(currEntity, CompositeTransformComponent.class);
         CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
-        //previousCompositeTransformComponent.transform = false;
-        //compositeTransformComponent.transform = true;
+        previousCompositeTransformComponent.transform = false;
+        compositeTransformComponent.transform = true;
     }
 }
