@@ -156,9 +156,6 @@ public class Sandbox {
         //setUIStage(uiStage);
 
         engine = new Engine();
-        //TODO rendering system must be added in scene loader or idk where
-        Overlap2dRenderer renderer = new Overlap2dRenderer(new SpriteBatch());
-        engine.addSystem(renderer);
 		SceneLoader sceneLoader = new SceneLoader(engine);
 		sceneLoader.setResourceManager(resourceManager);
         sceneControl = new SceneControlMediator(sceneLoader);
