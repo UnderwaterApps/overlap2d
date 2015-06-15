@@ -87,39 +87,47 @@ public class Overlap2dRenderer extends IteratingSystem {
 			}
 		} else {
 			// No transform for this group, offset each child.
+			TransformComponent compositeTransform = transformMapper.get(rootEntity);
+			
+			float offsetX = compositeTransform.x, offsetY = compositeTransform.y;
+			
+			if(viewPortMapper.has(rootEntity)){
+				offsetX = 0;
+				offsetY = 0;
+			}
+			
+			compositeTransform.x = 0;
+			compositeTransform.y = 0;
+			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
+				Entity child = children[i];
 
-//			float offsetX = curTransform.x, offsetY = curTransform.y;
-//			curTransform.x = 0;
-//			curTransform.y = 0;
-//			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
-//				Entity child = children[i];
-//				
-//				TextureRegionComponent childTextureRegionComponent = textureRegionMapper.get(child);
-//				TransformComponent childTransformComponent = transformMapper.get(child); 
-//				NodeComponent childNodeComponent = nodeMapper.get(child);
-//				
-//				//TODO visibility and parent Alpha thing
-//				//if (!child.isVisible()) continue;
-//				//if (!child.isVisible()) continue;
-//				
-//				float cx = childTransformComponent.x, cy = childTransformComponent.y;
-//				childTransformComponent.x = cx + offsetX;
-//				childTransformComponent.y = cy + offsetY;
-//				if(childTextureRegionComponent != null){
-//					batch.draw(childTextureRegionComponent.region, childTransformComponent.x, childTransformComponent.y, 0, 0, childTextureRegionComponent.region.getRegionWidth(), childTextureRegionComponent.region.getRegionHeight(), childTransformComponent.scaleX, childTransformComponent.scaleY, childTransformComponent.rotation);
-//				}
-//				childTransformComponent.x = cx;
-//				childTransformComponent.y = cy;
-//				
-//				
-//				//TODO other things lights, particles, sprite spine
-//				
-//				if(childNodeComponent !=null){
-//					drawRecursively(child);
-//				}
-//			}
-//			curTransform.x = offsetX;
-//			curTransform.y = offsetY;
+				//TODO visibility and parent Alpha thing
+				//if (!child.isVisible()) continue;
+				//if (!child.isVisible()) continue;
+				
+				TransformComponent childTransformComponent = transformMapper.get(child);
+				float cx = childTransformComponent.x, cy = childTransformComponent.y;
+				childTransformComponent.x = cx + offsetX;
+				childTransformComponent.y = cy + offsetY;
+				
+				NodeComponent childNodeComponent = nodeMapper.get(child);
+				
+				if(childNodeComponent ==null){
+					//Finde the logic from mapper and draw it
+					drawableLogicMapper.getDrawable(child.flags).draw(batch, child);
+				}else{
+					//Step into Composite
+					drawRecursively(child);
+				}
+				childTransformComponent.x = cx;
+				childTransformComponent.y = cy;
+				
+				if(childNodeComponent !=null){
+					drawRecursively(child);
+				}
+			}
+			compositeTransform.x = offsetX;
+			compositeTransform.y = offsetY;
 		}
 		nodeComponent.children.end();
 	}
