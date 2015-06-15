@@ -233,7 +233,10 @@ public class ItemSelector {
     public void setSelections(Set<Entity> items, boolean alsoShow) {
         currentSelection.clear();
 
-        if(items == null) return;
+        if(items == null) {
+            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+            return;
+        }
 
         currentSelection.addAll(items.stream().collect(Collectors.toList()));
 
