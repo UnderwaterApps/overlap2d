@@ -51,10 +51,10 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         sandbox.getSelector().clearSelections();
         facade.sendNotification(DONE, enteringInto);
         
-        CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(entity, CompositeTransformComponent.class);
-        CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
-        previousCompositeTransformComponent.transform = true;
-        compositeTransformComponent.transform = false;
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        TransformComponent previousTransformComponent = ComponentRetriever.get(oldEntity, TransformComponent.class);
+        previousTransformComponent.enableTransform();
+        transformComponent.disableTransform();
         
     }
 
@@ -68,12 +68,13 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         oldEntity.add(viewPortComponent);
         sandbox.setCurrentViewingEntity(oldEntity);
 
-        sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
         facade.sendNotification(DONE, previousViewEntityId);
 
-        CompositeTransformComponent compositeTransformComponent = ComponentRetriever.get(currEntity, CompositeTransformComponent.class);
-        CompositeTransformComponent previousCompositeTransformComponent = ComponentRetriever.get(oldEntity, CompositeTransformComponent.class);
-        previousCompositeTransformComponent.transform = false;
-        compositeTransformComponent.transform = true;
+        TransformComponent transformComponent = ComponentRetriever.get(currEntity, TransformComponent.class);
+        TransformComponent previousTransformComponent = ComponentRetriever.get(oldEntity, TransformComponent.class);
+        previousTransformComponent.disableTransform();
+        transformComponent.enableTransform();
+
+        sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
     }
 }

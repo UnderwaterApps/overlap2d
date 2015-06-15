@@ -82,6 +82,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         facade = Overlap2DFacade.getInstance();
 
         stageListener = new SandboxStageEventListener();
+        getViewComponent().addListener(stageListener);
 
         initTools();
     }
@@ -145,7 +146,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     private void initItemListeners() {
-        // TODO: remove this shit
         Engine engine = getViewComponent().getEngine();
         Family rootFamily = Family.all(ViewPortComponent.class).get();
         Entity rootEntity = engine.getEntitiesFor(rootFamily).iterator().next();
@@ -155,8 +155,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         for (Entity child: childrenEntities) {
             addListenerToItem(child);
         }
-        
-        getViewComponent().addListener(new SandboxStageEventListener());
     }
 
     /**
@@ -406,7 +404,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
 
-            currentSelectedTool.stageMouseUp(x, y);
+            if(currentSelectedTool != null) {
+                currentSelectedTool.stageMouseUp(x, y);
+            }
 
             Sandbox sandbox = Sandbox.getInstance();
             if (button == Input.Buttons.RIGHT) {
