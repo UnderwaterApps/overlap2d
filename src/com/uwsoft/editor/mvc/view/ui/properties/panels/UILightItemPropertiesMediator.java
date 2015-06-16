@@ -46,7 +46,6 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     protected void translateObservableDataToView(Entity entity) {
     	lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
 
-        viewComponent.setType(lightObjectComponent.type);
         viewComponent.setRayCount(lightObjectComponent.rays);
         viewComponent.setStatic(lightObjectComponent.isStatic);
         viewComponent.setXRay(lightObjectComponent.isXRay);

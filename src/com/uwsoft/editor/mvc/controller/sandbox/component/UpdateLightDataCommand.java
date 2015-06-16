@@ -45,13 +45,12 @@ public class UpdateLightDataCommand extends EntityModifyRevertableCommand {
 
         LightObjectComponent lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
 
-        lightObjectComponent.type = vo.type;
         lightObjectComponent.rays = vo.rays;
         lightObjectComponent.isStatic = vo.isStatic;
         lightObjectComponent.isXRay = vo.isXRay;
         lightObjectComponent.coneDegree = vo.coneDegree;
         lightObjectComponent.distance = vo.distance;
-        lightObjectComponent.setDirty();
+        
     }
 
     @Override
@@ -59,13 +58,11 @@ public class UpdateLightDataCommand extends EntityModifyRevertableCommand {
         Entity entity = EntityUtils.getByUniqueId(enitityId);
         LightObjectComponent lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
 
-        lightObjectComponent.type = backup.type;
         lightObjectComponent.rays = backup.rays;
         lightObjectComponent.isStatic = backup.isStatic;
         lightObjectComponent.isXRay = backup.isXRay;
         lightObjectComponent.coneDegree = backup.coneDegree;
         lightObjectComponent.distance = backup.distance;
-        lightObjectComponent.setDirty();
     }
 
     public static Object payload(Entity entity, LightVO vo) {
