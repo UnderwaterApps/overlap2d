@@ -16,5 +16,18 @@ public class LightObjectComponent extends Component {
 	public boolean isStatic = true;
 	public boolean isXRay = true;
 	public Light lightObject = null;
-	
+
+	private boolean isDirty = false;
+
+	public void setDirty() {
+		isDirty = true;
+	}
+
+	public void setDirty(boolean dirty) {
+		isDirty = dirty;
+	}
+
+	public boolean isDirty() {
+		return isDirty;
+	}
 }

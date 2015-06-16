@@ -26,16 +26,14 @@ public class LightSystem extends IteratingSystem {
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
-		//System.out.println("DELTAING  " + entity.getId() +"  " +deltaTime);
 		LightObjectComponent lightObjectComponent = lightObjectComponentMapper.get(entity);
-		TransformComponent trnasformCompononet = transformComponentMapper.get(entity);
+		TransformComponent transformComponent = transformComponentMapper.get(entity);
 		Light light = lightObjectComponent.lightObject;
-		
-		
+
 		ParentNodeComponent parentNodeComponent = parentNodeComponentMapper.get(entity);
 		
-		float relativeX = trnasformCompononet.x;
-		float relativeY = trnasformCompononet.y;
+		float relativeX = transformComponent.x;
+		float relativeY = transformComponent.y;
 		float relativeRotation = 0;
 		
 		Entity parentEntity = parentNodeComponent.parentEntity;
@@ -57,13 +55,18 @@ public class LightSystem extends IteratingSystem {
 			float xx = 0;
 			
 			if(relativeRotation != 0){
-				xx = trnasformCompononet.x*MathUtils.cosDeg(relativeRotation) - trnasformCompononet.y*MathUtils.sinDeg(relativeRotation);
-				yy = trnasformCompononet.y*MathUtils.cosDeg(relativeRotation) + trnasformCompononet.x*MathUtils.sinDeg(relativeRotation);
-				yy=trnasformCompononet.y-yy;
-				xx=trnasformCompononet.x-xx;
+				xx = transformComponent.x*MathUtils.cosDeg(relativeRotation) - transformComponent.y*MathUtils.sinDeg(relativeRotation);
+				yy = transformComponent.y*MathUtils.cosDeg(relativeRotation) + transformComponent.x*MathUtils.sinDeg(relativeRotation);
+				yy=transformComponent.y-yy;
+				xx=transformComponent.x-xx;
 			}
 			light.setPosition((relativeX-xx)*PhysicsBodyLoader.SCALE, (relativeY-yy)*PhysicsBodyLoader.SCALE);
 		}
+
+		if(lightObjectComponent.isDirty()) {
+			light.remove();
+		}
+
 		if(lightObjectComponent.type == LightType.CONE){
 			light.setDirection(lightObjectComponent.directionDegree+relativeRotation);
 		}

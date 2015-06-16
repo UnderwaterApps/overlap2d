@@ -343,6 +343,7 @@ public class CompositeVO {
 
     public void loadFromEntity(Entity compositeEntity) {
         NodeComponent nodeComponent = compositeEntity.getComponent(NodeComponent.class);
+        if(nodeComponent == null) return;
         for(Entity entity: nodeComponent.children) {
             if(entity.flags == EntityFactory.COMPOSITE_TYPE) {
                 CompositeItemVO vo = new CompositeItemVO();
