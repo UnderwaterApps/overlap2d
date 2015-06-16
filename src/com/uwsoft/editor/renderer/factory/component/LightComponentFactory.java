@@ -60,36 +60,18 @@ public class LightComponentFactory extends ComponentFactory {
     }
 
     protected LightObjectComponent createLightObjectComponent(Entity entity, LightVO vo) {
-        LightObjectComponent component = new LightObjectComponent();
+        LightObjectComponent component = new LightObjectComponent(vo.type);
         component.coneDegree = vo.coneDegree;
         component.directionDegree = vo.directionDegree;
         component.distance = vo.distance;
         component.isStatic = vo.isStatic;
         component.isXRay = vo.isXRay;
         component.rays = vo.rays;
-        component.type = vo.type;
 
-        if (component.type == LightVO.LightType.POINT) {
+        if (component.getType() == LightVO.LightType.POINT) {
             component.lightObject = new PointLight(rayHandler, component.rays);
-            component.lightObject.setColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
-            // TODO Physics and resolution part
-            component.lightObject.setDistance(component.distance * PhysicsBodyLoader.SCALE);
-            component.lightObject.setPosition(vo.x * PhysicsBodyLoader.SCALE, vo.y * PhysicsBodyLoader.SCALE);
-            component.lightObject.setStaticLight(component.isStatic);
-            component.lightObject.setActive(true);
-            component.lightObject.setXray(component.isXRay);
-
         } else {
             component.lightObject = new ConeLight(rayHandler, component.rays, Color.WHITE, 1, 0, 0, 0, 0);
-            // Color asd = new Color(vo.tint);
-            component.lightObject.setColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
-            component.lightObject.setDistance(component.distance * PhysicsBodyLoader.SCALE);
-            component.lightObject.setPosition(vo.x * PhysicsBodyLoader.SCALE, vo.y * PhysicsBodyLoader.SCALE);
-            component.lightObject.setStaticLight(component.isStatic);
-            component.lightObject.setDirection(component.directionDegree);
-            ((ConeLight) component.lightObject).setConeDegree(component.coneDegree);
-            component.lightObject.setActive(true);
-            component.lightObject.setXray(component.isXRay);
         }
 
         entity.add(component);

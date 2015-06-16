@@ -38,7 +38,7 @@ public class LightVO extends MainItemVO{
 		super.loadFromEntity(entity);
 
 		LightObjectComponent lightObjectComponent = entity.getComponent(LightObjectComponent.class);
-		type = lightObjectComponent.type;
+		type = lightObjectComponent.getType();
 		rays = lightObjectComponent.rays;
 		distance = lightObjectComponent.distance;
 		directionDegree = lightObjectComponent.directionDegree;

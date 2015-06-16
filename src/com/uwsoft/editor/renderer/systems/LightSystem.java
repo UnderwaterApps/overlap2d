@@ -1,16 +1,20 @@
 package com.uwsoft.editor.renderer.systems;
 
+import box2dLight.ConeLight;
 import box2dLight.Light;
+import box2dLight.PointLight;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.MathUtils;
-import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.legacy.data.LightVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
@@ -18,8 +22,8 @@ public class LightSystem extends IteratingSystem {
 	private ComponentMapper<LightObjectComponent> lightObjectComponentMapper = ComponentMapper.getFor(LightObjectComponent.class);
     private ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<ParentNodeComponent> parentNodeComponentMapper = ComponentMapper.getFor(ParentNodeComponent.class);
-    private ComponentMapper<NodeComponent> nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
-	//private 
+    private ComponentMapper<TintComponent> tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
+   
 	public LightSystem() {
 		super(Family.all(LightObjectComponent.class).get());
 	}
@@ -28,6 +32,7 @@ public class LightSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		LightObjectComponent lightObjectComponent = lightObjectComponentMapper.get(entity);
 		TransformComponent transformComponent = transformComponentMapper.get(entity);
+		TintComponent tintComponent = tintComponentMapper.get(entity);
 		Light light = lightObjectComponent.lightObject;
 
 		ParentNodeComponent parentNodeComponent = parentNodeComponentMapper.get(entity);
@@ -63,13 +68,27 @@ public class LightSystem extends IteratingSystem {
 			light.setPosition((relativeX-xx)*PhysicsBodyLoader.SCALE, (relativeY-yy)*PhysicsBodyLoader.SCALE);
 		}
 
-		if(lightObjectComponent.isDirty()) {
-			light.remove();
-		}
-
-		if(lightObjectComponent.type == LightType.CONE){
+		if(lightObjectComponent.getType() == LightType.CONE){
 			light.setDirection(lightObjectComponent.directionDegree+relativeRotation);
 		}
+		
+		
+		if (lightObjectComponent.getType() == LightVO.LightType.POINT) {
+			lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+            // TODO Physics and resolution part
+            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.SCALE);
+            lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
+            lightObjectComponent.lightObject.setActive(true);
+            lightObjectComponent.lightObject.setXray(lightObjectComponent.isXRay);
+
+        } else {
+        	lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
+            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.SCALE);
+            lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
+            lightObjectComponent.lightObject.setDirection(lightObjectComponent.directionDegree);
+            ((ConeLight) lightObjectComponent.lightObject).setConeDegree(lightObjectComponent.coneDegree);
+            lightObjectComponent.lightObject.setXray(lightObjectComponent.isXRay);
+        }
 		
 	}
 

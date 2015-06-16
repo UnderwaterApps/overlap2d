@@ -8,7 +8,13 @@ import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
 public class LightObjectComponent extends Component {
 	//TODO temporarley disabled because of legasy vo
 	//public static enum LightType {POINT, CONE}
-	public LightType type;
+	
+	private LightType type;
+	
+	public LightObjectComponent(LightType type) {
+		this.type = type;
+	}
+
 	public int rays = 12;
 	public float distance = 300;
 	public float directionDegree = 0;
@@ -17,17 +23,7 @@ public class LightObjectComponent extends Component {
 	public boolean isXRay = true;
 	public Light lightObject = null;
 
-	private boolean isDirty = false;
-
-	public void setDirty() {
-		isDirty = true;
-	}
-
-	public void setDirty(boolean dirty) {
-		isDirty = dirty;
-	}
-
-	public boolean isDirty() {
-		return isDirty;
+	public LightType getType(){
+		return type;
 	}
 }
