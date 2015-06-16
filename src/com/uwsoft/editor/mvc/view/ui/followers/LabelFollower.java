@@ -19,6 +19,13 @@
 package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 import java.util.HashMap;
 
@@ -57,6 +64,12 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
             anchorListeners.get(i).setListenerTransform(listener);
         }
     }
+
+    @Override
+    public void clearFollowerListener() {
+
+    }
+
     public void setMode(SelectionMode mode) {
         super.setMode(mode);
         transformGroup.setVisible(true);
@@ -74,6 +87,62 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
     @Override
     public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
         update();
+
+        Vector2 stageCoordinates = Sandbox.getInstance().screenToStageCoordinates(x, y);
+        x = stageCoordinates.x;
+        y = stageCoordinates.y;
+
+        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
+
+        float newX = transformComponent.x;
+        float newY = transformComponent.y;
+        float newWidth = dimensionsComponent.width;
+        float newHeight = dimensionsComponent.height;
+
+        switch (anchor) {
+            case NormalSelectionFollower.LB:
+                newX = x;
+                newY = y;
+                newWidth = newWidth + (transformComponent.x - x);
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.L:
+                newX = x;
+                newWidth = newWidth + (transformComponent.x - x);
+                break;
+            case NormalSelectionFollower.LT:
+                newX = x;
+                newWidth = newWidth + (transformComponent.x - x);
+                newHeight = y - transformComponent.y;
+                break;
+            case NormalSelectionFollower.T:
+                newHeight = y - transformComponent.y;
+                break;
+            case NormalSelectionFollower.B:
+                newY = y;
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.RB:
+                newY = y;
+                newWidth = x - follower.getX();
+                newHeight = newHeight + (transformComponent.y - y);
+                break;
+            case NormalSelectionFollower.R:
+                newWidth = x - transformComponent.x;
+                break;
+            case NormalSelectionFollower.RT:
+                newHeight = y - transformComponent.y;
+                newWidth = x - transformComponent.x;
+                break;
+        }
+
+        transformComponent.x = newX;
+        transformComponent.y = newY;
+        dimensionsComponent.width = newWidth;
+        dimensionsComponent.height = newHeight;
+
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     @Override

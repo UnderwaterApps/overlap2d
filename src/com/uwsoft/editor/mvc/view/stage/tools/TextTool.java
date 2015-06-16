@@ -26,7 +26,7 @@ import com.uwsoft.editor.mvc.factory.ItemFactory;
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class TextTool extends SimpleTool {
+public class TextTool extends SelectionTool {
 
     public static final String NAME = "TEXT_TOOL";
 

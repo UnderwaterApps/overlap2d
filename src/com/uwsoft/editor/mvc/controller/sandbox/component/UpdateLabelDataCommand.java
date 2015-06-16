@@ -16,11 +16,12 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.mvc.controller.sandbox;
+package com.uwsoft.editor.mvc.controller.sandbox.component;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.controller.sandbox.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;

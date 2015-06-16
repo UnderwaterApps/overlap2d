@@ -30,6 +30,7 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
+import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
@@ -181,6 +182,9 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
         lightTypeSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
+        pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
+        coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
+        coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
 
         lightTypeSelectBox.addListener(new ChangeListener() {
             @Override

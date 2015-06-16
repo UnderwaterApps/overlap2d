@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateLightDataCommand;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.ashley.core.Entity;
@@ -55,19 +57,21 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     @Override
     protected void translateViewToItemData() {
-        lightObjectComponent = ComponentRetriever.get(observableReference, LightObjectComponent.class);
+        LightVO payloadVo = new LightVO();
+        payloadVo.loadFromEntity(observableReference);
 
-    	lightObjectComponent.type = viewComponent.getType();
-    	lightObjectComponent.rays = viewComponent.getRayCount();
-    	lightObjectComponent.isStatic = viewComponent.isStatic();
-    	lightObjectComponent.isXRay = viewComponent.isXRay();
-
-    	lightObjectComponent.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
-
+        payloadVo.type = viewComponent.getType();
+        payloadVo.rays = viewComponent.getRayCount();
+        payloadVo.isStatic = viewComponent.isStatic();
+        payloadVo.isXRay = viewComponent.isXRay();
+        payloadVo.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
         if(viewComponent.getType() == LightVO.LightType.POINT) {
-        	lightObjectComponent.distance = NumberUtils.toFloat(viewComponent.getRadius());
+            payloadVo.distance = NumberUtils.toFloat(viewComponent.getRadius());
         } else {
-        	lightObjectComponent.distance = NumberUtils.toFloat(viewComponent.getDistance());
+            payloadVo.distance = NumberUtils.toFloat(viewComponent.getDistance());
         }
+
+        Object payload = UpdateLightDataCommand.payload(observableReference, payloadVo);
+        facade.sendNotification(Sandbox.ACTION_UPDATE_LIGHT_DATA, payload);
     }
 }

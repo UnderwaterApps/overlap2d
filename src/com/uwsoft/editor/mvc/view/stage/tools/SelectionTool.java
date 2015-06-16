@@ -297,7 +297,9 @@ public class SelectionTool implements Tool {
 
     @Override
     public void itemMouseDoubleClick(Entity item, float x, float y) {
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, item);
+        if(sandbox.getSelector().selectionIsComposite()) {
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, item);
+        }
     }
 
     private boolean isShiftPressed() {
