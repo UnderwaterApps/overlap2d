@@ -35,6 +35,7 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.NodeList;
@@ -187,6 +188,10 @@ public class ProjectManager extends BaseProxy {
     public void openProjectAndLoadAllData(String projectName, String resolution) {
         String projectPath = currentWorkingPath + "/" + projectName;
         String prjFilePath = projectPath + "/project.pit";
+
+        PreferencesManager prefs = PreferencesManager.getInstance();
+        prefs.buildRecentHistory();
+        prefs.pushHistory(prjFilePath);
 
         File prjFile = new File(prjFilePath);
         if (prjFile.exists() && !prjFile.isDirectory()) {
@@ -965,6 +970,7 @@ public class ProjectManager extends BaseProxy {
                 setLastOpenedPath(workSpacePath);
                 setWorkspacePath(workSpacePath);
             }
+            Sandbox.getInstance().loadCurrentProject();
             facade.sendNotification(PROJECT_OPENED);
         } catch (IOException e) {
             e.printStackTrace();

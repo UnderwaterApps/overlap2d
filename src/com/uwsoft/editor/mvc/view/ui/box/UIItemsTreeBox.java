@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.mvc.view.ui.box;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,7 +35,9 @@ import com.kotcrab.vis.ui.widget.VisTree;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
@@ -43,7 +46,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     private VisTree tree;
     
     private ComponentMapper<MainItemComponent> mainItemMapper;
-    private MainItemComponent mainITemComponent;
+    private MainItemComponent mainItemComponent;
 
     public UIItemsTreeBox() {
         super("Items Tree", 166);
@@ -68,9 +71,9 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     }
 
     private String getItemName(Entity entity) {
-    	mainITemComponent = mainItemMapper.get(entity);
-        if (mainITemComponent.itemIdentifier != null && !mainITemComponent.itemIdentifier.isEmpty()) {
-            return mainITemComponent.itemIdentifier;
+        mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        if (mainItemComponent.itemIdentifier != null && !mainItemComponent.itemIdentifier.isEmpty()) {
+            return mainItemComponent.itemIdentifier;
         } else {
             int type = entity.flags;
             switch (type) {
@@ -78,18 +81,10 @@ public class UIItemsTreeBox extends UICollapsibleBox {
                     return "Image";
                 case EntityFactory.NINE_PATCH:
                     return "9PatchImage";
-//                case "TextBoxVO":
-//                    return "TextBox";
-//                case "ButtonVO":
-//                    return "Button";
                 case EntityFactory.LABEL_TYPE:
                     return "Label";
                 case EntityFactory.COMPOSITE_TYPE:
                     return "CompositeItem";
-//                case "CheckBoxVO":
-//                    return "CheckBox";
-//                case "SelectBoxVO":
-//                    return "SelectBox";
                 case EntityFactory.PARTICLE_TYPE:
                     return "ParticleEffect";
                 case EntityFactory.LIGHT_TYPE:
@@ -106,24 +101,27 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         }
     }
 
-    private Node addTreeRoot(Entity compoiteItem, Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
-        Node node = addTreeNode(compoiteItem, parentNode);
-      //TODO fix and uncomment
-//        ArrayList<Entity> items = compoiteItem.getItems();
-//        for (Entity item : items) {
-//        	
-//            if (item.isComposite()) {
-//                addTreeRoot((CompositeItem) item, node);
-//            } else {
-//                addTreeNode(item, node);
-//            }
-//        }
+    private Node addTreeRoot(Entity entity, Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
+        Node node = addTreeNode(entity, parentNode);
+
+        NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+
+        if(nodeComponent != null) {
+            for (Entity item : nodeComponent.children) {
+                if (item.flags == EntityFactory.COMPOSITE_TYPE) {
+                    addTreeRoot(item, node);
+                } else {
+                    addTreeNode(item, node);
+                }
+            }
+        }
         return node;
     }
 
-    private Node addTreeNode(Entity baseItem, Node parentNode) {
-        Node node = new Node(new VisLabel(parentNode == null ? "root" : getItemName(baseItem)));
-        node.setObject(baseItem);
+    private Node addTreeNode(Entity item, Node parentNode) {
+        Node node = new Node(new VisLabel(parentNode == null ? "root" : getItemName(item)));
+        MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
+        node.setObject(mainItemComponent.uniqueId);
         if (parentNode != null) {
             parentNode.add(node);
         } else {

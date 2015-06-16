@@ -46,6 +46,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     protected void translateObservableDataToView(Entity entity) {
     	lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
 
+        viewComponent.setType(lightObjectComponent.getType());
         viewComponent.setRayCount(lightObjectComponent.rays);
         viewComponent.setStatic(lightObjectComponent.isStatic);
         viewComponent.setXRay(lightObjectComponent.isXRay);
@@ -59,12 +60,11 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         LightVO payloadVo = new LightVO();
         payloadVo.loadFromEntity(observableReference);
 
-        payloadVo.type = viewComponent.getType();
         payloadVo.rays = viewComponent.getRayCount();
         payloadVo.isStatic = viewComponent.isStatic();
         payloadVo.isXRay = viewComponent.isXRay();
         payloadVo.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
-        if(viewComponent.getType() == LightVO.LightType.POINT) {
+        if(payloadVo.type == LightVO.LightType.POINT) {
             payloadVo.distance = NumberUtils.toFloat(viewComponent.getRadius());
         } else {
             payloadVo.distance = NumberUtils.toFloat(viewComponent.getDistance());
