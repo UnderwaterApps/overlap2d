@@ -26,6 +26,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -72,6 +73,11 @@ public class CompositeComponentFactory extends ComponentFactory {
 
         LayerMapComponent layerMap = new LayerMapComponent();
         layerMap.layers = vo.composite.layers;
+
+        if(layerMap.layers.size() == 0) {
+            // make sure we have default layer
+            layerMap.layers.add(LayerItemVO.createDefault());
+        }
 
         entity.add(compositeTransform);
         entity.add(layerMap);

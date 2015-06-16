@@ -17,19 +17,9 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
-import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
-import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.legacy.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.systems.CompositeSystem;
@@ -185,13 +175,23 @@ public class SceneLoader {
 
 		MainItemComponent mainComponent = new MainItemComponent();
 		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
-		TransformComponent trnasform = new TransformComponent();
+		TransformComponent transform = new TransformComponent();
 		NodeComponent node = new NodeComponent();
 		
 		DimensionsComponent dimensionsComponent = new DimensionsComponent();
 		dimensionsComponent.height = 100;
 		dimensionsComponent.width = 100;
-		
+
+		LayerMapComponent layerMapComponent = new LayerMapComponent();
+		if(sceneVO.composite != null) {
+			layerMapComponent.layers = sceneVO.composite.layers;
+		}
+		if(layerMapComponent.layers.size() == 0) {
+			// make sure we have default layer
+			layerMapComponent.layers.add(LayerItemVO.createDefault());
+		}
+
+
 		TintComponent tint = new TintComponent();
 		
 		ViewPortComponent viewPortComponent = new ViewPortComponent();
@@ -202,17 +202,20 @@ public class SceneLoader {
 		rootEntity = new Entity();
 		rootEntity.add(mainComponent);
 		rootEntity.add(compositeTransform);
-		rootEntity.add(trnasform);
+		rootEntity.add(transform);
 		rootEntity.add(dimensionsComponent);
 		rootEntity.add(tint);
 		rootEntity.add(node);
+		rootEntity.add(layerMapComponent);
 		rootEntity.add(viewPortComponent);
 		rootEntity.flags = EntityFactory.COMPOSITE_TYPE;
 
 		engine.addEntity(rootEntity);
 		entityFactory.postProcessEntity(rootEntity);
 
-		initWithAshley(rootEntity, sceneVO.composite);
+		if(sceneVO.composite != null) {
+			initWithAshley(rootEntity, sceneVO.composite);
+		}
 
 		// if (createActors) {
 		// sceneActor = getSceneAsActor();
