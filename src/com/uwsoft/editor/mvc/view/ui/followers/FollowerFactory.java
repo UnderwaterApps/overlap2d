@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 5/21/2015.
@@ -27,7 +28,7 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 public class FollowerFactory {
 
     public static BasicFollower createFollower(Entity entity) {
-        switch (entity.flags) {
+        switch (EntityUtils.getType(entity)) {
             case EntityFactory.LIGHT_TYPE:
                 return new LightFollower(entity);
             case EntityFactory.LABEL_TYPE:

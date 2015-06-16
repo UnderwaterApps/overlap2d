@@ -30,6 +30,7 @@ import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -81,7 +82,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
                     Entity entity = selection.iterator().next();
-                    if(entity.flags == EntityFactory.SPRITE_TYPE) {
+                    if(EntityUtils.getType(entity) == EntityFactory.SPRITE_TYPE) {
                         setObservable(entity);
                     } else {
                         observable = null;

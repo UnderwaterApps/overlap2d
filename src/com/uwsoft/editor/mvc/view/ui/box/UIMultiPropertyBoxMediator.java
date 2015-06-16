@@ -46,6 +46,7 @@ import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProp
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UITextToolPropertiesMediator;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -154,7 +155,7 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
         
         //TODO this condition must be changes later it's a temporary solution for {@link Entity}
         if(observable instanceof Entity){
-        	mapName = "Entity" + ((Entity) observable).flags;
+        	mapName = "Entity" + EntityUtils.getType(((Entity) observable));
         }
 
         // retrieve a list of property panels to show

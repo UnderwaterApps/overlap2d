@@ -147,4 +147,9 @@ public class EntityUtils {
 
         return entities;
     }
+
+    public static int getType(Entity entity) {
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        return mainItemComponent.entityType;
+    }
 }
