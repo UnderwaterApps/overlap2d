@@ -293,8 +293,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                         commandManager.undoCommand();
                     }
                 }
-
-                return true;
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.S) && !isControlPressed()) {

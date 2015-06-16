@@ -393,10 +393,8 @@ public class Sandbox {
     }
 
     public void setZoomPercent(float percent) {
-    	//TODO fix and uncomment
-//        zoomPercent = percent;
-//        OrthographicCamera camera = (OrthographicCamera) (sandboxStage.getCamera());
-//        camera.zoom = 1f / (zoomPercent / 100f);
+        zoomPercent = percent;
+        getCamera().zoom = 1f / (zoomPercent / 100f);
     }
 
     public void zoomBy(float amount) {
