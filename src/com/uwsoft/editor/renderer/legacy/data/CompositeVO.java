@@ -1,6 +1,8 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
+import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
@@ -343,49 +345,52 @@ public class CompositeVO {
 
     public void loadFromEntity(Entity compositeEntity) {
         NodeComponent nodeComponent = compositeEntity.getComponent(NodeComponent.class);
+        ComponentMapper<MainItemComponent> mainItemComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+        
         if(nodeComponent == null) return;
         for(Entity entity: nodeComponent.children) {
-            if(entity.flags == EntityFactory.COMPOSITE_TYPE) {
+        	int entityType = mainItemComponentMapper.get(entity).entityType;
+            if(entityType == EntityFactory.COMPOSITE_TYPE) {
                 CompositeItemVO vo = new CompositeItemVO();
                 vo.loadFromEntity(entity);
                 sComposites.add(vo);
             }
-            if(entity.flags == EntityFactory.IMAGE_TYPE) {
+            if(entityType == EntityFactory.IMAGE_TYPE) {
                 SimpleImageVO vo = new SimpleImageVO();
                 vo.loadFromEntity(entity);
                 sImages.add(vo);
             }
-            if(entity.flags == EntityFactory.NINE_PATCH) {
+            if(entityType == EntityFactory.NINE_PATCH) {
                 Image9patchVO vo = new Image9patchVO();
                 vo.loadFromEntity(entity);
                 sImage9patchs.add(vo);
             }
-            if(entity.flags == EntityFactory.LABEL_TYPE) {
+            if(entityType == EntityFactory.LABEL_TYPE) {
                 LabelVO vo = new LabelVO();
                 vo.loadFromEntity(entity);
                 sLabels.add(vo);
             }
-            if(entity.flags == EntityFactory.PARTICLE_TYPE) {
+            if(entityType == EntityFactory.PARTICLE_TYPE) {
                 ParticleEffectVO vo = new ParticleEffectVO();
                 vo.loadFromEntity(entity);
                 sParticleEffects.add(vo);
             }
-            if(entity.flags == EntityFactory.SPRITE_TYPE) {
+            if(entityType == EntityFactory.SPRITE_TYPE) {
                 SpriteAnimationVO vo = new SpriteAnimationVO();
                 vo.loadFromEntity(entity);
                 sSpriteAnimations.add(vo);
             }
-            if(entity.flags == EntityFactory.SPRITER_TYPE) {
+            if(entityType == EntityFactory.SPRITER_TYPE) {
                 SpriterVO vo = new SpriterVO();
                 vo.loadFromEntity(entity);
                 sSpriterAnimations.add(vo);
             }
-            if(entity.flags == EntityFactory.SPINE_TYPE) {
+            if(entityType == EntityFactory.SPINE_TYPE) {
                 SpineVO vo = new SpineVO();
                 vo.loadFromEntity(entity);
                 sSpineAnimations.add(vo);
             }
-            if(entity.flags == EntityFactory.LIGHT_TYPE) {
+            if(entityType == EntityFactory.LIGHT_TYPE) {
                 CompositeItemVO vo = new CompositeItemVO();
                 vo.loadFromEntity(entity);
                 sComposites.add(vo);

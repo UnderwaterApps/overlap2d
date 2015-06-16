@@ -51,20 +51,21 @@ public abstract class ComponentFactory {
 
     public abstract void createComponents(Entity root, Entity entity, MainItemVO vo);
 
-    protected void createCommonComponents(Entity entity, MainItemVO vo) {
+    protected void createCommonComponents(Entity entity, MainItemVO vo, int entityType) {
         DimensionsComponent dimensionsComponent = createDimensionsComponent(entity, vo);
-        createMainItemComponent(entity, vo);
+        createMainItemComponent(entity, vo, entityType);
         createTransformComponent(entity, vo, dimensionsComponent);
         createTintComponent(entity, vo);
         createZIndexComponent(entity, vo);
     }
 
-    protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo) {
+    protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
         MainItemComponent component = new MainItemComponent();
         component.customVars = vo.customVars;
         component.itemIdentifier = vo.itemIdentifier;
         component.itemName = vo.itemName;
         component.tags = vo.tags;
+        component.entityType = entityType;
 
         entity.add(component);
 

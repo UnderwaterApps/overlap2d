@@ -19,11 +19,13 @@
 package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.*;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -39,7 +41,7 @@ public class SpineComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-        createCommonComponents(entity, vo);
+        createCommonComponents(entity, vo, EntityFactory.SPINE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

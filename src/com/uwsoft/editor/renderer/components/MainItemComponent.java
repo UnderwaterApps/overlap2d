@@ -8,4 +8,5 @@ public class MainItemComponent extends Component {
 	public String itemName = "";
     public String[] tags = null;
     public String customVars = "";
+	public int entityType;
 }

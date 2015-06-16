@@ -6,6 +6,7 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.legacy.data.LabelVO;
@@ -62,7 +63,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SimpleImageVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = IMAGE_TYPE;
 
 		simpleImageComponentFactory.createComponents(root, entity, vo);
 
@@ -72,8 +72,9 @@ public class EntityFactory {
 	}
 	
 	public Entity createEntity(Entity root, LabelVO vo) {
+		
 		Entity entity = new Entity();
-		entity.flags = LABEL_TYPE;
+		
 		labelComponentFactory.createComponents(root, entity, vo);
 
 		postProcessEntity(entity);
@@ -84,7 +85,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, ParticleEffectVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = PARTICLE_TYPE;
 		
 		particleEffectComponentFactory.createComponents(root, entity, vo);
 
@@ -96,7 +96,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, LightVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = LIGHT_TYPE;
 
 		lightComponentFactory.createComponents(root, entity, vo);
 
@@ -108,7 +107,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpineVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = SPINE_TYPE;
 
 		spineComponentFactory.createComponents(root, entity, vo);
 
@@ -120,7 +118,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpriteAnimationVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = SPRITE_TYPE;
 
 		spriteComponentFactory.createComponents(root, entity, vo);
 
@@ -132,7 +129,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, SpriterVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = SPRITER_TYPE;
 
 		spriterComponentFactory.createComponents(root, entity, vo);
 
@@ -144,7 +140,6 @@ public class EntityFactory {
 	public Entity createEntity(Entity root, CompositeItemVO vo){
 
 		Entity entity = new Entity();
-		entity.flags = COMPOSITE_TYPE;
 
 		compositeComponentFactory.createComponents(root, entity, vo);
 

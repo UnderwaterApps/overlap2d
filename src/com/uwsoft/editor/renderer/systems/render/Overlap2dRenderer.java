@@ -12,6 +12,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -27,6 +28,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private ComponentMapper<NodeComponent> nodeMapper = ComponentMapper.getFor(NodeComponent.class);
 	private ComponentMapper<ParentNodeComponent> parentNodeMapper = ComponentMapper.getFor(ParentNodeComponent.class);
 	private ComponentMapper<TransformComponent> transformMapper = ComponentMapper.getFor(TransformComponent.class);
+	private ComponentMapper<MainItemComponent> mainItemComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+	
 	private DrawableLogicMapper drawableLogicMapper;
 	private RayHandler rayHandler;
 	
@@ -90,10 +93,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 				//new Group()
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
+				int entityType = mainItemComponentMapper.get(child).entityType;
 				
 				if(childNodeComponent ==null){
 					//Finde the logic from mapper and draw it
-					drawableLogicMapper.getDrawable(child.flags).draw(batch, child);
+					drawableLogicMapper.getDrawable(entityType).draw(batch, child);
 				}else{
 					//Step into Composite
 					drawRecursively(child);
@@ -123,10 +127,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 				childTransformComponent.y = cy + offsetY;
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
+				int entityType = mainItemComponentMapper.get(child).entityType;
 				
 				if(childNodeComponent ==null){
 					//Finde the logic from mapper and draw it
-					drawableLogicMapper.getDrawable(child.flags).draw(batch, child);
+					drawableLogicMapper.getDrawable(entityType).draw(batch, child);
 				}else{
 					//Step into Composite
 					drawRecursively(child);

@@ -19,10 +19,12 @@
 package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -40,7 +42,7 @@ public class SimpleImageComponentFactory extends ComponentFactory {
 
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
         textureRegionComponent = createTextureRegionComponent(entity, (SimpleImageVO) vo);
-        createCommonComponents( entity, vo);
+        createCommonComponents( entity, vo, EntityFactory.IMAGE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

@@ -19,11 +19,13 @@
 package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -41,7 +43,7 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
     	createParticleCompononet(entity, (ParticleEffectVO) vo);
-        createCommonComponents(entity, vo);
+        createCommonComponents(entity, vo, EntityFactory.PARTICLE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);

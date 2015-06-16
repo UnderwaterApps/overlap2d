@@ -174,6 +174,8 @@ public class SceneLoader {
 		invalidateSceneVO(sceneVO);
 
 		MainItemComponent mainComponent = new MainItemComponent();
+		mainComponent.entityType = EntityFactory.COMPOSITE_TYPE;
+		
 		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
 		TransformComponent transform = new TransformComponent();
 		NodeComponent node = new NodeComponent();
@@ -208,8 +210,7 @@ public class SceneLoader {
 		rootEntity.add(node);
 		rootEntity.add(layerMapComponent);
 		rootEntity.add(viewPortComponent);
-		rootEntity.flags = EntityFactory.COMPOSITE_TYPE;
-
+		
 		engine.addEntity(rootEntity);
 		entityFactory.postProcessEntity(rootEntity);
 
