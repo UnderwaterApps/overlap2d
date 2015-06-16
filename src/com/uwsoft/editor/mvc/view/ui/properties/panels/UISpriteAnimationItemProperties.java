@@ -84,10 +84,15 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
         animationsSelectBox.setSelected(currentAnimationName);
     }
 
-    private void setListeners() {
-        fpsSelector.addChangeListener(number -> facade.sendNotification(PROPERTIES_UPDATED));
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
 
-        animationsSelectBox.addListener(new SelectBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+    private void setListeners() {
+        fpsSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+
+        animationsSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
         editAnimationsButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {

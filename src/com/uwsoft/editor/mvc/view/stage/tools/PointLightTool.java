@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 
 /**
@@ -34,8 +36,8 @@ public class PointLightTool extends SimpleTool {
         LightVO vo = new LightVO();
         vo.type = LightVO.LightType.POINT;
         vo.distance = 300;
-      //TODO fix and uncomment
-        //Sandbox.getInstance().getItemFactory().createLight(layer, vo, x, y);
+
+        ItemFactory.get().createLightItem(vo, new Vector2(x, y));
         return false;
     }
 

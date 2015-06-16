@@ -45,8 +45,8 @@ public class NormalSelectionFollower extends BasicFollower {
 
     private PixelRect pixelRect;
 
-    private Group transformGroup;
-    private Actor[] miniRects;
+    protected Group transformGroup;
+    protected Actor[] miniRects;
 
     public static final int LT = 0;
     public static final int T = 1;
@@ -67,7 +67,7 @@ public class NormalSelectionFollower extends BasicFollower {
     public enum SelectionMode {
         normal, transform
     }
-    private SelectionMode mode = SelectionMode.normal;
+    protected SelectionMode mode = SelectionMode.normal;
 
     public NormalSelectionFollower(Entity entity) {
         super(entity);
@@ -224,10 +224,15 @@ public class NormalSelectionFollower extends BasicFollower {
     }
 
     public void setMode(SelectionMode mode) {
+        this.mode = mode;
         if(mode == SelectionMode.normal) {
             transformGroup.setVisible(false);
         } else {
             transformGroup.setVisible(true);
         }
+    }
+
+    public SelectionMode getMode() {
+        return mode;
     }
 }

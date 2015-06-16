@@ -26,11 +26,17 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
  */
 public abstract class UIAbstractProperties extends VisTable {
 
-    public static final String PROPERTIES_UPDATED = "com.uwsoft.editor.mvc.view.ui.properties.UIAbstractProperties" + ".PROPERTIES_UPDATED";
-
     protected final Overlap2DFacade facade;
 
     public UIAbstractProperties() {
         facade = Overlap2DFacade.getInstance();
+    }
+
+    public String getPrefix() {
+        return "com.uwsoft.editor.mvc.view.ui.properties";
+    }
+
+    public String getUpdateEventName() {
+        return getPrefix()+"." + "PROPERTIES_UPDATED";
     }
 }

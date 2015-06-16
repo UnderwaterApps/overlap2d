@@ -50,7 +50,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2D.ITEM_DATA_UPDATED,
-                UIAbstractProperties.PROPERTIES_UPDATED
+                viewComponent.getUpdateEventName()
         };
     }
 
@@ -58,12 +58,14 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
 
+
+        if(notification.getName().equals(viewComponent.getUpdateEventName())) {
+            if(!lockUpdates) {
+                translateViewToItemData();
+            }
+        }
+
         switch (notification.getName()) {
-            case UIAbstractProperties.PROPERTIES_UPDATED:
-                if(!lockUpdates) {
-                    translateViewToItemData();
-                }
-                break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
                 break;

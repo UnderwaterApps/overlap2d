@@ -30,6 +30,7 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
+import com.uwsoft.editor.mvc.event.KeyboardListener;
 import com.uwsoft.editor.mvc.event.SelectBoxChangeListener;
 import com.uwsoft.editor.mvc.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
@@ -171,11 +172,19 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         coneDistanceField.setText(distance);
     }
 
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
+
     private void setListeners() {
-        isStaticCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        isXRayCheckBox.addListener(new CheckBoxChangeListener(PROPERTIES_UPDATED));
-        rayCountSelector.addChangeListener(number -> facade.sendNotification(PROPERTIES_UPDATED));
-        lightTypeSelectBox.addListener(new SelectBoxChangeListener(PROPERTIES_UPDATED));
+        isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        lightTypeSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
+        pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
+        coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
+        coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
 
         lightTypeSelectBox.addListener(new ChangeListener() {
             @Override

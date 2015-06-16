@@ -34,13 +34,15 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
 
     @Override
     public void handleNotification(Notification notification) {
+
+        if(notification.getName().equals(viewComponent.getUpdateEventName())) {
+            if(!lockUpdates) {
+                translateViewToItemData();
+                afterItemDataModified();
+            }
+        }
+
         switch (notification.getName()) {
-            case UIAbstractProperties.PROPERTIES_UPDATED:
-                if(!lockUpdates) {
-                    translateViewToItemData();
-                    afterItemDataModified();
-                }
-                break;
             case Overlap2D.ITEM_DATA_UPDATED:
                 if(observableReference == null) return;
                 onItemDataUpdate();

@@ -51,7 +51,7 @@ public abstract class RevertableCommand extends SandboxCommand {
     }
 
     public void callUndoAction() {
-        callUndoAction();
+       undoAction();
     }
 
     public Notification getNotification() {

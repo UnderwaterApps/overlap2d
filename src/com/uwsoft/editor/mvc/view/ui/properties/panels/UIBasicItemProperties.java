@@ -46,9 +46,9 @@ import com.uwsoft.editor.utils.StandardWidgetsFactory;
  */
 public class UIBasicItemProperties extends UIItemProperties {
 
-    public static final String PREFIX = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties";
-    public static final String TINT_COLOR_BUTTON_CLICKED = PREFIX + ".TINT_COLOR_BUTTON_CLICKED";
-    public static final String CUSTOM_VARS_BUTTON_CLICKED = PREFIX + ".CUSTOM_VARS_BUTTON_CLICKED";
+    public static final String prefix = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties";
+    public static final String TINT_COLOR_BUTTON_CLICKED = prefix + ".TINT_COLOR_BUTTON_CLICKED";
+    public static final String CUSTOM_VARS_BUTTON_CLICKED = prefix + ".CUSTOM_VARS_BUTTON_CLICKED";
 
     public enum ItemType {
         multiple,
@@ -247,17 +247,22 @@ public class UIBasicItemProperties extends UIItemProperties {
         tintColorComponent.setColorValue(tintColor);
     }
 
+    @Override
+    public String getPrefix() {
+        return prefix;
+    }
+
     private void setListeners() {
-        idBox.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        xValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        yValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        widthValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        heightValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        scaleXValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        scaleYValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        flipVertical.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        flipHorizontal.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
-        rotationValue.addListener(new KeyboardListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        idBox.addListener(new KeyboardListener(getUpdateEventName()));
+        xValue.addListener(new KeyboardListener(getUpdateEventName()));
+        yValue.addListener(new KeyboardListener(getUpdateEventName()));
+        widthValue.addListener(new KeyboardListener(getUpdateEventName()));
+        heightValue.addListener(new KeyboardListener(getUpdateEventName()));
+        scaleXValue.addListener(new KeyboardListener(getUpdateEventName()));
+        scaleYValue.addListener(new KeyboardListener(getUpdateEventName()));
+        flipVertical.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        flipHorizontal.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        rotationValue.addListener(new KeyboardListener(getUpdateEventName()));
 
         tintColorComponent.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

@@ -24,6 +24,8 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.sandbox.*;
 import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateLabelDataCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateLightDataCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -39,8 +41,7 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_DELETE, DeleteItemsCommand.class);
         facade.registerCommand(Sandbox.ACTION_CREATE_ITEM, CreateItemCommand.class);
         facade.registerCommand(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
+
         facade.registerCommand(Sandbox.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
         facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
@@ -50,5 +51,10 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_SET_SELECTION, SetSelectionCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_SELECTION, AddSelectionCommand.class);
         facade.registerCommand(Sandbox.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
+
+        // DATA MODIFY by components
+        facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
     }
 }

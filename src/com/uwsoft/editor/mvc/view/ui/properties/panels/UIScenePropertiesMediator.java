@@ -62,7 +62,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
-                        facade.sendNotification(UIAbstractProperties.PROPERTIES_UPDATED);
+                        facade.sendNotification(viewComponent.getUpdateEventName());
                     }
                 });
 

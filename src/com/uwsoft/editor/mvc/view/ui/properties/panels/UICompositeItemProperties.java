@@ -47,7 +47,12 @@ public class UICompositeItemProperties extends UIItemCollapsibleProperties {
         scissorsEnabledCheckBox.setChecked(scissorsEnabled);
     }
 
+    @Override
+    public String getPrefix() {
+        return this.getClass().getCanonicalName();
+    }
+
     private void setListeners() {
-        scissorsEnabledCheckBox.addListener(new CheckBoxChangeListener(UIAbstractProperties.PROPERTIES_UPDATED));
+        scissorsEnabledCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
     }
 }

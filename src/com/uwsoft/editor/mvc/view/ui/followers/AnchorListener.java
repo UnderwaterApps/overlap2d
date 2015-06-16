@@ -27,10 +27,15 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
  */
 public class AnchorListener extends ClickListener {
 
-    private int anchorId;
+    protected int anchorId;
     protected FollowerTransformationListener listener = new EmptyTransformationListener();
 
     protected NormalSelectionFollower follower;
+
+    public AnchorListener(NormalSelectionFollower follower, int anchorId) {
+        this.anchorId = anchorId;
+        this.follower = follower;
+    }
 
     public AnchorListener(NormalSelectionFollower follower, FollowerTransformationListener listener, int anchorId) {
         this.listener = listener;
@@ -41,25 +46,25 @@ public class AnchorListener extends ClickListener {
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         super.touchDown(event, x, y, pointer, button);
-        listener.anchorDown(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorDown(follower, anchorId, event.getStageX(), event.getStageY());
         return true;
     }
     @Override
     public void touchDragged (InputEvent event, float x, float y, int pointer) {
-        listener.anchorDragged(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorDragged(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        listener.anchorUp(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorUp(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
         super.enter(event, x, y, pointer, fromActor);
-        listener.anchorMouseEnter(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorMouseEnter(follower, anchorId, event.getStageX(), event.getStageY());
     }
     @Override
     public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
         super.exit(event, x, y, pointer, toActor);
-        listener.anchorMouseExit(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorMouseExit(follower, anchorId, event.getStageX(), event.getStageY());
     }
 }
