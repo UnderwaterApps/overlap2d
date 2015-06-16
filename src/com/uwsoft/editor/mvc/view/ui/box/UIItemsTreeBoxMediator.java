@@ -19,10 +19,18 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.ui.Tree;
+import com.badlogic.gdx.scenes.scene2d.utils.Selection;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by sargis on 4/10/15.
@@ -49,27 +57,27 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
-            	//TODO fix and uncomment
-//                CompositeItem rootScene = sandbox.getCurrentScene();
-//                viewComponent.init(rootScene);
+            	Entity rootEntity = sandbox.getRootEntity();
+                viewComponent.init(rootEntity);
                 break;
             case UIItemsTreeBox.ITEMS_SELECTED:
-            	//TODO fix and uncomment
-//                Selection<Tree.Node> selection = notification.getBody();
-//                Array<Tree.Node> nodes = selection.toArray();
-//                for (Tree.Node node : nodes) {
-//                    IBaseItem baseItem = (IBaseItem) node.getObject();
-//                    if (baseItem != null) {
-//                        addSelectionAction(baseItem);
-//                    }
-//                }
+                Selection<Tree.Node> selection = notification.getBody();
+                Array<Tree.Node> nodes = selection.toArray();
+                for (Tree.Node node : nodes) {
+                    Integer entityId = (Integer) node.getObject();
+                    Entity item = EntityUtils.getByUniqueId(entityId);
+                    if (item != null) {
+                        addSelectionAction(item);
+                    }
+                }
 
                 break;
         }
     }
 
     private void addSelectionAction(Entity entity) {
-        Sandbox sandbox = Sandbox.getInstance();
-        sandbox.getSelector().setSelection(entity, true);
+        Set<Entity> items = new HashSet<>();
+        items.add(entity);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, items);
     }
 }
