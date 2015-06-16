@@ -20,13 +20,16 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.util.ArrayList;
 
+import com.badlogic.ashley.core.Entity;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 
 /**
@@ -106,15 +109,17 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
     }
 
     private void initLayerData() {
-    	//TODO fix and uncomment
-//        CompositeItemVO currentComposite = Sandbox.getInstance().sceneControl.getCurrentScene().getDataVO();
-//        layers = currentComposite.composite.layers;
-//
-//        viewComponent.clearItems();
-//
-//        for (int i = 0; i < layers.size(); i++) {
-//            viewComponent.addItem(new UILayerBox.UILayerItem(layers.get(i)));
-//        }
+
+        Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
+        layers = layerMapComponent.layers;
+
+        viewComponent.clearItems();
+
+        for (int i = 0; i < layers.size(); i++) {
+            UILayerBox.UILayerItem layerItem = new UILayerBox.UILayerItem(layers.get(i), new UILayerBox.UILayerItemSlot());
+            viewComponent.addItem(layerItem);
+        }
     }
 
     public int getCurrentSelectedLayerIndex() {
