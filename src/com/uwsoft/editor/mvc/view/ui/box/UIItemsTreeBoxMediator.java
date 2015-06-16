@@ -26,6 +26,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -47,6 +48,7 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 SceneDataManager.SCENE_LOADED,
+                ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED
         };
     }
@@ -58,6 +60,10 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
             	Entity rootEntity = sandbox.getRootEntity();
+                viewComponent.init(rootEntity);
+                break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;
             case UIItemsTreeBox.ITEMS_SELECTED:

@@ -43,12 +43,12 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private VisCheckBox isStaticCheckBox;
     private VisCheckBox isXRayCheckBox;
     private NumberSelector rayCountSelector;
-    private VisSelectBox<String> lightTypeSelectBox;
 
     private VisValidableTextField pointLightRadiusField;
-
     private VisValidableTextField coneInnerAngleField;
     private VisValidableTextField coneDistanceField;
+
+    private VisLabel lightTypeLabel;
 
     private VisTable secondaryTable;
 
@@ -59,18 +59,16 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         isStaticCheckBox = new VisCheckBox(null);
         isXRayCheckBox = new VisCheckBox(null);
         rayCountSelector = new NumberSelector(null, 4, 4, 5000, 1);
-        lightTypeSelectBox = new VisSelectBox<>();
+        lightTypeLabel = new VisLabel();
         pointLightRadiusField = new VisValidableTextField(floatValidator);
         coneInnerAngleField = new VisValidableTextField(floatValidator);
         coneDistanceField = new VisValidableTextField(floatValidator);
 
         secondaryTable = new VisTable();
 
-        Array<String> types = new Array<>();
-        types.add("Point Light");
-        types.add("Cone Light");
-        lightTypeSelectBox.setItems(types);
-
+        mainTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(lightTypeLabel).left();
+        mainTable.row().padTop(5);
         mainTable.add(new VisLabel("Is Static: ", Align.right)).padRight(5).width(55).right();
         mainTable.add(isStaticCheckBox).left();
         mainTable.row().padTop(5);
@@ -79,9 +77,6 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         mainTable.row().padTop(5);
         mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(55).right();
         mainTable.add(rayCountSelector).left();
-        mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
-        mainTable.add(lightTypeSelectBox).left();
         mainTable.row().padTop(5);
         mainTable. add(secondaryTable).colspan(2);
         setListeners();
@@ -106,20 +101,12 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         secondaryTable.row().padTop(5);
     }
 
-    public LightVO.LightType getType() {
-        if (lightTypeSelectBox.getSelectedIndex() == 0) {
-            return LightVO.LightType.POINT;
-        } else {
-            return LightVO.LightType.CONE;
-        }
-    }
-
     public void setType(LightVO.LightType type) {
         if (type == LightVO.LightType.POINT) {
-            lightTypeSelectBox.setSelectedIndex(0);
+            lightTypeLabel.setText("Point Light");
             initPointFields();
         } else if (type == LightVO.LightType.CONE) {
-            lightTypeSelectBox.setSelectedIndex(1);
+            lightTypeLabel.setText("Cone Light");
             initConeFields();
         }
     }
@@ -181,20 +168,8 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
-        lightTypeSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
         pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
-
-        lightTypeSelectBox.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                if (lightTypeSelectBox.getSelectedIndex() == 0) {
-                    initPointFields();
-                } else {
-                    initConeFields();
-                }
-            }
-        });
     }
 }

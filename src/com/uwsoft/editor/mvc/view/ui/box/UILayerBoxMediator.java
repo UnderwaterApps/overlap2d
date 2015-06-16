@@ -117,8 +117,7 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
         viewComponent.clearItems();
 
         for (int i = 0; i < layers.size(); i++) {
-            UILayerBox.UILayerItem layerItem = new UILayerBox.UILayerItem(layers.get(i), new UILayerBox.UILayerItemSlot());
-            viewComponent.addItem(layerItem);
+            viewComponent.addItem(layers.get(i));
         }
     }
 
