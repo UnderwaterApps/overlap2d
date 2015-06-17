@@ -27,12 +27,10 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.proxy.ResourceManager;
 import com.uwsoft.editor.mvc.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.*;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 import java.util.HashMap;
 
@@ -119,7 +117,7 @@ public class ItemFactory {
 
         //adding library name
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-        mainItemComponent.itemName = libraryName;
+        mainItemComponent.libraryLink = libraryName;
 
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 

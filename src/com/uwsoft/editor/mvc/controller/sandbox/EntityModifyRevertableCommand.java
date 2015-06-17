@@ -52,10 +52,10 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         SceneControlMediator sceneControl = sandbox.getSceneControl();
         HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
-        if(libraryItems.containsKey(mainItemComponent.itemName)) {
+        if(libraryItems.containsKey(mainItemComponent.libraryLink)) {
             CompositeItemVO itemVO = new CompositeItemVO();
             itemVO.loadFromEntity(entity);
-            libraryItems.put(mainItemComponent.itemName, itemVO);
+            libraryItems.put(mainItemComponent.libraryLink, itemVO);
         }
 
         //TODO: change inners of all other entities with same library name

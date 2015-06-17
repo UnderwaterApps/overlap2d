@@ -23,7 +23,6 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 import java.util.HashMap;
@@ -56,7 +55,7 @@ public class AddToLibraryCommand extends RevertableCommand {
 
         //mark this entity as belonging to library
         MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
-        mainItemComponent.itemName = createdLibraryItemName;
+        mainItemComponent.libraryLink = createdLibraryItemName;
 
         facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
     }
