@@ -102,6 +102,8 @@ public class UIAlignBoxMediator extends PanelMediator<UIAlignBox> {
                 align = Align.right;
                 alignFunctionName = "alignSelectionsAtEdge";
                 break;
+            default:
+                return;
         }
         delegateAlignFunction(alignFunctionName, align);
     }

@@ -62,6 +62,7 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
+                viewComponent.update();
                 viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
             case  UIZoomBox.ZOOM_SHIFT_REQUESTED:

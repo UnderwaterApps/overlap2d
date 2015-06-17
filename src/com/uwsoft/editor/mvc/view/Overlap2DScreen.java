@@ -98,6 +98,8 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     }
 
     public void disableDrawingBgLogo() {
+        if(!isDrawingBgLogo) return;
+
         this.isDrawingBgLogo = false;
         bgLogo.dispose();
         batch.dispose();
