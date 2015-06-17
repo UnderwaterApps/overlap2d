@@ -34,7 +34,7 @@ import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 public class SpineResource extends BoxItemResource {
 
 
-    private final Image payloadImg;
+    private final SpineActor payloadActor;
     private final ResourcePayloadObject payload;
     private Overlap2DFacade facade;
 
@@ -86,10 +86,10 @@ public class SpineResource extends BoxItemResource {
 
         addActor(animThumb);
 
-        payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+        //payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+        payloadActor = new SpineActor(animName, sandbox.getSceneControl().sceneLoader.getRm());
 
         payload = new ResourcePayloadObject();
-
         payload.name = animName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
@@ -106,7 +106,7 @@ public class SpineResource extends BoxItemResource {
 
     @Override
     public Actor getDragActor() {
-        return payloadImg;
+        return payloadActor;
     }
 
     @Override
