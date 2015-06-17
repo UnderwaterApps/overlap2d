@@ -19,11 +19,14 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
@@ -39,7 +42,27 @@ public class SetSelectionCommand extends RevertableCommand {
         previousSelectionIds = EntityUtils.getEntityId(previousSelection);
 
         Set<Entity> items = getNotification().getBody();
-        Sandbox.getInstance().getSelector().setSelections(items, true);
+
+        if(items == null) {
+            // deselect all
+            sandbox.getSelector().setSelections(items, true);
+            return;
+        }
+
+        // check if items are in viewable element, if no - cancel
+        NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
+        for (Iterator<Entity> iterator = items.iterator(); iterator.hasNext();) {
+            Entity item = iterator.next();
+            if(!nodeComponent.children.contains(item, true)) {
+                iterator.remove();
+            }
+        }
+
+        if(items.size() == 0) {
+            cancel();
+        } else {
+            sandbox.getSelector().setSelections(items, true);
+        }
     }
 
     @Override
