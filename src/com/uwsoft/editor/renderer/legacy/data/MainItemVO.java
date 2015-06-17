@@ -1,7 +1,6 @@
 package com.uwsoft.editor.renderer.legacy.data;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -63,7 +62,7 @@ public class MainItemVO {
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
 
 		itemIdentifier = mainItemComponent.itemIdentifier;
-		itemName = mainItemComponent.itemName;
+		itemName = mainItemComponent.libraryLink;
 		tags = mainItemComponent.tags;
 		customVars = mainItemComponent.customVars;
 

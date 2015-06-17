@@ -480,7 +480,7 @@ public class SceneLoader {
 //		if (vo.composite == null)
 //			vo.composite = new CompositeVO();
 //		CompositeItem cnt = new CompositeItem(vo, null);
-//		cnt.dataVO.itemName = name;
+//		cnt.dataVO.libraryLink = name;
 //		cnt.applyResolution(curResolution);
 //		cnt.setX(0);
 //		cnt.setY(0);
