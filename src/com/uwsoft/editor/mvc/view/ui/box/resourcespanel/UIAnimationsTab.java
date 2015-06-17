@@ -32,7 +32,7 @@ public class UIAnimationsTab extends UIResourcesTab {
 
     @Override
     public String getTabTitle() {
-        return " Animations ";
+        return " Anims ";
     }
 
 
