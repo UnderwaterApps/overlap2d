@@ -72,6 +72,9 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
             for (Entity dependable : linkedEntities) {
                 if(dependable == entity) continue;
                 NodeComponent nodeComponent = ComponentRetriever.get(dependable, NodeComponent.class);
+                for(Entity child: nodeComponent.children) {
+                    sandbox.getEngine().removeEntity(child);
+                }
                 nodeComponent.children.clear();
                 sandbox.getSceneControl().sceneLoader.initWithAshley(dependable, libraryItems.get(link).composite);
             }
