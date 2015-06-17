@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import java.util.HashMap;
 
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -111,7 +112,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	dimensionComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
     	tintComponent = ComponentRetriever.get(entity, TintComponent.class);
 
-        viewComponent.setItemType(itemTypeMap.get("ENTITY_"+entity.flags));
+        viewComponent.setItemType(itemTypeMap.get("ENTITY_"+ EntityUtils.getType(entity)));
         viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
         viewComponent.setXValue(transformComponent.x + "");
         viewComponent.setYValue(transformComponent.y + "");

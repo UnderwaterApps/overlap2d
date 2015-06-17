@@ -38,6 +38,7 @@ import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.mvc.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
@@ -75,7 +76,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         if (mainItemComponent.itemIdentifier != null && !mainItemComponent.itemIdentifier.isEmpty()) {
             return mainItemComponent.itemIdentifier;
         } else {
-            int type = entity.flags;
+            int type = EntityUtils.getType(entity);
             switch (type) {
                 case EntityFactory.IMAGE_TYPE:
                     return "Image";
@@ -108,7 +109,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
 
         if(nodeComponent != null) {
             for (Entity item : nodeComponent.children) {
-                if (item.flags == EntityFactory.COMPOSITE_TYPE) {
+                if (EntityUtils.getType(entity) == EntityFactory.COMPOSITE_TYPE) {
                     addTreeRoot(item, node);
                 } else {
                     addTreeNode(item, node);
