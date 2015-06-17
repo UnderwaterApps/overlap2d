@@ -269,9 +269,17 @@ public class SceneLoader {
 				}
 				
 				Entity parentEntity = parentComponent.parentEntity;
-				NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
-				nodeComponent.removeChild(entity);
-				
+				NodeComponent parentNodeComponent = parentEntity.getComponent(NodeComponent.class);
+				parentNodeComponent.removeChild(entity);
+
+				// check if composite and remove all children
+				NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
+				if(nodeComponent != null) {
+					// it is composite
+					for(Entity node: nodeComponent.children) {
+						engine.removeEntity(node);
+					}
+				}
 			}
 		});
 	}
