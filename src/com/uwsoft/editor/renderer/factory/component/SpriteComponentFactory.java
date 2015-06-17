@@ -105,6 +105,7 @@ public class SpriteComponentFactory extends ComponentFactory {
         
         entity.add(textureRegionComponent);
         entity.add(stateComponent);
+        entity.add(animationComponent);
         entity.add(spriteAnimationComponent);
 
         return spriteAnimationComponent;
