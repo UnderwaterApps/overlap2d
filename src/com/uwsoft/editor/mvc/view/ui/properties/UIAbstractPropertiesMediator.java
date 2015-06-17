@@ -38,6 +38,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
         super(mediatorName, viewComponent);
 
         sandbox = Sandbox.getInstance();
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override

@@ -19,8 +19,16 @@
 package com.uwsoft.editor.mvc.controller.sandbox;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -45,19 +53,28 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
 
     protected void postChange() {
         Integer parentId = EntityUtils.getEntityId(sandbox.getCurrentViewingEntity());
-
         Entity entity = EntityUtils.getByUniqueId(parentId);
 
         // Update item library data if it was in library
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
-        if(libraryItems.containsKey(mainItemComponent.libraryLink)) {
-            CompositeItemVO itemVO = new CompositeItemVO();
-            itemVO.loadFromEntity(entity);
-            libraryItems.put(mainItemComponent.libraryLink, itemVO);
-        }
+        String link = mainItemComponent.libraryLink;
 
-        //TODO: change inners of all other entities with same library name
+        if(link != null && link.length() > 0) {
+            SceneControlMediator sceneControl = sandbox.getSceneControl();
+            HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+            if (libraryItems.containsKey(mainItemComponent.libraryLink)) {
+                CompositeItemVO itemVO = new CompositeItemVO();
+                itemVO.loadFromEntity(entity);
+                libraryItems.put(mainItemComponent.libraryLink, itemVO);
+            }
+
+            Array<Entity> linkedEntities = EntityUtils.getByLibraryLink(link);
+            for (Entity dependable : linkedEntities) {
+                if(dependable == entity) continue;
+                NodeComponent nodeComponent = ComponentRetriever.get(dependable, NodeComponent.class);
+                nodeComponent.children.clear();
+                sandbox.getSceneControl().sceneLoader.initWithAshley(dependable, libraryItems.get(link).composite);
+            }
+        }
     }
 }

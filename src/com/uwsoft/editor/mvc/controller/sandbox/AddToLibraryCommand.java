@@ -24,6 +24,7 @@ import com.uwsoft.editor.gdx.mediators.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 import java.util.HashMap;
 
@@ -34,30 +35,40 @@ public class AddToLibraryCommand extends RevertableCommand {
 
     private String createdLibraryItemName;
     private CompositeItemVO overwritten;
+    private String prevName;
+    private Integer entityId;
 
     @Override
     public void doAction() {
         Object[] payload = getNotification().getBody();
 
         Entity item = ((Entity) payload[0]);
+        entityId = EntityUtils.getEntityId(item);
         createdLibraryItemName = (String) payload[1];
 
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
-
-        if(libraryItems.containsKey(createdLibraryItemName)) {
-            overwritten = libraryItems.get(createdLibraryItemName);
-        }
-
-        CompositeItemVO newVO = new CompositeItemVO();
-        newVO.loadFromEntity(item);
-        libraryItems.put(createdLibraryItemName, newVO);
-
-        //mark this entity as belonging to library
         MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
-        mainItemComponent.libraryLink = createdLibraryItemName;
 
-        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        if(createdLibraryItemName.length() > 0) {
+            SceneControlMediator sceneControl = sandbox.getSceneControl();
+            HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+
+            if (libraryItems.containsKey(createdLibraryItemName)) {
+                overwritten = libraryItems.get(createdLibraryItemName);
+            }
+
+            CompositeItemVO newVO = new CompositeItemVO();
+            newVO.loadFromEntity(item);
+            libraryItems.put(createdLibraryItemName, newVO);
+
+            //mark this entity as belonging to library
+            mainItemComponent.libraryLink = createdLibraryItemName;
+            facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        } else {
+            prevName = mainItemComponent.libraryLink;
+            // unlink it
+            mainItemComponent.libraryLink = "";
+        }
+        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
     }
 
     @Override
@@ -65,12 +76,34 @@ public class AddToLibraryCommand extends RevertableCommand {
         SceneControlMediator sceneControl = sandbox.getSceneControl();
         HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
 
-        libraryItems.remove(createdLibraryItemName);
+        if(createdLibraryItemName.length() > 0) {
+            libraryItems.remove(createdLibraryItemName);
 
-        if(overwritten != null) {
-            libraryItems.put(createdLibraryItemName, overwritten);
+            if (overwritten != null) {
+                libraryItems.put(createdLibraryItemName, overwritten);
+            }
+            facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        } else {
+            Entity entity = EntityUtils.getByUniqueId(entityId);
+            MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            mainItemComponent.libraryLink = prevName;
+            facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
         }
+    }
 
-        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+    public static Object payloadUnLink(Entity entity) {
+        Object[] payload = new Object[2];
+        payload[0] = entity;
+        payload[1] = "";
+
+        return payload;
+    }
+
+    public static Object payloadLink(Entity entity, String link) {
+        Object[] payload = new Object[2];
+        payload[0] = entity;
+        payload[1] = link;
+
+        return payload;
     }
 }

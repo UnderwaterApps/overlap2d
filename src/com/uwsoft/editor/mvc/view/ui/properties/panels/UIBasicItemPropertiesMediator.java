@@ -20,6 +20,8 @@ package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
 import java.util.HashMap;
 
+import com.uwsoft.editor.mvc.controller.sandbox.AddToLibraryCommand;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -78,6 +80,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
                 UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
+                UIBasicItemProperties.LINKING_CHANGED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -101,6 +104,14 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                 Sandbox.getInstance().getUIStage().addActor(picker.fadeIn());
 
                 break;
+            case UIBasicItemProperties.LINKING_CHANGED:
+                boolean isLinked = notification.getBody();
+                if(!isLinked) {
+                    facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
+                } else {
+                    //TODO: show add to library dialog
+                }
+                break;
             default:
                 break;
         }
@@ -112,14 +123,19 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	dimensionComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
     	tintComponent = ComponentRetriever.get(entity, TintComponent.class);
 
+        if(EntityUtils.getType(observableReference) == EntityFactory.COMPOSITE_TYPE) {
+            if(mainItemComponent.libraryLink!= null && mainItemComponent.libraryLink.length() > 0) {
+                viewComponent.setLinkage(true, mainItemComponent.libraryLink);
+            } else {
+                viewComponent.setLinkage(false, "not in library");
+            }
+        }
+
         viewComponent.setItemType(itemTypeMap.get("ENTITY_"+ EntityUtils.getType(entity)));
         viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
         viewComponent.setXValue(transformComponent.x + "");
         viewComponent.setYValue(transformComponent.y + "");
-        //TODO no flip anymore
-        //viewComponent.setFlipH(vo.isFlipedH);
-        //viewComponent.setFlipV(vo.isFlipedV);
-        
+
         viewComponent.setWidthValue(dimensionComponent.width + "");
         viewComponent.setHeightValue(dimensionComponent.height + "");
         viewComponent.setRotationValue(transformComponent.rotation + "");

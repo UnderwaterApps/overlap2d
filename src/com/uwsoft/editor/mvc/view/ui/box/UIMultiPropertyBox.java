@@ -43,7 +43,7 @@ public class UIMultiPropertyBox extends UICollapsibleBox {
     }
 
     public void addPropertyBox(UIAbstractProperties viewComponent) {
-        propertiesTable.add(viewComponent).uniformX().fillX();
+        propertiesTable.add(viewComponent).width(219).fillX();
         propertiesTable.row();
     }
 }

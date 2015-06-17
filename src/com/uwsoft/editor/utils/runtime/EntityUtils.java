@@ -26,6 +26,8 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.Family;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
@@ -151,5 +153,18 @@ public class EntityUtils {
     public static int getType(Entity entity) {
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         return mainItemComponent.entityType;
+    }
+
+    public static Array<Entity> getByLibraryLink(String link) {
+        Array<Entity> result = new Array<>();
+        ImmutableArray<Entity> composites = Sandbox.getInstance().getEngine().getEntitiesFor(Family.all(NodeComponent.class).get());
+        for(Entity composite: composites) {
+            MainItemComponent mainItemComponent = ComponentRetriever.get(composite, MainItemComponent.class);
+            if(mainItemComponent.libraryLink.equals(link)) {
+                result.add(composite);
+            }
+        }
+
+        return result;
     }
 }

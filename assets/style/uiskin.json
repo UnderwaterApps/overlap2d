@@ -547,6 +547,10 @@
     "layer-visible": {
       "imageUp": "icon-visible-on",
       "imageChecked": "icon-visible-off"
+    },
+    "library-link-button": {
+      "imageUp": "icon-library",
+      "imageChecked": "icon-library-over"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
