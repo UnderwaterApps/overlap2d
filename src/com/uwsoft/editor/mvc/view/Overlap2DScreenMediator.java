@@ -73,6 +73,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
                 engine = sandboxMediator.getViewComponent().getEngine();
                 SandboxBackUI sandboxBackUI = new SandboxBackUI(engine.getSystem(Overlap2dRenderer.class).batch);
                 getViewComponent().setBackUI(sandboxBackUI);
+                getViewComponent().disableDrawingBgLogo();
                 break;
             case Overlap2D.PAUSE:
                 viewComponent.pause();

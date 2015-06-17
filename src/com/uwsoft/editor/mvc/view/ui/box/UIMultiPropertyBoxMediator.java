@@ -21,6 +21,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
+import java.util.stream.Stream;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
@@ -51,7 +52,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBox> {
+public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox> {
 
     private static final String TAG = UIMultiPropertyBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -112,17 +113,19 @@ public class UIMultiPropertyBoxMediator extends SimpleMediator<UIMultiPropertyBo
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
+        String[] parentNotifications = super.listNotificationInterests();
+        return Stream.of(parentNotifications, new String[]{
                 SceneDataManager.SCENE_LOADED,
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 SandboxMediator.SANDBOX_TOOL_CHANGED
-        };
+        }).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initAllPropertyBoxes(null);

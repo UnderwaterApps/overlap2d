@@ -20,6 +20,7 @@ package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.stream.Stream;
 
 import com.badlogic.gdx.utils.Align;
 import com.puremvc.patterns.mediator.SimpleMediator;
@@ -30,7 +31,7 @@ import com.uwsoft.editor.gdx.sandbox.Sandbox;
 /**
  * Created by sargis on 4/10/15.
  */
-public class UIAlignBoxMediator extends SimpleMediator<UIAlignBox> {
+public class UIAlignBoxMediator extends PanelMediator<UIAlignBox> {
     private static final String TAG = UIAlignBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -40,7 +41,8 @@ public class UIAlignBoxMediator extends SimpleMediator<UIAlignBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
+        String[] parentNotifications = super.listNotificationInterests();
+        return Stream.of(parentNotifications, new String[]{
                 UIAlignBox.ALIGN_TOP_BTN_CLICKED,
                 UIAlignBox.ALIGN_LEFT_BTN_CLICKED,
                 UIAlignBox.ALIGN_BOTTOM_BTN_CLICKED,
@@ -51,7 +53,7 @@ public class UIAlignBoxMediator extends SimpleMediator<UIAlignBox> {
                 UIAlignBox.ALIGN_AT_EDGE_LEFT_BTN_CLICKED,
                 UIAlignBox.ALIGN_AT_EDGE_BOTTOM_BTN_CLICKED,
                 UIAlignBox.ALIGN_AT_EDGE_RIGHT_BTN_CLICKED
-        };
+        }).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override

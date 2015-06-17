@@ -26,7 +26,13 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.gdx.actors.basic.SandboxBackUI;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -51,8 +57,21 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     private Sandbox sandbox;
     private SandboxBackUI sandboxBackUI;
 
+    private Batch batch;
+    private Color bgColor;
+    private Texture bgLogo;
+    private Vector2 screenSize;
+
+
+    private boolean isDrawingBgLogo;
+
     public Overlap2DScreen() {
         facade = Overlap2DFacade.getInstance();
+        bgColor = new Color(0.094f, 0.094f, 0.094f, 1.0f);
+        isDrawingBgLogo = true;
+        batch = new SpriteBatch();
+        bgLogo = new Texture(Gdx.files.internal("style/bglogo.png"));
+        screenSize = new Vector2(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
     }
 
     @Override
@@ -61,16 +80,34 @@ public class Overlap2DScreen implements Screen, InputProcessor {
             return;
         }
         GL20 gl = Gdx.gl;
-        gl.glClearColor(0.129f, 0.129f, 0.129f, 1.0f);
+        gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(sandboxBackUI != null) sandboxBackUI.render(deltaTime);
-
-        engine.update(deltaTime);
-        
+        if(isDrawingBgLogo) {
+            batch.begin();
+            batch.setColor(1, 1, 1, 0.12f);
+            batch.draw(bgLogo, screenSize.x/2 - bgLogo.getWidth()/2, screenSize.y/2 - bgLogo.getHeight()/2);
+            batch.end();
+        } else {
+            if (sandboxBackUI != null) sandboxBackUI.render(deltaTime);
+            engine.update(deltaTime);
+        }
 
         uiStage.act(deltaTime);
         uiStage.draw();
+    }
+
+    public void disableDrawingBgLogo() {
+        this.isDrawingBgLogo = false;
+        bgLogo.dispose();
+        batch.dispose();
+        batch = null;
+        bgLogo = null;
+
+    }
+
+    public void setBgColor(Color color) {
+        bgColor = color;
     }
 
     @Override

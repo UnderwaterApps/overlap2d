@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.util.ArrayList;
+import java.util.stream.Stream;
 
 import com.badlogic.ashley.core.Entity;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
@@ -35,7 +36,7 @@ import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
+public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
     private static final String TAG = UILayerBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -48,16 +49,18 @@ public class UILayerBoxMediator extends SimpleMediator<UILayerBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
+        String[] parentNotifications = super.listNotificationInterests();
+        return Stream.of(parentNotifications, new String[]{
                 SceneDataManager.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
                 UILayerBox.DELETE_NEW_LAYER
-        };
+        }).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initLayerData();
