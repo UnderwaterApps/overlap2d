@@ -69,8 +69,6 @@ public class SceneLoader {
 		rayHandler.setBlur(true);
 		rayHandler.setBlurNum(3);
 		rayHandler.setShadows(true);
-		// TODO
-		// rayHandler.setCombinedMatrix(getCamera().combined);
 		
 		addSystems();
 		
@@ -240,6 +238,7 @@ public class SceneLoader {
 		LabelSystem labelSystem = new LabelSystem();
 		Overlap2dRenderer renderer = new Overlap2dRenderer(new SpriteBatch());
 		renderer.setRayHandler(rayHandler);
+		
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
 		engine.addSystem(lightSystem);
