@@ -11,6 +11,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
@@ -236,7 +237,7 @@ public class SceneLoader {
 		SpineSystem spineSystem = new SpineSystem();
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
-		Overlap2dRenderer renderer = new Overlap2dRenderer(new SpriteBatch());
+		Overlap2dRenderer renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
 		renderer.setRayHandler(rayHandler);
 		
 		engine.addSystem(animationSystem);
