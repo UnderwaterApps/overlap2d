@@ -68,24 +68,20 @@ public class SpriteComponentFactory extends ComponentFactory {
     }
 
     protected SpriteAnimationComponent createSriteAnimationDataComponent(Entity entity, SpriteAnimationVO vo) {
-        SpriteAnimationComponent component = new SpriteAnimationComponent();
-        component.animationName = vo.animationName;
-        component.animations = vo.animations;
-        component.fps = vo.fps;
+        SpriteAnimationComponent spriteAnimationComponent = new SpriteAnimationComponent();
+        spriteAnimationComponent.animationName = vo.animationName;
+        spriteAnimationComponent.animations = vo.animations;
+        spriteAnimationComponent.fps = vo.fps;
 
-        DimensionsComponent dimensionsComponent = new DimensionsComponent();
-        dimensionsComponent.height = 100;
-        dimensionsComponent.width = 100;
-
-        Array<TextureAtlas.AtlasRegion> regions = sortAndGetRegions(component.animationName);
+        Array<TextureAtlas.AtlasRegion> regions = sortAndGetRegions(spriteAnimationComponent.animationName);
 
         AnimationComponent animationComponent = new AnimationComponent();
         SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent();
 
-        if (!component.animations.isEmpty()) {
-            component.keyFrames = SceneLoader.Frames
-                    .constructJsonObject(component.animations);
-            for (Map.Entry<String, SceneLoader.Frames> entry : component.keyFrames
+        if (!spriteAnimationComponent.animations.isEmpty()) {
+            spriteAnimationComponent.keyFrames = SceneLoader.Frames
+                    .constructJsonObject(spriteAnimationComponent.animations);
+            for (Map.Entry<String, SceneLoader.Frames> entry : spriteAnimationComponent.keyFrames
                     .entrySet()) {
                 SceneLoader.Frames keyFrame = entry.getValue();
 
@@ -93,23 +89,26 @@ public class SpriteComponentFactory extends ComponentFactory {
                 for (int r = keyFrame.startFrame; r <= keyFrame.endFrame; r++) {
                     tmpRegions.add(regions.get(r));
                 }
-                com.badlogic.gdx.graphics.g2d.Animation anim = new com.badlogic.gdx.graphics.g2d.Animation(1f / component.fps,tmpRegions, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
+                com.badlogic.gdx.graphics.g2d.Animation anim = new com.badlogic.gdx.graphics.g2d.Animation(1f / spriteAnimationComponent.fps,tmpRegions, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP);
                 animationComponent.animations.put(entry.getKey(), anim);
                 stateComponent.set(anim);
             }
 
         } else {
-            animationComponent.animations.put("Default", new com.badlogic.gdx.graphics.g2d.Animation(1f / component.fps, regions, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP));
+            animationComponent.animations.put("Default", new com.badlogic.gdx.graphics.g2d.Animation(1f / spriteAnimationComponent.fps, regions, com.badlogic.gdx.graphics.g2d.Animation.PlayMode.LOOP));
             // spriteComponent.animation =
             stateComponent.set(animationComponent.animations.get("Default"));
         }
 
         TextureRegionComponent textureRegionComponent = new TextureRegionComponent();
         textureRegionComponent.region = regions.get(0);
+        
+        entity.add(textureRegionComponent);
+        entity.add(stateComponent);
+        entity.add(animationComponent);
+        entity.add(spriteAnimationComponent);
 
-        entity.add(component);
-
-        return component;
+        return spriteAnimationComponent;
     }
 
     private Array<TextureAtlas.AtlasRegion> sortAndGetRegions(String animationName) {
