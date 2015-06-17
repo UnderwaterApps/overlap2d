@@ -100,7 +100,14 @@ public class ItemFactory {
         return true;
     }
 
-    public boolean createSpineAnimation(String regionName, Vector2 position) {
+    public boolean createSpineAnimation(String animationName, Vector2 position) {
+        SpineVO vo = new SpineVO();
+        vo.animationName = animationName;
+
+        if(!setEssentialData(vo, position)) return false;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
         return true;
     }
 
