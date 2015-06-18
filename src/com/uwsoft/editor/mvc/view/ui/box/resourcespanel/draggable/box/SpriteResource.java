@@ -18,10 +18,15 @@
 
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.gdx.actors.SpriteAnimationActor;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -29,7 +34,7 @@ import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
 public class SpriteResource extends BoxItemResource {
 
 
-    private final Image payloadImg;
+    private final SpriteAnimationActor payloadActor;
     private ResourcePayloadObject payload;
 
 
@@ -39,50 +44,49 @@ public class SpriteResource extends BoxItemResource {
         super();
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
-		//TODO fix and uncomment
-		
-//        final SpriteAnimation animThumb = new SpriteAnimation(vo, sandbox.getSceneControl().getEssentials());
-//
-//        if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
-//            // resizing is needed
-//            float scaleFactor = 1.0f;
-//            if (animThumb.getWidth() > animThumb.getHeight()) {
-//                //scale by width
-//                scaleFactor = 1.0f / (animThumb.getWidth() / thumbnailSize);
-//            } else {
-//                scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
-//            }
-//            animThumb.setScale(scaleFactor);
-//        }
-//        animThumb.start();
-//        // put it in middle
-//        animThumb.setX(/*(getWidth() - animThumb.getWidth()) / 2*/0);
-//        animThumb.setY(/*(getHeight() - animThumb.getHeight()) / 2*/0);
-//
-//
-//        addListener(new ClickListener() {
-//            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
-//                isMouseInside = true;
-//                super.enter(event, x, y, pointer, fromActor);
-//            }
-//
-//            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
-//                isMouseInside = false;
-//                super.enter(event, x, y, pointer, toActor);
-//            }
-//        });
-//
-//        animThumb.start();
-//        addActor(animThumb);
-//
-//        payloadImg = new Image(animThumb.getAtlasRegionAt(0));
+
+        IResourceRetriever rm = sandbox.getSceneControl().sceneLoader.getRm();
+
+        SpriteAnimationActor animThumb = new SpriteAnimationActor(animationName, rm);
+        animThumb.setFPS(vo.fps);
+
+        if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
+            // resizing is needed
+            float scaleFactor = 1.0f;
+            if (animThumb.getWidth() > animThumb.getHeight()) {
+                //scale by width
+                scaleFactor = 1.0f / (animThumb.getWidth() / thumbnailSize);
+            } else {
+                scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
+            }
+            animThumb.setScale(scaleFactor);
+        }
+
+        // put it in middle
+        animThumb.setX((getWidth() - animThumb.getWidth()*animThumb.getScaleX()) / 2f);
+        animThumb.setY((getHeight() - animThumb.getHeight()*animThumb.getScaleY()) / 2f);
+        animThumb.setPaused(false);
+
+
+        addListener(new ClickListener() {
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                isMouseInside = true;
+                super.enter(event, x, y, pointer, fromActor);
+            }
+
+            public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+                isMouseInside = false;
+                super.enter(event, x, y, pointer, toActor);
+            }
+        });
+
+        addActor(animThumb);
+
+        payloadActor = new SpriteAnimationActor(animationName, rm);
         payload = new ResourcePayloadObject();
-        payloadImg = new Image(); //TEMPORARY
-//        payload.name = animationName;
-//
-//        setHeight(thumbnailSize);
-		
-        super.act(1f);
+        payload.name = animationName;
+
+        setHeight(thumbnailSize);
     }
 
 
@@ -95,7 +99,7 @@ public class SpriteResource extends BoxItemResource {
 
     @Override
     public Actor getDragActor() {
-        return payloadImg;
+        return payloadActor;
     }
 
     @Override
