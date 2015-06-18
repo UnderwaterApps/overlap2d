@@ -99,6 +99,7 @@ public class ItemFactory {
     public boolean createSpriteAnimation(String animationName, Vector2 position) {
         SpriteAnimationVO vo = new SpriteAnimationVO();
         vo.animationName = animationName;
+        vo.playMode = 2;
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
