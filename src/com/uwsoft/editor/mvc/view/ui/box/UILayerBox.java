@@ -62,16 +62,22 @@ public class UILayerBox extends UICollapsibleBox {
         layersTable = new VisTable();
         scrollPane = new VisScrollPane(layersTable);
         scrollPane.setFadeScrollBars(false);
-        contentTable.add(scrollPane).width(230).height(150);
+        contentTable.add(scrollPane).padTop(2).width(221).height(150);
+        layersTable.top();
 
         scrollPane.layout();
 
         bottomPane = new VisTable();
+        contentTable.row();
+        contentTable.add(bottomPane).expandX().fillX();
 
-        VisTextButton newBtn = new VisTextButton("new");
-        VisTextButton deleteBtn = new VisTextButton("delete");
-        bottomPane.add(newBtn);
-        bottomPane.add(deleteBtn);
+
+        VisImageButton newBtn = new VisImageButton("new-layer-button");
+        VisImageButton deleteBtn = new VisImageButton("trash-button");
+
+        bottomPane.add().expandX();
+        bottomPane.add(newBtn).right().pad(3);
+        bottomPane.add(deleteBtn).right().pad(3);
 
         newBtn.addListener(new ChangeListener() {
             @Override
@@ -87,7 +93,9 @@ public class UILayerBox extends UICollapsibleBox {
             }
         });
         dragAndDrop = new DragAndDrop();
-//        contentTable.add(bottomPane);
+
+
+
         createCollapsibleWidget(contentTable);
     }
 
