@@ -143,6 +143,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         setCurrentTool(SelectionTool.NAME);
 
         Sandbox.getInstance().getCamera().position.set(new Vector2(0, 0), 0);
+        Overlap2DFacade.getInstance().sendNotification(PanTool.SCENE_PANNED);
     }
 
     private void initItemListeners() {

@@ -66,19 +66,18 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
 
         secondaryTable = new VisTable();
 
-        mainTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(new VisLabel("Type: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(lightTypeLabel).left();
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Is Static: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(new VisLabel("Is Static: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(isStaticCheckBox).left();
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Is XRay: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(new VisLabel("Is XRay: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(isXRayCheckBox).left();
         mainTable.row().padTop(5);
-        mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(55).right();
+        mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(rayCountSelector).left();
         mainTable.row().padTop(5);
-        mainTable. add(secondaryTable).colspan(2);
         setListeners();
     }
 
