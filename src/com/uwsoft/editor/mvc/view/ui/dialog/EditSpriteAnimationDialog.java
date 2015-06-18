@@ -31,6 +31,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.legacy.data.FrameRange;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
 /**
@@ -97,20 +98,21 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
         invalidateHeight();
     }
 
-    public void updateView(Map<String, SceneLoader.Frames> animations) {
+    public void updateView(Map<String, FrameRange> frameRangeMap) {
         createNewAnimationTable();
         animationsList.clear();
 
-        for (Map.Entry<String, SceneLoader.Frames> entry : animations.entrySet()) {
+        for (Map.Entry<String, FrameRange> entry : frameRangeMap.entrySet()) {
+            String animationName = entry.getKey();
+            FrameRange range = entry.getValue();
+
             VisTable row = new VisTable();
-            final String name = entry.getKey();
-            SceneLoader.Frames animationData = entry.getValue();
 
             VisImageButton trashBtn = new VisImageButton("trash-button");
 
-            row.add(StandardWidgetsFactory.createLabel(name)).width(120).left();
-            row.add(StandardWidgetsFactory.createLabel(animationData.startFrame + "")).width(50).left();
-            row.add(StandardWidgetsFactory.createLabel(animationData.endFrame + "")).width(50).left();
+            row.add(StandardWidgetsFactory.createLabel(animationName)).width(120).left();
+            row.add(StandardWidgetsFactory.createLabel(range.startFrame + "")).width(50).left();
+            row.add(StandardWidgetsFactory.createLabel(range.endFrame + "")).width(50).left();
             row.add(trashBtn).padLeft(10);
             row.row();
 
@@ -120,7 +122,7 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
             trashBtn.addListener(new ClickListener() {
                 @Override
                 public void clicked(InputEvent event, float x, float y) {
-                    facade.sendNotification(DELETE_BUTTON_PRESSED, name);
+                    facade.sendNotification(DELETE_BUTTON_PRESSED, animationName);
                 }
             });
         }

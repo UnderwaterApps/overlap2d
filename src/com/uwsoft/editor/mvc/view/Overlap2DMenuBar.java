@@ -108,8 +108,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
 
         public WindowMenu() {
             super("Window");
-            customVars = new MenuItem("Custom Variables", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
-            animations = new MenuItem("Sprite Animations", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            customVars = new MenuItem("Custom Variables", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            animations = new MenuItem("Sprite Animations", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
             addItem(customVars);
             addItem(animations);
         }
