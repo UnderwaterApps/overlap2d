@@ -36,7 +36,37 @@ public class PanTool implements Tool {
 
     @Override
     public void stageMouseDragged(float x, float y) {
-    	//TODO fix and uncomment
+        doPanning(x, y);
+    }
+
+    @Override
+    public void stageMouseDoubleClick(float x, float y) {
+
+    }
+
+    @Override
+    public boolean itemMouseDown(Entity entity, float x, float y) {
+        lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
+
+        return true;
+    }
+
+    @Override
+    public void itemMouseUp(Entity entity, float x, float y) {
+
+    }
+
+    @Override
+    public void itemMouseDragged(Entity entity, float x, float y) {
+        doPanning(x, y);
+    }
+
+    @Override
+    public void itemMouseDoubleClick(Entity entity, float x, float y) {
+
+    }
+
+    private void doPanning(float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
 
         OrthographicCamera camera = sandbox.getCamera();
@@ -49,30 +79,5 @@ public class PanTool implements Tool {
         lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 
         Overlap2DFacade.getInstance().sendNotification(SCENE_PANNED);
-    }
-
-    @Override
-    public void stageMouseDoubleClick(float x, float y) {
-
-    }
-
-    @Override
-    public boolean itemMouseDown(Entity entity, float x, float y) {
-        return false;
-    }
-
-    @Override
-    public void itemMouseUp(Entity entity, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDragged(Entity entity, float x, float y) {
-
-    }
-
-    @Override
-    public void itemMouseDoubleClick(Entity entity, float x, float y) {
-
     }
 }

@@ -32,6 +32,7 @@ import com.uwsoft.editor.mvc.view.MidUIMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -54,7 +55,7 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
         for (Collection<Component> components : backup.values()) {
             Entity entity = new Entity();
             for(Component component: components) {
-                entity.add(component);
+                entity.add(ComponentCloner.get(component));
             }
             sandbox.getEngine().addEntity(entity);
             int uniquId = sandbox.getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);

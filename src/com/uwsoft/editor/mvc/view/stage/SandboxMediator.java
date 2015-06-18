@@ -195,8 +195,15 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
         @Override
         public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
-        	
             super.touchDown(entity, x, y, pointer, button);
+
+            switch (button) {
+                case Input.Buttons.MIDDLE:
+                    // if middle button is pressed - PAN the scene
+                    toolHotSwap(sandboxTools.get(PanTool.NAME));
+                    break;
+            }
+
             Vector2 coords = getStageCoordinates();
             return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
@@ -206,6 +213,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
+
+            if (button == Input.Buttons.MIDDLE) {
+                toolHotSwapBack();
+            }
 
             currentSelectedTool.itemMouseUp(entity, x, y);
 
