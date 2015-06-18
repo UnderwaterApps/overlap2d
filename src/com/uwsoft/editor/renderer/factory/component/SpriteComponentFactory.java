@@ -61,8 +61,12 @@ public class SpriteComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 100;
-        component.width = 100;
+
+        SpriteAnimationVO sVo = (SpriteAnimationVO) vo;
+        Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(sVo.animationName).getRegions();
+
+        component.width = regions.get(0).getRegionWidth();
+        component.height = regions.get(0).getRegionHeight();
 
         entity.add(component);
         return component;
