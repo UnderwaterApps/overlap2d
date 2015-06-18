@@ -47,6 +47,10 @@ public class EntityFactory {
 		return compositeComponentFactory;
 	}
 
+    public SpriteComponentFactory getSpriteComponentFactory() {
+        return (SpriteComponentFactory) spriteComponentFactory;
+    }
+
 	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
 	
 		this.rayHandler = rayHandler;
