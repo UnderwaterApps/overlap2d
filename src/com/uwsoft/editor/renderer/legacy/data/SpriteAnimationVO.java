@@ -14,8 +14,8 @@ public class SpriteAnimationVO extends MainItemVO {
     public String animationName = "";
     public int fps = 24;
     public String currentAnimation;
-    public Map<String, FrameRange> frameRangeMap = new HashMap<>();
-    public Animation.PlayMode playMode = Animation.PlayMode.LOOP;
+    public HashMap<String, FrameRange> frameRangeMap = new HashMap<>();
+    public int playMode = 0;
 
     public SpriteAnimationVO() {
 
@@ -37,5 +37,12 @@ public class SpriteAnimationVO extends MainItemVO {
         fps = spriteAnimationComponent.fps;
         frameRangeMap = spriteAnimationComponent.frameRangeMap;
         currentAnimation = spriteAnimationComponent.currentAnimation;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.NORMAL) playMode = 0;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.REVERSED) playMode = 1;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.LOOP) playMode = 2;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.LOOP_REVERSED) playMode = 3;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.LOOP_PINGPONG) playMode = 4;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.LOOP_RANDOM) playMode = 5;
+        if(spriteAnimationComponent.playMode == Animation.PlayMode.NORMAL) playMode = 6;
     }
 }

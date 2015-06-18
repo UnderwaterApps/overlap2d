@@ -11,7 +11,7 @@ import com.uwsoft.editor.renderer.legacy.data.FrameRange;
 public class SpriteAnimationComponent extends Component {
 	public String animationName = "";
 	public int fps = 24;
-	public Map<String, FrameRange> frameRangeMap = new HashMap<>();
+	public HashMap<String, FrameRange> frameRangeMap = new HashMap<>();
     public String currentAnimation;
     public Animation.PlayMode playMode = Animation.PlayMode.LOOP;
 	

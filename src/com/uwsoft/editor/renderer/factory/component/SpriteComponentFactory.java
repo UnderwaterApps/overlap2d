@@ -74,7 +74,14 @@ public class SpriteComponentFactory extends ComponentFactory {
         spriteAnimationComponent.frameRangeMap = vo.frameRangeMap;
         spriteAnimationComponent.fps = vo.fps;
         spriteAnimationComponent.currentAnimation = vo.currentAnimation;
-        spriteAnimationComponent.playMode = vo.playMode;
+
+        if(vo.playMode == 0) spriteAnimationComponent.playMode = Animation.PlayMode.NORMAL;
+        if(vo.playMode == 1) spriteAnimationComponent.playMode = Animation.PlayMode.REVERSED;
+        if(vo.playMode == 2) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP;
+        if(vo.playMode == 3) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP_REVERSED;
+        if(vo.playMode == 4) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP_PINGPONG;
+        if(vo.playMode == 5) spriteAnimationComponent.playMode = Animation.PlayMode.LOOP_RANDOM;
+        if(vo.playMode == 6) spriteAnimationComponent.playMode = Animation.PlayMode.NORMAL;
 
         Array<TextureAtlas.AtlasRegion> regions = rm.getSpriteAnimation(spriteAnimationComponent.animationName).getRegions();
 
