@@ -314,21 +314,23 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
             }
 
-            if (keycode == Input.Keys.UP) {
-                // moving UP
-                sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
-            }
-            if (keycode == Input.Keys.DOWN) {
-                // moving down
-                sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
-            }
-            if (keycode == Input.Keys.LEFT) {
-                // moving left
-                sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
-            }
-            if (keycode == Input.Keys.RIGHT) {
-                //moving right
-                sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+            if(!isControlPressed) {
+                if (keycode == Input.Keys.UP) {
+                    // moving UP
+                    sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
+                }
+                if (keycode == Input.Keys.DOWN) {
+                    // moving down
+                    sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
+                }
+                if (keycode == Input.Keys.LEFT) {
+                    // moving left
+                    sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
+                }
+                if (keycode == Input.Keys.RIGHT) {
+                    //moving right
+                    sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+                }
             }
 
             // Delete
