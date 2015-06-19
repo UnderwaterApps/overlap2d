@@ -36,8 +36,8 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
 
-    private Integer entityId;
-    private Integer parentEntityId;
+    protected Integer entityId;
+    protected Integer parentEntityId;
 
     @Override
     public void doAction() {
