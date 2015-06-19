@@ -1,8 +1,6 @@
 package com.uwsoft.editor.mvc.view.stage.input;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
@@ -22,8 +20,6 @@ public class SandboxInputAdapter implements InputProcessor {
 
 	private Overlap2DFacade facade;
 	private Entity rootEntity;
-	private Engine engine;
-	private ImmutableArray<Entity> entities;
 	private InputListenerComponent inpputListenerComponent;
 	private Entity target;
 	private Vector2 hitTargetLocalCoordinates = new Vector2();
@@ -33,7 +29,6 @@ public class SandboxInputAdapter implements InputProcessor {
 		facade = Overlap2DFacade.getInstance();
 		SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
 		sandbox = sandboxMediator.getViewComponent();
-		engine = sandbox.getEngine();
 	}
 
 	@Override
