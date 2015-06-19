@@ -292,27 +292,12 @@ public class SceneLoader {
 		//NodeComponent nodeComponent = nodeComponentMapper.get(root);
 		for (int i = 0; i < vo.sImages.size(); i++) {
 			Entity entity = entityFactory.createEntity(root, vo.sImages.get(i));
-
 			engine.addEntity(entity);
 		}
 		
-		//TODO after drawable mechanics is done
 		for (int i = 0; i < vo.sImage9patchs.size(); i++) {
-			// Image9patchVO imageVo = vo.sImage9patchs.get(i);
-			//
-			// NinePatchComponnent ninePatchComponent = new
-			// NinePatchComponnent();
-			// ninePatchComponent.height = imageVo.height;
-			// ninePatchComponent.width = imageVo.width;
-			//
-			// //TODO remember nine patch region name somewhere
-			// AtlasRegion atlasRegion = (TextureAtlas.AtlasRegion)
-			// rm.getTextureRegion(imageVo.imageName);
-			// ninePatchComponent.ninePatch = new NinePatch(atlasRegion,
-			// atlasRegion.splits[0], atlasRegion.splits[1],
-			// atlasRegion.splits[2], atlasRegion.splits[3]);
-			
-			// TODO NIN PTACH SYSTEM
+			Entity entity = entityFactory.createEntity(root, vo.sImage9patchs.get(i));
+			engine.addEntity(entity);
 		}
 
 		for (int i = 0; i < vo.sLabels.size(); i++) {

@@ -4,11 +4,13 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.legacy.data.Image9patchVO;
 import com.uwsoft.editor.renderer.legacy.data.LabelVO;
 import com.uwsoft.editor.renderer.legacy.data.LightVO;
 import com.uwsoft.editor.renderer.legacy.data.ParticleEffectVO;
@@ -37,7 +39,7 @@ public class EntityFactory {
 	public IResourceRetriever rm = null;
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
-			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory;
+			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
 
 	private int entityIterator = 0;
 
@@ -65,7 +67,11 @@ public class EntityFactory {
 		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
 		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
 		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
+		ninePatchComponentFactory = new NinePatchComponentFactory(rayHandler, world, rm);
+		
 	}
+	
+	
 
 
 	public Entity createEntity(Entity root, SimpleImageVO vo){
@@ -73,6 +79,17 @@ public class EntityFactory {
 		Entity entity = new Entity();
 
 		simpleImageComponentFactory.createComponents(root, entity, vo);
+
+		postProcessEntity(entity);
+		
+		return entity;
+	}
+	
+	public Entity createEntity(Entity root, Image9patchVO vo){
+
+		Entity entity = new Entity();
+
+		ninePatchComponentFactory.createComponents(root, entity, vo);
 
 		postProcessEntity(entity);
 		
@@ -191,6 +208,7 @@ public class EntityFactory {
 		spriteComponentFactory.setResourceManager(rm);
 		spriterComponentFactory.setResourceManager(rm);
 		labelComponentFactory.setResourceManager(rm);
+		ninePatchComponentFactory.setResourceManager(rm);
 	}
 	
 }
