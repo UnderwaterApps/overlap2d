@@ -12,7 +12,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
@@ -23,14 +22,8 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
-import com.uwsoft.editor.renderer.systems.CompositeSystem;
-import com.uwsoft.editor.renderer.systems.LabelSystem;
-import com.uwsoft.editor.renderer.systems.LayerSystem;
-import com.uwsoft.editor.renderer.systems.LightSystem;
-import com.uwsoft.editor.renderer.systems.ParticleSystem;
-import com.uwsoft.editor.renderer.systems.PhysicsSystem;
-import com.uwsoft.editor.renderer.systems.SpineSystem;
-import com.uwsoft.editor.renderer.systems.SpriteAnimationSystem;
+import com.uwsoft.editor.renderer.scripts.IScript;
+import com.uwsoft.editor.renderer.systems.*;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 
 /**
@@ -237,6 +230,7 @@ public class SceneLoader {
 		SpineSystem spineSystem = new SpineSystem();
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
+        ScriptSystem scriptSystem = new ScriptSystem();
 		Overlap2dRenderer renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
 		renderer.setRayHandler(rayHandler);
 		
@@ -248,6 +242,7 @@ public class SceneLoader {
 		engine.addSystem(spineSystem);
 		engine.addSystem(compositeSystem);
 		engine.addSystem(labelSystem);
+        engine.addSystem(scriptSystem);
 		engine.addSystem(renderer);
 
 		addEntityRemoveListener();
@@ -258,6 +253,14 @@ public class SceneLoader {
 			@Override
 			public void entityAdded(Entity entity) {
 				// TODO: Gev knows what to do. (do this for all entities)
+
+                // call init for a system
+                ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
+                if(scriptComponent != null) {
+                    for (IScript script : scriptComponent.scripts) {
+                        script.init(entity);
+                    }
+                }
 			}
 
 			@Override

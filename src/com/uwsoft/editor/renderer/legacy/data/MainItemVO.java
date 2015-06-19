@@ -2,9 +2,12 @@ package com.uwsoft.editor.renderer.legacy.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.ScriptComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.scripts.IScript;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -28,6 +31,8 @@ public class MainItemVO {
 	
 	public String meshId = "-1";
 	public PhysicsBodyDataVO physicsBodyData = null;
+
+    public ArrayList<String> commonScripts = new ArrayList<>();
 	
 	public MainItemVO() {
 		
@@ -54,11 +59,14 @@ public class MainItemVO {
 		if(vo.physicsBodyData != null){
 			physicsBodyData = new PhysicsBodyDataVO(vo.physicsBodyData);
 		}
-	}
+
+        commonScripts = (ArrayList<String>) vo.commonScripts.clone();
+    }
 
 	public void loadFromEntity(Entity entity) {
 		MainItemComponent mainItemComponent = entity.getComponent(MainItemComponent.class);
 		TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
+        ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
 
 		itemIdentifier = mainItemComponent.itemIdentifier;
@@ -73,9 +81,17 @@ public class MainItemVO {
 		originX = transformComponent.originX;
 		originY = transformComponent.originY;
 		rotation = transformComponent.rotation;
-		//zIndex =
-		//layerName
-		//tint = tintComponent.color;
 
+        if(scriptComponent != null) {
+            for (IScript name : scriptComponent.scripts) {
+                commonScripts.add(name.getClass().getName());
+            }
+        }
+
+        layerName = mainItemComponent.layer;
+
+        // TODO:
+		//zIndex =
+		//tint = tintComponent.color;
 	}
 }
