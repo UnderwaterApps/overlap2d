@@ -31,7 +31,7 @@ public class LabelComponentFactory extends ComponentFactory{
 		 createParentNodeComponent(root, entity);
 		 createNodeComponent(root, entity);
 		 createPhysicsComponents(entity, vo);
-        createLabelComponent(entity, (LabelVO) vo);
+		 createLabelComponent(entity, (LabelVO) vo);
 	}
 
 	@Override
