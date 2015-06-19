@@ -4,12 +4,15 @@ import java.util.HashMap;
 import java.util.Map;
 
 import com.badlogic.ashley.core.Component;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.legacy.data.FrameRange;
 
 public class SpriteAnimationComponent extends Component {
 	public String animationName = "";
 	public int fps = 24;
-	public String animations = "";
-	public Map<String, SceneLoader.Frames> keyFrames = new HashMap<>(); 
+	public HashMap<String, FrameRange> frameRangeMap = new HashMap<>();
+    public String currentAnimation;
+    public Animation.PlayMode playMode = Animation.PlayMode.LOOP;
 	
 }

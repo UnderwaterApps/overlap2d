@@ -44,7 +44,15 @@ public class EntityFactory {
 	private int entityIterator = 0;
 
 	private HashMap<Integer, Entity> entities = new HashMap<>();
-	
+
+	public ComponentFactory getCompositeComponentFactory() {
+		return compositeComponentFactory;
+	}
+
+    public SpriteComponentFactory getSpriteComponentFactory() {
+        return (SpriteComponentFactory) spriteComponentFactory;
+    }
+
 	public EntityFactory( RayHandler rayHandler, World world, IResourceRetriever rm ) {
 	
 		this.rayHandler = rayHandler;

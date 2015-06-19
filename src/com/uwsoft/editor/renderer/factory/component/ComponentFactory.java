@@ -63,7 +63,7 @@ public abstract class ComponentFactory {
         MainItemComponent component = new MainItemComponent();
         component.customVars = vo.customVars;
         component.itemIdentifier = vo.itemIdentifier;
-        component.itemName = vo.itemName;
+        component.libraryLink = vo.itemName;
         component.tags = vo.tags;
         component.entityType = entityType;
 

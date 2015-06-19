@@ -269,9 +269,17 @@ public class SceneLoader {
 				}
 				
 				Entity parentEntity = parentComponent.parentEntity;
-				NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
-				nodeComponent.removeChild(entity);
-				
+				NodeComponent parentNodeComponent = parentEntity.getComponent(NodeComponent.class);
+				parentNodeComponent.removeChild(entity);
+
+				// check if composite and remove all children
+				NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
+				if(nodeComponent != null) {
+					// it is composite
+					for(Entity node: nodeComponent.children) {
+						engine.removeEntity(node);
+					}
+				}
 			}
 		});
 	}
@@ -465,7 +473,7 @@ public class SceneLoader {
 //		if (vo.composite == null)
 //			vo.composite = new CompositeVO();
 //		CompositeItem cnt = new CompositeItem(vo, null);
-//		cnt.dataVO.itemName = name;
+//		cnt.dataVO.libraryLink = name;
 //		cnt.applyResolution(curResolution);
 //		cnt.setX(0);
 //		cnt.setY(0);
