@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.uwsoft.editor.data.manager.PreferencesManager;
+import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.NodeList;
@@ -192,6 +193,7 @@ public class ProjectManager extends BaseProxy {
         PreferencesManager prefs = PreferencesManager.getInstance();
         prefs.buildRecentHistory();
         prefs.pushHistory(prjFilePath);
+        facade.sendNotification(Overlap2DMenuBar.RECENT_LIST_MODIFIED);
 
         File prjFile = new File(prjFilePath);
         if (prjFile.exists() && !prjFile.isDirectory()) {

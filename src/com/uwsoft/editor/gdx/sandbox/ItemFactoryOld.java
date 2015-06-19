@@ -200,7 +200,7 @@ public class ItemFactoryOld {
 //        CompositeItemVO vo = sceneControl.getCurrentSceneVO().libraryItems.get(libraryName).clone();
 //
 //        prepareVO(vo, layer.layerName, x, y);
-//        vo.itemName = libraryName;
+//        vo.libraryLink = libraryName;
 //
 //        CompositeItem itm = new CompositeItem(vo, sceneControl.getEssentials(), sceneControl.getCurrentScene());
 //

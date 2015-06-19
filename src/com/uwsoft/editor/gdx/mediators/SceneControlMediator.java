@@ -97,7 +97,7 @@ public class SceneControlMediator {
 //		CompositeItemVO itemVo = new CompositeItemVO();
 //		itemVo.composite = compositeItemVO.composite;
 //		itemVo.itemIdentifier = compositeItemVO.itemIdentifier;
-//		itemVo.itemName = compositeItemVO.itemName;
+//		itemVo.libraryLink = compositeItemVO.libraryLink;
 //		CompositeItem composite = new CompositeItem(itemVo, getEssentials());
 //
 //		return composite;

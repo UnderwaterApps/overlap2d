@@ -96,7 +96,7 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     	//TODO fix and uncomment
 //        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
 //
-//        String libName = currItem.getDataVO().itemName;
+//        String libName = currItem.getDataVO().libraryLink;
 //        CompositeItemVO libItem = sandbox.sceneControl.getCurrentSceneVO().libraryItems.get(libName);
 //
 //        if (libItem != null) {
@@ -111,7 +111,7 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     /*
     private void revursiveUpdateLibraryVO(String libName, CompositeItemVO initialVO, CompositeItemVO updatingWith) {
         for (int i = 0; i < initialVO.composite.sComposites.size(); i++) {
-            if (initialVO.composite.sComposites.get(i).itemName.equals(libName)) {
+            if (initialVO.composite.sComposites.get(i).libraryLink.equals(libName)) {
                 initialVO.composite.sComposites.get(i).update(updatingWith);
             } else {
                 revursiveUpdateLibraryVO(libName, initialVO.composite.sComposites.get(i), updatingWith);

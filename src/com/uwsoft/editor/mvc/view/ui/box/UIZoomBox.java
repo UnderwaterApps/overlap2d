@@ -31,24 +31,28 @@ import com.uwsoft.editor.ui.widget.EditableSelectBox;
 /**
  * Created by sargis on 4/27/15.
  */
-public class UIZoomBox extends VisTable {
+public class UIZoomBox extends UIBaseBox {
 
     private static final String prefix = "com.uwsoft.editor.mvc.view.ui.box.UIZoomBox";
 
     public static final String ZOOM_SHIFT_REQUESTED = prefix + "ZOOM_SHIFT_REQUESTED";
     public static final String ZOOM_VALUE_CHANGED = prefix + "ZOOM_VALUE_CHANGED";
 
-
-    private final Overlap2DFacade facade;
     private final Skin skin;
     private EditableSelectBox visSelectBox;
     private VisImageButton zoomInBtn;
     private VisImageButton zoomOutBtn;
 
     public UIZoomBox() {
-        facade = Overlap2DFacade.getInstance();
+        super();
         skin = VisUI.getSkin();
         init();
+        setVisible(false);
+    }
+
+    @Override
+    public void update() {
+        setVisible(true);
     }
 
     private void init() {

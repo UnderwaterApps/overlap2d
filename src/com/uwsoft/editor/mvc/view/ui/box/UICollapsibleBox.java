@@ -52,6 +52,9 @@ public class UICollapsibleBox extends VisWindow {
         getTitleLabel().setAlignment(Align.left);
         getTitleTable().add(collapsibleButton).right();
         add(mainTable).width(width).padBottom(4);
+
+        // by default all collapsible panels are not visible
+        setVisible(false);
     }
 
     protected void createCollapsibleWidget(Table table) {

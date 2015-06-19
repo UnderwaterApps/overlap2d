@@ -28,10 +28,12 @@ import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIImagesTabMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UILibraryItemsTabMediator;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.UIParticleEffectsTabMediator;
 
+import java.util.stream.Stream;
+
 /**
  * Created by azakhary on 4/17/2015.
  */
-public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
+public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
 
     private static final String TAG = UIResourcesBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -57,14 +59,16 @@ public class UIResourcesBoxMediator extends SimpleMediator<UIResourcesBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
+        String[] parentNotifications = super.listNotificationInterests();
+        return Stream.of(parentNotifications, new String[]{
                 ProjectManager.PROJECT_OPENED,
                 ProjectManager.PROJECT_DATA_UPDATED
-        };
+            }).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
             case ProjectManager.PROJECT_OPENED:
 

@@ -32,11 +32,12 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Created by sargis on 4/10/15.
  */
-public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
+public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     private static final String TAG = UIItemsTreeBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -46,11 +47,12 @@ public class UIItemsTreeBoxMediator extends SimpleMediator<UIItemsTreeBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
+        String[] parentNotifications = super.listNotificationInterests();
+        return Stream.of(parentNotifications, new String[]{
                 SceneDataManager.SCENE_LOADED,
                 ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED
-        };
+        }).flatMap(Stream::of).toArray(String[]::new);
     }
 
     @Override

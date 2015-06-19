@@ -29,11 +29,8 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.*;
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.gdx.ui.components.TintButton;
 import com.uwsoft.editor.mvc.event.CheckBoxChangeListener;
 import com.uwsoft.editor.mvc.event.KeyboardListener;
@@ -49,6 +46,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     public static final String prefix = "com.uwsoft.editor.mvc.view.ui.properties.panels.UIBasicItemProperties";
     public static final String TINT_COLOR_BUTTON_CLICKED = prefix + ".TINT_COLOR_BUTTON_CLICKED";
     public static final String CUSTOM_VARS_BUTTON_CLICKED = prefix + ".CUSTOM_VARS_BUTTON_CLICKED";
+    public static final String LINKING_CHANGED = prefix + ".LINKING_CHANGED";
 
     public enum ItemType {
         multiple,
@@ -67,6 +65,11 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     private Image itemTypeIcon;
     private VisLabel itemType;
+
+    private VisImageButton linkImage;
+    private VisLabel libraryLinkLabel;
+
+    private VisTable linkageContainer;
 
     private VisTextField idBox;
 
@@ -87,16 +90,25 @@ public class UIBasicItemProperties extends UIItemProperties {
 
         initMaps();
 
-        padTop(7);
-
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
         itemType = createLabel("");
         itemType.setAlignment(Align.left);
         itemTypeIcon = new Image();
 
+        libraryLinkLabel = createLabel("qaqov basturma");
+        libraryLinkLabel.setAlignment(Align.left);
+        linkImage = new VisImageButton("library-link-button");
+        linkImage.setWidth(22);
+
         VisTable iconContainer = new VisTable();
         iconContainer.add(itemTypeIcon).width(22).right();
+
+        linkageContainer = new VisTable();
+        linkageContainer.setVisible(false);
+        linkageContainer.add(linkImage).width(22);
+        linkageContainer.add(libraryLinkLabel);
+        linkageContainer.row();
 
         idBox = StandardWidgetsFactory.createTextField();
         xValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
@@ -115,9 +127,11 @@ public class UIBasicItemProperties extends UIItemProperties {
         add(itemType).width(143).height(21).colspan(2).left();
         row();
         addSeparator().padTop(9).padBottom(6).colspan(3);
-        add(createLabel("Identifier:")).padRight(19).fillX();
-        add(idBox).width(153).height(21).colspan(2);
-        row().padTop(13);
+        add(createLabel("Identifier:", Align.left)).fillX();
+        add(idBox).width(151).right().height(21).colspan(2);
+        row();
+        add(linkageContainer).colspan(3).right();
+        row().padTop(2);
         add(createLabel("Position:")).padRight(3).left().top();
         add(getAsTable("X:", xValue, "Y:", yValue)).left();
         add(getAsTable("Width:", widthValue, "Height:", heightValue)).right();
@@ -132,6 +146,12 @@ public class UIBasicItemProperties extends UIItemProperties {
         row().padTop(6);
 
         setListeners();
+    }
+
+    public void setLinkage(boolean isLinked, String text) {
+        linkageContainer.setVisible(true);
+        linkImage.setChecked(isLinked);
+        libraryLinkLabel.setText(text);
     }
 
     private Table getTintTable() {
@@ -275,6 +295,14 @@ public class UIBasicItemProperties extends UIItemProperties {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchUp(event, x, y, pointer, button);
                 facade.sendNotification(CUSTOM_VARS_BUTTON_CLICKED);
+            }
+        });
+
+        linkImage.addListener(new ClickListener() {
+            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                super.touchUp(event, x, y, pointer, button);
+                boolean isLinked = linkImage.isChecked();
+                facade.sendNotification(LINKING_CHANGED, isLinked);
             }
         });
     }

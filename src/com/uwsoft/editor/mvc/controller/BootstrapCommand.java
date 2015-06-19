@@ -26,6 +26,7 @@ import com.uwsoft.editor.mvc.controller.sandbox.*;
 import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateLabelDataCommand;
 import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateLightDataCommand;
+import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateSpriteAnimationDataCommand;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -56,5 +57,6 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, UpdateSpriteAnimationDataCommand.class);
     }
 }

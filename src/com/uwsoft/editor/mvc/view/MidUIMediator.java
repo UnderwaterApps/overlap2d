@@ -27,12 +27,15 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.mvc.view.ui.followers.FollowerFactory;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -63,7 +66,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 ItemFactory.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING
+                Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
+                CompositeCameraChangeCommand.DONE
         };
     }
 
@@ -71,8 +75,10 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
+            case CompositeCameraChangeCommand.DONE:
+                createFollowersForAllVisible();
             case SceneDataManager.SCENE_LOADED:
-                createFollowersForAllItems();
+                createFollowersForAllVisible();
                 break;
             case ItemFactory.NEW_ITEM_ADDED:
                 createFollower(notification.getBody());
@@ -120,11 +126,12 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         }
     }
 
-    private void createFollowersForAllItems() {
+    private void createFollowersForAllVisible() {
+        removeAllfollowers();
         Sandbox sandbox = Sandbox.getInstance();
-        ImmutableArray<Entity> entities = sandbox.getEngine().getEntities();
-        for (int i = 0; i < entities.size(); i++) {
-            Entity entity = entities.get(i);
+        NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
+
+        for (Entity entity: nodeComponent.children) {
             createFollower(entity);
         }
     }

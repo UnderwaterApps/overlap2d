@@ -27,7 +27,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 6/9/2015.
  */
-public class CreateItemCommand extends RevertableCommand {
+public class CreateItemCommand extends EntityModifyRevertableCommand {
 
     private Integer entityId;
 

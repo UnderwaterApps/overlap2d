@@ -64,6 +64,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Overlap2DMenuBar.EXPORT,
                 Overlap2DMenuBar.EXPORT_SETTINGS,
                 Overlap2DMenuBar.RECENT_PROJECTS,
+                Overlap2DMenuBar.CLEAR_RECENTS,
                 Overlap2DMenuBar.EXIT,
                 Overlap2DMenuBar.NEW_SCENE,
                 Overlap2DMenuBar.SELECT_SCENE,
@@ -76,6 +77,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Overlap2DMenuBar.REDO,
                 //General
                 ProjectManager.PROJECT_OPENED,
+                Overlap2DMenuBar.RECENT_LIST_MODIFIED
         };
     }
 
@@ -83,6 +85,12 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         String type = notification.getType();
+
+        if(notification.getName().equals(Overlap2DMenuBar.RECENT_LIST_MODIFIED)) {
+            PreferencesManager prefs = PreferencesManager.getInstance();
+            viewComponent.reInitRecent(prefs.getRecentHistory());
+        }
+
         if (type == null) {
             handleGeneralNotification(notification);
             return;
@@ -148,6 +156,9 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             case Overlap2DMenuBar.RECENT_PROJECTS:
                 recentProjectItemClicked(notification.getBody());
                 //showDialog("showImportDialog");
+                break;
+            case Overlap2DMenuBar.CLEAR_RECENTS:
+                clearRecents();
                 break;
             case Overlap2DMenuBar.EXPORT:
                 projectManager.exportProject();
@@ -232,6 +243,12 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         prefs.pushHistory(path);
         Sandbox sandbox = Sandbox.getInstance();
         projectManager.openProjectFromPath(path);
+    }
+
+    public void clearRecents() {
+        PreferencesManager prefs = PreferencesManager.getInstance();
+        prefs.clearHistory();
+        viewComponent.reInitRecent(prefs.getRecentHistory());
     }
 
     public void sceneMenuItemClicked(String sceneName) {

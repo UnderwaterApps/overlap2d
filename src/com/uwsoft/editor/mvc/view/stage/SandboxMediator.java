@@ -143,6 +143,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         setCurrentTool(SelectionTool.NAME);
 
         Sandbox.getInstance().getCamera().position.set(new Vector2(0, 0), 0);
+        Overlap2DFacade.getInstance().sendNotification(PanTool.SCENE_PANNED);
     }
 
     private void initItemListeners() {
@@ -194,8 +195,15 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
         @Override
         public boolean touchDown(Entity entity, float x, float y, int pointer, int button) {
-        	
             super.touchDown(entity, x, y, pointer, button);
+
+            switch (button) {
+                case Input.Buttons.MIDDLE:
+                    // if middle button is pressed - PAN the scene
+                    toolHotSwap(sandboxTools.get(PanTool.NAME));
+                    break;
+            }
+
             Vector2 coords = getStageCoordinates();
             return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
@@ -205,6 +213,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
             Vector2 coords = getStageCoordinates();
+
+            if (button == Input.Buttons.MIDDLE) {
+                toolHotSwapBack();
+            }
 
             currentSelectedTool.itemMouseUp(entity, x, y);
 
@@ -314,21 +326,23 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
             }
 
-            if (keycode == Input.Keys.UP) {
-                // moving UP
-                sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
-            }
-            if (keycode == Input.Keys.DOWN) {
-                // moving down
-                sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
-            }
-            if (keycode == Input.Keys.LEFT) {
-                // moving left
-                sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
-            }
-            if (keycode == Input.Keys.RIGHT) {
-                //moving right
-                sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+            if(!isControlPressed) {
+                if (keycode == Input.Keys.UP) {
+                    // moving UP
+                    sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
+                }
+                if (keycode == Input.Keys.DOWN) {
+                    // moving down
+                    sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
+                }
+                if (keycode == Input.Keys.LEFT) {
+                    // moving left
+                    sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
+                }
+                if (keycode == Input.Keys.RIGHT) {
+                    //moving right
+                    sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+                }
             }
 
             // Delete

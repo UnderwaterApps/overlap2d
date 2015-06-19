@@ -19,8 +19,11 @@
 package com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
+import com.uwsoft.editor.gdx.actors.SpineActor;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.legacy.data.SpineVO;
@@ -31,7 +34,7 @@ import com.uwsoft.editor.renderer.legacy.data.SpineVO;
 public class SpineResource extends BoxItemResource {
 
 
-    private final Image payloadImg;
+    private final SpineActor payloadActor;
     private final ResourcePayloadObject payload;
     private Overlap2DFacade facade;
 
@@ -44,9 +47,8 @@ public class SpineResource extends BoxItemResource {
         facade = Overlap2DFacade.getInstance();
         SpineVO vo = new SpineVO();
         vo.animationName = animName;
-		//TODO fix and uncomment
-		/*
-        final SpineActor animThumb = new SpineActor(vo, sandbox.getSceneControl().getEssentials());
+
+        final SpineActor animThumb = new SpineActor(animName, sandbox.getSceneControl().sceneLoader.getRm());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -84,16 +86,14 @@ public class SpineResource extends BoxItemResource {
 
         addActor(animThumb);
 
-        */
-        payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+        //payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
+        payloadActor = new SpineActor(animName, sandbox.getSceneControl().sceneLoader.getRm());
 
         payload = new ResourcePayloadObject();
-        //TODO fix and uncomment
-        /*
         payload.name = animName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
-		*/
+
         super.act(1f);
     }
 
@@ -106,7 +106,7 @@ public class SpineResource extends BoxItemResource {
 
     @Override
     public Actor getDragActor() {
-        return payloadImg;
+        return payloadActor;
     }
 
     @Override

@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.mvc.view.ui.properties.panels;
 
+import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.controller.sandbox.component.UpdateSpriteAnimationDataCommand;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.ashley.core.Entity;
@@ -36,7 +38,6 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     public static final String NAME = TAG;
 
     private SpriteAnimationComponent spriteAnimationComponent;
-    private SpriteAnimationStateComponent stateComponent;
 
     public UISpriteAnimationItemPropertiesMediator() {
         super(NAME, new UISpriteAnimationItemProperties());
@@ -69,22 +70,22 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     protected void translateObservableDataToView(Entity entity) {
 
     	spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
-    	stateComponent = ComponentRetriever.get(entity, SpriteAnimationStateComponent.class);
-    	
         Array<String> animations = new Array<>();
-        for (String name : spriteAnimationComponent.keyFrames.keySet()) {
-            animations.add(name);
-        }
-      //TODO fix and uncomment 
-        //viewComponent.setFPS(item.dataVO.fps);
-//        viewComponent.setAnimations(animations);
-//        viewComponent.setSelectedAnimation(stateComponent.currentAnimation);
+        spriteAnimationComponent.frameRangeMap.keySet().forEach(animations::add);
+
+        viewComponent.setFPS(spriteAnimationComponent.fps);
+        viewComponent.setAnimations(animations);
+        viewComponent.setSelectedAnimation(spriteAnimationComponent.currentAnimation);
+        viewComponent.setPlayMode(spriteAnimationComponent.playMode);
     }
 
     @Override
     protected void translateViewToItemData() {
-    	//TODO fix and uncomment 
-        //observableReference.setAnimation(viewComponent.getSelected());
-        //observableReference.dataVO.fps = viewComponent.getFPS();
+        Object payload = UpdateSpriteAnimationDataCommand.payload(observableReference,
+                viewComponent.getFPS(),
+                viewComponent.getSelectedAnimation(),
+                viewComponent.getPlayMode());
+
+        facade.sendNotification(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, payload);
     }
 }

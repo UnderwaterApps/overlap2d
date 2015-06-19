@@ -29,7 +29,10 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.view.Overlap2DMenuBar;
 import com.uwsoft.editor.mvc.view.stage.UIStage;
 import com.uwsoft.editor.mvc.view.ui.properties.panels.UISpriteAnimationItemProperties;
+import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.legacy.data.FrameRange;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
@@ -117,9 +120,8 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         if(observable == null) {
             viewComponent.setEmpty("No item selected");
         } else {
-        	//TODO fix and uncomment
-//            Map<String, SpriteAnimation.Animation> animations = observable.getAnimations();
-//            viewComponent.updateView(animations);
+            SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+            viewComponent.updateView(spriteAnimationComponent.frameRangeMap);
         }
     }
 
@@ -127,16 +129,17 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         String name = viewComponent.getName();
         int frameFrom = viewComponent.getFrameFrom();
         int frameTo = viewComponent.getFrameTo();
-        //TODO fix and uncomment
-//        observable.getAnimations().put(name, new SpriteAnimation.Animation(frameFrom, frameTo, name));
-//        observable.updateDataVO();
+
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+        spriteAnimationComponent.frameRangeMap.put(name, new FrameRange(frameFrom, frameTo));
+
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
     }
 
     private void removeAnimation(String name) {
-    	 //TODO fix and uncomment
-//        observable.getAnimations().remove(name);
-//        observable.updateDataVO();
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+        spriteAnimationComponent.frameRangeMap.remove(name);
+
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
     }
 }

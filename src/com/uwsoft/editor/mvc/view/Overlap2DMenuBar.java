@@ -35,30 +35,36 @@ import com.uwsoft.editor.ui.widget.CustomMenu;
 import com.uwsoft.editor.ui.widget.CustomMenuBar;
 
 public class Overlap2DMenuBar extends CustomMenuBar {
-    public static final String FILE_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".FILE_MENU";
-    public static final String NEW_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".NEW_PROJECT";
-    public static final String OPEN_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".OPEN_PROJECT";
-    public static final String SAVE_PROJECT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SAVE_PROJECT";
-    public static final String IMPORT_TO_LIBRARY = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".IMPORT_TO_LIBRARY";
-    public static final String RECENT_PROJECTS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".RECENT_PROJECTS";
-    public static final String EXPORT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT";
-    public static final String EXPORT_SETTINGS = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXPORT_SETTINGS";
-    public static final String EXIT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EXIT";
-    public static final String NEW_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".NEW_SCENE";
-    public static final String SELECT_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SELECT_SCENE";
-    public static final String DELETE_CURRENT_SCENE = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".DELETE_CURRENT_SCENE";
+
+    public static final String prefix = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar";
+
+    public static final String FILE_MENU = prefix + ".FILE_MENU";
+    public static final String NEW_PROJECT = prefix + ".NEW_PROJECT";
+    public static final String OPEN_PROJECT = prefix + ".OPEN_PROJECT";
+    public static final String SAVE_PROJECT = prefix + ".SAVE_PROJECT";
+    public static final String IMPORT_TO_LIBRARY = prefix + ".IMPORT_TO_LIBRARY";
+    public static final String RECENT_PROJECTS = prefix + ".RECENT_PROJECTS";
+    public static final String CLEAR_RECENTS = prefix + ".CLEAR_RECENTS";
+    public static final String EXPORT = prefix + ".EXPORT";
+    public static final String EXPORT_SETTINGS = prefix + ".EXPORT_SETTINGS";
+    public static final String EXIT = prefix + ".EXIT";
+    public static final String NEW_SCENE = prefix + ".NEW_SCENE";
+    public static final String SELECT_SCENE = prefix + ".SELECT_SCENE";
+    public static final String DELETE_CURRENT_SCENE = prefix + ".DELETE_CURRENT_SCENE";
     //
-    public static final String EDIT_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".EDIT_MENU";
-    public static final String CUT = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CUT";
-    public static final String COPY = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".COPY";
-    public static final String PAST = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".PAST";
-    public static final String UNDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".UNDO";
-    public static final String REDO = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".REDO";
+    public static final String EDIT_MENU = prefix + ".EDIT_MENU";
+    public static final String CUT = prefix + ".CUT";
+    public static final String COPY = prefix + ".COPY";
+    public static final String PAST = prefix + ".PAST";
+    public static final String UNDO = prefix + ".UNDO";
+    public static final String REDO = prefix + ".REDO";
     //
 
-    public static final String WINDOW_MENU = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".WINDOW_MENU";
-    public static final String SPRITE_ANIMATIONS_EDITOR_OPEN = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".SPRITE_ANIMATIONS_EDITOR_OPEN";
-    public static final String CUSTOM_VARIABLES_EDITOR_OPEN = "com.uwsoft.editor.mvc.view.Overlap2DMenuBar" + ".CUSTOM_VARIABLES_EDITOR_OPEN";
+    public static final String WINDOW_MENU = prefix + ".WINDOW_MENU";
+    public static final String SPRITE_ANIMATIONS_EDITOR_OPEN = prefix + ".SPRITE_ANIMATIONS_EDITOR_OPEN";
+    public static final String CUSTOM_VARIABLES_EDITOR_OPEN = prefix + ".CUSTOM_VARIABLES_EDITOR_OPEN";
+
+    public static final String RECENT_LIST_MODIFIED = prefix + ".RECENT_LIST_MODIFIED";
 
 
     private static final String TAG = Overlap2DMenuBar.class.getCanonicalName();
@@ -108,8 +114,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
 
         public WindowMenu() {
             super("Window");
-            customVars = new MenuItem("Custom Variables", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
-            animations = new MenuItem("Sprite Animations", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            customVars = new MenuItem("Custom Variables", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            animations = new MenuItem("Sprite Animations", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
             addItem(customVars);
             addItem(animations);
         }
@@ -198,7 +204,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             recentProjectsMenuItems = new Array<>();
             PreferencesManager prefs = PreferencesManager.getInstance();
             prefs.buildRecentHistory();
-            addRecent(prefs.getRecentHistory());
+            reInitRecent(prefs.getRecentHistory());
             //
             addSeparator();
             addItem(new MenuItem("Exit", new MenuItemListener(EXIT, FILE_MENU)));
@@ -241,6 +247,12 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             recentProjectsPopupMenu.clear();
 
             addRecent(paths);
+
+            recentProjectsPopupMenu.addSeparator();
+
+            MenuItem menuItem = new MenuItem("Clear list", new MenuItemListener(CLEAR_RECENTS, null, FILE_MENU));
+            recentProjectsMenuItems.add(menuItem);
+            recentProjectsPopupMenu.addItem(menuItem);
         }
 
         public void setProjectOpen(boolean open) {

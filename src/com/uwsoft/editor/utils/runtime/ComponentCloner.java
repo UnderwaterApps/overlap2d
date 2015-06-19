@@ -44,9 +44,9 @@ public class ComponentCloner {
                 }
             }
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
 
         return target;
@@ -63,7 +63,7 @@ public class ComponentCloner {
                 }
             }
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 
