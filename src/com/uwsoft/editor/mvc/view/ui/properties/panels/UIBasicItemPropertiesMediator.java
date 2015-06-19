@@ -109,7 +109,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                 if(!isLinked) {
                     facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
                 } else {
-                    //TODO: show add to library dialog
+                    facade.sendNotification(Sandbox.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
                 break;
             default:

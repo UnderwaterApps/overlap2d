@@ -157,7 +157,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::update);
     }
 
-    private void createFollower(Entity entity) {
+    public void createFollower(Entity entity) {
         BasicFollower follower = FollowerFactory.createFollower(entity);
         viewComponent.addActor(follower);
         followers.put(entity, follower);

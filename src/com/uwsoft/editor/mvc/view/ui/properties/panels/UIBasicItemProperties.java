@@ -96,7 +96,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         itemType.setAlignment(Align.left);
         itemTypeIcon = new Image();
 
-        libraryLinkLabel = createLabel("qaqov basturma");
+        libraryLinkLabel = createLabel("");
         libraryLinkLabel.setAlignment(Align.left);
         linkImage = new VisImageButton("library-link-button");
         linkImage.setWidth(22);

@@ -34,7 +34,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class GroupItemsCommand extends EntityModifyRevertableCommand {
+public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
 
     private Integer entityId;
     private Integer parentEntityId;
@@ -53,9 +53,7 @@ public class GroupItemsCommand extends EntityModifyRevertableCommand {
         sandbox.getEngine().addEntity(entity);
 
         // what was the parent component of entities
-        // TODO: this will change as we will know our current working parent.
-        ParentNodeComponent parentEntityComponent = ComponentRetriever.get(entities.stream().findFirst().get(), ParentNodeComponent.class);
-        parentEntityId = EntityUtils.getEntityId(parentEntityComponent.parentEntity);
+        parentEntityId = EntityUtils.getEntityId(sandbox.getCurrentViewingEntity());
 
         // rebase children
         EntityUtils.changeParent(entities, entity);
@@ -65,6 +63,9 @@ public class GroupItemsCommand extends EntityModifyRevertableCommand {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
             transformComponent.x-=position.x;
             transformComponent.y-=position.y;
+
+            // also remove followers (they will be created again once user enters the composite
+            // TODO:
         }
         // recalculate composite size
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
@@ -79,6 +80,8 @@ public class GroupItemsCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+
         //get the entity
         Entity entity = EntityUtils.getByUniqueId(entityId);
         Entity oldParentEntity = EntityUtils.getByUniqueId(parentEntityId);
@@ -90,15 +93,19 @@ public class GroupItemsCommand extends EntityModifyRevertableCommand {
         //rebase children back to root
         EntityUtils.changeParent(children, oldParentEntity);
 
+
+
         //reposition children
         for(Entity tmpEntity: children) {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
             transformComponent.x+=positionDiff.x;
             transformComponent.y+=positionDiff.y;
+
+            //bring back the followers
+            // TODO:
         }
 
         // remove composite
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         midUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
     }

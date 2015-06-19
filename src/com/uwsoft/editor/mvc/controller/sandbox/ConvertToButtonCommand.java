@@ -24,7 +24,20 @@ import com.uwsoft.editor.mvc.controller.SandboxCommand;
 /**
  * Created by azakhary on 4/28/2015.
  */
-public class ConvertToButtonCommand extends SandboxCommand {
+public class ConvertToButtonCommand extends ConvertToCompositeCommand {
+
+
+    @Override
+    public void doAction() {
+        super.doAction();
+
+        //create layers
+    }
+
+    @Override
+    public void undoAction() {
+        super.undoAction();
+    }
 
     @Override
     public void execute(Notification notification) {
