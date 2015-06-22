@@ -469,8 +469,8 @@ public class Sandbox {
     public Vector2 stageToScreenCoordinates(float x, float y) {
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
-        x = x + (viewport.getScreenWidth()/2 - camera.position.x);
-        y = y + (viewport.getScreenHeight()/2 - camera.position.y);
+        x = x/camera.zoom + (viewport.getScreenWidth()/2 - camera.position.x/camera.zoom);
+        y = y/camera.zoom + (viewport.getScreenHeight()/2 - camera.position.y/camera.zoom);
 
         return new Vector2(x, y);
     }
@@ -478,8 +478,8 @@ public class Sandbox {
     public Vector2 screenToStageCoordinates(float x, float y) {
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
-        x = x - (viewport.getScreenWidth()/2 - camera.position.x);
-        y = y - (viewport.getScreenHeight()/2 - camera.position.y);
+        x = x*camera.zoom - (viewport.getScreenWidth()/2 - camera.position.x*camera.zoom);
+        y = y*camera.zoom - (viewport.getScreenHeight()/2 - camera.position.y*camera.zoom);
 
         return new Vector2(x, y);
     }

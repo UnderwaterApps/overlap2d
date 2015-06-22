@@ -30,6 +30,8 @@ public class EditableSelectBoxChangeListener extends ChangeListener {
 
     private final String eventName;
 
+    private String lastSelected = "";
+
     public EditableSelectBoxChangeListener(String eventName) {
         this.eventName = eventName;
     }
@@ -37,6 +39,10 @@ public class EditableSelectBoxChangeListener extends ChangeListener {
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        facade.sendNotification(eventName, ((EditableSelectBox) actor).getSelected());
+        String selected = ((EditableSelectBox) actor).getSelected();
+        if(!lastSelected.equals(selected)) {
+            lastSelected = selected;
+            facade.sendNotification(eventName, selected);
+        }
     }
 }

@@ -69,7 +69,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 PanTool.SCENE_PANNED,
                 UIToolBoxMediator.TOOL_SELECTED,
                 Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
-                CompositeCameraChangeCommand.DONE
+                CompositeCameraChangeCommand.DONE,
+                Overlap2D.ZOOM_CHANGED
         };
     }
 
@@ -111,6 +112,9 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 break;
             case UIToolBoxMediator.TOOL_SELECTED:
                 pushNotificationToFollowers(notification);
+                break;
+            case Overlap2D.ZOOM_CHANGED:
+                updateAllFollowers();
                 break;
         }
     }

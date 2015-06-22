@@ -57,13 +57,14 @@ public abstract class BasicFollower extends Group {
         Viewport viewport = Sandbox.getInstance().getViewport();
 
         // TODO: Make poolable vector
-    	Vector2 localCoords = new Vector2(0, 0);
-    	TransformMathUtils.localToSceneCoordinates(entity, localCoords);
+    	Vector2 stageCoords = new Vector2(0, 0);
+    	TransformMathUtils.localToSceneCoordinates(entity, stageCoords);
+        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(stageCoords.x, stageCoords.y);
 
-        setX((int)(localCoords.x + (viewport.getScreenWidth()/2 - camera.position.x)));
-        setY((int)(localCoords.y + (viewport.getScreenHeight()/2 - camera.position.y)));
-        setWidth(dimensionsComponent.width * transformComponent.scaleX * camera.zoom);
-        setHeight(dimensionsComponent.height * transformComponent.scaleY * camera.zoom);
+        setX((int)(screenCoords.x));
+        setY((int)(screenCoords.y));
+        setWidth(dimensionsComponent.width * transformComponent.scaleX / camera.zoom);
+        setHeight(dimensionsComponent.height * transformComponent.scaleY / camera.zoom);
 
         //setOrigin(transformComponent.originX, transformComponent.originY);
         setRotation(transformComponent.rotation);

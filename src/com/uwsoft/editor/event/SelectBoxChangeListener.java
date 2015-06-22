@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.view.ui.widget.EditableSelectBox;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -30,6 +31,8 @@ public class SelectBoxChangeListener extends ChangeListener {
 
     private final String eventName;
 
+    private String lastSelected = "";
+
     public SelectBoxChangeListener(String eventName) {
         this.eventName = eventName;
     }
@@ -37,6 +40,10 @@ public class SelectBoxChangeListener extends ChangeListener {
     @Override
     public void changed(ChangeEvent changeEvent, Actor actor) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        facade.sendNotification(eventName, ((VisSelectBox) actor).getSelected());
+        String selected = (String) ((VisSelectBox) actor).getSelected();
+        if(!lastSelected.equals(selected)) {
+            lastSelected = selected;
+            facade.sendNotification(eventName, selected);
+        }
     }
 }

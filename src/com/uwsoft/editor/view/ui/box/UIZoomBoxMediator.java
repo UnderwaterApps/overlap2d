@@ -71,6 +71,7 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
                 break;
             case  UIZoomBox.ZOOM_VALUE_CHANGED:
                 sandbox.setZoomPercent(NumberUtils.toInt(viewComponent.getCurrentZoom()));
+                facade.sendNotification(Overlap2D.ZOOM_CHANGED);
                 break;
             case  Overlap2D.ZOOM_CHANGED:
                 viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
