@@ -24,6 +24,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
@@ -56,6 +57,7 @@ public class LightComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
         component.height = 40;
         component.width = 40;
+        component.boundBox = new Rectangle(-10, -10, 20, 20);
 
         entity.add(component);
         return component;
