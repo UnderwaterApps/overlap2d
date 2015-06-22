@@ -114,7 +114,7 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public void setCurrentSelectedLayer(int index) {
-        UILayerItemSlot slot = rows.get(index);
+        UILayerItemSlot slot = rows.get(rows.size-1-index);
 
         clearSelection();
         slot.getUiLayerItem().setSelected(true);
