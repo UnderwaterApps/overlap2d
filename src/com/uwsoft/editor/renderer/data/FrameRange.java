@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer.legacy.data;
+package com.uwsoft.editor.renderer.data;
 
 /**
  * Created by CyberJoe on 6/18/2015.

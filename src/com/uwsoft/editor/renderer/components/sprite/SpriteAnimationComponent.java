@@ -6,7 +6,7 @@ import java.util.Map;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.legacy.data.FrameRange;
+import com.uwsoft.editor.renderer.data.FrameRange;
 
 public class SpriteAnimationComponent extends Component {
 	public String animationName = "";

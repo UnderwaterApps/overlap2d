@@ -19,6 +19,7 @@
 package com.uwsoft.editor.renderer.factory.component;
 
 import box2dLight.RayHandler;
+
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
@@ -27,7 +28,7 @@ import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.physics.MeshComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
