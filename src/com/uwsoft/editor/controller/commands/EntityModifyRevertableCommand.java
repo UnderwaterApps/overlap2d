@@ -18,8 +18,10 @@
 
 package com.uwsoft.editor.controller.commands;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
@@ -70,7 +72,10 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
                     sandbox.getEngine().removeEntity(child);
                 }
                 nodeComponent.children.clear();
-                sandbox.getSceneControl().sceneLoader.initWithAshley(dependable, libraryItems.get(link).composite);
+
+                Engine engine = sandbox.getSceneControl().sceneLoader.engine;
+                EntityFactory factory = sandbox.getSceneControl().sceneLoader.entityFactory;
+                factory.initAllChildren(engine, dependable, libraryItems.get(link).composite);
             }
         }
     }

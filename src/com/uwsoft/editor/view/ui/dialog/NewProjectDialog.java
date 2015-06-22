@@ -116,6 +116,10 @@ public class NewProjectDialog extends O2DDialog {
         return originWidthTextField.getText();
     }
 
+    public String getPixelPerWorldUnit() {
+        return pixelsPerWorldUnitField.getText();
+    }
+
     public String getOriginHeight() {
         return originHeightTextField.getText();
     }

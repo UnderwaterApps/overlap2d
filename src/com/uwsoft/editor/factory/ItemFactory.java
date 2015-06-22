@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.factory;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -150,7 +151,9 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return null;
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        sceneLoader.initWithAshley(entity, vo.composite);
+        Engine engine = sceneLoader.engine;
+        EntityFactory factory = sceneLoader.entityFactory;
+        factory.initAllChildren(engine, entity, vo.composite);
 
         return entity;
     }
