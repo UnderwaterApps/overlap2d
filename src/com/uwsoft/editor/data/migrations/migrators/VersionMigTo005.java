@@ -29,11 +29,11 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.data.migrations.IVersionMigrator;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.ProjectManager;
-import com.uwsoft.editor.mvc.proxy.ResolutionManager;
-import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.proxy.ResolutionManager;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 /**
  * Created by azakhary on 9/28/2014.

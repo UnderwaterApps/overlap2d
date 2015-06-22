@@ -368,7 +368,7 @@
       "fontColor": "overlap2d-menuitem-grey"
     }
   },
-  "com.uwsoft.editor.mvc.view.ui.box.resourcespanel.draggable.list.ListItemResource$ListItemResourceStyle": {
+  "com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list.ListItemResource$ListItemResourceStyle": {
     "library": {
       "up": "button-resource",
       "over": "button-resource-over",

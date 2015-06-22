@@ -26,7 +26,7 @@ import java.util.Map;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
+import com.uwsoft.editor.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
@@ -98,7 +98,7 @@ public class ComponentRetriever {
         mappers.put(DimensionsComponent.class, ComponentMapper.getFor(DimensionsComponent.class));
         mappers.put(LayerMapComponent.class, ComponentMapper.getFor(LayerMapComponent.class));
         mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
-        mappers.put(NinePatchComponnent.class, ComponentMapper.getFor(NinePatchComponnent.class));
+        mappers.put(NinePatchComponent.class, ComponentMapper.getFor(NinePatchComponent.class));
         mappers.put(NodeComponent.class, ComponentMapper.getFor(NodeComponent.class));
         mappers.put(ParentNodeComponent.class, ComponentMapper.getFor(ParentNodeComponent.class));
         mappers.put(ScissorComponent.class, ComponentMapper.getFor(ScissorComponent.class));

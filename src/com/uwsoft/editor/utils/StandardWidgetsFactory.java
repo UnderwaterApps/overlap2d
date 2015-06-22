@@ -27,8 +27,8 @@ import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
-import com.uwsoft.editor.mvc.proxy.CursorManager;
-import com.uwsoft.editor.ui.widget.CursorListener;
+import com.uwsoft.editor.proxy.CursorManager;
+import com.uwsoft.editor.view.ui.widget.CursorListener;
 
 /**
  * Creates standard widgets like labels or text fields with provided standard Overlap2D specific visual style.
