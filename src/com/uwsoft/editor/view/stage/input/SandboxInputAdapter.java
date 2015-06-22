@@ -221,7 +221,8 @@ public class SandboxInputAdapter implements InputProcessor {
 		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
 		
 		Vector2 childLocalCoordinates  = new Vector2(localCoordinates);
-		for (int i = 0, n = childrenEntities.size; i < n; i++){
+		int n = childrenEntities.size-1;
+		for (int i = n; i >= 0; i--){
 			Entity childEntity = childrenEntities.get(i);
 			childLocalCoordinates.set(localCoordinates);
 //			NodeComponent childNodeComponent = ComponentRetriever.get(childEntity, NodeComponent.class);

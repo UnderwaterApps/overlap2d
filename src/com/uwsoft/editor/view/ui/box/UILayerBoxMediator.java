@@ -155,7 +155,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
         viewComponent.clearItems();
 
-        for (int i = 0; i < layers.size(); i++) {
+        for (int i = (layers.size()-1); i >=0; i--) {
             viewComponent.addItem(layers.get(i));
         }
     }
