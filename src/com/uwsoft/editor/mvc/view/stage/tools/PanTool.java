@@ -10,13 +10,18 @@ import com.uwsoft.editor.mvc.Overlap2DFacade;
 /**
  * Created by CyberJoe on 5/1/2015.
  */
-public class PanTool implements Tool {
+public class PanTool extends SimpleTool {
     private static final String EVENT_PREFIX = "com.uwsoft.editor.mvc.view.stage.tools.PanTool";
     public static final String SCENE_PANNED = EVENT_PREFIX + ".SCENE_PANNED";
 
     public static final String NAME = "PAN_TOOL";
 
     private Vector2 lastCoordinates;
+
+    @Override
+    public String getName() {
+        return NAME;
+    }
 
     @Override
     public void initTool() {

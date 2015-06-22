@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.stage.tools;
 
 import com.badlogic.ashley.core.Entity;
+import com.puremvc.patterns.observer.Notification;
 
 
 /**
@@ -34,4 +35,6 @@ public interface Tool {
     public void itemMouseUp(Entity entity, float x, float y);
     public void itemMouseDragged(Entity entity, float x, float y);
     public void itemMouseDoubleClick(Entity entity, float x, float y);
+    public String getName();
+    public void handleNotification(Notification notification);
 }

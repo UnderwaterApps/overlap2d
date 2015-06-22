@@ -18,12 +18,14 @@
 
 package com.uwsoft.editor.mvc.view.stage.tools;
 
+import java.util.HashSet;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 import com.uwsoft.editor.mvc.Overlap2DFacade;
@@ -50,6 +52,11 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     private float lastEntityAngle = 0;
 
     @Override
+    public String getName() {
+        return NAME;
+    }
+
+    @Override
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
 
@@ -62,6 +69,15 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         //cursorManager.setCursor(CursorManager.CROSS);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        switch (notification.getName()) {
+            case ItemFactory.NEW_ITEM_ADDED:
+                updateListeners((Entity) notification.getBody());
+                break;
+        }
     }
 
     @Override
@@ -78,13 +94,21 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     private void updateListeners() {
         Sandbox sandbox = Sandbox.getInstance();
-
         Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
+        updateListeners(selectedEntities);
+    }
 
+    private void updateListeners(Entity entity) {
+        Set<Entity> entities = new HashSet<>();
+        entities.add(entity);
+        updateListeners(entities);
+    }
+
+    private void updateListeners(Set<Entity> entities) {
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         midUIMediator.clearAllListeners();
 
-        for(Entity entity: selectedEntities) {
+        for(Entity entity: entities) {
             midUIMediator.getFollower(entity).setFollowerListener(this);
         }
     }
@@ -164,7 +188,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
                 break;
             case NormalSelectionFollower.RB:
                 newY = y;
-                newWidth = x - follower.getX();
+                newWidth = x - transformComponent.x;
                 newHeight = newHeight + (transformComponent.y - y);
                 break;
             case NormalSelectionFollower.R:
