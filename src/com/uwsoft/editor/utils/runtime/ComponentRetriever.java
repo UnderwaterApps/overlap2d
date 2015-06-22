@@ -98,7 +98,7 @@ public class ComponentRetriever {
         mappers.put(DimensionsComponent.class, ComponentMapper.getFor(DimensionsComponent.class));
         mappers.put(LayerMapComponent.class, ComponentMapper.getFor(LayerMapComponent.class));
         mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
-        mappers.put(NinePatchComponnent.class, ComponentMapper.getFor(NinePatchComponnent.class));
+        mappers.put(NinePatchComponent.class, ComponentMapper.getFor(NinePatchComponent.class));
         mappers.put(NodeComponent.class, ComponentMapper.getFor(NodeComponent.class));
         mappers.put(ParentNodeComponent.class, ComponentMapper.getFor(ParentNodeComponent.class));
         mappers.put(ScissorComponent.class, ComponentMapper.getFor(ScissorComponent.class));

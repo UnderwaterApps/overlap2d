@@ -93,6 +93,13 @@ public class ItemFactory {
     }
 
     public boolean create9Patch(String regionName, Vector2 position) {
+        Image9patchVO vo = new Image9patchVO();
+        vo.imageName = regionName;
+
+        if(!setEssentialData(vo, position)) return false;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
         return true;
     }
 

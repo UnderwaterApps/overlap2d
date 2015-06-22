@@ -78,6 +78,9 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
         classToMediatorMap.put("Entity"+EntityFactory.IMAGE_TYPE, new ArrayList<>());
         classToMediatorMap.get("Entity"+EntityFactory.IMAGE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
 
+        classToMediatorMap.put("Entity"+EntityFactory.NINE_PATCH, new ArrayList<>());
+        classToMediatorMap.get("Entity"+EntityFactory.NINE_PATCH).add(UIBasicItemPropertiesMediator.NAME);
+
         classToMediatorMap.put("Entity"+EntityFactory.LABEL_TYPE, new ArrayList<>());
         classToMediatorMap.get("Entity"+EntityFactory.LABEL_TYPE).add(UIBasicItemPropertiesMediator.NAME);
         classToMediatorMap.get("Entity"+EntityFactory.LABEL_TYPE).add(UILabelItemPropertiesMediator.NAME);
