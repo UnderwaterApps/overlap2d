@@ -27,6 +27,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
@@ -44,7 +45,9 @@ public class CompositeComponentFactory extends ComponentFactory {
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
         createCommonComponents(entity, vo, EntityFactory.COMPOSITE_TYPE);
-        createParentNodeComponent(root, entity);
+        if(root != null) {
+            createParentNodeComponent(root, entity);
+        }
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
         createCompositeComponents(entity, (CompositeItemVO) vo);
@@ -61,13 +64,13 @@ public class CompositeComponentFactory extends ComponentFactory {
     }
 
     @Override
-    protected NodeComponent createNodeComponent(Entity root, Entity entity) {
-        NodeComponent component = super.createNodeComponent(root, entity);
+    protected void createNodeComponent(Entity root, Entity entity) {
+        if(root != null) {
+            super.createNodeComponent(root, entity);
+        }
 
         NodeComponent node = new NodeComponent();
         entity.add(node);
-
-        return component;
     }
 
     protected void createCompositeComponents(Entity entity, CompositeItemVO vo) {
