@@ -108,6 +108,19 @@ public class UILayerBox extends UICollapsibleBox {
         rows.clear();
     }
 
+    public void clearSelection() {
+        for (int i = 0; i < rows.size; i++) {
+            rows.get(i).getUiLayerItem().setSelected(false);
+        }
+    }
+
+    public void setCurrentSelectedLayer(int index) {
+        UILayerItemSlot slot = rows.get(index);
+
+        clearSelection();
+        slot.getUiLayerItem().setSelected(true);
+    }
+
     public void addItem(LayerItemVO itemVO) {
         UILayerItemSlot itemSlot = new UILayerItemSlot();
         UILayerItem item = new UILayerItem(itemVO, itemSlot);
@@ -122,11 +135,7 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                for (int i = 0; i < rows.size; i++) {
-                    if (i != rows.indexOf(itemSlot, true)) {
-                        rows.get(i).getUiLayerItem().setSelected(false);
-                    }
-                }
+                clearSelection();
                 itemSlot.getUiLayerItem().setSelected(true);
                 currentSelectedLayerIndex = rows.indexOf(itemSlot, true);
 

@@ -20,6 +20,8 @@ package com.uwsoft.editor.mvc.controller.sandbox;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -46,10 +48,18 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
     @Override
     public void doAction() {
         Object[] payload = (Object[]) Sandbox.getInstance().retrieveFromClipboard();
+
+        if(payload == null) {
+            cancel();
+            return;
+        }
+
         Vector2 cameraPrevPosition = (Vector2) payload[0];
         Vector2 cameraCurrPosition = new Vector2(Sandbox.getInstance().getCamera().position.x,Sandbox.getInstance().getCamera().position.y);
 
         Vector2 diff = cameraCurrPosition.sub(cameraPrevPosition);
+
+        Set<Entity> newEntitiesList = new HashSet<>();
 
         HashMap<Integer, Collection<Component>> backup = (HashMap<Integer, Collection<Component>>) payload[1];
         for (Collection<Component> components : backup.values()) {
@@ -70,9 +80,12 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             transformComponent.y += diff.y;
 
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+            newEntitiesList.add(entity);
 
             pastedEntityIds.add(uniquId);
         }
+
+        sandbox.getSelector().setSelections(newEntitiesList, true);
     }
 
     @Override

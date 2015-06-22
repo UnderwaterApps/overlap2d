@@ -3,6 +3,7 @@ package com.uwsoft.editor.mvc.view.stage.tools;
 import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
 
 /**
@@ -16,6 +17,10 @@ public abstract class SimpleTool implements Tool {
         Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
     }
 
+    @Override
+    public String getName() {
+        return "SIMPLE_TOOL";
+    }
 
     @Override
     public void stageMouseDragged(float x, float y) {
@@ -44,6 +49,11 @@ public abstract class SimpleTool implements Tool {
 
     @Override
     public void itemMouseDoubleClick(Entity entity, float x, float y) {
+
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
 
     }
 }

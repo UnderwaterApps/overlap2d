@@ -554,8 +554,10 @@
       "imageUp": "icon-new-layer"
     },
     "library-link-button": {
-      "imageUp": "icon-library",
-      "imageChecked": "icon-library-over"
+      "imageUp": "icon-unlink-inactive",
+      "imageOver": "icon-link-inactive",
+      "imageChecked": "icon-link-active",
+      "imageCheckedOver": "icon-unlink-active"
     }
   },
   "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {

@@ -46,7 +46,7 @@ import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class SelectionTool implements Tool {
+public class SelectionTool extends SimpleTool {
 
     public static final String NAME = "SELECTION_TOOL";
 
@@ -68,6 +68,11 @@ public class SelectionTool implements Tool {
 
     public SelectionTool() {
     
+    }
+
+    @Override
+    public String getName() {
+        return NAME;
     }
 
     @Override

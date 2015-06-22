@@ -73,6 +73,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.SPRITER_TYPE, UIBasicItemProperties.ItemType.spriterAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
+        itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
     }
 
     @Override
@@ -109,7 +110,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                 if(!isLinked) {
                     facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
                 } else {
-                    //TODO: show add to library dialog
+                    facade.sendNotification(Sandbox.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
                 break;
             default:

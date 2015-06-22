@@ -132,6 +132,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             default:
                 break;
         }
+        if(currentSelectedTool != null) {
+            currentSelectedTool.handleNotification(notification);
+        }
     }
 
     private void handleSceneLoaded(Notification notification) {
@@ -510,5 +513,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     private void toolHotSwapBack() {
         currentSelectedTool = hotSwapMemory;
         hotSwapMemory = null;
+    }
+
+    public String getCurrentSelectedToolName() {
+        if(currentSelectedTool == null) {
+            return "";
+        }
+        return currentSelectedTool.getName();
     }
 }

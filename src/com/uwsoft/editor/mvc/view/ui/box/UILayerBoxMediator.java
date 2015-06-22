@@ -19,6 +19,7 @@
 package com.uwsoft.editor.mvc.view.ui.box;
 
 import java.util.ArrayList;
+import java.util.Set;
 import java.util.stream.Stream;
 
 import com.badlogic.ashley.core.Entity;
@@ -26,9 +27,13 @@ import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
+import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -54,7 +59,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 SceneDataManager.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
-                UILayerBox.DELETE_NEW_LAYER
+                UILayerBox.DELETE_NEW_LAYER,
+                CompositeCameraChangeCommand.DONE,
+                Overlap2D.ITEM_SELECTION_CHANGED,
+                ItemFactory.NEW_ITEM_ADDED
+
+
         }).flatMap(Stream::of).toArray(String[]::new);
     }
 
@@ -63,6 +73,9 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
+                initLayerData();
+                break;
+            case CompositeCameraChangeCommand.DONE:
                 initLayerData();
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
@@ -82,7 +95,6 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                             // show error dialog
                         }
                     }
-
                     @Override
                     public void canceled() {
 
@@ -95,10 +107,35 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     layers.remove(viewComponent.getCurrentSelectedLayerIndex());
                     initLayerData();
                 }
+            case Overlap2D.ITEM_SELECTION_CHANGED:
+                Set<Entity> selection = notification.getBody();
+                if(selection.size() == 1) {
+                    MainItemComponent mainItemComponent = ComponentRetriever.get(selection.iterator().next(), MainItemComponent.class);
+                    int index = findLayerByName(mainItemComponent.layer);
+                    viewComponent.setCurrentSelectedLayer(index);
+                } else if (selection.size() > 1) {
+                    // multi selection handling not yet clear
+                }
+                break;
+            case ItemFactory.NEW_ITEM_ADDED:
+                int index = viewComponent.getCurrentSelectedLayerIndex();
+                Entity item = notification.getBody();
+                MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
+                mainItemComponent.layer = layers.get(index).layerName;
                 break;
             default:
                 break;
         }
+    }
+
+    private int findLayerByName(String name) {
+        for (int i = 0; i < layers.size(); i++) {
+            if (layers.get(i).layerName.equals(name)) {
+                return i;
+            }
+        }
+
+        return -1;
     }
 
     private boolean checkIfNameIsUnique(String name) {

@@ -27,19 +27,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.LayerMapComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NinePatchComponnent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.ScissorComponent;
-import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.renderer.components.ZindexComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
@@ -110,7 +98,7 @@ public class ComponentRetriever {
         mappers.put(DimensionsComponent.class, ComponentMapper.getFor(DimensionsComponent.class));
         mappers.put(LayerMapComponent.class, ComponentMapper.getFor(LayerMapComponent.class));
         mappers.put(MainItemComponent.class, ComponentMapper.getFor(MainItemComponent.class));
-        mappers.put(NinePatchComponnent.class, ComponentMapper.getFor(NinePatchComponnent.class));
+        mappers.put(NinePatchComponent.class, ComponentMapper.getFor(NinePatchComponent.class));
         mappers.put(NodeComponent.class, ComponentMapper.getFor(NodeComponent.class));
         mappers.put(ParentNodeComponent.class, ComponentMapper.getFor(ParentNodeComponent.class));
         mappers.put(ScissorComponent.class, ComponentMapper.getFor(ScissorComponent.class));
@@ -120,6 +108,7 @@ public class ComponentRetriever {
         mappers.put(ViewPortComponent.class, ComponentMapper.getFor(ViewPortComponent.class));
         mappers.put(ZindexComponent.class, ComponentMapper.getFor(ZindexComponent.class));
         mappers.put(InputListenerComponent.class, ComponentMapper.getFor(InputListenerComponent.class));
+        mappers.put(ScriptComponent.class, ComponentMapper.getFor(ScriptComponent.class));
         
         
     }
@@ -173,7 +162,8 @@ public class ComponentRetriever {
     }
 
     /**
-     * This is to add a new mapper type externally, in case of for example implementing the plugin system, where components might be initialized on the fly
+     * This is to add a new mapper type externally, in case of for example implementing the plugin system,
+     * where components might be initialized on the fly
      *
      * @param type
      */

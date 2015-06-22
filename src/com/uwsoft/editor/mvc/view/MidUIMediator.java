@@ -24,12 +24,15 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.puremvc.patterns.mediator.SimpleMediator;
+import com.puremvc.patterns.observer.BaseNotification;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.mvc.Overlap2DFacade;
 import com.uwsoft.editor.mvc.controller.sandbox.CompositeCameraChangeCommand;
 import com.uwsoft.editor.mvc.factory.ItemFactory;
 import com.uwsoft.editor.mvc.proxy.SceneDataManager;
+import com.uwsoft.editor.mvc.view.stage.SandboxMediator;
 import com.uwsoft.editor.mvc.view.stage.tools.PanTool;
 import com.uwsoft.editor.mvc.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.mvc.view.ui.followers.BasicFollower;
@@ -52,7 +55,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
 
     @Override
     public void onRegister() {
-
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -157,10 +160,13 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
         followers.values().forEach(com.uwsoft.editor.mvc.view.ui.followers.BasicFollower::update);
     }
 
-    private void createFollower(Entity entity) {
+    public void createFollower(Entity entity) {
         BasicFollower follower = FollowerFactory.createFollower(entity);
         viewComponent.addActor(follower);
         followers.put(entity, follower);
+
+        SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+        follower.handleNotification(new BaseNotification(UIToolBoxMediator.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
     }
 
     public void removeFollower(Entity entity) {
