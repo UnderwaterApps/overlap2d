@@ -359,9 +359,9 @@ public class CompositeVO {
                 sSpineAnimations.add(vo);
             }
             if(entityType == EntityFactory.LIGHT_TYPE) {
-                CompositeItemVO vo = new CompositeItemVO();
+                LightVO vo = new LightVO();
                 vo.loadFromEntity(entity);
-                sComposites.add(vo);
+                sLights.add(vo);
             }
 
             //TODO: layers

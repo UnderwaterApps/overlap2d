@@ -9,4 +9,5 @@ public class MainItemComponent extends Component {
     public String[] tags = null;
     public String customVars = "";
 	public int entityType;
+    public String layer;
 }

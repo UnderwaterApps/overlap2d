@@ -57,6 +57,7 @@ public abstract class ComponentFactory {
         createTransformComponent(entity, vo, dimensionsComponent);
         createTintComponent(entity, vo);
         createZIndexComponent(entity, vo);
+        createScriptComponent(entity, vo);
     }
 
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
@@ -66,6 +67,8 @@ public abstract class ComponentFactory {
         component.libraryLink = vo.itemName;
         component.tags = vo.tags;
         component.entityType = entityType;
+        if(vo.layerName == "" || vo.layerName == null) vo.layerName = "Default";
+        component.layer = vo.layerName;
 
         entity.add(component);
 
@@ -109,6 +112,19 @@ public abstract class ComponentFactory {
 
         entity.add(component);
 
+        return component;
+    }
+
+    protected ScriptComponent createScriptComponent(Entity entity, MainItemVO vo) {
+
+        if(vo.commonScripts == null || vo.commonScripts.size() == 0) return null;
+
+        ScriptComponent component = new ScriptComponent();
+        for(String name: vo.commonScripts) {
+            component.addScript(name);
+        }
+
+        entity.add(component);
         return component;
     }
 
