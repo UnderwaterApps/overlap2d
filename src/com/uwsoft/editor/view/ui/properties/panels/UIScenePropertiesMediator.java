@@ -27,8 +27,8 @@ import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.renderer.legacy.data.PhysicsPropertiesVO;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by azakhary on 4/16/2015.

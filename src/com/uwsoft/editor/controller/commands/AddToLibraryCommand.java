@@ -22,7 +22,7 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 

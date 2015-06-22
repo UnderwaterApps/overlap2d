@@ -37,6 +37,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.view.Overlap2DMenuBar;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.NodeList;
@@ -56,12 +57,12 @@ import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
-import com.uwsoft.editor.renderer.legacy.data.MeshVO;
-import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.MeshVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.Overlap2DUtils;
 

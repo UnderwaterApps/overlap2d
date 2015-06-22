@@ -40,10 +40,10 @@ import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.CompositeVO;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**

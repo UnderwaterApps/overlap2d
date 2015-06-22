@@ -23,7 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.view.ui.widget.actors.SpriteAnimationActor;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
-import com.uwsoft.editor.renderer.legacy.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 /**

@@ -21,7 +21,7 @@ package com.uwsoft.editor.controller.commands.component;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 

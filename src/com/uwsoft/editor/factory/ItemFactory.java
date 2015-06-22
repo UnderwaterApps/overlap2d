@@ -28,8 +28,8 @@ import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.*;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 import java.util.HashMap;

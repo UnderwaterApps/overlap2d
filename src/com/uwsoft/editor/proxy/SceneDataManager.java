@@ -28,7 +28,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by sargis on 3/23/15.

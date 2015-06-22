@@ -24,7 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.view.ui.widget.actors.SpineActor;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
-import com.uwsoft.editor.renderer.legacy.data.SpineVO;
+import com.uwsoft.editor.renderer.data.SpineVO;
 
 /**
  * Created by azakhary on 7/3/2014.

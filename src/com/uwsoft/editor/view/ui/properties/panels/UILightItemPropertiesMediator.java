@@ -20,12 +20,13 @@ package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.controller.commands.component.UpdateLightDataCommand;
+
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**

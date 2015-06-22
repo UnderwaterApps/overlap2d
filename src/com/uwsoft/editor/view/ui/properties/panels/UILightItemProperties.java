@@ -28,7 +28,7 @@ import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
-import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.data.LightVO;
 
 /**
  * Created by azakhary on 4/28/2015.

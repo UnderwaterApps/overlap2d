@@ -30,7 +30,7 @@ import com.kotcrab.vis.ui.widget.PopupMenu;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.MenuItemListener;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.ui.widget.CustomMenu;
 import com.uwsoft.editor.view.ui.widget.CustomMenuBar;
 

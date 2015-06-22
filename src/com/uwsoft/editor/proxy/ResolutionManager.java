@@ -43,8 +43,8 @@ import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.utils.NinePatchUtils;
 import com.uwsoft.editor.utils.Overlap2DUtils;
 

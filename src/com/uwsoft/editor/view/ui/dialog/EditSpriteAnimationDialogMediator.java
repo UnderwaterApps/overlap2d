@@ -30,8 +30,8 @@ import com.uwsoft.editor.view.Overlap2DMenuBar;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
+import com.uwsoft.editor.renderer.data.FrameRange;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.FrameRange;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 

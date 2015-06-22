@@ -38,7 +38,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.stage.input.SandboxInputAdapter;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 public class Overlap2DScreen implements Screen, InputProcessor {
     private static final String TAG = Overlap2DScreen.class.getCanonicalName();

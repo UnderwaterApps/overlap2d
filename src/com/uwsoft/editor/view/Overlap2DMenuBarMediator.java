@@ -32,7 +32,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by sargis on 3/25/15.

@@ -28,8 +28,8 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.ui.UIMainTable;
 import com.uwsoft.editor.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.renderer.legacy.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends Stage {
 

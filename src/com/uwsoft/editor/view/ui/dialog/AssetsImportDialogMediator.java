@@ -27,7 +27,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.Overlap2DMenuBar;
 import com.uwsoft.editor.view.stage.UIStage;
-import com.uwsoft.editor.renderer.legacy.data.SceneVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
  * Created by sargis on 4/3/15.

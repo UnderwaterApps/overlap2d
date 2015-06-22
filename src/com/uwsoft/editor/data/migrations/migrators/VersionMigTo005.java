@@ -32,8 +32,8 @@ import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
-import com.uwsoft.editor.renderer.legacy.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.legacy.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 /**
  * Created by azakhary on 9/28/2014.

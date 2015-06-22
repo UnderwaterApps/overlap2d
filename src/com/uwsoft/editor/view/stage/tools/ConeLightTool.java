@@ -20,7 +20,7 @@ package com.uwsoft.editor.view.stage.tools;
 
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.renderer.legacy.data.LightVO;
+import com.uwsoft.editor.renderer.data.LightVO;
 
 /**
  * Created by azakhary on 4/30/2015.
