@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.legacy.data;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
@@ -314,6 +315,7 @@ public class CompositeVO {
     public void loadFromEntity(Entity compositeEntity) {
         NodeComponent nodeComponent = compositeEntity.getComponent(NodeComponent.class);
         ComponentMapper<MainItemComponent> mainItemComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
+        ComponentMapper<LayerMapComponent> layerMainItemComponentComponentMapper = ComponentMapper.getFor(LayerMapComponent.class);
         
         if(nodeComponent == null) return;
         for(Entity entity: nodeComponent.children) {
@@ -364,7 +366,8 @@ public class CompositeVO {
                 sLights.add(vo);
             }
 
-            //TODO: layers
+            LayerMapComponent layerMapComponent = layerMainItemComponentComponentMapper.get(compositeEntity);
+            layers = layerMapComponent.layers;
         }
     }
 }
