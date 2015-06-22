@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.NinePatchComponnent;
+import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.legacy.data.Image9patchVO;
 import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
@@ -16,18 +16,19 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class NinePatchComponentFactory extends ComponentFactory {
 
+	NinePatchComponent ninePatchComponent;
+
 	public NinePatchComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
 		super(rayHandler, world, rm);
-		// TODO Auto-generated constructor stub
 	}
 
 	@Override
 	public void createComponents(Entity root, Entity entity, MainItemVO vo) {
+		ninePatchComponent = createNinePatchComponent(entity, (Image9patchVO) vo);
 		createCommonComponents(entity, vo, EntityFactory.NINE_PATCH);
 		createParentNodeComponent(root, entity);
 		createNodeComponent(root, entity);
 		createPhysicsComponents(entity, vo);
-		createNinePatchComponent(entity, (Image9patchVO) vo);
 	}
 
 	@Override
@@ -36,15 +37,25 @@ public class NinePatchComponentFactory extends ComponentFactory {
 		component.height = ((Image9patchVO) vo).height;
 		component.width = ((Image9patchVO) vo).width;
 
+		if(component.width == 0) {
+			component.width = ninePatchComponent.ninePatch.getTotalWidth();
+		}
+
+		if(component.height == 0) {
+			component.height = ninePatchComponent.ninePatch.getTotalHeight();
+		}
+
 		entity.add(component);
 		return component;
 	}
 
-	private void createNinePatchComponent(Entity entity, Image9patchVO vo) {
-		NinePatchComponnent ninePatchComponent = new NinePatchComponnent();
+	private NinePatchComponent createNinePatchComponent(Entity entity, Image9patchVO vo) {
+		NinePatchComponent ninePatchComponent = new NinePatchComponent();
 		AtlasRegion atlasRegion = (TextureAtlas.AtlasRegion) rm.getTextureRegion(vo.imageName);
 		ninePatchComponent.ninePatch = new NinePatch(atlasRegion, atlasRegion.splits[0], atlasRegion.splits[1], atlasRegion.splits[2], atlasRegion.splits[3]);
 		entity.add(ninePatchComponent);
+
+		return ninePatchComponent;
 	}
 
 }
