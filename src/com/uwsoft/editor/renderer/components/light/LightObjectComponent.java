@@ -3,7 +3,7 @@ package com.uwsoft.editor.renderer.components.light;
 import box2dLight.Light;
 
 import com.badlogic.ashley.core.Component;
-import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
+import com.uwsoft.editor.renderer.data.LightVO.LightType;
 
 public class LightObjectComponent extends Component {
 	//TODO temporarley disabled because of legasy vo

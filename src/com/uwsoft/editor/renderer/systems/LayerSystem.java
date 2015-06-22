@@ -12,7 +12,7 @@ import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZindexComponent;
-import com.uwsoft.editor.renderer.legacy.data.LayerItemVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class LayerSystem extends IteratingSystem {
 
@@ -41,7 +41,10 @@ public class LayerSystem extends IteratingSystem {
 		for (int i = 0; i < children.size; i++) {
 			Entity entity = children.get(i);
 			ZindexComponent zindexComponent = zIndexMapper.get(entity);
+			
 			zindexComponent.layerIndex = getlayerIndexByName(zindexComponent.layerName,layerMapComponent);
+			
+			//System.out.println("LAYER NAME " + zindexComponent.layerName + " layerindex " + zindexComponent.layerIndex);
         }
 	}
 

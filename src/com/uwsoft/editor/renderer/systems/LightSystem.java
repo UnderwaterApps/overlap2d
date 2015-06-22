@@ -14,8 +14,8 @@ import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.legacy.data.LightVO;
-import com.uwsoft.editor.renderer.legacy.data.LightVO.LightType;
+import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 public class LightSystem extends IteratingSystem {

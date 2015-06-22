@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
+import com.uwsoft.editor.renderer.data.Image9patchVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.legacy.data.Image9patchVO;
-import com.uwsoft.editor.renderer.legacy.data.MainItemVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class NinePatchComponentFactory extends ComponentFactory {

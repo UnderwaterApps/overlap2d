@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer.legacy.data;
+package com.uwsoft.editor.renderer.data;
 
 public class ResolutionEntryVO {
 
