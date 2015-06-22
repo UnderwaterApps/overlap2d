@@ -21,8 +21,8 @@ package com.uwsoft.editor.utils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 

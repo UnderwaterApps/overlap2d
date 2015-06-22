@@ -23,8 +23,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
-import com.uwsoft.editor.mvc.Overlap2DFacade;
-import com.uwsoft.editor.mvc.proxy.EditorTextureManager;
+import com.uwsoft.editor.proxy.EditorTextureManager;
 
 public class Overlap2D extends ApplicationAdapter implements Proxy {
     private static final String TAG = Overlap2D.class.getCanonicalName();
