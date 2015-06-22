@@ -30,7 +30,7 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.gdx.sandbox.Sandbox;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;

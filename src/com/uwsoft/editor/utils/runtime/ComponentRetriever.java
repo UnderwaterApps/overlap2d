@@ -26,7 +26,7 @@ import java.util.Map;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.mvc.view.stage.input.InputListenerComponent;
+import com.uwsoft.editor.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
