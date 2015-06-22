@@ -27,12 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
-import com.kotcrab.vis.ui.widget.VisDialog;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.widget.InputFileWidget;
@@ -41,6 +36,7 @@ public class NewProjectDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
     private static final String DEFAULT_ORIGIN_WIDTH = "1920";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
+    private static final String DEFAULT_PPWU = "80";
 
     //    private final VisValidableTextField projectName;
     private final InputFileWidget workspacePathField;
@@ -48,6 +44,7 @@ public class NewProjectDialog extends O2DDialog {
     private VisTextField originWidthTextField;
     private VisTextField originHeightTextField;
     private String defaultWorkspacePath;
+    private VisTextField pixelsPerWorldUnitField;
 
     NewProjectDialog() {
         super("Create New Project");
@@ -70,9 +67,13 @@ public class NewProjectDialog extends O2DDialog {
         mainTable.add(workspacePathField);
         //
         mainTable.row().padTop(10);
+        mainTable.add(new Separator()).padTop(2).padBottom(2).fill().expand();
+        mainTable.row().padTop(10);
         //
-        mainTable.add(new VisLabel("Max. Resolution:")).top().right().padRight(5);
+        mainTable.add(new VisLabel("Original Size")).top().left().padRight(5);
         mainTable.add(getDimensionsTable()).left();
+        //
+
         //
         mainTable.row().padTop(23);
         //
@@ -95,6 +96,10 @@ public class NewProjectDialog extends O2DDialog {
         originHeightTextField = createTextField(DEFAULT_ORIGIN_HEIGHT, digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Height:")).left().padRight(3);
         dimensionsTable.add(originHeightTextField).width(45).height(21).left();
+        dimensionsTable.row().padTop(10);
+        pixelsPerWorldUnitField = createTextField(DEFAULT_PPWU, digitsOnlyFilter);
+        dimensionsTable.add(new VisLabel("Pixels per WUnit:")).left().padRight(3);
+        dimensionsTable.add(pixelsPerWorldUnitField).width(45).height(21).left();
         return dimensionsTable;
     }
 
