@@ -19,6 +19,7 @@
 package com.uwsoft.editor.view.ui.box;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Stream;
 
@@ -27,12 +28,15 @@ import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.box.UILayerBox.UILayerItem;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
@@ -49,6 +53,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
     public UILayerBoxMediator() {
         super(NAME, new UILayerBox());
+        facade = Overlap2DFacade.getInstance();
     }
 
     @Override
@@ -78,8 +83,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 initLayerData();
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
-                // select this one deselect others
-
+            	UILayerItem layerItem = notification.getBody();
+                selectEntitiesByLayerName(layerItem.getLayerName());
                 break;
             case UILayerBox.CREATE_NEW_LAYER:
                 DialogUtils.showInputDialog(Sandbox.getInstance().getUIStage(), "Please set unique name for your Layer", "Please set unique name for your Layer", new InputDialogListener() {
@@ -127,7 +132,23 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         }
     }
 
-    private int findLayerByName(String name) {
+    private void selectEntitiesByLayerName(String layerName) {
+    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+
+    	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
+    	Set<Entity> items = new HashSet<>();
+    	for(int i=0; i<nodeComponent.children.size; i++){
+    		Entity entity = nodeComponent.children.get(i);
+    		MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+    		if(childeMainItemComponent.layer.equals(layerName)){
+    			items.add(entity);
+    		}
+    	}
+    	Sandbox.getInstance().getSelector().clearSelections();
+    	facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+	}
+
+	private int findLayerByName(String name) {
         for (int i = 0; i < layers.size(); i++) {
             if (layers.get(i).layerName.equals(name)) {
                 return i;
