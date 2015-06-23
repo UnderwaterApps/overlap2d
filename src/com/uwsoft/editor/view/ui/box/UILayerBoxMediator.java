@@ -64,6 +64,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
                 UILayerBox.DELETE_NEW_LAYER,
+                UILayerBox.LOCK_LAYER,
+                UILayerBox.HIDE_LAYER,
                 CompositeCameraChangeCommand.DONE,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 ItemFactory.NEW_ITEM_ADDED
@@ -75,6 +77,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
+        UILayerItem layerItem;
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initLayerData();
@@ -83,8 +86,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 initLayerData();
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
-            	UILayerItem layerItem = notification.getBody();
-                selectEntitiesByLayerName(layerItem.getLayerName());
+            	layerItem = notification.getBody();
+                selectEntitiesByLayerName(layerItem);
                 break;
             case UILayerBox.CREATE_NEW_LAYER:
                 DialogUtils.showInputDialog(Sandbox.getInstance().getUIStage(), "Please set unique name for your Layer", "Please set unique name for your Layer", new InputDialogListener() {
@@ -111,6 +114,15 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     layers.remove(viewComponent.getCurrentSelectedLayerIndex());
                     initLayerData();
                 }
+                break;
+            case UILayerBox.LOCK_LAYER:
+            	layerItem = notification.getBody();
+            	lockLayerByName(layerItem);
+                break;
+            case UILayerBox.HIDE_LAYER:
+            	layerItem = notification.getBody();
+            	hideEntitiesByLayerName(layerItem);
+                break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
@@ -132,7 +144,30 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         }
     }
 
-    private void selectEntitiesByLayerName(String layerName) {
+    private void lockLayerByName(UILayerItem layerItem) {
+    	String layerName = layerItem.getLayerName();
+    	boolean toLock = layerItem.isLocked();
+    	if(toLock){
+    		Sandbox.getInstance().getSelector().clearSelections();
+    	}
+    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
+        for(int i=0; i<layerMapComponent.layers.size(); i++){
+        	LayerItemVO layerVO = layerMapComponent.layers.get(i);
+        	if(layerVO.layerName.equals(layerName)){
+        		layerVO.isLocked = toLock;
+        		break;
+        	}
+        }
+        
+	}
+
+	private void selectEntitiesByLayerName(UILayerItem layerItem) {
+		if(layerItem.isLocked()){
+			Sandbox.getInstance().getSelector().clearSelections();
+			return;
+		}
+		String layerName = layerItem.getLayerName();
     	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
 
     	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
@@ -146,6 +181,21 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     	}
     	Sandbox.getInstance().getSelector().clearSelections();
     	facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+	}
+    
+    private void hideEntitiesByLayerName(UILayerItem layerItem) {
+    	String layerName = layerItem.getLayerName();
+    	boolean toHide = layerItem.isLayerVisible();
+    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+
+    	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
+    	for(int i=0; i<nodeComponent.children.size; i++){
+    		Entity entity = nodeComponent.children.get(i);
+    		MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+    		if(childeMainItemComponent.layer.equals(layerName)){
+    			childeMainItemComponent.visible = toHide;
+    		}
+    	}
 	}
 
 	private int findLayerByName(String name) {

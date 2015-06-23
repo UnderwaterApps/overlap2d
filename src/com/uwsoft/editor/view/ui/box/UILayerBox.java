@@ -41,6 +41,8 @@ public class UILayerBox extends UICollapsibleBox {
     public static final String LAYER_ROW_CLICKED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_ROW_CLICKED";
     public static final String CREATE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CREATE_NEW_LAYER";
     public static final String DELETE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
+    public static final String LOCK_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LOCK_LAYER";
+    public static final String HIDE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".HIDE_LAYER";
     private final DragAndDrop dragAndDrop;
     public int currentSelectedLayerIndex = 0;
     private Overlap2DFacade facade;
@@ -317,6 +319,7 @@ public class UILayerBox extends UICollapsibleBox {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 layerData.isLocked = !layerData.isLocked;
+                facade.sendNotification(LOCK_LAYER, itemSlot.getUiLayerItem());
             }
         }
 
@@ -325,6 +328,7 @@ public class UILayerBox extends UICollapsibleBox {
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 layerData.isVisible = !layerData.isVisible;
+                facade.sendNotification(HIDE_LAYER, itemSlot.getUiLayerItem());
             }
         }
 
