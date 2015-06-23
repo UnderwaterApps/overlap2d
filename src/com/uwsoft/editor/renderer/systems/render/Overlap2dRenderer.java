@@ -87,13 +87,17 @@ public class Overlap2dRenderer extends IteratingSystem {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 				
-				//TODO visibility and parent Alpha thing
-				//if (!child.isVisible()) continue;
-				//child.draw(batch, parentAlpha);
-				//new Group()
+				MainItemComponent childMainItemComponent = mainItemComponentMapper.get(child);
+				if(!childMainItemComponent.visible){
+					continue;
+				}
+				
+				int entityType = childMainItemComponent.entityType;
+				
+				//TODO Alpha thing
 				
 				NodeComponent childNodeComponent = nodeMapper.get(child);
-				int entityType = mainItemComponentMapper.get(child).entityType;
+				
 				
 				if(childNodeComponent ==null){
 					//Finde the logic from mapper and draw it
