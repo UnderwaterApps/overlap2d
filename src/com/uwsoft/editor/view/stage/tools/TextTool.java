@@ -18,15 +18,17 @@
 
 package com.uwsoft.editor.view.stage.tools;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class TextTool extends SelectionTool {
+public class TextTool extends ItemDropTool {
 
     public static final String NAME = "TEXT_TOOL";
 
@@ -41,22 +43,21 @@ public class TextTool extends SelectionTool {
 
     public TextTool() {
         fontFamily = "arial";
-        fontSize = 12;
+        fontSize = 20;
         color = Color.WHITE;
         kerningEnabled = true;
         align = Align.left;
     }
 
     @Override
-    public boolean stageMouseDown(float x, float y) {
-        return true;
+    public Entity putItem(float x, float y) {
+        return ItemFactory.get().createLabel(this, new Vector2(x, y));
     }
 
     @Override
-    public void stageMouseUp(float x, float y) {
-        ItemFactory.get().createLabel(this, new Vector2(x, y));
-
-        return;
+    public int[] listItemFilters() {
+        int[] filter = {EntityFactory.LABEL_TYPE};
+        return filter;
     }
 
 
