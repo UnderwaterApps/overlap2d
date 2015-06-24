@@ -34,6 +34,9 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteItemsCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
+
    private HashMap<Integer, Collection<Component>> backup;
 
     private void backup() {
@@ -44,6 +47,8 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
     public void doAction() {
         backup();
         sandbox.getSelector().removeCurrentSelectedItems();
+
+        facade.sendNotification(DONE);
     }
 
     @Override

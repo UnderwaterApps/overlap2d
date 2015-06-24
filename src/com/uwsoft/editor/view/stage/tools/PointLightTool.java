@@ -18,31 +18,32 @@
 
 package com.uwsoft.editor.view.stage.tools;
 
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 /**
  * Created by azakhary on 4/30/2015.
  */
-public class PointLightTool extends SimpleTool {
+public class PointLightTool extends ItemDropTool {
 
     public static final String NAME = "POINT_LIGHT_TOOL";
 
+
     @Override
-    public boolean stageMouseDown(float x, float y) {
-    	//TODO fix and uncomment
-        //LayerItemVO layer = Sandbox.getInstance().getItemFactory().getSelectedLayer();
+    public Entity putItem(float x, float y) {
         LightVO vo = new LightVO();
         vo.type = LightVO.LightType.POINT;
         vo.distance = 300;
 
-        ItemFactory.get().createLightItem(vo, new Vector2(x, y));
-        return false;
+        return ItemFactory.get().createLightItem(vo, new Vector2(x, y));
     }
 
     @Override
-    public void stageMouseUp(float x, float y) {
-
+    public int[] listItemFilters() {
+        int[] filter = {EntityFactory.LIGHT_TYPE};
+        return filter;
     }
 }
