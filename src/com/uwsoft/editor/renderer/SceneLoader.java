@@ -217,6 +217,14 @@ public class SceneLoader {
 			public void entityAdded(Entity entity) {
 				// TODO: Gev knows what to do. (do this for all entities)
 
+				// mae sure we assign correct z-index here
+				ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
+				ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
+				if(parentNodeComponent != null) {
+					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
+					zindexComponent.zIndex = nodeComponent.children.size;
+				}
+
                 // call init for a system
                 ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
                 if(scriptComponent != null) {
