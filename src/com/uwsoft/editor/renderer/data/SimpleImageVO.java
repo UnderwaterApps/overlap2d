@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 
 public class SimpleImageVO extends MainItemVO {
@@ -20,6 +21,11 @@ public class SimpleImageVO extends MainItemVO {
 		super.loadFromEntity(entity);
 
 		TextureRegionComponent textureRegionComponent = entity.getComponent(TextureRegionComponent.class);
-		imageName = textureRegionComponent.regionName;
+		if(textureRegionComponent != null) {
+			imageName = textureRegionComponent.regionName;
+		} else {
+			NinePatchComponent ninePatchComponent = entity.getComponent(NinePatchComponent.class);
+			imageName = ninePatchComponent.textureRegionName;
+		}
 	}
 }

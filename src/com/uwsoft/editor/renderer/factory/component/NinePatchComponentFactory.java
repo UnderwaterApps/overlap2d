@@ -53,6 +53,7 @@ public class NinePatchComponentFactory extends ComponentFactory {
 		NinePatchComponent ninePatchComponent = new NinePatchComponent();
 		AtlasRegion atlasRegion = (TextureAtlas.AtlasRegion) rm.getTextureRegion(vo.imageName);
 		ninePatchComponent.ninePatch = new NinePatch(atlasRegion, atlasRegion.splits[0], atlasRegion.splits[1], atlasRegion.splits[2], atlasRegion.splits[3]);
+		ninePatchComponent.textureRegionName = vo.imageName;
 		entity.add(ninePatchComponent);
 
 		return ninePatchComponent;
