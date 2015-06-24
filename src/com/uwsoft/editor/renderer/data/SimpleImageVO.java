@@ -21,11 +21,6 @@ public class SimpleImageVO extends MainItemVO {
 		super.loadFromEntity(entity);
 
 		TextureRegionComponent textureRegionComponent = entity.getComponent(TextureRegionComponent.class);
-		if(textureRegionComponent != null) {
-			imageName = textureRegionComponent.regionName;
-		} else {
-			NinePatchComponent ninePatchComponent = entity.getComponent(NinePatchComponent.class);
-			imageName = ninePatchComponent.textureRegionName;
-		}
+		imageName = textureRegionComponent.regionName;
 	}
 }

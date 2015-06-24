@@ -100,7 +100,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 				
 				
 				if(childNodeComponent ==null){
-					//Finde the logic from mapper and draw it
+					//Find logic from the mapper and draw it
 					drawableLogicMapper.getDrawable(entityType).draw(batch, child);
 				}else{
 					//Step into Composite
