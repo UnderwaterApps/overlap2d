@@ -1,10 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.ScriptComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.scripts.IScript;
 
 import java.util.ArrayList;
@@ -68,6 +65,7 @@ public class MainItemVO {
 		TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
         ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
+		ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
 
 		itemIdentifier = mainItemComponent.itemIdentifier;
 		itemName = mainItemComponent.libraryLink;
@@ -90,8 +88,12 @@ public class MainItemVO {
 
         layerName = mainItemComponent.layer;
 
-        // TODO:
-		//zIndex =
-		//tint = tintComponent.color;
+		tint = new float[4];
+		tint[0] = tintComponent.color.r;
+		tint[1] = tintComponent.color.g;
+		tint[2] = tintComponent.color.b;
+		tint[3] = tintComponent.color.a;
+
+		zIndex = zindexComponent.zIndex;
 	}
 }

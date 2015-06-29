@@ -17,6 +17,7 @@ import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
@@ -164,50 +165,12 @@ public class SceneLoader {
 		// }
 
 		invalidateSceneVO(sceneVO);
-
-		MainItemComponent mainComponent = new MainItemComponent();
-		mainComponent.entityType = EntityFactory.COMPOSITE_TYPE;
-		
-		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
-		TransformComponent transform = new TransformComponent();
-		NodeComponent node = new NodeComponent();
-		
-		DimensionsComponent dimensionsComponent = new DimensionsComponent();
-		dimensionsComponent.height = 100;
-		dimensionsComponent.width = 100;
-
-		LayerMapComponent layerMapComponent = new LayerMapComponent();
-		if(sceneVO.composite != null) {
-			layerMapComponent.layers = sceneVO.composite.layers;
-		}
-		if(layerMapComponent.layers.size() == 0) {
-			// make sure we have default layer
-			layerMapComponent.layers.add(LayerItemVO.createDefault());
-		}
-
-
-		TintComponent tint = new TintComponent();
-		
-		ViewPortComponent viewPortComponent = new ViewPortComponent();
-		viewPortComponent.viewPort = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
-		//viewPortComponent.viewPort.getCamera().position.set(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
-		
-		rootEntity = new Entity();
-		rootEntity.add(mainComponent);
-		rootEntity.add(compositeTransform);
-		rootEntity.add(transform);
-		rootEntity.add(dimensionsComponent);
-		rootEntity.add(tint);
-		rootEntity.add(node);
-		rootEntity.add(layerMapComponent);
-		rootEntity.add(viewPortComponent);
-		
+		Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+		rootEntity = entityFactory.createRootEntity(sceneVO.composite, viewport);
 		engine.addEntity(rootEntity);
-		entityFactory.postProcessEntity(rootEntity);
 
 		if(sceneVO.composite != null) {
-			initWithAshley(rootEntity, sceneVO.composite);
+			entityFactory.initAllChildren(engine, rootEntity, sceneVO.composite);
 		}
 
 		// if (createActors) {
@@ -254,6 +217,14 @@ public class SceneLoader {
 			public void entityAdded(Entity entity) {
 				// TODO: Gev knows what to do. (do this for all entities)
 
+				// mae sure we assign correct z-index here
+				ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
+				ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
+				if(parentNodeComponent != null) {
+					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
+					zindexComponent.zIndex = nodeComponent.children.size;
+				}
+
                 // call init for a system
                 ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
                 if(scriptComponent != null) {
@@ -286,61 +257,6 @@ public class SceneLoader {
 			}
 		});
 	}
-
-	//TODO this function should be changed later 
-	public void initWithAshley(Entity root, CompositeVO vo) {
-		//NodeComponent nodeComponent = nodeComponentMapper.get(root);
-		for (int i = 0; i < vo.sImages.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sImages.get(i));
-			engine.addEntity(entity);
-		}
-		
-		for (int i = 0; i < vo.sImage9patchs.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sImage9patchs.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sLabels.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sLabels.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sParticleEffects.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sParticleEffects.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sLights.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sLights.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sSpineAnimations.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sSpineAnimations.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sSpriteAnimations.size(); i++) {			
-			Entity entity = entityFactory.createEntity(root, vo.sSpriteAnimations.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.sSpriterAnimations.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sSpriterAnimations.get(i));
-			engine.addEntity(entity);
-		}
-
-		for (int i = 0; i < vo.layers.size(); i++) {
-			//TODO wtf is this do we need this? :O
-		}
-
-		for (int i = 0; i < vo.sComposites.size(); i++) {
-			Entity entity = entityFactory.createEntity(root, vo.sComposites.get(i));
-			engine.addEntity(entity);
-			initWithAshley(entity,  vo.sComposites.get(i).composite);
-		}
-	}
-	
 	
 
 	/**

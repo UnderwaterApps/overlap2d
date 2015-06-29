@@ -3,20 +3,21 @@ package com.uwsoft.editor.renderer.factory;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.Image9patchVO;
-import com.uwsoft.editor.renderer.data.LabelVO;
-import com.uwsoft.editor.renderer.data.LightVO;
-import com.uwsoft.editor.renderer.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.data.SimpleImageVO;
-import com.uwsoft.editor.renderer.data.SpineVO;
-import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
-import com.uwsoft.editor.renderer.data.SpriterVO;
+import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -70,8 +71,6 @@ public class EntityFactory {
 		ninePatchComponentFactory = new NinePatchComponentFactory(rayHandler, world, rm);
 		
 	}
-	
-	
 
 
 	public Entity createEntity(Entity root, SimpleImageVO vo){
@@ -173,6 +172,31 @@ public class EntityFactory {
 		return entity;
 	}
 
+	public Entity createRootEntity(CompositeVO compositeVo, Viewport viewport){
+
+		CompositeItemVO vo = new CompositeItemVO();
+		vo.composite = compositeVo;
+
+		Entity entity = new Entity();
+
+		compositeComponentFactory.createComponents(null, entity, vo);
+		CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
+		TransformComponent transform = new TransformComponent();
+
+		ViewPortComponent viewPortComponent = new ViewPortComponent();
+		viewPortComponent.viewPort = viewport;
+
+		//TODO: not sure if this line is okay
+		viewPortComponent.viewPort.update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), true);
+
+		entity.add(transform);
+		entity.add(viewPortComponent);
+
+		postProcessEntity(entity);
+
+		return entity;
+	}
+
 	public Integer postProcessEntity(Entity entity) {
 		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
@@ -188,6 +212,58 @@ public class EntityFactory {
 		entities.put(mainItemComponent.uniqueId, entity);
 
 		return mainItemComponent.uniqueId;
+	}
+
+	public void initAllChildren(Engine engine, Entity entity, CompositeVO vo) {
+		for (int i = 0; i < vo.sImages.size(); i++) {
+			Entity child = createEntity(entity, vo.sImages.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sImage9patchs.size(); i++) {
+			Entity child = createEntity(entity, vo.sImage9patchs.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sLabels.size(); i++) {
+			Entity child = createEntity(entity, vo.sLabels.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sParticleEffects.size(); i++) {
+			Entity child = createEntity(entity, vo.sParticleEffects.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sLights.size(); i++) {
+			Entity child = createEntity(entity, vo.sLights.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sSpineAnimations.size(); i++) {
+			Entity child = createEntity(entity, vo.sSpineAnimations.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sSpriteAnimations.size(); i++) {
+			Entity child = createEntity(entity, vo.sSpriteAnimations.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.sSpriterAnimations.size(); i++) {
+			Entity child = createEntity(entity, vo.sSpriterAnimations.get(i));
+			engine.addEntity(child);
+		}
+
+		for (int i = 0; i < vo.layers.size(); i++) {
+			//TODO wtf is this do we need this? :O
+		}
+
+		for (int i = 0; i < vo.sComposites.size(); i++) {
+			Entity child = createEntity(entity, vo.sComposites.get(i));
+			engine.addEntity(child);
+			initAllChildren(engine, child, vo.sComposites.get(i).composite);
+		}
 	}
 
 	public Entity getEntityByUniqueId(Integer id) {

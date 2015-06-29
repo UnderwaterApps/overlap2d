@@ -7,7 +7,7 @@ import com.badlogic.ashley.core.Entity;
  */
 public abstract class BasicScript implements IScript {
 
-    private Entity entity;
+    protected Entity entity;
 
     @Override
     public void init(Entity item) {

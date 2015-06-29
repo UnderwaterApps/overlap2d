@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 
 public class SimpleImageVO extends MainItemVO {

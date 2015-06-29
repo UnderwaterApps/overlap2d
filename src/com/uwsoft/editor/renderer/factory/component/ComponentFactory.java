@@ -137,11 +137,9 @@ public abstract class ComponentFactory {
         return component;
     }
 
-    protected NodeComponent createNodeComponent(Entity root, Entity entity) {
+    protected void createNodeComponent(Entity root, Entity entity) {
         NodeComponent component = nodeComponentMapper.get(root);
         component.children.add(entity);
-
-        return component;
     }
 
     protected void createPhysicsComponents(Entity entity, MainItemVO vo) {

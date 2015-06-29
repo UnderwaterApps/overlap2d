@@ -13,6 +13,8 @@ public class ProjectInfoVO {
 
     public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
 
+    public int pixelToWorld = 1;
+
     public Array<ResolutionEntryVO> resolutions = new Array<>();
     public ArrayList<SceneVO> scenes = new ArrayList<SceneVO>();
     public HashMap<String, String> assetMeshMap = new HashMap<String, String>();
