@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
@@ -50,7 +51,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
         return Stream.of(parentNotifications, new String[]{
                 SceneDataManager.SCENE_LOADED,
                 ItemFactory.NEW_ITEM_ADDED,
-                UIItemsTreeBox.ITEMS_SELECTED
+                UIItemsTreeBox.ITEMS_SELECTED,
+                DeleteItemsCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
 
@@ -64,6 +66,10 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 viewComponent.init(rootEntity);
                 break;
             case ItemFactory.NEW_ITEM_ADDED:
+                rootEntity = sandbox.getRootEntity();
+                viewComponent.init(rootEntity);
+                break;
+            case DeleteItemsCommand.DONE:
                 rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;

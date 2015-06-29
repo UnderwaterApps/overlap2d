@@ -67,7 +67,8 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
                 int originWidth = Integer.parseInt(viewComponent.getOriginWidth());
                 int originHeight = Integer.parseInt(viewComponent.getOriginHeight());
-                projectManager.createNewProject(notification.getBody(), originWidth, originHeight);
+                int pixelPerWorldUnit = Integer.parseInt(viewComponent.getPixelPerWorldUnit());
+                projectManager.createNewProject(notification.getBody(), originWidth, originHeight, pixelPerWorldUnit);
                 //TODO: this should be not hear
                 sandbox.loadCurrentProject();
                 viewComponent.hide();

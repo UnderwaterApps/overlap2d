@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.factory;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -36,6 +37,7 @@ import java.util.HashMap;
 
 /**
  * Created by azakhary on 6/5/2015.
+ *
  */
 public class ItemFactory {
 
@@ -150,7 +152,9 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return null;
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        sceneLoader.initWithAshley(entity, vo.composite);
+        Engine engine = sceneLoader.engine;
+        EntityFactory factory = sceneLoader.entityFactory;
+        factory.initAllChildren(engine, entity, vo.composite);
 
         return entity;
     }
@@ -169,20 +173,27 @@ public class ItemFactory {
         return entity;
     }
 
-    public boolean createParticleItem(String particleName, Vector2 position) {
-        ParticleEffectVO vo = new ParticleEffectVO();
-        vo.particleName = particleName;
-
-        if(!setEssentialData(vo, position)) return false;
-        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+    public boolean tryCreateParticleItem(String particleName, Vector2 position) {
+        Entity entity = createParticleItem(particleName, position);
+        if(entity == null) return false;
 
         return true;
     }
 
-    public boolean createLabel(TextTool textSettings, Vector2 position) {
+    public Entity createParticleItem(String particleName, Vector2 position) {
+        ParticleEffectVO vo = new ParticleEffectVO();
+        vo.particleName = particleName;
+
+        if(!setEssentialData(vo, position)) return null;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
+        return entity;
+    }
+
+    public Entity createLabel(TextTool textSettings, Vector2 position) {
         LabelVO vo = new LabelVO();
-        if(!setEssentialData(vo, position)) return false;
+        if(!setEssentialData(vo, position)) return null;
 
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
@@ -195,12 +206,12 @@ public class ItemFactory {
         vo.size = textSettings.getFontSize();
 
         // need to calculate minimum bounds size here
-        vo.width = 100;
-        vo.height = 100;
+        vo.width = 120;
+        vo.height = 50;
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
-        return true;
+        return entity;
     }
 }

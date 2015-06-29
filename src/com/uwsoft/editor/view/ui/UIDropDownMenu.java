@@ -55,7 +55,6 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
         //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
-
     }
 
     public void setActionList(Array<String> actions) {

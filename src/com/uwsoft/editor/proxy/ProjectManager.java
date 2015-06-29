@@ -127,7 +127,7 @@ public class ProjectManager extends BaseProxy {
         handler.progressChanged(currentPercent);
     }
 
-    public void createEmptyProject(String projectName, int width, int height) throws IOException {
+    public void createEmptyProject(String projectName, int width, int height, int pixelPerWorldUnit) throws IOException {
 
         if (workspacePath.endsWith(File.separator)) {
             workspacePath = workspacePath.substring(0, workspacePath.length() - 1);
@@ -157,6 +157,7 @@ public class ProjectManager extends BaseProxy {
         projInfoVo.originalResolution.name = "orig";
         projInfoVo.originalResolution.width = width;
         projInfoVo.originalResolution.height = height;
+        projInfoVo.pixelToWorld = pixelPerWorldUnit;
 
         //TODO: add project orig resolution setting
         currentProjectVO = projVo;
@@ -955,7 +956,7 @@ public class ProjectManager extends BaseProxy {
         return editorConfig;
     }
 
-    public void createNewProject(String projectPath, int originWidth, int originHeight) {
+    public void createNewProject(String projectPath, int originWidth, int originHeight, int pixelPerWorldUnit) {
         if (projectPath == null || projectPath.equals("")) {
             return;
         }
@@ -966,7 +967,7 @@ public class ProjectManager extends BaseProxy {
         }
 
         try {
-            createEmptyProject(projectName, originWidth, originHeight);
+            createEmptyProject(projectName, originWidth, originHeight, pixelPerWorldUnit);
             openProjectAndLoadAllData(projectName);
             String workSpacePath = projectPath.substring(0, projectPath.lastIndexOf(projectName));
             if (workSpacePath.length() > 0) {
