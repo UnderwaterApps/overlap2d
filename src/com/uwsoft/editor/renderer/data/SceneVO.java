@@ -15,8 +15,6 @@ public class SceneVO {
 
     public float[] ambientColor = {1f, 1f, 1f, 1f};
 
-    public HashMap<String, CompositeItemVO> libraryItems = new HashMap<String, CompositeItemVO>();
-
     public PhysicsPropertiesVO physicsPropertiesVO = new PhysicsPropertiesVO();
 
     public SceneVO() {

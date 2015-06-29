@@ -163,7 +163,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
             String[] spriterAnimations = composite.getRecursiveSpriterAnimationList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
-            for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
+            for(CompositeItemVO library : projectVO.libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
                 Collections.addAll(fontsToLoad, libFonts);
 
