@@ -250,7 +250,7 @@ public class ProjectManager extends BaseProxy {
                     if (vo.meshId.equals("-1")) continue;
                     uniqueMeshIds.add(vo.meshId);
                 }
-                for (CompositeItemVO libraryItem : sceneVO.libraryItems.values()) {
+                for (CompositeItemVO libraryItem : currentProjectInfoVO.libraryItems.values()) {
                     if (libraryItem.composite == null) continue;
                     items = libraryItem.composite.getAllItems();
                     for (MainItemVO vo : items) {

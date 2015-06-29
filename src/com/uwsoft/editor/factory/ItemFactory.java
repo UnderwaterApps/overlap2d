@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -131,8 +132,8 @@ public class ItemFactory {
     }
 
     public boolean createItemFromLibrary(String libraryName, Vector2 position) {
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
         CompositeItemVO itemVO = libraryItems.get(libraryName);
         Entity entity = createCompositeItem(itemVO, position);
