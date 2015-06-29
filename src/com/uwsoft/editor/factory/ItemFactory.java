@@ -32,6 +32,7 @@ import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 import java.util.HashMap;
 
@@ -65,17 +66,14 @@ public class ItemFactory {
     }
 
     private boolean setEssentialData(MainItemVO vo, Vector2 position) {
-        // TODO: sort out how layers work now
-        //LayerItemVO layer = commands.getSelectedLayer();
-        //if (layer == null) return false;
+        UILayerBoxMediator layerBoxMediator = Overlap2DFacade.getInstance().retrieveMediator(UILayerBoxMediator.NAME);
+        String layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
-        vo.layerName = "default";
+        vo.layerName = layerName;
 
         // This is for grid
         position.x = MathUtils.floor(position.x / sandbox.getGridSize()) * sandbox.getGridSize();
         position.y = MathUtils.floor(position.y / sandbox.getGridSize()) * sandbox.getGridSize();
-
-        // TODO: screen to stage coordinates
 
         vo.x = position.x;
         vo.y = position.y;
