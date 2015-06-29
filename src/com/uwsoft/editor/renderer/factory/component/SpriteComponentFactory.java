@@ -36,6 +36,8 @@ import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,7 +77,11 @@ public class SpriteComponentFactory extends ComponentFactory {
     protected SpriteAnimationComponent createSpriteAnimationDataComponent(Entity entity, SpriteAnimationVO vo) {
         SpriteAnimationComponent spriteAnimationComponent = new SpriteAnimationComponent();
         spriteAnimationComponent.animationName = vo.animationName;
-        spriteAnimationComponent.frameRangeMap = vo.frameRangeMap;
+
+        spriteAnimationComponent.frameRangeMap = new HashMap<>();
+        for(int i = 0; i < vo.frameRangeMap.size(); i++) {
+            spriteAnimationComponent.frameRangeMap.put(vo.frameRangeMap.get(i).name, vo.frameRangeMap.get(i));
+        }
         spriteAnimationComponent.fps = vo.fps;
         spriteAnimationComponent.currentAnimation = vo.currentAnimation;
 
@@ -93,8 +99,13 @@ public class SpriteComponentFactory extends ComponentFactory {
         SpriteAnimationStateComponent stateComponent = new SpriteAnimationStateComponent(regions);
 
         if(spriteAnimationComponent.frameRangeMap.isEmpty()) {
-            spriteAnimationComponent.frameRangeMap.put("Default", new FrameRange(0, regions.size-1));
-            spriteAnimationComponent.currentAnimation = "Default";
+            spriteAnimationComponent.frameRangeMap.put("Default", new FrameRange("Default", 0, regions.size-1));
+        }
+        if(spriteAnimationComponent.currentAnimation == null) {
+            spriteAnimationComponent.currentAnimation = spriteAnimationComponent.frameRangeMap.keySet().stream().findFirst().get();
+        }
+        if(spriteAnimationComponent.playMode == null) {
+            spriteAnimationComponent.playMode = Animation.PlayMode.LOOP;
         }
 
         stateComponent.set(spriteAnimationComponent);
