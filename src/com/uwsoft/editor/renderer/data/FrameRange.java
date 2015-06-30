@@ -4,6 +4,7 @@ package com.uwsoft.editor.renderer.data;
  * Created by CyberJoe on 6/18/2015.
  */
 public class FrameRange {
+    public String name;
     public int startFrame;
     public int endFrame;
 
@@ -11,7 +12,8 @@ public class FrameRange {
 
     }
 
-    public FrameRange(int startFrame, int endFrame) {
+    public FrameRange(String name, int startFrame, int endFrame) {
+        this.name = name;
         this.startFrame = startFrame;
         this.endFrame = endFrame;
     }

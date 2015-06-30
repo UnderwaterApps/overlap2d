@@ -11,14 +11,17 @@ import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
 public class ProjectInfoVO {
 
-    public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
-
     public int pixelToWorld = 1;
+
+    public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
 
     public Array<ResolutionEntryVO> resolutions = new Array<>();
     public ArrayList<SceneVO> scenes = new ArrayList<SceneVO>();
+
     public HashMap<String, String> assetMeshMap = new HashMap<String, String>();
     public HashMap<String, MeshVO> meshes = new HashMap<String, MeshVO>();
+
+    public HashMap<String, CompositeItemVO> libraryItems = new HashMap<String, CompositeItemVO>();
 
     public String constructJsonString() {
         String str = "";

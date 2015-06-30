@@ -166,6 +166,9 @@ public class SceneLoader {
 
 		invalidateSceneVO(sceneVO);
 		Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
+		if(sceneVO.composite == null) {
+			sceneVO.composite = new CompositeVO();
+		}
 		rootEntity = entityFactory.createRootEntity(sceneVO.composite, viewport);
 		engine.addEntity(rootEntity);
 
