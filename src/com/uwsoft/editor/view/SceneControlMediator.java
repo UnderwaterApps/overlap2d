@@ -27,6 +27,7 @@ import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 
 /**
@@ -70,6 +71,10 @@ public class SceneControlMediator {
 		// this.essentials = essentials;
 		facade = Overlap2DFacade.getInstance();
 		projectManager = facade.retrieveProxy(ProjectManager.NAME);
+	}
+
+	public ProjectInfoVO getProjectInfoVO() {
+		return sceneLoader.getRm().getProjectVO();
 	}
 
 	public void initScene(String sceneName) {

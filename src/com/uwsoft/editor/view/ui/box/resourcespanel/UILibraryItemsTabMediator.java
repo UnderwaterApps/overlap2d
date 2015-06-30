@@ -20,6 +20,8 @@ package com.uwsoft.editor.view.ui.box.resourcespanel;
 
 import java.util.HashMap;
 
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.proxy.ProjectManager;
 import org.apache.commons.lang3.ArrayUtils;
 
 import com.badlogic.gdx.utils.Array;
@@ -64,8 +66,9 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
 
     @Override
     protected void initList(String searchText) {
-        Sandbox sandbox = Sandbox.getInstance();
-        HashMap<String, CompositeItemVO> items = Sandbox.getInstance().sceneControl.getCurrentSceneVO().libraryItems;
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        HashMap<String, CompositeItemVO> items = projectManager.currentProjectInfoVO.libraryItems;
+
         Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
             if(!key.contains(searchText))continue;

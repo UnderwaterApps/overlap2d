@@ -20,6 +20,8 @@ package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -49,8 +51,8 @@ public class AddToLibraryCommand extends RevertableCommand {
         MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
 
         if(createdLibraryItemName.length() > 0) {
-            SceneControlMediator sceneControl = sandbox.getSceneControl();
-            HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+            ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+            HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
             if (libraryItems.containsKey(createdLibraryItemName)) {
                 overwritten = libraryItems.get(createdLibraryItemName);
@@ -73,8 +75,8 @@ public class AddToLibraryCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
         if(createdLibraryItemName.length() > 0) {
             libraryItems.remove(createdLibraryItemName);

@@ -131,7 +131,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         int frameTo = viewComponent.getFrameTo();
 
         SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
-        spriteAnimationComponent.frameRangeMap.put(name, new FrameRange(frameFrom, frameTo));
+        spriteAnimationComponent.frameRangeMap.put(name, new FrameRange(name, frameFrom, frameTo));
 
         facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
     }

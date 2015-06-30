@@ -234,4 +234,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     public int getCurrentSelectedLayerIndex() {
         return viewComponent.getCurrentSelectedLayerIndex();
     }
+
+    public String getCurrentSelectedLayerName() {
+        return layers.get(viewComponent.getCurrentSelectedLayerIndex()).layerName;
+    }
 }

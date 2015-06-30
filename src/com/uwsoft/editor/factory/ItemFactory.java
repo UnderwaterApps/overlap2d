@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -32,6 +33,7 @@ import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 import java.util.HashMap;
 
@@ -65,17 +67,14 @@ public class ItemFactory {
     }
 
     private boolean setEssentialData(MainItemVO vo, Vector2 position) {
-        // TODO: sort out how layers work now
-        //LayerItemVO layer = commands.getSelectedLayer();
-        //if (layer == null) return false;
+        UILayerBoxMediator layerBoxMediator = Overlap2DFacade.getInstance().retrieveMediator(UILayerBoxMediator.NAME);
+        String layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
-        vo.layerName = "default";
+        vo.layerName = layerName;
 
         // This is for grid
         position.x = MathUtils.floor(position.x / sandbox.getGridSize()) * sandbox.getGridSize();
         position.y = MathUtils.floor(position.y / sandbox.getGridSize()) * sandbox.getGridSize();
-
-        // TODO: screen to stage coordinates
 
         vo.x = position.x;
         vo.y = position.y;
@@ -133,8 +132,8 @@ public class ItemFactory {
     }
 
     public boolean createItemFromLibrary(String libraryName, Vector2 position) {
-        SceneControlMediator sceneControl = sandbox.getSceneControl();
-        HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
         CompositeItemVO itemVO = libraryItems.get(libraryName);
         Entity entity = createCompositeItem(itemVO, position);

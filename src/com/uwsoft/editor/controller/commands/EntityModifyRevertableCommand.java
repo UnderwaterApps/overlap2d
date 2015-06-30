@@ -21,6 +21,8 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
@@ -56,8 +58,8 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
         String link = mainItemComponent.libraryLink;
 
         if(link != null && link.length() > 0) {
-            SceneControlMediator sceneControl = sandbox.getSceneControl();
-            HashMap<String, CompositeItemVO> libraryItems = sceneControl.getCurrentSceneVO().libraryItems;
+            ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+            HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
             if (libraryItems.containsKey(mainItemComponent.libraryLink)) {
                 CompositeItemVO itemVO = new CompositeItemVO();
                 itemVO.loadFromEntity(entity);

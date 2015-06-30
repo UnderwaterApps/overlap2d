@@ -26,6 +26,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.controller.commands.ConvertToCompositeCommand;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
@@ -70,7 +71,8 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 UIToolBoxMediator.TOOL_SELECTED,
                 Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
                 CompositeCameraChangeCommand.DONE,
-                Overlap2D.ZOOM_CHANGED
+                Overlap2D.ZOOM_CHANGED,
+                ConvertToCompositeCommand.DONE
         };
     }
 
@@ -115,6 +117,11 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 break;
             case Overlap2D.ZOOM_CHANGED:
                 updateAllFollowers();
+                break;
+            case ConvertToCompositeCommand.DONE:
+                // because entities changed their parent, it's better to re-make all followers
+                removeAllfollowers();
+                createFollowersForAllVisible();
                 break;
         }
     }

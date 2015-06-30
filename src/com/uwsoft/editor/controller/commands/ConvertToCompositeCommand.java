@@ -35,6 +35,9 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.ConvertToCompositeCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
+
     protected Integer entityId;
     protected Integer parentEntityId;
 
@@ -63,8 +66,6 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             transformComponent.x-=position.x;
             transformComponent.y-=position.y;
 
-            // also remove followers (they will be created again once user enters the composite
-            // TODO:
         }
         // recalculate composite size
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
@@ -73,8 +74,10 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         dimensionsComponent.height = newSize.y;
 
         //let everyone know
+        Overlap2DFacade.getInstance().sendNotification(DONE);
         Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
         sandbox.getSelector().setSelection(entity, true);
+
     }
 
     @Override
@@ -99,13 +102,12 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
             transformComponent.x+=positionDiff.x;
             transformComponent.y+=positionDiff.y;
-
-            //bring back the followers
-            // TODO:
         }
 
         // remove composite
         midUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
+
+        Overlap2DFacade.getInstance().sendNotification(DONE);
     }
 }
