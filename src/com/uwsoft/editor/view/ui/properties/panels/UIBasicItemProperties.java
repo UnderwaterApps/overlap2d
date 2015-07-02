@@ -27,6 +27,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
@@ -84,6 +85,9 @@ public class UIBasicItemProperties extends UIItemProperties {
     private VisTextField rotationValue;
     private VisTextButton customVarsButton;
 
+    private VisSelectBox<String> nonExistantComponents;
+    private VisTextButton addComponentButton;
+
     public UIBasicItemProperties() {
         super();
 
@@ -122,6 +126,14 @@ public class UIBasicItemProperties extends UIItemProperties {
         rotationValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
         customVarsButton = new VisTextButton("Custom Vars");
 
+        nonExistantComponents = new VisSelectBox<>();
+        addComponentButton = new VisTextButton("add");
+
+        VisTable componentsTable = new VisTable();
+        componentsTable.add(nonExistantComponents).left().width(150).padRight(10);
+        componentsTable.add(addComponentButton).right().height(21);
+        componentsTable.row();
+
         add(iconContainer).padRight(3).right().fillX();
         add(itemType).width(143).height(21).colspan(2).left();
         row();
@@ -142,9 +154,18 @@ public class UIBasicItemProperties extends UIItemProperties {
         add(createLabel("Scale:")).padRight(3).left().top();
         add(getAsTable("X:", scaleXValue, "Y:", scaleYValue)).left();
         add(customVarsButton).height(21).left().top().padLeft(13);
+        row();
+        addSeparator().padTop(9).padBottom(6).colspan(3);
+        add(createLabel("Add additional components:", Align.left)).fillX().colspan(3);
         row().padTop(6);
+        add(componentsTable).left().colspan(3);
+        row();
 
         setListeners();
+    }
+
+    public void setNonExistantComponents(Array<String> componentNames) {
+        nonExistantComponents.setItems(componentNames);
     }
 
     public void setLinkage(boolean isLinked, String text) {

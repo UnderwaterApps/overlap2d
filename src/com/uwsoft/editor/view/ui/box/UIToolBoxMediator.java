@@ -22,11 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.stage.tools.ConeLightTool;
-import com.uwsoft.editor.view.stage.tools.PointLightTool;
-import com.uwsoft.editor.view.stage.tools.SelectionTool;
-import com.uwsoft.editor.view.stage.tools.TextTool;
-import com.uwsoft.editor.view.stage.tools.TransformTool;
+import com.uwsoft.editor.view.stage.tools.*;
 
 /**
  * Created by sargis on 4/9/15.
@@ -65,6 +61,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         toolNames.add(TextTool.NAME);
         toolNames.add(PointLightTool.NAME);
         toolNames.add(ConeLightTool.NAME);
+        toolNames.add(MeshTool.NAME);
         return toolNames;
     }
 

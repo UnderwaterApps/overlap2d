@@ -39,13 +39,7 @@ import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.input.EntityClickListener;
 import com.uwsoft.editor.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.view.stage.tools.ConeLightTool;
-import com.uwsoft.editor.view.stage.tools.PanTool;
-import com.uwsoft.editor.view.stage.tools.PointLightTool;
-import com.uwsoft.editor.view.stage.tools.SelectionTool;
-import com.uwsoft.editor.view.stage.tools.TextTool;
-import com.uwsoft.editor.view.stage.tools.Tool;
-import com.uwsoft.editor.view.stage.tools.TransformTool;
+import com.uwsoft.editor.view.stage.tools.*;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
@@ -93,6 +87,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         sandboxTools.put(PointLightTool.NAME, new PointLightTool());
         sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
         sandboxTools.put(PanTool.NAME, new PanTool());
+        sandboxTools.put(MeshTool.NAME, new MeshTool());
 
     }
 

@@ -31,7 +31,6 @@ import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
-import com.uwsoft.editor.renderer.components.physics.MeshComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
@@ -109,6 +108,8 @@ public class ComponentRetriever {
         mappers.put(ZindexComponent.class, ComponentMapper.getFor(ZindexComponent.class));
         mappers.put(InputListenerComponent.class, ComponentMapper.getFor(InputListenerComponent.class));
         mappers.put(ScriptComponent.class, ComponentMapper.getFor(ScriptComponent.class));
+
+        mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
         
         
     }

@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -42,6 +43,8 @@ public class NormalSelectionFollower extends BasicFollower {
     private Overlap2DFacade facade;
     private EditorTextureManager tm;
     private CursorManager cursorManager;
+
+    private Array<BasicFollower> subFollowers = new Array<>();
 
     private PixelRect pixelRect;
 
@@ -136,7 +139,7 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[ROTATION_RT].setY(getHeight());
         miniRects[ROTATION_RB].setX(getWidth());
         miniRects[ROTATION_RB].setY(-h*2);
-        miniRects[ROTATION_LB].setX(-w*2);
+        miniRects[ROTATION_LB].setX(-w * 2);
         miniRects[ROTATION_LB].setY(-h*2);
     }
 
@@ -172,16 +175,18 @@ public class NormalSelectionFollower extends BasicFollower {
             miniRects[i].clearListeners();
             miniRects[i].addListener(new AnchorListener(this, listener, rectId) {
                 @Override
-                public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                public void touchDragged(InputEvent event, float x, float y, int pointer) {
                     super.touchDragged(event, x, y, pointer);
                     update();
                 }
+
                 @Override
-                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event, x, y, pointer, fromActor);
                 }
+
                 @Override
-                public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event, x, y, pointer, toActor);
                 }
             });
@@ -208,6 +213,12 @@ public class NormalSelectionFollower extends BasicFollower {
         for(int i = 0; i <= 7; i++) {
             miniRects[i].setRotation(-getRotation());
         }
+
+        if(subFollowers != null) {
+            for (BasicFollower follower : subFollowers) {
+                follower.update();
+            }
+        }
     }
 
     @Override
@@ -220,6 +231,9 @@ public class NormalSelectionFollower extends BasicFollower {
                     setMode(SelectionMode.normal);
                 }
                 break;
+        }
+        for(BasicFollower follower: subFollowers) {
+            follower.handleNotification(notification);
         }
     }
 
@@ -234,5 +248,31 @@ public class NormalSelectionFollower extends BasicFollower {
 
     public SelectionMode getMode() {
         return mode;
+    }
+
+    public void addSubfollower(BasicFollower follower) {
+        subFollowers.add(follower);
+    }
+
+    public Array<BasicFollower> getSubFollowers() {
+        return subFollowers;
+    }
+
+    public BasicFollower getSubFollower(String className) {
+        for(BasicFollower follower: subFollowers) {
+            if(follower.getClass().getName().equals(className)) {
+                return follower;
+            }
+        }
+
+        return null;
+    }
+
+    public void removeSubFollower(BasicFollower follower) {
+        subFollowers.removeValue(follower, true);
+    }
+
+    public void clearSubFollowers() {
+        subFollowers.clear();
     }
 }

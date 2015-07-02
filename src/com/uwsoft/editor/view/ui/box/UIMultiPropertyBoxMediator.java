@@ -29,6 +29,8 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.SceneDataManager;
@@ -36,14 +38,7 @@ import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UIBasicItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UICompositeItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UILabelItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UILightItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UIScenePropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UISpineAnimationItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.UITextToolPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.*;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -72,45 +67,41 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
     private void initMap() {
         classToMediatorMap = new HashMap<>();
 
-        Entity asd = new Entity();
-        
-        classToMediatorMap.put("Entity"+EntityFactory.IMAGE_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.IMAGE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.NINE_PATCH, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.NINE_PATCH).add(UIBasicItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.LABEL_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.LABEL_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get("Entity"+EntityFactory.LABEL_TYPE).add(UILabelItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.SPRITE_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.SPRITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get("Entity"+EntityFactory.SPRITE_TYPE).add(UISpriteAnimationItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.SPINE_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.SPINE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get("Entity"+EntityFactory.SPINE_TYPE).add(UISpineAnimationItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.SPRITER_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.SPRITER_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.COMPOSITE_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.COMPOSITE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get("Entity"+EntityFactory.COMPOSITE_TYPE).add(UICompositeItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.PARTICLE_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.PARTICLE_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-
-        classToMediatorMap.put("Entity"+EntityFactory.LIGHT_TYPE, new ArrayList<>());
-        classToMediatorMap.get("Entity"+EntityFactory.LIGHT_TYPE).add(UIBasicItemPropertiesMediator.NAME);
-        classToMediatorMap.get("Entity"+EntityFactory.LIGHT_TYPE).add(UILightItemPropertiesMediator.NAME);
+        classToMediatorMap.put(Entity.class.getName(), new ArrayList<>());
+        classToMediatorMap.get(Entity.class.getName()).add(UIBasicItemPropertiesMediator.NAME);
 
         classToMediatorMap.put(SceneVO.class.getName(), new ArrayList<>());
         classToMediatorMap.get(SceneVO.class.getName()).add(UIScenePropertiesMediator.NAME);
 
         classToMediatorMap.put(TextTool.class.getName(), new ArrayList<>());
         classToMediatorMap.get(TextTool.class.getName()).add(UITextToolPropertiesMediator.NAME);
+    }
+
+    private void initEntityProperties( ArrayList<String> mediatorNames, Entity entity) {
+
+        int entityType = EntityUtils.getType(entity);
+
+        if(entityType == EntityFactory.COMPOSITE_TYPE) {
+            mediatorNames.add(UICompositeItemPropertiesMediator.NAME);
+        }
+        if(entityType == EntityFactory.LABEL_TYPE) {
+            mediatorNames.add(UILabelItemPropertiesMediator.NAME);
+        }
+        if(entityType == EntityFactory.SPRITE_TYPE) {
+            mediatorNames.add(UISpriteAnimationItemPropertiesMediator.NAME);
+        }
+        if(entityType == EntityFactory.SPINE_TYPE) {
+            mediatorNames.add(UISpineAnimationItemPropertiesMediator.NAME);
+        }
+        if(entityType == EntityFactory.LIGHT_TYPE) {
+            mediatorNames.add(UILightItemPropertiesMediator.NAME);
+        }
+
+        // optional panels based on components
+        MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
+        if(meshComponent != null) {
+            mediatorNames.add(UIMeshComponentPropertiesMediator.NAME);
+        }
     }
 
     @Override
@@ -157,14 +148,16 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
         }
         
         String mapName = observable.getClass().getName();
-        
-        //TODO this condition must be changes later it's a temporary solution for {@link Entity}
-        if(observable instanceof Entity){
-        	mapName = "Entity" + EntityUtils.getType(((Entity) observable));
-        }
+
+        if(classToMediatorMap.get(mapName) == null) return;
 
         // retrieve a list of property panels to show
-        ArrayList<String> mediatorNames = classToMediatorMap.get(mapName);
+        ArrayList<String> mediatorNames = new ArrayList<>(classToMediatorMap.get(mapName));
+
+        // TODO: this is not uber cool, gotta think a new way to make this class know nothing about entities
+        if(observable instanceof Entity){
+            initEntityProperties(mediatorNames, (Entity) observable);
+        }
 
         if(mediatorNames == null) return;
 

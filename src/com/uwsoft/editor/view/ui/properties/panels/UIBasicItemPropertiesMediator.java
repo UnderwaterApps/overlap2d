@@ -19,8 +19,10 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import java.util.HashMap;
+import java.util.Map;
 
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,10 +37,6 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -57,6 +55,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     private HashMap<String, UIBasicItemProperties.ItemType> itemTypeMap = new HashMap<>();
 
+    private HashMap<String, Class> componentClassMap = new HashMap<>();
+
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
     }
@@ -72,6 +72,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
+
+        componentClassMap.put("Mesh Component", MeshComponent.class);
     }
 
     @Override
@@ -141,6 +143,19 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setScaleXValue(transformComponent.scaleX + "");
         viewComponent.setScaleYValue(transformComponent.scaleY + "");
         viewComponent.setTintColor(tintComponent.color);
+
+        // non components
+        Array<String> componentsToAddList = new Array<>();
+        for (Map.Entry<String, Class> entry : componentClassMap.entrySet()) {
+            String componentName = entry.getKey();
+            Class componentClass = entry.getValue();
+            Component component = entity.getComponent(componentClass);
+            if(component == null) {
+                componentsToAddList.add(componentName);
+            }
+        }
+        viewComponent.setNonExistantComponents(componentsToAddList);
+
     }
 
     @Override
