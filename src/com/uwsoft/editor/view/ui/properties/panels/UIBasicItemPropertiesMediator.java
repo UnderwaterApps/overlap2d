@@ -21,6 +21,9 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -81,7 +84,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
                 UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
-                UIBasicItemProperties.LINKING_CHANGED
+                UIBasicItemProperties.LINKING_CHANGED,
+                UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -112,6 +116,14 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                 } else {
                     facade.sendNotification(Sandbox.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
+                break;
+            case UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED:
+                try {
+                    Class componentClass = componentClassMap.get(viewComponent.getSelectedComponent());
+                    if(componentClass == null) break;
+                    Component component = (Component) ClassReflection.newInstance(componentClass);
+                    facade.sendNotification(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.payload(observableReference, component));
+                } catch (ReflectionException ignored) {}
                 break;
             default:
                 break;

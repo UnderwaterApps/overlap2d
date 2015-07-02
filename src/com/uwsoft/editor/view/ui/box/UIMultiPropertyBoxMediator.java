@@ -29,6 +29,8 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.renderer.components.MeshComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -112,7 +114,9 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTION_CHANGED,
-                SandboxMediator.SANDBOX_TOOL_CHANGED
+                SandboxMediator.SANDBOX_TOOL_CHANGED,
+                AddComponentToItemCommand.DONE,
+                RemoveComponentFromItemCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
 
@@ -131,6 +135,12 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 if(selection.size() == 1) {
                     initAllPropertyBoxes(selection.iterator().next());
                 }
+                break;
+            case RemoveComponentFromItemCommand.DONE:
+                initAllPropertyBoxes(notification.getBody());
+                break;
+            case AddComponentToItemCommand.DONE:
+                initAllPropertyBoxes(notification.getBody());
                 break;
             case SandboxMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());

@@ -18,14 +18,71 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.event.ButtonToNotificationListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
+import com.uwsoft.editor.view.ui.properties.UIRemovableProperties;
 
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class UIMeshComponentProperties extends UIItemCollapsibleProperties {
+public class UIMeshComponentProperties extends UIRemovableProperties {
+
+    public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIMeshComponentProperties";
+
+    public static final String ADD_DEFAULT_MESH_BUTTON_CLICKED = prefix + ".ADD_DEFAULT_MESH_BUTTON_CLICKED";
+    public static final String CLOSE_CLICKED = prefix + ".CLOSE_CLICKED";
+
+    private VisTextButton addDefaultMeshButton;
+
+    private VisLabel verticesCountLbl;
 
     public UIMeshComponentProperties() {
         super("Mesh Component");
+    }
+
+    public void initView() {
+        mainTable.clear();
+
+        verticesCountLbl = new VisLabel("", Align.left);
+
+        mainTable.add(new VisLabel("Vertices", Align.left)).left().padRight(10);
+        mainTable.add(verticesCountLbl).right().fillX();
+        mainTable.row();
+
+        initListeners();
+    }
+
+    public void setVerticesCount(int count) {
+        verticesCountLbl.setText(count+"");
+    }
+
+    public void initEmptyView() {
+        mainTable.clear();
+
+        addDefaultMeshButton = new VisTextButton("Create Default Mesh");
+
+        mainTable.add(new VisLabel("There is no vertices in this mesh", Align.center));
+        mainTable.row();
+        mainTable.add(addDefaultMeshButton).center();
+
+        initEmptyviewListeners();
+    }
+
+    private void initListeners() {
+
+    }
+
+    private void initEmptyviewListeners() {
+        addDefaultMeshButton.addListener(new ButtonToNotificationListener(ADD_DEFAULT_MESH_BUTTON_CLICKED));
+    }
+
+    @Override
+    public void onClose() {
+        Overlap2DFacade.getInstance().sendNotification(CLOSE_CLICKED);
     }
 }

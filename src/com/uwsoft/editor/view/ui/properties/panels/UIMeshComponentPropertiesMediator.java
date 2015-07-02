@@ -19,15 +19,23 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Created by azakhary on 7/2/2015.
  */
 public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<Entity, UIMeshComponentProperties> {
 
-    private static final String TAG = UISpriteAnimationItemPropertiesMediator.class.getCanonicalName();
+    private static final String TAG = UIMeshComponentPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
     private MeshComponent meshComponent;
@@ -37,12 +45,52 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
     }
 
     @Override
-    protected void translateObservableDataToView(Entity item) {
+    public String[] listNotificationInterests() {
+        String[] defaultNotifications = super.listNotificationInterests();
+        String[] notificationInterests = new String[]{
+                UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
+                UIMeshComponentProperties.CLOSE_CLICKED
+        };
 
+        return ArrayUtils.addAll(defaultNotifications, notificationInterests);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED:
+                addDefaultMesh();
+                break;
+            case UIMeshComponentProperties.CLOSE_CLICKED:
+                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, MeshComponent.class));
+                break;
+        }
+    }
+
+    @Override
+    protected void translateObservableDataToView(Entity item) {
+        meshComponent = item.getComponent(MeshComponent.class);
+        if(meshComponent.vertices != null) {
+            viewComponent.initView();
+
+            viewComponent.setVerticesCount(meshComponent.vertices.length);
+
+        } else {
+            viewComponent.initEmptyView();
+        }
     }
 
     @Override
     protected void translateViewToItemData() {
 
+    }
+
+    private void addDefaultMesh() {
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
+        meshComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
+
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, observableReference);
     }
 }

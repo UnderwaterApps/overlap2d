@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
+import com.uwsoft.editor.event.ButtonToNotificationListener;
 import com.uwsoft.editor.view.ui.widget.components.TintButton;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
@@ -45,6 +46,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIBasicItemProperties";
     public static final String TINT_COLOR_BUTTON_CLICKED = prefix + ".TINT_COLOR_BUTTON_CLICKED";
     public static final String CUSTOM_VARS_BUTTON_CLICKED = prefix + ".CUSTOM_VARS_BUTTON_CLICKED";
+    public static final String ADD_COMPONENT_BUTTON_CLICKED = prefix + "ADD_COMPONENT_BUTTON_CLICKED";
     public static final String LINKING_CHANGED = prefix + ".LINKING_CHANGED";
 
     public enum ItemType {
@@ -166,6 +168,10 @@ public class UIBasicItemProperties extends UIItemProperties {
 
     public void setNonExistantComponents(Array<String> componentNames) {
         nonExistantComponents.setItems(componentNames);
+    }
+
+    public String getSelectedComponent() {
+        return nonExistantComponents.getSelected();
     }
 
     public void setLinkage(boolean isLinked, String text) {
@@ -304,19 +310,9 @@ public class UIBasicItemProperties extends UIItemProperties {
         flipHorizontal.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         rotationValue.addListener(new KeyboardListener(getUpdateEventName()));
 
-        tintColorComponent.addListener(new ClickListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                facade.sendNotification(TINT_COLOR_BUTTON_CLICKED);
-            }
-        });
-
-        customVarsButton.addListener(new ClickListener() {
-            public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
-                super.touchUp(event, x, y, pointer, button);
-                facade.sendNotification(CUSTOM_VARS_BUTTON_CLICKED);
-            }
-        });
+        tintColorComponent.addListener(new ButtonToNotificationListener(TINT_COLOR_BUTTON_CLICKED));
+        customVarsButton.addListener(new ButtonToNotificationListener(CUSTOM_VARS_BUTTON_CLICKED));
+        addComponentButton.addListener(new ButtonToNotificationListener(ADD_COMPONENT_BUTTON_CLICKED));
 
         linkImage.addListener(new ClickListener() {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {

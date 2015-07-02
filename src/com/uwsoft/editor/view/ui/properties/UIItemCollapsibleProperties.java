@@ -30,9 +30,9 @@ import com.kotcrab.vis.ui.widget.VisTable;
  * Created by azakhary on 4/15/2015.
  */
 public abstract class UIItemCollapsibleProperties extends UIItemProperties {
-    private final String title;
+    protected final String title;
     protected VisTable mainTable;
-    private CollapsibleWidget collapsibleWidget;
+    protected CollapsibleWidget collapsibleWidget;
 
     public UIItemCollapsibleProperties(String title) {
         this.title = title;
