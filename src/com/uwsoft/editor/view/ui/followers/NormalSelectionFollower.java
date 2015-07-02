@@ -44,7 +44,7 @@ public class NormalSelectionFollower extends BasicFollower {
     private EditorTextureManager tm;
     private CursorManager cursorManager;
 
-    private Array<BasicFollower> subFollowers = new Array<>();
+    private Array<SubFollower> subFollowers = new Array<>();
 
     private PixelRect pixelRect;
 
@@ -215,7 +215,7 @@ public class NormalSelectionFollower extends BasicFollower {
         }
 
         if(subFollowers != null) {
-            for (BasicFollower follower : subFollowers) {
+            for (SubFollower follower : subFollowers) {
                 follower.update();
             }
         }
@@ -232,7 +232,7 @@ public class NormalSelectionFollower extends BasicFollower {
                 }
                 break;
         }
-        for(BasicFollower follower: subFollowers) {
+        for(SubFollower follower: subFollowers) {
             follower.handleNotification(notification);
         }
     }
@@ -250,29 +250,41 @@ public class NormalSelectionFollower extends BasicFollower {
         return mode;
     }
 
-    public void addSubfollower(BasicFollower follower) {
-        subFollowers.add(follower);
+    public void addSubfollower(SubFollower subFollower) {
+        subFollowers.add(subFollower);
+        addActor(subFollower);
     }
 
-    public Array<BasicFollower> getSubFollowers() {
+    public Array<SubFollower> getSubFollowers() {
         return subFollowers;
     }
 
-    public BasicFollower getSubFollower(String className) {
-        for(BasicFollower follower: subFollowers) {
-            if(follower.getClass().getName().equals(className)) {
-                return follower;
+    public SubFollower getSubFollower(Class clazz) {
+        for(SubFollower subFollower: subFollowers) {
+            if(subFollower.getClass() == clazz) {
+                return subFollower;
             }
         }
 
         return null;
     }
 
-    public void removeSubFollower(BasicFollower follower) {
-        subFollowers.removeValue(follower, true);
+    public void removeSubFollower(Class clazz) {
+        SubFollower subFollower = getSubFollower(clazz);
+        if(subFollower != null) {
+            removeSubFollower(subFollower);
+        }
+    }
+
+    public void removeSubFollower(SubFollower subFollower) {
+        subFollowers.removeValue(subFollower, true);
+        subFollower.remove();
     }
 
     public void clearSubFollowers() {
+        for(SubFollower subFollower: subFollowers) {
+            subFollower.remove();
+        }
         subFollowers.clear();
     }
 }

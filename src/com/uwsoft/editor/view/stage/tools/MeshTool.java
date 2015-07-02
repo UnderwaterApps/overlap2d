@@ -18,18 +18,62 @@
 
 package com.uwsoft.editor.view.stage.tools;
 
+import com.badlogic.ashley.core.Entity;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.followers.BasicFollower;
+import com.uwsoft.editor.view.ui.followers.MeshFollower;
+import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
+
+import java.util.Set;
+
+
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class MeshTool extends SimpleTool {
+public class MeshTool extends SelectionTool {
 
     public static final String NAME = "MESH_TOOL";
 
+    private MidUIMediator midUIMediator;
 
     @Override
     public void initTool() {
         super.initTool();
 
-        // add mesh follower as sub follower
+        midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+
+        updateSubFollowerList();
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        switch (notification.getName()) {
+            case AddComponentToItemCommand.DONE:
+                updateSubFollowerList();
+                break;
+            case RemoveComponentFromItemCommand.DONE:
+                updateSubFollowerList();
+                break;
+            case Overlap2D.ITEM_SELECTION_CHANGED:
+                updateSubFollowerList();
+                break;
+        }
+    }
+
+    private void updateSubFollowerList() {
+        Sandbox sandbox = Sandbox.getInstance();
+        Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
+        for(Entity entity: selectedEntities) {
+            NormalSelectionFollower follower = (NormalSelectionFollower) midUIMediator.getFollower(entity);
+            follower.removeSubFollower(MeshFollower.class);
+            follower.addSubfollower(new MeshFollower(entity));
+        }
     }
 }

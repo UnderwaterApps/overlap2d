@@ -33,7 +33,9 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
@@ -104,6 +106,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 UIToolBoxMediator.TOOL_SELECTED,
                 ItemFactory.NEW_ITEM_ADDED,
                 CompositeCameraChangeCommand.DONE,
+                AddComponentToItemCommand.DONE,
+                RemoveComponentFromItemCommand.DONE
         };
     }
 

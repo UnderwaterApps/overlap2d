@@ -76,14 +76,12 @@ public class SelectionTool extends SimpleTool {
 
     @Override
     public void initTool() {
+        super.initTool();
         sandbox = Sandbox.getInstance();
-        Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
 
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         cursorManager.setCursor(CursorManager.NORMAL);
-
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
     }
 
     @Override
