@@ -22,14 +22,11 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.MeshComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 /**
@@ -174,22 +171,28 @@ public abstract class ComponentFactory {
     }
 
     protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, MeshComponent meshComponent) {
+        /*
 		PhysicsBodyComponent component = new PhysicsBodyComponent();
         component.body = PhysicsBodyLoader.createBody(world, physicsBodyPropertiesComponent, meshComponent.minPolygonData, new Vector2(1, 1)); //TODO resolution thing
 
         entity.add(component);
 
         return component;
+        */
+
+        return null;
     }
 
     protected MeshComponent createMeshComponent(Entity entity, MainItemVO vo) {
+        /*
         MeshComponent component = new MeshComponent();
         component.meshId = vo.meshId;
         component.minPolygonData = rm.getProjectVO().meshes.get(vo.meshId).minPolygonData;
 
         entity.add(component);
 
-        return component;
+        return component;*/
+        return null;
     }
 
     public void setResourceManager(IResourceRetriever rm) {
