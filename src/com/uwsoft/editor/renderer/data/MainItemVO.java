@@ -26,7 +26,7 @@ public class MainItemVO {
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
 	
-	public String meshId = "-1";
+	public MeshVO mesh = null;
 	public PhysicsBodyDataVO physicsBodyData = null;
 
     public ArrayList<String> commonScripts = new ArrayList<>();
@@ -51,8 +51,11 @@ public class MainItemVO {
 		isFlipedV 	= vo.isFlipedV;
 		scaleX 		= vo.scaleX;
 		scaleY 		= vo.scaleY;
-		
-		meshId = vo.meshId;
+
+		if(vo.mesh != null) {
+			mesh = vo.mesh.clone();
+		}
+
 		if(vo.physicsBodyData != null){
 			physicsBodyData = new PhysicsBodyDataVO(vo.physicsBodyData);
 		}
@@ -95,5 +98,14 @@ public class MainItemVO {
 		tint[3] = tintComponent.color.a;
 
 		zIndex = zindexComponent.zIndex;
+
+		/**
+		 * Secondary components
+		 */
+		MeshComponent meshComponent = entity.getComponent(MeshComponent.class);
+		if(meshComponent != null && meshComponent.vertices != null) {
+			mesh = new MeshVO();
+			mesh.polygons = meshComponent.vertices;
+		}
 	}
 }

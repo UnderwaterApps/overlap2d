@@ -4,25 +4,19 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class MeshVO {
-	public Vector2 [][] minPolygonData;
-	public PhysicsBodyDataVO initialProperties;
-
+	public Vector2 [][] polygons;
 
     public MeshVO clone() {
         MeshVO newVo = new MeshVO();
-        Vector2 [][] target = new Vector2[minPolygonData.length][];
+        Vector2 [][] target = new Vector2[polygons.length][];
 
-        for (int i = 0; i < minPolygonData.length; i++) {
-            target[i] = new Vector2[minPolygonData[i].length];
-            for(int j=0;j<minPolygonData[i].length;j++){
-                target[i][j] = minPolygonData[i][j].cpy();
+        for (int i = 0; i < polygons.length; i++) {
+            target[i] = new Vector2[polygons[i].length];
+            for(int j=0;j<polygons[i].length;j++){
+                target[i][j] = polygons[i][j].cpy();
             }
         }
-        newVo.minPolygonData = target;
-
-        if(initialProperties != null) {
-            newVo.initialProperties = new PhysicsBodyDataVO(initialProperties);
-        }
+        newVo.polygons = target;
 
         return newVo;
     }

@@ -56,6 +56,7 @@ public abstract class ComponentFactory {
         createTintComponent(entity, vo);
         createZIndexComponent(entity, vo);
         createScriptComponent(entity, vo);
+        createMeshComponent(entity, vo);
     }
 
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
@@ -143,11 +144,9 @@ public abstract class ComponentFactory {
         if(vo.physicsBodyData == null){
             return;
         }
-        //TODO: it's better to move mesh logic out of the physics in future
-
-        PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
-        MeshComponent meshComponent = createMeshComponent(entity, vo);
-        createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
+        //TODO: Physics logic
+        //PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
+        //createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
     }
 
     protected PhysicsBodyPropertiesComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
@@ -184,14 +183,13 @@ public abstract class ComponentFactory {
     }
 
     protected MeshComponent createMeshComponent(Entity entity, MainItemVO vo) {
-        /*
         MeshComponent component = new MeshComponent();
-        component.meshId = vo.meshId;
-        component.minPolygonData = rm.getProjectVO().meshes.get(vo.meshId).minPolygonData;
+        if(vo.mesh != null) {
+            component.vertices = vo.mesh.polygons.clone();
+            entity.add(component);
 
-        entity.add(component);
-
-        return component;*/
+            return component;
+        }
         return null;
     }
 
