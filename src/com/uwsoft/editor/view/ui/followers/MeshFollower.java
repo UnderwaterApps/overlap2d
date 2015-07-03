@@ -20,20 +20,21 @@ package com.uwsoft.editor.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.renderer.components.MeshComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -54,14 +55,13 @@ public class MeshFollower extends SubFollower {
 
     private ShapeRenderer shapeRenderer;
 
-    public static final int POINT_WIDTH = 8;
     public static final int CIRCLE_RADIUS = 10;
 
     private static final Color outlineColor = new Color(200f / 255f, 156f / 255f, 71f / 255f, 1f);
     private static final Color innerColor = new Color(200f / 255f, 200f / 255f, 200f / 255f, 1f);
     private static final Color overColor = new Color(255f / 255f, 94f / 255f, 0f / 255f, 1f);
 
-    private int lineIndex;
+    private int lineIndex = -1;
     public int draggingAnchorId = -1;
 
     private int selectedAnchorId = -1;
@@ -187,8 +187,8 @@ public class MeshFollower extends SubFollower {
 
     private void positionAnchors() {
         for (int i = 0; i < anchors.length; i++) {
-            anchors[i].setX(Math.round(originalPoints.get(i).x - anchors[i].getWidth()/2f));
-            anchors[i].setY(Math.round(originalPoints.get(i).y - anchors[i].getHeight() / 2f));
+            anchors[i].setX(MathUtils.round(originalPoints.get(i).x - anchors[i].getWidth()/2f));
+            anchors[i].setY(MathUtils.round(originalPoints.get(i).y - anchors[i].getHeight() / 2f));
             anchors[i].setScale(runtimeCamera.zoom);
         }
     }
@@ -216,13 +216,14 @@ public class MeshFollower extends SubFollower {
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
+                if(button != Input.Buttons.LEFT) return true;
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
                     draggingAnchorId = anchorId;
-                    listener.anchorDown(MeshFollower.this, anchorId, x, y);
+                    listener.anchorDown(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
                     // not anchor but line is selected gotta make new point
-                    listener.vertexDown(MeshFollower.this, lineIndex, x, y);
+                    listener.vertexDown(MeshFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 }
                 return true;
             }
@@ -231,7 +232,7 @@ public class MeshFollower extends SubFollower {
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 int anchorId = draggingAnchorId;
                 if (anchorId >= 0) {
-                    listener.anchorDragged(MeshFollower.this, anchorId, x, y);
+                    listener.anchorDragged(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
 
                 }
@@ -239,19 +240,26 @@ public class MeshFollower extends SubFollower {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                if(button != Input.Buttons.LEFT) return;
                 int anchorId = anchorHitTest(x, y);
+                lineIndex = vertexHitTest(x, y);
                 if (anchorId >= 0) {
-                    listener.anchorUp(MeshFollower.this, anchorId, x, y);
+                    listener.anchorUp(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
-                    listener.vertexUp(MeshFollower.this, lineIndex, x, y);
+                    listener.vertexUp(MeshFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 }
                 draggingAnchorId = -1;
             }
 
             @Override
             public boolean mouseMoved(InputEvent event, float x, float y) {
+                int anchorId = anchorHitTest(x, y);
+                lineIndex = vertexHitTest(x, y);
+                if(anchorId >= 0) {
+                    lineIndex = -1;
+                }
                 if (lineIndex > -1) {
-                    System.out.println(lineIndex);
+
                 }
 
                 return super.mouseMoved(event, x, y);
@@ -262,34 +270,50 @@ public class MeshFollower extends SubFollower {
     @Override
     public Actor hit (float x, float y, boolean touchable) {
         if(anchors == null) return null;
-        for (int i = 0; i < anchors.length; i++) {
-            if(anchors[i].hit(x-anchors[i].getX(), y - anchors[i].getY(), true) != null) {
-                return this;
-            }
+
+        int anchorId = anchorHitTest(x, y);
+        if(anchorId > -1) {
+            return this;
         }
 
         // checking for vertex intersect
-        Vector2 tmpVector = new Vector2(x, y);
-        lineIndex = -1;
-        for (int i = 1; i < drawPoints.length; i++) {
-            if (Intersector.intersectSegmentCircle(drawPoints[i - 1], drawPoints[i], tmpVector, CIRCLE_RADIUS)) {
-                lineIndex = i;
-                break;
-            }
-        }
-        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(drawPoints[drawPoints.length - 1], drawPoints[0], tmpVector, CIRCLE_RADIUS)) {
-            lineIndex = 0;
-        }
-        if(lineIndex >= 0) {
+        lineIndex = vertexHitTest(x, y);
+        if(lineIndex > -1) {
             return this;
         }
 
         return null;
     }
 
+    private int vertexHitTest(float x, float y) {
+        Vector2 tmpVector = new Vector2(x, y);
+        int lineIndex = -1;
+
+        for (int i = 1; i < drawPoints.length; i++) {
+            Vector2 pointOne = drawPoints[i-1].cpy().scl(1f/runtimeCamera.zoom);
+            Vector2 pointTwo = drawPoints[i].cpy().scl(1f/runtimeCamera.zoom);
+            if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, CIRCLE_RADIUS*CIRCLE_RADIUS)) {
+                lineIndex = i;
+                break;
+            }
+        }
+        Vector2 pointOne = drawPoints[drawPoints.length - 1].cpy().scl(1f/runtimeCamera.zoom);
+        Vector2 pointTwo = drawPoints[0].cpy().scl(1f/runtimeCamera.zoom);
+        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, CIRCLE_RADIUS*CIRCLE_RADIUS)) {
+            lineIndex = 0;
+        }
+
+        if(lineIndex > -1) {
+            return lineIndex;
+        }
+
+        return -1;
+    }
+
     private int anchorHitTest(float x, float y) {
-        for (int i = 0; i < anchors.length; i++) {
-            if(anchors[i].hit(x-anchors[i].getX(), y - anchors[i].getY(), true) != null) {
+        for (int i = 0; i < drawPoints.length; i++) {
+            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, CIRCLE_RADIUS);
+            if(pointCircle.contains(x, y)) {
                 return i;
             }
         }

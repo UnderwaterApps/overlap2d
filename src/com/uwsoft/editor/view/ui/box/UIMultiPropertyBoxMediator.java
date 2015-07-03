@@ -30,6 +30,7 @@ import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
+import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.renderer.components.MeshComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -114,6 +115,7 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 Overlap2D.EMPTY_SPACE_CLICKED,
                 Overlap2D.ITEM_DATA_UPDATED,
                 Overlap2D.ITEM_SELECTION_CHANGED,
+                DeleteItemsCommand.DONE,
                 SandboxMediator.SANDBOX_TOOL_CHANGED,
                 AddComponentToItemCommand.DONE,
                 RemoveComponentFromItemCommand.DONE
@@ -144,6 +146,9 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 break;
             case SandboxMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
+                break;
+            case DeleteItemsCommand.DONE:
+                initAllPropertyBoxes(null);
                 break;
             default:
                 break;

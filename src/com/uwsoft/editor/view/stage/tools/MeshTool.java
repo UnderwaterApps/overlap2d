@@ -162,6 +162,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     private Vector2[][] polygonize(Vector2[] vertices) {
         if (PolygonUtils.isPolygonCCW(vertices)) {
             // TODO
+            System.out.println("IMPORTANT");
         }
 
         return Clipper.polygonize(Clipper.Polygonizer.BAYAZIT, vertices);

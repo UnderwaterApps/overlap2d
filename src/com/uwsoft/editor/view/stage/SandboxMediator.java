@@ -255,7 +255,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
-            currentSelectedTool.keyDown(entity, keycode);
+            if(currentSelectedTool != null) {
+                currentSelectedTool.keyDown(entity, keycode);
+            }
 
             // Control pressed as well
             if (isControlPressed()) {
