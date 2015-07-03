@@ -22,10 +22,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -33,14 +34,10 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
 import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.renderer.components.MeshComponent;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
-import javafx.scene.shape.Mesh;
 
 import java.util.ArrayList;
 
@@ -68,6 +65,8 @@ public class MeshFollower extends SubFollower {
     public int draggingAnchorId = -1;
 
     private int selectedAnchorId = -1;
+
+    OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 
     public MeshFollower(Entity entity) {
         super(entity);
@@ -118,7 +117,7 @@ public class MeshFollower extends SubFollower {
 
 
     @Override
-    public void draw (Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
         if(meshComponent != null && meshComponent.vertices != null) {
             positionAnchors();
             batch.end();
@@ -127,8 +126,11 @@ public class MeshFollower extends SubFollower {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
+
             shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
-            shapeRenderer.setTransformMatrix(batch.getTransformMatrix());
+            Matrix4 matrix = batch.getTransformMatrix();
+            matrix.scale(1f / runtimeCamera.zoom, 1f / runtimeCamera.zoom, 1f);
+            shapeRenderer.setTransformMatrix(matrix);
 
             drawTriangulatedPolygons();
             drawOutlines();
@@ -187,6 +189,7 @@ public class MeshFollower extends SubFollower {
         for (int i = 0; i < anchors.length; i++) {
             anchors[i].setX(Math.round(originalPoints.get(i).x - anchors[i].getWidth()/2f));
             anchors[i].setY(Math.round(originalPoints.get(i).y - anchors[i].getHeight() / 2f));
+            anchors[i].setScale(runtimeCamera.zoom);
         }
     }
 
@@ -206,7 +209,7 @@ public class MeshFollower extends SubFollower {
         return rect;
     }
 
-    public void setListener(MeshTransformationListener listener) {
+    public void setListener(final MeshTransformationListener listener) {
         clearListeners();
         addListener(new ClickListener() {
 
