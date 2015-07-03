@@ -85,6 +85,8 @@ public class Sandbox {
     public static final String ACTION_UPDATE_LABEL_DATA = CLASS_NAME + "ACTION_UPDATE_LABEL_DATA";
     public static final String ACTION_UPDATE_LIGHT_DATA = CLASS_NAME + "ACTION_UPDATE_LIGHT_DATA";
     public static final String ACTION_UPDATE_SPRITE_ANIMATION_DATA = CLASS_NAME + "ACTION_UPDATE_SPRITE_ANIMATION_DATA";
+    public static final String ACTION_UPDATE_MESH_DATA = CLASS_NAME + "ACTION_UPDATE_MESH_DATA";
+
 
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;

@@ -20,6 +20,7 @@ package com.uwsoft.editor.controller;
 
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.component.UpdateMeshComponentCommand;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.*;
@@ -61,5 +62,6 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, UpdateSpriteAnimationDataCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_MESH_DATA, UpdateMeshComponentCommand.class);
     }
 }

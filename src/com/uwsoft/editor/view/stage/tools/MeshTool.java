@@ -25,20 +25,18 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.controller.commands.component.UpdateMeshComponentCommand;
+import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.MeshComponent;
 import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.utils.poly.PolygonUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.MeshFollower;
 import com.uwsoft.editor.view.ui.followers.MeshTransformationListener;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
-import org.lwjgl.Sys;
 
-import java.util.Collections;
-import java.util.HashSet;
 import java.util.Set;
 
 
@@ -52,6 +50,8 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     private MidUIMediator midUIMediator;
 
     private Vector2 dragLastPoint;
+
+    private Object[] currentCommandPayload;
 
     @Override
     public void initTool() {
@@ -72,6 +72,9 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
                 updateSubFollowerList();
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
+                updateSubFollowerList();
+                break;
+            case SceneDataManager.SCENE_LOADED:
                 updateSubFollowerList();
                 break;
         }
@@ -101,10 +104,11 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     @Override
     public void vertexDown(MeshFollower follower, int vertexIndex, float x, float y) {
         MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
+        currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
+
         follower.getOriginalPoints().add(vertexIndex, new Vector2(x, y));
         Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
         meshComponent.vertices = polygonize(points);
-        follower.updateDraw();
         follower.draggingAnchorId = vertexIndex;
         dragLastPoint = new Vector2(x, y);
     }
@@ -117,24 +121,28 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     @Override
     public void anchorDown(MeshFollower follower, int anchor, float x, float y) {
         dragLastPoint = new Vector2(x, y);
+        currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
     }
 
     @Override
     public void anchorDragged(MeshFollower follower, int anchor, float x, float y) {
         MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
-        Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
 
+        Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
         Vector2 diff = dragLastPoint.sub(x, y);
         points[anchor].sub(diff);
         dragLastPoint = new Vector2(x, y);
-
         meshComponent.vertices = polygonize(points);
+
         follower.updateDraw();
     }
 
     @Override
     public void anchorUp(MeshFollower follower, int anchor, float x, float y) {
+        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
 
+        currentCommandPayload = UpdateMeshComponentCommand.payload(currentCommandPayload, meshComponent.vertices);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
     }
 
     private Vector2[][] polygonize(Vector2[] vertices) {

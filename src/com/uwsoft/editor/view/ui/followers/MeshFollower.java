@@ -236,7 +236,7 @@ public class MeshFollower extends SubFollower {
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
-                    listener.anchorDown(MeshFollower.this, anchorId, x, y);
+                    listener.anchorUp(MeshFollower.this, anchorId, x, y);
                 } else if(lineIndex > -1) {
                     listener.vertexUp(MeshFollower.this, lineIndex, x, y);
                 }

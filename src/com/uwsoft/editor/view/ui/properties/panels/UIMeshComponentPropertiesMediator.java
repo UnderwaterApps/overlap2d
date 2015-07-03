@@ -74,8 +74,13 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
         meshComponent = item.getComponent(MeshComponent.class);
         if(meshComponent.vertices != null) {
             viewComponent.initView();
-
-            viewComponent.setVerticesCount(meshComponent.vertices.length);
+            int verticesCount = 0;
+            for(int i = 0; i < meshComponent.vertices.length; i++) {
+                for(int j = 0; j < meshComponent.vertices[i].length; j++) {
+                    verticesCount++;
+                }
+            }
+            viewComponent.setVerticesCount(verticesCount);
 
         } else {
             viewComponent.initEmptyView();

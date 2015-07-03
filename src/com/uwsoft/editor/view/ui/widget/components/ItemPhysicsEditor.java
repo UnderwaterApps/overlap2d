@@ -142,7 +142,7 @@ public class ItemPhysicsEditor extends Group {
         }
         testBodiesToDestroy.clear();
         MeshVO vo = new MeshVO();
-        vo.minPolygonData = minPolies;
+        //vo.minPolygonData = minPolies;
         physicsEditorWorld = new World(new Vector2(0, -10), true);
         physicsEditorWorld.setContactListener(new ContactListener() {
             @Override
@@ -239,7 +239,7 @@ public class ItemPhysicsEditor extends Group {
 
         ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
-        if (projectInfo.assetMeshMap.containsKey(assetName)) {
+        if (projectInfo.assetMeshMap.containsKey(assetName)) {/*
             mesh = projectInfo.meshes.get(projectInfo.assetMeshMap.get(assetName));
             if (mesh.initialProperties != null) {
                 physicsBodyDataVO = new PhysicsBodyDataVO(mesh.initialProperties);
@@ -247,7 +247,7 @@ public class ItemPhysicsEditor extends Group {
             minPolies = new Vector2[mesh.minPolygonData.length][];
             //System.arraycopy(mesh.minPolygonData, 0, minPolies, 0, mesh.minPolygonData.length);
             arrayCopy(mesh.minPolygonData, minPolies, false);
-
+*/
             Vector2 localToGlobal = new Vector2();
             currentActor.localToStageCoordinates(localToGlobal);
             for (Vector2[] poly : minPolies) {
@@ -364,7 +364,7 @@ public class ItemPhysicsEditor extends Group {
 
         ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
         MeshVO mesh = null;
-        if (assetName != null && !assetName.isEmpty()) {
+        if (assetName != null && !assetName.isEmpty()) {/*
             if (projectInfo.assetMeshMap.containsKey(assetName)) {
                 mesh = projectInfo.meshes.get(projectInfo.assetMeshMap.get(assetName));
                 mesh.minPolygonData = new Vector2[minPolies.length][];
@@ -391,7 +391,7 @@ public class ItemPhysicsEditor extends Group {
                 }
 
 
-            }
+            }*/
         } else if (currentItem != null) {
         	//TODO fix and uncomment 
 //            if (Integer.parseInt(currentItem.getDataVO().meshId) >= 0) {

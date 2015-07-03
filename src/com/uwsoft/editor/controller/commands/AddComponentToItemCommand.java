@@ -28,16 +28,16 @@ public class AddComponentToItemCommand extends EntityModifyRevertableCommand {
 
         entity.add(component);
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
         Overlap2DFacade.getInstance().sendNotification(DONE, entity);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
     @Override
     public void undoAction() {
         entity.remove(component.getClass());
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
         Overlap2DFacade.getInstance().sendNotification(DONE, entity);
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payload(Entity entity, Component component) {

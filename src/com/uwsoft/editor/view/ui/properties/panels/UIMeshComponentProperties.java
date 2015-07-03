@@ -50,7 +50,7 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
 
         verticesCountLbl = new VisLabel("", Align.left);
 
-        mainTable.add(new VisLabel("Vertices", Align.left)).left().padRight(10);
+        mainTable.add(new VisLabel("Vertices: ", Align.left)).left().padRight(10);
         mainTable.add(verticesCountLbl).right().fillX();
         mainTable.row();
 
