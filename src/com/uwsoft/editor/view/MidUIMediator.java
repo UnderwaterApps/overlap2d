@@ -39,6 +39,7 @@ import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.FollowerFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -104,6 +105,7 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
                 updateAllFollowers();
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
+                clearAllSubFollowersExceptNew(notification.getBody());
                 setNewSelectionConfiguration(notification.getBody());
                 break;
             case Overlap2D.HIDE_SELECTIONS:
@@ -129,6 +131,16 @@ public class MidUIMediator extends SimpleMediator<MidUI> {
     public void pushNotificationToFollowers(Notification notification) {
         for (BasicFollower follower : followers.values()) {
             follower.handleNotification(notification);
+        }
+    }
+
+    private void clearAllSubFollowersExceptNew(Set<Entity> items) {
+        for (BasicFollower follower : followers.values()) {
+            if(!items.contains(follower)) {
+                if(follower instanceof NormalSelectionFollower) {
+                    ((NormalSelectionFollower)follower).clearSubFollowers();
+                }
+            }
         }
     }
 

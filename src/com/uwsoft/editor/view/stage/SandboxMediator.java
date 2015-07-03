@@ -107,7 +107,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 ItemFactory.NEW_ITEM_ADDED,
                 CompositeCameraChangeCommand.DONE,
                 AddComponentToItemCommand.DONE,
-                RemoveComponentFromItemCommand.DONE
+                RemoveComponentFromItemCommand.DONE,
+                Overlap2D.ITEM_SELECTION_CHANGED
         };
     }
 
