@@ -481,7 +481,7 @@
       "up": "toolbar-normal",
       "over": "toolbar-over",
       "checked": "toolbar-down",
-      "imageUp": "tool-transform"
+      "imageUp": "tool-mesh"
     },
     "align-center-horisontal": {
       "down": "toolbar-down",
