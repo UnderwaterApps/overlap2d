@@ -351,4 +351,55 @@ public class SelectionTool extends SimpleTool {
         facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
     }
 
+    @Override
+    public void keyDown(Entity entity, int keycode) {
+        boolean isControlPressed = isControlPressed();
+
+        // the amount of pixels by which to move item if moving
+        float deltaMove = 1;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            // if shift is pressed, move boxes by 20 pixels instead of one
+            deltaMove = 20; //pixels
+        }
+
+        if (sandbox.getGridSize() > 1) {
+            deltaMove = sandbox.getGridSize();
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                // if shift is pressed, move boxes 3 times more then the grid size
+                deltaMove *= 3;
+            }
+        }
+
+        if(!isControlPressed) {
+            if (keycode == Input.Keys.UP) {
+                // moving UP
+                sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
+            }
+            if (keycode == Input.Keys.DOWN) {
+                // moving down
+                sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
+            }
+            if (keycode == Input.Keys.LEFT) {
+                // moving left
+                sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
+            }
+            if (keycode == Input.Keys.RIGHT) {
+                //moving right
+                sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+            }
+        }
+
+        // Delete
+        if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_DELETE);
+        }
+    }
+
+    private boolean isControlPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.SYM)
+                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
+                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+    }
+
 }

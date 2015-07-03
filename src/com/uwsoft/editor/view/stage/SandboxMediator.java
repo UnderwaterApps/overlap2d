@@ -250,13 +250,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public boolean keyDown(Entity entity, int keycode) {
             boolean isControlPressed = isControlPressed();
             Sandbox sandbox = Sandbox.getInstance();
-            // the amount of pixels by which to move item if moving
-            float deltaMove = 1;
 
             // if control is pressed then z index is getting modified
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
+            currentSelectedTool.keyDown(entity, keycode);
 
             // Control pressed as well
             if (isControlPressed()) {
@@ -313,43 +312,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 setCurrentTool(SelectionTool.NAME);
                 UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
                 toolBoxMediator.setCurrentTool(SelectionTool.NAME);
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                // if shift is pressed, move boxes by 20 pixels instead of one
-                deltaMove = 20; //pixels
-            }
-
-            if (sandbox.getGridSize() > 1) {
-                deltaMove = sandbox.getGridSize();
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    // if shift is pressed, move boxes 3 times more then the grid size
-                    deltaMove *= 3;
-                }
-            }
-
-            if(!isControlPressed) {
-                if (keycode == Input.Keys.UP) {
-                    // moving UP
-                    sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
-                }
-                if (keycode == Input.Keys.DOWN) {
-                    // moving down
-                    sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
-                }
-                if (keycode == Input.Keys.LEFT) {
-                    // moving left
-                    sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
-                }
-                if (keycode == Input.Keys.RIGHT) {
-                    //moving right
-                    sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
-                }
-            }
-
-            // Delete
-            if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-                facade.sendNotification(Sandbox.ACTION_DELETE);
             }
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly

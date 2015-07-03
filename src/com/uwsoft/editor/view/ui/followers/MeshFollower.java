@@ -67,6 +67,8 @@ public class MeshFollower extends SubFollower {
     private int lineIndex;
     public int draggingAnchorId = -1;
 
+    private int selectedAnchorId = -1;
+
     public MeshFollower(Entity entity) {
         super(entity);
         setTouchable(Touchable.enabled);
@@ -74,7 +76,6 @@ public class MeshFollower extends SubFollower {
 
     public void create() {
         meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
-
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -194,6 +195,7 @@ public class MeshFollower extends SubFollower {
         for (int i = 0; i < originalPoints.size(); i++) {
             anchors[i] = getMiniRect();
         }
+        setSelectedAnchor(selectedAnchorId);
     }
 
     private Image getMiniRect() {
@@ -215,7 +217,7 @@ public class MeshFollower extends SubFollower {
                 if (anchorId >= 0) {
                     draggingAnchorId = anchorId;
                     listener.anchorDown(MeshFollower.this, anchorId, x, y);
-                } else if(lineIndex > -1) {
+                } else if (lineIndex > -1) {
                     // not anchor but line is selected gotta make new point
                     listener.vertexDown(MeshFollower.this, lineIndex, x, y);
                 }
@@ -227,7 +229,7 @@ public class MeshFollower extends SubFollower {
                 int anchorId = draggingAnchorId;
                 if (anchorId >= 0) {
                     listener.anchorDragged(MeshFollower.this, anchorId, x, y);
-                } else if(lineIndex > -1) {
+                } else if (lineIndex > -1) {
 
                 }
             }
@@ -237,7 +239,7 @@ public class MeshFollower extends SubFollower {
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
                     listener.anchorUp(MeshFollower.this, anchorId, x, y);
-                } else if(lineIndex > -1) {
+                } else if (lineIndex > -1) {
                     listener.vertexUp(MeshFollower.this, lineIndex, x, y);
                 }
                 draggingAnchorId = -1;
@@ -297,5 +299,19 @@ public class MeshFollower extends SubFollower {
 
     public ArrayList<Vector2> getOriginalPoints() {
         return originalPoints;
+    }
+
+    public void setSelectedAnchor(int anchorId) {
+        if(anchorId == -1) return;
+
+        selectedAnchorId = anchorId;
+        for (int i = 0; i < anchors.length; i++) {
+            anchors[i].setColor(Color.WHITE);
+        }
+        anchors[selectedAnchorId].setColor(Color.ORANGE);
+    }
+
+    public int getSelectedAnchorId() {
+        return selectedAnchorId;
     }
 }

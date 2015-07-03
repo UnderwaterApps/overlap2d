@@ -78,4 +78,9 @@ public abstract class SimpleTool implements Tool {
     public void handleNotification(Notification notification) {
 
     }
+
+    @Override
+    public void keyDown(Entity entity, int keycode) {
+
+    }
 }
