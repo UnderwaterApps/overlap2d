@@ -49,6 +49,8 @@ public class UpdateMeshComponentCommand extends EntityModifyRevertableCommand {
         MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
         meshComponent.vertices = dataTo;
 
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+
     }
 
     @Override
@@ -56,6 +58,7 @@ public class UpdateMeshComponentCommand extends EntityModifyRevertableCommand {
         MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
         meshComponent.vertices = dataFrom;
 
+        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payloadInitialState(Entity entity) {

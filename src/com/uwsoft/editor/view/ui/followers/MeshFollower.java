@@ -37,10 +37,12 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.utils.PolygonUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by azakhary on 7/2/2015.
@@ -58,7 +60,7 @@ public class MeshFollower extends SubFollower {
     public static final int CIRCLE_RADIUS = 10;
 
     private static final Color outlineColor = new Color(200f / 255f, 156f / 255f, 71f / 255f, 1f);
-    private static final Color innerColor = new Color(200f / 255f, 200f / 255f, 200f / 255f, 1f);
+    private static final Color innerColor = new Color(200f / 255f, 200f / 255f, 200f / 255f, 0.2f);
     private static final Color overColor = new Color(255f / 255f, 94f / 255f, 0f / 255f, 1f);
 
     private int lineIndex = -1;
@@ -90,6 +92,7 @@ public class MeshFollower extends SubFollower {
         if(meshComponent != null && meshComponent.vertices != null) {
             computeOriginalPoints();
             computeDrawPoints();
+            if(selectedAnchorId == -1) selectedAnchorId = 0;
             initAnchors();
         }
     }
@@ -102,12 +105,15 @@ public class MeshFollower extends SubFollower {
     private void computeOriginalPoints() {
         originalPoints = new ArrayList<>();
         if(meshComponent == null) return;
+
+        /*
         for (Vector2[] poly : meshComponent.vertices) {
             for (int i = 0; i < poly.length; i++) {
                 if (!originalPoints.contains(poly[i]))
                     originalPoints.add(poly[i]);
             }
-        }
+        }*/
+        originalPoints = new ArrayList<>(Arrays.asList(PolygonUtils.mergeTouchingPolygonsToOne(meshComponent.vertices)));
 
     }
 
@@ -122,7 +128,7 @@ public class MeshFollower extends SubFollower {
             positionAnchors();
             batch.end();
 
-            Gdx.gl.glLineWidth(1);
+            Gdx.gl.glLineWidth(1.7f);
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
@@ -340,5 +346,10 @@ public class MeshFollower extends SubFollower {
 
     public int getSelectedAnchorId() {
         return selectedAnchorId;
+    }
+
+    public void getSelectedAnchorId(int id) {
+        if(id < 0) id = 0;
+        selectedAnchorId = id;
     }
 }

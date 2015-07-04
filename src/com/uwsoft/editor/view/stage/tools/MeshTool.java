@@ -103,6 +103,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
             MeshFollower meshFollower = new MeshFollower(entity);
             follower.addSubfollower(meshFollower);
             setListener(meshFollower);
+            lastSelectedMeshFollower = meshFollower;
         }
     }
 
@@ -118,7 +119,10 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
 
         follower.getOriginalPoints().add(vertexIndex, new Vector2(x, y));
         Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
+
         meshComponent.vertices = polygonize(points);
+        follower.updateDraw();
+
         follower.draggingAnchorId = vertexIndex;
         dragLastPoint = new Vector2(x, y);
         follower.setSelectedAnchor(vertexIndex);
@@ -171,7 +175,9 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     @Override
     public void keyDown(Entity entity, int keycode) {
         if(keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-            deleteSelectedAnchor();
+            if(!deleteSelectedAnchor()) {
+                super.keyDown(entity, keycode);
+            }
         } else {
             super.keyDown(entity, keycode);
         }
@@ -188,16 +194,24 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         return null;
     }
 
-    private void deleteSelectedAnchor() {
+    private boolean deleteSelectedAnchor() {
         MeshFollower follower = lastSelectedMeshFollower;
+        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
         if(follower != null) {
-            MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
+            if(meshComponent == null || meshComponent.vertices == null || meshComponent.vertices.length == 0) return false;
+            if(follower.getOriginalPoints().size() <= 3) return false;
+
             currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
 
             follower.getOriginalPoints().remove(follower.getSelectedAnchorId());
+            follower.getSelectedAnchorId(follower.getSelectedAnchorId()-1);
             Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
             meshComponent.vertices = polygonize(points);
             follower.updateDraw();
+
+            return true;
         }
+
+        return false;
     }
 }
