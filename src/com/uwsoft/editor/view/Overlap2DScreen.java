@@ -178,8 +178,6 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     break;
             }
         }
-
-        Gdx.app.log(TAG, "keyDown : " + keycode);
         return false;
     }
 
