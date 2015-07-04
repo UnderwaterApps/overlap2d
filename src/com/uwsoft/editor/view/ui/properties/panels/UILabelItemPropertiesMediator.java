@@ -38,6 +38,7 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setFontFamily(labelComponent.fontName);
         viewComponent.setFontSize(labelComponent.fontSize);
         viewComponent.setAlignValue(labelComponent.labelAlign);
+        viewComponent.setText(labelComponent.text.toString());
     }
 
     @Override
@@ -45,11 +46,12 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
         resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(),viewComponent.getFontSize());
 
-        Object[] payload = new Object[4];
+        Object[] payload = new Object[5];
         payload[0] = observableReference;
         payload[1] = viewComponent.getFontFamily();
         payload[2] = viewComponent.getFontSize();
         payload[3] = viewComponent.getAlignValue();
+        payload[4] = viewComponent.getText();
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
     }
 

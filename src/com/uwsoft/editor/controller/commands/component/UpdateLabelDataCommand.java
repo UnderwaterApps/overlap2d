@@ -45,6 +45,7 @@ public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
         labelComponent.fontName = (String) payload[1];
         labelComponent.fontSize = (int) payload[2];
         labelComponent.setAlignment((Integer) payload[3]);
+        labelComponent.setText((CharSequence) payload[4]);
 
         labelComponent.setStyle(LabelComponentFactory.generateStyle(Sandbox.getInstance().getSceneControl().sceneLoader.getRm(), labelComponent.fontName, labelComponent.fontSize));
 

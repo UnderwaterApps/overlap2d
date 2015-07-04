@@ -6,10 +6,9 @@ import java.util.Map;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.NumberSelector;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
+import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.event.NumberSelectorOverlapListener;
 import com.uwsoft.editor.event.SelectBoxChangeListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
@@ -30,6 +29,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     private VisCheckBox boldCheckBox;
     private VisCheckBox italicCheckBox;
     private NumberSelector fontSizeField;
+    private VisTextArea textArea;
 
     public UILabelItemProperties() {
         super("Label");
@@ -45,23 +45,32 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         fontFamilySelectBox.setMaxListCount(10);
         alignSelectBox.setMaxListCount(10);
 
-        mainTable.add(createLabel("Font Family", Align.right)).padRight(5).width(50).left();
+        VisTable textEditTable = new VisTable();
+        textArea = new VisTextArea();
+
+        mainTable.add(createLabel("Font Family", Align.right)).padRight(5).width(90).left();
         mainTable.add(fontFamilySelectBox).width(90).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(createLabel("Bold", Align.right)).padRight(5).width(50).left();
+        /*
+        mainTable.add(createLabel("Bold", Align.right)).padRight(5).width(90).left();
         mainTable.add(boldCheckBox).width(55).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(createLabel("Italic", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Italic", Align.right)).padRight(5).width(90).left();
         mainTable.add(italicCheckBox).width(55).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(createLabel("Font Size", Align.right)).padRight(5).width(50).left();
+        */
+        mainTable.add(createLabel("Font Size", Align.right)).padRight(5).width(90).left();
         mainTable.add(fontSizeField).width(55).padRight(5);
         mainTable.row().padTop(5);
-        mainTable.add(createLabel("Align", Align.right)).padRight(5).width(50).left();
+        mainTable.add(createLabel("Align", Align.right)).padRight(5).width(90).left();
         mainTable.add(alignSelectBox).width(90).padRight(5);
         mainTable.row().padTop(5);
-        setListeners();
+        mainTable.add(textEditTable).colspan(2).width(200);
+        mainTable.row().padTop(5);
 
+        textEditTable.add(textArea).width(200).height(65);
+
+        setListeners();
         setAlignList();
     }
 
@@ -75,6 +84,14 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
 
     public boolean isItalic() {
         return italicCheckBox.isChecked();
+    }
+
+    public String getText() {
+        return textArea.getText();
+    }
+
+    public void setText(String text) {
+        textArea.setText(text);
     }
 
     public void setAlignList() {
@@ -145,5 +162,6 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         boldCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         italicCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         fontSizeField.addChangeListener(new NumberSelectorOverlapListener(getUpdateEventName()));
+        textArea.addListener(new KeyboardListener(getUpdateEventName()));
     }
 }
