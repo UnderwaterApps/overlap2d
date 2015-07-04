@@ -19,10 +19,12 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.controller.commands.component.UpdateMeshComponentCommand;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MeshComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
@@ -49,6 +51,8 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
                 UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
+                UIMeshComponentProperties.COPY_BUTTON_CLICKED,
+                UIMeshComponentProperties.PASTE_BUTTON_CLICKED,
                 UIMeshComponentProperties.CLOSE_CLICKED
         };
 
@@ -62,6 +66,12 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
         switch (notification.getName()) {
             case UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED:
                 addDefaultMesh();
+                break;
+            case UIMeshComponentProperties.COPY_BUTTON_CLICKED:
+                copyMesh();
+                break;
+            case UIMeshComponentProperties.PASTE_BUTTON_CLICKED:
+                pasteMesh();
                 break;
             case UIMeshComponentProperties.CLOSE_CLICKED:
                 Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, MeshComponent.class));
@@ -97,5 +107,18 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
         meshComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, observableReference);
+    }
+
+    private void copyMesh() {
+        meshComponent = observableReference.getComponent(MeshComponent.class);
+        Sandbox.getInstance().copyToLocalClipboard("meshData", meshComponent.vertices);
+    }
+
+    private void pasteMesh() {
+        Vector2[][] vertices = (Vector2[][]) Sandbox.getInstance().retrieveFromLocalClipboard("meshData");
+        if(vertices == null) return;
+        Object[] payload = UpdateMeshComponentCommand.payloadInitialState(observableReference);
+        payload = UpdateMeshComponentCommand.payload(payload, vertices);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, payload);
     }
 }

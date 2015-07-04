@@ -19,10 +19,14 @@
 package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+
+import java.util.HashSet;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -30,6 +34,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 public class CreateItemCommand extends EntityModifyRevertableCommand {
 
     private Integer entityId;
+    private Array<Integer> previousSelectionIds;
 
     @Override
     public void doAction() {
@@ -41,6 +46,9 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
         Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
 
         // select newly created item
+        // get current selection
+        HashSet<Entity> previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
+        previousSelectionIds = EntityUtils.getEntityId(previousSelection);
         sandbox.getSelector().setSelection(entity, true);
     }
 
@@ -51,5 +59,7 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         midUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
+
+        Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
     }
 }

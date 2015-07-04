@@ -34,12 +34,16 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
 
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIMeshComponentProperties";
 
+    public static final String COPY_BUTTON_CLICKED = prefix + ".COPY_BUTTON_CLICKED";
+    public static final String PASTE_BUTTON_CLICKED = prefix + ".PASTE_BUTTON_CLICKED";
     public static final String ADD_DEFAULT_MESH_BUTTON_CLICKED = prefix + ".ADD_DEFAULT_MESH_BUTTON_CLICKED";
     public static final String CLOSE_CLICKED = prefix + ".CLOSE_CLICKED";
 
     private VisTextButton addDefaultMeshButton;
 
     private VisLabel verticesCountLbl;
+    private VisTextButton copyBtn;
+    private VisTextButton pasteBtn;
 
     public UIMeshComponentProperties() {
         super("Mesh Component");
@@ -50,8 +54,13 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
 
         verticesCountLbl = new VisLabel("", Align.left);
 
-        mainTable.add(new VisLabel("Vertices: ", Align.left)).left().padRight(10);
-        mainTable.add(verticesCountLbl).right().fillX();
+        copyBtn = new VisTextButton("copy");
+        pasteBtn = new VisTextButton("paste");
+
+        mainTable.add(new VisLabel("Vertices: ", Align.left)).left().padRight(3);
+        mainTable.add(verticesCountLbl).left().width(67);
+        mainTable.add(copyBtn).right().padRight(4);
+        mainTable.add(pasteBtn).right().padRight(4);
         mainTable.row();
 
         initListeners();
@@ -70,14 +79,15 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
         mainTable.row();
         mainTable.add(addDefaultMeshButton).center();
 
-        initEmptyviewListeners();
+        initEmptyViewListeners();
     }
 
     private void initListeners() {
-
+        copyBtn.addListener(new ButtonToNotificationListener(COPY_BUTTON_CLICKED));
+        pasteBtn.addListener(new ButtonToNotificationListener(PASTE_BUTTON_CLICKED));
     }
 
-    private void initEmptyviewListeners() {
+    private void initEmptyViewListeners() {
         addDefaultMeshButton.addListener(new ButtonToNotificationListener(ADD_DEFAULT_MESH_BUTTON_CLICKED));
     }
 

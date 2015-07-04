@@ -27,6 +27,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.brashmonkey.spriter.Timeline;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -45,6 +46,8 @@ import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+
+import java.util.HashMap;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "commands" the part of editor where
@@ -92,7 +95,7 @@ public class Sandbox {
     public ItemControlMediator itemControl;
 
     private Object clipboard;
-
+    private HashMap<String, Object> localClipboard = new HashMap<>();
 
     private Entity currentViewingEntity;
 
@@ -498,5 +501,13 @@ public class Sandbox {
     public Object retrieveFromClipboard() {
         //TODO: make this an actual clipboard call (dunno how though, need to make all serializable?)
         return clipboard;
+    }
+
+    public void copyToLocalClipboard(String key, Object data) {
+        this.localClipboard.put(key, data);
+    }
+
+    public Object retrieveFromLocalClipboard(String key) {
+        return localClipboard.get(key);
     }
 }
