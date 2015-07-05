@@ -79,7 +79,7 @@ public class ComponentRetriever {
 
         mappers.put(LabelComponent.class, ComponentMapper.getFor(LabelComponent.class));
 
-    	mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
+    	mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
     	
@@ -109,7 +109,7 @@ public class ComponentRetriever {
         mappers.put(InputListenerComponent.class, ComponentMapper.getFor(InputListenerComponent.class));
         mappers.put(ScriptComponent.class, ComponentMapper.getFor(ScriptComponent.class));
 
-        mappers.put(MeshComponent.class, ComponentMapper.getFor(MeshComponent.class));
+        mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
         
         
     }

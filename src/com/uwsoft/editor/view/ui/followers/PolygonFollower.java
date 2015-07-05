@@ -24,7 +24,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.*;
@@ -34,9 +33,8 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.kotcrab.vis.ui.VisUI;
-import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -47,9 +45,9 @@ import java.util.Arrays;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class MeshFollower extends SubFollower {
+public class PolygonFollower extends SubFollower {
 
-    private MeshComponent meshComponent;
+    private PolygonComponent polygonComponent;
 
     private ArrayList<Vector2> originalPoints;
     private Vector2[] drawPoints;
@@ -70,13 +68,13 @@ public class MeshFollower extends SubFollower {
 
     OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 
-    public MeshFollower(Entity entity) {
+    public PolygonFollower(Entity entity) {
         super(entity);
         setTouchable(Touchable.enabled);
     }
 
     public void create() {
-        meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
+        polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -89,7 +87,7 @@ public class MeshFollower extends SubFollower {
     }
 
     public void update() {
-        if(meshComponent != null && meshComponent.vertices != null) {
+        if(polygonComponent != null && polygonComponent.vertices != null) {
             computeOriginalPoints();
             computeDrawPoints();
             if(selectedAnchorId == -1) selectedAnchorId = 0;
@@ -104,7 +102,7 @@ public class MeshFollower extends SubFollower {
 
     private void computeOriginalPoints() {
         originalPoints = new ArrayList<>();
-        if(meshComponent == null) return;
+        if(polygonComponent == null) return;
 
         /*
         for (Vector2[] poly : meshComponent.vertices) {
@@ -113,7 +111,7 @@ public class MeshFollower extends SubFollower {
                     originalPoints.add(poly[i]);
             }
         }*/
-        originalPoints = new ArrayList<>(Arrays.asList(PolygonUtils.mergeTouchingPolygonsToOne(meshComponent.vertices)));
+        originalPoints = new ArrayList<>(Arrays.asList(PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices)));
 
     }
 
@@ -124,7 +122,7 @@ public class MeshFollower extends SubFollower {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        if(meshComponent != null && meshComponent.vertices != null) {
+        if(polygonComponent != null && polygonComponent.vertices != null) {
             positionAnchors();
             batch.end();
 
@@ -170,12 +168,12 @@ public class MeshFollower extends SubFollower {
     }
 
     public void drawTriangulatedPolygons() {
-        if (meshComponent.vertices == null) {
+        if (polygonComponent.vertices == null) {
             return;
         }
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(innerColor);
-        for (Vector2[] poly : meshComponent.vertices) {
+        for (Vector2[] poly : polygonComponent.vertices) {
             for (int i = 1; i < poly.length; i++) {
                 shapeRenderer.line(poly[i - 1], poly[i]);
             }
@@ -226,10 +224,10 @@ public class MeshFollower extends SubFollower {
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
                     draggingAnchorId = anchorId;
-                    listener.anchorDown(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorDown(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
                     // not anchor but line is selected gotta make new point
-                    listener.vertexDown(MeshFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.vertexDown(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 }
                 return true;
             }
@@ -238,7 +236,7 @@ public class MeshFollower extends SubFollower {
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 int anchorId = draggingAnchorId;
                 if (anchorId >= 0) {
-                    listener.anchorDragged(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorDragged(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
 
                 }
@@ -250,9 +248,9 @@ public class MeshFollower extends SubFollower {
                 int anchorId = anchorHitTest(x, y);
                 lineIndex = vertexHitTest(x, y);
                 if (anchorId >= 0) {
-                    listener.anchorUp(MeshFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorUp(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 } else if (lineIndex > -1) {
-                    listener.vertexUp(MeshFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.vertexUp(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
                 }
                 draggingAnchorId = -1;
             }

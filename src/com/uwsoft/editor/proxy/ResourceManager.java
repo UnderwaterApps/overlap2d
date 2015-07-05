@@ -126,6 +126,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         // TODO: this should be cached
         FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
+        json.setIgnoreUnknownFields(true);
         return json.fromJson(SceneVO.class, file.readString());
     }
 

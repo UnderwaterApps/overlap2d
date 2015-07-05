@@ -23,13 +23,13 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
-import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 
 /**
  * Created by azakhary on 7/3/2015.
  */
-public class UpdateMeshComponentCommand extends EntityModifyRevertableCommand {
+public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand {
 
     private Entity entity;
     private Vector2[][] dataFrom;
@@ -46,8 +46,8 @@ public class UpdateMeshComponentCommand extends EntityModifyRevertableCommand {
     public void doAction() {
         collectData();
 
-        MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
-        meshComponent.vertices = dataTo;
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        polygonComponent.vertices = dataTo;
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
 
@@ -55,17 +55,17 @@ public class UpdateMeshComponentCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
-        MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
-        meshComponent.vertices = dataFrom;
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        polygonComponent.vertices = dataFrom;
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payloadInitialState(Entity entity) {
-        MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         Object[] payload = new Object[3];
         payload[0] = entity;
-        payload[1] = cloneData(meshComponent.vertices);
+        payload[1] = cloneData(polygonComponent.vertices);
 
         return payload;
     }

@@ -24,9 +24,9 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.controller.commands.component.UpdateMeshComponentCommand;
+import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
@@ -35,25 +35,25 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<Entity, UIMeshComponentProperties> {
+public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediator<Entity, UIPolygonComponentProperties> {
 
-    private static final String TAG = UIMeshComponentPropertiesMediator.class.getCanonicalName();
+    private static final String TAG = UIPolygonComponentPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private MeshComponent meshComponent;
+    private PolygonComponent polygonComponent;
 
-    public UIMeshComponentPropertiesMediator() {
-        super(NAME, new UIMeshComponentProperties());
+    public UIPolygonComponentPropertiesMediator() {
+        super(NAME, new UIPolygonComponentProperties());
     }
 
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
-                UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
-                UIMeshComponentProperties.COPY_BUTTON_CLICKED,
-                UIMeshComponentProperties.PASTE_BUTTON_CLICKED,
-                UIMeshComponentProperties.CLOSE_CLICKED
+                UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
+                UIPolygonComponentProperties.COPY_BUTTON_CLICKED,
+                UIPolygonComponentProperties.PASTE_BUTTON_CLICKED,
+                UIPolygonComponentProperties.CLOSE_CLICKED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -64,29 +64,29 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
         super.handleNotification(notification);
 
         switch (notification.getName()) {
-            case UIMeshComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED:
+            case UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED:
                 addDefaultMesh();
                 break;
-            case UIMeshComponentProperties.COPY_BUTTON_CLICKED:
+            case UIPolygonComponentProperties.COPY_BUTTON_CLICKED:
                 copyMesh();
                 break;
-            case UIMeshComponentProperties.PASTE_BUTTON_CLICKED:
+            case UIPolygonComponentProperties.PASTE_BUTTON_CLICKED:
                 pasteMesh();
                 break;
-            case UIMeshComponentProperties.CLOSE_CLICKED:
-                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, MeshComponent.class));
+            case UIPolygonComponentProperties.CLOSE_CLICKED:
+                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
                 break;
         }
     }
 
     @Override
     protected void translateObservableDataToView(Entity item) {
-        meshComponent = item.getComponent(MeshComponent.class);
-        if(meshComponent.vertices != null) {
+        polygonComponent = item.getComponent(PolygonComponent.class);
+        if(polygonComponent.vertices != null) {
             viewComponent.initView();
             int verticesCount = 0;
-            for(int i = 0; i < meshComponent.vertices.length; i++) {
-                for(int j = 0; j < meshComponent.vertices[i].length; j++) {
+            for(int i = 0; i < polygonComponent.vertices.length; i++) {
+                for(int j = 0; j < polygonComponent.vertices[i].length; j++) {
                     verticesCount++;
                 }
             }
@@ -104,21 +104,21 @@ public class UIMeshComponentPropertiesMediator extends UIItemPropertiesMediator<
 
     private void addDefaultMesh() {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
-        meshComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
+        polygonComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, observableReference);
     }
 
     private void copyMesh() {
-        meshComponent = observableReference.getComponent(MeshComponent.class);
-        Sandbox.getInstance().copyToLocalClipboard("meshData", meshComponent.vertices);
+        polygonComponent = observableReference.getComponent(PolygonComponent.class);
+        Sandbox.getInstance().copyToLocalClipboard("meshData", polygonComponent.vertices);
     }
 
     private void pasteMesh() {
         Vector2[][] vertices = (Vector2[][]) Sandbox.getInstance().retrieveFromLocalClipboard("meshData");
         if(vertices == null) return;
-        Object[] payload = UpdateMeshComponentCommand.payloadInitialState(observableReference);
-        payload = UpdateMeshComponentCommand.payload(payload, vertices);
+        Object[] payload = UpdatePolygonComponentCommand.payloadInitialState(observableReference);
+        payload = UpdatePolygonComponentCommand.payload(payload, vertices);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, payload);
     }
 }

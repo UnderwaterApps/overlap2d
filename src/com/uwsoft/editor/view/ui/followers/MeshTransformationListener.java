@@ -23,11 +23,11 @@ package com.uwsoft.editor.view.ui.followers;
  */
 public interface MeshTransformationListener {
 
-    public abstract void vertexUp(MeshFollower follower, int vertexIndex, float x, float y);
-    public abstract void vertexDown(MeshFollower follower, int vertexIndex, float x, float y);
-    public abstract void VertexMouseOver(MeshFollower follower, int vertexIndex, float x, float y);
-    void anchorDown(MeshFollower follower, int anchor, float x, float y);
-    void anchorDragged(MeshFollower follower, int anchor, float x, float y);
-    void anchorUp(MeshFollower follower, int anchor, float x, float y);
+    public abstract void vertexUp(PolygonFollower follower, int vertexIndex, float x, float y);
+    public abstract void vertexDown(PolygonFollower follower, int vertexIndex, float x, float y);
+    public abstract void VertexMouseOver(PolygonFollower follower, int vertexIndex, float x, float y);
+    void anchorDown(PolygonFollower follower, int anchor, float x, float y);
+    void anchorDragged(PolygonFollower follower, int anchor, float x, float y);
+    void anchorUp(PolygonFollower follower, int anchor, float x, float y);
 
 }

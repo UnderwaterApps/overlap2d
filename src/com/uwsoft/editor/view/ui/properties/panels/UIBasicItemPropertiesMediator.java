@@ -76,7 +76,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
 
-        componentClassMap.put("Mesh Component", MeshComponent.class);
+        componentClassMap.put("Mesh Component", PolygonComponent.class);
     }
 
     @Override

@@ -26,16 +26,15 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.controller.commands.component.UpdateMeshComponentCommand;
+import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.proxy.SceneDataManager;
-import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.poly.Clipper;
-import com.uwsoft.editor.utils.poly.PolygonUtils;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
-import com.uwsoft.editor.view.ui.followers.MeshFollower;
+import com.uwsoft.editor.view.ui.followers.PolygonFollower;
 import com.uwsoft.editor.view.ui.followers.MeshTransformationListener;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 
@@ -55,7 +54,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
 
     private Object[] currentCommandPayload;
 
-    private MeshFollower lastSelectedMeshFollower = null;
+    private PolygonFollower lastSelectedMeshFollower = null;
 
     @Override
     public void initTool() {
@@ -90,7 +89,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         return super.itemMouseDown(entity, x, y);
     }
 
-    private void setListener(MeshFollower meshFollower) {
+    private void setListener(PolygonFollower meshFollower) {
         meshFollower.setListener(this);
     }
 
@@ -99,8 +98,8 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
         for(Entity entity: selectedEntities) {
             NormalSelectionFollower follower = (NormalSelectionFollower) midUIMediator.getFollower(entity);
-            follower.removeSubFollower(MeshFollower.class);
-            MeshFollower meshFollower = new MeshFollower(entity);
+            follower.removeSubFollower(PolygonFollower.class);
+            PolygonFollower meshFollower = new PolygonFollower(entity);
             follower.addSubfollower(meshFollower);
             setListener(meshFollower);
             lastSelectedMeshFollower = meshFollower;
@@ -108,19 +107,19 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     }
 
     @Override
-    public void vertexUp(MeshFollower follower, int vertexIndex, float x, float y) {
+    public void vertexUp(PolygonFollower follower, int vertexIndex, float x, float y) {
 
     }
 
     @Override
-    public void vertexDown(MeshFollower follower, int vertexIndex, float x, float y) {
-        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
-        currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
+    public void vertexDown(PolygonFollower follower, int vertexIndex, float x, float y) {
+        PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
+        currentCommandPayload = UpdatePolygonComponentCommand.payloadInitialState(follower.getEntity());
 
         follower.getOriginalPoints().add(vertexIndex, new Vector2(x, y));
         Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
 
-        meshComponent.vertices = polygonize(points);
+        polygonComponent.vertices = polygonize(points);
         follower.updateDraw();
 
         follower.draggingAnchorId = vertexIndex;
@@ -130,36 +129,36 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     }
 
     @Override
-    public void VertexMouseOver(MeshFollower follower, int vertexIndex, float x, float y) {
+    public void VertexMouseOver(PolygonFollower follower, int vertexIndex, float x, float y) {
 
     }
 
     @Override
-    public void anchorDown(MeshFollower follower, int anchor, float x, float y) {
+    public void anchorDown(PolygonFollower follower, int anchor, float x, float y) {
         dragLastPoint = new Vector2(x, y);
-        currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
+        currentCommandPayload = UpdatePolygonComponentCommand.payloadInitialState(follower.getEntity());
         follower.setSelectedAnchor(anchor);
         lastSelectedMeshFollower = follower;
     }
 
     @Override
-    public void anchorDragged(MeshFollower follower, int anchor, float x, float y) {
-        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
+    public void anchorDragged(PolygonFollower follower, int anchor, float x, float y) {
+        PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
 
         Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
         Vector2 diff = dragLastPoint.sub(x, y);
         points[anchor].sub(diff);
         dragLastPoint = new Vector2(x, y);
-        meshComponent.vertices = polygonize(points);
+        polygonComponent.vertices = polygonize(points);
 
         follower.updateDraw();
     }
 
     @Override
-    public void anchorUp(MeshFollower follower, int anchor, float x, float y) {
-        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
+    public void anchorUp(PolygonFollower follower, int anchor, float x, float y) {
+        PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
 
-        currentCommandPayload = UpdateMeshComponentCommand.payload(currentCommandPayload, meshComponent.vertices);
+        currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
     }
 
@@ -178,11 +177,11 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         }
     }
 
-    private MeshFollower getMeshFollower(Entity entity) {
+    private PolygonFollower getMeshFollower(Entity entity) {
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         BasicFollower follower = midUIMediator.getFollower(entity);
         if(follower instanceof NormalSelectionFollower) {
-            MeshFollower meshFollower = (MeshFollower) ((NormalSelectionFollower) follower).getSubFollower(MeshFollower.class);
+            PolygonFollower meshFollower = (PolygonFollower) ((NormalSelectionFollower) follower).getSubFollower(PolygonFollower.class);
             return meshFollower;
         }
 
@@ -190,18 +189,18 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     }
 
     private boolean deleteSelectedAnchor() {
-        MeshFollower follower = lastSelectedMeshFollower;
-        MeshComponent meshComponent = ComponentRetriever.get(follower.getEntity(), MeshComponent.class);
+        PolygonFollower follower = lastSelectedMeshFollower;
+        PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
         if(follower != null) {
-            if(meshComponent == null || meshComponent.vertices == null || meshComponent.vertices.length == 0) return false;
+            if(polygonComponent == null || polygonComponent.vertices == null || polygonComponent.vertices.length == 0) return false;
             if(follower.getOriginalPoints().size() <= 3) return false;
 
-            currentCommandPayload = UpdateMeshComponentCommand.payloadInitialState(follower.getEntity());
+            currentCommandPayload = UpdatePolygonComponentCommand.payloadInitialState(follower.getEntity());
 
             follower.getOriginalPoints().remove(follower.getSelectedAnchorId());
             follower.getSelectedAnchorId(follower.getSelectedAnchorId()-1);
             Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
-            meshComponent.vertices = polygonize(points);
+            polygonComponent.vertices = polygonize(points);
             follower.updateDraw();
 
             return true;

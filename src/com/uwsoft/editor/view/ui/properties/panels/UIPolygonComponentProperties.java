@@ -30,7 +30,7 @@ import com.uwsoft.editor.view.ui.properties.UIRemovableProperties;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class UIMeshComponentProperties extends UIRemovableProperties {
+public class UIPolygonComponentProperties extends UIRemovableProperties {
 
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIMeshComponentProperties";
 
@@ -45,8 +45,8 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
     private VisTextButton copyBtn;
     private VisTextButton pasteBtn;
 
-    public UIMeshComponentProperties() {
-        super("Mesh Component");
+    public UIPolygonComponentProperties() {
+        super("Polygon Component");
     }
 
     public void initView() {
@@ -73,9 +73,9 @@ public class UIMeshComponentProperties extends UIRemovableProperties {
     public void initEmptyView() {
         mainTable.clear();
 
-        addDefaultMeshButton = new VisTextButton("Create Default Mesh");
+        addDefaultMeshButton = new VisTextButton("Make Default");
 
-        mainTable.add(new VisLabel("There is no vertices in this mesh", Align.center));
+        mainTable.add(new VisLabel("There is no vertices in this shape", Align.center));
         mainTable.row();
         mainTable.add(addDefaultMeshButton).center();
 

@@ -31,7 +31,6 @@ import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
-import com.uwsoft.editor.view.ui.widget.components.ItemPhysicsEditor;
 import com.uwsoft.editor.event.ClickNotifier;
 
 
@@ -48,7 +47,7 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     private VisTable mainTable;
     private VisTable controlsTable;
-    private ItemPhysicsEditor itemPhysicsEditor;
+    //private ItemPhysicsEditor itemPhysicsEditor;
 
 
     private VisSelectBox<String> bodyTypeBox;
@@ -86,12 +85,12 @@ public class PhysicsEditorDialog extends O2DDialog {
 
         mainTable = new VisTable();
         controlsTable = new VisTable();
-        itemPhysicsEditor = new ItemPhysicsEditor(500, 500);
+        //itemPhysicsEditor = new ItemPhysicsEditor(500, 500);
 
         initSidePanel();
 
         mainTable.add(controlsTable).top();
-        mainTable.add(itemPhysicsEditor).top();
+        //mainTable.add(itemPhysicsEditor).top();
 
         mainTable.row();
 
@@ -106,7 +105,7 @@ public class PhysicsEditorDialog extends O2DDialog {
         float diffX = dialogStartPosition.x - getX();
         float diffY = dialogStartPosition.y - getY();
         if (diffX != 0 || diffY != 0) {
-            itemPhysicsEditor.moveRenderer(diffX, diffY);
+            //itemPhysicsEditor.moveRenderer(diffX, diffY);
             dialogStartPosition.x = getX();
             dialogStartPosition.y = getY();
         }
@@ -246,7 +245,7 @@ public class PhysicsEditorDialog extends O2DDialog {
         clearMeshButton = new VisTextButton("Clear Mesh");
         createFreshCopyButton = new VisTextButton("Create Fresh Copy");
 
-        controlsTable.add(new VisLabel("Clearing mesh does not clone it:", Align.center)).colspan(4).fillX();
+        controlsTable.add(new VisLabel("Clearing shape does not clone it:", Align.center)).colspan(4).fillX();
         controlsTable.row().padTop(5);
         controlsTable.add(clearMeshButton).padRight(5).colspan(2);
         controlsTable.add(createFreshCopyButton).padRight(5).colspan(2);
@@ -254,11 +253,11 @@ public class PhysicsEditorDialog extends O2DDialog {
     }
 
     public void setItem(Entity item) {
-        itemPhysicsEditor.editItem(item);
+        //itemPhysicsEditor.editItem(item);
     }
 
     public void setItem(String item) {
-        itemPhysicsEditor.editAsset(item);
+        //itemPhysicsEditor.editAsset(item);
     }
 
     public String getBodyType() {
@@ -395,9 +394,9 @@ public class PhysicsEditorDialog extends O2DDialog {
         return createFreshCopyButton;
     }
 
-    public ItemPhysicsEditor getItemPhysicsEditor() {
-        return itemPhysicsEditor;
-    }
+    //public ItemPhysicsEditor getItemPhysicsEditor() {
+    //    return itemPhysicsEditor;
+   // }
 
     public boolean isAllowSleep() {
         return  allowSleepBox.isChecked();

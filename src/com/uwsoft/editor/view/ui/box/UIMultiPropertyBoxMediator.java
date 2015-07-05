@@ -32,7 +32,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.renderer.components.MeshComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -101,9 +101,9 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
         }
 
         // optional panels based on components
-        MeshComponent meshComponent = ComponentRetriever.get(entity, MeshComponent.class);
-        if(meshComponent != null) {
-            mediatorNames.add(UIMeshComponentPropertiesMediator.NAME);
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        if(polygonComponent != null) {
+            mediatorNames.add(UIPolygonComponentPropertiesMediator.NAME);
         }
     }
 
