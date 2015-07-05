@@ -20,8 +20,8 @@ public class PhysicsBodyLoader {
         this.world = world;
     }
 
-//    public Body createBody( PhysicsBodyPropertiesComponent pysicsComponent, MeshVO mesh,Vector2 mulVec) {
-//        return PhysicsBodyLoader.createBody(world, pysicsComponent, mesh, mulVec);
+//    public Body createBody( PhysicsBodyPropertiesComponent pysicsComponent, MeshVO shape,Vector2 mulVec) {
+//        return PhysicsBodyLoader.createBody(world, pysicsComponent, shape, mulVec);
 //    }
 
     public static Body createBody(World world, PhysicsBodyPropertiesComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {

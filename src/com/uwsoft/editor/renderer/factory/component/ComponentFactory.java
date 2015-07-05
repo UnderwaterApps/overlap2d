@@ -169,7 +169,7 @@ public abstract class ComponentFactory {
         return component;
     }
 
-    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, MeshComponent meshComponent) {
+    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, PolygonComponent polygonComponent) {
         /*
 		PhysicsBodyComponent component = new PhysicsBodyComponent();
         component.body = PhysicsBodyLoader.createBody(world, physicsBodyPropertiesComponent, meshComponent.minPolygonData, new Vector2(1, 1)); //TODO resolution thing
@@ -182,10 +182,10 @@ public abstract class ComponentFactory {
         return null;
     }
 
-    protected MeshComponent createMeshComponent(Entity entity, MainItemVO vo) {
-        MeshComponent component = new MeshComponent();
-        if(vo.mesh != null) {
-            component.vertices = vo.mesh.polygons.clone();
+    protected PolygonComponent createMeshComponent(Entity entity, MainItemVO vo) {
+        PolygonComponent component = new PolygonComponent();
+        if(vo.shape != null) {
+            component.vertices = vo.shape.polygons.clone();
             entity.add(component);
 
             return component;

@@ -26,7 +26,7 @@ public class MainItemVO {
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
 	
-	public MeshVO mesh = null;
+	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physicsBodyData = null;
 
     public ArrayList<String> commonScripts = new ArrayList<>();
@@ -52,8 +52,8 @@ public class MainItemVO {
 		scaleX 		= vo.scaleX;
 		scaleY 		= vo.scaleY;
 
-		if(vo.mesh != null) {
-			mesh = vo.mesh.clone();
+		if(vo.shape != null) {
+			shape = vo.shape.clone();
 		}
 
 		if(vo.physicsBodyData != null){
@@ -102,10 +102,10 @@ public class MainItemVO {
 		/**
 		 * Secondary components
 		 */
-		MeshComponent meshComponent = entity.getComponent(MeshComponent.class);
-		if(meshComponent != null && meshComponent.vertices != null) {
-			mesh = new MeshVO();
-			mesh.polygons = meshComponent.vertices;
+		PolygonComponent polygonComponent = entity.getComponent(PolygonComponent.class);
+		if(polygonComponent != null && polygonComponent.vertices != null) {
+			shape = new ShapeVO();
+			shape.polygons = polygonComponent.vertices;
 		}
 	}
 }

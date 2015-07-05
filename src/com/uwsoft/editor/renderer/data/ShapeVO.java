@@ -1,13 +1,14 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
-public class MeshVO {
+public class ShapeVO {
 	public Vector2 [][] polygons;
+    public Circle[] circles;
 
-    public MeshVO clone() {
-        MeshVO newVo = new MeshVO();
+    public ShapeVO clone() {
+        ShapeVO newVo = new ShapeVO();
         Vector2 [][] target = new Vector2[polygons.length][];
 
         for (int i = 0; i < polygons.length; i++) {
