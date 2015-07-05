@@ -141,28 +141,28 @@ public abstract class ComponentFactory {
     }
 
     protected void createPhysicsComponents(Entity entity, MainItemVO vo) {
-        if(vo.physicsBodyData == null){
+        if(vo.physics == null){
             return;
         }
         //TODO: Physics logic
-        //PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
+        PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
         //createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
     }
 
     protected PhysicsBodyPropertiesComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
         PhysicsBodyPropertiesComponent component = new PhysicsBodyPropertiesComponent();
-        component.allowSleep = vo.physicsBodyData.allowSleep;
-        component.awake = vo.physicsBodyData.awake;
-        component.bodyType = vo.physicsBodyData.bodyType;
-        component.bullet = vo.physicsBodyData.bullet;
-        component.centerOfMass = vo.physicsBodyData.centerOfMass;
-        component.damping = vo.physicsBodyData.damping;
-        component.density = vo.physicsBodyData.density;
-        component.friction = vo.physicsBodyData.friction;
-        component.gravityScale = vo.physicsBodyData.gravityScale;
-        component.mass = vo.physicsBodyData.mass;
-        component.restitution = vo.physicsBodyData.restitution;
-        component.rotationalInertia = vo.physicsBodyData.rotationalInertia;
+        component.allowSleep = vo.physics.allowSleep;
+        component.awake = vo.physics.awake;
+        component.bodyType = vo.physics.bodyType;
+        component.bullet = vo.physics.bullet;
+        component.centerOfMass = vo.physics.centerOfMass;
+        component.damping = vo.physics.damping;
+        component.density = vo.physics.density;
+        component.friction = vo.physics.friction;
+        component.gravityScale = vo.physics.gravityScale;
+        component.mass = vo.physics.mass;
+        component.restitution = vo.physics.restitution;
+        component.rotationalInertia = vo.physics.rotationalInertia;
 
         entity.add(component);
 

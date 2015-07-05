@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.scripts.IScript;
 
 import java.util.ArrayList;
@@ -27,7 +28,7 @@ public class MainItemVO {
 	public boolean isFlipedV = false;
 	
 	public ShapeVO shape = null;
-	public PhysicsBodyDataVO physicsBodyData = null;
+	public PhysicsBodyDataVO physics = null;
 
     public ArrayList<String> commonScripts = new ArrayList<>();
 	
@@ -56,8 +57,8 @@ public class MainItemVO {
 			shape = vo.shape.clone();
 		}
 
-		if(vo.physicsBodyData != null){
-			physicsBodyData = new PhysicsBodyDataVO(vo.physicsBodyData);
+		if(vo.physics != null){
+            physics = new PhysicsBodyDataVO(vo.physics);
 		}
 
         commonScripts = (ArrayList<String>) vo.commonScripts.clone();
@@ -107,5 +108,10 @@ public class MainItemVO {
 			shape = new ShapeVO();
 			shape.polygons = polygonComponent.vertices;
 		}
+        PhysicsBodyPropertiesComponent physicsComponent = entity.getComponent(PhysicsBodyPropertiesComponent.class);
+        if(physicsComponent != null) {
+            physics = new PhysicsBodyDataVO();
+            physics.loadFromComponent(physicsComponent);
+        }
 	}
 }
