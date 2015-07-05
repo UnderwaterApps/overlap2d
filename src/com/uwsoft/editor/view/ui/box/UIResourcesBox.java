@@ -40,6 +40,8 @@ public class UIResourcesBox extends UICollapsibleBox {
     public UIResourcesBox() {
         super("Resources", 222);
         facade = Overlap2DFacade.getInstance();
+
+        setMovable(false);
         contentTable = new VisTable();
         tabContent = new VisTable();
         tabbedPane = new TabbedPane();

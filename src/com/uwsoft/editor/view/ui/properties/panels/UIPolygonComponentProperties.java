@@ -32,7 +32,7 @@ import com.uwsoft.editor.view.ui.properties.UIRemovableProperties;
  */
 public class UIPolygonComponentProperties extends UIRemovableProperties {
 
-    public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIMeshComponentProperties";
+    public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIPolygonComponentProperties";
 
     public static final String COPY_BUTTON_CLICKED = prefix + ".COPY_BUTTON_CLICKED";
     public static final String PASTE_BUTTON_CLICKED = prefix + ".PASTE_BUTTON_CLICKED";

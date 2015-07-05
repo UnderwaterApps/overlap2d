@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
 import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -76,7 +77,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
 
-        componentClassMap.put("Mesh Component", PolygonComponent.class);
+        componentClassMap.put("Polygon Component", PolygonComponent.class);
+        componentClassMap.put("Physics Component", PhysicsBodyPropertiesComponent.class);
     }
 
     @Override
@@ -186,11 +188,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
         dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
         dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
-    	
-    	//TODO nor more flip
-    	//vo.isFlipedH = viewComponent.getFlipH();
-    	//vo.isFlipedV = viewComponent.getFlipV();
-    	
+
         // TODO: manage width and height
         transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
     	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);

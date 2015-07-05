@@ -33,6 +33,7 @@ import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.utils.runtime.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -102,8 +103,12 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
 
         // optional panels based on components
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        PhysicsBodyPropertiesComponent physicsComponent = ComponentRetriever.get(entity, PhysicsBodyPropertiesComponent.class);
         if(polygonComponent != null) {
             mediatorNames.add(UIPolygonComponentPropertiesMediator.NAME);
+        }
+        if(physicsComponent != null) {
+            mediatorNames.add(UIPhysicsPropertiesMediator.NAME);
         }
     }
 

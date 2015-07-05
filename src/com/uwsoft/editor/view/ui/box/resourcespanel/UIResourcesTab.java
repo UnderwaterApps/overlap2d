@@ -45,7 +45,7 @@ public abstract class UIResourcesTab extends Tab {
         contentTable.add(createTextField()).padLeft(0).padRight(7).fillX().padBottom(4);
         contentTable.row();
         scrollPane = crateScrollPane();
-        contentTable.add(scrollPane).colspan(2).maxHeight(350).expandX().fillX();
+        contentTable.add(scrollPane).colspan(2).maxHeight(200).expandX().fillX();
         contentTable.padTop(4);
     }
 
