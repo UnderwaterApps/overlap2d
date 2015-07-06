@@ -63,6 +63,7 @@ public class ExportSettingsDialogMediator extends SimpleMediator<ExportSettingsD
                 viewComponent.show(uiStage);
                 break;
             case ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED:
+                saveExportSettings(notification.getBody());
                 exportProject(notification.getBody());
                 viewComponent.hide();
                 break;
