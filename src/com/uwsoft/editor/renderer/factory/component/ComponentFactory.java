@@ -22,14 +22,11 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.MeshComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 /**
@@ -59,6 +56,7 @@ public abstract class ComponentFactory {
         createTintComponent(entity, vo);
         createZIndexComponent(entity, vo);
         createScriptComponent(entity, vo);
+        createMeshComponent(entity, vo);
     }
 
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
@@ -143,53 +141,56 @@ public abstract class ComponentFactory {
     }
 
     protected void createPhysicsComponents(Entity entity, MainItemVO vo) {
-        if(vo.physicsBodyData == null){
+        if(vo.physics == null){
             return;
         }
-        //TODO: it's better to move mesh logic out of the physics in future
-
+        //TODO: Physics logic
         PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
-        MeshComponent meshComponent = createMeshComponent(entity, vo);
-        createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
+        //createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
     }
 
     protected PhysicsBodyPropertiesComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
         PhysicsBodyPropertiesComponent component = new PhysicsBodyPropertiesComponent();
-        component.allowSleep = vo.physicsBodyData.allowSleep;
-        component.awake = vo.physicsBodyData.awake;
-        component.bodyType = vo.physicsBodyData.bodyType;
-        component.bullet = vo.physicsBodyData.bullet;
-        component.centerOfMass = vo.physicsBodyData.centerOfMass;
-        component.damping = vo.physicsBodyData.damping;
-        component.density = vo.physicsBodyData.density;
-        component.friction = vo.physicsBodyData.friction;
-        component.gravityScale = vo.physicsBodyData.gravityScale;
-        component.mass = vo.physicsBodyData.mass;
-        component.restitution = vo.physicsBodyData.restitution;
-        component.rotationalInertia = vo.physicsBodyData.rotationalInertia;
+        component.allowSleep = vo.physics.allowSleep;
+        component.awake = vo.physics.awake;
+        component.bodyType = vo.physics.bodyType;
+        component.bullet = vo.physics.bullet;
+        component.centerOfMass = vo.physics.centerOfMass;
+        component.damping = vo.physics.damping;
+        component.density = vo.physics.density;
+        component.friction = vo.physics.friction;
+        component.gravityScale = vo.physics.gravityScale;
+        component.mass = vo.physics.mass;
+        component.restitution = vo.physics.restitution;
+        component.rotationalInertia = vo.physics.rotationalInertia;
 
         entity.add(component);
 
         return component;
     }
 
-    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, MeshComponent meshComponent) {
+    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, PolygonComponent polygonComponent) {
+        /*
 		PhysicsBodyComponent component = new PhysicsBodyComponent();
         component.body = PhysicsBodyLoader.createBody(world, physicsBodyPropertiesComponent, meshComponent.minPolygonData, new Vector2(1, 1)); //TODO resolution thing
 
         entity.add(component);
 
         return component;
+        */
+
+        return null;
     }
 
-    protected MeshComponent createMeshComponent(Entity entity, MainItemVO vo) {
-        MeshComponent component = new MeshComponent();
-        component.meshId = vo.meshId;
-        component.minPolygonData = rm.getProjectVO().meshes.get(vo.meshId).minPolygonData;
+    protected PolygonComponent createMeshComponent(Entity entity, MainItemVO vo) {
+        PolygonComponent component = new PolygonComponent();
+        if(vo.shape != null) {
+            component.vertices = vo.shape.polygons.clone();
+            entity.add(component);
 
-        entity.add(component);
-
-        return component;
+            return component;
+        }
+        return null;
     }
 
     public void setResourceManager(IResourceRetriever rm) {

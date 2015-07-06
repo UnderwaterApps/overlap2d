@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.scripts.IScript;
 
 import java.util.ArrayList;
@@ -26,8 +27,8 @@ public class MainItemVO {
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
 	
-	public String meshId = "-1";
-	public PhysicsBodyDataVO physicsBodyData = null;
+	public ShapeVO shape = null;
+	public PhysicsBodyDataVO physics = null;
 
     public ArrayList<String> commonScripts = new ArrayList<>();
 	
@@ -51,10 +52,13 @@ public class MainItemVO {
 		isFlipedV 	= vo.isFlipedV;
 		scaleX 		= vo.scaleX;
 		scaleY 		= vo.scaleY;
-		
-		meshId = vo.meshId;
-		if(vo.physicsBodyData != null){
-			physicsBodyData = new PhysicsBodyDataVO(vo.physicsBodyData);
+
+		if(vo.shape != null) {
+			shape = vo.shape.clone();
+		}
+
+		if(vo.physics != null){
+            physics = new PhysicsBodyDataVO(vo.physics);
 		}
 
         commonScripts = (ArrayList<String>) vo.commonScripts.clone();
@@ -95,5 +99,19 @@ public class MainItemVO {
 		tint[3] = tintComponent.color.a;
 
 		zIndex = zindexComponent.zIndex;
+
+		/**
+		 * Secondary components
+		 */
+		PolygonComponent polygonComponent = entity.getComponent(PolygonComponent.class);
+		if(polygonComponent != null && polygonComponent.vertices != null) {
+			shape = new ShapeVO();
+			shape.polygons = polygonComponent.vertices;
+		}
+        PhysicsBodyPropertiesComponent physicsComponent = entity.getComponent(PhysicsBodyPropertiesComponent.class);
+        if(physicsComponent != null) {
+            physics = new PhysicsBodyDataVO();
+            physics.loadFromComponent(physicsComponent);
+        }
 	}
 }

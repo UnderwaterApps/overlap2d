@@ -255,10 +255,6 @@ public class EntityFactory {
 			engine.addEntity(child);
 		}
 
-		for (int i = 0; i < vo.layers.size(); i++) {
-			//TODO wtf is this do we need this? :O
-		}
-
 		for (int i = 0; i < vo.sComposites.size(); i++) {
 			Entity child = createEntity(entity, vo.sComposites.get(i));
 			engine.addEntity(child);
