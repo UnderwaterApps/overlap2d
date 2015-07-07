@@ -97,7 +97,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         Sandbox sandbox = Sandbox.getInstance();
         Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
         for(Entity entity: selectedEntities) {
-            NormalSelectionFollower follower = (NormalSelectionFollower) midUIMediator.getFollower(entity);
+            BasicFollower follower = midUIMediator.getFollower(entity);
             follower.removeSubFollower(PolygonFollower.class);
             PolygonFollower meshFollower = new PolygonFollower(entity);
             follower.addSubfollower(meshFollower);
@@ -180,12 +180,9 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     private PolygonFollower getMeshFollower(Entity entity) {
         MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
         BasicFollower follower = midUIMediator.getFollower(entity);
-        if(follower instanceof NormalSelectionFollower) {
-            PolygonFollower meshFollower = (PolygonFollower) ((NormalSelectionFollower) follower).getSubFollower(PolygonFollower.class);
-            return meshFollower;
-        }
 
-        return null;
+        PolygonFollower meshFollower = (PolygonFollower) (follower).getSubFollower(PolygonFollower.class);
+        return meshFollower;
     }
 
     private boolean deleteSelectedAnchor() {

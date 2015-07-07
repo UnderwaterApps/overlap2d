@@ -104,13 +104,6 @@ public class PolygonFollower extends SubFollower {
         originalPoints = new ArrayList<>();
         if(polygonComponent == null) return;
 
-        /*
-        for (Vector2[] poly : meshComponent.vertices) {
-            for (int i = 0; i < poly.length; i++) {
-                if (!originalPoints.contains(poly[i]))
-                    originalPoints.add(poly[i]);
-            }
-        }*/
         originalPoints = new ArrayList<>(Arrays.asList(PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices)));
 
     }

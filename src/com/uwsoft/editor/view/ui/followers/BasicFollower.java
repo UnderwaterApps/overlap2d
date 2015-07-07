@@ -23,6 +23,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -39,6 +40,9 @@ public abstract class BasicFollower extends Group {
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
+
+
+    private Array<SubFollower> subFollowers = new Array<>();
 
     public BasicFollower(Entity entity) {
         setItem(entity);
@@ -68,6 +72,12 @@ public abstract class BasicFollower extends Group {
 
         //setOrigin(transformComponent.originX, transformComponent.originY);
         setRotation(transformComponent.rotation);
+
+        if(subFollowers != null) {
+            for (SubFollower follower : subFollowers) {
+                follower.update();
+            }
+        }
     }
 
     public void show() {
@@ -100,10 +110,50 @@ public abstract class BasicFollower extends Group {
     }
 
     public void handleNotification(Notification notification) {
-        // This method is meant to be overridden.
+        for(SubFollower follower: subFollowers) {
+            follower.handleNotification(notification);
+        }
     }
 
     public Entity getEntity() {
         return entity;
+    }
+
+    public void addSubfollower(SubFollower subFollower) {
+        subFollowers.add(subFollower);
+        addActor(subFollower);
+    }
+
+    public Array<SubFollower> getSubFollowers() {
+        return subFollowers;
+    }
+
+    public SubFollower getSubFollower(Class clazz) {
+        for(SubFollower subFollower: subFollowers) {
+            if(subFollower.getClass() == clazz) {
+                return subFollower;
+            }
+        }
+
+        return null;
+    }
+
+    public void removeSubFollower(Class clazz) {
+        SubFollower subFollower = getSubFollower(clazz);
+        if(subFollower != null) {
+            removeSubFollower(subFollower);
+        }
+    }
+
+    public void removeSubFollower(SubFollower subFollower) {
+        subFollowers.removeValue(subFollower, true);
+        subFollower.remove();
+    }
+
+    public void clearSubFollowers() {
+        for(SubFollower subFollower: subFollowers) {
+            subFollower.remove();
+        }
+        subFollowers.clear();
     }
 }

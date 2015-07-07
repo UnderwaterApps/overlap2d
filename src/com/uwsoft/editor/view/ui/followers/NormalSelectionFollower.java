@@ -44,8 +44,6 @@ public class NormalSelectionFollower extends BasicFollower {
     private EditorTextureManager tm;
     private CursorManager cursorManager;
 
-    private Array<SubFollower> subFollowers = new Array<>();
-
     private PixelRect pixelRect;
 
     protected Group transformGroup;
@@ -213,16 +211,11 @@ public class NormalSelectionFollower extends BasicFollower {
         for(int i = 0; i <= 7; i++) {
             miniRects[i].setRotation(-getRotation());
         }
-
-        if(subFollowers != null) {
-            for (SubFollower follower : subFollowers) {
-                follower.update();
-            }
-        }
     }
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
             case UIToolBoxMediator.TOOL_SELECTED:
                 if(notification.getBody().equals(TransformTool.NAME)) {
@@ -231,9 +224,6 @@ public class NormalSelectionFollower extends BasicFollower {
                     setMode(SelectionMode.normal);
                 }
                 break;
-        }
-        for(SubFollower follower: subFollowers) {
-            follower.handleNotification(notification);
         }
     }
 
@@ -248,43 +238,5 @@ public class NormalSelectionFollower extends BasicFollower {
 
     public SelectionMode getMode() {
         return mode;
-    }
-
-    public void addSubfollower(SubFollower subFollower) {
-        subFollowers.add(subFollower);
-        addActor(subFollower);
-    }
-
-    public Array<SubFollower> getSubFollowers() {
-        return subFollowers;
-    }
-
-    public SubFollower getSubFollower(Class clazz) {
-        for(SubFollower subFollower: subFollowers) {
-            if(subFollower.getClass() == clazz) {
-                return subFollower;
-            }
-        }
-
-        return null;
-    }
-
-    public void removeSubFollower(Class clazz) {
-        SubFollower subFollower = getSubFollower(clazz);
-        if(subFollower != null) {
-            removeSubFollower(subFollower);
-        }
-    }
-
-    public void removeSubFollower(SubFollower subFollower) {
-        subFollowers.removeValue(subFollower, true);
-        subFollower.remove();
-    }
-
-    public void clearSubFollowers() {
-        for(SubFollower subFollower: subFollowers) {
-            subFollower.remove();
-        }
-        subFollowers.clear();
     }
 }
