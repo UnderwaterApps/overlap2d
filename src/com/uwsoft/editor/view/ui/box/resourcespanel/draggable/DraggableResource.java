@@ -26,6 +26,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.utils.Pools;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.proxy.ResolutionManager;
+import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 
@@ -67,19 +70,17 @@ public class DraggableResource extends DragAndDrop {
 
             @Override
             public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-                Vector2 vector2 = Pools.obtain(Vector2.class);
-                OrthographicCamera camera = sandbox.getCamera();
-                vector2.x = x - (-camera.position.x+sandbox.getViewport().getScreenWidth()/2);
-                vector2.y = y - (-camera.position.y+sandbox.getViewport().getScreenHeight()/2);
-                DraggableResource.this.drop(payload, vector2);
-                Pools.free(vector2);
+                Vector2 vector = sandbox.screenToWorld(x, y);
+                DraggableResource.this.drop(payload, vector);
             }
         });
     }
 
     private void drop(DragAndDrop.Payload payload, Vector2 vector2) {
         ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
-        vector2.sub(resourcePayloadObject.xOffset, resourcePayloadObject.yOffset);
+        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
+
+        vector2.sub(resourcePayloadObject.xOffset/resourceManager.getProjectVO().pixelToWorld, resourcePayloadObject.yOffset/resourceManager.getProjectVO().pixelToWorld);
         factoryFunction.apply(resourcePayloadObject.name, vector2);
     }
 

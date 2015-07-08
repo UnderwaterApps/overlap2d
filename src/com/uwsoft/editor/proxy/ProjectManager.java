@@ -212,6 +212,7 @@ public class ProjectManager extends BaseProxy {
                 String projectInfoContents = FileUtils.readFileToString(projectInfoFile.file());
                 ProjectInfoVO voInfo = json.fromJson(ProjectInfoVO.class, projectInfoContents);
                 currentProjectInfoVO = voInfo;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -967,8 +968,12 @@ public class ProjectManager extends BaseProxy {
         currentWorkingPath = projectFolder.getParentFile().getPath();
         editorConfigVO.lastOpenedSystemPath = currentWorkingPath;
         saveEditorConfig();
+
+        // here we load all data
         openProjectAndLoadAllData(projectName);
         Sandbox.getInstance().loadCurrentProject();
+
+
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
     }
 }

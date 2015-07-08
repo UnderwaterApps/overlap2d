@@ -21,10 +21,16 @@ package com.uwsoft.editor.view;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.StretchViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
+import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
@@ -78,12 +84,13 @@ public class SceneControlMediator {
 	}
 
 	public void initScene(String sceneName) {
-		ResolutionManager resolutionManager = facade
-				.retrieveProxy(ResolutionManager.NAME);
+		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+		ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 		// TODO: Resolution
 		// sceneLoader.setResolution(resolutionManager.currentResolutionName);
 
-		currentSceneVo = sceneLoader.loadScene(sceneName);
+		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)Gdx.graphics.getWidth()/resourceManager.getProjectVO().pixelToWorld, (float)Gdx.graphics.getHeight()/resourceManager.getProjectVO().pixelToWorld);
+		currentSceneVo = sceneLoader.loadScene(sceneName, viewport);
 		// TODO: this is now in sceneLoaader but probably will be changed
 		// essentials.world = new World(new
 		// Vector2(currentSceneVo.physicsPropertiesVO.gravityX,

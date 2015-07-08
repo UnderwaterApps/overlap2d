@@ -96,7 +96,7 @@ public class SelectionTool extends SimpleTool {
         }
 
         // transform stage coordinates to screen coordinates
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+        Vector2 screenCoords = Sandbox.getInstance().worldToScreen(x, y);
 
         // preparing selection tool rectangle to follow mouse
         sandbox.prepareSelectionRectangle(screenCoords.x, screenCoords.y, setOpacity);
@@ -118,7 +118,7 @@ public class SelectionTool extends SimpleTool {
         isCastingRectangle = true;
 
         // transform stage coordinates to screen coordinates
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+        Vector2 screenCoords = Sandbox.getInstance().worldToScreen(x, y);
 
         sandbox.selectionRec.setWidth(screenCoords.x - sandbox.selectionRec.getX());
         sandbox.selectionRec.setHeight(screenCoords.y - sandbox.selectionRec.getY());
@@ -191,7 +191,7 @@ public class SelectionTool extends SimpleTool {
 
         isDragging = true;
 
-        int gridSize = Sandbox.getInstance().getGridSize();
+        float gridSize = Sandbox.getInstance().getWorldGridSize();
 
         if (isShiftPressed()) {
             // check if we have a direction vector

@@ -24,6 +24,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -57,18 +58,22 @@ public abstract class BasicFollower extends Group {
     }
 
     public void update() {
+        Sandbox sandbox = Sandbox.getInstance();
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
-        Viewport viewport = Sandbox.getInstance().getViewport();
 
-        // TODO: Make poolable vector
-    	Vector2 stageCoords = new Vector2(0, 0);
-    	TransformMathUtils.localToSceneCoordinates(entity, stageCoords);
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(stageCoords.x, stageCoords.y);
+        int pixelPerWU = sandbox.sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
 
-        setX((int)(screenCoords.x));
-        setY((int)(screenCoords.y));
-        setWidth(dimensionsComponent.width * transformComponent.scaleX / camera.zoom);
-        setHeight(dimensionsComponent.height * transformComponent.scaleY / camera.zoom);
+    	Vector2 position = Pools.obtain(Vector2.class);
+        position.x = 0; position.y = 0;
+        TransformMathUtils.localToSceneCoordinates(entity, position);
+        position = Sandbox.getInstance().worldToScreen(position);
+
+        setX((int) (position.x));
+        setY((int) (position.y));
+        setWidth(pixelPerWU * dimensionsComponent.width * transformComponent.scaleX / camera.zoom);
+        setHeight(pixelPerWU * dimensionsComponent.height * transformComponent.scaleY / camera.zoom);
+
+        Pools.free(position);
 
         //setOrigin(transformComponent.originX, transformComponent.originY);
         setRotation(transformComponent.rotation);

@@ -88,7 +88,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
     public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
         update();
 
-        Vector2 stageCoordinates = Sandbox.getInstance().screenToStageCoordinates(x, y);
+        Vector2 stageCoordinates = Sandbox.getInstance().screenToWorld(x, y);
         x = stageCoordinates.x;
         y = stageCoordinates.y;
 
