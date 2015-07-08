@@ -326,9 +326,7 @@ public class SelectionTool extends SimpleTool {
         sandbox.selectionRec.setOpacity(0.0f);
         //ArrayList<Entity> curr = new ArrayList<Entity>();
         Set<Entity> curr = new HashSet<>();
-        Rectangle sR = sandbox.selectionRec.getRect();
-        sR.x = sR.x - (viewport.getScreenWidth()/2 - camera.position.x);
-        sR.y = sR.y - (viewport.getScreenHeight()/2 - camera.position.y);
+        Rectangle sR = sandbox.screenToWorld(sandbox.selectionRec.getRect());
 
         for (Entity entity : freeItems) {
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);

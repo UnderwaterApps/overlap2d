@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -468,6 +469,18 @@ public class Sandbox {
 
     /** Transformations **/
 
+    public Rectangle screenToWorld(Rectangle rect) {
+        Vector2 pos = getViewport().unproject(new Vector2(rect.x, rect.y));
+        Vector2 pos2 = getViewport().unproject(new Vector2(rect.x + rect.width, rect.y + rect.height));
+        pos.y=-pos.y;
+        pos2.y=-pos2.y;
+
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.width = pos2.x - rect.x;
+        rect.height = pos2.y - rect.y;
+        return rect;
+    }
 
     public Vector2 screenToWorld(Vector2 vector) {
         getViewport().unproject(vector);
