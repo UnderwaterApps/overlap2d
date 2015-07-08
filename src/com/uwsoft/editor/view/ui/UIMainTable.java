@@ -92,9 +92,6 @@ public class UIMainTable extends VisTable {
     private void initRightBoxesPanel() {
         VisTable rightPanel = new VisTable();
 
-        // TODO: make this scroll pane work
-        VisScrollPane scrollPane = new VisScrollPane(rightPanel);
-
         //PropertyBox
         UIMultiPropertyBoxMediator multiPropertyBoxMediator = facade.retrieveMediator(UIMultiPropertyBoxMediator.NAME);
         UIMultiPropertyBox multiPropertyBox = multiPropertyBoxMediator.getViewComponent();
