@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import java.text.NumberFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -146,13 +147,13 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             }
         }
 
-        viewComponent.setItemType(itemTypeMap.get("ENTITY_"+ EntityUtils.getType(entity)));
+        viewComponent.setItemType(itemTypeMap.get("ENTITY_" + EntityUtils.getType(entity)));
         viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
-        viewComponent.setXValue(transformComponent.x + "");
-        viewComponent.setYValue(transformComponent.y + "");
+        viewComponent.setXValue(String.format("%.2f", transformComponent.x));
+        viewComponent.setYValue(String.format("%.2f", transformComponent.y));
 
-        viewComponent.setWidthValue(dimensionComponent.width + "");
-        viewComponent.setHeightValue(dimensionComponent.height + "");
+        viewComponent.setWidthValue(String.format("%.2f", dimensionComponent.width));
+        viewComponent.setHeightValue(String.format("%.2f", dimensionComponent.height));
         viewComponent.setRotationValue(transformComponent.rotation + "");
         viewComponent.setScaleXValue(transformComponent.scaleX + "");
         viewComponent.setScaleYValue(transformComponent.scaleY + "");

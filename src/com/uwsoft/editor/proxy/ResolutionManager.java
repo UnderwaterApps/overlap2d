@@ -166,7 +166,9 @@ public class ResolutionManager extends BaseProxy {
             rePackProjectImages(resolutionEntryVO);
             createResizedAnimations(resolutionEntryVO);
             changePercentBy(5);
-            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+            if (resizeWarnings > 0) {
+                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+            }
         });
         executor.execute(() -> {
             try {

@@ -86,8 +86,6 @@ public class SceneControlMediator {
 	public void initScene(String sceneName) {
 		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
 		ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-		// TODO: Resolution
-		// sceneLoader.setResolution(resolutionManager.currentResolutionName);
 
 		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)Gdx.graphics.getWidth()/resourceManager.getProjectVO().pixelToWorld, (float)Gdx.graphics.getHeight()/resourceManager.getProjectVO().pixelToWorld);
 		currentSceneVo = sceneLoader.loadScene(sceneName, viewport);

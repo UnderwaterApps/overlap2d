@@ -104,7 +104,8 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
 
     private void addDefaultMesh() {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
-        polygonComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
+        int pixelPerWU = Sandbox.getInstance().getPixelPerWU();
+        polygonComponent.makeRectangle(dimensionsComponent.width * pixelPerWU, dimensionsComponent.height * pixelPerWU);
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, observableReference);
     }

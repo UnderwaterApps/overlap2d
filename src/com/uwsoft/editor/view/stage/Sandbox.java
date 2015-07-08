@@ -515,4 +515,8 @@ public class Sandbox {
     public Object retrieveFromLocalClipboard(String key) {
         return localClipboard.get(key);
     }
+
+    public int getPixelPerWU() {
+        return sceneLoader.getRm().getProjectVO().pixelToWorld;
+    }
 }
