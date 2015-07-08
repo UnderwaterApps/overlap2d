@@ -8,8 +8,8 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 public class DrawableLogicMapper {
 
-	private HashMap<Integer, Drawable> logicClassMap;  
-	
+	private HashMap<Integer, Drawable> logicClassMap;
+
 	public DrawableLogicMapper() {
 		logicClassMap = new HashMap<Integer, Drawable>(6);
 		logicClassMap.put(EntityFactory.IMAGE_TYPE, 	new TexturRegionDrawLogic());

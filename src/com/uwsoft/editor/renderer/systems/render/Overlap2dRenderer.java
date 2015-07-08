@@ -34,8 +34,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	private RayHandler rayHandler;
 	
 	public Batch batch;
-	
-	
+
 	public Overlap2dRenderer(Batch batch) {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
@@ -204,18 +203,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 		return curCompositeTransformComponent.computedTransform;
 	}
 
-	/** Set the batch's transformation matrix, often with the result of {@link #computeTransform()}. Note this causes the batch to
-	 * be flushed. {@link #resetTransform(Batch)} will restore the transform to what it was before this call. 
-	 * @param rootEntity */
 	protected void applyTransform (Entity rootEntity, Batch batch) {
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		curCompositeTransformComponent.oldTransform.set(batch.getTransformMatrix());
 		batch.setTransformMatrix(curCompositeTransformComponent.computedTransform);
 	}
 
-	/** Restores the batch transform to what it was before {@link #applyTransform(Batch, Matrix4)}. Note this causes the batch to be
-	 * flushed. 
-	 * @param rootEntity */
 	protected void resetTransform (Entity rootEntity, Batch batch) {
 		CompositeTransformComponent curCompositeTransformComponent = compositeTransformMapper.get(rootEntity);
 		batch.setTransformMatrix(curCompositeTransformComponent.oldTransform);
@@ -224,6 +217,5 @@ public class Overlap2dRenderer extends IteratingSystem {
 	public void setRayHandler(RayHandler rayHandler){
 		this.rayHandler = rayHandler;
 	}
-	
 }
 
