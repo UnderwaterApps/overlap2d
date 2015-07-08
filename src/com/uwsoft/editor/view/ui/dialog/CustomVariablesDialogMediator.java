@@ -31,7 +31,7 @@ import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.properties.panels.UIBasicItemProperties;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/12/2015.

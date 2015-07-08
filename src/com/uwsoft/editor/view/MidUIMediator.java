@@ -38,7 +38,7 @@ import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.FollowerFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 
 /**

@@ -51,6 +51,9 @@ import com.uwsoft.editor.utils.Overlap2DUtils;
 public class ResolutionManager extends BaseProxy {
     private static final String TAG = ResolutionManager.class.getCanonicalName();
     public static final String NAME = TAG;
+
+    public static final String RESOLUTION_LIST_CHANGED = "com.uwsoft.editor.proxy.ResolutionManager" + ".RESOLUTION_LIST_CHANGED";
+
     private static final String EXTENSION_9PATCH = ".9.png";
     public String currentResolutionName;
     private float currentPercent = 0.0f;
@@ -169,6 +172,7 @@ public class ResolutionManager extends BaseProxy {
             if (resizeWarnings > 0) {
                 DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
             }
+            Overlap2DFacade.getInstance().sendNotification(RESOLUTION_LIST_CHANGED);
         });
         executor.execute(() -> {
             try {

@@ -27,9 +27,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Pools;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.brashmonkey.spriter.Timeline;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -37,7 +35,6 @@ import com.uwsoft.editor.view.ItemControlMediator;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.input.InputListener;
@@ -47,7 +44,7 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import java.util.HashMap;
 

@@ -7,7 +7,7 @@ import com.uwsoft.editor.proxy.FontManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by avetiszakharyan on 4/24/15.

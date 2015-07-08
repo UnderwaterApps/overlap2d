@@ -52,7 +52,8 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
                 ProjectManager.PROJECT_OPENED,
                 UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED,
                 UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED,
-                UIResolutionBox.REPACK_BTN_CLICKED
+                UIResolutionBox.REPACK_BTN_CLICKED,
+                ResolutionManager.RESOLUTION_LIST_CHANGED
         };
     }
 
@@ -62,6 +63,9 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
         Sandbox sandbox = Sandbox.getInstance();
         ResolutionEntryVO resolutionEntryVO;
         switch (notification.getName()) {
+            case ResolutionManager.RESOLUTION_LIST_CHANGED:
+                viewComponent.update();
+                break;
             case ProjectManager.PROJECT_OPENED:
                 viewComponent.update();
                 break;

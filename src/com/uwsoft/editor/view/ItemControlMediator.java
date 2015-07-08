@@ -23,7 +23,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ZindexComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by CyberJoe on 3/18/2015.

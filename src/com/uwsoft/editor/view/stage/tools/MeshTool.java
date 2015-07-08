@@ -30,13 +30,12 @@ import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCom
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.poly.Clipper;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.PolygonFollower;
 import com.uwsoft.editor.view.ui.followers.MeshTransformationListener;
-import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 
 import java.util.Set;
 
