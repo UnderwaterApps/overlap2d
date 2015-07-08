@@ -81,6 +81,13 @@ public class SceneLoader {
         entityFactory = new EntityFactory(rayHandler, world, rm);
     }
 
+	public void setResolution(String resolutionName) {
+		ResolutionEntryVO resolution = getRm().getProjectVO().getResolution("resolutionName");
+		if(resolution != null) {
+			curResolution = resolutionName;
+		}
+	}
+
 
 	public SceneVO getSceneVO() {
 		return sceneVO;

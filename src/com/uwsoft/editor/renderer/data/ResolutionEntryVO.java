@@ -15,4 +15,14 @@ public class ResolutionEntryVO {
         }
         return width + "x" + height + " (" + name + ")";
     }
+
+    public float getMultiplier(ResolutionEntryVO originalResolution) {
+        float mul;
+        if(base == 0) {
+            mul = originalResolution.width/width;
+        } else {
+            mul = originalResolution.height/height;
+        }
+        return mul;
+    }
 }

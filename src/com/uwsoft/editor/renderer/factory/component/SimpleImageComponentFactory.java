@@ -26,6 +26,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -53,8 +54,10 @@ public class SimpleImageComponentFactory extends ComponentFactory {
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
         DimensionsComponent component = new DimensionsComponent();
-        component.height = (float) textureRegionComponent.region.getRegionHeight() / projectInfoVO.pixelToWorld;
-        component.width = (float) textureRegionComponent.region.getRegionWidth() / projectInfoVO.pixelToWorld;
+        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+        component.height = (float) textureRegionComponent.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
+        component.width = (float) textureRegionComponent.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
 
         entity.add(component);
 
