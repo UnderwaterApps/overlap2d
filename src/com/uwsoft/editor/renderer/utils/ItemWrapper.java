@@ -73,4 +73,9 @@ public class ItemWrapper {
 
         return new ItemWrapper();
     }
+
+    public int getType() {
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        return mainItemComponent.entityType;
+    }
 }

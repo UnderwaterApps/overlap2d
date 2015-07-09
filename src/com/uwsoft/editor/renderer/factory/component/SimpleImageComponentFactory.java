@@ -56,8 +56,8 @@ public class SimpleImageComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
-        component.height = (float) textureRegionComponent.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
         component.width = (float) textureRegionComponent.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
+        component.height = (float) textureRegionComponent.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
 
         entity.add(component);
 
