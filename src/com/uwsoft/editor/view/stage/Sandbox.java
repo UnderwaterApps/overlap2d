@@ -467,11 +467,8 @@ public class Sandbox {
     /** Transformations **/
 
     public Rectangle screenToWorld(Rectangle rect) {
-        Vector2 pos = getViewport().unproject(new Vector2(rect.x, rect.y));
-        Vector2 pos2 = getViewport().unproject(new Vector2(rect.x + rect.width, rect.y + rect.height));
-        pos.y=-pos.y;
-        pos2.y=-pos2.y;
-
+        Vector2 pos = screenToWorld(new Vector2(rect.x, rect.y));
+        Vector2 pos2 = screenToWorld(new Vector2(rect.x + rect.width, rect.y + rect.height));
         rect.x = pos.x;
         rect.y = pos.y;
         rect.width = pos2.x - rect.x;
@@ -480,19 +477,29 @@ public class Sandbox {
     }
 
     public Vector2 screenToWorld(Vector2 vector) {
-        getViewport().unproject(vector);
-        vector.y = - vector.y;
+        // TODO: now unproject doesnot do well too. I am completely lost here. how hard is it to do screen to world, madafakas.
+        //getViewport().unproject(vector);
+        int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+
+        vector.x = vector.x*camera.zoom - (viewport.getScreenWidth()/2 - (camera.position.x/pixelPerWU)*camera.zoom);
+        vector.y = vector.y*camera.zoom - (viewport.getScreenHeight()/2 - (camera.position.y/pixelPerWU)*camera.zoom);
+
+        vector.scl(1f/pixelPerWU);
+
+
         return vector;
     }
 
     public Vector2 worldToScreen(Vector2 vector) {
-        // TODO: WTF this had to work
+        // TODO: WTF, project had to work instead I am back to this barbarian methods of unholy land!
         //vector = getViewport().project(vector);
         int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
-        vector.x = vector.x/camera.zoom + (viewport.getWorldWidth()/2 - camera.position.x/camera.zoom);
-        vector.y = vector.y/camera.zoom + (viewport.getWorldHeight()/2 - camera.position.y/camera.zoom);
+        vector.x = vector.x/camera.zoom + (viewport.getWorldWidth()/2 - (camera.position.x)/camera.zoom);
+        vector.y = vector.y/camera.zoom + (viewport.getWorldHeight()/2 - (camera.position.y)/camera.zoom);
 
         vector.scl(pixelPerWU);
 
