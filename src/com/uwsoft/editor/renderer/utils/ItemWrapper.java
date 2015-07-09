@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 
 import java.util.HashMap;
 
@@ -32,6 +33,7 @@ public class ItemWrapper {
 
     private Entity entity;
 
+    private NodeComponent nodeComponent;
     private HashMap<String, Entity> childMap = new HashMap<>();
 
     public ItemWrapper() {
@@ -40,7 +42,7 @@ public class ItemWrapper {
 
     public ItemWrapper(Entity entity) {
         this.entity = entity;
-        NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+        nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
         if(nodeComponent != null) {
             for (Entity child : nodeComponent.children) {
                 MainItemComponent mainItemComponent = ComponentRetriever.get(child, MainItemComponent.class);
@@ -58,5 +60,17 @@ public class ItemWrapper {
 
     public Component getComponent(Class clazz) {
         return ComponentRetriever.get(entity, clazz);
+    }
+
+    public ItemWrapper addChild(Entity child) {
+        if(nodeComponent != null) {
+            ParentNodeComponent parentNodeComponent = child.getComponent(ParentNodeComponent.class);
+            parentNodeComponent.parentEntity = entity;
+            nodeComponent.children.add(child);
+
+            return  new ItemWrapper(child);
+        }
+
+        return new ItemWrapper();
     }
 }

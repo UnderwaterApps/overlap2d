@@ -26,9 +26,10 @@ import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.systems.*;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * SceneLoader is importatn part of runtime that utilizes provided
+ * SceneLoader is important part of runtime that utilizes provided
  * IResourceRetriever (or creates default one shipped with runtime) in order to
  * load entire scene data into viewable actors provides the functionality to get
  * root actor of scene and load scenes.
@@ -82,7 +83,7 @@ public class SceneLoader {
     }
 
 	public void setResolution(String resolutionName) {
-		ResolutionEntryVO resolution = getRm().getProjectVO().getResolution("resolutionName");
+		ResolutionEntryVO resolution = getRm().getProjectVO().getResolution(resolutionName);
 		if(resolution != null) {
 			curResolution = resolutionName;
 		}
@@ -156,8 +157,8 @@ public class SceneLoader {
 				// TODO: Gev knows what to do. (do this for all entities)
 
 				// mae sure we assign correct z-index here
-				ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
-				ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
+				ZindexComponent zindexComponent = ComponentRetriever.get(entity, ZindexComponent.class);
+				ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
 				if (parentNodeComponent != null) {
 					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
 					zindexComponent.zIndex = nodeComponent.children.size;
@@ -174,18 +175,18 @@ public class SceneLoader {
 
 			@Override
 			public void entityRemoved(Entity entity) {
-				ParentNodeComponent parentComponent = entity.getComponent(ParentNodeComponent.class);
+				ParentNodeComponent parentComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
 
 				if (parentComponent == null) {
 					return;
 				}
 
 				Entity parentEntity = parentComponent.parentEntity;
-				NodeComponent parentNodeComponent = parentEntity.getComponent(NodeComponent.class);
+				NodeComponent parentNodeComponent = ComponentRetriever.get(parentEntity, NodeComponent.class);
 				parentNodeComponent.removeChild(entity);
 
 				// check if composite and remove all children
-				NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
+				NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
 				if (nodeComponent != null) {
 					// it is composite
 					for (Entity node : nodeComponent.children) {
@@ -194,6 +195,18 @@ public class SceneLoader {
 				}
 			}
 		});
+	}
+
+	public Entity loadFromLibrary(String libraryName) {
+		ProjectInfoVO projectInfoVO = getRm().getProjectVO();
+		CompositeItemVO compositeItemVO = projectInfoVO.libraryItems.get(libraryName);
+
+		if(compositeItemVO != null) {
+			Entity entity = entityFactory.createEntity(null, compositeItemVO);
+			return entity;
+		}
+
+		return null;
 	}
 
 	/**
