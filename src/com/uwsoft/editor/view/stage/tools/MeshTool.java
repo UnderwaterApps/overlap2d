@@ -54,6 +54,7 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     private Object[] currentCommandPayload;
 
     private PolygonFollower lastSelectedMeshFollower = null;
+    private Vector2[][] polygonBackup = null;
 
     @Override
     public void initTool() {
@@ -148,6 +149,11 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
         Vector2 diff = dragLastPoint.sub(x, y);
         points[anchor].sub(diff);
         dragLastPoint = new Vector2(x, y);
+
+        if( polygonComponent.vertices != null) {
+            // backup vertices
+            polygonBackup = polygonComponent.vertices.clone();
+        }
         polygonComponent.vertices = polygonize(points);
 
         follower.updateDraw();
@@ -156,6 +162,11 @@ public class MeshTool extends SelectionTool implements MeshTransformationListene
     @Override
     public void anchorUp(PolygonFollower follower, int anchor, float x, float y) {
         PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
+
+        if(polygonComponent.vertices == null) {
+            // restore from backup
+            polygonComponent.vertices = polygonBackup.clone();
+        }
 
         currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);

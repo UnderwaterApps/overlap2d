@@ -40,7 +40,7 @@ public class UIMultiPropertyBox extends UICollapsibleBox {
         propertiesTable = new VisTable();
         scrollPaneInner = new VisTable();
         scrollPane = new VisScrollPane(scrollPaneInner);
-        propertiesTable.add(scrollPane).maxHeight(Gdx.graphics.getHeight() * 0.38f);
+        propertiesTable.add(scrollPane).maxHeight(Gdx.graphics.getHeight() * 0.43f);
         createCollapsibleWidget(propertiesTable);
     }
 

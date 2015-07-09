@@ -97,7 +97,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		hitTargetLocalCoordinates.set(screenX, screenY);
 		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
 		
-		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
 		TransformMathUtils.sceneToLocalCoordinates(target, hitTargetLocalCoordinates);
@@ -129,7 +129,7 @@ public class SandboxInputAdapter implements InputProcessor {
 			
 			return false;
 		}
-		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = listeners.size; j < s; j++){
@@ -158,7 +158,7 @@ public class SandboxInputAdapter implements InputProcessor {
 			return false;
 		}
 		
-		inpputListenerComponent = ComponentRetriever.get(target, InputListenerComponent.class);
+		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
 		for (int j = 0, s = listeners.size; j < s; j++){
