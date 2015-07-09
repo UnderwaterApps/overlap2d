@@ -483,8 +483,8 @@ public class Sandbox {
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
 
-        vector.x = vector.x*camera.zoom - (viewport.getScreenWidth()/2 - (camera.position.x/pixelPerWU)*camera.zoom);
-        vector.y = vector.y*camera.zoom - (viewport.getScreenHeight()/2 - (camera.position.y/pixelPerWU)*camera.zoom);
+        vector.x = (vector.x - (viewport.getScreenWidth()/2 - camera.position.x*pixelPerWU/camera.zoom))*camera.zoom;
+        vector.y = (vector.y - (viewport.getScreenHeight()/2 - camera.position.y*pixelPerWU/camera.zoom))*camera.zoom;
 
         vector.scl(1f/pixelPerWU);
 
