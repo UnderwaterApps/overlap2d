@@ -124,14 +124,14 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
-
+        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
         if(anchor == NormalSelectionFollower.ROTATION_LT ||
                 anchor == NormalSelectionFollower.ROTATION_RT ||
                 anchor == NormalSelectionFollower.ROTATION_RB ||
                 anchor == NormalSelectionFollower.ROTATION_LB) {
 
             // get mouse stage coordinates
-            TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+            
             Vector2 mousePoint = sandbox.worldToScreen(Gdx.input.getX(), Gdx.input.getY());
             mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
 
@@ -157,7 +157,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     	TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
     	DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
     	
-    	 Vector2 mousePointStage = Sandbox.getInstance().screenToSceneCoordinates(x, y);
+    	 Vector2 mousePointStage = Sandbox.getInstance().screenToWorld(x, y);
          x = mousePointStage.x;
          y = mousePointStage.y;
          
