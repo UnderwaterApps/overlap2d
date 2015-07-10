@@ -7,7 +7,7 @@ import com.uwsoft.editor.proxy.FontManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by avetiszakharyan on 4/24/15.
@@ -38,6 +38,7 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setFontFamily(labelComponent.fontName);
         viewComponent.setFontSize(labelComponent.fontSize);
         viewComponent.setAlignValue(labelComponent.labelAlign);
+        viewComponent.setText(labelComponent.text.toString());
     }
 
     @Override
@@ -45,11 +46,12 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
         resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(),viewComponent.getFontSize());
 
-        Object[] payload = new Object[4];
+        Object[] payload = new Object[5];
         payload[0] = observableReference;
         payload[1] = viewComponent.getFontFamily();
         payload[2] = viewComponent.getFontSize();
         payload[3] = viewComponent.getAlignValue();
+        payload[4] = viewComponent.getText();
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
     }
 

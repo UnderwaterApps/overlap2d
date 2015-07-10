@@ -4,7 +4,11 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.followers.BasicFollower;
+import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 
 /**
  * Created by CyberJoe on 5/2/2015.
@@ -15,6 +19,14 @@ public abstract class SimpleTool implements Tool {
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
         Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
+        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        for(Entity entity: currSelection) {
+            BasicFollower follower = midUIMediator.getFollower(entity);
+            if(follower instanceof NormalSelectionFollower) {
+                NormalSelectionFollower selectionFollower = (NormalSelectionFollower) follower;
+                selectionFollower.clearSubFollowers();
+            }
+        }
     }
 
     @Override
@@ -24,6 +36,16 @@ public abstract class SimpleTool implements Tool {
 
     @Override
     public void stageMouseDragged(float x, float y) {
+
+    }
+
+    @Override
+    public boolean stageMouseDown(float x, float y) {
+        return false;
+    }
+
+    @Override
+    public void stageMouseUp(float x, float y) {
 
     }
 
@@ -54,6 +76,11 @@ public abstract class SimpleTool implements Tool {
 
     @Override
     public void handleNotification(Notification notification) {
+
+    }
+
+    @Override
+    public void keyDown(Entity entity, int keycode) {
 
     }
 }

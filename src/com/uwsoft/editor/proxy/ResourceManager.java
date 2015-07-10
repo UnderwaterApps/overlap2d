@@ -8,6 +8,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 
+import com.uwsoft.editor.renderer.data.*;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -23,10 +24,6 @@ import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.CompositeVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
@@ -35,6 +32,8 @@ import com.uwsoft.editor.renderer.utils.MySkin;
  * Created by azakhary on 4/26/2015.
  */
 public class ResourceManager extends BaseProxy implements IResourceRetriever {
+
+    public String packResolutionName = "orig";
 
     private static final String TAG = ResourceManager.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -78,6 +77,17 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     public TextureAtlas getSkeletonAtlas(String animationName) {
         SpineAnimData animData = spineAnimAtlases.get(animationName);
         return animData.atlas;
+    }
+
+    /**
+     * Sets working resolution, please set before doing any loading
+     * @param resolution String resolution name, default is "orig" later use resolution names created in editor
+     */
+    public void setWorkingResolution(String resolution) {
+        ResolutionEntryVO resolutionObject = getProjectVO().getResolution("resolutionName");
+        if(resolutionObject != null) {
+            packResolutionName = resolution;
+        }
     }
 
 
@@ -126,10 +136,12 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         // TODO: this should be cached
         FileHandle file = Gdx.files.internal(sceneDataManager.getCurrProjectScenePathByName(name));
         Json json = new Json();
+        json.setIgnoreUnknownFields(true);
         return json.fromJson(SceneVO.class, file.readString());
     }
 
     public void loadCurrentProjectData(String currentWorkingPath, String projectName, String curResolution) {
+        packResolutionName = curResolution;
         loadCurrentProjectAssets(currentWorkingPath + "/" + projectName + "/assets/" + curResolution + "/pack/pack.atlas");
         loadCurrentProjectSkin(currentWorkingPath + "/" + projectName + "/assets/orig/styles");
         loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
@@ -341,5 +353,13 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 
     public HashMap<String, ParticleEffect> getProjectParticleList() {
         return particleEffects;
+    }
+
+    @Override
+    public ResolutionEntryVO getLoadedResolution() {
+        if(packResolutionName.equals("orig")) {
+            return getProjectVO().originalResolution;
+        }
+        return getProjectVO().getResolution(packResolutionName);
     }
 }

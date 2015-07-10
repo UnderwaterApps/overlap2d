@@ -21,7 +21,7 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**

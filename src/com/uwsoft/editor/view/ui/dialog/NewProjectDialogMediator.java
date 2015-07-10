@@ -69,7 +69,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
                 int originHeight = Integer.parseInt(viewComponent.getOriginHeight());
                 int pixelPerWorldUnit = Integer.parseInt(viewComponent.getPixelPerWorldUnit());
                 projectManager.createNewProject(notification.getBody(), originWidth, originHeight, pixelPerWorldUnit);
-                //TODO: this should be not hear
+                //TODO: this should be not here
                 sandbox.loadCurrentProject();
                 viewComponent.hide();
                 break;

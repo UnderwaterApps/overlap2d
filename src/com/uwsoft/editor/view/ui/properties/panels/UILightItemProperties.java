@@ -73,6 +73,10 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(rayCountSelector).left();
         mainTable.row().padTop(5);
+
+        mainTable.add(secondaryTable).colspan(2);
+        mainTable.row().padTop(5);
+
         setListeners();
     }
 
@@ -90,7 +94,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         secondaryTable.add(createLabel("Distance: ", Align.right)).padRight(5).fillX().right();
         secondaryTable.add(coneDistanceField).width(70).left();
         secondaryTable.row().padTop(5);
-        secondaryTable.add(createLabel("Type: ", Align.right)).padRight(5).fillX().right();
+        secondaryTable.add(createLabel("Angle: ", Align.right)).padRight(5).fillX().right();
         secondaryTable.add(coneInnerAngleField).width(70).left();
         secondaryTable.row().padTop(5);
     }

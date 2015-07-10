@@ -44,7 +44,7 @@ public class CreateNewResolutionDialog extends O2DDialog {
         super("Create New Resolution");
         addCloseButton();
         VisTable mainTable = new VisTable();
-        mainTable.debug();
+
         mainTable.padTop(6).padRight(6).padBottom(22);
         mainTable.add("Name:").padRight(5).right();
         nameVisTextField = createTextField("");

@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Align;
@@ -45,7 +46,7 @@ public abstract class UIResourcesTab extends Tab {
         contentTable.add(createTextField()).padLeft(0).padRight(7).fillX().padBottom(4);
         contentTable.row();
         scrollPane = crateScrollPane();
-        contentTable.add(scrollPane).colspan(2).maxHeight(350).expandX().fillX();
+        contentTable.add(scrollPane).colspan(2).maxHeight(Gdx.graphics.getHeight() * 0.22f).expandX().fillX();
         contentTable.padTop(4);
     }
 

@@ -27,6 +27,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
@@ -35,8 +36,9 @@ import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -78,6 +80,10 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             transformComponent.x += diff.x;
             transformComponent.y += diff.y;
+
+            MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+            mainItemComponent.layer = layerBoxMediator.getCurrentSelectedLayerName();
 
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
             newEntitiesList.add(entity);

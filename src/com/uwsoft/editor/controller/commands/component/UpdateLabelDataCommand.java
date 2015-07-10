@@ -24,7 +24,7 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
@@ -45,6 +45,7 @@ public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
         labelComponent.fontName = (String) payload[1];
         labelComponent.fontSize = (int) payload[2];
         labelComponent.setAlignment((Integer) payload[3]);
+        labelComponent.setText((CharSequence) payload[4]);
 
         labelComponent.setStyle(LabelComponentFactory.generateStyle(Sandbox.getInstance().getSceneControl().sceneLoader.getRm(), labelComponent.fontName, labelComponent.fontSize));
 

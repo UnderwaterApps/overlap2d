@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -136,7 +137,7 @@ public class NormalSelectionFollower extends BasicFollower {
         miniRects[ROTATION_RT].setY(getHeight());
         miniRects[ROTATION_RB].setX(getWidth());
         miniRects[ROTATION_RB].setY(-h*2);
-        miniRects[ROTATION_LB].setX(-w*2);
+        miniRects[ROTATION_LB].setX(-w * 2);
         miniRects[ROTATION_LB].setY(-h*2);
     }
 
@@ -172,16 +173,18 @@ public class NormalSelectionFollower extends BasicFollower {
             miniRects[i].clearListeners();
             miniRects[i].addListener(new AnchorListener(this, listener, rectId) {
                 @Override
-                public void touchDragged (InputEvent event, float x, float y, int pointer) {
+                public void touchDragged(InputEvent event, float x, float y, int pointer) {
                     super.touchDragged(event, x, y, pointer);
                     update();
                 }
+
                 @Override
-                public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
                     super.enter(event, x, y, pointer, fromActor);
                 }
+
                 @Override
-                public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+                public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
                     super.exit(event, x, y, pointer, toActor);
                 }
             });
@@ -212,6 +215,7 @@ public class NormalSelectionFollower extends BasicFollower {
 
     @Override
     public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
         switch (notification.getName()) {
             case UIToolBoxMediator.TOOL_SELECTED:
                 if(notification.getBody().equals(TransformTool.NAME)) {

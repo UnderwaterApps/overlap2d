@@ -23,13 +23,14 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.utils.viewport.Viewport;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Pools;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.TransformMathUtils;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -39,6 +40,9 @@ public abstract class BasicFollower extends Group {
     protected TransformComponent transformComponent;
     protected DimensionsComponent dimensionsComponent;
     protected Entity entity;
+
+
+    private Array<SubFollower> subFollowers = new Array<>();
 
     public BasicFollower(Entity entity) {
         setItem(entity);
@@ -53,21 +57,31 @@ public abstract class BasicFollower extends Group {
     }
 
     public void update() {
+        Sandbox sandbox = Sandbox.getInstance();
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
-        Viewport viewport = Sandbox.getInstance().getViewport();
 
-        // TODO: Make poolable vector
-    	Vector2 stageCoords = new Vector2(0, 0);
-    	TransformMathUtils.localToSceneCoordinates(entity, stageCoords);
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(stageCoords.x, stageCoords.y);
+        int pixelPerWU = sandbox.sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
 
-        setX((int)(screenCoords.x));
-        setY((int)(screenCoords.y));
-        setWidth(dimensionsComponent.width * transformComponent.scaleX / camera.zoom);
-        setHeight(dimensionsComponent.height * transformComponent.scaleY / camera.zoom);
+    	Vector2 position = Pools.obtain(Vector2.class);
+        position.x = 0; position.y = 0;
+        TransformMathUtils.localToSceneCoordinates(entity, position);
+        position = Sandbox.getInstance().worldToScreen(position);
+
+        setX((int) (position.x));
+        setY((int) (position.y));
+        setWidth(pixelPerWU * dimensionsComponent.width * transformComponent.scaleX / camera.zoom);
+        setHeight(pixelPerWU * dimensionsComponent.height * transformComponent.scaleY / camera.zoom);
+
+        Pools.free(position);
 
         //setOrigin(transformComponent.originX, transformComponent.originY);
         setRotation(transformComponent.rotation);
+
+        if(subFollowers != null) {
+            for (SubFollower follower : subFollowers) {
+                follower.update();
+            }
+        }
     }
 
     public void show() {
@@ -100,10 +114,50 @@ public abstract class BasicFollower extends Group {
     }
 
     public void handleNotification(Notification notification) {
-        // This method is meant to be overridden.
+        for(SubFollower follower: subFollowers) {
+            follower.handleNotification(notification);
+        }
     }
 
     public Entity getEntity() {
         return entity;
+    }
+
+    public void addSubfollower(SubFollower subFollower) {
+        subFollowers.add(subFollower);
+        addActor(subFollower);
+    }
+
+    public Array<SubFollower> getSubFollowers() {
+        return subFollowers;
+    }
+
+    public SubFollower getSubFollower(Class clazz) {
+        for(SubFollower subFollower: subFollowers) {
+            if(subFollower.getClass() == clazz) {
+                return subFollower;
+            }
+        }
+
+        return null;
+    }
+
+    public void removeSubFollower(Class clazz) {
+        SubFollower subFollower = getSubFollower(clazz);
+        if(subFollower != null) {
+            removeSubFollower(subFollower);
+        }
+    }
+
+    public void removeSubFollower(SubFollower subFollower) {
+        subFollowers.removeValue(subFollower, true);
+        subFollower.remove();
+    }
+
+    public void clearSubFollowers() {
+        for(SubFollower subFollower: subFollowers) {
+            subFollower.remove();
+        }
+        subFollowers.clear();
     }
 }

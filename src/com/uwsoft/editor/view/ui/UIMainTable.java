@@ -20,6 +20,7 @@ package com.uwsoft.editor.view.ui;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.Overlap2DMenuBar;
@@ -89,8 +90,8 @@ public class UIMainTable extends VisTable {
     }
 
     private void initRightBoxesPanel() {
-        Table rightPanel = new Table();
-//        rightPanel.debug();
+        VisTable rightPanel = new VisTable();
+
         //PropertyBox
         UIMultiPropertyBoxMediator multiPropertyBoxMediator = facade.retrieveMediator(UIMultiPropertyBoxMediator.NAME);
         UIMultiPropertyBox multiPropertyBox = multiPropertyBoxMediator.getViewComponent();

@@ -28,6 +28,8 @@ public abstract class ItemDropTool extends SelectionTool {
     public boolean itemMouseDown(Entity entity, float x, float y) {
         if(checkFilter(entity)) {
             return super.itemMouseDown(entity, x, y);
+        } else {
+            stageMouseDown(x, y);
         }
 
         return false;

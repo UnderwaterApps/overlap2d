@@ -38,7 +38,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
@@ -124,17 +124,15 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
-        
-        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
-        
+
         if(anchor == NormalSelectionFollower.ROTATION_LT ||
                 anchor == NormalSelectionFollower.ROTATION_RT ||
                 anchor == NormalSelectionFollower.ROTATION_RB ||
                 anchor == NormalSelectionFollower.ROTATION_LB) {
 
             // get mouse stage coordinates
-            
-            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+            Vector2 mousePoint = sandbox.worldToScreen(Gdx.input.getX(), Gdx.input.getY());
             mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
 
             lastTransformAngle = mousePoint.angle();
@@ -216,7 +214,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     	 
         Sandbox sandbox = Sandbox.getInstance();
 
-        Vector2 mousePointStage = sandbox.screenToSceneCoordinates(x, y);
+        Vector2 mousePointStage = sandbox.screenToWorld(x, y);
         x = mousePointStage.x;
         y = mousePointStage.y;
         
@@ -323,7 +321,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
         if(anchor >= NormalSelectionFollower.ROTATION_LT && anchor <= NormalSelectionFollower.ROTATION_LB) {
             // get mouse stage coordinates
-            Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
+            Vector2 mousePoint = sandbox.worldToScreen(Gdx.input.getX(), Gdx.input.getY());
             mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
             float currentAngle = mousePoint.angle();
             float angleDiff = currentAngle - lastTransformAngle;

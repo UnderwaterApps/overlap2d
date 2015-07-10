@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.view.ui.box;
 
+import com.badlogic.gdx.Gdx;
+import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
 
@@ -28,22 +30,27 @@ public class UIMultiPropertyBox extends UICollapsibleBox {
 
 
     private final VisTable propertiesTable;
+    private VisScrollPane scrollPane;
+    private VisTable scrollPaneInner;
 
 
     public UIMultiPropertyBox() {
         super("Properties", 222);
         setMovable(false);
         propertiesTable = new VisTable();
+        scrollPaneInner = new VisTable();
+        scrollPane = new VisScrollPane(scrollPaneInner);
+        propertiesTable.add(scrollPane).maxHeight(Gdx.graphics.getHeight() * 0.43f);
         createCollapsibleWidget(propertiesTable);
     }
 
     public void clearAll() {
-        propertiesTable.clear();
-        propertiesTable.reset();
+        scrollPaneInner.clear();
+        scrollPaneInner.reset();
     }
 
     public void addPropertyBox(UIAbstractProperties viewComponent) {
-        propertiesTable.add(viewComponent).width(219).expandX();
-        propertiesTable.row();
+        scrollPaneInner.add(viewComponent).width(219).expandX();
+        scrollPaneInner.row();
     }
 }

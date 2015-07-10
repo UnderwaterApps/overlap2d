@@ -37,4 +37,5 @@ public interface Tool {
     public void itemMouseDoubleClick(Entity entity, float x, float y);
     public String getName();
     public void handleNotification(Notification notification);
+    public void keyDown(Entity entity, int keycode);
 }

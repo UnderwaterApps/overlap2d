@@ -31,6 +31,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
@@ -43,6 +44,8 @@ public class UILayerBox extends UICollapsibleBox {
     public static final String DELETE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
     public static final String LOCK_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LOCK_LAYER";
     public static final String HIDE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".HIDE_LAYER";
+    public static final String LAYER_DROPPED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_DROPPED";
+
     private final DragAndDrop dragAndDrop;
     public int currentSelectedLayerIndex = 0;
     private Overlap2DFacade facade;
@@ -50,6 +53,7 @@ public class UILayerBox extends UICollapsibleBox {
     private VisTable bottomPane;
     private VisScrollPane scrollPane;
     private VisTable layersTable;
+
     private Array<UILayerItemSlot> rows = new Array<>();
 
     public UILayerBox() {
@@ -138,7 +142,7 @@ public class UILayerBox extends UICollapsibleBox {
                 super.clicked(event, x, y);
                 clearSelection();
                 itemSlot.getUiLayerItem().setSelected(true);
-                currentSelectedLayerIndex = rows.indexOf(itemSlot, true);
+                currentSelectedLayerIndex = rows.size - rows.indexOf(itemSlot, true) - 1;
 
                 facade.sendNotification(LAYER_ROW_CLICKED, itemSlot.getUiLayerItem());
             }
@@ -199,6 +203,7 @@ public class UILayerBox extends UICollapsibleBox {
 
         @Override
         public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
+            Overlap2DFacade.getInstance().sendNotification(LAYER_DROPPED);
         }
 
         @Override
@@ -296,6 +301,10 @@ public class UILayerBox extends UICollapsibleBox {
             itemSlot.setSelected(selected);
         }
 
+        public LayerItemVO getData() {
+            return layerData;
+        }
+
         public boolean isLayerVisible() {
             return layerData.isVisible;
         }
@@ -333,6 +342,11 @@ public class UILayerBox extends UICollapsibleBox {
         }
 
 
+    }
+
+
+    public Array<UILayerItemSlot> getLayerSlots() {
+        return rows;
     }
 
 }

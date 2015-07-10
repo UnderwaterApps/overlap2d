@@ -476,6 +476,13 @@
       "checked": "toolbar-down",
       "imageUp": "tool-conuslight"
     },
+    "tool-MESH_TOOL": {
+      "down": "toolbar-down",
+      "up": "toolbar-normal",
+      "over": "toolbar-over",
+      "checked": "toolbar-down",
+      "imageUp": "tool-mesh"
+    },
     "align-center-horisontal": {
       "down": "toolbar-down",
       "up": "toolbar-normal",

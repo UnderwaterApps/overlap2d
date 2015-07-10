@@ -23,7 +23,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
@@ -32,7 +31,7 @@ import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 import java.util.HashMap;
@@ -73,8 +72,8 @@ public class ItemFactory {
         vo.layerName = layerName;
 
         // This is for grid
-        position.x = MathUtils.floor(position.x / sandbox.getGridSize()) * sandbox.getGridSize();
-        position.y = MathUtils.floor(position.y / sandbox.getGridSize()) * sandbox.getGridSize();
+        position.x = MathUtils.floor(position.x / sandbox.getWorldGridSize()) * sandbox.getWorldGridSize();
+        position.y = MathUtils.floor(position.y / sandbox.getWorldGridSize()) * sandbox.getWorldGridSize();
 
         vo.x = position.x;
         vo.y = position.y;

@@ -24,6 +24,7 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.observer.Notification;
@@ -38,7 +39,7 @@ import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
 /**
@@ -68,7 +69,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 UILayerBox.HIDE_LAYER,
                 CompositeCameraChangeCommand.DONE,
                 Overlap2D.ITEM_SELECTION_CHANGED,
-                ItemFactory.NEW_ITEM_ADDED
+                ItemFactory.NEW_ITEM_ADDED,
+                UILayerBox.LAYER_DROPPED
 
 
         }).flatMap(Stream::of).toArray(String[]::new);
@@ -97,7 +99,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                             LayerItemVO layerVo = new LayerItemVO();
                             layerVo.layerName = input;
                             viewComponent.addItem(layerVo);
-                            //currentSelectedLayerIndex = layers.indexOf(layerVo);
+                            addNewLayerToItemComposite(layerVo);
                         } else {
                             // show error dialog
                         }
@@ -107,6 +109,10 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
                     }
                 });
+                break;
+            case UILayerBox.LAYER_DROPPED:
+                // remake layers array
+                remakeLayersArray();
                 break;
             case UILayerBox.DELETE_NEW_LAYER:
                 if (layers == null) return;
@@ -142,6 +148,24 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             default:
                 break;
         }
+    }
+
+    private void remakeLayersArray() {
+        Array<UILayerBox.UILayerItemSlot> slots = viewComponent.getLayerSlots();
+        layers = new ArrayList<>();
+        for(UILayerBox.UILayerItemSlot slot: slots) {
+            LayerItemVO vo = slot.getUiLayerItem().getData();
+            layers.add(vo);
+        }
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
+        layerMapComponent.layers = layers;
+    }
+
+    private void addNewLayerToItemComposite(LayerItemVO layerVo) {
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
+        layerMapComponent.layers.add(layerVo);
+        layers.add(layerVo);
+        //currentSelectedLayerIndex = layers.indexOf(layerVo);
     }
 
     private void lockLayerByName(UILayerItem layerItem) {

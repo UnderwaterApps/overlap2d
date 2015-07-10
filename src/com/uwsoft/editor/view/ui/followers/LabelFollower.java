@@ -25,7 +25,7 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import java.util.HashMap;
 
@@ -88,7 +88,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
     public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
         update();
 
-        Vector2 stageCoordinates = Sandbox.getInstance().screenToSceneCoordinates(x, y);
+        Vector2 stageCoordinates = Sandbox.getInstance().screenToWorld(x, y);
         x = stageCoordinates.x;
         y = stageCoordinates.y;
 

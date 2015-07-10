@@ -21,8 +21,11 @@ package com.uwsoft.editor.view.ui.properties;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.InputValidator;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -43,5 +46,37 @@ public abstract class UIItemProperties extends UIAbstractProperties {
 
     protected VisLabel createLabel(String text) {
         return createLabel(text, Align.right);
+    }
+
+    protected VisTextField createTextField() {
+        return new VisTextField("", "default");
+    }
+
+    protected VisTextField createTextField(String text) {
+        return new VisTextField(text, "default");
+    }
+
+    protected VisTextField createTextField(String text, VisTextField.TextFieldFilter textFieldFilter) {
+        VisTextField visTextField = createTextField(text);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
+        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+        visTextField.setText(text);
+        visTextField.setStyle(skin.get("default", VisTextField.VisTextFieldStyle.class));
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
+        return visTextField;
+    }
+
+    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+        visTextField.setTextFieldFilter(textFieldFilter);
+        return visTextField;
     }
 }

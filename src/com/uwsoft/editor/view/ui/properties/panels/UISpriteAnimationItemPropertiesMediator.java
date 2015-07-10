@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/16/2015.

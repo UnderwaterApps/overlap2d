@@ -20,6 +20,7 @@ package com.uwsoft.editor.controller;
 
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.*;
@@ -43,6 +44,9 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_CREATE_ITEM, CreateItemCommand.class);
         facade.registerCommand(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
 
+        facade.registerCommand(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.class);
+        facade.registerCommand(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.class);
+
         facade.registerCommand(Sandbox.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
         facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
         facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
@@ -58,5 +62,6 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
         facade.registerCommand(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, UpdateSpriteAnimationDataCommand.class);
+        facade.registerCommand(Sandbox.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
     }
 }

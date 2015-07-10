@@ -59,7 +59,7 @@ import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.MeshVO;
+import com.uwsoft.editor.renderer.data.ShapeVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -212,6 +212,7 @@ public class ProjectManager extends BaseProxy {
                 String projectInfoContents = FileUtils.readFileToString(projectInfoFile.file());
                 ProjectInfoVO voInfo = json.fromJson(ProjectInfoVO.class, projectInfoContents);
                 currentProjectInfoVO = voInfo;
+
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -243,36 +244,15 @@ public class ProjectManager extends BaseProxy {
         for (FileHandle entry : sourceDir.list(Overlap2DUtils.DT_FILTER)) {
             if (!entry.file().isDirectory()) {
                 Json json = new Json();
+                json.setIgnoreUnknownFields(true);
                 SceneVO sceneVO = json.fromJson(SceneVO.class, entry);
                 if (sceneVO.composite == null) continue;
                 ArrayList<MainItemVO> items = sceneVO.composite.getAllItems();
-                for (MainItemVO vo : items) {
-                    if (vo.meshId.equals("-1")) continue;
-                    uniqueMeshIds.add(vo.meshId);
-                }
+
                 for (CompositeItemVO libraryItem : currentProjectInfoVO.libraryItems.values()) {
                     if (libraryItem.composite == null) continue;
                     items = libraryItem.composite.getAllItems();
-                    for (MainItemVO vo : items) {
-                        if (vo.meshId.equals("-1")) continue;
-                        uniqueMeshIds.add(vo.meshId);
-                    }
                 }
-            }
-        }
-        // addsset list
-        for (String meshId : currentProjectInfoVO.assetMeshMap.values()) {
-            uniqueMeshIds.add(meshId);
-        }
-
-        // check for not used meshes and remove
-        Iterator<Map.Entry<String, MeshVO>> iter = currentProjectInfoVO.meshes.entrySet().iterator();
-        while (iter.hasNext()) {
-            Map.Entry<String, MeshVO> entry = iter.next();
-            if (!uniqueMeshIds.contains(entry.getKey())) {
-                System.out.println("KEY " + entry.getKey());
-                iter.remove();
-                System.out.println("meshe removed");
             }
         }
     }
@@ -988,8 +968,12 @@ public class ProjectManager extends BaseProxy {
         currentWorkingPath = projectFolder.getParentFile().getPath();
         editorConfigVO.lastOpenedSystemPath = currentWorkingPath;
         saveEditorConfig();
+
+        // here we load all data
         openProjectAndLoadAllData(projectName);
         Sandbox.getInstance().loadCurrentProject();
+
+
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
     }
 }

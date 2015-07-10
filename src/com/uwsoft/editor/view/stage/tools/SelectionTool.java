@@ -36,11 +36,10 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.CursorManager;
-import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -76,14 +75,12 @@ public class SelectionTool extends SimpleTool {
 
     @Override
     public void initTool() {
+        super.initTool();
         sandbox = Sandbox.getInstance();
-        Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
 
         // set cursor
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         cursorManager.setCursor(CursorManager.NORMAL);
-
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
     }
 
     @Override
@@ -98,7 +95,7 @@ public class SelectionTool extends SimpleTool {
         }
 
         // transform stage coordinates to screen coordinates
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+        Vector2 screenCoords = Sandbox.getInstance().worldToScreen(x, y);
 
         // preparing selection tool rectangle to follow mouse
         sandbox.prepareSelectionRectangle(screenCoords.x, screenCoords.y, setOpacity);
@@ -120,7 +117,7 @@ public class SelectionTool extends SimpleTool {
         isCastingRectangle = true;
 
         // transform stage coordinates to screen coordinates
-        Vector2 screenCoords = Sandbox.getInstance().stageToScreenCoordinates(x, y);
+        Vector2 screenCoords = Sandbox.getInstance().worldToScreen(x, y);
 
         sandbox.selectionRec.setWidth(screenCoords.x - sandbox.selectionRec.getX());
         sandbox.selectionRec.setHeight(screenCoords.y - sandbox.selectionRec.getY());
@@ -193,7 +190,7 @@ public class SelectionTool extends SimpleTool {
 
         isDragging = true;
 
-        int gridSize = Sandbox.getInstance().getGridSize();
+        float gridSize = Sandbox.getInstance().getWorldGridSize();
 
         if (isShiftPressed()) {
             // check if we have a direction vector
@@ -328,9 +325,7 @@ public class SelectionTool extends SimpleTool {
         sandbox.selectionRec.setOpacity(0.0f);
         //ArrayList<Entity> curr = new ArrayList<Entity>();
         Set<Entity> curr = new HashSet<>();
-        Rectangle sR = sandbox.selectionRec.getRect();
-        sR.x = sR.x - (viewport.getScreenWidth()/2 - camera.position.x);
-        sR.y = sR.y - (viewport.getScreenHeight()/2 - camera.position.y);
+        Rectangle sR = sandbox.screenToWorld(sandbox.selectionRec.getRect());
 
         for (Entity entity : freeItems) {
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
@@ -351,6 +346,57 @@ public class SelectionTool extends SimpleTool {
         }
         
         facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+    }
+
+    @Override
+    public void keyDown(Entity entity, int keycode) {
+        boolean isControlPressed = isControlPressed();
+
+        // the amount of pixels by which to move item if moving
+        float deltaMove = 1;
+
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            // if shift is pressed, move boxes by 20 pixels instead of one
+            deltaMove = 20; //pixels
+        }
+
+        if (sandbox.getGridSize() > 1) {
+            deltaMove = sandbox.getGridSize();
+            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                // if shift is pressed, move boxes 3 times more then the grid size
+                deltaMove *= 3;
+            }
+        }
+
+        if(!isControlPressed) {
+            if (keycode == Input.Keys.UP) {
+                // moving UP
+                sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
+            }
+            if (keycode == Input.Keys.DOWN) {
+                // moving down
+                sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
+            }
+            if (keycode == Input.Keys.LEFT) {
+                // moving left
+                sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
+            }
+            if (keycode == Input.Keys.RIGHT) {
+                //moving right
+                sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
+            }
+        }
+
+        // Delete
+        if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_DELETE);
+        }
+    }
+
+    private boolean isControlPressed() {
+        return Gdx.input.isKeyPressed(Input.Keys.SYM)
+                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
+                || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
     }
 
 }

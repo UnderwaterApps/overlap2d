@@ -33,23 +33,19 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.input.EntityClickListener;
 import com.uwsoft.editor.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.view.stage.tools.ConeLightTool;
-import com.uwsoft.editor.view.stage.tools.PanTool;
-import com.uwsoft.editor.view.stage.tools.PointLightTool;
-import com.uwsoft.editor.view.stage.tools.SelectionTool;
-import com.uwsoft.editor.view.stage.tools.TextTool;
-import com.uwsoft.editor.view.stage.tools.Tool;
-import com.uwsoft.editor.view.stage.tools.TransformTool;
+import com.uwsoft.editor.view.stage.tools.*;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by sargis on 4/20/15.
@@ -93,6 +89,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         sandboxTools.put(PointLightTool.NAME, new PointLightTool());
         sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
         sandboxTools.put(PanTool.NAME, new PanTool());
+        sandboxTools.put(PolygonTool.NAME, new PolygonTool());
 
     }
 
@@ -109,6 +106,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 UIToolBoxMediator.TOOL_SELECTED,
                 ItemFactory.NEW_ITEM_ADDED,
                 CompositeCameraChangeCommand.DONE,
+                AddComponentToItemCommand.DONE,
+                RemoveComponentFromItemCommand.DONE,
+                Overlap2D.ITEM_SELECTION_CHANGED
         };
     }
 
@@ -250,13 +250,14 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public boolean keyDown(Entity entity, int keycode) {
             boolean isControlPressed = isControlPressed();
             Sandbox sandbox = Sandbox.getInstance();
-            // the amount of pixels by which to move item if moving
-            float deltaMove = 1;
 
             // if control is pressed then z index is getting modified
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
+            if(currentSelectedTool != null) {
+                currentSelectedTool.keyDown(entity, keycode);
+            }
 
             // Control pressed as well
             if (isControlPressed()) {
@@ -313,43 +314,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 setCurrentTool(SelectionTool.NAME);
                 UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
                 toolBoxMediator.setCurrentTool(SelectionTool.NAME);
-            }
-
-            if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                // if shift is pressed, move boxes by 20 pixels instead of one
-                deltaMove = 20; //pixels
-            }
-
-            if (sandbox.getGridSize() > 1) {
-                deltaMove = sandbox.getGridSize();
-                if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-                    // if shift is pressed, move boxes 3 times more then the grid size
-                    deltaMove *= 3;
-                }
-            }
-
-            if(!isControlPressed) {
-                if (keycode == Input.Keys.UP) {
-                    // moving UP
-                    sandbox.getSelector().moveSelectedItemsBy(0, deltaMove);
-                }
-                if (keycode == Input.Keys.DOWN) {
-                    // moving down
-                    sandbox.getSelector().moveSelectedItemsBy(0, -deltaMove);
-                }
-                if (keycode == Input.Keys.LEFT) {
-                    // moving left
-                    sandbox.getSelector().moveSelectedItemsBy(-deltaMove, 0);
-                }
-                if (keycode == Input.Keys.RIGHT) {
-                    //moving right
-                    sandbox.getSelector().moveSelectedItemsBy(deltaMove, 0);
-                }
-            }
-
-            // Delete
-            if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-                facade.sendNotification(Sandbox.ACTION_DELETE);
             }
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly

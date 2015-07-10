@@ -24,7 +24,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.widget.components.ItemPhysicsEditor;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.UIStage;
@@ -80,10 +79,6 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
             case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:
                 setItem((String) notification.getBody());
                 break;
-            case PhysicsEditorDialog.SAVE_CLICKED:
-                collectData();
-                viewComponent.getItemPhysicsEditor().save();
-                break;
             default:
                 break;
         }
@@ -115,6 +110,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     }
 
     private void collectData() {
+        /*
         ItemPhysicsEditor itemPhysicsEditor = viewComponent.getItemPhysicsEditor();
         if (viewComponent.getBodyType().equals("STATIC")) {
             itemPhysicsEditor.physicsBodyDataVO.bodyType = BodyDef.BodyType.StaticBody.getValue();
@@ -134,7 +130,7 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         itemPhysicsEditor.physicsBodyDataVO.restitution = Float.parseFloat(viewComponent.getRestitution());
         itemPhysicsEditor.physicsBodyDataVO.allowSleep = !itemPhysicsEditor.physicsBodyDataVO.allowSleep;
         itemPhysicsEditor.physicsBodyDataVO.awake = !itemPhysicsEditor.physicsBodyDataVO.awake;
-        itemPhysicsEditor.physicsBodyDataVO.bullet = !itemPhysicsEditor.physicsBodyDataVO.bullet;
+        itemPhysicsEditor.physicsBodyDataVO.bullet = !itemPhysicsEditor.physicsBodyDataVO.bullet;*/
     }
 
     public void setItem(Entity item) {

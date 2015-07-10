@@ -34,7 +34,7 @@ import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Managing item selections, selecting by criteria and so on

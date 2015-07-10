@@ -36,7 +36,7 @@ import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 public class UIItemsTreeBox extends UICollapsibleBox {

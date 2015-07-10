@@ -19,8 +19,14 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import java.util.HashMap;
+import java.util.Map;
 
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
+import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -35,13 +41,9 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.TintComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.utils.runtime.ComponentCloner;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -56,6 +58,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     private TintComponent tintComponent;
 
     private HashMap<String, UIBasicItemProperties.ItemType> itemTypeMap = new HashMap<>();
+
+    private HashMap<String, Class> componentClassMap = new HashMap<>();
 
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
@@ -72,6 +76,9 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
+
+        componentClassMap.put("Polygon Component", PolygonComponent.class);
+        componentClassMap.put("Physics Component", PhysicsBodyPropertiesComponent.class);
     }
 
     @Override
@@ -79,7 +86,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         String[] defaultNotifications = super.listNotificationInterests();
         String[] notificationInterests = new String[]{
                 UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
-                UIBasicItemProperties.LINKING_CHANGED
+                UIBasicItemProperties.LINKING_CHANGED,
+                UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -111,6 +119,14 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                     facade.sendNotification(Sandbox.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
                 break;
+            case UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED:
+                try {
+                    Class componentClass = componentClassMap.get(viewComponent.getSelectedComponent());
+                    if(componentClass == null) break;
+                    Component component = (Component) ClassReflection.newInstance(componentClass);
+                    facade.sendNotification(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.payload(observableReference, component));
+                } catch (ReflectionException ignored) {}
+                break;
             default:
                 break;
         }
@@ -130,17 +146,30 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             }
         }
 
-        viewComponent.setItemType(itemTypeMap.get("ENTITY_"+ EntityUtils.getType(entity)));
+        viewComponent.setItemType(itemTypeMap.get("ENTITY_" + EntityUtils.getType(entity)));
         viewComponent.setIdBoxValue(mainItemComponent.itemIdentifier);
-        viewComponent.setXValue(transformComponent.x + "");
-        viewComponent.setYValue(transformComponent.y + "");
+        viewComponent.setXValue(String.format("%.2f", transformComponent.x));
+        viewComponent.setYValue(String.format("%.2f", transformComponent.y));
 
-        viewComponent.setWidthValue(dimensionComponent.width + "");
-        viewComponent.setHeightValue(dimensionComponent.height + "");
+        viewComponent.setWidthValue(String.format("%.2f", dimensionComponent.width));
+        viewComponent.setHeightValue(String.format("%.2f", dimensionComponent.height));
         viewComponent.setRotationValue(transformComponent.rotation + "");
         viewComponent.setScaleXValue(transformComponent.scaleX + "");
         viewComponent.setScaleYValue(transformComponent.scaleY + "");
         viewComponent.setTintColor(tintComponent.color);
+
+        // non components
+        Array<String> componentsToAddList = new Array<>();
+        for (Map.Entry<String, Class> entry : componentClassMap.entrySet()) {
+            String componentName = entry.getKey();
+            Class componentClass = entry.getValue();
+            Component component = entity.getComponent(componentClass);
+            if(component == null) {
+                componentsToAddList.add(componentName);
+            }
+        }
+        viewComponent.setNonExistantComponents(componentsToAddList);
+
     }
 
     @Override
@@ -159,11 +188,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
         dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
         dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
-    	
-    	//TODO nor more flip
-    	//vo.isFlipedH = viewComponent.getFlipH();
-    	//vo.isFlipedV = viewComponent.getFlipV();
-    	
+
         // TODO: manage width and height
         transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
     	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);

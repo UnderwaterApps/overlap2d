@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
@@ -34,7 +35,6 @@ import com.uwsoft.editor.view.ItemControlMediator;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.input.InputListener;
@@ -44,7 +44,9 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import java.util.HashMap;
 
 /**
  * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "commands" the part of editor where
@@ -67,6 +69,10 @@ public class Sandbox {
     public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
     public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
     public static final String ACTION_CREATE_ITEM = CLASS_NAME + "ACTION_CREATE_ITEM";
+
+    public static final String ACTION_ADD_COMPONENT = CLASS_NAME + "ACTION_ADD_COMPONENT";
+    public static final String ACTION_REMOVE_COMPONENT = CLASS_NAME + "ACTION_REMOVE_COMPONENT";
+
     public static final String SHOW_ADD_LIBRARY_DIALOG = CLASS_NAME + "SHOW_ADD_LIBRARY_DIALOG";
     public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
     public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
@@ -81,12 +87,14 @@ public class Sandbox {
     public static final String ACTION_UPDATE_LABEL_DATA = CLASS_NAME + "ACTION_UPDATE_LABEL_DATA";
     public static final String ACTION_UPDATE_LIGHT_DATA = CLASS_NAME + "ACTION_UPDATE_LIGHT_DATA";
     public static final String ACTION_UPDATE_SPRITE_ANIMATION_DATA = CLASS_NAME + "ACTION_UPDATE_SPRITE_ANIMATION_DATA";
+    public static final String ACTION_UPDATE_MESH_DATA = CLASS_NAME + "ACTION_UPDATE_MESH_DATA";
+
 
     public SceneControlMediator sceneControl;
     public ItemControlMediator itemControl;
 
     private Object clipboard;
-
+    private HashMap<String, Object> localClipboard = new HashMap<>();
 
     private Entity currentViewingEntity;
 
@@ -115,7 +123,7 @@ public class Sandbox {
     //public SandboxUI ui;
     //public Group frontUI;
 
-	private Engine engine;
+    private SceneLoader sceneLoader;
 	private Array<InputListener> listeners = new Array<InputListener>(1);
 
 
@@ -144,23 +152,15 @@ public class Sandbox {
     	facade = Overlap2DFacade.getInstance();
     	 projectManager = facade.retrieveProxy(ProjectManager.NAME);
          resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-    	
-        
-        Overlap2D overlap2D = facade.retrieveProxy(Overlap2D.NAME);
-        SandboxMediator sandboxStageMediator = facade.retrieveMediator(SandboxMediator.NAME);
+
         UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
         uiStage = uiStageMediator.getViewComponent();
-        //setUIStage(uiStage);
 
-        engine = new Engine();
-		SceneLoader sceneLoader = new SceneLoader(engine);
-		sceneLoader.setResourceManager(resourceManager);
+		sceneLoader = new SceneLoader(resourceManager);
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
         selector = new ItemSelector(this);
-
-       
     }
     
     public void initView() {
@@ -197,7 +197,7 @@ public class Sandbox {
     }
     
     public Engine getEngine() {
-        return engine;
+        return sceneLoader.getEngine();
     }
 
 
@@ -207,11 +207,6 @@ public class Sandbox {
      * @param sceneName
      */
     public void initData(String sceneName) {
-        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-      //TODO fix and uncomment
-        //sceneDataManager.loadScene(sceneControl.getEssentials().rm.getSceneVO(sceneName), resolutionManager.currentResolutionName);
-
         sceneControl.initScene(sceneName);
     }
 
@@ -228,13 +223,12 @@ public class Sandbox {
 
     public void loadScene(String sceneName) {
         currentLoadedSceneFileName = sceneName;
-//        uiStage.getCompositePanel().clearScenes();
+
         initData(sceneName);
 
         initView();
-//        uiStage.getCompositePanel().addScene(sceneControl.getRootSceneVO());
+
         initSceneView(sceneControl.getRootSceneVO());
-//        sandboxInputAdapter.initSandboxEvents();
 
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
@@ -407,6 +401,10 @@ public class Sandbox {
         facade.sendNotification(Overlap2D.ZOOM_CHANGED);
     }
 
+    public float getWorldGridSize(){
+        return (float)gridSize/sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
+    }
+
     public int getGridSize() {
         return gridSize;
     }
@@ -466,24 +464,56 @@ public class Sandbox {
         return viewPortComponent.viewPort;
     }
 
-    public Vector2 stageToScreenCoordinates(float x, float y) {
+    /** Transformations **/
+
+    public Rectangle screenToWorld(Rectangle rect) {
+        Vector2 pos = screenToWorld(new Vector2(rect.x, rect.y));
+        Vector2 pos2 = screenToWorld(new Vector2(rect.x + rect.width, rect.y + rect.height));
+        rect.x = pos.x;
+        rect.y = pos.y;
+        rect.width = pos2.x - rect.x;
+        rect.height = pos2.y - rect.y;
+        return rect;
+    }
+
+    public Vector2 screenToWorld(Vector2 vector) {
+        // TODO: now unproject doesnot do well too. I am completely lost here. how hard is it to do screen to world, madafakas.
+        //getViewport().unproject(vector);
+        int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
-        x = x/camera.zoom + (viewport.getScreenWidth()/2 - camera.position.x/camera.zoom);
-        y = y/camera.zoom + (viewport.getScreenHeight()/2 - camera.position.y/camera.zoom);
 
-        return new Vector2(x, y);
+        vector.x = (vector.x - (viewport.getScreenWidth()/2 - camera.position.x*pixelPerWU/camera.zoom))*camera.zoom;
+        vector.y = (vector.y - (viewport.getScreenHeight()/2 - camera.position.y*pixelPerWU/camera.zoom))*camera.zoom;
+
+        vector.scl(1f/pixelPerWU);
+
+
+        return vector;
     }
 
-    public Vector2 screenToSceneCoordinates(float x, float y) {
-    	System.out.println("Snadbox x = " + x + "; y = " + y);
-    	//TODO right fix when input system will be implemented in runtime
-    	Vector2 vec = new Vector2(x, y);
-    	ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(), ViewPortComponent.class);
-		viewPortComponent.viewPort.unproject(vec);
+    public Vector2 worldToScreen(Vector2 vector) {
+        // TODO: WTF, project had to work instead I am back to this barbarian methods of unholy land!
+        //vector = getViewport().project(vector);
+        int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
+        OrthographicCamera camera = Sandbox.getInstance().getCamera();
+        Viewport viewport = Sandbox.getInstance().getViewport();
+        vector.x = vector.x/camera.zoom + (viewport.getWorldWidth()/2 - (camera.position.x)/camera.zoom);
+        vector.y = vector.y/camera.zoom + (viewport.getWorldHeight()/2 - (camera.position.y)/camera.zoom);
 
-        return vec;
+        vector.scl(pixelPerWU);
+
+        return vector;
     }
+
+    public Vector2 screenToWorld(float x, float y) {
+        return screenToWorld(new Vector2(x, y));
+    }
+
+    public Vector2 worldToScreen(float x, float y) {
+        return worldToScreen(new Vector2(x, y));
+    }
+
 
     public void copyToClipboard(Object data) {
         //TODO: make this an actual clipboard call (dunno how though, need to make all serializable?)
@@ -493,5 +523,17 @@ public class Sandbox {
     public Object retrieveFromClipboard() {
         //TODO: make this an actual clipboard call (dunno how though, need to make all serializable?)
         return clipboard;
+    }
+
+    public void copyToLocalClipboard(String key, Object data) {
+        this.localClipboard.put(key, data);
+    }
+
+    public Object retrieveFromLocalClipboard(String key) {
+        return localClipboard.get(key);
+    }
+
+    public int getPixelPerWU() {
+        return sceneLoader.getRm().getProjectVO().pixelToWorld;
     }
 }

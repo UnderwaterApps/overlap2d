@@ -32,7 +32,7 @@ import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperti
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.data.FrameRange;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
