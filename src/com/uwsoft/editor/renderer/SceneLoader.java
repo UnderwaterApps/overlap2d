@@ -26,9 +26,10 @@ import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.systems.*;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * SceneLoader is importatn part of runtime that utilizes provided
+ * SceneLoader is important part of runtime that utilizes provided
  * IResourceRetriever (or creates default one shipped with runtime) in order to
  * load entire scene data into viewable actors provides the functionality to get
  * root actor of scene and load scenes.
@@ -46,31 +47,26 @@ public class SceneLoader {
 
 	public EntityFactory entityFactory;
 
+	private float pixesPerWU = 1;
+	private Overlap2dRenderer renderer;
+
     public SceneLoader() {
         IResourceRetriever rm = new ResourceManager();
         ((ResourceManager)rm).initAllResources();
-        Engine engine = new Engine();
-        initSceneLoader(engine, rm);
+        this.engine = new Engine();
+		initSceneLoader();
     }
 
     public SceneLoader(IResourceRetriever rm) {
-        Engine engine = new Engine();
-        initSceneLoader(engine, rm);
+        this.engine = new Engine();
+		this.rm = rm;
+		initSceneLoader();
     }
 
-    public SceneLoader(Engine engine) {
-        IResourceRetriever rm = new ResourceManager();
-        initSceneLoader(engine, rm);
-    }
-
-	public void SceneLoader(Engine engine, IResourceRetriever rm) {
-        initSceneLoader(engine, rm);
-	}
-
-    private void initSceneLoader(Engine engine, IResourceRetriever rm) {
-        this.engine = engine;
-        this.rm = rm;
-
+	/**
+	 * this method is called when rm has loaded all data
+	 */
+    private void initSceneLoader() {
         RayHandler.setGammaCorrection(true);
         RayHandler.useDiffuseLight(true);
 
@@ -86,17 +82,26 @@ public class SceneLoader {
         entityFactory = new EntityFactory(rayHandler, world, rm);
     }
 
+	public void setResolution(String resolutionName) {
+		ResolutionEntryVO resolution = getRm().getProjectVO().getResolution(resolutionName);
+		if(resolution != null) {
+			curResolution = resolutionName;
+		}
+	}
+
 
 	public SceneVO getSceneVO() {
 		return sceneVO;
 	}
 
-	public SceneVO loadScene(String sceneName) {
+	public SceneVO loadScene(String sceneName, Viewport viewport) {
+
+		pixesPerWU = rm.getProjectVO().pixelToWorld;
+
 		engine.removeAllEntities();
-		
+
 		sceneVO = rm.getSceneVO(sceneName);
 
-		Viewport viewport = new ScalingViewport(Scaling.stretch, Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), new OrthographicCamera());
 		if(sceneVO.composite == null) {
 			sceneVO.composite = new CompositeVO();
 		}
@@ -108,8 +113,14 @@ public class SceneLoader {
 		}
 
 		setAmbienceInfo(sceneVO);
-		
+
 		return sceneVO;
+	}
+
+	public SceneVO loadScene(String sceneName) {
+		ProjectInfoVO projectVO = rm.getProjectVO();
+		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/pixesPerWU, (float)projectVO.originalResolution.height/pixesPerWU, new OrthographicCamera());
+		return loadScene(sceneName, viewport);
 	} 
 
 	private void addSystems() {
@@ -122,7 +133,7 @@ public class SceneLoader {
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
-		Overlap2dRenderer renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
+		renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
 		renderer.setRayHandler(rayHandler);
 		
 		engine.addSystem(animationSystem);
@@ -146,44 +157,56 @@ public class SceneLoader {
 				// TODO: Gev knows what to do. (do this for all entities)
 
 				// mae sure we assign correct z-index here
-				ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
-				ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
-				if(parentNodeComponent != null) {
+				ZindexComponent zindexComponent = ComponentRetriever.get(entity, ZindexComponent.class);
+				ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+				if (parentNodeComponent != null) {
 					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
 					zindexComponent.zIndex = nodeComponent.children.size;
 				}
 
-                // call init for a system
-                ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
-                if(scriptComponent != null) {
-                    for (IScript script : scriptComponent.scripts) {
-                        script.init(entity);
-                    }
-                }
+				// call init for a system
+				ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
+				if (scriptComponent != null) {
+					for (IScript script : scriptComponent.scripts) {
+						script.init(entity);
+					}
+				}
 			}
 
 			@Override
 			public void entityRemoved(Entity entity) {
-				ParentNodeComponent parentComponent = entity.getComponent(ParentNodeComponent.class);
-				
-				if(parentComponent == null){
+				ParentNodeComponent parentComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+
+				if (parentComponent == null) {
 					return;
 				}
-				
+
 				Entity parentEntity = parentComponent.parentEntity;
-				NodeComponent parentNodeComponent = parentEntity.getComponent(NodeComponent.class);
+				NodeComponent parentNodeComponent = ComponentRetriever.get(parentEntity, NodeComponent.class);
 				parentNodeComponent.removeChild(entity);
 
 				// check if composite and remove all children
-				NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
-				if(nodeComponent != null) {
+				NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+				if (nodeComponent != null) {
 					// it is composite
-					for(Entity node: nodeComponent.children) {
+					for (Entity node : nodeComponent.children) {
 						engine.removeEntity(node);
 					}
 				}
 			}
 		});
+	}
+
+	public Entity loadFromLibrary(String libraryName) {
+		ProjectInfoVO projectInfoVO = getRm().getProjectVO();
+		CompositeItemVO compositeItemVO = projectInfoVO.libraryItems.get(libraryName);
+
+		if(compositeItemVO != null) {
+			Entity entity = entityFactory.createEntity(null, compositeItemVO);
+			return entity;
+		}
+
+		return null;
 	}
 
 	/**
@@ -198,11 +221,6 @@ public class SceneLoader {
 					vo.ambientColor[2], vo.ambientColor[3]);
 			rayHandler.setAmbientLight(clr);
 		}
-	}
-	
-	public void setResourceManager(IResourceRetriever rm) {
-		this.rm = rm;
-		entityFactory.setResourceManager(rm);
 	}
 
 

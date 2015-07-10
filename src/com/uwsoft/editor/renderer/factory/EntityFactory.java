@@ -266,21 +266,5 @@ public class EntityFactory {
 		return entities.get(id);
 	}
 
-	public void setResourceManager(IResourceRetriever rm) {
-		this.rm = rm;
-
-		//TODO: this is just a temporary solution caused by fact that we do not provide the correct rm at the beginning, and later change it
-		// which has to be changed from the sceneLoader
-
-		compositeComponentFactory.setResourceManager(rm);
-		lightComponentFactory.setResourceManager(rm);
-		particleEffectComponentFactory.setResourceManager(rm);
-		simpleImageComponentFactory.setResourceManager(rm);
-		spineComponentFactory.setResourceManager(rm);
-		spriteComponentFactory.setResourceManager(rm);
-		spriterComponentFactory.setResourceManager(rm);
-		labelComponentFactory.setResourceManager(rm);
-		ninePatchComponentFactory.setResourceManager(rm);
-	}
 	
 }

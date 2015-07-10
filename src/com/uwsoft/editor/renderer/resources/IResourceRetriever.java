@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -26,4 +27,6 @@ public interface IResourceRetriever {
 
     public SceneVO getSceneVO(String sceneName);
     public ProjectInfoVO getProjectVO();
+
+    public ResolutionEntryVO getLoadedResolution();
 }

@@ -12,6 +12,7 @@ public class NinePatchDrawableLogic implements Drawable {
 	private ComponentMapper<DimensionsComponent> dimensionsMapper;
 	private ComponentMapper<NinePatchComponent> ninePatchMapper;
 
+
 	public NinePatchDrawableLogic() {
 		tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);

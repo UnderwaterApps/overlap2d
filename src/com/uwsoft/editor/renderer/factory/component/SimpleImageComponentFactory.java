@@ -25,6 +25,8 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -50,9 +52,12 @@ public class SimpleImageComponentFactory extends ComponentFactory {
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
         DimensionsComponent component = new DimensionsComponent();
-        component.height = textureRegionComponent.region.getRegionHeight();
-        component.width = textureRegionComponent.region.getRegionWidth();
+        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+        component.width = (float) textureRegionComponent.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
+        component.height = (float) textureRegionComponent.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
 
         entity.add(component);
 
