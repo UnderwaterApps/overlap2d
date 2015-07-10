@@ -475,13 +475,14 @@ public class Sandbox {
         return new Vector2(x, y);
     }
 
-    public Vector2 screenToStageCoordinates(float x, float y) {
-        OrthographicCamera camera = Sandbox.getInstance().getCamera();
-        Viewport viewport = Sandbox.getInstance().getViewport();
-        x = x*camera.zoom - (viewport.getScreenWidth()/2 - camera.position.x*camera.zoom);
-        y = y*camera.zoom - (viewport.getScreenHeight()/2 - camera.position.y*camera.zoom);
+    public Vector2 screenToSceneCoordinates(float x, float y) {
+    	System.out.println("Snadbox x = " + x + "; y = " + y);
+    	//TODO right fix when input system will be implemented in runtime
+    	Vector2 vec = new Vector2(x, y);
+    	ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(), ViewPortComponent.class);
+		viewPortComponent.viewPort.unproject(vec);
 
-        return new Vector2(x, y);
+        return vec;
     }
 
     public void copyToClipboard(Object data) {

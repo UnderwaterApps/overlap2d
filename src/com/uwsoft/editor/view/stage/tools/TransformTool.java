@@ -51,6 +51,13 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     private float lastTransformAngle = 0;
     private float lastEntityAngle = 0;
 
+	private Vector2 tmpOriginPoint;
+
+	private Vector2 tmpPositionPoint;
+
+	private float tmpAdjustX;
+	private float tmpAdjustY;
+
     @Override
     public String getName() {
         return NAME;
@@ -117,37 +124,114 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
-
+        
+        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+        
         if(anchor == NormalSelectionFollower.ROTATION_LT ||
                 anchor == NormalSelectionFollower.ROTATION_RT ||
                 anchor == NormalSelectionFollower.ROTATION_RB ||
                 anchor == NormalSelectionFollower.ROTATION_LB) {
 
             // get mouse stage coordinates
-            TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+            
             Vector2 mousePoint = sandbox.stageToScreenCoordinates(Gdx.input.getX(), Gdx.input.getY());
             mousePoint.sub(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
 
             lastTransformAngle = mousePoint.angle();
             lastEntityAngle = transformComponent.rotation;
+            
         }
+        
+        //reset Origin Point to 0,0;
+        tmpOriginPoint = new Vector2(transformComponent.originX, transformComponent.originY);
+        tmpPositionPoint = new Vector2(transformComponent.x, transformComponent.y);
+//        transformComponent.originX = 0;
+//        transformComponent.originY = 0;
+        //transformComponent.x += tmpOriginPoint.x;
+        //transformComponent.y += tmpOriginPoint.y;
+        //end of resseting
+        tmpAdjustX = tmpOriginPoint.x*(transformComponent.scaleX-1);
+        tmpAdjustY = tmpOriginPoint.y*(transformComponent.scaleY-1);
+    }
+    
+    @Override
+    public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
+    	TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
+    	DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
+    	
+    	 Vector2 mousePointStage = Sandbox.getInstance().screenToSceneCoordinates(x, y);
+         x = mousePointStage.x;
+         y = mousePointStage.y;
+         
+         tmpAdjustX = tmpOriginPoint.x*(transformComponent.scaleX-1);
+         tmpAdjustY = tmpOriginPoint.y*(transformComponent.scaleY-1);
+    	
+    	//reset Origin Point to original;
+        transformComponent.originX = tmpOriginPoint.x;
+        transformComponent.originY = tmpOriginPoint.y;
+        float newX = tmpPositionPoint.x;
+        float newY = tmpPositionPoint.y;
+        switch (anchor) {
+	        case NormalSelectionFollower.ORIGIN:
+	           
+	            break;
+	        case NormalSelectionFollower.L:
+	            newX = transformComponent.x - tmpAdjustX;
+	            break;
+	        case NormalSelectionFollower.R:
+	        	newX = transformComponent.x + tmpAdjustX;
+	            break;
+	        case NormalSelectionFollower.T:
+	        	newY = transformComponent.y - tmpAdjustY;
+	            break;
+	        case NormalSelectionFollower.B:
+	        	newY = transformComponent.y + tmpAdjustY;
+	            break;
+	        case NormalSelectionFollower.LT:
+	        	newX = transformComponent.x - tmpAdjustX;
+	        	newY = transformComponent.y + tmpAdjustY;
+	            break;
+	        case NormalSelectionFollower.RT:
+	        	newX = transformComponent.x + tmpAdjustX;
+	        	newY = transformComponent.y + tmpAdjustY;
+	            break;
+	        case NormalSelectionFollower.RB:
+	        	newX = transformComponent.x + tmpAdjustX;
+	        	newY = transformComponent.y - tmpAdjustY;
+	            break;
+	        case NormalSelectionFollower.LB:
+	        	newX = transformComponent.x - tmpAdjustX;
+	        	newY = transformComponent.y - tmpAdjustY;
+	            break;
+	    }
+        transformComponent.x = newX;
+        transformComponent.y = newY;
+        //transformComponent.x += tmpOriginPoint.x*transformComponent.scaleX-tmpOriginPoint.x;
+        //transformComponent.y += tmpOriginPoint.y*transformComponent.scaleY;
+        //end of resseting
     }
 
     @Override
     public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
+    	 
         Sandbox sandbox = Sandbox.getInstance();
 
-        Vector2 mousePointStage = sandbox.screenToStageCoordinates(x, y);
+        Vector2 mousePointStage = sandbox.screenToSceneCoordinates(x, y);
         x = mousePointStage.x;
         y = mousePointStage.y;
+        
+        System.out.println("asd");
+        System.out.println("mousePointStage " + mousePointStage.toString());
+        System.out.println("asd");
 
         TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
+        
 
         float newX = transformComponent.x;
         float newY = transformComponent.y;
-        float newWidth = dimensionsComponent.width * transformComponent.scaleX;
-        float newHeight = dimensionsComponent.height * transformComponent.scaleY;
+        float newWidth = dimensionsComponent.width*transformComponent.scaleX;
+        float newHeight = dimensionsComponent.height*transformComponent.scaleY;
 
         float newOriginX = transformComponent.originX;
         float newOriginY = transformComponent.originY;
@@ -164,39 +248,58 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
                 //newX = (newX * cos + newY * sin)+newX;
                 //newY = (newX * -sin + newY * cos)+newY;
                 break;
-            case NormalSelectionFollower.LB:
-                newX = x;
-                newY = y;
-                newWidth = newWidth + (transformComponent.x - x);
-                newHeight = newHeight + (transformComponent.y - y);
-                break;
+           
             case NormalSelectionFollower.L:
-                newX = x;
-                newWidth = newWidth + (transformComponent.x - x);
-                break;
-            case NormalSelectionFollower.LT:
-                newX = x;
-                newWidth = newWidth + (transformComponent.x - x);
-                newHeight = y - transformComponent.y;
-                break;
-            case NormalSelectionFollower.T:
-                newHeight = y - transformComponent.y;
-                break;
-            case NormalSelectionFollower.B:
-                newY = y;
-                newHeight = newHeight + (transformComponent.y - y);
-                break;
-            case NormalSelectionFollower.RB:
-                newY = y;
-                newWidth = x - transformComponent.x;
-                newHeight = newHeight + (transformComponent.y - y);
+            	transformComponent.originX = dimensionsComponent.width;
+            	newX = tmpPositionPoint.x + tmpAdjustX;
+                newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
                 break;
             case NormalSelectionFollower.R:
-                newWidth = x - transformComponent.x;
+            	transformComponent.originX = 0;
+            	newX = tmpPositionPoint.x - tmpAdjustX;
+                newWidth = x - newX ;
+                break;
+            case NormalSelectionFollower.T:
+            	transformComponent.originY = 0;
+            	newY = tmpPositionPoint.y - tmpAdjustY;
+                newHeight = newY-y;
+                break;
+            case NormalSelectionFollower.B:
+            	transformComponent.originY = dimensionsComponent.height;
+            	newY = tmpPositionPoint.y + tmpAdjustY;
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y - y);
+                break;
+            case NormalSelectionFollower.LT:
+            	transformComponent.originY = 0;
+            	transformComponent.originX = dimensionsComponent.width;
+            	newX = tmpPositionPoint.x + tmpAdjustX;
+            	newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
+            	newY = tmpPositionPoint.y - tmpAdjustY;
+                newHeight = newY - y;
                 break;
             case NormalSelectionFollower.RT:
-                newHeight = y - transformComponent.y;
-                newWidth = x - transformComponent.x;
+            	transformComponent.originX = 0;
+            	transformComponent.originY = 0;
+            	newX = tmpPositionPoint.x - tmpAdjustX;
+                newWidth = x - newX ;
+                newY = tmpPositionPoint.y - tmpAdjustY;
+                newHeight = newY - y;
+                break;
+            case NormalSelectionFollower.RB:
+            	transformComponent.originX = 0;
+            	transformComponent.originY = dimensionsComponent.height;
+            	newX = tmpPositionPoint.x - tmpAdjustX;
+                newWidth = x - newX ;
+                newY = tmpPositionPoint.y + tmpAdjustY;
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y + y + tmpAdjustY);
+                break;
+            case NormalSelectionFollower.LB:
+            	transformComponent.originX = dimensionsComponent.width;
+            	transformComponent.originY = dimensionsComponent.height;
+            	newX = tmpPositionPoint.x + tmpAdjustX;
+                newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
+                newY = tmpPositionPoint.y + tmpAdjustY;
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y + y + tmpAdjustY);
                 break;
         }
 
@@ -227,8 +330,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             transformComponent.rotation = lastEntityAngle - angleDiff;
         }
 
-        transformComponent.x = newX;
-        transformComponent.y = newY;
+        
+        //transformComponent.y = newY;
         if(EntityUtils.getType(follower.getEntity()) == EntityFactory.NINE_PATCH) {
             NinePatchComponent ninePatchComponent = ComponentRetriever.get(follower.getEntity(), NinePatchComponent.class);
             if(newWidth < ninePatchComponent.ninePatch.getTotalWidth()) newWidth = ninePatchComponent.ninePatch.getTotalWidth();
@@ -237,18 +340,21 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             dimensionsComponent.width = newWidth;
             dimensionsComponent.height = newHeight;
         } else{
+        	System.out.println("newHeight " + newHeight + " / dimensionsComponent.height" + dimensionsComponent.height);
             transformComponent.scaleX = newWidth / dimensionsComponent.width;
             transformComponent.scaleY = newHeight / dimensionsComponent.height;
+            System.out.println(" transformComponent.scaleY " +  transformComponent.scaleY);
         }
-        transformComponent.originX = newOriginX;
-        transformComponent.originY = newOriginY;
+        
+        transformComponent.x = newX;
+        //transformComponent.y = newY;
+        
+        //transformComponent.originX = newOriginX;
+        //transformComponent.originY = newOriginY;
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
-    }
-
-    @Override
-    public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
-
+        
+      
     }
 
     @Override

@@ -46,25 +46,25 @@ public class AnchorListener extends ClickListener {
     @Override
     public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
         super.touchDown(event, x, y, pointer, button);
-        if(listener != null) listener.anchorDown(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorDown(follower, anchorId, x, y);
         return true;
     }
     @Override
     public void touchDragged (InputEvent event, float x, float y, int pointer) {
-        if(listener != null) listener.anchorDragged(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorDragged(follower, anchorId, x, y);
     }
     @Override
     public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-        if(listener != null) listener.anchorUp(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorUp(follower, anchorId, x, y);
     }
     @Override
     public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
         super.enter(event, x, y, pointer, fromActor);
-        if(listener != null) listener.anchorMouseEnter(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorMouseEnter(follower, anchorId, x, y);
     }
     @Override
     public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
         super.exit(event, x, y, pointer, toActor);
-        if(listener != null) listener.anchorMouseExit(follower, anchorId, event.getStageX(), event.getStageY());
+        if(listener != null) listener.anchorMouseExit(follower, anchorId, x, y);
     }
 }
