@@ -89,7 +89,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         sandboxTools.put(PointLightTool.NAME, new PointLightTool());
         sandboxTools.put(ConeLightTool.NAME, new ConeLightTool());
         sandboxTools.put(PanTool.NAME, new PanTool());
-        sandboxTools.put(MeshTool.NAME, new MeshTool());
+        sandboxTools.put(PolygonTool.NAME, new PolygonTool());
 
     }
 

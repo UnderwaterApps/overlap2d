@@ -61,7 +61,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         toolNames.add(TextTool.NAME);
         toolNames.add(PointLightTool.NAME);
         toolNames.add(ConeLightTool.NAME);
-        toolNames.add(MeshTool.NAME);
+        toolNames.add(PolygonTool.NAME);
         return toolNames;
     }
 

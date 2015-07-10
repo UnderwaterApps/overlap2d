@@ -21,7 +21,7 @@ package com.uwsoft.editor.view.ui.followers;
 /**
  * Created by azakhary on 7/3/2015.
  */
-public interface MeshTransformationListener {
+public interface PolygonTransformationListener {
 
     public abstract void vertexUp(PolygonFollower follower, int vertexIndex, float x, float y);
     public abstract void vertexDown(PolygonFollower follower, int vertexIndex, float x, float y);

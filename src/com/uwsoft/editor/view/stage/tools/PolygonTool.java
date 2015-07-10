@@ -35,7 +35,7 @@ import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.PolygonFollower;
-import com.uwsoft.editor.view.ui.followers.MeshTransformationListener;
+import com.uwsoft.editor.view.ui.followers.PolygonTransformationListener;
 
 import java.util.Set;
 
@@ -43,7 +43,7 @@ import java.util.Set;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class MeshTool extends SelectionTool implements MeshTransformationListener {
+public class PolygonTool extends SelectionTool implements PolygonTransformationListener {
 
     public static final String NAME = "MESH_TOOL";
 

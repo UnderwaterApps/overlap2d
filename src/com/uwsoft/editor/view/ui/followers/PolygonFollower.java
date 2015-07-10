@@ -66,10 +66,13 @@ public class PolygonFollower extends SubFollower {
 
     private int selectedAnchorId = -1;
 
+    private int pixelsPerWU = 1;
+
     OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 
     public PolygonFollower(Entity entity) {
         super(entity);
+        pixelsPerWU = Sandbox.getInstance().getPixelPerWU();
         setTouchable(Touchable.enabled);
     }
 
@@ -123,10 +126,9 @@ public class PolygonFollower extends SubFollower {
             Gdx.gl.glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-
             shapeRenderer.setProjectionMatrix(getStage().getCamera().combined);
             Matrix4 matrix = batch.getTransformMatrix();
-            matrix.scale(1f / runtimeCamera.zoom, 1f / runtimeCamera.zoom, 1f);
+            matrix.scale(pixelsPerWU / runtimeCamera.zoom, pixelsPerWU / runtimeCamera.zoom, 1f);
             shapeRenderer.setTransformMatrix(matrix);
 
             drawTriangulatedPolygons();
@@ -184,9 +186,9 @@ public class PolygonFollower extends SubFollower {
 
     private void positionAnchors() {
         for (int i = 0; i < anchors.length; i++) {
-            anchors[i].setX(MathUtils.round(originalPoints.get(i).x - anchors[i].getWidth()/2f));
+            anchors[i].setX(MathUtils.round(originalPoints.get(i).x - anchors[i].getWidth() / 2f));
             anchors[i].setY(MathUtils.round(originalPoints.get(i).y - anchors[i].getHeight() / 2f));
-            anchors[i].setScale(runtimeCamera.zoom);
+            anchors[i].setScale(runtimeCamera.zoom/pixelsPerWU);
         }
     }
 
@@ -206,13 +208,15 @@ public class PolygonFollower extends SubFollower {
         return rect;
     }
 
-    public void setListener(final MeshTransformationListener listener) {
+    public void setListener(final PolygonTransformationListener listener) {
         clearListeners();
         addListener(new ClickListener() {
 
             @Override
             public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 super.touchDown(event, x, y, pointer, button);
+                x = x / pixelsPerWU;
+                y = y / pixelsPerWU;
                 if(button != Input.Buttons.LEFT) return true;
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
@@ -227,6 +231,8 @@ public class PolygonFollower extends SubFollower {
 
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
+                x = x / pixelsPerWU;
+                y = y / pixelsPerWU;
                 int anchorId = draggingAnchorId;
                 if (anchorId >= 0) {
                     listener.anchorDragged(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
@@ -237,6 +243,8 @@ public class PolygonFollower extends SubFollower {
 
             @Override
             public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+                x = x / pixelsPerWU;
+                y = y / pixelsPerWU;
                 if(button != Input.Buttons.LEFT) return;
                 int anchorId = anchorHitTest(x, y);
                 lineIndex = vertexHitTest(x, y);
@@ -250,6 +258,8 @@ public class PolygonFollower extends SubFollower {
 
             @Override
             public boolean mouseMoved(InputEvent event, float x, float y) {
+                x = x / pixelsPerWU;
+                y = y / pixelsPerWU;
                 int anchorId = anchorHitTest(x, y);
                 lineIndex = vertexHitTest(x, y);
                 if(anchorId >= 0) {
@@ -267,6 +277,9 @@ public class PolygonFollower extends SubFollower {
     @Override
     public Actor hit (float x, float y, boolean touchable) {
         if(anchors == null) return null;
+
+        x = x / pixelsPerWU;
+        y = y / pixelsPerWU;
 
         int anchorId = anchorHitTest(x, y);
         if(anchorId > -1) {
@@ -289,14 +302,14 @@ public class PolygonFollower extends SubFollower {
         for (int i = 1; i < drawPoints.length; i++) {
             Vector2 pointOne = drawPoints[i-1].cpy().scl(1f/runtimeCamera.zoom);
             Vector2 pointTwo = drawPoints[i].cpy().scl(1f/runtimeCamera.zoom);
-            if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, CIRCLE_RADIUS*CIRCLE_RADIUS)) {
+            if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, (CIRCLE_RADIUS/pixelsPerWU)*(CIRCLE_RADIUS/pixelsPerWU))) {
                 lineIndex = i;
                 break;
             }
         }
         Vector2 pointOne = drawPoints[drawPoints.length - 1].cpy().scl(1f/runtimeCamera.zoom);
         Vector2 pointTwo = drawPoints[0].cpy().scl(1f/runtimeCamera.zoom);
-        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, CIRCLE_RADIUS*CIRCLE_RADIUS)) {
+        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, (CIRCLE_RADIUS/pixelsPerWU)*(CIRCLE_RADIUS/pixelsPerWU))) {
             lineIndex = 0;
         }
 
@@ -309,7 +322,7 @@ public class PolygonFollower extends SubFollower {
 
     private int anchorHitTest(float x, float y) {
         for (int i = 0; i < drawPoints.length; i++) {
-            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, CIRCLE_RADIUS);
+            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, (CIRCLE_RADIUS/pixelsPerWU));
             if(pointCircle.contains(x, y)) {
                 return i;
             }
