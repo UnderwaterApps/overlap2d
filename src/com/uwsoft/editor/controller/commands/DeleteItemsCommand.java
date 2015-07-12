@@ -20,6 +20,8 @@ package com.uwsoft.editor.controller.commands;
 
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
@@ -53,6 +55,7 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
+        Set<Entity> newEntitiesList = new HashSet<>();
         for (Collection<Component> components : backup.values()) {
             Entity entity = new Entity();
             for(Component component: components) {
@@ -64,6 +67,10 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
             NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
             nodeComponent.addChild(entity);
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+
+            newEntitiesList.add(entity);
         }
+
+        sandbox.getSelector().setSelections(newEntitiesList, true);
     }
 }

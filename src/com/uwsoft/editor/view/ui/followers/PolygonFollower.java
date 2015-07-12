@@ -364,6 +364,9 @@ public class PolygonFollower extends SubFollower {
         if(anchorId == -1) return;
 
         selectedAnchorId = anchorId;
+
+        if(selectedAnchorId > anchors.length-1) selectedAnchorId = anchors.length - 1;
+
         for (int i = 0; i < anchors.length; i++) {
             anchors[i].setColor(Color.WHITE);
         }

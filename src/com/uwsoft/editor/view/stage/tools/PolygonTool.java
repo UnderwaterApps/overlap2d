@@ -30,6 +30,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
+import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.poly.Clipper;
@@ -132,6 +133,8 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         dragLastPoint = new Vector2(x, y);
         follower.setSelectedAnchor(vertexIndex);
         lastSelectedMeshFollower = follower;
+
+        polygonBackup = polygonComponent.vertices.clone();
     }
 
     @Override
@@ -189,6 +192,8 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         if(polygonComponent.vertices == null) {
             // restore from backup
             polygonComponent.vertices = polygonBackup.clone();
+        } else if(intersections != null) {
+            polygonComponent.vertices = polygonBackup.clone();
         }
 
         follower.setProblems(null);
@@ -240,6 +245,9 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
                 polygonComponent.vertices = polygonBackup.clone();
                 follower.update();
             }
+
+            currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
+            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
 
             follower.updateDraw();
 
