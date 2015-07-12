@@ -60,9 +60,12 @@ public class PolygonFollower extends SubFollower {
     private static final Color outlineColor = new Color(200f / 255f, 156f / 255f, 71f / 255f, 1f);
     private static final Color innerColor = new Color(200f / 255f, 200f / 255f, 200f / 255f, 0.2f);
     private static final Color overColor = new Color(255f / 255f, 94f / 255f, 0f / 255f, 1f);
+    private static final Color problemColor = new Color(200f / 255f, 0f / 255f, 0f / 255f, 1f);
 
     private int lineIndex = -1;
     public int draggingAnchorId = -1;
+
+    private int[] intersections = null;
 
     private int selectedAnchorId = -1;
 
@@ -147,14 +150,20 @@ public class PolygonFollower extends SubFollower {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
             for (int i = 1; i < drawPoints.length; i++) {
                 shapeRenderer.setColor(outlineColor);
-                if (lineIndex == i) {
+                if (lineIndex == i && draggingAnchorId == -1) {
                     shapeRenderer.setColor(overColor);
+                }
+                if(checkIfLineIntersects(i - 1)) {
+                    shapeRenderer.setColor(problemColor);
                 }
                 shapeRenderer.line(drawPoints[i], drawPoints[i - 1]);
             }
             shapeRenderer.setColor(outlineColor);
-            if(lineIndex == 0) {
+            if(lineIndex == 0 && draggingAnchorId == -1) {
                 shapeRenderer.setColor(overColor);
+            }
+            if(checkIfLineIntersects(drawPoints.length - 1)) {
+                shapeRenderer.setColor(problemColor);
             }
             shapeRenderer.line(drawPoints[drawPoints.length - 1], drawPoints[0]);
             shapeRenderer.end();
@@ -162,10 +171,23 @@ public class PolygonFollower extends SubFollower {
 
     }
 
+    private boolean checkIfLineIntersects(int index) {
+        if(intersections == null) return false;
+        for(int i = 0; i < intersections.length; i++) {
+            if(intersections[i] == index) return true;
+        }
+
+        return false;
+    }
+
     public void drawTriangulatedPolygons() {
         if (polygonComponent.vertices == null) {
             return;
         }
+        if(intersections != null) {
+            return;
+        }
+
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         shapeRenderer.setColor(innerColor);
         for (Vector2[] poly : polygonComponent.vertices) {
@@ -355,5 +377,9 @@ public class PolygonFollower extends SubFollower {
     public void getSelectedAnchorId(int id) {
         if(id < 0) id = 0;
         selectedAnchorId = id;
+    }
+
+    public void setProblems(int[] intersections) {
+        this.intersections = intersections;
     }
 }
