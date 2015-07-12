@@ -72,6 +72,66 @@ public class PolygonUtils {
 
     public static Vector2[] extractClosedLoop(Set<Edge> edges) {
         ArrayList<Edge> sortedList = new ArrayList<>();
+        Edge edge = edges.stream().findFirst().get();
+        edges.remove(edge);
+        sortedList.add(edge);
+        while(edges.size() > 0) {
+            boolean result2 = false;
+            boolean result1 = appendNextEdge(sortedList, edges);
+            if(edges.size() > 0) {
+                result2 = appendPrevEdge(sortedList, edges);
+            }
+            if(!result1 && !result2) {
+                break;
+            }
+        }
+
+        Vector2[] result = new Vector2[sortedList.size()];
+        int iterator = 0;
+        for(Edge tmp: sortedList) {
+            result[iterator++] = tmp.start;
+        }
+
+        return result;
+    }
+
+    public static boolean appendNextEdge(ArrayList<Edge> sortedList, Set<Edge> edges) {
+        Edge lastEdge = sortedList.get(sortedList.size()-1);
+        Vector2 point = lastEdge.end;
+        for(Edge edge: edges) {
+            if(edge.linkedTo(point)) {
+                if(edge.end.equals(lastEdge.end)) {
+                    edge.reverse();
+                }
+                edges.remove(edge);
+                sortedList.add(edge);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static boolean appendPrevEdge(ArrayList<Edge> sortedList, Set<Edge> edges) {
+        Edge prevEdge = sortedList.get(0);
+        Vector2 point = prevEdge.start;
+        for(Edge edge: edges) {
+            if(edge.linkedTo(point)) {
+                if(edge.start.equals(prevEdge.start)) {
+                    edge.reverse();
+                }
+                edges.remove(edge);
+                sortedList.add(0, edge);
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    @Deprecated
+    public static Vector2[] extractClosedLoopOld(Set<Edge> edges) {
+        ArrayList<Edge> sortedList = new ArrayList<>();
         Edge nextEdge = edges.stream().findFirst().get();
         sortedList.add(nextEdge);
         sortedList = recursivelySortChainPoints(edges, nextEdge, sortedList);
@@ -86,6 +146,7 @@ public class PolygonUtils {
         return result;
     }
 
+    @Deprecated
     private static ArrayList<Edge> recursivelySortChainPoints(Set<Edge> edges, Edge edge, ArrayList<Edge> sortedList) {
         Edge nextEdge = findLink(edges, edge, edge.end);
         if(!edge.end.equals(nextEdge.start)) nextEdge.reverse();
