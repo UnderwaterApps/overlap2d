@@ -179,10 +179,10 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 	        case NormalSelectionFollower.R:
 	        	newX = transformComponent.x + tmpAdjustX;
 	            break;
-	        case NormalSelectionFollower.T:
+	        case NormalSelectionFollower.B:
 	        	newY = transformComponent.y - tmpAdjustY;
 	            break;
-	        case NormalSelectionFollower.B:
+	        case NormalSelectionFollower.T:
 	        	newY = transformComponent.y + tmpAdjustY;
 	            break;
 	        case NormalSelectionFollower.LT:
@@ -257,47 +257,47 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             	newX = tmpPositionPoint.x - tmpAdjustX;
                 newWidth = x - newX ;
                 break;
-            case NormalSelectionFollower.T:
-            	transformComponent.originY = 0;
-            	newY = tmpPositionPoint.y - tmpAdjustY;
-                newHeight = newY-y;
-                break;
             case NormalSelectionFollower.B:
             	transformComponent.originY = dimensionsComponent.height;
             	newY = tmpPositionPoint.y + tmpAdjustY;
-            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y - y);
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y - y + tmpAdjustY);
+                break;
+            case NormalSelectionFollower.T:
+            	transformComponent.originY = 0;
+            	newY = tmpPositionPoint.y - tmpAdjustY;
+                newHeight = y-newY;
                 break;
             case NormalSelectionFollower.LT:
-            	transformComponent.originY = 0;
             	transformComponent.originX = dimensionsComponent.width;
             	newX = tmpPositionPoint.x + tmpAdjustX;
-            	newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
+                newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
+            	transformComponent.originY = 0;
             	newY = tmpPositionPoint.y - tmpAdjustY;
-                newHeight = newY - y;
+                newHeight = y-newY;
                 break;
             case NormalSelectionFollower.RT:
             	transformComponent.originX = 0;
-            	transformComponent.originY = 0;
             	newX = tmpPositionPoint.x - tmpAdjustX;
-                newWidth = x - newX ;
-                newY = tmpPositionPoint.y - tmpAdjustY;
-                newHeight = newY - y;
+                newWidth = x - newX;
+                transformComponent.originY = 0;
+            	newY = tmpPositionPoint.y - tmpAdjustY;
+                newHeight = y-newY;
                 break;
             case NormalSelectionFollower.RB:
             	transformComponent.originX = 0;
-            	transformComponent.originY = dimensionsComponent.height;
             	newX = tmpPositionPoint.x - tmpAdjustX;
-                newWidth = x - newX ;
-                newY = tmpPositionPoint.y + tmpAdjustY;
-            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y + y + tmpAdjustY);
+                newWidth = x - newX;
+                transformComponent.originY = dimensionsComponent.height;
+            	newY = tmpPositionPoint.y + tmpAdjustY;
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y - y + tmpAdjustY);
                 break;
             case NormalSelectionFollower.LB:
             	transformComponent.originX = dimensionsComponent.width;
-            	transformComponent.originY = dimensionsComponent.height;
             	newX = tmpPositionPoint.x + tmpAdjustX;
                 newWidth = dimensionsComponent.width + (tmpPositionPoint.x - x + tmpAdjustX);
-                newY = tmpPositionPoint.y + tmpAdjustY;
-            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y + y + tmpAdjustY);
+                transformComponent.originY = dimensionsComponent.height;
+            	newY = tmpPositionPoint.y + tmpAdjustY;
+            	newHeight = dimensionsComponent.height + (tmpPositionPoint.y - y + tmpAdjustY);
                 break;
         }
 
@@ -345,7 +345,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         }
         
         transformComponent.x = newX;
-        //transformComponent.y = newY;
+        transformComponent.y = newY;
         
         //transformComponent.originX = newOriginX;
         //transformComponent.originY = newOriginY;
