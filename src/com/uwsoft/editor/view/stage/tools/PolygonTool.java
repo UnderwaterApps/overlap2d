@@ -260,11 +260,24 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     private boolean intersectSegments(Vector2[] points, int index1, int index2, int index3, int index4) {
         Vector2 intersectionPoint = new Vector2(points[index1]);
         boolean isIntersecting = Intersector.intersectSegments(points[index1], points[index2], points[index3], points[index4], intersectionPoint);
-        if(isIntersecting && !intersectionPoint.equals(points[index1]) && !intersectionPoint.equals(points[index2]) && !intersectionPoint.equals(points[index3]) && !intersectionPoint.equals(points[index4])) {
+        if(isIntersecting && !isSamePoint(intersectionPoint, points[index1]) && !isSamePoint(intersectionPoint, points[index2]) && !isSamePoint(intersectionPoint, points[index3]) && !isSamePoint(intersectionPoint, points[index4])) {
             return true;
         }
 
         return false;
+    }
+
+    private boolean isSamePoint(Vector2 point1, Vector2 point2) {
+        int pixelsPerWU = Sandbox.getInstance().getPixelPerWU();
+        int precision = 10000 * pixelsPerWU;
+        Vector2 pointA = new Vector2(point1);
+        Vector2 pointB = new Vector2(point2);
+        pointA.x = Math.round(point1.x * precision) / (float)precision;
+        pointA.y = Math.round(point1.y * precision) / (float)precision;
+        pointB.x = Math.round(point2.x * precision) / (float)precision;
+        pointB.y = Math.round(point2.y * precision) / (float)precision;
+
+        return pointA.equals(pointB);
     }
 
 

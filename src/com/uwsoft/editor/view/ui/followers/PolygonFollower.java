@@ -31,9 +31,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.VisUI;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -51,10 +49,10 @@ public class PolygonFollower extends SubFollower {
 
     private ArrayList<Vector2> originalPoints;
     private Vector2[] drawPoints;
-    protected Actor[] anchors;
 
     private ShapeRenderer shapeRenderer;
 
+    public static final int ANCHOR_SIZE = 9;
     public static final int CIRCLE_RADIUS = 10;
 
     private static final Color outlineColor = new Color(200f / 255f, 156f / 255f, 71f / 255f, 1f);
@@ -97,13 +95,11 @@ public class PolygonFollower extends SubFollower {
             computeOriginalPoints();
             computeDrawPoints();
             if(selectedAnchorId == -1) selectedAnchorId = 0;
-            initAnchors();
         }
     }
 
     public void updateDraw() {
         computeDrawPoints();
-        initAnchors();
     }
 
     private void computeOriginalPoints() {
@@ -122,7 +118,6 @@ public class PolygonFollower extends SubFollower {
     @Override
     public void draw(Batch batch, float parentAlpha) {
         if(polygonComponent != null && polygonComponent.vertices != null) {
-            positionAnchors();
             batch.end();
 
             Gdx.gl.glLineWidth(1.7f);
@@ -136,12 +131,11 @@ public class PolygonFollower extends SubFollower {
 
             drawTriangulatedPolygons();
             drawOutlines();
+            drawPoints();
 
             Gdx.gl.glDisable(GL20.GL_BLEND);
 
             batch.begin();
-
-            drawPoints(batch, parentAlpha);
         }
     }
 
@@ -200,34 +194,20 @@ public class PolygonFollower extends SubFollower {
         shapeRenderer.end();
     }
 
-    public void drawPoints(Batch batch, float parentAlpha) {
-        for (int i = 0; i < anchors.length; i++) {
-            anchors[i].draw(batch, parentAlpha);
-        }
-    }
-
-    private void positionAnchors() {
-        for (int i = 0; i < anchors.length; i++) {
-            anchors[i].setX(MathUtils.round(originalPoints.get(i).x - anchors[i].getWidth() / 2f));
-            anchors[i].setY(MathUtils.round(originalPoints.get(i).y - anchors[i].getHeight() / 2f));
-            anchors[i].setScale(runtimeCamera.zoom/pixelsPerWU);
-        }
-    }
-
-    private void initAnchors() {
-        anchors = new Actor[originalPoints.size()];
+    public void drawPoints() {
         for (int i = 0; i < originalPoints.size(); i++) {
-            anchors[i] = getMiniRect();
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+            shapeRenderer.setColor(Color.WHITE);
+            float side = (float) ANCHOR_SIZE / ((float)pixelsPerWU / runtimeCamera.zoom);
+            float onePixel = 1f/((float)pixelsPerWU / runtimeCamera.zoom);
+            shapeRenderer.rect(originalPoints.get(i).x-side/2f, originalPoints.get(i).y-side/2f, side, side);
+            shapeRenderer.setColor(Color.BLACK);
+            if(selectedAnchorId == i) {
+                shapeRenderer.setColor(Color.WHITE);
+            }
+            shapeRenderer.rect(originalPoints.get(i).x-side/2f+onePixel, originalPoints.get(i).y-side/2f+onePixel, side-2*onePixel, side-2*onePixel);
+            shapeRenderer.end();
         }
-        setSelectedAnchor(selectedAnchorId);
-    }
-
-    private Image getMiniRect() {
-        Image rect = new Image(VisUI.getSkin().getDrawable("selection-anchor"));
-        int w = (int) (rect.getWidth()/2);
-        int h = (int) (rect.getHeight()/2);
-        rect.setOrigin(w, h);
-        return rect;
     }
 
     public void setListener(final PolygonTransformationListener listener) {
@@ -298,8 +278,6 @@ public class PolygonFollower extends SubFollower {
 
     @Override
     public Actor hit (float x, float y, boolean touchable) {
-        if(anchors == null) return null;
-
         x = x / pixelsPerWU;
         y = y / pixelsPerWU;
 
@@ -321,17 +299,19 @@ public class PolygonFollower extends SubFollower {
         Vector2 tmpVector = new Vector2(x, y);
         int lineIndex = -1;
 
+        float circleSqr = ((float)CIRCLE_RADIUS/pixelsPerWU)*((float)CIRCLE_RADIUS/pixelsPerWU);
+
         for (int i = 1; i < drawPoints.length; i++) {
             Vector2 pointOne = drawPoints[i-1].cpy().scl(1f/runtimeCamera.zoom);
             Vector2 pointTwo = drawPoints[i].cpy().scl(1f/runtimeCamera.zoom);
-            if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, (CIRCLE_RADIUS/pixelsPerWU)*(CIRCLE_RADIUS/pixelsPerWU))) {
+            if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, circleSqr)) {
                 lineIndex = i;
                 break;
             }
         }
         Vector2 pointOne = drawPoints[drawPoints.length - 1].cpy().scl(1f/runtimeCamera.zoom);
         Vector2 pointTwo = drawPoints[0].cpy().scl(1f/runtimeCamera.zoom);
-        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, (CIRCLE_RADIUS/pixelsPerWU)*(CIRCLE_RADIUS/pixelsPerWU))) {
+        if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, circleSqr)) {
             lineIndex = 0;
         }
 
@@ -344,7 +324,7 @@ public class PolygonFollower extends SubFollower {
 
     private int anchorHitTest(float x, float y) {
         for (int i = 0; i < drawPoints.length; i++) {
-            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, (CIRCLE_RADIUS/pixelsPerWU));
+            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, (float)CIRCLE_RADIUS/pixelsPerWU);
             if(pointCircle.contains(x, y)) {
                 return i;
             }
@@ -364,13 +344,6 @@ public class PolygonFollower extends SubFollower {
         if(anchorId == -1) return;
 
         selectedAnchorId = anchorId;
-
-        if(selectedAnchorId > anchors.length-1) selectedAnchorId = anchors.length - 1;
-
-        for (int i = 0; i < anchors.length; i++) {
-            anchors[i].setColor(Color.WHITE);
-        }
-        anchors[selectedAnchorId].setColor(Color.ORANGE);
     }
 
     public int getSelectedAnchorId() {
