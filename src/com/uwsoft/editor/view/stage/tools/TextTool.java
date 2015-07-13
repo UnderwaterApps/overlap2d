@@ -22,7 +22,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.proxy.CursorManager;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 
 /**
@@ -47,6 +49,13 @@ public class TextTool extends ItemDropTool {
         color = Color.WHITE;
         kerningEnabled = true;
         align = Align.left;
+    }
+
+    @Override
+    public void initTool() {
+        super.initTool();
+        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(CursorManager.TEXT_TOOL);
     }
 
     @Override

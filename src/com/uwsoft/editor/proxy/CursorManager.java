@@ -36,6 +36,11 @@ public class CursorManager extends BaseProxy {
     public static CursorData TEXT_TOOL = new CursorData("label-tool", 15, 17);
     public static CursorData FINGER = new CursorData("fingerpoint", 16, 9);
 
+    public static CursorData ROTATION_LB = new CursorData("left-rotate-down", 18, 15);
+    public static CursorData ROTATION_LT = new CursorData("left-rotate-up", 18, 15);
+    public static CursorData ROTATION_RT = new CursorData("right-rotate-up", 18, 15);
+    public static CursorData ROTATION_RB = new CursorData("right-rotate-down", 18, 15);
+
     private CursorData cursor;
     private CursorData overrideCursor = null;
 

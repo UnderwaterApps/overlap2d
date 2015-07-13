@@ -51,6 +51,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     private float lastTransformAngle = 0;
     private float lastEntityAngle = 0;
 
+    private CursorManager cursorManager;
+
     @Override
     public String getName() {
         return NAME;
@@ -67,8 +69,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         updateListeners();
 
         // set cursor
-        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
-        //cursorManager.setCursor(CursorManager.CROSS);
+        cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(CursorManager.CROSS);
     }
 
     @Override
@@ -253,11 +255,23 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     @Override
     public void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y) {
-
+        cursorManager.setCursor(CursorManager.NORMAL);
+        if(anchor == NormalSelectionFollower.ROTATION_LB) {
+            cursorManager.setCursor(CursorManager.ROTATION_LB);
+        }
+        if(anchor == NormalSelectionFollower.ROTATION_LT) {
+            cursorManager.setCursor(CursorManager.ROTATION_LT);
+        }
+        if(anchor == NormalSelectionFollower.ROTATION_RT) {
+            cursorManager.setCursor(CursorManager.ROTATION_RT);
+        }
+        if(anchor == NormalSelectionFollower.ROTATION_RB) {
+            cursorManager.setCursor(CursorManager.ROTATION_RB);
+        }
     }
 
     @Override
     public void anchorMouseExit(NormalSelectionFollower follower, int anchor, float x, float y) {
-
+        cursorManager.setCursor(CursorManager.CROSS);
     }
 }
