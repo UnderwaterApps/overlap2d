@@ -278,6 +278,8 @@ public class PolygonFollower extends SubFollower {
 
     @Override
     public Actor hit (float x, float y, boolean touchable) {
+        if(originalPoints == null || originalPoints.size() == 0) return null;
+
         x = x / pixelsPerWU;
         y = y / pixelsPerWU;
 
@@ -323,6 +325,8 @@ public class PolygonFollower extends SubFollower {
     }
 
     private int anchorHitTest(float x, float y) {
+        if(originalPoints == null || originalPoints.size() == 0) return -1;
+
         for (int i = 0; i < drawPoints.length; i++) {
             Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, (float)CIRCLE_RADIUS/pixelsPerWU);
             if(pointCircle.contains(x, y)) {
