@@ -99,8 +99,8 @@ public class GridView extends Actor {
 		OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 		batch.setProjectionMatrix(uiCamera.projection);
 		zeroLabel.draw(batch, parentAlpha);
-		zeroLabel.setX(-runtimeCamera.position.x - 5 - zeroLabel.getWidth());
-		zeroLabel.setY(-runtimeCamera.position.y - zeroLabel.getHeight());
+		zeroLabel.setX(-runtimeCamera.position.x/runtimeCamera.zoom - 5 - zeroLabel.getWidth());
+		zeroLabel.setY(-runtimeCamera.position.y/runtimeCamera.zoom - zeroLabel.getHeight());
 	}
 
 	private void drawLines() {
@@ -128,7 +128,10 @@ public class GridView extends Actor {
 		}
 
 		// offset
-		i += Math.floor(offsetTmp);
+		int offset = 0;
+		if(offsetTmp > 0) offset = (int) Math.floor(offsetTmp);
+		if(offsetTmp < 0) offset = (int) -Math.floor(-offsetTmp);
+		i += offset;
 
 		Color color = new Color(Color.WHITE);
 
