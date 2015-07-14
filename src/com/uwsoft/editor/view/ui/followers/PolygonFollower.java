@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -45,6 +46,7 @@ import java.util.Arrays;
  */
 public class PolygonFollower extends SubFollower {
 
+    private TransformComponent transformComponent;
     private PolygonComponent polygonComponent;
 
     private ArrayList<Vector2> originalPoints;
@@ -79,6 +81,7 @@ public class PolygonFollower extends SubFollower {
 
     public void create() {
         polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         shapeRenderer = new ShapeRenderer();
     }
 
@@ -150,7 +153,7 @@ public class PolygonFollower extends SubFollower {
                 if(checkIfLineIntersects(i - 1)) {
                     shapeRenderer.setColor(problemColor);
                 }
-                shapeRenderer.line(drawPoints[i], drawPoints[i - 1]);
+                shapeRenderer.line(drawPoints[i].x*transformComponent.scaleX, drawPoints[i].y*transformComponent.scaleY, drawPoints[i - 1].x*transformComponent.scaleX, drawPoints[i - 1].y*transformComponent.scaleY);
             }
             shapeRenderer.setColor(outlineColor);
             if(lineIndex == 0 && draggingAnchorId == -1) {
@@ -159,7 +162,7 @@ public class PolygonFollower extends SubFollower {
             if(checkIfLineIntersects(drawPoints.length - 1)) {
                 shapeRenderer.setColor(problemColor);
             }
-            shapeRenderer.line(drawPoints[drawPoints.length - 1], drawPoints[0]);
+            shapeRenderer.line(drawPoints[drawPoints.length - 1].x*transformComponent.scaleX, drawPoints[drawPoints.length - 1].y*transformComponent.scaleY, drawPoints[0].x*transformComponent.scaleX, drawPoints[0].y*transformComponent.scaleY);
             shapeRenderer.end();
         }
 
@@ -186,10 +189,10 @@ public class PolygonFollower extends SubFollower {
         shapeRenderer.setColor(innerColor);
         for (Vector2[] poly : polygonComponent.vertices) {
             for (int i = 1; i < poly.length; i++) {
-                shapeRenderer.line(poly[i - 1], poly[i]);
+                shapeRenderer.line(poly[i - 1].x*transformComponent.scaleX, poly[i - 1].y*transformComponent.scaleY, poly[i].x*transformComponent.scaleX, poly[i].y*transformComponent.scaleY);
             }
             if (poly.length > 0)
-                shapeRenderer.line(poly[poly.length - 1].x, poly[poly.length - 1].y, poly[0].x, poly[0].y);
+                shapeRenderer.line(poly[poly.length - 1].x*transformComponent.scaleX, poly[poly.length - 1].y*transformComponent.scaleY, poly[0].x*transformComponent.scaleX, poly[0].y*transformComponent.scaleY);
         }
         shapeRenderer.end();
     }
@@ -198,14 +201,14 @@ public class PolygonFollower extends SubFollower {
         for (int i = 0; i < originalPoints.size(); i++) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE);
-            float side = (float) ANCHOR_SIZE / ((float)pixelsPerWU / runtimeCamera.zoom);
+            float side = (float) (ANCHOR_SIZE) / ((float)pixelsPerWU / runtimeCamera.zoom);
             float onePixel = 1f/((float)pixelsPerWU / runtimeCamera.zoom);
-            shapeRenderer.rect(originalPoints.get(i).x-side/2f, originalPoints.get(i).y-side/2f, side, side);
+            shapeRenderer.rect(originalPoints.get(i).x*transformComponent.scaleX-side/2f, originalPoints.get(i).y*transformComponent.scaleY-side/2f, side, side);
             shapeRenderer.setColor(Color.BLACK);
             if(selectedAnchorId == i) {
                 shapeRenderer.setColor(Color.WHITE);
             }
-            shapeRenderer.rect(originalPoints.get(i).x-side/2f+onePixel, originalPoints.get(i).y-side/2f+onePixel, side-2*onePixel, side-2*onePixel);
+            shapeRenderer.rect(originalPoints.get(i).x*transformComponent.scaleX-side/2f+onePixel, originalPoints.get(i).y*transformComponent.scaleY-side/2f+onePixel, side-2*onePixel, side-2*onePixel);
             shapeRenderer.end();
         }
     }
@@ -223,10 +226,10 @@ public class PolygonFollower extends SubFollower {
                 int anchorId = anchorHitTest(x, y);
                 if (anchorId >= 0) {
                     draggingAnchorId = anchorId;
-                    listener.anchorDown(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorDown(PolygonFollower.this, anchorId, x*runtimeCamera.zoom/transformComponent.scaleX, y*runtimeCamera.zoom/transformComponent.scaleY);
                 } else if (lineIndex > -1) {
                     // not anchor but line is selected gotta make new point
-                    listener.vertexDown(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.vertexDown(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom/transformComponent.scaleX, y*runtimeCamera.zoom/transformComponent.scaleY);
                 }
                 return true;
             }
@@ -237,7 +240,7 @@ public class PolygonFollower extends SubFollower {
                 y = y / pixelsPerWU;
                 int anchorId = draggingAnchorId;
                 if (anchorId >= 0) {
-                    listener.anchorDragged(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorDragged(PolygonFollower.this, anchorId, x*runtimeCamera.zoom/transformComponent.scaleX, y*runtimeCamera.zoom/transformComponent.scaleY);
                 } else if (lineIndex > -1) {
 
                 }
@@ -251,9 +254,9 @@ public class PolygonFollower extends SubFollower {
                 int anchorId = anchorHitTest(x, y);
                 lineIndex = vertexHitTest(x, y);
                 if (anchorId >= 0) {
-                    listener.anchorUp(PolygonFollower.this, anchorId, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.anchorUp(PolygonFollower.this, anchorId, x*runtimeCamera.zoom/transformComponent.scaleX, y*runtimeCamera.zoom/transformComponent.scaleY);
                 } else if (lineIndex > -1) {
-                    listener.vertexUp(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom, y*runtimeCamera.zoom);
+                    listener.vertexUp(PolygonFollower.this, lineIndex, x*runtimeCamera.zoom/transformComponent.scaleX, y*runtimeCamera.zoom/transformComponent.scaleY);
                 }
                 draggingAnchorId = -1;
             }
@@ -304,15 +307,15 @@ public class PolygonFollower extends SubFollower {
         float circleSqr = ((float)CIRCLE_RADIUS/pixelsPerWU)*((float)CIRCLE_RADIUS/pixelsPerWU);
 
         for (int i = 1; i < drawPoints.length; i++) {
-            Vector2 pointOne = drawPoints[i-1].cpy().scl(1f/runtimeCamera.zoom);
-            Vector2 pointTwo = drawPoints[i].cpy().scl(1f/runtimeCamera.zoom);
+            Vector2 pointOne = drawPoints[i-1].cpy().scl(1f/runtimeCamera.zoom*transformComponent.scaleX, 1f/runtimeCamera.zoom*transformComponent.scaleY);
+            Vector2 pointTwo = drawPoints[i].cpy().scl(1f/runtimeCamera.zoom*transformComponent.scaleX, 1f/runtimeCamera.zoom*transformComponent.scaleY);
             if (Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, circleSqr)) {
                 lineIndex = i;
                 break;
             }
         }
-        Vector2 pointOne = drawPoints[drawPoints.length - 1].cpy().scl(1f/runtimeCamera.zoom);
-        Vector2 pointTwo = drawPoints[0].cpy().scl(1f/runtimeCamera.zoom);
+        Vector2 pointOne = drawPoints[drawPoints.length - 1].cpy().scl(1f/runtimeCamera.zoom*transformComponent.scaleX, 1f/runtimeCamera.zoom*transformComponent.scaleY);
+        Vector2 pointTwo = drawPoints[0].cpy().scl(1f/runtimeCamera.zoom*transformComponent.scaleX, 1f/runtimeCamera.zoom*transformComponent.scaleY);
         if (drawPoints.length > 0 && Intersector.intersectSegmentCircle(pointOne, pointTwo, tmpVector, circleSqr)) {
             lineIndex = 0;
         }
@@ -328,7 +331,7 @@ public class PolygonFollower extends SubFollower {
         if(originalPoints == null || originalPoints.size() == 0) return -1;
 
         for (int i = 0; i < drawPoints.length; i++) {
-            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom, drawPoints[i].y/runtimeCamera.zoom, (float)CIRCLE_RADIUS/pixelsPerWU);
+            Circle pointCircle = new Circle(drawPoints[i].x/runtimeCamera.zoom*transformComponent.scaleX, drawPoints[i].y/runtimeCamera.zoom*transformComponent.scaleY, (float)CIRCLE_RADIUS/pixelsPerWU);
             if(pointCircle.contains(x, y)) {
                 return i;
             }
