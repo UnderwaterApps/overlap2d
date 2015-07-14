@@ -51,13 +51,17 @@ public class DraggableResource extends DragAndDrop {
             public DragAndDrop.Payload dragStart(InputEvent event, float x, float y, int pointer) {
                 DragAndDrop.Payload payload = new DragAndDrop.Payload();
                 Actor dragActor = viewComponent.getDragActor();
+
+                OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
+                dragActor.setScale(1f/runtimeCamera.zoom);
+
                 ResourcePayloadObject payloadData = viewComponent.getPayloadData();
-                payloadData.xOffset = dragActor.getWidth() / 2;
-                payloadData.yOffset = dragActor.getHeight() / 2;
+                payloadData.xOffset = runtimeCamera.zoom * dragActor.getWidth() / 2f;
+                payloadData.yOffset = runtimeCamera.zoom * dragActor.getHeight() / 2f;
                 payload.setDragActor(dragActor);
                 payload.setObject(payloadData);
                 payload.setInvalidDragActor(null);
-                setDragActorPosition(-dragActor.getWidth() / 2, dragActor.getHeight() / 2);
+                setDragActorPosition(-dragActor.getWidth() / 2f, dragActor.getHeight() / 2f);
                 return payload;
             }
         });
