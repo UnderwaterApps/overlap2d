@@ -201,13 +201,13 @@ public class PolygonFollower extends SubFollower {
         for (int i = 0; i < originalPoints.size(); i++) {
             shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             shapeRenderer.setColor(Color.WHITE);
+            if(selectedAnchorId == i) {
+                shapeRenderer.setColor(Color.ORANGE);
+            }
             float side = (float) (ANCHOR_SIZE) / ((float)pixelsPerWU / runtimeCamera.zoom);
             float onePixel = 1f/((float)pixelsPerWU / runtimeCamera.zoom);
             shapeRenderer.rect(originalPoints.get(i).x*transformComponent.scaleX-side/2f, originalPoints.get(i).y*transformComponent.scaleY-side/2f, side, side);
             shapeRenderer.setColor(Color.BLACK);
-            if(selectedAnchorId == i) {
-                shapeRenderer.setColor(Color.WHITE);
-            }
             shapeRenderer.rect(originalPoints.get(i).x*transformComponent.scaleX-side/2f+onePixel, originalPoints.get(i).y*transformComponent.scaleY-side/2f+onePixel, side-2*onePixel, side-2*onePixel);
             shapeRenderer.end();
         }

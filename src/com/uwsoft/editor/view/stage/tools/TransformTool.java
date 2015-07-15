@@ -359,18 +359,46 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     @Override
     public void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y) {
-        cursorManager.setCursor(CursorManager.NORMAL);
-        if(anchor == NormalSelectionFollower.ROTATION_LB) {
-            cursorManager.setCursor(CursorManager.ROTATION_LB);
-        }
-        if(anchor == NormalSelectionFollower.ROTATION_LT) {
-            cursorManager.setCursor(CursorManager.ROTATION_LT);
-        }
-        if(anchor == NormalSelectionFollower.ROTATION_RT) {
-            cursorManager.setCursor(CursorManager.ROTATION_RT);
-        }
-        if(anchor == NormalSelectionFollower.ROTATION_RB) {
-            cursorManager.setCursor(CursorManager.ROTATION_RB);
+        switch (anchor) {
+            case NormalSelectionFollower.ROTATION_LB:
+                cursorManager.setCursor(CursorManager.ROTATION_LB);
+                break;
+            case NormalSelectionFollower.ROTATION_LT:
+                cursorManager.setCursor(CursorManager.ROTATION_LT);
+                break;
+            case NormalSelectionFollower.ROTATION_RT:
+                cursorManager.setCursor(CursorManager.ROTATION_RT);
+                break;
+            case NormalSelectionFollower.ROTATION_RB:
+                cursorManager.setCursor(CursorManager.ROTATION_RB);
+                break;
+            case NormalSelectionFollower.LB:
+                cursorManager.setCursor(CursorManager.TRANSFORM_LEFT_RIGHT);
+                break;
+            case NormalSelectionFollower.L:
+                cursorManager.setCursor(CursorManager.TRANSFORM_HORIZONTAL);
+                break;
+            case NormalSelectionFollower.LT:
+                cursorManager.setCursor(CursorManager.TRANSFORM_RIGHT_LEFT);
+                break;
+            case NormalSelectionFollower.T:
+                cursorManager.setCursor(CursorManager.TRANSFORM_VERTICAL);
+                break;
+            case NormalSelectionFollower.RT:
+                cursorManager.setCursor(CursorManager.TRANSFORM_LEFT_RIGHT);
+                break;
+            case NormalSelectionFollower.R:
+                cursorManager.setCursor(CursorManager.TRANSFORM_HORIZONTAL);
+                break;
+            case NormalSelectionFollower.RB:
+                cursorManager.setCursor(CursorManager.TRANSFORM_RIGHT_LEFT);
+                break;
+            case NormalSelectionFollower.B:
+                cursorManager.setCursor(CursorManager.TRANSFORM_VERTICAL);
+                break;
+            default:
+                cursorManager.setCursor(CursorManager.NORMAL);
+                break;
         }
     }
 
