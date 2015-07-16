@@ -99,16 +99,16 @@ public class GridView extends Actor {
 		OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 		batch.setProjectionMatrix(uiCamera.projection);
 		zeroLabel.draw(batch, parentAlpha);
-		zeroLabel.setX(-runtimeCamera.position.x/runtimeCamera.zoom - 5 - zeroLabel.getWidth());
-		zeroLabel.setY(-runtimeCamera.position.y/runtimeCamera.zoom - zeroLabel.getHeight());
+		zeroLabel.setX(-(runtimeCamera.position.x*pixelsPerWU)/runtimeCamera.zoom - 5 - zeroLabel.getWidth());
+		zeroLabel.setY(-(runtimeCamera.position.y*pixelsPerWU)/runtimeCamera.zoom - zeroLabel.getHeight());
 	}
 
 	private void drawLines() {
 		shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 
 		OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
-		float offsetX = runtimeCamera.position.x/runtimeCamera.zoom % gridSize;
-		float offsetY = runtimeCamera.position.y/runtimeCamera.zoom % gridSize;
+		float offsetX = (runtimeCamera.position.x*pixelsPerWU)/runtimeCamera.zoom % gridSize;
+		float offsetY = (runtimeCamera.position.y*pixelsPerWU)/runtimeCamera.zoom % gridSize;
 
 		for(int i = 0; i < lines.size; i++) {
 			shapeRenderer.setColor(getLineColor(i));
@@ -121,10 +121,10 @@ public class GridView extends Actor {
 	private Color getLineColor(int i) {
 		OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
 
-		float offsetTmp = (runtimeCamera.position.x/runtimeCamera.zoom) / gridSize;
+		float offsetTmp = ((runtimeCamera.position.x*pixelsPerWU)/runtimeCamera.zoom) / gridSize;
 		if(i >= gridLinesCount) {
 			i-= gridLinesCount;
-			offsetTmp = (runtimeCamera.position.y/runtimeCamera.zoom) / gridSize;
+			offsetTmp = ((runtimeCamera.position.y*pixelsPerWU)/runtimeCamera.zoom) / gridSize;
 		}
 
 		// offset
@@ -145,17 +145,6 @@ public class GridView extends Actor {
 
 		return color;
 	}
-
-	 @Override
-	 public void act(float delta) {
-		 super.act(delta);
-		 /*
-		  OrthographicCamera camera = Sandbox.getInstance().getCamera();
-		  for(int i = 0; i <lines.size(); i++) {
-				lines.get(i).setThickness(camera.zoom);
-		  }*/
-	 }
-
 
 	public class Segment {
 		public Vector2 start;
