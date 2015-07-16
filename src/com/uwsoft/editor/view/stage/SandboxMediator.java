@@ -288,6 +288,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
                 if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
                     sandbox.setZoomPercent(100);
+                    sandbox.getCamera().position.set(0 ,0, 0);
                     facade.sendNotification(Overlap2D.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
