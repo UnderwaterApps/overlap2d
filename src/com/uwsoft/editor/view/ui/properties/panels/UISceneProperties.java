@@ -23,10 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.VisCheckBox;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.*;
 import com.uwsoft.editor.view.ui.widget.components.TintButton;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
@@ -40,6 +37,7 @@ public class UISceneProperties extends UIAbstractProperties {
 
     public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.view.ui.properties.panels.UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
 
+    private NumberSelector pixelsPerWorldUnitField;
     private VisCheckBox physicsEnabledCheckBox;
     private VisTextField gravityXTextField;
     private VisTextField gravityYTextField;
@@ -53,6 +51,7 @@ public class UISceneProperties extends UIAbstractProperties {
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
+        pixelsPerWorldUnitField = new NumberSelector("", 0, 1, 150);
         physicsEnabledCheckBox = new VisCheckBox(null);
         gravityXTextField = new VisValidableTextField(floatValidator);
         gravityYTextField = new VisValidableTextField(floatValidator);
@@ -62,6 +61,9 @@ public class UISceneProperties extends UIAbstractProperties {
         ambientColorComponent = new TintButton(29, 21);
 
         pad(5);
+        add(new VisLabel("Pixels per WU:", Align.right)).padRight(5).width(115);
+        add(pixelsPerWorldUnitField).width(30).left().padLeft(7);
+        row().padTop(5);
         add(new VisLabel("Physics enabled:", Align.right)).padRight(5).width(115);
         add(physicsEnabledCheckBox).left();
         row().padTop(5);
@@ -142,6 +144,14 @@ public class UISceneProperties extends UIAbstractProperties {
 
     public void setAmbientColor(Color tintColor) {
         ambientColorComponent.setColorValue(tintColor);
+    }
+
+    public int getPixelsPerWorldUnit() {
+        return pixelsPerWorldUnitField.getValue();
+    }
+
+    public void setPixelsPerWorldUnit(int value) {
+        pixelsPerWorldUnitField.setValue(value);
     }
 
     @Override
