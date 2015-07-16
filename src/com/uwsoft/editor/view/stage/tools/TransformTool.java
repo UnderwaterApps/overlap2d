@@ -168,7 +168,17 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         float newOriginX = transformComponent.originX;
         float newOriginY = transformComponent.originY;
         float tmpAdjustmenX = transformComponent.originX*(transformComponent.scaleX-1);
-        float tmpAdjustmenY = transformComponent.originY*(transformComponent.scaleX-1);
+        float tmpAdjustmenY = transformComponent.originY*(transformComponent.scaleY-1);
+        
+        final float cos = MathUtils.cosDeg(transformComponent.rotation);
+        final float sin = MathUtils.sinDeg(transformComponent.rotation);
+        
+        float difX = (transformComponent.x - x);
+    	float difY = (transformComponent.y - y);
+    	
+    	difX = (difX * cos + difY * sin);
+    	difY = (difX * -sin + difY * cos);
+        
         switch (anchor) {
             case NormalSelectionFollower.ORIGIN:
             	//TODO this shit is to complicated will leave it for now
@@ -184,43 +194,32 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
                 break;
            
             case NormalSelectionFollower.L:
-            	final float cos = MathUtils.cosDeg(transformComponent.rotation);
-                final float sin = MathUtils.sinDeg(transformComponent.rotation);
-            	float asdX = (transformComponent.x - x);
-            	float asdY = (transformComponent.y - y);
-            	
-            	asdX = cos * x - sin * y;
-            	asdY = sin * x + cos * y;
-            	
-            	asdX = (transformComponent.x - asdX);
-            	asdY = (transformComponent.y - asdY);
-            	
-            	newWidth = dimensionsComponent.width + asdY*2;
+            	newWidth = dimensionsComponent.width + difX*2;
                 break;
             case NormalSelectionFollower.R:
-                newWidth = tmpAdjustmenX + x - transformComponent.x;
+                newWidth = tmpAdjustmenX - difX;
                 break;
             case NormalSelectionFollower.B:
-            	newHeight = dimensionsComponent.height + (transformComponent.y - y)*2;
+            	newHeight = dimensionsComponent.height + difY*2;
                 break;
             case NormalSelectionFollower.T:
-                newHeight = tmpAdjustmenY + (y-newY);
+                newHeight = tmpAdjustmenY - difY;
                 break;
             case NormalSelectionFollower.LT:
-            	newWidth = dimensionsComponent.width + (transformComponent.x - x)*2;
-            	newHeight = tmpAdjustmenY + (y-newY);
+            	newWidth = dimensionsComponent.width + difX*2;
+            	newHeight = tmpAdjustmenY - difY;
                 break;
             case NormalSelectionFollower.RT:
-            	newWidth = tmpAdjustmenX + x - transformComponent.x;
-            	newHeight = tmpAdjustmenY + (y-newY);
+            	newWidth = tmpAdjustmenX - difX;
+            	newHeight = tmpAdjustmenY - difY;
                 break;
             case NormalSelectionFollower.RB:
-            	newWidth = tmpAdjustmenX + x - transformComponent.x;
-            	newHeight = dimensionsComponent.height + (transformComponent.y - y)*2;
+            	newWidth = tmpAdjustmenX - difX;
+            	newHeight = dimensionsComponent.height + difY*2;
                 break;
             case NormalSelectionFollower.LB:
-            	newWidth = dimensionsComponent.width + (transformComponent.x - x)*2;
-            	newHeight = dimensionsComponent.height + (transformComponent.y - y)*2;
+            	newWidth = dimensionsComponent.width + difX*2;
+            	newHeight = dimensionsComponent.height + difY*2;
                 break;
         }
         
@@ -266,41 +265,6 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         
         transformComponent.x = newX;
         transformComponent.y = newY;
-        
-        if (transformComponent.rotation != 0) {
-//			final float cos = MathUtils.cosDeg(transformComponent.rotation);
-//			final float sin = MathUtils.sinDeg(transformComponent.rotation);
-//			float originDifX = tmpOriginPoint.x - transformComponent.originX;
-//			float originDifY = tmpOriginPoint.y - transformComponent.originY;
-//
-//			transformComponent.x+= (cos * originDifX - sin * originDifY);
-//			transformComponent.y+= (sin * originDifX + cos * originDifY);
-//        	final float worldOriginX = x + transformComponent.originX;
-//    		final float worldOriginY = y + transformComponent.originY;
-//    		float fx = -transformComponent.originX;
-//    		float fy = -transformComponent.originY;
-//
-//    		// scale
-//    		if (transformComponent.scaleX != 1 || transformComponent.scaleY != 1) {
-//    			fx *= transformComponent.scaleX;
-//    			fy *= transformComponent.scaleY;
-//    		}
-//    		
-//    		// rotate
-//    		
-//    			final float cos = MathUtils.cosDeg(transformComponent.rotation);
-//    			final float sin = MathUtils.sinDeg(transformComponent.rotation);
-//
-//    			float x1 = cos * fx - sin * fy;
-//    			float y1 = sin * fx + cos * fy;
-//    			
-//    			x1 += worldOriginX;
-//    			y1 += worldOriginY;
-//    			
-//    			transformComponent.x+= transformComponent.x - x1;
-    			//transformComponent.y-= y1 - transformComponent.y;
-
-		}
         
         //transformComponent.originX = newOriginX;
         //transformComponent.originY = newOriginY;
