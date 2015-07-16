@@ -43,8 +43,6 @@ public class LayerSystem extends IteratingSystem {
 			ZindexComponent zindexComponent = zIndexMapper.get(entity);
 			
 			zindexComponent.layerIndex = getlayerIndexByName(zindexComponent.layerName,layerMapComponent);
-			
-			//System.out.println("LAYER NAME " + zindexComponent.layerName + " layerindex " + zindexComponent.layerIndex);
         }
 	}
 

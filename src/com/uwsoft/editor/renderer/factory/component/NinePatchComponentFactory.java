@@ -11,6 +11,8 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.data.Image9patchVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -36,7 +38,6 @@ public class NinePatchComponentFactory extends ComponentFactory {
 		DimensionsComponent component = new DimensionsComponent();
 		component.height = ((Image9patchVO) vo).height;
 		component.width = ((Image9patchVO) vo).width;
-
 		if(component.width == 0) {
 			component.width = ninePatchComponent.ninePatch.getTotalWidth();
 		}
@@ -53,6 +54,15 @@ public class NinePatchComponentFactory extends ComponentFactory {
 		NinePatchComponent ninePatchComponent = new NinePatchComponent();
 		AtlasRegion atlasRegion = (TextureAtlas.AtlasRegion) rm.getTextureRegion(vo.imageName);
 		ninePatchComponent.ninePatch = new NinePatch(atlasRegion, atlasRegion.splits[0], atlasRegion.splits[1], atlasRegion.splits[2], atlasRegion.splits[3]);
+
+		ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+		ProjectInfoVO projectInfoVO = rm.getProjectVO();
+		float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+
+		ninePatchComponent.ninePatch.scale(multiplier/projectInfoVO.pixelToWorld, multiplier/projectInfoVO.pixelToWorld);
+		ninePatchComponent.ninePatch.setMiddleWidth(ninePatchComponent.ninePatch.getMiddleWidth()*multiplier/projectInfoVO.pixelToWorld);
+		ninePatchComponent.ninePatch.setMiddleHeight(ninePatchComponent.ninePatch.getMiddleHeight()*multiplier/projectInfoVO.pixelToWorld);
+
 		ninePatchComponent.textureRegionName = vo.imageName;
 		entity.add(ninePatchComponent);
 

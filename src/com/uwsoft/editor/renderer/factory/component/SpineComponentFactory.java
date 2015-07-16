@@ -26,14 +26,19 @@ import com.esotericsoftware.spine.*;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/22/2015.
  */
 public class SpineComponentFactory extends ComponentFactory {
+
+    private SpineDataComponent spineDataComponent;
 
     public SpineComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
         super(rayHandler, world, rm);
@@ -45,35 +50,37 @@ public class SpineComponentFactory extends ComponentFactory {
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
-        createSpineDataComponent(entity, (SpineVO) vo);
+        spineDataComponent = createSpineDataComponent(entity, (SpineVO) vo);
     }
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 100;
-        component.width = 100;
 
         entity.add(component);
         return component;
     }
 
     protected SpineDataComponent createSpineDataComponent(Entity entity, SpineVO vo) {
+        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+
+
         SpineDataComponent component = new SpineDataComponent();
         component.animationName = vo.animationName;
         component.skeletonJson = new SkeletonJson(rm.getSkeletonAtlas(component.animationName));
         component.skeletonData = component.skeletonJson.readSkeletonData((rm.getSkeletonJSON(component.animationName)));
 
         BoneData rootBone = component.skeletonData.getBones().get(0); // this has to be the root bone.
-        rootBone.setScale(vo.scaleX, vo.scaleY); //TODO resolution part
+        rootBone.setScale(vo.scaleX / projectInfoVO.pixelToWorld, vo.scaleY / projectInfoVO.pixelToWorld); // TODO: resolution part and multipliers
         component.skeleton = new Skeleton(component.skeletonData); // Skeleton holds skeleton state (bone positions, slot attachments, etc).
         AnimationStateData stateData = new AnimationStateData(component.skeletonData); // Defines mixing (crossfading) between animations.
         component.state = new AnimationState(stateData); // Holds the animation state for a skeleton (current animation, time, etc).
 
-        //TODO: this can be done better, just don't have time right now
-        DimensionsComponent dimensionsComponent = entity.getComponent(DimensionsComponent.class);
-
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
         component.computeBoundBox(dimensionsComponent);
+
         // todo: fix this, it's a temporary solution
         component.setAnimation(component.currentAnimationName.isEmpty() ? component.skeletonData.getAnimations().get(0).getName() : component.currentAnimationName);
 

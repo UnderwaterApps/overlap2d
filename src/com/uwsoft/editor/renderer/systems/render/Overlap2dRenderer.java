@@ -50,10 +50,12 @@ public class Overlap2dRenderer extends IteratingSystem {
 		batch.begin();
 		drawRecursively(entity);
 		batch.end();
+
+		rayHandler.setCulling(false);
 		//TODO kinda not cool
 		if(rayHandler != null) {
 			OrthographicCamera orthoCamera = (OrthographicCamera) camera;
-			rayHandler.setCombinedMatrix(camera.combined.scl(1/PhysicsBodyLoader.SCALE),
+			rayHandler.setCombinedMatrix(camera.combined.scl(1f/PhysicsBodyLoader.SCALE),
 					camera.position.x,
 					camera.position.y,
 					camera.viewportWidth * orthoCamera.zoom,
