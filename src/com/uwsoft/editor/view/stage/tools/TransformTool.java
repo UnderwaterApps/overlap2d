@@ -60,7 +60,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     @Override
     public void initTool() {
-        Sandbox sandbox = Sandbox.getInstance();
+        sandbox = Sandbox.getInstance();
 
         if(!sandbox.getSelector().selectionIsOneItem()){
             sandbox.getSelector().clearSelections();

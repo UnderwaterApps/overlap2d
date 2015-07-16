@@ -48,7 +48,7 @@ public class SelectionTool extends SimpleTool {
 
     public static final String NAME = "SELECTION_TOOL";
 
-    private Sandbox sandbox;
+    protected Sandbox sandbox;
 
     private boolean isDragging = false;
     private boolean currentTouchedItemWasSelected = false;
