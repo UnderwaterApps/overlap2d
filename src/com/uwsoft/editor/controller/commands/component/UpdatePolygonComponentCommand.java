@@ -25,26 +25,31 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 7/3/2015.
  */
 public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand {
 
-    private Entity entity;
+    private Integer entityId;
     private Vector2[][] dataFrom;
     private Vector2[][] dataTo;
 
     private void collectData() {
         Object[] payload = getNotification().getBody();
-        entity = (Entity) payload[0];
+        entityId = EntityUtils.getEntityId((Entity) payload[0]);
         dataFrom = (Vector2[][]) payload[1];
         dataTo = (Vector2[][]) payload[2];
+        dataFrom = dataFrom.clone();
+        dataTo = dataTo.clone();
     }
 
     @Override
     public void doAction() {
         collectData();
+
+        Entity entity = EntityUtils.getByUniqueId(entityId);
 
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         polygonComponent.vertices = dataTo;
@@ -55,6 +60,8 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
 
     @Override
     public void undoAction() {
+        Entity entity = EntityUtils.getByUniqueId(entityId);
+
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         polygonComponent.vertices = dataFrom;
 

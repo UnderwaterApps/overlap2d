@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import com.uwsoft.editor.view.ui.widget.components.color.ColorPickerAdapter;
+import com.uwsoft.editor.view.ui.widget.components.color.CustomColorPicker;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.gdx.graphics.Color;
-import com.kotcrab.vis.ui.widget.color.ColorPicker;
-import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
@@ -57,9 +57,14 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
 
         switch (notification.getName()) {
             case UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED:
-                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                CustomColorPicker picker = new CustomColorPicker(new ColorPickerAdapter() {
                     @Override
                     public void finished(Color newColor) {
+                        viewComponent.setAmbientColor(newColor);
+                        facade.sendNotification(viewComponent.getUpdateEventName());
+                    }
+                    @Override
+                    public void changed(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
                         facade.sendNotification(viewComponent.getUpdateEventName());
                     }

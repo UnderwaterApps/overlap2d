@@ -34,6 +34,8 @@ public class TintButton extends Group {
     private final Skin skin;
     private Image colorImg;
 
+    private Color colorValue;
+
     public TintButton(int width, int height) {
         skin = VisUI.getSkin();
         colorImg = new Image(skin.getDrawable("white"));
@@ -54,11 +56,12 @@ public class TintButton extends Group {
     }
 
     public Color getColorValue() {
-        return colorImg.getColor();
+        return colorValue;
     }
 
     public void setColorValue(Color color) {
         colorImg.setColor(color);
+        colorValue = new Color(color);
     }
 
 }

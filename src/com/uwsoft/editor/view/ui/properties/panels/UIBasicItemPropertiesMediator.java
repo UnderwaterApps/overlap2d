@@ -28,6 +28,8 @@ import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.ui.widget.components.color.ColorPickerAdapter;
+import com.uwsoft.editor.view.ui.widget.components.color.CustomColorPicker;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -35,8 +37,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.color.ColorPicker;
-import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -99,9 +99,15 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
         switch (notification.getName()) {
             case UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED:
-                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                CustomColorPicker picker = new CustomColorPicker(new ColorPickerAdapter() {
                     @Override
                     public void finished(Color newColor) {
+                        viewComponent.setTintColor(newColor);
+                        facade.sendNotification(viewComponent.getUpdateEventName());
+                    }
+
+                    @Override
+                    public void changed(Color newColor) {
                         viewComponent.setTintColor(newColor);
                         facade.sendNotification(viewComponent.getUpdateEventName());
                     }

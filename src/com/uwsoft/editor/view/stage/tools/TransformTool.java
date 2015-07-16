@@ -51,6 +51,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     private float lastTransformAngle = 0;
     private float lastEntityAngle = 0;
+	private CursorManager cursorManager;
 
     @Override
     public String getName() {
@@ -68,8 +69,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         updateListeners();
 
         // set cursor
-        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
-        //cursorManager.setCursor(CursorManager.CROSS);
+        cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(CursorManager.CROSS);
     }
 
     @Override
@@ -310,11 +311,51 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
     @Override
     public void anchorMouseEnter(NormalSelectionFollower follower, int anchor, float x, float y) {
-
+        switch (anchor) {
+            case NormalSelectionFollower.ROTATION_LB:
+                cursorManager.setCursor(CursorManager.ROTATION_LB);
+                break;
+            case NormalSelectionFollower.ROTATION_LT:
+                cursorManager.setCursor(CursorManager.ROTATION_LT);
+                break;
+            case NormalSelectionFollower.ROTATION_RT:
+                cursorManager.setCursor(CursorManager.ROTATION_RT);
+                break;
+            case NormalSelectionFollower.ROTATION_RB:
+                cursorManager.setCursor(CursorManager.ROTATION_RB);
+                break;
+            case NormalSelectionFollower.LB:
+                cursorManager.setCursor(CursorManager.TRANSFORM_LEFT_RIGHT);
+                break;
+            case NormalSelectionFollower.L:
+                cursorManager.setCursor(CursorManager.TRANSFORM_HORIZONTAL);
+                break;
+            case NormalSelectionFollower.LT:
+                cursorManager.setCursor(CursorManager.TRANSFORM_RIGHT_LEFT);
+                break;
+            case NormalSelectionFollower.T:
+                cursorManager.setCursor(CursorManager.TRANSFORM_VERTICAL);
+                break;
+            case NormalSelectionFollower.RT:
+                cursorManager.setCursor(CursorManager.TRANSFORM_LEFT_RIGHT);
+                break;
+            case NormalSelectionFollower.R:
+                cursorManager.setCursor(CursorManager.TRANSFORM_HORIZONTAL);
+                break;
+            case NormalSelectionFollower.RB:
+                cursorManager.setCursor(CursorManager.TRANSFORM_RIGHT_LEFT);
+                break;
+            case NormalSelectionFollower.B:
+                cursorManager.setCursor(CursorManager.TRANSFORM_VERTICAL);
+                break;
+            default:
+                cursorManager.setCursor(CursorManager.NORMAL);
+                break;
+        }
     }
 
     @Override
     public void anchorMouseExit(NormalSelectionFollower follower, int anchor, float x, float y) {
-
+        cursorManager.setCursor(CursorManager.CROSS);
     }
 }
