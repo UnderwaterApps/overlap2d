@@ -353,11 +353,11 @@ public class SelectionTool extends SimpleTool {
         boolean isControlPressed = isControlPressed();
 
         // the amount of pixels by which to move item if moving
-        float deltaMove = 1;
+        float deltaMove = 1f/Sandbox.getInstance().getPixelPerWU();
 
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             // if shift is pressed, move boxes by 20 pixels instead of one
-            deltaMove = 20; //pixels
+            deltaMove = 20f/Sandbox.getInstance().getPixelPerWU(); //pixels
         }
 
         if (sandbox.getGridSize() > 1) {
