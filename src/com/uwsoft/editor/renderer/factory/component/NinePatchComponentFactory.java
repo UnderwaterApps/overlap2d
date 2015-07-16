@@ -55,11 +55,13 @@ public class NinePatchComponentFactory extends ComponentFactory {
 		AtlasRegion atlasRegion = (TextureAtlas.AtlasRegion) rm.getTextureRegion(vo.imageName);
 		ninePatchComponent.ninePatch = new NinePatch(atlasRegion, atlasRegion.splits[0], atlasRegion.splits[1], atlasRegion.splits[2], atlasRegion.splits[3]);
 
+		ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
 		ProjectInfoVO projectInfoVO = rm.getProjectVO();
+		float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
 
-		ninePatchComponent.ninePatch.scale(1f/projectInfoVO.pixelToWorld, 1f/projectInfoVO.pixelToWorld);
-		ninePatchComponent.ninePatch.setMiddleWidth(ninePatchComponent.ninePatch.getMiddleWidth()/projectInfoVO.pixelToWorld);
-		ninePatchComponent.ninePatch.setMiddleHeight(ninePatchComponent.ninePatch.getMiddleHeight()/projectInfoVO.pixelToWorld);
+		ninePatchComponent.ninePatch.scale(multiplier/projectInfoVO.pixelToWorld, multiplier/projectInfoVO.pixelToWorld);
+		ninePatchComponent.ninePatch.setMiddleWidth(ninePatchComponent.ninePatch.getMiddleWidth()*multiplier/projectInfoVO.pixelToWorld);
+		ninePatchComponent.ninePatch.setMiddleHeight(ninePatchComponent.ninePatch.getMiddleHeight()*multiplier/projectInfoVO.pixelToWorld);
 
 		ninePatchComponent.textureRegionName = vo.imageName;
 		entity.add(ninePatchComponent);
