@@ -1,311 +1,238 @@
 package com.uwsoft.editor.renderer;
 
-import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
-import com.badlogic.gdx.files.FileHandle;
+import box2dLight.RayHandler;
+
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.ashley.core.EntityListener;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.uwsoft.editor.renderer.actor.CompositeItem;
-import com.uwsoft.editor.renderer.actor.IBaseItem;
+import com.badlogic.gdx.utils.JsonWriter;
+import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
-import com.uwsoft.editor.renderer.script.IScript;
-
+import com.uwsoft.editor.renderer.scripts.IScript;
+import com.uwsoft.editor.renderer.systems.*;
+import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * SceneLoader is importatn part of runtime that
- * utilizes provided IResourceRetriever (or creates default one shipped with runtime)
- * in order to load entire scene data into viewable actors
- * provides the functionality to get root actor of scene and load scenes.
- *
- * Created by azakhary on 9/9/2014.
+ * SceneLoader is important part of runtime that utilizes provided
+ * IResourceRetriever (or creates default one shipped with runtime) in order to
+ * load entire scene data into viewable actors provides the functionality to get
+ * root actor of scene and load scenes.
  */
 public class SceneLoader {
-	
+
 	private String curResolution = "orig";
-	
 	private SceneVO sceneVO;
-	
-	public CompositeItem sceneActor;
-	public Essentials essentials;
+	private IResourceRetriever rm = null;
 
+    public Engine engine = null;
+	public RayHandler rayHandler;
+	public World world;
+	public Entity rootEntity;
 
-    /**
-     * Empty constructor is intended for easy use,
-     * it will create default ResourceManager, and load
-     * all possible resources into memory that have been exported with editor
-     */
+	public EntityFactory entityFactory;
+
+	private float pixesPerWU = 1;
+	private Overlap2dRenderer renderer;
+
     public SceneLoader() {
-        ResourceManager rm = new ResourceManager();
-        rm.initAllResources();
-        Essentials emptyEssentuials = new Essentials();
-        emptyEssentuials.rm = rm;
-        essentials = emptyEssentuials;
+        IResourceRetriever rm = new ResourceManager();
+        ((ResourceManager)rm).initAllResources();
+        this.engine = new Engine();
+		initSceneLoader();
     }
 
-    /**
-     * intended for easy use,
-     * it will create default ResourceManager, and load
-     * all possible resources into memory that have been exported with editor
-     * @param resolution - String resolution name to load everything for 9default is "orig"
-     */
-    public SceneLoader(String resolution) {
-        ResourceManager rm = new ResourceManager();
-        rm.setWorkingResolution(resolution);
-        rm.initAllResources();
-        Essentials emptyEssentuials = new Essentials();
-        emptyEssentuials.rm = rm;
-        essentials = emptyEssentuials;
-        curResolution = resolution;
-    }
-
-    /**
-     * Sets your implementation of IResourceRetriever, and does not load anything
-     *
-     * @param rm - Implementation of IResourceRetriever
-     */
     public SceneLoader(IResourceRetriever rm) {
-        Essentials emptyEssentuials = new Essentials();
-        emptyEssentuials.rm = rm;
-        essentials = emptyEssentuials;
+        this.engine = new Engine();
+		this.rm = rm;
+		initSceneLoader();
     }
 
-    /**
-     * Sets essentials container with or without content for later use
-     * This the most dummy contructor
-     * @param e - Essentials container
-     */
-	public SceneLoader(Essentials e) {
-		this.essentials = e;
-	}
+	/**
+	 * this method is called when rm has loaded all data
+	 */
+    private void initSceneLoader() {
+        RayHandler.setGammaCorrection(true);
+        RayHandler.useDiffuseLight(true);
 
-    /**
-     * Sets resolution of the screen, and applies it to existing actors if already loaded
-     * @param resolutionName - String resolution name to load everything for 9default is "orig"
-     */
+        rayHandler = new RayHandler(world);
+        rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
+        rayHandler.setCulling(true);
+        rayHandler.setBlur(true);
+        rayHandler.setBlurNum(3);
+        rayHandler.setShadows(true);
+
+        addSystems();
+
+        entityFactory = new EntityFactory(rayHandler, world, rm);
+    }
+
 	public void setResolution(String resolutionName) {
-		curResolution = resolutionName;
-		if(sceneActor != null){
-			sceneActor.applyResolution(resolutionName);
+		ResolutionEntryVO resolution = getRm().getProjectVO().getResolution(resolutionName);
+		if(resolution != null) {
+			curResolution = resolutionName;
 		}
 	}
 
-    /**
-     *
-     * @return SceneVO data if scene is already loaded with loadScene
-     */
+
 	public SceneVO getSceneVO() {
 		return sceneVO;
 	}
 
-    /**
-     * Asks IResourceRetriever for sceneVO data, checks scene for errors
-     * Applies resolution set previously with setResolution method or uses "orig" default resolution
-     * Sets default ambient light using scene data
-     *
-     * @param sceneName - String scene name without ".dt" extension
-     * @param createActors - if true the root composite with entire actor list will be created
-     * @return SceneVO data file of loaded scene (you don't really need it at this point though...)
-     */
-    public SceneVO loadScene(String sceneName, boolean createActors) {
-        sceneVO 	= essentials.rm.getSceneVO(sceneName);
+	public SceneVO loadScene(String sceneName, Viewport viewport) {
 
-        // init physics world
-        PhysicsPropertiesVO physicsProperties = sceneVO.physicsPropertiesVO;
-        //if(sceneVO.physicsPropertiesVO != null && sceneVO.physicsPropertiesVO.enabled == true)
+		pixesPerWU = rm.getProjectVO().pixelToWorld;
 
-        if(sceneVO.physicsPropertiesVO != null && sceneVO.physicsPropertiesVO.enabled == true) {
-            essentials.world = new World(new Vector2(physicsProperties.gravityX, physicsProperties.gravityY), true);
-            essentials.rayHandler.setWorld(essentials.world);
-        }
+		engine.removeAllEntities();
 
-        invalidateSceneVO(sceneVO);
+		sceneVO = rm.getSceneVO(sceneName);
 
-        if(createActors) {
-            sceneActor = getSceneAsActor();
-            if (!curResolution.equals("orig")) sceneActor.applyResolution(curResolution);
-        }
-
-        setAmbienceInfo(sceneVO);
-        return sceneVO;
-    }
-
-
-    /**
-     * Asks IResourceRetriever for sceneVO data, checks scene for errors
-     * and Recreates a big Actor tree that you can later add to your stage for rendering
-     * Applies resolution set previously with setResolution method or uses "orig" default resolution
-     * Sets default ambient light using scene data
-     *
-     * @param sceneName - String scene name without ".dt" extension
-     * @return SceneVO data file of loaded scene (you don't really need it at this point though...)
-     */
-	public SceneVO loadScene(String sceneName) {
-        return loadScene(sceneName, true);
-	}
-
-    /**
-     * Checks scene for continuity errors
-     *
-     * @param vo - Scene data file to invalidate
-     */
-    public void invalidateSceneVO(SceneVO vo) {
-        removeMissingImages(vo.composite);
-    }
-
-    /**
-     * Checks if composite data contains any scene items with images not provided by resource retriever, and removes them from composite
-     * to at least show what is not missing
-     *
-     * @param vo - Scene data file to invalidate
-     */
-    public void removeMissingImages(CompositeVO vo) {
-        if(vo == null) return;
-        for(SimpleImageVO img: vo.sImages) {
-            if(essentials.rm.getTextureRegion(img.imageName) == null) {
-                vo.sImages.remove(img);
-            }
-        }
-        for(CompositeItemVO cmp: vo.sComposites) {
-            removeMissingImages(cmp.composite);
-        }
-    }
-
-    /**
-     * Sets ambient light to the one specified in scene from editor
-     *
-     * @param vo - Scene data file to invalidate
-     */
-	public void setAmbienceInfo(SceneVO vo) {
-		if(essentials.rayHandler != null && vo.ambientColor !=null){
-			Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1], vo.ambientColor[2], vo.ambientColor[3]);
-			essentials.rayHandler.setAmbientLight(clr);
+		if(sceneVO.composite == null) {
+			sceneVO.composite = new CompositeVO();
 		}
+		rootEntity = entityFactory.createRootEntity(sceneVO.composite, viewport);
+		engine.addEntity(rootEntity);
+
+		if(sceneVO.composite != null) {
+			entityFactory.initAllChildren(engine, rootEntity, sceneVO.composite);
+		}
+
+		setAmbienceInfo(sceneVO);
+
+		return sceneVO;
 	}
 
-    /**
-     * Creates CompositeItem from sceneVo
-     *      *
-     * @return CompositeItem
-     */
-	public CompositeItem getSceneAsActor() {
-		CompositeItemVO vo = new CompositeItemVO(sceneVO.composite);
+	public SceneVO loadScene(String sceneName) {
+		ProjectInfoVO projectVO = rm.getProjectVO();
+		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/pixesPerWU, (float)projectVO.originalResolution.height/pixesPerWU, new OrthographicCamera());
+		return loadScene(sceneName, viewport);
+	} 
+
+	private void addSystems() {
+		ParticleSystem particleSystem = new ParticleSystem();
+		LightSystem lightSystem = new LightSystem();
+		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();
+		LayerSystem layerSystem = new LayerSystem();
+		PhysicsSystem physicsSystem = new PhysicsSystem();
+		SpineSystem spineSystem = new SpineSystem();
+		CompositeSystem compositeSystem = new CompositeSystem();
+		LabelSystem labelSystem = new LabelSystem();
+        ScriptSystem scriptSystem = new ScriptSystem();
+		renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
+		renderer.setRayHandler(rayHandler);
 		
-		if(vo.composite == null) vo.composite = new CompositeVO();
-		CompositeItem cnt = new CompositeItem(vo, essentials);
+		engine.addSystem(animationSystem);
+		engine.addSystem(particleSystem);
+		engine.addSystem(lightSystem);
+		engine.addSystem(layerSystem);
+		engine.addSystem(physicsSystem);
+		engine.addSystem(spineSystem);
+		engine.addSystem(compositeSystem);
+		engine.addSystem(labelSystem);
+        engine.addSystem(scriptSystem);
+		engine.addSystem(renderer);
 
-		return cnt;
+		addEntityRemoveListener();
 	}
 
-    /**
-     * Loads CompositeItem from Library by using it's library name
-     * So you can get item that is not on the scene, but is stored in library for later use
-     * Works great for dialogs and thigns like that
-     *
-     * TODO: this should be also renamed as name is confusing
-     * @param name String - library item name
-     * @return CompositeItem Actor
-     */
-	public CompositeItem getLibraryAsActor(String name) {
-		CompositeItemVO vo = new CompositeItemVO(sceneVO.libraryItems.get(name));
-		if(vo.composite == null) vo.composite = new CompositeVO();
-		CompositeItem cnt = new CompositeItem(vo, essentials);
-		cnt.dataVO.itemName = name;
-		cnt.applyResolution(curResolution);
-		cnt.setX(0);
-		cnt.setY(0);
-		return cnt;
-	}
+	private void addEntityRemoveListener() {
+		engine.addEntityListener(new EntityListener() {
+			@Override
+			public void entityAdded(Entity entity) {
+				// TODO: Gev knows what to do. (do this for all entities)
 
-    /**
-     * Returns CompositeItem that is inside rootScene identified by unique id set in Editor
-     * does not perform deep search inside other composites
-     *
-     * @param id - String uniqe identifier
-     * @return - CompositeItem
-     */
-	public CompositeItem getCompositeElementById(String id) {
-		CompositeItem cnt = getCompositeElement(sceneActor.getCompositeById(id).getDataVO());
-		
-		return cnt;
-	}
+				// mae sure we assign correct z-index here
+				ZindexComponent zindexComponent = ComponentRetriever.get(entity, ZindexComponent.class);
+				ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+				if (parentNodeComponent != null) {
+					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
+					zindexComponent.zIndex = nodeComponent.children.size;
+				}
 
-    /**
-     * Creates CompositeItem by provided CompositeItemVO data class
-     *
-     * @param vo CompositeItemVO data class
-     * @return CompositeItem
-     */
-	public CompositeItem getCompositeElement(CompositeItemVO vo) {
-		CompositeItem cnt = new CompositeItem(vo, essentials);
-		return cnt;
-	}
-
-	public void addScriptTo(String name,IScript iScript){
-		sceneActor.addScriptTo(name, iScript);
-	}
-	
-	public void addScriptTo(String name,ArrayList<IScript> iScripts){
-		sceneActor.addScriptTo(name, iScripts);
-	}
-
-    /**
-     *
-     * @return IResourceRetriever instance to load any resources already in memory
-     */
-    public IResourceRetriever getRm() {
-        return essentials.rm;
-    }
-
-    /**
-     *
-     * @return CompositeItem - root element of the scene
-     */
-    public CompositeItem getRoot() {
-        return sceneActor;
-    }
-	/**
-	 * Injects elements loaded through this scene loader into properly annotated
-	 * fields
-	 * 
-	 * @param object
-	 */
-	@SuppressWarnings("unchecked")
-	public void inject(Object object) {
-		Class<?> cls = object.getClass();
-		// get all public fields
-		Field[] fields = cls.getDeclaredFields();
-		System.out.println(fields.length);
-		// iterate over fields, injecting values from the root composite item
-		// into the object
-		for (Field field : fields) {
-			System.out.println(field.getName());
-			if (IBaseItem.class.isAssignableFrom(field.getType())) {
-				Class<? extends IBaseItem> type = (Class<? extends IBaseItem>) field
-						.getType();
-				Class<?> realType = field.getType();
-				System.out.println(Arrays.toString(field
-                        .getDeclaredAnnotations()));
-				if (field.isAnnotationPresent(Overlap2D.class)) {
-					System.out.println("annotation found");
-					String name = field.getName();
-					IBaseItem result = getRoot().getById(name, type);
-					System.out.println(result);
-					try {
-						field.set(object, realType.cast(result));
-					} catch (IllegalArgumentException | IllegalAccessException e) {
-						e.printStackTrace();
-						System.exit(-1);
+				// call init for a system
+				ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
+				if (scriptComponent != null) {
+					for (IScript script : scriptComponent.scripts) {
+						script.init(entity);
 					}
 				}
 			}
+
+			@Override
+			public void entityRemoved(Entity entity) {
+				ParentNodeComponent parentComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
+
+				if (parentComponent == null) {
+					return;
+				}
+
+				Entity parentEntity = parentComponent.parentEntity;
+				NodeComponent parentNodeComponent = ComponentRetriever.get(parentEntity, NodeComponent.class);
+				parentNodeComponent.removeChild(entity);
+
+				// check if composite and remove all children
+				NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+				if (nodeComponent != null) {
+					// it is composite
+					for (Entity node : nodeComponent.children) {
+						engine.removeEntity(node);
+					}
+				}
+			}
+		});
+	}
+
+	public Entity loadFromLibrary(String libraryName) {
+		ProjectInfoVO projectInfoVO = getRm().getProjectVO();
+		CompositeItemVO compositeItemVO = projectInfoVO.libraryItems.get(libraryName);
+
+		if(compositeItemVO != null) {
+			Entity entity = entityFactory.createEntity(null, compositeItemVO);
+			return entity;
+		}
+
+		return null;
+	}
+
+	/**
+	 * Sets ambient light to the one specified in scene from editor
+	 *
+	 * @param vo
+	 *            - Scene data file to invalidate
+	 */
+	public void setAmbienceInfo(SceneVO vo) {
+		if (vo.ambientColor != null) {
+			Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1],
+					vo.ambientColor[2], vo.ambientColor[3]);
+			rayHandler.setAmbientLight(clr);
 		}
 	}
+
+
+	public EntityFactory getEntityFactory() {
+		return entityFactory;
+	}
+
+	 public IResourceRetriever getRm() {
+	 	return rm;
+	 }
+
+    public Engine getEngine() {
+        return engine;
+    }
 }

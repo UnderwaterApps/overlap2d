@@ -1,11 +1,16 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
+
 public class SpriterVO extends MainItemVO {
 
     public int 	entity;
     public int 	animation;
-    public String 	animationName = "";    
-    public float 	scale	=	1f;
+    public String animationName = "";
+
+    //wtf is this?
+    public float scale	=	1f;
 
     public SpriterVO() {
 
@@ -17,6 +22,15 @@ public class SpriterVO extends MainItemVO {
         animation		= vo.animation;
         animationName 	= vo.animationName;
         scale 			= vo.scale;
+    }
+
+    @Override
+    public void loadFromEntity(Entity entity) {
+        super.loadFromEntity(entity);
+
+        SpriterComponent spriterComponent = entity.getComponent(SpriterComponent.class);
+        animationName = spriterComponent.animationName;
+        animation = spriterComponent.animation;
     }
 
 }

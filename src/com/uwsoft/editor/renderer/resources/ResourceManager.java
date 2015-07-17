@@ -31,6 +31,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
      *  Paths (please change if different) this is the default structure exported from editor
      */
     public String packResolutionName = "orig";
+
     public String scenesPath = "scenes";
     public String particleEffectsPath = "particles";
     public String spriteAnimationsPath = "sprite_animations";
@@ -73,7 +74,10 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
      * @param resolution String resolution name, default is "orig" later use resolution names created in editor
      */
     public void setWorkingResolution(String resolution) {
-    	packResolutionName = resolution;
+        ResolutionEntryVO resolutionObject = getProjectVO().getResolution("resolutionName");
+        if(resolutionObject != null) {
+            packResolutionName = resolution;
+        }
     }
 
     /**
@@ -163,7 +167,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
             String[] spriterAnimations = composite.getRecursiveSpriterAnimationList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
-            for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
+            for(CompositeItemVO library : projectVO.libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
                 Collections.addAll(fontsToLoad, libFonts);
 
@@ -387,6 +391,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public ProjectInfoVO getProjectVO() {
         return projectVO;
+    }
+
+    @Override
+    public ResolutionEntryVO getLoadedResolution() {
+        if(packResolutionName.equals("orig")) {
+            return getProjectVO().originalResolution;
+        }
+        return getProjectVO().getResolution(packResolutionName);
     }
 
     public void dispose() {

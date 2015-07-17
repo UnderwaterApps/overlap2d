@@ -6,8 +6,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.data.MeshVO;
-import com.uwsoft.editor.renderer.data.PhysicsBodyDataVO;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -21,25 +20,25 @@ public class PhysicsBodyLoader {
         this.world = world;
     }
 
-    public Body createBody(PhysicsBodyDataVO data, MeshVO mesh,Vector2 mulVec) {
-        return PhysicsBodyLoader.createBody(world, data, mesh, mulVec);
-    }
+//    public Body createBody( PhysicsBodyPropertiesComponent pysicsComponent, MeshVO shape,Vector2 mulVec) {
+//        return PhysicsBodyLoader.createBody(world, pysicsComponent, shape, mulVec);
+//    }
 
-    public static Body createBody(World world, PhysicsBodyDataVO data, MeshVO mesh, Vector2 mulVec) {
+    public static Body createBody(World world, PhysicsBodyPropertiesComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
         FixtureDef fixtureDef = new FixtureDef();
 
-        if(data != null) {
-            fixtureDef.density = data.density;
-            fixtureDef.friction = data.friction;
-            fixtureDef.restitution = data.restitution;
+        if(pysicsComponent != null) {
+            fixtureDef.density = pysicsComponent.density;
+            fixtureDef.friction = pysicsComponent.friction;
+            fixtureDef.restitution = pysicsComponent.restitution;
         }
 
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(0, 0);
 
-        if(data.bodyType == 0) {
+        if(pysicsComponent.bodyType == 0) {
             bodyDef.type = BodyDef.BodyType.StaticBody;
-        } else if (data.bodyType == 1){
+        } else if (pysicsComponent.bodyType == 1){
             bodyDef.type = BodyDef.BodyType.KinematicBody;
         } else {
             bodyDef.type = BodyDef.BodyType.DynamicBody;
@@ -49,11 +48,11 @@ public class PhysicsBodyLoader {
 
         PolygonShape polygonShape = new PolygonShape();
 
-        for(int i = 0; i < mesh.minPolygonData.length; i++) {
-        	float[] verts = new float[mesh.minPolygonData[i].length * 2];
+        for(int i = 0; i < minPolygonData.length; i++) {
+        	float[] verts = new float[minPolygonData[i].length * 2];
         	for(int j=0;j<verts.length;j+=2){
-        		verts[j] = mesh.minPolygonData[i][j/2].x * mulVec.x * SCALE;
-        		verts[j+1] = mesh.minPolygonData[i][j/2].y * mulVec.y * SCALE;
+        		verts[j] = minPolygonData[i][j/2].x * mulVec.x * SCALE;
+        		verts[j+1] = minPolygonData[i][j/2].y * mulVec.y * SCALE;
         	}
             polygonShape.set(verts);
             fixtureDef.shape = polygonShape;
