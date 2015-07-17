@@ -82,6 +82,8 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
     protected void translateObservableDataToView(SceneVO item) {
         PhysicsPropertiesVO physicsVO = item.physicsPropertiesVO;
 
+        viewComponent.setPixelsPerWorldUnit(Sandbox.getInstance().getPixelPerWU());
+
         viewComponent.setGravityXValue(physicsVO.gravityX + "");
         viewComponent.setGravityYValue(physicsVO.gravityY + "");
         viewComponent.setPhysicsEnable(physicsVO.enabled);

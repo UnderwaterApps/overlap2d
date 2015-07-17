@@ -164,6 +164,9 @@ public class NormalSelectionFollower extends BasicFollower {
         Image originAnchor = new Image(VisUI.getSkin().getDrawable("origin-anchor"));
         transformGroup.addActor(originAnchor);
         miniRects[ORIGIN] = originAnchor;
+
+        //TODO: till it works bad, let's hide it
+        miniRects[ORIGIN].setVisible(false);
     }
 
     @Override
