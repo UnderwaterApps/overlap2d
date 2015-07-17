@@ -47,9 +47,9 @@ public class ItemControlMediator {
             int ammount = 1;
             if (!isUp) ammount = -1;
 
-            int setting = zIndexComponent.zIndex + ammount;
+            int setting = zIndexComponent.getzIndex() + ammount;
             if (setting < 0) setting = 0;
-            zIndexComponent.zIndex = setting;
+            zIndexComponent.setzIndex(setting);
         }
     }
 

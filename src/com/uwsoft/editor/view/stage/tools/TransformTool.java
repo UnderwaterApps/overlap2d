@@ -179,7 +179,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     	
     	difX = (difX * cos + difY * sin);
     	difY = (difX * -sin + difY * cos);
-        
+    	
         switch (anchor) {
             case NormalSelectionFollower.ORIGIN:
             	//TODO this shit is to complicated will leave it for now
