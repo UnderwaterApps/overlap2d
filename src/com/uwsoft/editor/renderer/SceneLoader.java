@@ -162,6 +162,7 @@ public class SceneLoader {
 				if (parentNodeComponent != null) {
 					NodeComponent nodeComponent = parentNodeComponent.parentEntity.getComponent(NodeComponent.class);
 					zindexComponent.setzIndex(nodeComponent.children.size);
+					zindexComponent.needReOrder = false;
 				}
 
 				// call init for a system
