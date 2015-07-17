@@ -103,9 +103,9 @@ public class FontManager extends BaseProxy {
                     systemFontMap.put(name, file.getAbsolutePath());
                 }
             } catch (FontFormatException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             } catch (IOException e) {
-                e.printStackTrace();
+                //e.printStackTrace();
             }
         }
 

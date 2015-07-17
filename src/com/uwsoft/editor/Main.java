@@ -96,13 +96,17 @@ public class Main {
         	 input = "art/textures";
              file = new File(input);
         }
-        //System.out.println("path " + file.getAbsolutePath());
+        /**
+         * this should not be happening when in release mode
+         */
+        /*
         String output = "style";
         String packFileName = "uiskin";
         TexturePacker.Settings settings =  new TexturePacker.Settings();
         settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
         processSplashScreenTextures();
+        */
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }

@@ -100,6 +100,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                             layerVo.layerName = input;
                             viewComponent.addItem(layerVo);
                             addNewLayerToItemComposite(layerVo);
+                            initLayerData();
                         } else {
                             // show error dialog
                         }
@@ -164,8 +165,6 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     private void addNewLayerToItemComposite(LayerItemVO layerVo) {
         LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
         layerMapComponent.layers.add(layerVo);
-        layers.add(layerVo);
-        //currentSelectedLayerIndex = layers.indexOf(layerVo);
     }
 
     private void lockLayerByName(UILayerItem layerItem) {

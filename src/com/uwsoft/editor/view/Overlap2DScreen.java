@@ -139,6 +139,9 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         if (demoDir.isDirectory() && demoDir.exists()) {
             projectManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
             sandbox.loadCurrentProject();
+            if(sandbox.getViewport() != null) {
+                sandbox.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+            }
         }
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(this);
@@ -155,8 +158,9 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         uiStage.resize(width, height);
-        //TODO resize thing
-        //sandboxStage.resize(width, height);
+        if(Sandbox.getInstance().getViewport() != null) {
+            Sandbox.getInstance().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        }
     }
 
     @Override

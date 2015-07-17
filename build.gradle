@@ -13,7 +13,7 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '0.0.8'
+    version = '0.1.0'
     ext {
         appName = 'Overlap2D'
         gdxVersion = '1.6.2'
@@ -101,14 +101,6 @@ task dist(type: Jar) {
     from { configurations.compile.collect { zipTree(it) } }
     from files(project.assetsDir);
 
-    /**
-     * TODO: This was not working well
-    ant.propertyfile(
-            file: "assets/app.properties") {
-        entry(key: "version", value: project.version)
-    }
-    */
-
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
@@ -151,3 +143,10 @@ tasks.eclipse.doLast {
     delete ".project"
 }
 
+if (JavaVersion.current().isJava8Compatible()) {
+    allprojects {
+        tasks.withType(Javadoc) {
+            options.addStringOption('Xdoclint:none', '-quiet')
+        }
+    }
+}

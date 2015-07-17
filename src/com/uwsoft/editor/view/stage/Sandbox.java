@@ -455,12 +455,14 @@ public class Sandbox {
     }
 
     public ViewPortComponent getViewportComponent() {
+        if(getCurrentViewingEntity() == null) return null;
         ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(), ViewPortComponent.class);
         return viewPortComponent;
     }
 
     public Viewport getViewport() {
         ViewPortComponent viewPortComponent = getViewportComponent();
+        if(viewPortComponent == null) return null;
         return viewPortComponent.viewPort;
     }
 

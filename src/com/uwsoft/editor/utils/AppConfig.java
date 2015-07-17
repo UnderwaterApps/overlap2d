@@ -64,6 +64,6 @@ public class AppConfig  {
             e.printStackTrace();
         }
         */
-        version = "0.0.8";
+        version = "0.1.0";
     }
 }
