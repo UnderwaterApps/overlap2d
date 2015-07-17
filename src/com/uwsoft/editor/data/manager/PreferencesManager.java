@@ -119,4 +119,15 @@ public class PreferencesManager {
 		recentHistory.remove(-1);
 		storeRecentHistory();
 	}
+
+    public void clearHistory() {
+        for (int i = 0; i < recentHistory.size(); i++)
+        {
+            if (i > getInteger("recentHistory"))
+                break;
+            prefs.remove(String.format("recent.%d",i));
+        }
+        flush();
+        recentHistory.clear();
+    }
 }
