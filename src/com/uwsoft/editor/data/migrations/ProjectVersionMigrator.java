@@ -18,15 +18,17 @@
 
 package com.uwsoft.editor.data.migrations;
 
+import java.io.IOException;
+
+import com.uwsoft.editor.data.migrations.migrators.VersionMigTo009;
+import org.apache.commons.io.FileUtils;
+
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.data.migrations.migrators.DummyMig;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.utils.AppConfig;
-import org.apache.commons.io.FileUtils;
-
-import java.io.IOException;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -37,6 +39,11 @@ public class ProjectVersionMigrator {
     private ProjectVO projectVo;
 
     private int safetyIterator = 0;
+
+    /**
+     * this is the current supported version, change when data format is changed, and add migration script
+     */
+    public static String dataFormatVersion = "0.0.9";
 
     private Json json = new Json();
 
@@ -57,7 +64,7 @@ public class ProjectVersionMigrator {
     }
 
     private void migrationIterator() {
-        if (projectVo.projectVersion.equals(AppConfig.getInstance().version)) return;
+        if (projectVo.projectVersion.equals(dataFormatVersion)) return;
 
         if (safetyIterator > 100) {
             System.out.println("Emergency exit from version migration process due to safety lock");
@@ -69,18 +76,14 @@ public class ProjectVersionMigrator {
             VersionMigTo005 vmt = new VersionMigTo005();
             doMigartion(vmt, "0.0.5");
         }
-        if (projectVo.projectVersion.equals("0.0.5")) {
+        if (projectVo.projectVersion.equals("0.0.5") || projectVo.projectVersion.equals("0.0.6") || projectVo.projectVersion.equals("0.0.7")) {
             DummyMig vmt = new DummyMig();
-            doMigartion(vmt, "0.0.6");
+            doMigartion(vmt, "0.0.8");
         }
-        if (projectVo.projectVersion.equals("0.0.6")) {
-            DummyMig vmt = new DummyMig();
-            doMigartion(vmt, "0.0.7");
+        if (projectVo.projectVersion.equals("0.0.8")) {
+            VersionMigTo009 vmt = new VersionMigTo009();
+            doMigartion(vmt, "0.0.9");
         }
-		  if (projectVo.projectVersion.equals("0.0.7")) {
-				DummyMig vmt = new DummyMig();
-				doMigartion(vmt, "0.0.8");
-		  }
     }
 
     private void doMigartion(IVersionMigrator vmt, String nextVersion) {

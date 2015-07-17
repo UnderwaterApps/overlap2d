@@ -18,49 +18,173 @@
 
 package com.uwsoft.editor;
 
-import com.badlogic.gdx.backends.jglfw.JglfwApplication;
-import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
-import com.uwsoft.editor.gdx.Overlap2D;
-import com.uwsoft.editor.utils.AppConfig;
+import java.awt.GraphicsEnvironment;
+import java.awt.Image;
+import java.awt.MouseInfo;
+import java.awt.Point;
+import java.awt.Rectangle;
+import java.awt.Robot;
+import java.awt.Toolkit;
+import java.awt.event.InputEvent;
+import java.io.File;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import javax.swing.JFrame;
+import javax.swing.UIManager;
+
 import org.apache.commons.lang3.SystemUtils;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowEvent;
-import java.awt.event.WindowStateListener;
+import com.badlogic.gdx.backends.jglfw.JglfwApplication;
+import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.badlogic.gdx.backends.lwjgl.LwjglFrame;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.uwsoft.editor.splash.SplashStarter;
+import com.uwsoft.editor.utils.AppConfig;
 
 public class Main {
 
+    private SplashStarter splash;
+    private LwjglFrame mainFrame;
+
     public Main() {
+        splash = new SplashStarter(() -> startLoadingEditor());
+    }
+
+    private void startLoadingEditor() {
+        //first, kill off the splash
+    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC)) {
+    		splash.kill();
+    	}
+
+        Overlap2D overlap2D = new Overlap2D();
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
-        Overlap2D overlap2D = new Overlap2D();
+        
         if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
+            config.width = (int) (width);
+            config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-            config.width = (int) width;
-            config.height = (int) height;
             config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
-				LwjglFrame mainFrame = new LwjglFrame(overlap2D, config);
-				mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH );
+            config.fullscreen = true;
+            config.resizable = false;
+            config.width = (int) (width);
+            config.height = (int) (height - height * .04);
+            config.backgroundFPS = 0;
+            mainFrame = new LwjglFrame(overlap2D, config);
+            mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
+            toggleVisible();
         }
+        
+        setIcon();
 
     }
 
     public static void main(String[] argv) throws Exception {
+        String input = "../art/textures";
+        File file = new File(input);
+        if(!file.exists()){
+        	 input = "art/textures";
+             file = new File(input);
+        }
+        /**
+         * this should not be happening when in release mode
+         */
+        /*
+        String output = "style";
+        String packFileName = "uiskin";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
+        TexturePacker.processIfModified(input, output, packFileName);
+        processSplashScreenTextures();
+        */
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
 
+    private static void processSplashScreenTextures() {
+        String input = "../art/splash_textures";
+        File file = new File(input);
+        if(!file.exists()){
+        	 input = "art/splash_textures";
+             file = new File(input);
+        }
+        
+        String output = "splash";
+        String packFileName = "splash";
+        TexturePacker.Settings settings =  new TexturePacker.Settings();
+        settings.flattenPaths = true;
+        TexturePacker.processIfModified(input, output, packFileName);
+    }
+
+
+    private void toggleVisible() {
+        mainFrame.setVisible(!mainFrame.isVisible());
+        if (mainFrame.isVisible()) {
+            mainFrame.toFront();
+            mainFrame.requestFocus();
+            mainFrame.setAlwaysOnTop(true);
+            try {
+                //remember the last location of mouse
+                final Point oldMouseLocation = MouseInfo.getPointerInfo().getLocation();
+
+                //simulate a mouse click on title bar of window
+                Robot robot = new Robot();
+                robot.mouseMove(mainFrame.getX() + 100, mainFrame.getY() + 5);
+                robot.mousePress(InputEvent.BUTTON1_DOWN_MASK);
+                robot.mouseRelease(InputEvent.BUTTON1_DOWN_MASK);
+
+                //move mouse to old location
+                robot.mouseMove((int) oldMouseLocation.getX(), (int) oldMouseLocation.getY());
+            } catch (Exception ex) {
+                //just ignore exception, or you can handle it as you want
+            } finally {
+                mainFrame.setAlwaysOnTop(false);
+            }
+        }
+    }
+    
+    //THIS IS JUST FOR FUN
+    private void setIcon(){
+    	String logoPath = "../art/splash_textures/";
+        File file = new File(logoPath);
+        if(!file.exists()){
+        	 logoPath = "art/splash_textures/";
+             file = new File(logoPath);
+        }
+        logoPath+="icon.png";
+    	
+    	if(mainFrame != null){
+    		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(logoPath));
+    		return;
+    	}
+    	
+    	 try {
+             Class util = Class.forName("com.apple.eawt.Application");
+             Method getApplication = util.getMethod("getApplication", new Class[0]);
+             Object application = getApplication.invoke(util);
+             Class params[] = new Class[1];
+             params[0] = Image.class;
+             Method setDockIconImage = util.getMethod("setDockIconImage", params);
+             Image image = Toolkit.getDefaultToolkit().getImage(logoPath);
+             setDockIconImage.invoke(application, image);
+         } catch (ClassNotFoundException e) {
+             // log exception
+         } catch (NoSuchMethodException e) {
+             // log exception
+         } catch (InvocationTargetException e) {
+             // log exception
+         } catch (IllegalAccessException e) {
+             // log exception
+         }
+    }
 }

@@ -810,7 +810,7 @@ class CrossingEdgeInfo implements Comparable<CrossingEdgeInfo> {
 }
 
 // / <summary>
-// / Class used as a data container and helper for the texture-to-vertices code.
+// / Class used as a tools container and helper for the texture-to-vertices code.
 // / </summary>
 class PolygonCreationAssistance {
    private int _alphaTolerance;

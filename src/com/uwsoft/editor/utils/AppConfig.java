@@ -18,12 +18,6 @@
 
 package com.uwsoft.editor.utils;
 
-import com.badlogic.gdx.Gdx;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.Properties;
 
 /**
@@ -70,6 +64,6 @@ public class AppConfig  {
             e.printStackTrace();
         }
         */
-        version = "0.0.8";
+        version = "0.1.0";
     }
 }
