@@ -4,6 +4,10 @@ Overlap2D is a 2D level and UI editor with an engine agnostic philosophy for gam
 Made to separate coding from content, it enables developer to create rich content using images,
 animations, particle effects, light system, physics and complex grouped items.
 
+### Note
+This is a RC candidate that does not yet output a data file that is readable by latest official runtime.
+We will push next runtime very soon. 
+
 ### Getting Started
 
 * [Check out our website](http://overlap2d.com/)
@@ -25,20 +29,16 @@ so you can always be up to date with latest news!
 There is also [forum](http://overlap2d.com/forums) for all discussions.
 
 ### Contributing
-Overlap2D is growing really fast, and any help from community, be that just a small tweet or a code contribution is a huge help.
-Pull requests to this repo are very welcome! And you are also welcome to explore [javadocs](http://overlap2d.com/javadoc/)
+Check [this](http://overlap2d.com/contributing-to-overlap2d-editor/) for more info.
 
-### Project Set-Up to run from sources (we'll make it easier later)
+
+### Project Set-Up to run from sources.
 Here are the steps you need to do in order to run this project from sources
 
 * Fork this repo
 * Clone your fork to your local
-* Overlap2D requires for it to be in same folder in which o2d runtime and spine runtime are located so you need to clone them separately
-* Clone overlap2d-runtime from [here](https://github.com/UnderwaterApps/overlap2d-runtime-libgdx) (and switch it to dev branch)
-* Clone spine runtimes from [here](https://github.com/EsotericSoftware/spine-runtimes)
-* Make sure that paths are correct by taking a look (not modifying) settigs.gradle of overlap2d project
-* Open your favorite IDE (Eclipse/IntelliJ) and import overlap2d as gradle project
-* Things should work fine now, create branch, make some commits, push it to your origin and make some pull requests - yay ^^
+* Import as gradle project, and refresh your cradle config. (It should automatically download both o2d runtime and spine runtimes)
+* Make sure you have JDK 8
 
 ### Reporting Issues
 Because the editor is now open source, you can use the [issue tracker](https://github.com/UnderwaterApps/overlap2d/issues?page=1&state=open) here on GitHub to report issues.
