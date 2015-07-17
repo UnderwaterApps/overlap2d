@@ -107,8 +107,8 @@ public abstract class ComponentFactory {
     protected ZindexComponent createZIndexComponent(Entity entity, MainItemVO vo) {
         ZindexComponent component = new ZindexComponent();
         component.layerName = vo.layerName;
-        component.zIndex = vo.zIndex;
-
+        component.setzIndex(vo.zIndex);
+        component.needReOrder = false;
         entity.add(component);
 
         return component;

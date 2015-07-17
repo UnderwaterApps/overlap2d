@@ -7,6 +7,9 @@ import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
@@ -34,6 +37,7 @@ public class LayerSystem extends IteratingSystem {
 		NodeComponent nodeComponent = nodeMapper.get(entity);
 		LayerMapComponent layerMapComponent = layerMapper.get(entity);
 		updateLayers(nodeComponent.children,layerMapComponent);
+		updateZindexes(nodeComponent.children);
 		sort(nodeComponent.children);
 	}
 	
@@ -41,8 +45,29 @@ public class LayerSystem extends IteratingSystem {
 		for (int i = 0; i < children.size; i++) {
 			Entity entity = children.get(i);
 			ZindexComponent zindexComponent = zIndexMapper.get(entity);
-			
 			zindexComponent.layerIndex = getlayerIndexByName(zindexComponent.layerName,layerMapComponent);
+			if(zindexComponent.needReOrder){
+				if (zindexComponent.getzIndex() < 0) throw new IllegalArgumentException("ZIndex cannot be < 0.");
+				if (children.size == 1){ 
+					zindexComponent.setzIndex(0);
+					zindexComponent.needReOrder = false;
+					return;
+				}
+				if (!children.removeValue(entity, true)) return;
+				if (zindexComponent.getzIndex() >= children.size)
+					children.add(entity);
+				else
+					children.insert(zindexComponent.getzIndex(), entity);
+			}
+        }
+	}
+	
+	private void updateZindexes(SnapshotArray<Entity> children) {
+		for (int i = 0; i < children.size; i++) {
+			Entity entity = children.get(i);
+			ZindexComponent zindexComponent = zIndexMapper.get(entity);
+			zindexComponent.setzIndex(i);
+			zindexComponent.needReOrder = false;
         }
 	}
 
@@ -68,7 +93,7 @@ public class LayerSystem extends IteratingSystem {
         public int compare(Entity e1, Entity e2) {
         	ZindexComponent zIndexComponent1 = zIndexMapper.get(e1);
         	ZindexComponent zIndexComponent2 = zIndexMapper.get(e2);
-        	return zIndexComponent1.layerIndex == zIndexComponent2.layerIndex ? Integer.signum(zIndexComponent1.zIndex - zIndexComponent2.zIndex) : Integer.signum(zIndexComponent1.layerIndex - zIndexComponent2.layerIndex);
+        	return zIndexComponent1.layerIndex == zIndexComponent2.layerIndex ? Integer.signum(zIndexComponent1.getzIndex() - zIndexComponent2.getzIndex()) : Integer.signum(zIndexComponent1.layerIndex - zIndexComponent2.layerIndex);
             //return (int)Math.signum(pm.get(e1).z - pm.get(e2).z);
         }
     }

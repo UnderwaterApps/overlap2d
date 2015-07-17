@@ -98,7 +98,7 @@ public class MainItemVO {
 		tint[2] = tintComponent.color.b;
 		tint[3] = tintComponent.color.a;
 
-		zIndex = zindexComponent.zIndex;
+		zIndex = zindexComponent.getzIndex();
 
 		/**
 		 * Secondary components
