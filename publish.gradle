@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'com.underwaterapps.overlap2druntime'
-version = '0.0.8'
+version = '0.1.0'
 ext.packaging = 'jar'
 
 def isDevBuild
@@ -101,6 +101,11 @@ uploadArchives {
                            id 'gevorg.kopalyan'
                            name 'Gevorg Kopalyan'
 						   email 'gevorg.kopalyan@gmail.com'
+                       }
+                       developer {
+                           id 'azakhary'
+                           name 'Avetis Zakharyan'
+                           email 'avetis.zakharyan@gmail.com'
                        }
                    }
                }

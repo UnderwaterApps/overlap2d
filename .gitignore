@@ -10,3 +10,4 @@ target/
 *.iws
 .classpath
 .project
+gradle.properties
