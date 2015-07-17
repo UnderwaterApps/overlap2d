@@ -36,9 +36,10 @@ public class LayerSystem extends IteratingSystem {
 	protected void processEntity(Entity entity, float deltaTime) {
 		NodeComponent nodeComponent = nodeMapper.get(entity);
 		LayerMapComponent layerMapComponent = layerMapper.get(entity);
-		updateLayers(nodeComponent.children,layerMapComponent);
-		updateZindexes(nodeComponent.children);
+		updateLayers(nodeComponent.children, layerMapComponent);
+
 		sort(nodeComponent.children);
+		updateZindexes(nodeComponent.children);
 	}
 	
 	private void updateLayers(SnapshotArray<Entity> children, LayerMapComponent layerMapComponent) {
