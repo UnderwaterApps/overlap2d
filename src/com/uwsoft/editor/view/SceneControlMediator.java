@@ -25,6 +25,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.badlogic.gdx.utils.viewport.StretchViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -87,7 +88,10 @@ public class SceneControlMediator {
 		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
 		ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)Gdx.graphics.getWidth()/resourceManager.getProjectVO().pixelToWorld, (float)Gdx.graphics.getHeight()/resourceManager.getProjectVO().pixelToWorld);
+		ScreenViewport viewport = new ScreenViewport();
+		// Yey to whoever made this method
+		viewport.setUnitsPerPixel(resourceManager.getProjectVO().pixelToWorld);
+
 		currentSceneVo = sceneLoader.loadScene(sceneName, viewport);
 		// TODO: this is now in sceneLoaader but probably will be changed
 		// essentials.world = new World(new

@@ -142,6 +142,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
             if(sandbox.getViewport() != null) {
                 sandbox.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             }
+            facade.sendNotification(ProjectManager.PROJECT_OPENED);
         }
         multiplexer = new InputMultiplexer();
         multiplexer.addProcessor(this);
