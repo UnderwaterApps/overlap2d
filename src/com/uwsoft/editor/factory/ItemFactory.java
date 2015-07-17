@@ -204,8 +204,8 @@ public class ItemFactory {
         vo.size = textSettings.getFontSize();
 
         // need to calculate minimum bounds size here
-        vo.width = 120;
-        vo.height = 50;
+        vo.width = 120/Sandbox.getInstance().getPixelPerWU();
+        vo.height = 50/Sandbox.getInstance().getPixelPerWU();
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
