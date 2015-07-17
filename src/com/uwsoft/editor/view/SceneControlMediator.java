@@ -90,7 +90,7 @@ public class SceneControlMediator {
 
 		ScreenViewport viewport = new ScreenViewport();
 		// Yey to whoever made this method
-		viewport.setUnitsPerPixel(resourceManager.getProjectVO().pixelToWorld);
+		viewport.setUnitsPerPixel(1f/resourceManager.getProjectVO().pixelToWorld);
 
 		currentSceneVo = sceneLoader.loadScene(sceneName, viewport);
 		// TODO: this is now in sceneLoaader but probably will be changed
