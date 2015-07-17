@@ -13,6 +13,7 @@ import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.data.LabelVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -48,6 +49,10 @@ public class LabelComponentFactory extends ComponentFactory{
     	LabelComponent component = new LabelComponent(vo.text, generateStyle(rm, vo.style, vo.size));
         component.fontName = vo.style;
         component.fontSize = vo.size;
+
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+        component.setFontScale(1f/projectInfoVO.pixelToWorld);
+
         entity.add(component);
         return component;
     }
