@@ -64,7 +64,7 @@ public abstract class BasicFollower extends Group {
 
     	Vector2 position = Pools.obtain(Vector2.class);
         position.x = 0; position.y = 0;
-        TransformMathUtils.localToSceneCoordinates(entity, position);
+        TransformMathUtils.localToAscendantCoordinates(sandbox.getCurrentViewingEntity(), entity, position);
         position = Sandbox.getInstance().worldToScreen(position);
 
         setX((int) (position.x));
