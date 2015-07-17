@@ -5,6 +5,7 @@ buildscript {
     }
     dependencies {
         classpath 'net.sf.proguard:proguard-gradle:5.0'
+        classpath 'org.ajoberstar:gradle-git:1.2.0'
     }
 }
 
@@ -30,6 +31,14 @@ allprojects {
 }
 
 apply plugin: "java"
+
+
+import org.ajoberstar.grgit.*
+def spineDestination = file("../spine-runtimes")
+def overlapRuntimeDestination = file("../overlap2d-runtime-libgdx")
+if(!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
+if(!overlapRuntimeDestination.exists()) Grgit.clone(dir: overlapRuntimeDestination, uri: 'https://github.com/azakhary/overlap2d-runtime-libgdx.git')
+
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
@@ -70,11 +79,13 @@ project(":spine-runtime-libgdx") {
     }
 }
 
+
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = ["src/"]
 
 project.ext.mainClassName = "com.uwsoft.editor.Main"
 project.ext.assetsDir = new File("assets/");
+
 
 task run(dependsOn: classes, type: JavaExec) {
     main = project.mainClassName
