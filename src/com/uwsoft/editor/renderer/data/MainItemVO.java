@@ -69,7 +69,7 @@ public class MainItemVO {
 		TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
         ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
-		ZindexComponent zindexComponent = entity.getComponent(ZindexComponent.class);
+		ZIndexComponent zindexComponent = entity.getComponent(ZIndexComponent.class);
 
 		itemIdentifier = mainItemComponent.itemIdentifier;
 		itemName = mainItemComponent.libraryLink;
@@ -98,7 +98,7 @@ public class MainItemVO {
 		tint[2] = tintComponent.color.b;
 		tint[3] = tintComponent.color.a;
 
-		zIndex = zindexComponent.getzIndex();
+		zIndex = zindexComponent.getZIndex();
 
 		/**
 		 * Secondary components

@@ -104,7 +104,7 @@ public class ComponentRetriever {
         mappers.put(TintComponent.class, ComponentMapper.getFor(TintComponent.class));
         mappers.put(TransformComponent.class, ComponentMapper.getFor(TransformComponent.class));
         mappers.put(ViewPortComponent.class, ComponentMapper.getFor(ViewPortComponent.class));
-        mappers.put(ZindexComponent.class, ComponentMapper.getFor(ZindexComponent.class));
+        mappers.put(ZIndexComponent.class, ComponentMapper.getFor(ZIndexComponent.class));
         mappers.put(ScriptComponent.class, ComponentMapper.getFor(ScriptComponent.class));
 
         mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
@@ -168,6 +168,6 @@ public class ComponentRetriever {
      */
     @SuppressWarnings("unchecked")
     public static void addMapper(Class type) {
-        self().getMappers().put(ZindexComponent.class, ComponentMapper.getFor(type));
+        self().getMappers().put(ZIndexComponent.class, ComponentMapper.getFor(type));
     }
 }
