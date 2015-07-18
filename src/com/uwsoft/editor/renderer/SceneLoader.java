@@ -19,6 +19,7 @@ import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -195,6 +196,12 @@ public class SceneLoader {
 						engine.removeEntity(node);
 					}
 				}
+
+                // check if it is light
+                LightObjectComponent lightObjectComponent = ComponentRetriever.get(entity, LightObjectComponent.class);
+                if(lightObjectComponent != null) {
+                    lightObjectComponent.lightObject.remove(true);
+                }
 			}
 		});
 	}
