@@ -22,6 +22,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.MidUIMediator;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -43,6 +46,12 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
         entityId = EntityUtils.getEntityId(entity);
 
         sandbox.getEngine().addEntity(entity);
+
+        // z-index
+        NodeComponent nodeComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), NodeComponent.class);
+        ZIndexComponent zindexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+        zindexComponent.setZIndex(nodeComponent.children.size);
+
         Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
 
         // select newly created item
