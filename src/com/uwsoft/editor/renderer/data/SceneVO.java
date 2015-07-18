@@ -13,6 +13,8 @@ public class SceneVO {
 
     public CompositeVO composite;
 
+    public boolean lightSystemEnabled = false;
+
     public float[] ambientColor = {1f, 1f, 1f, 1f};
 
     public PhysicsPropertiesVO physicsPropertiesVO = new PhysicsPropertiesVO();
@@ -26,6 +28,7 @@ public class SceneVO {
         composite = new CompositeVO(vo.composite);
         ambientColor = Arrays.copyOf(vo.ambientColor, vo.ambientColor.length);
         physicsPropertiesVO = new PhysicsPropertiesVO(vo.physicsPropertiesVO);
+        lightSystemEnabled = vo.lightSystemEnabled;
     }
 
     public String constructJsonString() {
