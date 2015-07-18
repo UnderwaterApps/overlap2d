@@ -22,7 +22,7 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.components.ZindexComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
@@ -33,7 +33,7 @@ public class ItemControlMediator {
     private SceneControlMediator sceneControl;
     
     private TransformComponent transformComponent;
-    private ZindexComponent zIndexComponent;
+    private ZIndexComponent zIndexComponent;
 
     public ItemControlMediator(SceneControlMediator sceneControl) {
         this.sceneControl = sceneControl;
@@ -42,14 +42,14 @@ public class ItemControlMediator {
 
     public void itemZIndexChange( Set<Entity> currentSelection, boolean isUp) {
         for (Entity item : currentSelection) {
-        	zIndexComponent = ComponentRetriever.get(item, ZindexComponent.class);
+        	zIndexComponent = ComponentRetriever.get(item, ZIndexComponent.class);
 
             int ammount = 1;
             if (!isUp) ammount = -1;
 
-            int setting = zIndexComponent.getzIndex() + ammount;
+            int setting = zIndexComponent.getZIndex() + ammount;
             if (setting < 0) setting = 0;
-            zIndexComponent.setzIndex(setting);
+            zIndexComponent.setZIndex(setting);
         }
     }
 
