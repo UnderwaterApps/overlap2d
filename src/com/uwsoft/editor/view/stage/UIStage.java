@@ -58,11 +58,12 @@ public class UIStage extends Stage {
 
         RulersUIMediator rulersUIMediator = facade.retrieveMediator(RulersUIMediator.NAME);
         Actor rulersGroup = rulersUIMediator.getViewComponent();
-        midUI.addActor(rulersGroup);
 
         FollowersUIMediator followersUIMediator = facade.retrieveMediator(FollowersUIMediator.NAME);
         Group followersGroup = followersUIMediator.getViewComponent();
+
         midUI.addActor(followersGroup);
+        midUI.addActor(rulersGroup);
 
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();
