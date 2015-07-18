@@ -171,7 +171,7 @@ public class Sandbox {
         selectionRec.setFillColor(new Color(1, 1, 1, 0.1f));
         selectionRec.setOpacity(0.0f);
         selectionRec.setTouchable(Touchable.disabled);
-        uiStage.sandBoxUIGroup.addActor(selectionRec);
+        uiStage.midUI.addActor(selectionRec);
 
     }
     
@@ -180,7 +180,7 @@ public class Sandbox {
     }
 
     public void setKeyboardFocus() {
-        uiStage.setKeyboardFocus(uiStage.sandBoxUIGroup);
+        uiStage.setKeyboardFocus(uiStage.midUI);
     }
     
 

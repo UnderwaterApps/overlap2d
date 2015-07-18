@@ -5,7 +5,7 @@ import java.util.Set;
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
@@ -19,9 +19,9 @@ public abstract class SimpleTool implements Tool {
     public void initTool() {
         Sandbox sandbox = Sandbox.getInstance();
         Set<Entity> currSelection = sandbox.getSelector().getCurrentSelection();
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
         for(Entity entity: currSelection) {
-            BasicFollower follower = midUIMediator.getFollower(entity);
+            BasicFollower follower = followersUIMediator.getFollower(entity);
             if(follower instanceof NormalSelectionFollower) {
                 NormalSelectionFollower selectionFollower = (NormalSelectionFollower) follower;
                 selectionFollower.clearSubFollowers();

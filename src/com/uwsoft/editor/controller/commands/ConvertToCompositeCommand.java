@@ -24,7 +24,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -82,7 +82,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
 
         //get the entity
         Entity entity = EntityUtils.getByUniqueId(entityId);
@@ -105,7 +105,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         }
 
         // remove composite
-        midUIMediator.removeFollower(entity);
+        followersUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
 
         Overlap2DFacade.getInstance().sendNotification(DONE);
