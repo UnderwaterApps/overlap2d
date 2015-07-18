@@ -106,22 +106,6 @@ task dist(type: Jar) {
     }
 }
 
-task proguard(type: proguard.gradle.ProGuardTask) {
-    configuration files('proguard.cfg')
-    dependsOn 'dist'
-    injars(project.dist.archivePath.getPath())
-    outjars(project.name + '_obfuscated.jar')
-}
-
-dist.dependsOn classes
-
-//eclipse {
-//    project {
-//        name = appName
-//        linkedResource name: 'assets', type: '2', location: 'assets'
-//    }
-//}
-
 idea {
     project {
         languageLevel = sourceCompatibility
