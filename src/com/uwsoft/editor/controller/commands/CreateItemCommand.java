@@ -25,7 +25,7 @@ import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 
@@ -65,8 +65,8 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
     public void undoAction() {
         Entity entity = EntityUtils.getByUniqueId(entityId);
 
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.removeFollower(entity);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        followersUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
 
         Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);

@@ -16,17 +16,17 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view;
+package com.uwsoft.editor.view.ui;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
 
 /**
  * Created by azakhary on 5/20/2015.
  */
-public class MidUI extends Group {
+public class FollowersUI extends Group {
 
 
-    public MidUI() {
+    public FollowersUI() {
 
     }
 

@@ -30,7 +30,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
@@ -51,7 +51,7 @@ public class ItemSelector {
     /** list of current selected panels */
     private Set<Entity> currentSelection = new HashSet<>();
 
-    private MidUIMediator midUIMediator;
+    private FollowersUIMediator followersUIMediator;
 
     private MoveCommandBuilder moveCommandBuilder = new MoveCommandBuilder();
 
@@ -59,7 +59,7 @@ public class ItemSelector {
         this.sandbox = sandbox;
         sceneControl = sandbox.sceneControl;
 
-        midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
     }
 
     /***************************** Getters *********************************/
@@ -300,7 +300,7 @@ public class ItemSelector {
      */
     public void removeCurrentSelectedItems() {
         for (Entity item : currentSelection) {
-            midUIMediator.removeFollower(item);
+            followersUIMediator.removeFollower(item);
             sandbox.getEngine().removeEntity(item);
         }
 

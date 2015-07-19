@@ -90,7 +90,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
         viewComponent.setAmbientColor(new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
 
-        viewComponent.setLightsEnabled(Sandbox.getInstance().sceneControl.isLightsEnabled());
+        viewComponent.setLightsEnabled(item.lightSystemEnabled);
         viewComponent.setDiffuse(Sandbox.getInstance().sceneControl.isDiffuse());
     }
 
@@ -107,10 +107,12 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         observableReference.ambientColor[2] = color.b;
         observableReference.ambientColor[3] = color.a;
 
+        observableReference.lightSystemEnabled = viewComponent.isLightsEnabled();
+
         Sandbox.getInstance().setSceneAmbientColor(color, viewComponent.isLightsEnabled());
 
-        Sandbox.getInstance().sceneControl.disableLights(!viewComponent.isLightsEnabled());
-        Sandbox.getInstance().sceneControl.disableAmbience(!viewComponent.isLightsEnabled());
+        Sandbox.getInstance().sceneControl.disableLights(!observableReference.lightSystemEnabled);
+        Sandbox.getInstance().sceneControl.disableAmbience(!observableReference.lightSystemEnabled);
 
         Sandbox.getInstance().sceneControl.setDiffuse(viewComponent.isDiffuse());
     }

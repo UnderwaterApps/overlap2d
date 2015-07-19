@@ -31,7 +31,7 @@ import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -96,10 +96,10 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
         for (Integer entityId : pastedEntityIds) {
             Entity entity = EntityUtils.getByUniqueId(entityId);
-            midUIMediator.removeFollower(entity);
+            followersUIMediator.removeFollower(entity);
             sandbox.getEngine().removeEntity(entity);
         }
     }

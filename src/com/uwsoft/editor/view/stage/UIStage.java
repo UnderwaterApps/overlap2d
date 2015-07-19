@@ -19,13 +19,11 @@
 package com.uwsoft.editor.view.stage;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Group;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
+import com.uwsoft.editor.view.ui.RulersUIMediator;
 import com.uwsoft.editor.view.ui.UIMainTable;
 import com.uwsoft.editor.view.ui.box.UIItemsTreeBox;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -38,7 +36,7 @@ public class UIStage extends Stage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
-	public Group sandBoxUIGroup;
+	public Group midUI;
 
 
     public UIStage() {
@@ -55,9 +53,17 @@ public class UIStage extends Stage {
 
         addActor(dummyTarget);
 
-        MidUIMediator midUIMediator = facade.retrieveMediator(MidUIMediator.NAME);
-        sandBoxUIGroup = midUIMediator.getViewComponent();
-        addActor(sandBoxUIGroup);
+        midUI = new Group();
+        addActor(midUI);
+
+        RulersUIMediator rulersUIMediator = facade.retrieveMediator(RulersUIMediator.NAME);
+        Actor rulersGroup = rulersUIMediator.getViewComponent();
+
+        FollowersUIMediator followersUIMediator = facade.retrieveMediator(FollowersUIMediator.NAME);
+        Group followersGroup = followersUIMediator.getViewComponent();
+
+        midUI.addActor(followersGroup);
+        midUI.addActor(rulersGroup);
 
         contextMenuContainer = new Group();
         uiMainTable = new UIMainTable();

@@ -21,22 +21,19 @@ package com.uwsoft.editor.view.stage.tools;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.poly.PolygonUtils;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.PolygonFollower;
@@ -54,7 +51,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
 
     public static final String NAME = "MESH_TOOL";
 
-    private MidUIMediator midUIMediator;
+    private FollowersUIMediator followersUIMediator;
 
     private Vector2 dragLastPoint;
 
@@ -67,7 +64,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     public void initTool() {
         super.initTool();
 
-        midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
+        followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
 
         updateSubFollowerList();
     }
@@ -104,7 +101,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         Sandbox sandbox = Sandbox.getInstance();
         Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
         for(Entity entity: selectedEntities) {
-            BasicFollower follower = midUIMediator.getFollower(entity);
+            BasicFollower follower = followersUIMediator.getFollower(entity);
             follower.removeSubFollower(PolygonFollower.class);
             PolygonFollower meshFollower = new PolygonFollower(entity);
             follower.addSubfollower(meshFollower);
@@ -218,8 +215,8 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     }
 
     private PolygonFollower getMeshFollower(Entity entity) {
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        BasicFollower follower = midUIMediator.getFollower(entity);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        BasicFollower follower = followersUIMediator.getFollower(entity);
 
         PolygonFollower meshFollower = (PolygonFollower) (follower).getSubFollower(PolygonFollower.class);
         return meshFollower;

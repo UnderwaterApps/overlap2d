@@ -36,6 +36,7 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
 import com.uwsoft.editor.data.manager.PreferencesManager;
+import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.view.Overlap2DMenuBar;
 
 import org.apache.commons.io.FileUtils;
@@ -206,6 +207,7 @@ public class ProjectManager extends BaseProxy {
                 Json json = new Json();
                 ProjectVO vo = json.fromJson(ProjectVO.class, projectContents);
                 goThroughVersionMigrationProtocol(projectPath, vo);
+                json.setIgnoreUnknownFields(true);
                 currentProjectVO = vo;
                 String prjInfoFilePath = projectPath + "/project.dt";
                 FileHandle projectInfoFile = Gdx.files.internal(prjInfoFilePath);
@@ -975,5 +977,19 @@ public class ProjectManager extends BaseProxy {
 
 
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
+    }
+
+    public SceneConfigVO getCurrentSceneConfigVO() {
+        for(int i = 0; i < currentProjectVO.sceneConfigs.size(); i++) {
+            if(currentProjectVO.sceneConfigs.get(i).sceneName.equals(Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName)) {
+                return currentProjectVO.sceneConfigs.get(i);
+            }
+        }
+
+        SceneConfigVO newConfig = new SceneConfigVO();
+        newConfig.sceneName = Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName;
+        currentProjectVO.sceneConfigs.add(newConfig);
+
+        return newConfig;
     }
 }
