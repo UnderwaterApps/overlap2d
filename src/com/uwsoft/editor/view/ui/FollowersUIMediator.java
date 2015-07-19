@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view;
+package com.uwsoft.editor.view.ui;
 
 import java.util.HashMap;
 import java.util.Set;
@@ -44,14 +44,14 @@ import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 /**
  * Created by azakhary on 5/20/2015.
  */
-public class MidUIMediator extends SimpleMediator<MidUI> {
-    private static final String TAG = MidUIMediator.class.getCanonicalName();
+public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
+    private static final String TAG = FollowersUIMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
     private HashMap<Entity, BasicFollower> followers = new HashMap<>();
 
-    public MidUIMediator() {
-        super(NAME, new MidUI());
+    public FollowersUIMediator() {
+        super(NAME, new FollowersUI());
     }
 
     @Override

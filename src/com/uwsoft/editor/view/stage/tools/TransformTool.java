@@ -32,7 +32,7 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CursorManager;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.followers.FollowerTransformationListener;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -107,11 +107,11 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     }
 
     private void updateListeners(Set<Entity> entities) {
-        MidUIMediator midUIMediator = Overlap2DFacade.getInstance().retrieveMediator(MidUIMediator.NAME);
-        midUIMediator.clearAllListeners();
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        followersUIMediator.clearAllListeners();
 
         for(Entity entity: entities) {
-            midUIMediator.getFollower(entity).setFollowerListener(this);
+            followersUIMediator.getFollower(entity).setFollowerListener(this);
         }
     }
 

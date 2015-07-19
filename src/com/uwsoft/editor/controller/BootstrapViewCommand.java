@@ -21,11 +21,12 @@ package com.uwsoft.editor.controller;
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.MidUIMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.UIStageMediator;
+import com.uwsoft.editor.view.ui.RulersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIAlignBoxMediator;
 import com.uwsoft.editor.view.ui.box.UICompositeHierarchyMediator;
@@ -68,7 +69,8 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new CustomVariablesDialogMediator());
         facade.registerMediator(new EditSpriteAnimationDialogMediator());
 
-        facade.registerMediator(new MidUIMediator());
+        facade.registerMediator(new RulersUIMediator());
+        facade.registerMediator(new FollowersUIMediator());
 
         facade.registerMediator(new UIAlignBoxMediator());
         facade.registerMediator(new UIItemsTreeBoxMediator());

@@ -360,7 +360,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
             // setting key and scroll focus on main area
             sandbox.getUIStage().setKeyboardFocus();
-            sandbox.getUIStage().setScrollFocus(sandbox.getUIStage().sandBoxUIGroup);
+            sandbox.getUIStage().setScrollFocus(sandbox.getUIStage().midUI);
             sandbox.setKeyboardFocus();
 
             // if there was a drop down remove it

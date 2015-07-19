@@ -78,7 +78,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		hitTargetLocalCoordinates.set(screenX, screenY);
 		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
 		
-		System.out.println("SCREEN TO STAGE X="+ hitTargetLocalCoordinates.x +" Y=" + hitTargetLocalCoordinates.y);
+		//System.out.println("SCREEN TO STAGE X="+ hitTargetLocalCoordinates.x +" Y=" + hitTargetLocalCoordinates.y);
 		
 		target = hit(rootEntity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y);
 		if(target == null){ 
