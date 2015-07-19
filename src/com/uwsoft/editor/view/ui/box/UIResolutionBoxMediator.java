@@ -18,6 +18,8 @@
 
 package com.uwsoft.editor.view.ui.box;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -72,10 +74,12 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
             case UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED:
                 resolutionEntryVO = notification.getBody();
                 float zoom = sandbox.getZoomPercent();
+                Vector3 cameraPos = new Vector3(sandbox.getCamera().position);
                 String name = sandbox.sceneControl.getCurrentSceneVO().sceneName;
                 projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName, resolutionEntryVO.name);
                 sandbox.loadCurrentProject(name);
                 sandbox.setZoomPercent(zoom);
+                sandbox.getCamera().position.set(cameraPos);
                 break;
             case UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED:
                 resolutionEntryVO = notification.getBody();
