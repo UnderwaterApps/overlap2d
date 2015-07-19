@@ -1,3 +1,30 @@
+Overlap2D - 0.1.0 (skipping 0.0.9)
+------------------------------
+
+Complete code rewrite
+Now based on puremvc
+editors UI is fully based on scene2d
+switched to new under the hood runtime based on Ashley ECS
+Ditched old physics editor
+Items now can have optional property boxes
+added new physics property box to items
+added new polygon property box to items
+you can now add and edit new polygon to any item directly from the scene.
+coordinates are now in world units (meaning you get to specify how much pixels is in one world unit)
+switching between resolutions does not make your scene smaller, but just renders it in current quality
+new Guides and Rulers system allows you to be more precise (we ditched, old bounding box for resolution size)
+Search box for all resources (not only library items)
+Library items are now easier to managed added library button to composite property box
+Custom vars dialog now stays on top
+works better on small screens
+better zooming
+Position setting don't break anymore when changing to non orig resolution
+Amazing new undo/redo system is almost bugless.
+Text items now can be created using text tool. No need to import new fonts, as we use fonts from your system.
+
+
+
+
 Overlap2D - 0.0.8
 ------------------------------
 
