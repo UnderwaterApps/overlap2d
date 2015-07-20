@@ -5,7 +5,7 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'com.underwaterapps.overlap2druntime'
-version = '0.1.0'
+version = '0.1.1'
 ext.packaging = 'jar'
 
 def isDevBuild

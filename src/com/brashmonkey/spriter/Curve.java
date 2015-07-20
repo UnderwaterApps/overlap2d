@@ -156,7 +156,7 @@ public class Curve {
 	}
 	
 	/**
-	 * @see {@link #tween(float, float, float)}
+	 *
 	 */
 	public float tweenAngle(float a, float b, float t){
 		t = tweenSub(0f,1f,t);
