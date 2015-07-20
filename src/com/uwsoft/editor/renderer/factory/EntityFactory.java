@@ -136,9 +136,8 @@ public class EntityFactory {
 		ComponentFactory factory = externalFactories.get(SPINE_TYPE);
 		if(factory != null) {
 			factory.createComponents(root, entity, vo);
+			postProcessEntity(entity);
 		}
-
-		postProcessEntity(entity);
 		
 		return entity;
 	}
