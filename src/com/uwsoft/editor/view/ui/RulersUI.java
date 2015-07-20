@@ -163,8 +163,8 @@ public class RulersUI extends Actor {
         verticalRect.set(-Gdx.graphics.getWidth()/2+leftOffset, -Gdx.graphics.getHeight()/2, rulerBoxSize, Gdx.graphics.getHeight()-topOffset);
 
         //calculating sizes
-        viewMeasurableWidth = Sandbox.getInstance().getViewport().getWorldWidth() / Sandbox.getInstance().getCamera().zoom;
-        viewMeasurableHeight = Sandbox.getInstance().getViewport().getWorldHeight() / Sandbox.getInstance().getCamera().zoom;
+        viewMeasurableWidth = Sandbox.getInstance().getViewport().getWorldWidth() * Sandbox.getInstance().getCamera().zoom;
+        viewMeasurableHeight = Sandbox.getInstance().getViewport().getWorldHeight() * Sandbox.getInstance().getCamera().zoom;
 
         if(isShowingPixels) {
             viewMeasurableWidth = viewMeasurableWidth * Sandbox.getInstance().getPixelPerWU();

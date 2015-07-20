@@ -17,8 +17,12 @@ We will push next runtime very soon.
 
 ### Runtime
 Overlap2D currently supports [libGDX](https://github.com/libgdx/libgdx) based runtime which will easily render your content on
-Android, iOS and desktop, while letting you code on Java.
-It is of course open source: [overlap2d-libgdx-runtime](https://github.com/UnderwaterApps/overlap2d-runtime-libgdx)
+Android, iOS and desktop, while letting you code on Java. 
+It is of course open source: [overlap2d-libgdx-runtime](https://github.com/azakhary/overlap2d-runtime-libgdx)
+
+Runtime is also in maven central, current version being:
+com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1-SNAPSHOT
+
 Runtimes for other platforms are coming soon and everyone is welcome to contribute!
 
 
@@ -37,7 +41,7 @@ Here are the steps you need to do in order to run this project from sources
 
 * Fork this repo
 * Clone your fork to your local
-* Import as gradle project, and refresh your cradle config. (It should automatically download both o2d runtime and spine runtimes)
+* Import as gradle project, and refresh your gradle config.
 * Make sure you have JDK 8
 
 ### Reporting Issues
