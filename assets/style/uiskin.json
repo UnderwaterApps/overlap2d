@@ -664,6 +664,29 @@
       "up": "select-up"
     }
   },
+  "com.kotcrab.vis.ui.widget.file.FileChooserStyle": {
+    "default": {
+      "highlight": "list-selection",
+      "popupMenuStyleName": "default",
+      "iconArrowLeft": "icon-arrow-left",
+      "iconArrowRight": "icon-arrow-right",
+      "iconFolder": "icon-folder",
+      "iconFolderParent": "icon-folder-parent",
+      "iconDrive": "icon-drive"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.color.ColorPickerStyle": {
+    "default": {
+      "white": "white",
+      "alphaBar10px": "alpha-bar-10px",
+      "alphaBar25px": "alpha-bar-25px",
+      "alphaBar25pxShifted": "alpha-bar-25px-shifted",
+      "barSelector": "color-picker-bar-selector",
+      "cross": "color-picker-cross",
+      "verticalSelector": "color-picker-selector-vertical",
+      "horizontalSelector": "color-picker-selector-horizontal"
+    }
+  },
   "com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle": {
     "default": {
       //      "background": "menu-bg",
