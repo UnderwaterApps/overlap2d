@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 
 
 public interface IScript {
-    public void init(Entity item);
+    public void init(Entity entity);
 
     public void act(float delta);
 

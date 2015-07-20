@@ -23,6 +23,8 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.ScriptComponent;
+import com.uwsoft.editor.renderer.scripts.IScript;
 
 import java.util.HashMap;
 
@@ -77,5 +79,21 @@ public class ItemWrapper {
     public int getType() {
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         return mainItemComponent.entityType;
+    }
+
+    public Entity getEntity() {
+        return entity;
+    }
+
+    public IScript addScript(IScript script) {
+        ScriptComponent component = ComponentRetriever.get(entity, ScriptComponent.class);
+        if(component == null) {
+            component = new ScriptComponent();
+            entity.add(component);
+        }
+        component.addScript(script);
+        script.init(entity);
+
+        return script;
     }
 }

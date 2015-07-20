@@ -46,8 +46,9 @@ public class SceneLoader {
 
 	private float pixesPerWU = 1;
 	private Overlap2dRenderer renderer;
+	private Entity root;
 
-    public SceneLoader() {
+	public SceneLoader() {
 		ResourceManager rm = new ResourceManager();
         rm.initAllResources();
 
@@ -253,4 +254,8 @@ public class SceneLoader {
     public Engine getEngine() {
         return engine;
     }
+
+	public Entity getRoot() {
+		return rootEntity;
+	}
 }
