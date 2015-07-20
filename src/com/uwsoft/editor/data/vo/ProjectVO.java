@@ -31,11 +31,6 @@ public class ProjectVO {
 
     public String projectMainExportPath = "";
 
-    public String projectSceneExportPath = "";
-    public String projectAtlasExportPath = "";
-    public String projectEffectsExportPath = "";
-    public String projectSpineExportPath = "";
-    public String projectFontsExportPath = "";
     public String lastOpenScene = "";
     public String lastOpenResolution = "";    
     public String texturepackerWidth	=	"4096";
