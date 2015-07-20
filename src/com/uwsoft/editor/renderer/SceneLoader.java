@@ -48,9 +48,12 @@ public class SceneLoader {
 	private Overlap2dRenderer renderer;
 
     public SceneLoader() {
-        IResourceRetriever rm = new ResourceManager();
-        ((ResourceManager)rm).initAllResources();
-        this.engine = new Engine();
+		ResourceManager rm = new ResourceManager();
+        rm.initAllResources();
+
+		this.rm = rm;
+
+		this.engine = new Engine();
 		initSceneLoader();
     }
 

@@ -14,17 +14,17 @@ import java.util.HashSet;
 
 public class CompositeVO {
 
-    public ArrayList<SimpleImageVO> sImages = new ArrayList<>(1);
-    public ArrayList<Image9patchVO> sImage9patchs = new ArrayList<>(1);
-    public ArrayList<TextBoxVO> sTextBox = new ArrayList<>(1);
-    public ArrayList<LabelVO> sLabels = new ArrayList<>(1);
-    public ArrayList<CompositeItemVO> sComposites = new ArrayList<>(1);
-    public ArrayList<SelectBoxVO> sSelectBoxes = new ArrayList<>(1);
-    public ArrayList<ParticleEffectVO> sParticleEffects = new ArrayList<>(1);
-    public ArrayList<LightVO> sLights = new ArrayList<>(1);
-    public ArrayList<SpineVO> sSpineAnimations = new ArrayList<>(1);
-    public ArrayList<SpriteAnimationVO> sSpriteAnimations = new ArrayList<>(1);
-    public ArrayList<SpriterVO> sSpriterAnimations = new ArrayList<>(1);
+    public ArrayList<SimpleImageVO> sImages = new ArrayList<SimpleImageVO>(1);
+    public ArrayList<Image9patchVO> sImage9patchs = new ArrayList<Image9patchVO>(1);
+    public ArrayList<TextBoxVO> sTextBox = new ArrayList<TextBoxVO>(1);
+    public ArrayList<LabelVO> sLabels = new ArrayList<LabelVO>(1);
+    public ArrayList<CompositeItemVO> sComposites = new ArrayList<CompositeItemVO>(1);
+    public ArrayList<SelectBoxVO> sSelectBoxes = new ArrayList<SelectBoxVO>(1);
+    public ArrayList<ParticleEffectVO> sParticleEffects = new ArrayList<ParticleEffectVO>(1);
+    public ArrayList<LightVO> sLights = new ArrayList<LightVO>(1);
+    public ArrayList<SpineVO> sSpineAnimations = new ArrayList<SpineVO>(1);
+    public ArrayList<SpriteAnimationVO> sSpriteAnimations = new ArrayList<SpriteAnimationVO>(1);
+    public ArrayList<SpriterVO> sSpriterAnimations = new ArrayList<SpriterVO>(1);
 
     public ArrayList<LayerItemVO> layers = new ArrayList<LayerItemVO>();
 
@@ -192,7 +192,7 @@ public class CompositeVO {
     }
 
     public String[] getRecursiveParticleEffectsList() {
-        HashSet<String> list = new HashSet<>();
+        HashSet<String> list = new HashSet<String>();
         for (ParticleEffectVO sParticleEffect : sParticleEffects) {
             list.add(sParticleEffect.particleName);
         }
@@ -207,7 +207,7 @@ public class CompositeVO {
     }
 
     public String[] getRecursiveSpineAnimationList() {
-        HashSet<String> list = new HashSet<>();
+        HashSet<String> list = new HashSet<String>();
         for (SpineVO sSpineAnimation : sSpineAnimations) {
             list.add(sSpineAnimation.animationName);
         }
@@ -222,7 +222,7 @@ public class CompositeVO {
     }
 
     public String[] getRecursiveSpriteAnimationList() {
-        HashSet<String> list = new HashSet<>();
+        HashSet<String> list = new HashSet<String>();
         for (SpriteAnimationVO sSpriteAnimation : sSpriteAnimations) {
             list.add(sSpriteAnimation.animationName);
         }
@@ -237,7 +237,7 @@ public class CompositeVO {
     }
     
     public String[] getRecursiveSpriterAnimationList() {
-    	HashSet<String> list = new HashSet<>();
+    	HashSet<String> list = new HashSet<String>();
     	for (SpriterVO sSpriterAnimation : sSpriterAnimations) {
     		list.add(sSpriterAnimation.animationName);
     	}
@@ -252,7 +252,7 @@ public class CompositeVO {
     }
 
     public FontSizePair[] getRecursiveFontList() {
-        HashSet<FontSizePair> list = new HashSet<>();
+        HashSet<FontSizePair> list = new HashSet<FontSizePair>();
         for (LabelVO sLabel : sLabels) {
             list.add(new FontSizePair(sLabel.style.isEmpty() ? "arial" : sLabel.style, sLabel.size == 0 ? 12 : sLabel.size));
         }
@@ -267,7 +267,7 @@ public class CompositeVO {
     }
 
     public ArrayList<MainItemVO> getAllItems() {
-        ArrayList<MainItemVO> itemsList = new ArrayList<>();
+        ArrayList<MainItemVO> itemsList = new ArrayList<MainItemVO>();
         itemsList = getAllItemsRecursive(itemsList, this);
 
         return itemsList;

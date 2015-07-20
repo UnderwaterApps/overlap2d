@@ -34,7 +34,7 @@ public class ItemWrapper {
     private Entity entity;
 
     private NodeComponent nodeComponent;
-    private HashMap<String, Entity> childMap = new HashMap<>();
+    private HashMap<String, Entity> childMap = new HashMap<String, Entity>();
 
     public ItemWrapper() {
         // empty wrapper is better then null pointer

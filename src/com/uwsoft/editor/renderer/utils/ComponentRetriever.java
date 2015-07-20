@@ -56,7 +56,7 @@ public class ComponentRetriever {
     /**
      * Unique map of mappers that can be accessed by component class
      */
-    private Map<Class, ComponentMapper<? extends Component>> mappers = new HashMap<>();
+    private Map<Class, ComponentMapper<? extends Component>> mappers = new HashMap<Class, ComponentMapper<? extends Component>>();
 
     /**
      * Private constructor
@@ -147,7 +147,7 @@ public class ComponentRetriever {
 
     @SuppressWarnings("unchecked")
     public static  Collection<Component> getComponents(Entity entity) {
-        Collection<Component> components = new ArrayList<>();
+        Collection<Component> components = new ArrayList<Component>();
         for (ComponentMapper<? extends Component> mapper : self().getMappers().values()) {
             if(mapper.get(entity) != null) components.add(mapper.get(entity));
         }

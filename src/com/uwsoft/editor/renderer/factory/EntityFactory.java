@@ -39,11 +39,11 @@ public class EntityFactory {
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
 			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
 
-	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<>();
+	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<Integer, ComponentFactory>();
 
 	private int entityIterator = 0;
 
-	private HashMap<Integer, Entity> entities = new HashMap<>();
+	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
 
 	public ComponentFactory getCompositeComponentFactory() {
 		return compositeComponentFactory;

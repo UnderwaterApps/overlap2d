@@ -30,7 +30,7 @@ public class MainItemVO {
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
 
-    public ArrayList<String> commonScripts = new ArrayList<>();
+    public ArrayList<String> commonScripts = new ArrayList<String>();
 	
 	public MainItemVO() {
 		

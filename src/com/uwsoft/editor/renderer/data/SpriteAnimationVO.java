@@ -11,7 +11,7 @@ public class SpriteAnimationVO extends MainItemVO {
     public String animationName = "";
     public int fps = 24;
     public String currentAnimation;
-    public ArrayList<FrameRange> frameRangeMap = new ArrayList<>();
+    public ArrayList<FrameRange> frameRangeMap = new ArrayList<FrameRange>();
     public int playMode = 0;
 
     public SpriteAnimationVO() {
@@ -32,7 +32,7 @@ public class SpriteAnimationVO extends MainItemVO {
         SpriteAnimationComponent spriteAnimationComponent = entity.getComponent(SpriteAnimationComponent.class);
         animationName = spriteAnimationComponent.animationName;
         fps = spriteAnimationComponent.fps;
-        frameRangeMap = new ArrayList<>();
+        frameRangeMap = new ArrayList<FrameRange>();
         for(FrameRange fr: spriteAnimationComponent.frameRangeMap.values()) {
             frameRangeMap.add(fr);
         }

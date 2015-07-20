@@ -13,7 +13,7 @@ import java.util.Iterator;
  */
 public class ScriptComponent extends Component {
 
-    public Array<IScript> scripts = new Array<>();
+    public Array<IScript> scripts = new Array<IScript>();
 
     public void addScript(IScript script) {
         scripts.add(script);

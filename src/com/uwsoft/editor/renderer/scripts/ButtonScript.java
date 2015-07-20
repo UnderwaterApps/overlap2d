@@ -34,7 +34,7 @@ public class ButtonScript extends BasicScript {
 
     private ClickListener clickListener;
 
-    private HashMap<String, LayerItemVO> componentLayerMap = new HashMap<>();
+    private HashMap<String, LayerItemVO> componentLayerMap = new HashMap<String, LayerItemVO>();
 
     public ButtonScript() {
 

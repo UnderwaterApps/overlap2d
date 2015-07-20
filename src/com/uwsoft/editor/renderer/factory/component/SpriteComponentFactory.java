@@ -79,7 +79,7 @@ public class SpriteComponentFactory extends ComponentFactory {
         SpriteAnimationComponent spriteAnimationComponent = new SpriteAnimationComponent();
         spriteAnimationComponent.animationName = vo.animationName;
 
-        spriteAnimationComponent.frameRangeMap = new HashMap<>();
+        spriteAnimationComponent.frameRangeMap = new HashMap<String, FrameRange>();
         for(int i = 0; i < vo.frameRangeMap.size(); i++) {
             spriteAnimationComponent.frameRangeMap.put(vo.frameRangeMap.get(i).name, vo.frameRangeMap.get(i));
         }
@@ -103,7 +103,7 @@ public class SpriteComponentFactory extends ComponentFactory {
             spriteAnimationComponent.frameRangeMap.put("Default", new FrameRange("Default", 0, regions.size-1));
         }
         if(spriteAnimationComponent.currentAnimation == null) {
-            spriteAnimationComponent.currentAnimation = spriteAnimationComponent.frameRangeMap.keySet().stream().findFirst().get();
+            spriteAnimationComponent.currentAnimation = (String) spriteAnimationComponent.frameRangeMap.keySet().toArray()[0];
         }
         if(spriteAnimationComponent.playMode == null) {
             spriteAnimationComponent.playMode = Animation.PlayMode.LOOP;

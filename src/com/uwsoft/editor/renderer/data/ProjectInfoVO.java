@@ -15,8 +15,8 @@ public class ProjectInfoVO {
 
     public ResolutionEntryVO originalResolution = new ResolutionEntryVO();
 
-    public Array<ResolutionEntryVO> resolutions = new Array<>();
-    public ArrayList<SceneVO> scenes = new ArrayList<>();
+    public Array<ResolutionEntryVO> resolutions = new Array<ResolutionEntryVO>();
+    public ArrayList<SceneVO> scenes = new ArrayList<SceneVO>();
 
     public HashMap<String, CompositeItemVO> libraryItems = new HashMap<String, CompositeItemVO>();
 

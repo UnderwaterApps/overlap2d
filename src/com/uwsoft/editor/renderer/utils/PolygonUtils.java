@@ -2,7 +2,6 @@ package com.uwsoft.editor.renderer.utils;
 
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.collision.Segment;
 import com.badlogic.gdx.utils.Array;
 
 import java.util.ArrayList;
@@ -16,8 +15,8 @@ public class PolygonUtils {
 
     public static Array<Vector2[]> mergeTouchingPolygons(Vector2[][] polys) {
 
-        Set<Edge> uniqueEdges = new HashSet<>();
-        Set<Edge> duplicateEdges = new HashSet<>();
+        Set<Edge> uniqueEdges = new HashSet<Edge>();
+        Set<Edge> duplicateEdges = new HashSet<Edge>();
 
         for(int i = 0; i < polys.length; i++) {
             for(int j = 0; j < polys[i].length; j++) {
@@ -37,7 +36,7 @@ public class PolygonUtils {
 
         uniqueEdges.removeAll(duplicateEdges);
 
-        Array<Vector2[]> result = new Array<>();
+        Array<Vector2[]> result = new Array<Vector2[]>();
         while(uniqueEdges.size() > 0) {
             Vector2[] mesh = extractClosedLoop(uniqueEdges);
             mesh = clearUnnecessaryVertices(mesh);
@@ -54,7 +53,7 @@ public class PolygonUtils {
     }
 
     public static Vector2[] clearUnnecessaryVertices(Vector2[] points) {
-        Array<Vector2> result = new Array<>();
+        Array<Vector2> result = new Array<Vector2>();
         if(points.length < 3) return points;
         for(int i = 0; i < points.length; i++) {
             Vector2 currPoint = points[i];
@@ -71,8 +70,8 @@ public class PolygonUtils {
     }
 
     public static Vector2[] extractClosedLoop(Set<Edge> edges) {
-        ArrayList<Edge> sortedList = new ArrayList<>();
-        Edge edge = edges.stream().findFirst().get();
+        ArrayList<Edge> sortedList = new ArrayList<Edge>();
+        Edge edge = (Edge) edges.toArray()[0];
         edges.remove(edge);
         sortedList.add(edge);
         while(edges.size() > 0) {
@@ -131,8 +130,8 @@ public class PolygonUtils {
 
     @Deprecated
     public static Vector2[] extractClosedLoopOld(Set<Edge> edges) {
-        ArrayList<Edge> sortedList = new ArrayList<>();
-        Edge nextEdge = edges.stream().findFirst().get();
+        ArrayList<Edge> sortedList = new ArrayList<Edge>();
+        Edge nextEdge = (Edge) edges.toArray()[0];
         sortedList.add(nextEdge);
         sortedList = recursivelySortChainPoints(edges, nextEdge, sortedList);
         edges.removeAll(sortedList);

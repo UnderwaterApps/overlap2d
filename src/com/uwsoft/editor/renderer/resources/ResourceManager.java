@@ -5,7 +5,6 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -43,14 +42,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
     protected ProjectInfoVO projectVO;
 
-    protected ArrayList<String> preparedSceneNames = new ArrayList<>();
-    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
+    protected ArrayList<String> preparedSceneNames = new ArrayList<String>();
+    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<String, SceneVO>();
 
-    protected HashSet<String> particleEffectNamesToLoad = new HashSet<>();
-    protected HashSet<String> spineAnimNamesToLoad = new HashSet<>();
-    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
-    protected HashSet<String> spriterAnimNamesToLoad = new HashSet<>();
-    protected HashSet<FontSizePair> fontsToLoad = new HashSet<>();
+    protected HashSet<String> particleEffectNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spineAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spriterAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<FontSizePair> fontsToLoad = new HashSet<FontSizePair>();
 
     protected TextureAtlas mainPack;
     protected HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();

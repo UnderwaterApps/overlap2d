@@ -27,7 +27,7 @@ public class SpriteAnimationStateComponent extends Component {
     }
 
     public void set(FrameRange range, int fps, Animation.PlayMode playMode) {
-        Array<TextureAtlas.AtlasRegion> textureRegions = new Array<>(range.endFrame - range.startFrame + 1);
+        Array<TextureAtlas.AtlasRegion> textureRegions = new Array<TextureAtlas.AtlasRegion>(range.endFrame - range.startFrame + 1);
         for (int r = range.startFrame; r <= range.endFrame; r++) {
             textureRegions.add(allRegions.get(r));
         }
@@ -41,7 +41,7 @@ public class SpriteAnimationStateComponent extends Component {
             String regName = regions.get(ri).name;
             animationAtlasRegions[regNameToFrame(regName) - 1] = regions.get(ri);
         }
-        return new Array<>(animationAtlasRegions);
+        return new Array<TextureAtlas.AtlasRegion>(animationAtlasRegions);
     }
 
     private int regNameToFrame(String name) {

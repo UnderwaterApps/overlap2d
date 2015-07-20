@@ -6,5 +6,5 @@ import com.badlogic.ashley.core.Component;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class LayerMapComponent extends Component {
-	public ArrayList<LayerItemVO> layers = new ArrayList<>();
+	public ArrayList<LayerItemVO> layers = new ArrayList<LayerItemVO>();
 }
