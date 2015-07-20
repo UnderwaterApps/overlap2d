@@ -207,7 +207,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             reInitRecent(prefs.getRecentHistory());
             //
             addSeparator();
-            addItem(new MenuItem("Exit", new MenuItemListener(EXIT, FILE_MENU)));
+            addItem(new MenuItem("Exit", new MenuItemListener(EXIT, null , FILE_MENU)));
             sceneMenuItems = new Array<>();
         }
 
