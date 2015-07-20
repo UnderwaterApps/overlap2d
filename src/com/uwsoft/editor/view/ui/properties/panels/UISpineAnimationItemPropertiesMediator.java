@@ -21,8 +21,9 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.Animation;
+import com.overlap2d.extensions.spine.SpineObjectComponent;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.SpineDataComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
@@ -31,8 +32,9 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpineAnimationItemProperties> {
     private static final String TAG = UISpineAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-    
+
     private SpineDataComponent spineDataComponent;
+    private SpineObjectComponent spineObjectComponent;
 
     public UISpineAnimationItemPropertiesMediator() {
         super(NAME, new UISpineAnimationItemProperties());
@@ -40,11 +42,12 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
 
     @Override
     protected void translateObservableDataToView(Entity entity) {
-    	
-    	spineDataComponent = ComponentRetriever.get(entity, SpineDataComponent.class);
+
+        spineObjectComponent = ComponentRetriever.get(entity, SpineObjectComponent.class);
+        spineDataComponent = ComponentRetriever.get(entity, SpineDataComponent.class);
     	
         Array<String> animations = new Array<>();
-        for (Animation animation : spineDataComponent.getAnimations()) {
+        for (Animation animation : spineObjectComponent.getAnimations()) {
             animations.add(animation.getName());
         }
 
@@ -54,6 +57,6 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
 
     @Override
     protected void translateViewToItemData() {
-    	spineDataComponent.setAnimation(viewComponent.getSelected());
+        spineObjectComponent.setAnimation(viewComponent.getSelected());
     }
 }

@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.overlap2d.extensions.spine.SpineItemType;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -157,6 +158,9 @@ public class Sandbox {
         uiStage = uiStageMediator.getViewComponent();
 
 		sceneLoader = new SceneLoader(resourceManager);
+        // adding spine as external component
+        sceneLoader.injectExternalItemType(new SpineItemType());
+
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
