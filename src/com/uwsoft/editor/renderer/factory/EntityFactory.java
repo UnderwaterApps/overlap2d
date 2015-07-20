@@ -2,21 +2,18 @@ package com.uwsoft.editor.renderer.factory;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -40,7 +37,9 @@ public class EntityFactory {
 	public IResourceRetriever rm = null;
 
 	private ComponentFactory compositeComponentFactory, lightComponentFactory, particleEffectComponentFactory,
-			simpleImageComponentFactory, spineComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
+			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
+
+	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<>();
 
 	private int entityIterator = 0;
 
@@ -64,7 +63,6 @@ public class EntityFactory {
 		lightComponentFactory = new LightComponentFactory(rayHandler, world, rm);
 		particleEffectComponentFactory = new ParticleEffectComponentFactory(rayHandler, world, rm);
 		simpleImageComponentFactory = new SimpleImageComponentFactory(rayHandler, world, rm);
-		spineComponentFactory = new SpineComponentFactory(rayHandler, world, rm);
 		spriteComponentFactory = new SpriteComponentFactory(rayHandler, world, rm);
 		spriterComponentFactory = new SpriterComponentFactory(rayHandler, world, rm);
 		labelComponentFactory = new LabelComponentFactory(rayHandler, world, rm);
@@ -72,6 +70,9 @@ public class EntityFactory {
 		
 	}
 
+	public void addExternalFactory(IExternalItemType itemType) {
+		externalFactories.put(itemType.getTypeId(), itemType.getComponentFactory());
+	}
 
 	public Entity createEntity(Entity root, SimpleImageVO vo){
 
@@ -132,7 +133,10 @@ public class EntityFactory {
 
 		Entity entity = new Entity();
 
-		spineComponentFactory.createComponents(root, entity, vo);
+		ComponentFactory factory = externalFactories.get(SPINE_TYPE);
+		if(factory != null) {
+			factory.createComponents(root, entity, vo);
+		}
 
 		postProcessEntity(entity);
 		

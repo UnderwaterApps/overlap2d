@@ -1,23 +1,19 @@
 package com.uwsoft.editor.renderer;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
-import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.data.*;
@@ -122,7 +118,15 @@ public class SceneLoader {
 		ProjectInfoVO projectVO = rm.getProjectVO();
 		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/pixesPerWU, (float)projectVO.originalResolution.height/pixesPerWU, new OrthographicCamera());
 		return loadScene(sceneName, viewport);
-	} 
+	}
+
+	public void injectExternalItemType(IExternalItemType itemType) {
+		itemType.injectDependencies(rayHandler, world, rm);
+		itemType.injectMappers();
+		entityFactory.addExternalFactory(itemType);
+		engine.addSystem(itemType.getSystem());
+		renderer.addDrawableType(itemType);
+	}
 
 	private void addSystems() {
 		ParticleSystem particleSystem = new ParticleSystem();
@@ -130,7 +134,6 @@ public class SceneLoader {
 		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();
 		LayerSystem layerSystem = new LayerSystem();
 		PhysicsSystem physicsSystem = new PhysicsSystem();
-		SpineSystem spineSystem = new SpineSystem();
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
@@ -142,7 +145,6 @@ public class SceneLoader {
 		engine.addSystem(lightSystem);
 		engine.addSystem(layerSystem);
 		engine.addSystem(physicsSystem);
-		engine.addSystem(spineSystem);
 		engine.addSystem(compositeSystem);
 		engine.addSystem(labelSystem);
         engine.addSystem(scriptSystem);

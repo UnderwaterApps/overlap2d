@@ -40,11 +40,19 @@ public abstract class ComponentFactory {
 
     protected ComponentMapper<NodeComponent> nodeComponentMapper;
 
+    public ComponentFactory() {
+        nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
+    }
+
     public ComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
+        this();
+        injectDependencies(rayHandler, world, rm);
+    }
+
+    public void injectDependencies(RayHandler rayHandler, World world, IResourceRetriever rm) {
         this.rayHandler = rayHandler;
         this.world = world;
         this.rm = rm;
-        nodeComponentMapper = ComponentMapper.getFor(NodeComponent.class);
     }
 
     public abstract void createComponents(Entity root, Entity entity, MainItemVO vo);

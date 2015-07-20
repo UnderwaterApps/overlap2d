@@ -2,12 +2,9 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Animation;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class SpriteAnimationVO extends MainItemVO {
 

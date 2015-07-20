@@ -1,7 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.SpineDataComponent;
 
 public class SpineVO extends MainItemVO {
 

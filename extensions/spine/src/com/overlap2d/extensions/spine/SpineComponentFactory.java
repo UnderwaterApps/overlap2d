@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.renderer.factory.component;
+package com.overlap2d.extensions.spine;
 
 import box2dLight.RayHandler;
 
@@ -24,12 +24,12 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.esotericsoftware.spine.*;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
+import com.uwsoft.editor.renderer.components.SpineDataComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SpineVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.factory.component.ComponentFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
@@ -38,7 +38,11 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
  */
 public class SpineComponentFactory extends ComponentFactory {
 
-    private SpineDataComponent spineDataComponent;
+    private SpineObjectComponent spineObjectComponent;
+
+    public SpineComponentFactory() {
+        super();
+    }
 
     public SpineComponentFactory(RayHandler rayHandler, World world, IResourceRetriever rm) {
         super(rayHandler, world, rm);
@@ -50,7 +54,8 @@ public class SpineComponentFactory extends ComponentFactory {
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
-        spineDataComponent = createSpineDataComponent(entity, (SpineVO) vo);
+        spineObjectComponent = createSpineObjectComponent(entity, (SpineVO) vo);
+        createSpineDataComponent(entity, (SpineVO) vo);
     }
 
     @Override
@@ -61,16 +66,12 @@ public class SpineComponentFactory extends ComponentFactory {
         return component;
     }
 
-    protected SpineDataComponent createSpineDataComponent(Entity entity, SpineVO vo) {
-        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+    protected SpineObjectComponent createSpineObjectComponent(Entity entity, SpineVO vo) {
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
 
-
-        SpineDataComponent component = new SpineDataComponent();
-        component.animationName = vo.animationName;
-        component.skeletonJson = new SkeletonJson(rm.getSkeletonAtlas(component.animationName));
-        component.skeletonData = component.skeletonJson.readSkeletonData((rm.getSkeletonJSON(component.animationName)));
+        SpineObjectComponent component = new SpineObjectComponent();
+        component.skeletonJson = new SkeletonJson(rm.getSkeletonAtlas(vo.animationName));
+        component.skeletonData = component.skeletonJson.readSkeletonData((rm.getSkeletonJSON(vo.animationName)));
 
         BoneData rootBone = component.skeletonData.getBones().get(0); // this has to be the root bone.
         rootBone.setScale(vo.scaleX / projectInfoVO.pixelToWorld, vo.scaleY / projectInfoVO.pixelToWorld); // TODO: resolution part and multipliers
@@ -81,8 +82,18 @@ public class SpineComponentFactory extends ComponentFactory {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
         component.computeBoundBox(dimensionsComponent);
 
-        // todo: fix this, it's a temporary solution
-        component.setAnimation(component.currentAnimationName.isEmpty() ? component.skeletonData.getAnimations().get(0).getName() : component.currentAnimationName);
+        component.setAnimation(vo.currentAnimationName.isEmpty() ? component.skeletonData.getAnimations().get(0).getName() : vo.currentAnimationName);
+
+        entity.add(component);
+
+        return component;
+    }
+
+    protected SpineDataComponent createSpineDataComponent(Entity entity, SpineVO vo) {
+        SpineDataComponent component = new SpineDataComponent();
+        component.animationName = vo.animationName;
+
+        component.currentAnimationName = vo.currentAnimationName.isEmpty() ? spineObjectComponent.skeletonData.getAnimations().get(0).getName() : vo.currentAnimationName;
 
         entity.add(component);
 

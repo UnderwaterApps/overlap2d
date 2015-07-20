@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
 import com.badlogic.gdx.math.Matrix4;
+import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
@@ -39,6 +40,10 @@ public class Overlap2dRenderer extends IteratingSystem {
 		super(Family.all(ViewPortComponent.class).get());
 		this.batch = batch;
 		drawableLogicMapper = new DrawableLogicMapper();
+	}
+
+	public void addDrawableType(IExternalItemType itemType) {
+		drawableLogicMapper.addDrawableToMap(itemType.getTypeId(), itemType.getDrawable());
 	}
 
 	@Override

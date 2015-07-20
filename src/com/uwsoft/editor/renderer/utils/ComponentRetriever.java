@@ -32,8 +32,6 @@ import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.components.spine.SpineDataComponent;
-import com.uwsoft.editor.renderer.components.spine.SpineObjectComponent;
 import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
@@ -81,10 +79,7 @@ public class ComponentRetriever {
     	mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
         mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
-    	
-        mappers.put(SpineDataComponent.class, ComponentMapper.getFor(SpineDataComponent.class));
-        mappers.put(SpineObjectComponent.class, ComponentMapper.getFor(SpineObjectComponent.class));
-        
+
         mappers.put(AnimationComponent.class, ComponentMapper.getFor(AnimationComponent.class));
         mappers.put(SpriteAnimationComponent.class, ComponentMapper.getFor(SpriteAnimationComponent.class));
         mappers.put(SpriteAnimationStateComponent.class, ComponentMapper.getFor(SpriteAnimationStateComponent.class));
@@ -168,6 +163,6 @@ public class ComponentRetriever {
      */
     @SuppressWarnings("unchecked")
     public static void addMapper(Class type) {
-        self().getMappers().put(ZIndexComponent.class, ComponentMapper.getFor(type));
+        self().getMappers().put(type, ComponentMapper.getFor(type));
     }
 }
