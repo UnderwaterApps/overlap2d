@@ -105,7 +105,8 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 break;
             case FileDropListener.ACTION_DROP:
                 DropTargetDropEvent dtde = notification.getBody();
-                catchFiles(dtde);
+                String[] paths = catchFiles(dtde);
+                viewComponent.setPaths(paths);
                 break;
             case ImportDialog.START_IMPORTING_BTN_CLICKED:
                 /*
@@ -124,19 +125,24 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
         }
     }
 
-    public void catchFiles(DropTargetDropEvent dtde) {
+    public String[] catchFiles(DropTargetDropEvent dtde) {
         dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 
         Transferable t= dtde.getTransferable();
         if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
             try {
                 List<File> list = (List<File>)dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
-                System.out.println(list.size());
+                String[] paths = new String[list.size()];
+                for(int i = 0; i < list.size(); i++) {
+                    paths[i] = list.get(i).getAbsolutePath();
+                }
+                return paths;
             }
             catch (Exception ufe) {
-                System.out.print(ufe.getMessage());
             }
         }
+
+        return null;
     }
 
     private class AssetsImportProgressHandler implements ProgressHandler {

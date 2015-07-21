@@ -110,4 +110,9 @@ public class ImportDialog extends O2DDialog {
         dropRegion.getColor().a = 1f;
     }
 
+    public void setPaths(String[] paths) {
+        for(int i = 0; i < paths.length; i++) {
+            System.out.println(paths[i]);
+        }
+    }
 }
