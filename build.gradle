@@ -35,13 +35,14 @@ apply plugin: "java"
 
 
 import org.ajoberstar.grgit.*
-def spineDestination = file("../spine-runtimes")
+def spineDestination = file("spine-runtimes")
 if(!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
-
+def o2dRuntimeDestination = file("overlap2d-runtime-libgdx")
+if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/azakhary/overlap2d-runtime-libgdx.git')
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
-    compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:$overlap2druntimeVersion"
+    compile project(":overlap2d-runtime-libgdx")
     compile project(":spine-runtime-libgdx")
     compile project(":spine-o2d-extension")
     compile fileTree(dir: 'libs', include: '*.jar')
@@ -59,6 +60,17 @@ dependencies {
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
     compile "com.mortennobel:java-image-scaling:0.8.5"
 }
+
+project(":overlap2d-runtime-libgdx") {
+    apply plugin: "java"
+    sourceSets.main.java.srcDirs = ["src/"]
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile fileTree(dir: 'libs', include: '*.jar')
+    }
+}
+
 
 project(":spine-o2d-extension") {
     apply plugin: "java"
