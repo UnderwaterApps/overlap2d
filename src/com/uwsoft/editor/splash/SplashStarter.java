@@ -33,7 +33,7 @@ public class SplashStarter {
 
     public SplashStarter(SplashScreen.SplashListener listener) {
 
-        if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
+        if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX) {
             // let's work out osx splash screen later, not sure if we can have translucency there.
             listener.loadingComplete();
             return;

@@ -29,6 +29,7 @@ import java.awt.event.InputEvent;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 
 import javax.swing.JFrame;
 import javax.swing.UIManager;
@@ -54,7 +55,7 @@ public class Main {
 
     private void startLoadingEditor() {
         //first, kill off the splash
-    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC)) {
+    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX)) {
     		splash.kill();
     	}
 
@@ -84,40 +85,55 @@ public class Main {
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             toggleVisible();
         }
-        
-        setIcon();
+
+        if(!SystemUtils.IS_OS_UNIX) {
+            // no aesthetics for linux users I guess..
+            setIcon();
+        }
 
     }
 
-    public static void main(String[] argv) throws Exception {
-        String input = Main.class.getClassLoader().getResource("art/textures").getPath();
+    public static String getLocalArtPath(String directoryName) {
+        // TODO: wtf with all the multiplatform shit? anyone had experience?
+        URL inputUrl = Main.class.getClassLoader().getResource("art/"+directoryName);
+        String input;
+        if(inputUrl != null) {
+            input = inputUrl.getPath();
+        } else {
+            inputUrl = Main.class.getClassLoader().getResource(directoryName);
+            if(inputUrl != null) {
+                input = inputUrl.getPath();
+            } else {
+                input = "../art/"+directoryName;
+            }
+        }
         File file = new File(input);
         if(!file.exists()){
-        	 input = "art/textures";
-             file = new File(input);
+            input = "art/"+directoryName;
         }
+
+        return input;
+    }
+
+    public static void main(String[] argv) throws Exception {
+        String input = getLocalArtPath("textures");
+
         /**
          * this should not be happening when in release mode
          */
-        /*
         String output = "style";
         String packFileName = "uiskin";
         TexturePacker.Settings settings =  new TexturePacker.Settings();
         settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
         processSplashScreenTextures();
-        */
+
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
     }
 
     private static void processSplashScreenTextures() {
-        String input = Main.class.getClassLoader().getResource("art/splash_textures").getPath();
-        File file = new File(input);
-        if(!file.exists()){
-        	 input = "art/splash_textures";
-             file = new File(input);
-        }
+        String input = getLocalArtPath("splash_textures");
         
         String output = "splash";
         String packFileName = "splash";
@@ -155,7 +171,7 @@ public class Main {
     
     //THIS IS JUST FOR FUN
     private void setIcon(){
-    	String logoPath = Main.class.getClassLoader().getResource("art/splash_textures/").getPath();
+    	String logoPath = getLocalArtPath("splash_textures");
         File file = new File(logoPath);
         if(!file.exists()){
         	 logoPath = "art/splash_textures/";

@@ -57,3 +57,6 @@ gradle/
 
 overlap2d-runtime-libgdx
 spine-runtimes
+
+assets/style/uiskin.png
+assets/style/uiskin.atlas
