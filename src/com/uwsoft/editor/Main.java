@@ -54,7 +54,7 @@ public class Main {
 
     private void startLoadingEditor() {
         //first, kill off the splash
-    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC)) {
+    	if (!(SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX)) {
     		splash.kill();
     	}
 
