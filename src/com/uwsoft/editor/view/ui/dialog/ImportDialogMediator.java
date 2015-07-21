@@ -19,8 +19,10 @@
 package com.uwsoft.editor.view.ui.dialog;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.math.Vector2;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.view.frame.FileDropListener;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -28,6 +30,14 @@ import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.Overlap2DMenuBar;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.SceneVO;
+
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.Transferable;
+import java.awt.dnd.DnDConstants;
+import java.awt.dnd.DropTargetDragEvent;
+import java.awt.dnd.DropTargetDropEvent;
+import java.io.File;
+import java.util.List;
 
 /**
  * Created by sargis on 4/3/15.
@@ -52,8 +62,18 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2DMenuBar.IMPORT_TO_LIBRARY,
-                ImportDialog.START_IMPORTING_BTN_CLICKED
+                ImportDialog.START_IMPORTING_BTN_CLICKED,
+                FileDropListener.ACTION_DRAG_ENTER,
+                FileDropListener.ACTION_DRAG_OVER,
+                FileDropListener.ACTION_DRAG_EXIT,
+                FileDropListener.ACTION_DROP,
         };
+    }
+
+    public Vector2 getLocationFromDtde(DropTargetDragEvent dtde) {
+        Vector2 pos = new Vector2((float)(dtde).getLocation().getX(),(float)(dtde).getLocation().getY());
+
+        return pos;
     }
 
     @Override
@@ -64,6 +84,28 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
         switch (notification.getName()) {
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 viewComponent.show(uiStage);
+                break;
+            case FileDropListener.ACTION_DRAG_ENTER:
+                Vector2 dropPos = getLocationFromDtde(notification.getBody());
+                if(viewComponent.checkDropRegionHit(dropPos)) {
+                    viewComponent.dragOver();
+                }
+                break;
+            case FileDropListener.ACTION_DRAG_OVER:
+                dropPos = getLocationFromDtde(notification.getBody());
+                if(viewComponent.checkDropRegionHit(dropPos)) {
+                    viewComponent.dragOver();
+                }
+                break;
+            case FileDropListener.ACTION_DRAG_EXIT:
+                dropPos = getLocationFromDtde(notification.getBody());
+                if(viewComponent.checkDropRegionHit(dropPos)) {
+                    viewComponent.dragExit();
+                }
+                break;
+            case FileDropListener.ACTION_DROP:
+                DropTargetDropEvent dtde = notification.getBody();
+                catchFiles(dtde);
                 break;
             case ImportDialog.START_IMPORTING_BTN_CLICKED:
                 /*
@@ -79,6 +121,21 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
 //                uiStage.getCompositePanel().updateOriginalItem();
                 projectManager.saveCurrentProject(vo);*/
                 break;
+        }
+    }
+
+    public void catchFiles(DropTargetDropEvent dtde) {
+        dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
+
+        Transferable t= dtde.getTransferable();
+        if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
+            try {
+                List<File> list = (List<File>)dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                System.out.println(list.size());
+            }
+            catch (Exception ufe) {
+                System.out.print(ufe.getMessage());
+            }
         }
     }
 

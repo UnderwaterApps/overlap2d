@@ -25,6 +25,7 @@ import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.awt.Toolkit;
+import java.awt.dnd.DropTarget;
 import java.awt.event.InputEvent;
 import java.io.File;
 import java.lang.reflect.InvocationTargetException;
@@ -34,6 +35,7 @@ import java.net.URL;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+import com.uwsoft.editor.view.frame.FileDropListener;
 import org.apache.commons.lang3.SystemUtils;
 
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
@@ -84,6 +86,9 @@ public class Main {
             mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             toggleVisible();
+
+            // subscribe to file dropping notifications, currently windows only
+            DropTarget dropTarget = new DropTarget(mainFrame, new FileDropListener());
         }
 
         if(!SystemUtils.IS_OS_UNIX) {
