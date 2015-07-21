@@ -133,7 +133,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
 
     public int getBodyType() {
         for(Integer key: bodyTypes.keySet()) {
-            if(key.equals(bodyTypeBox.getSelected())) {
+            if(bodyTypes.get(key).equals(bodyTypeBox.getSelected())) {
                 return key;
             }
         }
