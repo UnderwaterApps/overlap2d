@@ -319,10 +319,14 @@ public class RulersUI extends Actor {
 
             if(guide.isVertical) {
                 Vector2 localCoords = worldToHere(new Vector2(guide.pos, 0));
-                shapeRenderer.line(localCoords.x, -Gdx.graphics.getHeight() / 2, localCoords.x, horizontalRect.y);
+                if(localCoords.x > verticalRect.x+verticalRect.width) {
+                    shapeRenderer.line(localCoords.x, -Gdx.graphics.getHeight() / 2, localCoords.x, horizontalRect.y);
+                }
             } else {
                 Vector2 localCoords = worldToHere(new Vector2(0, guide.pos));
-                shapeRenderer.line(verticalRect.x + verticalRect.getWidth(), localCoords.y, Gdx.graphics.getWidth(), localCoords.y);
+                if(localCoords.y < horizontalRect.y) {
+                    shapeRenderer.line(verticalRect.x + verticalRect.getWidth(), localCoords.y, Gdx.graphics.getWidth(), localCoords.y);
+                }
             }
         }
     }
