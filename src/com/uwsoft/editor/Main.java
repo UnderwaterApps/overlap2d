@@ -90,7 +90,7 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = "../art/textures";
+        String input = Main.class.getClassLoader().getResource("art/textures").getPath();
         File file = new File(input);
         if(!file.exists()){
         	 input = "art/textures";
@@ -112,7 +112,7 @@ public class Main {
     }
 
     private static void processSplashScreenTextures() {
-        String input = "../art/splash_textures";
+        String input = Main.class.getClassLoader().getResource("art/splash_textures").getPath();
         File file = new File(input);
         if(!file.exists()){
         	 input = "art/splash_textures";
@@ -155,7 +155,7 @@ public class Main {
     
     //THIS IS JUST FOR FUN
     private void setIcon(){
-    	String logoPath = "../art/splash_textures/";
+    	String logoPath = Main.class.getClassLoader().getResource("art/splash_textures/").getPath();
         File file = new File(logoPath);
         if(!file.exists()){
         	 logoPath = "art/splash_textures/";
