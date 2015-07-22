@@ -82,8 +82,7 @@ public class FontManager extends BaseProxy {
         String[] paths = getSystemFontsPaths();
 
         ArrayList<File> files = new ArrayList<>();
-        
-        ArrayList<File> files = new ArrayList<>();
+
         File projectFont = new File(FontManager.class.getClassLoader().getResource("freetypefonts").getPath());
 
         if (projectFont.exists() && projectFont.isDirectory() && projectFont.canRead()) {
