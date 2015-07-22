@@ -37,7 +37,7 @@ public class UISceneProperties extends UIAbstractProperties {
 
     public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.view.ui.properties.panels.UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
 
-    private NumberSelector pixelsPerWorldUnitField;
+    private VisLabel pixelsPerWorldUnitField;
     private VisCheckBox physicsEnabledCheckBox;
     private VisTextField gravityXTextField;
     private VisTextField gravityYTextField;
@@ -51,7 +51,7 @@ public class UISceneProperties extends UIAbstractProperties {
 
         Validators.FloatValidator floatValidator = new Validators.FloatValidator();
 
-        pixelsPerWorldUnitField = new NumberSelector("", 0, 1, 150);
+        pixelsPerWorldUnitField = new VisLabel("1");
         physicsEnabledCheckBox = new VisCheckBox(null);
         gravityXTextField = new VisValidableTextField(floatValidator);
         gravityYTextField = new VisValidableTextField(floatValidator);
@@ -147,11 +147,11 @@ public class UISceneProperties extends UIAbstractProperties {
     }
 
     public int getPixelsPerWorldUnit() {
-        return pixelsPerWorldUnitField.getValue();
+        return Integer.parseInt(pixelsPerWorldUnitField.getText().toString());
     }
 
     public void setPixelsPerWorldUnit(int value) {
-        pixelsPerWorldUnitField.setValue(value);
+        pixelsPerWorldUnitField.setText(value+"");
     }
 
     @Override

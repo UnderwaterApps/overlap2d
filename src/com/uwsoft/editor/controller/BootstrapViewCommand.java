@@ -38,7 +38,7 @@ import com.uwsoft.editor.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIZoomBoxMediator;
-import com.uwsoft.editor.view.ui.dialog.AssetsImportDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.ImportDialogMediator;
 import com.uwsoft.editor.view.ui.dialog.CreateNewResolutionDialogMediator;
 import com.uwsoft.editor.view.ui.dialog.CustomVariablesDialogMediator;
 import com.uwsoft.editor.view.ui.dialog.EditSpriteAnimationDialogMediator;
@@ -63,7 +63,7 @@ public class BootstrapViewCommand extends SimpleCommand {
 
         // Dialogs
         facade.registerMediator(new NewProjectDialogMediator());
-        facade.registerMediator(new AssetsImportDialogMediator());
+        facade.registerMediator(new ImportDialogMediator());
         facade.registerMediator(new ExportSettingsDialogMediator());
         facade.registerMediator(new CreateNewResolutionDialogMediator());
         facade.registerMediator(new CustomVariablesDialogMediator());
@@ -80,7 +80,5 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new UIStageMediator());
         facade.registerMediator(new SandboxMediator());
         facade.registerMediator(new UIDropDownMenuMediator());
-        //TODO fix and uncomment
-        //facade.registerMediator(new PhysicsEditorDialogMediator());
     }
 }
