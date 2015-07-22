@@ -24,9 +24,12 @@ import java.util.HashMap;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Touchable;
+import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -47,6 +50,8 @@ import com.uwsoft.editor.view.ui.widget.InputFileWidget;
 public class ImportDialog extends UIDraggablePanel {
     public static final String CLASS_NAME = "com.uwsoft.editor.view.ui.dialog.ImportDialog";
 
+    public static final String BROWSE_BTN_CLICKED = CLASS_NAME + ".BROWSE_BTN_CLICKED";
+
     public static final String CANCEL_BTN_CLICKED = CLASS_NAME + ".CANCEL_BTN_CLICKED";
     public static final String IMPORT_BTN_CLICKED = CLASS_NAME + ".IMPORT_BTN_CLICKED";
 
@@ -54,6 +59,7 @@ public class ImportDialog extends UIDraggablePanel {
 
     private VisTable mainTable;
     private Image dropRegion;
+    private VisLabel errorLabel;
 
     private VisProgressBar progressBar;
 
@@ -79,6 +85,12 @@ public class ImportDialog extends UIDraggablePanel {
         add(mainTable).fill().expand();
 
         setDroppingView();
+
+        errorLabel = new VisLabel("File you selected was too sexy to import");
+        errorLabel.setColor(Color.RED);
+        addActor(errorLabel);
+        errorLabel.getColor().a = 0;
+        errorLabel.setTouchable(Touchable.disabled);
     }
 
     private void fillTypeNames() {
@@ -87,6 +99,7 @@ public class ImportDialog extends UIDraggablePanel {
         typeNames.put(ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE, "PNG Sequence Animation");
         typeNames.put(ImportUtils.TYPE_BITMAP_FONT, "Bitmap Font");
         typeNames.put(ImportUtils.TYPE_IMAGE, "Texture");
+        typeNames.put(ImportUtils.TYPE_TEXTURE_ATLAS, "Texture Atlas");
         typeNames.put(ImportUtils.TYPE_PARTICLE_EFFECT, "Particle Effect");
         typeNames.put(ImportUtils.TYPE_SPINE_ANIMATION, "Spine Animation");
         typeNames.put(ImportUtils.TYPE_SPRITE_ANIMATION_ATLAS, "Animation Atlas Pack");
@@ -131,8 +144,18 @@ public class ImportDialog extends UIDraggablePanel {
 
         dropRegion = new Image(VisUI.getSkin().getDrawable("dropHere"));
         mainTable.add(dropRegion).padRight(6).padBottom(6);
-        dragExit();
+        mainTable.row().pad(5);
 
+        mainTable.add(new VisLabel("or browse files on file system"));
+        mainTable.row().pad(5);
+
+        VisTextButton showFileSelectBtn = new VisTextButton("Browse");
+        mainTable.add(showFileSelectBtn);
+        mainTable.row().pad(5);
+
+        initDropListeners(showFileSelectBtn);
+
+        dragExit();
         pack();
     }
 
@@ -142,7 +165,7 @@ public class ImportDialog extends UIDraggablePanel {
         String typeText = typeNames.get(type);
         if(isMultiple) typeText+="'s";
 
-        mainTable.add(new VisLabel("Ready to import: " + typeText)).left();
+        mainTable.add(new VisLabel("Currently importing: " + typeText)).left();
         mainTable.row().padBottom(5);
 
         progressBar = new VisProgressBar(0, 100, 1, false);
@@ -157,11 +180,17 @@ public class ImportDialog extends UIDraggablePanel {
         btnTable.add(cancelBtn).width(50).padRight(5);
         btnTable.add(importBtn).width(50).right().padRight(3);
 
-        //mainTable.add(btnTable).expand().fill();
-
         pack();
 
         initImportListeners(cancelBtn, importBtn);
+    }
+
+    private void initDropListeners(VisTextButton browseBtn) {
+        browseBtn.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                facade.sendNotification(BROWSE_BTN_CLICKED);
+            }
+        });
     }
 
     private void initImportListeners(VisTextButton cancelBtn, VisTextButton importBtn) {
@@ -178,6 +207,21 @@ public class ImportDialog extends UIDraggablePanel {
     }
 
     public void showError(int type) {
+        String text = "";
+        if(type == ImportUtils.TYPE_UNSUPPORTED || type == ImportUtils.TYPE_UNCKNOWN) {
+            text = "unsupported file type/types";
+        }
+        if(type == ImportUtils.TYPE_MIXED) {
+            text = "Multiple import types, please use one";
+        }
 
+        errorLabel.setX(getWidth() / 2 - errorLabel.getWidth() / 2);
+        errorLabel.setY(getHeight() - errorLabel.getHeight() - 34);
+        errorLabel.setAlignment(Align.center);
+
+        errorLabel.setText(text);
+
+        errorLabel.addAction(Actions.sequence(Actions.fadeIn(0.3f), Actions.delay(2f), Actions.fadeOut(0.7f)));
+        dragExit();
     }
 }

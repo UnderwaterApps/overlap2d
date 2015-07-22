@@ -54,14 +54,15 @@ public class ImportUtils  {
 
     private ImportUtils() {
         supportedTypes.add(TYPE_IMAGE);
-        supportedTypes.add(TYPE_TEXTURE_ATLAS);
         supportedTypes.add(TYPE_ANIMATION_PNG_SEQUENCE);
         supportedTypes.add(TYPE_SPRITE_ANIMATION_ATLAS);
         supportedTypes.add(TYPE_SPINE_ANIMATION);
         supportedTypes.add(TYPE_SPRITER_ANIMATION);
+        supportedTypes.add(TYPE_PARTICLE_EFFECT);
+        // TODO: not yet supported
+        //supportedTypes.add(TYPE_TEXTURE_ATLAS);
         //supportedTypes.add(TYPE_TTF_FONT);
         //supportedTypes.add(TYPE_BITMAP_FONT);
-        supportedTypes.add(TYPE_PARTICLE_EFFECT);
     }
 
     public static ImportUtils getInstance() {

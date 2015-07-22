@@ -22,6 +22,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.utils.ImportUtils;
@@ -68,6 +70,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2DMenuBar.IMPORT_TO_LIBRARY,
+                ImportDialog.BROWSE_BTN_CLICKED,
                 ImportDialog.CANCEL_BTN_CLICKED,
                 ImportDialog.IMPORT_BTN_CLICKED,
                 FileDropListener.ACTION_DRAG_ENTER,
@@ -98,6 +101,9 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 viewComponent.show(uiStage);
                 break;
+            case ImportDialog.BROWSE_BTN_CLICKED:
+                showFileChoose();
+                break;
             case FileDropListener.ACTION_DRAG_ENTER:
                 Vector2 dropPos = getLocationFromDtde(notification.getBody());
                 if(viewComponent.checkDropRegionHit(dropPos)) {
@@ -121,22 +127,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 if(viewComponent.checkDropRegionHit(dropPos)) {
                     DropTargetDropEvent dtde = notification.getBody();
                     String[] paths = catchFiles(dtde);
-                    int type = ImportUtils.getImportType(paths);
-
-                    if (type <= 0) {
-                        // error
-                        viewComponent.showError(type);
-                    } else {
-                        boolean isMultiple = false;
-                        if (paths.length > 1) isMultiple = true;
-                        if (type == ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE) isMultiple = false;
-                        viewComponent.setImportingView(type, isMultiple);
-
-                        this.paths = paths;
-                        this.importType = type;
-
-                        startImport();
-                    }
+                    postPathObrainAction(paths);
                 }
                 break;
             case ImportDialog.CANCEL_BTN_CLICKED:
@@ -146,6 +137,45 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 startImport();
                 break;
         }
+    }
+
+    private void postPathObrainAction(String[] paths) {
+        int type = ImportUtils.getImportType(paths);
+
+        if (type <= 0) {
+            // error
+            viewComponent.showError(type);
+        } else {
+            boolean isMultiple = false;
+            if (paths.length > 1) isMultiple = true;
+            if (type == ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE) isMultiple = false;
+            viewComponent.setImportingView(type, isMultiple);
+
+            this.paths = paths;
+            this.importType = type;
+
+            startImport();
+        }
+    }
+
+    private void showFileChoose() {
+         Sandbox sandbox = Sandbox.getInstance();
+        FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+
+        fileChooser.setMultiselectionEnabled(true);
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected(Array<FileHandle> files) {
+                String paths[] = new String[files.size];
+                for(int i = 0; i < files.size; i++) {
+                    paths[i] = files.get(i).path();
+                }
+                if(paths.length > 0) {
+                    postPathObrainAction(paths);
+                }
+            }
+        });
+        sandbox.getUIStage().addActor(fileChooser.fadeIn());
     }
 
     private void startImport() {
@@ -158,7 +188,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 projectManager.importImagesIntoProject(files, progressHandler);
                 break;
             case ImportUtils.TYPE_TEXTURE_ATLAS:
-                projectManager.importImagesIntoProject(files, progressHandler);
+                projectManager.importAtlasesIntoProject(files, progressHandler);
                 break;
             case ImportUtils.TYPE_PARTICLE_EFFECT:
                 projectManager.importParticlesIntoProject(files, progressHandler);
