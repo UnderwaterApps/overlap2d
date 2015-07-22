@@ -80,9 +80,14 @@ public class PreferencesManager {
 	public void buildRecentHistory() {
 		recentHistory = new ArrayList<String>();
 		for (int i = 0; i < getInteger("recentHistory"); i++) {
-			if (!contains(String.format("recent.%d",i)))
+			if (!contains(String.format("recent.%d",i))) {
 				break;
-			recentHistory.add(getString(String.format("recent.%d",i)));
+			}
+			String project = getString(String.format("recent.%d", i));
+			java.io.File file = new java.io.File(project);
+			if (file.exists() && file.isFile() && file.canRead()) {
+				recentHistory.add(project);
+			}
 		}
 	}
 	
