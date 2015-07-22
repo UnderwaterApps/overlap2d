@@ -168,6 +168,9 @@ public class ImportDialog extends UIDraggablePanel {
     public void setImportingView(int type, boolean isMultiple) {
         mainTable.clear();
 
+        errorLabel.getColor().a = 0;
+        errorLabel.clearActions();
+
         String typeText = typeNames.get(type);
         if(isMultiple) typeText+="'s";
 
