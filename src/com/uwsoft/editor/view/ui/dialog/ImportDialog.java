@@ -142,8 +142,14 @@ public class ImportDialog extends UIDraggablePanel {
     public void setDroppingView() {
         mainTable.clear();
 
+        VisLabel helpLbl = new VisLabel("Supported file types: images, sprite animations (atlas or img sequence), spine animations, spriter scml, particle effects");
+        helpLbl.setWidth(260);
+        helpLbl.setWrap(true);
+        mainTable.add(helpLbl).width(260).padLeft(5);
+        mainTable.row().padBottom(5);
+
         dropRegion = new Image(VisUI.getSkin().getDrawable("dropHere"));
-        mainTable.add(dropRegion).padRight(6).padBottom(6);
+        mainTable.add(dropRegion).padRight(6).padBottom(6).padTop(10);
         mainTable.row().pad(5);
 
         mainTable.add(new VisLabel("or browse files on file system"));
@@ -216,7 +222,7 @@ public class ImportDialog extends UIDraggablePanel {
         }
 
         errorLabel.setX(getWidth() / 2 - errorLabel.getWidth() / 2);
-        errorLabel.setY(getHeight() - errorLabel.getHeight() - 34);
+        errorLabel.setY(getHeight() - errorLabel.getHeight() - 87);
         errorLabel.setAlignment(Align.center);
 
         errorLabel.setText(text);
