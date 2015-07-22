@@ -33,6 +33,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -40,43 +41,57 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.utils.ImportUtils;
 import com.uwsoft.editor.view.ui.widget.InputFileWidget;
 
-public class ImportDialog extends O2DDialog {
-    public static final String START_IMPORTING_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ImportDialog" + ".START_IMPORTING_BTN_CLICKED";
+public class ImportDialog extends UIDraggablePanel {
+    public static final String CLASS_NAME = "com.uwsoft.editor.view.ui.dialog.ImportDialog";
+
+    public static final String CANCEL_BTN_CLICKED = CLASS_NAME + ".CANCEL_BTN_CLICKED";
+    public static final String IMPORT_BTN_CLICKED = CLASS_NAME + ".IMPORT_BTN_CLICKED";
 
     private Overlap2DFacade facade;
 
+    private VisTable mainTable;
     private Image dropRegion;
 
+    private VisProgressBar progressBar;
+
+    private HashMap<Integer, String> typeNames = new HashMap<>();
+
     ImportDialog() {
-        super("Import new Assets");
+        super("Import Resources");
         setMovable(true);
         setModal(false);
+        addCloseButton();
         setStyle(VisUI.getSkin().get("box", WindowStyle.class));
         getTitleLabel().setAlignment(Align.left);
 
+        setWidth(250);
+        setHeight(100);
+
         facade = Overlap2DFacade.getInstance();
 
-        VisTable mainTable = new VisTable();
+        fillTypeNames();
 
-        TabbedPane tabbedPane = new TabbedPane();
-        Tab texturesTab = new ImportTypeTab("Import Images");
-        Tab animationsTab = new ImportTypeTab("Import Animations");
-        Tab particleEffectsTab = new ImportTypeTab("Import Particle Effects");
-        Tab fontsTab = new ImportTypeTab("Import Fonts");
-        tabbedPane.add(texturesTab);
-        tabbedPane.add(animationsTab);
-        tabbedPane.add(particleEffectsTab);
-        tabbedPane.add(fontsTab);
-        mainTable.add(tabbedPane.getTable());
+        mainTable = new VisTable();
 
-        mainTable.row().padBottom(3);
+        add(mainTable).fill().expand();
 
-        dropRegion = new Image(VisUI.getSkin().getDrawable("logo"));
-        mainTable.add(dropRegion);
+        setDroppingView();
+    }
 
-        add(mainTable);
+    private void fillTypeNames() {
+        typeNames.clear();
+
+        typeNames.put(ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE, "PNG Sequence Animation");
+        typeNames.put(ImportUtils.TYPE_BITMAP_FONT, "Bitmap Font");
+        typeNames.put(ImportUtils.TYPE_IMAGE, "Texture");
+        typeNames.put(ImportUtils.TYPE_PARTICLE_EFFECT, "Particle Effect");
+        typeNames.put(ImportUtils.TYPE_SPINE_ANIMATION, "Spine Animation");
+        typeNames.put(ImportUtils.TYPE_SPRITE_ANIMATION_ATLAS, "Animation Atlas Pack");
+        typeNames.put(ImportUtils.TYPE_SPRITER_ANIMATION, "Spriter Animation");
+        typeNames.put(ImportUtils.TYPE_TTF_FONT, "TTF Font");
     }
 
     @Override
@@ -97,7 +112,7 @@ public class ImportDialog extends O2DDialog {
             return true;
         }
 
-        dropRegion.getColor().a = 1f;
+        dropRegion.getColor().a = 0.3f;
 
         return false;
     }
@@ -107,12 +122,62 @@ public class ImportDialog extends O2DDialog {
     }
 
     public void dragExit() {
-        dropRegion.getColor().a = 1f;
+        dropRegion.getColor().a = 0.3f;
     }
 
-    public void setPaths(String[] paths) {
-        for(int i = 0; i < paths.length; i++) {
-            System.out.println(paths[i]);
-        }
+
+    public void setDroppingView() {
+        mainTable.clear();
+
+        dropRegion = new Image(VisUI.getSkin().getDrawable("dropHere"));
+        mainTable.add(dropRegion).padRight(6).padBottom(6);
+        dragExit();
+
+        pack();
+    }
+
+    public void setImportingView(int type, boolean isMultiple) {
+        mainTable.clear();
+
+        String typeText = typeNames.get(type);
+        if(isMultiple) typeText+="'s";
+
+        mainTable.add(new VisLabel("Ready to import: " + typeText)).left();
+        mainTable.row().padBottom(5);
+
+        progressBar = new VisProgressBar(0, 100, 1, false);
+        mainTable.add(progressBar).fillX().padTop(5).width(250);
+        mainTable.row().padBottom(5);
+
+        VisTextButton cancelBtn = new VisTextButton("Cancel");
+        VisTextButton importBtn = new VisTextButton("Import");
+
+        VisTable btnTable = new VisTable();
+        btnTable.add("").expand().right();
+        btnTable.add(cancelBtn).width(50).padRight(5);
+        btnTable.add(importBtn).width(50).right().padRight(3);
+
+        //mainTable.add(btnTable).expand().fill();
+
+        pack();
+
+        initImportListeners(cancelBtn, importBtn);
+    }
+
+    private void initImportListeners(VisTextButton cancelBtn, VisTextButton importBtn) {
+        cancelBtn.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                facade.sendNotification(CANCEL_BTN_CLICKED);
+            }
+        });
+        importBtn.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                facade.sendNotification(IMPORT_BTN_CLICKED);
+            }
+        });
+    }
+
+    public void showError(int type) {
+
     }
 }

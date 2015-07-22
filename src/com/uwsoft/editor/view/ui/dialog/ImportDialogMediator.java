@@ -19,9 +19,12 @@
 package com.uwsoft.editor.view.ui.dialog;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.utils.ImportUtils;
 import com.uwsoft.editor.view.frame.FileDropListener;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.widget.ProgressHandler;
@@ -47,6 +50,9 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     private static final String NAME = TAG;
     private AssetsImportProgressHandler progressHandler;
 
+    private int importType;
+    private String[] paths;
+
     public ImportDialogMediator() {
         super(NAME, new ImportDialog());
     }
@@ -62,7 +68,8 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     public String[] listNotificationInterests() {
         return new String[]{
                 Overlap2DMenuBar.IMPORT_TO_LIBRARY,
-                ImportDialog.START_IMPORTING_BTN_CLICKED,
+                ImportDialog.CANCEL_BTN_CLICKED,
+                ImportDialog.IMPORT_BTN_CLICKED,
                 FileDropListener.ACTION_DRAG_ENTER,
                 FileDropListener.ACTION_DRAG_OVER,
                 FileDropListener.ACTION_DRAG_EXIT,
@@ -71,6 +78,12 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     }
 
     public Vector2 getLocationFromDtde(DropTargetDragEvent dtde) {
+        Vector2 pos = new Vector2((float)(dtde).getLocation().getX(),(float)(dtde).getLocation().getY());
+
+        return pos;
+    }
+
+    public Vector2 getLocationFromDropEvent(DropTargetDropEvent dtde) {
         Vector2 pos = new Vector2((float)(dtde).getLocation().getX(),(float)(dtde).getLocation().getY());
 
         return pos;
@@ -104,25 +117,78 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 }
                 break;
             case FileDropListener.ACTION_DROP:
-                DropTargetDropEvent dtde = notification.getBody();
-                String[] paths = catchFiles(dtde);
-                viewComponent.setPaths(paths);
+                dropPos = getLocationFromDropEvent(notification.getBody());
+                if(viewComponent.checkDropRegionHit(dropPos)) {
+                    DropTargetDropEvent dtde = notification.getBody();
+                    String[] paths = catchFiles(dtde);
+                    int type = ImportUtils.getImportType(paths);
+
+                    if (type <= 0) {
+                        // error
+                        viewComponent.showError(type);
+                    } else {
+                        boolean isMultiple = false;
+                        if (paths.length > 1) isMultiple = true;
+                        if (type == ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE) isMultiple = false;
+                        viewComponent.setImportingView(type, isMultiple);
+
+                        this.paths = paths;
+                        this.importType = type;
+
+                        startImport();
+                    }
+                }
                 break;
-            case ImportDialog.START_IMPORTING_BTN_CLICKED:
-                /*
-                ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-                projectManager.importImagesIntoProject(viewComponent.getImageFiles(), progressHandler);
-                projectManager.importParticlesIntoProject(viewComponent.getParticleEffectFiles(), progressHandler);
-                projectManager.importStyleIntoProject(viewComponent.getStyleFiles(), progressHandler);
-                projectManager.importFontIntoProject(viewComponent.getFontFiles(), progressHandler);
-                projectManager.importSpineAnimationsIntoProject(viewComponent.getSpineSpriterFiles(), progressHandler);
-                projectManager.importSpriteAnimationsIntoProject(viewComponent.getSpriteAnimationFiles(), progressHandler);
-                // save before importing
-                SceneVO vo = sandbox.sceneVoFromItems();
-//                uiStage.getCompositePanel().updateOriginalItem();
-                projectManager.saveCurrentProject(vo);*/
+            case ImportDialog.CANCEL_BTN_CLICKED:
+                viewComponent.setDroppingView();
+                break;
+            case ImportDialog.IMPORT_BTN_CLICKED:
+                startImport();
                 break;
         }
+    }
+
+    private void startImport() {
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+
+        Array<FileHandle> files = getFilesFromPaths(this.paths);
+
+        switch (importType) {
+            case ImportUtils.TYPE_IMAGE:
+                projectManager.importImagesIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_TEXTURE_ATLAS:
+                projectManager.importImagesIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_PARTICLE_EFFECT:
+                projectManager.importParticlesIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_SPRITER_ANIMATION:
+                projectManager.importSpineAnimationsIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_SPINE_ANIMATION:
+                projectManager.importSpineAnimationsIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_SPRITE_ANIMATION_ATLAS:
+                projectManager.importSpriteAnimationsIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE:
+                projectManager.importSpriteAnimationsIntoProject(files, progressHandler);
+                break;
+        }
+
+        // save before importing
+        SceneVO vo = Sandbox.getInstance().sceneVoFromItems();
+        projectManager.saveCurrentProject(vo);
+    }
+
+    private  Array<FileHandle> getFilesFromPaths(String[] paths) {
+        Array<FileHandle> files = new Array<>();
+        for(int i = 0; i < paths.length;i++) {
+            files.add(new FileHandle(new File(paths[i])));
+        }
+
+        return files;
     }
 
     public String[] catchFiles(DropTargetDropEvent dtde) {
@@ -165,7 +231,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
                 projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
                 sandbox.loadCurrentProject();
-                ImportDialogMediator.this.viewComponent.hide();
+                ImportDialogMediator.this.viewComponent.setDroppingView();
                 facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);
             });
         }
