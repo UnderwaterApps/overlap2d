@@ -33,11 +33,7 @@ public class SplashStarter {
 
     public SplashStarter(SplashScreen.SplashListener listener) {
 
-<<<<<<< HEAD
-        if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX) {
-=======
     	if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC || SystemUtils.IS_OS_UNIX) {
->>>>>>> fixed start crash on linux
             // let's work out osx splash screen later, not sure if we can have translucency there.
             listener.loadingComplete();
             return;
