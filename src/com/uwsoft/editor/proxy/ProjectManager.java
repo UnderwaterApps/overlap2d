@@ -515,6 +515,22 @@ public class ProjectManager extends BaseProxy {
         return  imgHandles;
     }
 
+    private void addParticleEffectImages(FileHandle fileHandle, Array<FileHandle> imgs) {
+        try {
+            BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
+            while (true) {
+                String line = reader.readLine();
+                if (line == null) break;
+                if (line.trim().equals("- Image Path -")) {
+                    line = reader.readLine();
+                    imgs.add(new FileHandle(new File(FilenameUtils.getFullPath(fileHandle.path()) + line)));
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void importParticlesIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
         if (fileHandles == null) {
             return;
@@ -523,44 +539,65 @@ public class ProjectManager extends BaseProxy {
         handler = progressHandler;
         currentPercent = 0;
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                for (FileHandle fileHandle : fileHandles) {
-                    if (!fileHandle.isDirectory() && fileHandle.exists()) {
-                        try {
-                            //copy images
-                            Array<FileHandle> imgs = getAtlasPageHandles(fileHandle);
-                            copyImageFilesForAllResolutionsIntoProject(imgs, false);
-                            // copy the fileHandle
-                            String newName = fileHandle.name();
-                            File target = new File(targetPath + "/" + newName);
-                            FileUtils.copyFile(fileHandle.file(), target);
-                        } catch (Exception e) {
-                            e.printStackTrace();
-                            System.out.println("Error importing particles");
-                            //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect fileHandle in the same directory ");
-                        }
+        executor.execute(() -> {
+            Array<FileHandle> imgs = new Array<>();
+            for (FileHandle fileHandle : fileHandles) {
+                if (!fileHandle.isDirectory() && fileHandle.exists()) {
+                    try {
+                        //copy images
+                        addParticleEffectImages(fileHandle, imgs);
+                        // copy the fileHandle
+                        String newName = fileHandle.name();
+                        File target = new File(targetPath + "/" + newName);
+                        FileUtils.copyFile(fileHandle.file(), target);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                        //System.out.println("Error importing particles");
+                        //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect fileHandle in the same directory ");
                     }
                 }
-                ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-                resolutionManager.rePackProjectImagesForAllResolutions();
             }
+            if(imgs.size > 0) {
+                copyImageFilesForAllResolutionsIntoProject(imgs, false);
+            }
+            ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+            resolutionManager.rePackProjectImagesForAllResolutions();
         });
-        executor.execute(new Runnable() {
-            @Override
-            public void run() {
-                changePercentBy(100 - currentPercent);
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                handler.progressComplete();
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
+            handler.progressComplete();
         });
         executor.shutdown();
     }
+
+    public void importAtlasesIntoProject(final Array<FileHandle> files, ProgressHandler progressHandler) {
+        handler = progressHandler;
+        currentPercent = 0;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            for (FileHandle fileHandle : files) {
+                // TODO: logic goes here
+            }
+        });
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            handler.progressComplete();
+        });
+        executor.shutdown();
+    }
+
+
 
     public void importImagesIntoProject(final Array<FileHandle> files, ProgressHandler progressHandler) {
         if (files == null) {

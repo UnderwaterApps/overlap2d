@@ -189,7 +189,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             addItem(scenesMenuItem);
             //
             addSeparator();
-            importToLibrary = new MenuItem("Import to Library", new MenuItemListener(IMPORT_TO_LIBRARY, null, FILE_MENU));
+            importToLibrary = new MenuItem("Import Resources", new MenuItemListener(IMPORT_TO_LIBRARY, null, FILE_MENU));
             export = new MenuItem("Export", new MenuItemListener(EXPORT, null, FILE_MENU));
             exportSettings = new MenuItem("Export Settings", new MenuItemListener(EXPORT_SETTINGS, null, FILE_MENU));
             addItem(importToLibrary);
