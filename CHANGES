@@ -21,6 +21,7 @@ better zooming
 Position setting don't break anymore when changing to non orig resolution
 Amazing new undo/redo system is almost bugless.
 Text items now can be created using text tool. No need to import new fonts, as we use fonts from your system.
+Import System is changed, now it works with Drag and Drop, and is more aware of file types, so you don't have to specify.
 
 
 
