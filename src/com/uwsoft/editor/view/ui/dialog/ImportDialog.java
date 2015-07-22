@@ -156,7 +156,7 @@ public class ImportDialog extends UIDraggablePanel {
         mainTable.row().pad(5);
 
         VisTextButton showFileSelectBtn = new VisTextButton("Browse");
-        mainTable.add(showFileSelectBtn);
+        mainTable.add(showFileSelectBtn).width(88);
         mainTable.row().pad(5);
 
         initDropListeners(showFileSelectBtn);
