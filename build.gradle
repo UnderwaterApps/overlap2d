@@ -16,7 +16,6 @@ allprojects {
     version = '0.1.0'
     ext {
         appName = 'Overlap2D'
-        overlap2druntimeVersion = '0.1.1-SNAPSHOT'
         gdxVersion = '1.6.2'
         box2DLightsVersion = '1.4'
         visuiVersion = '0.7.6'
@@ -78,7 +77,7 @@ project(":spine-o2d-extension") {
 
     dependencies {
         compile project(":spine-runtime-libgdx");
-        compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:$overlap2druntimeVersion"
+        compile project(":overlap2d-runtime-libgdx");
         compile fileTree(dir: 'libs', include: '*.jar')
     }
 }
