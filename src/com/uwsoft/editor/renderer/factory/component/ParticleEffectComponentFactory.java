@@ -51,7 +51,7 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
-        createParticleCompononet(entity, (ParticleEffectVO) vo);
+        createParticleComponent(entity, (ParticleEffectVO) vo);
     }
 
     @Override
@@ -59,16 +59,14 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
 
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
-
-        component.height = 70f/projectInfoVO.pixelToWorld;
-        component.width = 70f/projectInfoVO.pixelToWorld;
-        component.boundBox = new Rectangle(-35f/projectInfoVO.pixelToWorld, -35f/projectInfoVO.pixelToWorld, 70f/projectInfoVO.pixelToWorld, 70f/projectInfoVO.pixelToWorld);
+        float boundBoxSize = 70f;
+        component.boundBox = new Rectangle((-boundBoxSize/2f)/projectInfoVO.pixelToWorld, (-boundBoxSize/2f)/projectInfoVO.pixelToWorld, boundBoxSize/projectInfoVO.pixelToWorld, boundBoxSize/projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;
     }
 
-    protected ParticleComponent createParticleCompononet(Entity entity, ParticleEffectVO vo) {
+    protected ParticleComponent createParticleComponent(Entity entity, ParticleEffectVO vo) {
         ParticleComponent component = new ParticleComponent();
         component.particleName = vo.particleName;
 		ParticleEffect particleEffect = new ParticleEffect(rm.getParticleEffect(vo.particleName));

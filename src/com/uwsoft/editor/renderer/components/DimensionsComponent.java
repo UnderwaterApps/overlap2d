@@ -10,14 +10,10 @@ public class DimensionsComponent extends Component {
 	public Rectangle boundBox;
 
 	public boolean hit(float x, float y){
-//		System.out.println("******** DimensionsComponent hit********");
-//		System.out.println("Loacal X="+ x + " Local Y=" + y);
-//		System.out.println("width="+ width + " height=" + height);
-//		System.out.println("****************************************");
 		if(boundBox == null) {
 			return (x >= 0 && x < width && y >= 0 && y < height);
 		} else {
-			return (x >= boundBox.x && x < boundBox.width && y >= boundBox.y && y < boundBox.height);
+			return (x >= boundBox.x && x < boundBox.x+boundBox.width && y >= boundBox.y && y < boundBox.y+boundBox.height);
 		}
 	}
 }
