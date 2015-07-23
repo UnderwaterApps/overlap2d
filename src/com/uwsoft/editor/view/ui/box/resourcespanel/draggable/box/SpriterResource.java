@@ -52,14 +52,13 @@ public class SpriterResource extends BoxItemResource {
             }
             animThumb.setScale(scaleFactor);
 
-//            animThumb.setX((getWidth()-animThumb.getWidth())/2);
-//            animThumb.setY((getHeight()-animThumb.getHeight())/2);
-            animThumb.setX(0);
-            animThumb.setY(0);
+            animThumb.setX((getWidth()-animThumb.getWidth())/2);
+            animThumb.setY((getHeight()-animThumb.getHeight())/2);
+
         } else {
             // put it in middle
-            animThumb.setX(0);
-            animThumb.setY(0);
+            animThumb.setX((getWidth() - animThumb.getWidth()) / 2);
+            animThumb.setY((getHeight() - animThumb.getHeight()) / 2);
         }
 
         addActor(animThumb);
@@ -68,21 +67,18 @@ public class SpriterResource extends BoxItemResource {
         payload = new ResourcePayloadObject();
         payload.name = animationName;
 
-        /*
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        dragActor = new Image(textureManager.getEditorAsset("resizeIconChecked"));
-		*/
+
         super.act(1f);
     }
 
 
     @Override
     public void act(float delta) {
-        if (isMouseInside) {
+        //if (isMouseInside) {
             super.act(delta);
-        }
+        //}
     }
 
     @Override

@@ -515,7 +515,7 @@ public class ProjectManager extends BaseProxy {
         return  imgHandles;
     }
 
-    private void addParticleEffectImages(FileHandle fileHandle, Array<FileHandle> imgs) {
+    private boolean addParticleEffectImages(FileHandle fileHandle, Array<FileHandle> imgs) {
         try {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
             while (true) {
@@ -523,12 +523,35 @@ public class ProjectManager extends BaseProxy {
                 if (line == null) break;
                 if (line.trim().equals("- Image Path -")) {
                     line = reader.readLine();
-                    imgs.add(new FileHandle(new File(FilenameUtils.getFullPath(fileHandle.path()) + line)));
+                    if(line.contains("\\") || line.contains("/")) {
+                        // then it's a path let's see if exists.
+                        File tmp = new File(line);
+                        if(tmp.exists()) {
+                            imgs.add(new FileHandle(tmp));
+                        } else {
+                            line = FilenameUtils.getBaseName(line) + ".png";
+                            File file = new File(FilenameUtils.getFullPath(fileHandle.path()) + line);
+                            if(file.exists()) {
+                                imgs.add(new FileHandle(file));
+                            } else {
+                                return false;
+                            }
+                        }
+                    } else {
+                        File file = new File(FilenameUtils.getFullPath(fileHandle.path()) + line);
+                        if(file.exists()) {
+                            imgs.add(new FileHandle(file));
+                        } else {
+                            return false;
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        return true;
     }
 
     public void importParticlesIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
@@ -545,13 +568,15 @@ public class ProjectManager extends BaseProxy {
                 if (!fileHandle.isDirectory() && fileHandle.exists()) {
                     try {
                         //copy images
-                        addParticleEffectImages(fileHandle, imgs);
-                        // copy the fileHandle
-                        String newName = fileHandle.name();
-                        File target = new File(targetPath + "/" + newName);
-                        FileUtils.copyFile(fileHandle.file(), target);
+                        boolean allImagesFound = addParticleEffectImages(fileHandle, imgs);
+                        if(allImagesFound) {
+                            // copy the fileHandle
+                            String newName = fileHandle.name();
+                            File target = new File(targetPath + "/" + newName);
+                            FileUtils.copyFile(fileHandle.file(), target);
+                        }
                     } catch (Exception e) {
-                        e.printStackTrace();
+                        //e.printStackTrace();
                         //System.out.println("Error importing particles");
                         //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect fileHandle in the same directory ");
                     }

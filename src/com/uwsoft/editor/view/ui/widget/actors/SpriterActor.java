@@ -93,6 +93,12 @@ public class SpriterActor extends Actor {
     }
 
     @Override
+    public void setScale(float scaleXY) {
+        super.setScale(scaleXY);
+        player.setScale(scaleXY);
+    }
+
+    @Override
     public void act(float delta) {
         super.act(delta);
         player.update();
@@ -105,7 +111,6 @@ public class SpriterActor extends Actor {
 
         player.setPosition(getX(), getY());
         player.setPivot(getWidth()/2, getHeight()/2);
-        player.setScale(getScaleX());
         player.rotate(getRotation()-player.getAngle());
         drawer.beforeDraw(player,batch);
     }
