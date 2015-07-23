@@ -21,24 +21,25 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+import com.uwsoft.editor.view.ui.widget.actors.SpriterActor;
 
 /**
  * Created by hayk on 19/12/2014.
  */
 public class SpriterResource extends BoxItemResource {
     private final Overlap2DFacade facade;
-    private final Image dragActor;
+    private Actor payloadActor;
     private ResourcePayloadObject payload;
     private boolean isMouseInside = true;
 
     public SpriterResource(String animationName) {
         facade = Overlap2DFacade.getInstance();
-		//TODO fix and uncomment
-		/*
+
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
-        SpriterActor animThumb = new SpriterActor(vo, commands.getSceneControl().getEssentials());
+        SpriterActor animThumb = new SpriterActor(animationName, sandbox.getSceneControl().sceneLoader.getRm());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -49,43 +50,40 @@ public class SpriterResource extends BoxItemResource {
             } else {
                 scaleFactor = 1.0f / (animThumb.getHeight() / thumbnailSize);
             }
-            animThumb.setSpriterScale(scaleFactor);
+            animThumb.setScale(scaleFactor);
 
-//            animThumb.setX((getWidth()-animThumb.getWidth())/2);
-//            animThumb.setY((getHeight()-animThumb.getHeight())/2);
-            animThumb.setX(0);
-            animThumb.setY(0);
+            animThumb.setX((getWidth()-animThumb.getWidth())/2);
+            animThumb.setY((getHeight()-animThumb.getHeight())/2);
+
         } else {
             // put it in middle
-            animThumb.setX(0);
-            animThumb.setY(0);
+            animThumb.setX((getWidth() - animThumb.getWidth()) / 2);
+            animThumb.setY((getHeight() - animThumb.getHeight()) / 2);
         }
 
         addActor(animThumb);
-		*/
+
+        payloadActor = new SpriterActor(animationName, sandbox.getSceneControl().sceneLoader.getRm());
         payload = new ResourcePayloadObject();
         payload.name = animationName;
-        dragActor = new Image(); //TEMPORARY
-        /*
+
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
-        EditorTextureManager textureManager = facade.retrieveProxy(EditorTextureManager.NAME);
-        dragActor = new Image(textureManager.getEditorAsset("resizeIconChecked"));
-		*/
+
         super.act(1f);
     }
 
 
     @Override
     public void act(float delta) {
-        if (isMouseInside) {
+        //if (isMouseInside) {
             super.act(delta);
-        }
+        //}
     }
 
     @Override
     public Actor getDragActor() {
-        return dragActor;
+        return payloadActor;
     }
 
     @Override

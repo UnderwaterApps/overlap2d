@@ -11,4 +11,7 @@ public class SceneConfigVO {
 
     public ArrayList<Float> verticalGuides = new ArrayList<>();
     public ArrayList<Float> horizontalGuides = new ArrayList<>();
+
+    // 0 = x, 1 = y
+    public float[] cameraPosition = new float[2];
 }

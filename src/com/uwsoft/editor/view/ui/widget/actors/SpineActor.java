@@ -11,8 +11,6 @@ import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 public class SpineActor extends Actor {
 
     private String animationName;
-    public float mulX = 1f;
-    public float mulY = 1f;
     public SkeletonData skeletonData;
     private SkeletonRenderer renderer;
     private Skeleton skeleton;
