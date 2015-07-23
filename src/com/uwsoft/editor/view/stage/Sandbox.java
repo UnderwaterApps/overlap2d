@@ -31,6 +31,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.overlap2d.extensions.spine.SpineItemType;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.data.vo.ProjectVO;
+import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 import com.uwsoft.editor.view.ItemControlMediator;
 import com.uwsoft.editor.view.SceneControlMediator;
@@ -247,6 +248,10 @@ public class Sandbox {
         //TODO: move this into SceneDataManager!
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
         sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
+
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        SceneConfigVO sceneConfigVO = projectManager.getCurrentSceneConfigVO();
+        getCamera().position.set(sceneConfigVO.cameraPosition[0], sceneConfigVO.cameraPosition[1], 0);
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {

@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Pools;
+import com.uwsoft.editor.data.vo.SceneConfigVO;
+import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -87,5 +89,12 @@ public class PanTool extends SimpleTool {
         lastCoordinates = new Vector2(Gdx.input.getX(), Gdx.input.getY());
 
         Overlap2DFacade.getInstance().sendNotification(SCENE_PANNED);
+
+        // Save the current position
+        // TODO: (this has to move to some kind of mediator that listens to scene panned event)
+        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        SceneConfigVO sceneConfigVO = projectManager.getCurrentSceneConfigVO();
+        sceneConfigVO.cameraPosition[0] = sandbox.getCamera().position.x;
+        sceneConfigVO.cameraPosition[1] = sandbox.getCamera().position.y;
     }
 }

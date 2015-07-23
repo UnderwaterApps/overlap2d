@@ -40,13 +40,13 @@ public class SpineResource extends BoxItemResource {
     private boolean isMouseInside = false;
 
 
-    public SpineResource(String animName) {
+    public SpineResource(String animationName) {
         super();
         facade = Overlap2DFacade.getInstance();
         SpineVO vo = new SpineVO();
-        vo.animationName = animName;
+        vo.animationName = animationName;
 
-        final SpineActor animThumb = new SpineActor(animName, sandbox.getSceneControl().sceneLoader.getRm());
+        final SpineActor animThumb = new SpineActor(animationName, sandbox.getSceneControl().sceneLoader.getRm());
 
         if (animThumb.getWidth() > thumbnailSize || animThumb.getHeight() > thumbnailSize) {
             // resizing is needed
@@ -85,10 +85,10 @@ public class SpineResource extends BoxItemResource {
         addActor(animThumb);
 
         //payloadImg = new Image(VisUI.getSkin().getDrawable("icon-animation"));
-        payloadActor = new SpineActor(animName, sandbox.getSceneControl().sceneLoader.getRm());
+        payloadActor = new SpineActor(animationName, sandbox.getSceneControl().sceneLoader.getRm());
 
         payload = new ResourcePayloadObject();
-        payload.name = animName;
+        payload.name = animationName;
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
 
