@@ -303,10 +303,10 @@ public class ProjectManager extends BaseProxy {
         try {
             db = dbf.newDocumentBuilder();
             org.w3c.dom.Document document = db.parse(fileHandle.file());
-            NodeList nodeList = document.getElementsByTagName("fileHandle");
+            NodeList nodeList = document.getElementsByTagName("file");
             for (int x = 0, size = nodeList.getLength(); x < size; x++) {
                 String absolutePath = fileHandle.path();
-                String path = absolutePath.substring(0, absolutePath.lastIndexOf(File.separator)) + File.separator + nodeList.item(x).getAttributes().getNamedItem("name").getNodeValue();
+                String path = absolutePath.substring(0, FilenameUtils.indexOfLastSeparator(fileHandle.path())) + File.separator + nodeList.item(x).getAttributes().getNamedItem("name").getNodeValue();
                 File imgFile = new File(path);
                 images.add(imgFile);
             }
