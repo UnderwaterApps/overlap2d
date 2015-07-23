@@ -248,7 +248,9 @@ public class Overlap2DMenuBar extends CustomMenuBar {
 
             addRecent(paths);
 
-            recentProjectsPopupMenu.addSeparator();
+            if (paths.size() > 0) {
+            	recentProjectsPopupMenu.addSeparator();
+            }
 
             MenuItem menuItem = new MenuItem("Clear list", new MenuItemListener(CLEAR_RECENTS, null, FILE_MENU));
             recentProjectsMenuItems.add(menuItem);
