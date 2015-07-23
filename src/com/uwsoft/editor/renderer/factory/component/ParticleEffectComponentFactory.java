@@ -22,13 +22,18 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/22/2015.
@@ -42,18 +47,22 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-    	createParticleCompononet(entity, (ParticleEffectVO) vo);
         createCommonComponents(entity, vo, EntityFactory.PARTICLE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
+        createParticleCompononet(entity, (ParticleEffectVO) vo);
     }
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 100;
-        component.width = 100;
+
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+
+        component.height = 70f/projectInfoVO.pixelToWorld;
+        component.width = 70f/projectInfoVO.pixelToWorld;
+        component.boundBox = new Rectangle(-35f/projectInfoVO.pixelToWorld, -35f/projectInfoVO.pixelToWorld, 70f/projectInfoVO.pixelToWorld, 70f/projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;
@@ -64,6 +73,10 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
         component.particleName = vo.particleName;
 		ParticleEffect particleEffect = new ParticleEffect(rm.getParticleEffect(vo.particleName));
         component.particleEffect = particleEffect;
+
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+
+        component.worldMultiplyer = 1f/projectInfoVO.pixelToWorld;
 
         entity.add(component);
         return component;

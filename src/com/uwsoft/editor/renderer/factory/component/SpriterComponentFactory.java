@@ -24,6 +24,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.brashmonkey.spriter.Player;
+import com.brashmonkey.spriter.Rectangle;
 import com.brashmonkey.spriter.SCMLReader;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.spriter.SpriterComponent;
@@ -32,6 +33,7 @@ import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.LibGdxDrawer;
 import com.uwsoft.editor.renderer.utils.LibGdxLoader;
 
@@ -46,18 +48,22 @@ public class SpriterComponentFactory extends ComponentFactory {
 
     @Override
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
+        createSpriterDataComponent(entity, (SpriterVO) vo);
         createCommonComponents(entity, vo, EntityFactory.SPRITER_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
-        createSpriterDataComponent(entity, (SpriterVO) vo);
     }
 
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 100;
-        component.width = 100;
+
+        SpriterComponent spriterComponent = ComponentRetriever.get(entity, SpriterComponent.class);
+
+        Rectangle rect = spriterComponent.player.getBoundingRectangle(null);
+        component.width = (int) rect.size.width;
+        component.height = (int) rect.size.height;
 
         entity.add(component);
         return component;

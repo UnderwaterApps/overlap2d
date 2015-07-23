@@ -165,7 +165,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		ParentNodeComponent parentNodeComponent = parentNodeMapper.get(rootEntity);
 		TransformComponent curTransform = transformMapper.get(rootEntity);
 		Affine2 worldTransform = curCompositeTransformComponent.worldTransform;
-		//TODO orogin thing
+		//TODO origin thing
 		float originX = 0;
 		float originY = 0;
 		float x = curTransform.x;

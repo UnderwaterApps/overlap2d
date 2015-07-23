@@ -5,5 +5,6 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 
 public class ParticleComponent extends Component {
 	public String particleName = "";
-	public ParticleEffect particleEffect; 
+	public ParticleEffect particleEffect;
+	public float worldMultiplyer = 1f;
 }
