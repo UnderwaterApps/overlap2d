@@ -38,6 +38,7 @@ public class ParticleFollower extends BasicFollower {
         icon.setTouchable(Touchable.disabled);
         icon.setX(-icon.getWidth()/2);
         icon.setY(-icon.getHeight()/2);
+        icon.getColor().a = 0.3f;
         addActor(icon);
     }
 

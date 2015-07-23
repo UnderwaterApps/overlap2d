@@ -127,14 +127,7 @@ public class ItemFactory {
         return true;
     }
 
-    public boolean createSpriterAnimation(String animationName, Vector2 position) {
-        SpriterVO vo = new SpriterVO();
-        vo.animationName = animationName;
-
-        if(!setEssentialData(vo, position)) return false;
-        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
-
+    public boolean createSpriterAnimation(String regionName, Vector2 position) {
         return true;
     }
 
