@@ -5,6 +5,12 @@ To be used with libGDX projects. Thanks to roboVM this will work also on iOS.
 
 Overlap2D runtime is based on entity component system (which libGDX supportive incarnation is [Ashley](https://github.com/libgdx/ashley))
 
+##**IMPORTANT - old runtime users**
+
+If you were using the old runtime, and have to use it for your old projects, here is the url for all old resources:
+[http://overlap2d.com/pre-0-1-0-stuff/](http://overlap2d.com/pre-0-1-0-stuff/)
+
+
 ##**Setting Up**
 
 If you are using gradle, yo can just add this line to your dependecies:
