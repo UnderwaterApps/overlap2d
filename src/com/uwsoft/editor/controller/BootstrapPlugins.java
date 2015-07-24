@@ -27,9 +27,16 @@ import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.jar.JarEntry;
+import java.util.jar.JarFile;
+import java.util.jar.JarInputStream;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -54,20 +61,34 @@ public class BootstrapPlugins extends SimpleCommand {
         PluginManager pluginManager = facade.retrieveProxy(PluginManager.NAME);
 
         try {
-            File file  = new File(pluginPath);
-            URL url = file.toURI().toURL();
-            URL[] urls = new URL[]{url};
-            URLClassLoader child = new URLClassLoader (urls, this.getClass().getClassLoader());
-            Class classToLoad = Class.forName("com.overlap2d.plugins." + pluginName + "." + pluginNameFLUC + "Plugin", true, child);
-            pluginManager.initPlugin((O2DPlugin) classToLoad.newInstance());
+            JarFile jarFile = new JarFile(pluginPath);
+            Enumeration ee = jarFile.entries();
+            URL[] urls = { new URL("jar:file:" + pluginPath+"!/") };
+            URLClassLoader cl = URLClassLoader.newInstance(urls);
+
+            while (ee.hasMoreElements()) {
+                JarEntry je = (JarEntry) ee.nextElement();
+                if(je.isDirectory() || !je.getName().endsWith(".class")){
+                    continue;
+                }
+                // -6 because of .class
+                String className = je.getName().substring(0,je.getName().length()-6);
+                className = className.replace('/', '.');
+                if(className.contains(pluginNameFLUC + "Plugin")) {
+                    Class c = cl.loadClass(className);
+                    pluginManager.initPlugin((O2DPlugin) c.newInstance());
+                }
+            }
         } catch (MalformedURLException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (ClassNotFoundException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
+        } catch (IOException e) {
+            //e.printStackTrace();
         } catch (InstantiationException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         } catch (IllegalAccessException e) {
-            e.printStackTrace();
+            //e.printStackTrace();
         }
     }
 }
