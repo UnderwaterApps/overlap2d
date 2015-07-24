@@ -37,7 +37,7 @@ import org.ajoberstar.grgit.*
 def spineDestination = file("spine-runtimes")
 if(!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
 def o2dRuntimeDestination = file("overlap2d-runtime-libgdx")
-if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/azakhary/overlap2d-runtime-libgdx.git')
+if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/UnderwaterApps/overlap2d-runtime-libgdx.git')
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
