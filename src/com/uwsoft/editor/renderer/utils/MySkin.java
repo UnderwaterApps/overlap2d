@@ -466,10 +466,6 @@ public class MySkin extends Skin {
 					}
 					// Scaled size is the desired cap height to scale the font to.
 					if (scaledSize != -1) font.getData().setScale(scaledSize / font.getCapHeight());
-<<<<<<< HEAD
-=======
-
->>>>>>> 166b839de2f2f6e30bd85c558047d1dcdae799df
 					return font;
 				} catch (RuntimeException ex) {
 					throw new SerializationException("Error loading bitmap font: " + fontFile, ex);
