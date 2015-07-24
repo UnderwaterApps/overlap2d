@@ -1,5 +1,9 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.label.LabelComponent;
+
 public class LabelVO extends MainItemVO {
 	
 	public String 	text 	= "Label";
@@ -25,5 +29,20 @@ public class LabelVO extends MainItemVO {
         width 	= vo.width;
         height 	= vo.height;
         multiline 	= vo.multiline;
+	}
+
+	@Override
+	public void loadFromEntity(Entity entity) {
+		super.loadFromEntity(entity);
+		LabelComponent labelComponent = entity.getComponent(LabelComponent.class);
+		DimensionsComponent dimensionsComponent = entity.getComponent(DimensionsComponent.class);
+		text = labelComponent.getText().toString();
+		style = labelComponent.fontName;
+		size = labelComponent.fontSize;
+		align = labelComponent.labelAlign;
+		multiline = labelComponent.wrap;
+
+		width = dimensionsComponent.width;
+		height = dimensionsComponent.height;
 	}
 }

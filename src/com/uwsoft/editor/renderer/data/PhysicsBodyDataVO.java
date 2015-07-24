@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 
 public class PhysicsBodyDataVO {
 
@@ -36,5 +37,20 @@ public class PhysicsBodyDataVO {
         density = vo.density;
         friction = vo.friction;
         restitution = vo.restitution;
+    }
+
+    public void loadFromComponent(PhysicsBodyPropertiesComponent physicsComponent) {
+        bodyType = physicsComponent.bodyType;
+        mass = physicsComponent.mass;
+        centerOfMass = physicsComponent.centerOfMass.cpy();
+        rotationalInertia = physicsComponent.rotationalInertia;
+        damping = physicsComponent.damping;
+        gravityScale = physicsComponent.gravityScale;
+        allowSleep = physicsComponent.allowSleep;
+        awake = physicsComponent.awake;
+        bullet = physicsComponent.bullet;
+        density = physicsComponent.density;
+        friction = physicsComponent.friction;
+        restitution = physicsComponent.restitution;
     }
 }

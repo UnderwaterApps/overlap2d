@@ -5,7 +5,8 @@ apply plugin: 'maven'
 apply plugin: 'signing'
 
 group = 'com.underwaterapps.overlap2druntime'
-version = '0.1.0'
+
+version = '0.1.1'
 ext.packaging = 'jar'
 
 def isDevBuild
@@ -17,7 +18,7 @@ def sonatypeRepositoryUrl
 //set build variables based on build type (release, continuous integration, development)
 if(hasProperty("release")) {
     isReleaseBuild = true
-    sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"                             
+    sonatypeRepositoryUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2/"
     println "Performing release build"
 } else if (hasProperty("snapshot")) {
     isCiBuild = true
@@ -100,12 +101,12 @@ uploadArchives {
                        developer {
                            id 'gevorg.kopalyan'
                            name 'Gevorg Kopalyan'
-						   email 'gevorg.kopalyan@gmail.com'
+						               email 'gevorg.kopalyan@gmail.com'
                        }
                        developer {
                            id 'azakhary'
                            name 'Avetis Zakharyan'
-						   email 'avetis.zakharyan@gmail.com'
+                           email 'avetis.zakharyan@gmail.com'
                        }
                    }
                }

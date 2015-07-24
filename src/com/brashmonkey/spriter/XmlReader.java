@@ -1,5 +1,7 @@
 package com.brashmonkey.spriter;
 
+import com.badlogic.gdx.utils.Array;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;

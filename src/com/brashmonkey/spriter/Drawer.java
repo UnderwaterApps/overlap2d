@@ -182,7 +182,7 @@ public abstract class Drawer<R> {
 	/**
 	 * Draws the given player with the given character map. 
 	 * @param player the player to draw
-	 * @param map the character map to draw
+	 * @param maps the character map to draw
 	 */
 	public void draw(Player player, CharacterMap[] maps){
 		this.draw(player.objectIterator(), maps);
@@ -191,7 +191,7 @@ public abstract class Drawer<R> {
 	/**
 	 * Draws the objects the given iterator is providing with the given character map. 
 	 * @param it the iterator iterating over the objects to draw
-	 * @param map the character map to draw
+	 * @param maps the character map to draw
 	 */
 	public void draw(Iterator<Timeline.Key.Object> it, CharacterMap[] maps){
 		while(it.hasNext()){

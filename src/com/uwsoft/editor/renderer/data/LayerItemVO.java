@@ -19,5 +19,11 @@ public class LayerItemVO {
 		isLocked = vo.isLocked;
 		isVisible = vo.isVisible;
 	}
+
+	public static LayerItemVO createDefault() {
+		LayerItemVO layerItemVO = new LayerItemVO();
+		layerItemVO.layerName = "Default";
+		return layerItemVO;
+	}
 	
 }
