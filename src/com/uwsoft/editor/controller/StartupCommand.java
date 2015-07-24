@@ -30,5 +30,6 @@ public class StartupCommand extends MacroCommand {
         addSubCommand(BootstrapProxyCommand.class);
         addSubCommand(BootstrapViewCommand.class);
         addSubCommand(BootstrapCommand.class);
+        addSubCommand(BootstrapPlugins.class);
     }
 }

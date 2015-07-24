@@ -19,12 +19,10 @@
 package com.uwsoft.editor.view.ui;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.Overlap2DMenuBar;
-import com.uwsoft.editor.view.Overlap2DMenuBarMediator;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.ui.box.UIAlignBox;
 import com.uwsoft.editor.view.ui.box.UIAlignBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIItemsTreeBox;

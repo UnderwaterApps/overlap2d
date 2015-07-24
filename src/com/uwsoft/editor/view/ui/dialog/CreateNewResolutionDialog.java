@@ -27,6 +27,7 @@ import com.kotcrab.vis.ui.widget.VisRadioButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
+import com.commons.O2DDialog;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
