@@ -18,7 +18,7 @@ import com.brashmonkey.spriter.Timeline.Key.Object;
  * and update the current set animation ({@link #setAnimation(Animation)}).
  * A Player can be positioned with {@link #setPivot(float, float)}, scaled with {@link #setScale(float)},
  * flipped with {@link #flip(boolean, boolean)} and rotated {@link #setAngle(float)}.
- * A Player has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or {@link #setObject(String, Bone)}.
+ * A Player has various methods for runtime object manipulation such as {@link #setBone(String, Bone)} or .
  * Events like the ending of an animation can be observed with the {@link PlayerListener} interface.
  * Character maps can be changed on the fly, just by assigning a character maps to {@link #characterMaps}, setting it to <code>null</code> will remove the current character map.
  * 
@@ -267,7 +267,7 @@ public class Player {
 	
 	/**
 	 * Returns whether the given point lies inside the box of the given bone or object.
-	 * @param bone the bone or object
+	 * @param boneOrObject the bone or object
 	 * @param point the point
 	 * @return <code>true</code> if the point lies inside the box of the given bone or object
 	 * @throws NullPointerException if no object info for the given bone or object exists

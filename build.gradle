@@ -1,12 +1,13 @@
 apply plugin: "java"
 apply from : 'publish.gradle'
 
-sourceCompatibility = 1.7
+sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
     gdxVersion = '1.6.2'
-    box2DLightsVersion = '1.4'
+    box2dlightsVersion = '1.4'
+    ashleyVersion = '1.5.0'
 }
 
 dependencies {
@@ -14,6 +15,7 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-box2d:$gdxVersion"
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
+    compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
 }
 
 repositories {
