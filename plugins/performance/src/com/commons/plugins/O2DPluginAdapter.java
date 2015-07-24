@@ -17,6 +17,7 @@
  */
 
 package com.commons.plugins;
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.puremvc.patterns.facade.Facade;
 
@@ -26,7 +27,8 @@ import com.puremvc.patterns.facade.Facade;
 public class O2DPluginAdapter implements O2DPlugin {
 
     protected Stage uiStage;
-    protected Facade facade;
+    protected Engine engine;
+    public Facade facade;
 
     @Override
     public String getName() {
@@ -34,9 +36,10 @@ public class O2DPluginAdapter implements O2DPlugin {
     }
 
     @Override
-    public void injectDependencies(Facade facade, Stage uiStage) {
+    public void injectDependencies(Facade facade, Stage uiStage, Engine engine) {
         this.uiStage = uiStage;
         this.facade = facade;
+        this.engine = engine;
     }
 
     @Override
@@ -51,5 +54,9 @@ public class O2DPluginAdapter implements O2DPlugin {
 
     public Stage getUiStage() {
         return uiStage;
+    }
+
+    public Engine getEngine() {
+        return engine;
     }
 }

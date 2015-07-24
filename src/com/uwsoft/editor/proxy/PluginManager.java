@@ -47,7 +47,10 @@ public class PluginManager extends BaseProxy {
     }
 
     public void initPlugin(O2DPlugin plugin) {
-        plugin.injectDependencies(Overlap2DFacade.getInstance(), Sandbox.getInstance().getUIStage());
+        if(plugins.contains(plugin)) return;
+
+        registerPlugin(plugin);
+        plugin.injectDependencies(Overlap2DFacade.getInstance(), Sandbox.getInstance().getUIStage(), Sandbox.getInstance().getEngine());
         MenuConnector menuConnector = Overlap2DFacade.getInstance().retrieveMediator(Overlap2DMenuBarMediator.NAME);
         plugin.initPlugin();
         plugin.initMenuItems(menuConnector);

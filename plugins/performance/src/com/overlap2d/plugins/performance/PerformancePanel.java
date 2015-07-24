@@ -32,6 +32,8 @@ public class PerformancePanel extends UIDraggablePanel {
 
     private VisTable mainTable;
 
+    private VisLabel entitiesCount;
+
     public PerformancePanel() {
         super("Performance");
         addCloseButton();
@@ -40,9 +42,25 @@ public class PerformancePanel extends UIDraggablePanel {
 
         mainTable = new VisTable();
 
-        VisLabel label = new VisLabel("Hello World");
-        mainTable.add(label).center();
+        add(mainTable).width(222);
+    }
 
-        add(mainTable).width(222).height(200);
+    public void initView() {
+        mainTable.clear();
+
+        VisLabel label = new VisLabel("Entity count: ");
+        entitiesCount = new VisLabel("0");
+        mainTable.add(label).right();
+        mainTable.add(entitiesCount).left().padLeft(4);
+    }
+
+    public void initLockView() {
+        mainTable.clear();
+
+        mainTable.add(new VisLabel("no scenes open")).right();
+    }
+
+    public void setEntityCount(int count) {
+        entitiesCount.setText(count+"");
     }
 }

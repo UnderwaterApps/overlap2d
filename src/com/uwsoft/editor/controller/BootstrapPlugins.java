@@ -23,20 +23,18 @@ import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.PluginManager;
+import com.uwsoft.editor.proxy.ProjectManager;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
-import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
-import java.util.jar.JarInputStream;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -50,8 +48,17 @@ public class BootstrapPlugins extends SimpleCommand {
         PluginManager pluginManager = new PluginManager();
         facade.registerProxy(pluginManager);
 
-        //TODO: read plugin from plugins folder
-        loadPlugin("D:\\work\\overlap2d\\plugins\\performance\\build\\libs\\performance.jar");
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        File pluginDir = new File(projectManager.getRootPath() + File.separator + "plugins");
+        if(pluginDir.exists() && pluginDir.isDirectory()) {
+            File[] listOfFiles = pluginDir.listFiles();
+            for (int i = 0; i < listOfFiles.length; i++) {
+                if (listOfFiles[i].isFile() && FilenameUtils.getExtension(listOfFiles[i].getName()).equals("jar")) {
+                    loadPlugin(listOfFiles[i].getAbsolutePath());
+                }
+            }
+        }
+
     }
 
     private void loadPlugin(String pluginPath) {

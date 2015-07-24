@@ -18,6 +18,7 @@
 
 package com.commons.plugins;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.puremvc.patterns.facade.Facade;
 
@@ -27,7 +28,7 @@ import com.puremvc.patterns.facade.Facade;
 public interface O2DPlugin {
 
     String getName();
-    void injectDependencies(Facade facade, Stage uiStage);
+    void injectDependencies(Facade facade, Stage uiStage, Engine engine);
     void initPlugin();
     void initMenuItems(MenuConnector menuConnector);
 

@@ -29,18 +29,24 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
     public static final String NAME = TAG;
 
     public static final String SCENE_LOADED = "com.uwsoft.editor.proxy.SceneDataManager.SCENE_LOADED";
+    public static final String NEW_ITEM_ADDED = "com.uwsoft.editor.factory.ItemFactory.NEW_ITEM_ADDED";
+    public static final String ACTION_DELETE = "com.uwsoft.editor.controller.commands.DeleteItemsCommandDONE";
 
     private PerformancePlugin performancePlugin;
 
     public PerformancePanelMediator(PerformancePlugin performancePlugin) {
         super(NAME, new PerformancePanel());
         this.performancePlugin = performancePlugin;
+
+        viewComponent.initLockView();
     }
 
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
                 SCENE_LOADED,
+                NEW_ITEM_ADDED,
+                ACTION_DELETE,
                 PerformancePlugin.PANEL_OPEN
         };
     }
@@ -50,7 +56,18 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case SCENE_LOADED:
+                viewComponent.initView();
 
+                int count = performancePlugin.getEngine().getEntities().size();
+                viewComponent.setEntityCount(count);
+                break;
+            case NEW_ITEM_ADDED:
+                count = performancePlugin.getEngine().getEntities().size();
+                viewComponent.setEntityCount(count);
+                break;
+            case ACTION_DELETE:
+                count = performancePlugin.getEngine().getEntities().size();
+                viewComponent.setEntityCount(count);
                 break;
             case PerformancePlugin.PANEL_OPEN:
                 viewComponent.show(performancePlugin.getUiStage());
