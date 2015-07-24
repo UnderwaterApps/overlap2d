@@ -23,7 +23,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;

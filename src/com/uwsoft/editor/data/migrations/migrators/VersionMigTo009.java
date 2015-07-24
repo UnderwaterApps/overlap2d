@@ -27,16 +27,11 @@ import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.proxy.ResolutionManager;
-import com.uwsoft.editor.renderer.data.FrameRange;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by azakhary on 6/29/2015.

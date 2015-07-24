@@ -19,8 +19,6 @@
 package com.uwsoft.editor.view.ui.dialog;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;

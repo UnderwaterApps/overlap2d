@@ -30,6 +30,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.commons.UIDraggablePanel;
 import com.uwsoft.editor.renderer.data.FrameRange;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
 

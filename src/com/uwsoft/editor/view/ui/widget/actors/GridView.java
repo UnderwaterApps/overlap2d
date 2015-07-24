@@ -18,28 +18,18 @@
 
 package com.uwsoft.editor.view.ui.widget.actors;
 
-import java.util.AbstractList;
-import java.util.ArrayList;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.uwsoft.editor.renderer.utils.PolygonUtils;
-import com.uwsoft.editor.view.stage.UIStage;
-import com.uwsoft.editor.view.ui.widget.actors.basic.PixelLine;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.EditorTextureManager;
 
 public class GridView extends Actor {
 

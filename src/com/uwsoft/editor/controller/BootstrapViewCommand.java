@@ -22,7 +22,7 @@ import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
-import com.uwsoft.editor.view.Overlap2DMenuBarMediator;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.Overlap2DScreenMediator;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.UIStageMediator;

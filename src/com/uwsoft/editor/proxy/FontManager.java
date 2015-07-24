@@ -25,7 +25,7 @@ import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 
 /**
- * Created by CyberJoe on 4/24/2015.
+ * Created by azakhary on 4/24/2015.
  */
 public class FontManager extends BaseProxy {
 

@@ -21,13 +21,8 @@ package com.uwsoft.editor.view;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.badlogic.gdx.utils.viewport.StretchViewport;
-import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
