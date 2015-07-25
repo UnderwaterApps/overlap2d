@@ -48,4 +48,8 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
 
         layerMapComponent.layers.add(layerIndex, layerItemVO);
     }
+
+    public int getLayerIndex() {
+        return layerIndex;
+    }
 }

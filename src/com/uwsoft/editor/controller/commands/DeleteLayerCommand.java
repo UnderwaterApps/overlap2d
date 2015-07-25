@@ -16,13 +16,16 @@ import java.util.Set;
 public class DeleteLayerCommand extends TransactiveCommand {
     private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteLayerCommand";
     public static final String DONE = CLASS_NAME + "DONE";
+    public static final String UNDONE = CLASS_NAME + "UNDONE";
 
     private String layerName;
+    private DeleteLayerAtomCommand deleteLayerAtomCommand;
 
     @Override
     public void transaction() {
         layerName = getNotification().getBody();
-        addInnerCommand(new DeleteLayerAtomCommand(layerName));
+        deleteLayerAtomCommand = new DeleteLayerAtomCommand(layerName);
+        addInnerCommand(deleteLayerAtomCommand);
         DeleteItemsCommand deleteItemsCommand = new DeleteItemsCommand();
         deleteItemsCommand.setItemsToDelete(getItemsByLayerName(layerName));
         addInnerCommand(deleteItemsCommand);
@@ -30,12 +33,12 @@ public class DeleteLayerCommand extends TransactiveCommand {
 
     @Override
     public void onFinish() {
-        facade.sendNotification(DONE, layerName);
+        facade.sendNotification(DONE, deleteLayerAtomCommand.getLayerIndex());
     }
 
     @Override
     public void onFinishUndo() {
-        facade.sendNotification(DONE, layerName);
+        facade.sendNotification(UNDONE, layerName);
     }
 
     public Set<Entity> getItemsByLayerName(String layerName) {
