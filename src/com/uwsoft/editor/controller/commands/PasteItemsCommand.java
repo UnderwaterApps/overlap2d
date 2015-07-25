@@ -69,8 +69,9 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             for(Component component: components) {
                 entity.add(ComponentCloner.get(component));
             }
+
             sandbox.getEngine().addEntity(entity);
-            int uniquId = sandbox.getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
+            int uniqueId = sandbox.getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
 
             ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
             parentNodeComponent.parentEntity = sandbox.getCurrentViewingEntity();
@@ -88,7 +89,9 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
             newEntitiesList.add(entity);
 
-            pastedEntityIds.add(uniquId);
+            pastedEntityIds.add(uniqueId);
+
+            EntityUtils.reInstantiateChildren(entity);
         }
 
         sandbox.getSelector().setSelections(newEntitiesList, true);
