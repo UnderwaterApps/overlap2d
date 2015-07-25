@@ -27,12 +27,11 @@ import com.uwsoft.editor.proxy.CommandManager;
  */
 public abstract class RevertableCommand extends SandboxCommand {
 
-    private CommandManager commandManager;
-    private Notification notification;
+    protected CommandManager commandManager;
+    protected Notification notification;
 
-    private boolean isCancelled = false;
-
-    private boolean stateDone = false;
+    protected boolean isCancelled = false;
+    protected boolean stateDone = false;
 
     @Override
     public void execute(Notification notification) {
