@@ -30,6 +30,9 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -187,17 +190,14 @@ public class EntityUtils {
     public static void reInstantiateChildren(Entity entity) {
         NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
         if (nodeComponent != null) {
-            for(int i = 0; i < nodeComponent.children.size; i++) {
-                Entity newEntity = cloneEntity(nodeComponent.children.get(i));
-                nodeComponent.children.set(i, newEntity);
+            CompositeVO compositeVo = new CompositeVO();
+            compositeVo.loadFromEntity(entity);
 
-                ParentNodeComponent parentNodeComponent = ComponentRetriever.get(newEntity, ParentNodeComponent.class);
-                parentNodeComponent.parentEntity = entity;
+            entity.remove(NodeComponent.class);
+            entity.add(new NodeComponent());
 
-                Sandbox.getInstance().getEngine().addEntity(newEntity);
-                Sandbox.getInstance().getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
-                reInstantiateChildren(newEntity);
-            }
+            SceneLoader sceneLoader = Sandbox.getInstance().getSceneControl().sceneLoader;
+            sceneLoader.entityFactory.initAllChildren(Sandbox.getInstance().getEngine(), entity, compositeVo);
         }
     }
 }
