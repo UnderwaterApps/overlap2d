@@ -27,7 +27,7 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
         Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
-        if(layerMapComponent.layers.size() > 0) {
+        if(layerMapComponent.layers.size() > 1) {
             for(LayerItemVO vo: layerMapComponent.layers) {
                 if(vo.layerName.equals(layerName)) {
                     layerItemVO = vo;
