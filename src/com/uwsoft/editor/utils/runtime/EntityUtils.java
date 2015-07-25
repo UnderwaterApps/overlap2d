@@ -75,11 +75,26 @@ public class EntityUtils {
         HashMap<Integer, Collection<Component>> data = new HashMap<>();
 
         for(Entity entity: entities) {
-            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+            Collection<Component> components = cloneEntityComponents(entity);
             data.put(EntityUtils.getEntityId(entity), components);
         }
 
         return data;
+    }
+
+    public static Entity cloneEntity(Entity entity) {
+        Entity newEntity = new Entity();
+        Collection<Component> components = cloneEntityComponents(entity);
+        for(Component component: components) {
+            newEntity.add(ComponentCloner.get(component));
+        }
+
+        return newEntity;
+    }
+
+    public static Collection<Component> cloneEntityComponents(Entity entity) {
+        Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+        return components;
     }
 
     public static Vector2 getPosition(Entity entity) {
@@ -167,5 +182,22 @@ public class EntityUtils {
         }
 
         return result;
+    }
+
+    public static void reInstantiateChildren(Entity entity) {
+        NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+        if (nodeComponent != null) {
+            for(int i = 0; i < nodeComponent.children.size; i++) {
+                Entity newEntity = cloneEntity(nodeComponent.children.get(i));
+                nodeComponent.children.set(i, newEntity);
+
+                ParentNodeComponent parentNodeComponent = ComponentRetriever.get(newEntity, ParentNodeComponent.class);
+                parentNodeComponent.parentEntity = entity;
+
+                Sandbox.getInstance().getEngine().addEntity(newEntity);
+                Sandbox.getInstance().getSceneControl().sceneLoader.entityFactory.postProcessEntity(entity);
+                reInstantiateChildren(newEntity);
+            }
+        }
     }
 }
