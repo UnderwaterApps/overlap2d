@@ -225,6 +225,10 @@ public class ItemSelector {
         }
     }
 
+    public boolean isSelected(Entity entity) {
+        return currentSelection.contains(entity);
+    }
+
     /**
      * set selection to a list of items
      * @param items list of panels to select
