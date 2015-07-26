@@ -224,6 +224,13 @@ public class SceneLoader {
 		return null;
 	}
 
+    public CompositeItemVO loadVoFromLibrary(String libraryName) {
+        ProjectInfoVO projectInfoVO = getRm().getProjectVO();
+        CompositeItemVO compositeItemVO = projectInfoVO.libraryItems.get(libraryName);
+
+       return compositeItemVO;
+    }
+
 	/**
 	 * Sets ambient light to the one specified in scene from editor
 	 *
