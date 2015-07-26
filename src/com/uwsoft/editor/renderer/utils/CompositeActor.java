@@ -16,7 +16,7 @@ import java.util.HashMap;
 
 
 /**
- * Created by CyberJoe on 7/26/2015.
+ * Created by azakhary on 7/26/2015.
  */
 public class CompositeActor extends Group {
 
