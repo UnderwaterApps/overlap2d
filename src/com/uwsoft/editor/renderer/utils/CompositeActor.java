@@ -79,6 +79,7 @@ public class CompositeActor extends Group {
         for(int i = 0; i < labels.size(); i++) {
             Label.LabelStyle style = new Label.LabelStyle(ir.getBitmapFont(labels.get(i).style, labels.get(i).size), Color.WHITE);
             Label label = new Label(labels.get(i).text, style);
+            label.setAlignment(labels.get(i).align);
             processMain(label, labels.get(i));
             addActor(label);
         }
