@@ -30,6 +30,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.data.LightVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -55,9 +56,8 @@ public class LightComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 40;
-        component.width = 40;
-        component.boundBox = new Rectangle(-10, -10, 20, 20);
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+        component.boundBox = new Rectangle(-10f/projectInfoVO.pixelToWorld, -10f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld, 20f/projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;
