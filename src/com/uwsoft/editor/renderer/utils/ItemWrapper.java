@@ -60,7 +60,7 @@ public class ItemWrapper {
         return new ItemWrapper(entity);
     }
 
-    public Component getComponent(Class clazz) {
+    public <T extends Component> T getComponent(Class<T> clazz) {
         return ComponentRetriever.get(entity, clazz);
     }
 
