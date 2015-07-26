@@ -18,6 +18,8 @@
 
 package com.overlap2d.plugins.performance;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.gdx.Gdx;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.puremvc.patterns.facade.SimpleFacade;
@@ -33,6 +35,9 @@ public class PerformancePanel extends UIDraggablePanel {
     private VisTable mainTable;
 
     private VisLabel entitiesCount;
+    private VisLabel fpsLbl;
+
+    private Engine engine;
 
     public PerformancePanel() {
         super("Performance");
@@ -48,10 +53,17 @@ public class PerformancePanel extends UIDraggablePanel {
     public void initView() {
         mainTable.clear();
 
-        VisLabel label = new VisLabel("Entity count: ");
-        entitiesCount = new VisLabel("0");
-        mainTable.add(label).right();
+        entitiesCount = new VisLabel();
+        fpsLbl = new VisLabel();
+
+
+        mainTable.add(new VisLabel("Entity count: ")).right();
         mainTable.add(entitiesCount).left().padLeft(4);
+        mainTable.row();
+
+        mainTable.add(new VisLabel("FPS: ")).right();
+        mainTable.add(fpsLbl).left().padLeft(4);
+        mainTable.row();
     }
 
     public void initLockView() {
@@ -60,7 +72,15 @@ public class PerformancePanel extends UIDraggablePanel {
         mainTable.add(new VisLabel("no scenes open")).right();
     }
 
-    public void setEntityCount(int count) {
-        entitiesCount.setText(count+"");
+    @Override
+    public void act(float delta) {
+        super.act(delta);
+
+        entitiesCount.setText(engine.getEntities().size()+"");
+        fpsLbl.setText(Gdx.graphics.getFramesPerSecond()+"");
+    }
+
+    public void setEngine(Engine engine) {
+        this.engine = engine;
     }
 }

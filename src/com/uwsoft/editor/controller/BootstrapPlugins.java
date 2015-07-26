@@ -24,6 +24,9 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.PluginManager;
 import com.uwsoft.editor.proxy.ProjectManager;
+import net.mountainblade.modular.Module;
+import net.mountainblade.modular.ModuleManager;
+import net.mountainblade.modular.impl.DefaultModuleManager;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -32,6 +35,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLClassLoader;
+import java.util.Collection;
 import java.util.Enumeration;
 import java.util.jar.JarEntry;
 import java.util.jar.JarFile;
@@ -50,52 +54,19 @@ public class BootstrapPlugins extends SimpleCommand {
 
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         File pluginDir = new File(projectManager.getRootPath() + File.separator + "plugins");
-        if(pluginDir.exists() && pluginDir.isDirectory()) {
-            File[] listOfFiles = pluginDir.listFiles();
-            for (int i = 0; i < listOfFiles.length; i++) {
-                if (listOfFiles[i].isFile() && FilenameUtils.getExtension(listOfFiles[i].getName()).equals("jar")) {
-                    loadPlugin(listOfFiles[i].getAbsolutePath());
-                }
+
+        ModuleManager manager = new DefaultModuleManager();
+        Collection<Module> loadedPlugins = manager.loadModules(pluginDir);
+
+        System.out.println(loadedPlugins.size());
+        for(Module module: loadedPlugins) {
+            try {
+                pluginManager.initPlugin((O2DPlugin) module.getClass().newInstance());
+            } catch (InstantiationException e) {
+                e.printStackTrace();
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
             }
-        }
-
-    }
-
-    private void loadPlugin(String pluginPath) {
-        String pluginName = FilenameUtils.removeExtension(FilenameUtils.getBaseName(pluginPath));
-        String pluginNameFLUC = WordUtils.capitalize(pluginName);
-
-        PluginManager pluginManager = facade.retrieveProxy(PluginManager.NAME);
-
-        try {
-            JarFile jarFile = new JarFile(pluginPath);
-            Enumeration ee = jarFile.entries();
-            URL[] urls = { new URL("jar:file:" + pluginPath+"!/") };
-            URLClassLoader cl = URLClassLoader.newInstance(urls);
-
-            while (ee.hasMoreElements()) {
-                JarEntry je = (JarEntry) ee.nextElement();
-                if(je.isDirectory() || !je.getName().endsWith(".class")){
-                    continue;
-                }
-                // -6 because of .class
-                String className = je.getName().substring(0,je.getName().length()-6);
-                className = className.replace('/', '.');
-                if(className.contains(pluginNameFLUC + "Plugin")) {
-                    Class c = cl.loadClass(className);
-                    pluginManager.initPlugin((O2DPlugin) c.newInstance());
-                }
-            }
-        } catch (MalformedURLException e) {
-            //e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            //e.printStackTrace();
-        } catch (IOException e) {
-            //e.printStackTrace();
-        } catch (InstantiationException e) {
-            //e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            //e.printStackTrace();
         }
     }
 }

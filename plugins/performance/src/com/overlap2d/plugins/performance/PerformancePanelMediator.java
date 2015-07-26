@@ -18,6 +18,7 @@
 
 package com.overlap2d.plugins.performance;
 
+import com.badlogic.ashley.core.Engine;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 
@@ -57,17 +58,8 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
         switch (notification.getName()) {
             case SCENE_LOADED:
                 viewComponent.initView();
-
-                int count = performancePlugin.getEngine().getEntities().size();
-                viewComponent.setEntityCount(count);
-                break;
-            case NEW_ITEM_ADDED:
-                count = performancePlugin.getEngine().getEntities().size();
-                viewComponent.setEntityCount(count);
-                break;
-            case ACTION_DELETE:
-                count = performancePlugin.getEngine().getEntities().size();
-                viewComponent.setEntityCount(count);
+                Engine engine = performancePlugin.getEngine();
+                viewComponent.setEngine(engine);
                 break;
             case PerformancePlugin.PANEL_OPEN:
                 viewComponent.show(performancePlugin.getUiStage());
