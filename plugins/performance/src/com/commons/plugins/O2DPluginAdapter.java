@@ -20,11 +20,12 @@ package com.commons.plugins;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.puremvc.patterns.facade.Facade;
+import net.mountainblade.modular.Module;
 
 /**
  * Created by azakhary on 7/24/2015.
  */
-public class O2DPluginAdapter implements O2DPlugin {
+public class O2DPluginAdapter implements O2DPlugin, Module {
 
     protected Stage uiStage;
     protected Engine engine;
