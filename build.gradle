@@ -70,11 +70,11 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 task packTextures << {
   if (project.ext.has('packMain')) {
     logger.info "Calling TexturePacker: "+packMain
-    TexturePacker.process(packMain[0], packMain[1], packMain[2])
+    TexturePacker.processIfModified(packMain[0], packMain[1], packMain[2])
   }
   if (project.ext.has('packSplash')) {
     logger.info "Calling TexturePacker: "+packSplash
-    TexturePacker.process(packSplash[0], packSplash[1], packSplash[2])
+    TexturePacker.processIfModified(packSplash[0], packSplash[1], packSplash[2])
   }
 }
 build.dependsOn packTextures
