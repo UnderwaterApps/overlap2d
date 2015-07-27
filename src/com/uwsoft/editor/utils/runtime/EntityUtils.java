@@ -31,15 +31,12 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -199,5 +196,17 @@ public class EntityUtils {
             SceneLoader sceneLoader = Sandbox.getInstance().getSceneControl().sceneLoader;
             sceneLoader.entityFactory.initAllChildren(Sandbox.getInstance().getEngine(), entity, compositeVo);
         }
+    }
+
+    public static LayerItemVO getEntityLayer(Entity entity) {
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(entity.getComponent(ParentNodeComponent.class).parentEntity, LayerMapComponent.class);
+        for(LayerItemVO layerItemVO: layerMapComponent.layers) {
+            if(layerItemVO.layerName.equals(mainItemComponent.layer)) {
+                return layerItemVO;
+            }
+        }
+
+        return null;
     }
 }

@@ -25,6 +25,7 @@ public class NewLayerCommand extends EntityModifyRevertableCommand {
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
         LayerItemVO vo = new LayerItemVO(layerName);
+        vo.isVisible = true;
         layerMapComponent.layers.add(index, vo);
 
         facade.sendNotification(DONE, layerName);
