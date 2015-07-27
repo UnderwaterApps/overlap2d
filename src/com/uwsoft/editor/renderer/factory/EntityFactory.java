@@ -18,6 +18,9 @@ import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.component.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 
 public class EntityFactory {
@@ -40,8 +43,6 @@ public class EntityFactory {
 			simpleImageComponentFactory, spriteComponentFactory, spriterComponentFactory, labelComponentFactory, ninePatchComponentFactory;
 
 	private HashMap<Integer, ComponentFactory> externalFactories = new HashMap<Integer, ComponentFactory>();
-
-	private int entityIterator = 0;
 
 	private HashMap<Integer, Entity> entities = new HashMap<Integer, Entity>();
 
@@ -203,10 +204,22 @@ public class EntityFactory {
 	public Integer postProcessEntity(Entity entity) {
 		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
-		if(mainItemComponent.uniqueId == -1) mainItemComponent.uniqueId = entityIterator++;
+		if(mainItemComponent.uniqueId == -1) mainItemComponent.uniqueId = getFreeId();
 		entities.put(mainItemComponent.uniqueId, entity);
 
 		return mainItemComponent.uniqueId;
+	}
+
+	private int getFreeId() {
+		if(entities == null || entities.size() == 0) return 1;
+		ArrayList<Integer> ids = new ArrayList<Integer>(entities.keySet());
+		Collections.sort(ids);
+		for(int i = 1; i < ids.size(); i++) {
+			if(ids.get(i)-ids.get(i-1) > 1) {
+				return ids.get(i-1)+1;
+			}
+		}
+		return ids.get(ids.size()-1)+1;
 	}
 
 	public Integer updateMap(Entity entity) {
