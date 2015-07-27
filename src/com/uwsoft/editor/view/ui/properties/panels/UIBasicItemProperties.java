@@ -197,8 +197,8 @@ public class UIBasicItemProperties extends UIItemProperties {
         return positionTable;
     }
 
-    public void setItemType(ItemType type) {
-        itemType.setText(itemTypeNameMap.get(type));
+    public void setItemType(ItemType type, int itemUniqueId) {
+        itemType.setText(itemTypeNameMap.get(type) + " ("+itemUniqueId+")");
         itemTypeIcon.setDrawable(VisUI.getSkin().getDrawable(itemTypeIconMap.get(type)));
         itemTypeIcon.setWidth(22);
     }
