@@ -70,6 +70,7 @@ public abstract class ComponentFactory {
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
         MainItemComponent component = new MainItemComponent();
         component.customVars = vo.customVars;
+        component.uniqueId = vo.uniqueId;
         component.itemIdentifier = vo.itemIdentifier;
         component.libraryLink = vo.itemName;
         component.tags = vo.tags;

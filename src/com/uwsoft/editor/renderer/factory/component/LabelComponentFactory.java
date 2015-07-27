@@ -49,6 +49,7 @@ public class LabelComponentFactory extends ComponentFactory{
     	LabelComponent component = new LabelComponent(vo.text, generateStyle(rm, vo.style, vo.size));
         component.fontName = vo.style;
         component.fontSize = vo.size;
+        component.setAlignment(vo.align);
 
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
         component.setFontScale(1f/projectInfoVO.pixelToWorld);

@@ -56,8 +56,8 @@ public class CompositeComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-        component.height = 100;
-        component.width = 100;
+        component.width = ((CompositeItemVO) vo).width;
+        component.height = ((CompositeItemVO) vo).height;
 
         entity.add(component);
         return component;

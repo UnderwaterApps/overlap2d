@@ -10,6 +10,7 @@ import java.util.Arrays;
 
 
 public class MainItemVO {
+	public int uniqueId = -1;
 	public String itemIdentifier = "";
 	public String itemName = "";
     public String[] tags = null;
@@ -37,6 +38,7 @@ public class MainItemVO {
 	}
 	
 	public MainItemVO(MainItemVO vo) {
+		uniqueId = vo.uniqueId;
 		itemIdentifier = new String(vo.itemIdentifier);
 		itemName = new String(vo.itemName);
         if(tags != null) tags = Arrays.copyOf(vo.tags, vo.tags.length);
@@ -71,6 +73,7 @@ public class MainItemVO {
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
 		ZIndexComponent zindexComponent = entity.getComponent(ZIndexComponent.class);
 
+		uniqueId = mainItemComponent.uniqueId;
 		itemIdentifier = mainItemComponent.itemIdentifier;
 		itemName = mainItemComponent.libraryLink;
 		tags = mainItemComponent.tags;

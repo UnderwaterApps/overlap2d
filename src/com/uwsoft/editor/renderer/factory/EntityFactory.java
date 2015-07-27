@@ -203,7 +203,7 @@ public class EntityFactory {
 	public Integer postProcessEntity(Entity entity) {
 		ComponentMapper<MainItemComponent> mainItemComponentComponentMapper = ComponentMapper.getFor(MainItemComponent.class);
 		MainItemComponent mainItemComponent = mainItemComponentComponentMapper.get(entity);
-		mainItemComponent.uniqueId = entityIterator++;
+		if(mainItemComponent.uniqueId == -1) mainItemComponent.uniqueId = entityIterator++;
 		entities.put(mainItemComponent.uniqueId, entity);
 
 		return mainItemComponent.uniqueId;
