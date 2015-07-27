@@ -32,6 +32,7 @@ import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
 import com.uwsoft.editor.controller.commands.NewLayerCommand;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.UILayerBox.UILayerItem;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
@@ -206,7 +207,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
     private void lockLayerByName(UILayerItem layerItem) {
     	String layerName = layerItem.getLayerName();
-    	boolean toLock = layerItem.isLocked();
+    	boolean toLock = !layerItem.isLocked();
     	if(toLock){
     		Sandbox.getInstance().getSelector().clearSelections();
     	}
@@ -245,15 +246,16 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     
     private void hideEntitiesByLayerName(UILayerItem layerItem) {
     	String layerName = layerItem.getLayerName();
-    	boolean toHide = layerItem.isLayerVisible();
+    	boolean toHide = !layerItem.isLayerVisible();
     	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
 
     	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
     	for(int i=0; i<nodeComponent.children.size; i++){
     		Entity entity = nodeComponent.children.get(i);
-    		MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-    		if(childeMainItemComponent.layer.equals(layerName)){
-    			childeMainItemComponent.visible = toHide;
+    		MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+    		if(childMainItemComponent.layer.equals(layerName)){
+    			childMainItemComponent.visible = toHide;
+                EntityUtils.getEntityLayer(entity).isVisible = toHide;
     		}
     	}
 	}

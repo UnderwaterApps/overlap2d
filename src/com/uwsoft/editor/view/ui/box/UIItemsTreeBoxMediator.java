@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
@@ -79,6 +80,11 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 for (Tree.Node node : nodes) {
                     Integer entityId = (Integer) node.getObject();
                     Entity item = EntityUtils.getByUniqueId(entityId);
+                    //layer lock thing
+                    LayerItemVO layerItemVO = EntityUtils.getEntityLayer(item);
+                    if(layerItemVO != null && layerItemVO.isLocked) {
+                        continue;
+                    }
                     if (item != null) {
                         addSelectionAction(item);
                     }

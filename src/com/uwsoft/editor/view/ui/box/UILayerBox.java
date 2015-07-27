@@ -283,6 +283,10 @@ public class UILayerBox extends UICollapsibleBox {
             add(lockBtn).left();
             add(visibleBtn).left().padRight(6);
             add(layerData.layerName).expandX().fillX();
+
+            lockBtn.setChecked(layerData.isLocked);
+            visibleBtn.setChecked(!layerData.isVisible);
+
             //
             itemSlot.setLayerItem(this);
         }
@@ -326,7 +330,6 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                layerData.isLocked = !layerData.isLocked;
                 facade.sendNotification(LOCK_LAYER, itemSlot.getUiLayerItem());
             }
         }
@@ -335,7 +338,6 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                layerData.isVisible = !layerData.isVisible;
                 facade.sendNotification(HIDE_LAYER, itemSlot.getUiLayerItem());
             }
         }

@@ -20,6 +20,7 @@ package com.uwsoft.editor.view.stage;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
@@ -28,6 +29,8 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
@@ -284,7 +287,6 @@ public class ItemSelector {
 
     /**
      * Selects all panels on currently active scene
-     * TODO: This should not select locked panels, check if it's true and remove this comment
      */
     public HashSet<Entity> getAllFreeItems() {
     	NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
@@ -292,6 +294,15 @@ public class ItemSelector {
 
         Entity[] array = childrenEntities.toArray();
         HashSet<Entity> result = new HashSet<>(Arrays.asList(array));
+
+        for (Iterator<Entity> i = result.iterator(); i.hasNext();) {
+            Entity element = i.next();
+            LayerItemVO layerItemVO = EntityUtils.getEntityLayer(element);
+            if(layerItemVO != null && layerItemVO.isLocked) {
+                i.remove();
+            }
+        }
+
         return result;
     }
 
