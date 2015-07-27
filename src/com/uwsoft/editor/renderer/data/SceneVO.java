@@ -3,6 +3,7 @@ package com.uwsoft.editor.renderer.data;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter.OutputType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 
@@ -18,6 +19,9 @@ public class SceneVO {
     public float[] ambientColor = {1f, 1f, 1f, 1f};
 
     public PhysicsPropertiesVO physicsPropertiesVO = new PhysicsPropertiesVO();
+
+    public ArrayList<Float> verticalGuides = new ArrayList<Float>();
+    public ArrayList<Float> horizontalGuides = new ArrayList<Float>();
 
     public SceneVO() {
 
