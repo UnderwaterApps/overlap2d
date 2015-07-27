@@ -27,18 +27,10 @@ import com.uwsoft.editor.proxy.ProjectManager;
 import net.mountainblade.modular.Module;
 import net.mountainblade.modular.ModuleManager;
 import net.mountainblade.modular.impl.DefaultModuleManager;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.text.WordUtils;
 
 import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLClassLoader;
 import java.util.Collection;
-import java.util.Enumeration;
-import java.util.jar.JarEntry;
-import java.util.jar.JarFile;
+
 
 /**
  * Created by azakhary on 7/24/2015.
