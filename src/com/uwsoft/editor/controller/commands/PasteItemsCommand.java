@@ -74,6 +74,7 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
             mainItemComponent.layer = layerBoxMediator.getCurrentSelectedLayerName();
             Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+            pastedEntityIds.add(EntityUtils.getEntityId(entity));
         }
         sandbox.getSelector().setSelections(newEntitiesList, true);
     }
