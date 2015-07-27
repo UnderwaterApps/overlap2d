@@ -104,6 +104,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             case DeleteLayerCommand.DONE:
                 initLayerData();
                 int deletedIndex = (int)notification.getBody()-1;
+                if(deletedIndex == -1) deletedIndex = 0;
                 viewComponent.setCurrentSelectedLayer(deletedIndex);
                 viewComponent.currentSelectedLayerIndex = deletedIndex;
                 break;
