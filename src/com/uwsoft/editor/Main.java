@@ -65,7 +65,7 @@ public class Main {
         Rectangle maximumWindowBounds = GraphicsEnvironment.getLocalGraphicsEnvironment().getMaximumWindowBounds();
         double width = maximumWindowBounds.getWidth();
         double height = maximumWindowBounds.getHeight();
-        
+
         if (SystemUtils.IS_OS_MAC_OSX || SystemUtils.IS_OS_MAC) {
             System.setProperty("apple.laf.useScreenMenuBar", "true");
             System.setProperty("com.apple.mrj.application.apple.menu.about.name", "Overlap2D");
@@ -121,17 +121,18 @@ public class Main {
     }
 
     public static void main(String[] argv) throws Exception {
-        String input = getLocalArtPath("textures");
-
         /**
          * this should not be happening when in release mode
          */
+         /**
+        String input = getLocalArtPath("textures");
         String output = "style";
         String packFileName = "uiskin";
         TexturePacker.Settings settings =  new TexturePacker.Settings();
         settings.flattenPaths = true;
         TexturePacker.processIfModified(input, output, packFileName);
         processSplashScreenTextures();
+        */
 
         new Main();
         UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
@@ -139,7 +140,7 @@ public class Main {
 
     private static void processSplashScreenTextures() {
         String input = getLocalArtPath("splash_textures");
-        
+
         String output = "splash";
         String packFileName = "splash";
         TexturePacker.Settings settings =  new TexturePacker.Settings();
@@ -173,7 +174,7 @@ public class Main {
             }
         }
     }
-    
+
     //THIS IS JUST FOR FUN
     private void setIcon(){
     	String logoPath = getLocalArtPath("splash_textures");
@@ -183,12 +184,12 @@ public class Main {
              file = new File(logoPath);
         }
         logoPath+="icon.png";
-    	
+
     	if(mainFrame != null){
     		mainFrame.setIconImage(Toolkit.getDefaultToolkit().getImage(logoPath));
     		return;
     	}
-    	
+
     	 try {
              Class util = Class.forName("com.apple.eawt.Application");
              Method getApplication = util.getMethod("getApplication", new Class[0]);
