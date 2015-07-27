@@ -307,6 +307,13 @@
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
+    },
+    "transparent": {
+      "selection": "selection",
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "default-font",
+      "fontColor": "white"
     }
   },
   "com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle": {

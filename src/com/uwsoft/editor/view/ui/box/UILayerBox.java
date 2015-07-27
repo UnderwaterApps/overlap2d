@@ -21,6 +21,7 @@ package com.uwsoft.editor.view.ui.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
@@ -30,9 +31,12 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisTextField.TextFieldListener;
+import com.kotcrab.vis.ui.widget.VisTextField.VisTextFieldStyle;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -145,8 +149,18 @@ public class UILayerBox extends UICollapsibleBox {
                 currentSelectedLayerIndex = rows.size - rows.indexOf(itemSlot, true) - 1;
 
                 facade.sendNotification(LAYER_ROW_CLICKED, itemSlot.getUiLayerItem());
+                
+                // Change name mode if double click
+            	if(getTapCount() == 2)
+            	{
+            		VisTextField textField = itemSlot.getUiLayerItem().getNameField();
+            		textField.setDisabled(false);
+            		textField.focusField();
+            		textField.selectAll();
+            	}
             }
         });
+
     }
 
     private static class SlotSource extends DragAndDrop.Source {
@@ -272,6 +286,8 @@ public class UILayerBox extends UICollapsibleBox {
         private final LayerItemVO layerData;
         private UILayerItemSlot itemSlot;
         private boolean selected;
+        
+        private VisTextField layerNameField;
 
         public UILayerItem(LayerItemVO layerData, UILayerItemSlot itemSlot) {
             super();
@@ -283,11 +299,26 @@ public class UILayerBox extends UICollapsibleBox {
             visibleBtn.addListener(new VisibleClickListener());
             add(lockBtn).left();
             add(visibleBtn).left().padRight(6);
-            add(layerData.layerName).expandX().fillX();
-            //
+            // TODO: InputValidator and Filter
+            //VisTextField layerName = StandardWidgetsFactory.createValidableTextField("transparent"/*, null, null*/);
+            layerNameField = StandardWidgetsFactory.createTextField("transparent");
+            layerNameField.setText(layerData.layerName);
+            layerNameField.setDisabled(true);
+            // Listener to update layer name
+            layerNameField.setTextFieldListener( new TextFieldListener() {
+				@Override
+				public void keyTyped(VisTextField textField, char c) {
+					layerData.layerName = textField.getText();
+				}
+            });
+            add(layerNameField).expandX().fillX();
             itemSlot.setLayerItem(this);
         }
 
+        public VisTextField getNameField() {
+        	return layerNameField;
+        }
+        
         public boolean isLocked() {
             return layerData.isLocked;
         }
