@@ -26,8 +26,10 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/22/2015.
@@ -140,6 +142,12 @@ public abstract class ComponentFactory {
         ParentNodeComponent component = new ParentNodeComponent();
         component.parentEntity = root;
         entity.add(component);
+
+        //set visible to true depending on parent
+        // TODO: I do not likes this part
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(root, LayerMapComponent.class);
+        mainItemComponent.visible = layerMapComponent.isVisible(mainItemComponent.layer);
 
         return component;
     }
