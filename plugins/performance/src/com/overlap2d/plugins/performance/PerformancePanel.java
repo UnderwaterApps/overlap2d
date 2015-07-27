@@ -64,6 +64,7 @@ public class PerformancePanel extends UIDraggablePanel {
         mainTable.add(new VisLabel("FPS: ")).right();
         mainTable.add(fpsLbl).left().padLeft(4);
         mainTable.row();
+        pack();
     }
 
     public void initLockView() {
@@ -75,9 +76,10 @@ public class PerformancePanel extends UIDraggablePanel {
     @Override
     public void act(float delta) {
         super.act(delta);
-
-        entitiesCount.setText(engine.getEntities().size()+"");
-        fpsLbl.setText(Gdx.graphics.getFramesPerSecond()+"");
+        if(entitiesCount != null && fpsLbl != null) {
+            entitiesCount.setText(engine.getEntities().size() + "");
+            fpsLbl.setText(Gdx.graphics.getFramesPerSecond() + "");
+        }
     }
 
     public void setEngine(Engine engine) {
