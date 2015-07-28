@@ -145,86 +145,60 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         
     }
     
-    //TODO
-    //THIS PART IS SUPER VERY VERY TEMPORARRY it's need to be overwritten 
-
-    @Override
-    public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
-    	 
-        Sandbox sandbox = Sandbox.getInstance();
-
-        Vector2 mousePointStage = sandbox.screenToWorld(x, y);
-        x = mousePointStage.x;
-        y = mousePointStage.y;
-
-        TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
-        
+    private void defaultAnchorDraggedLogic(Vector2 mousePointStage, int anchor, Entity entity) {
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
         float newX = transformComponent.x;
         float newY = transformComponent.y;
         float newWidth = dimensionsComponent.width*transformComponent.scaleX;
         float newHeight = dimensionsComponent.height*transformComponent.scaleY;
 
-        float newOriginX = transformComponent.originX;
-        float newOriginY = transformComponent.originY;
-        float tmpAdjustmenX = transformComponent.originX*(transformComponent.scaleX-1);
-        float tmpAdjustmenY = transformComponent.originY*(transformComponent.scaleY-1);
-        
+        float tmpAdjustmentX = transformComponent.originX*(transformComponent.scaleX-1);
+        float tmpAdjustmentY = transformComponent.originY*(transformComponent.scaleY-1);
+
         final float cos = MathUtils.cosDeg(transformComponent.rotation);
         final float sin = MathUtils.sinDeg(transformComponent.rotation);
-        
-        float difX = (transformComponent.x - x);
-    	float difY = (transformComponent.y - y);
-    	
-    	difX = (difX * cos + difY * sin);
-    	difY = (difX * -sin + difY * cos);
-    	
+
+        float difX = (transformComponent.x - mousePointStage.x);
+        float difY = (transformComponent.y - mousePointStage.y);
+
+        difX = (difX * cos + difY * sin);
+        difY = (difX * -sin + difY * cos);
+
         switch (anchor) {
-            case NormalSelectionFollower.ORIGIN:
-            	//TODO this shit is to complicated will leave it for now
-//                newOriginX = x - transformComponent.x;
-//                newOriginY = y - transformComponent.y;
-                // TODO: adjust coordinates
-                //final float cos = (float)Math.cos(transformComponent.rotation * MathUtils.degreesToRadians);
-                //final float sin = (float)Math.sin(transformComponent.rotation * MathUtils.degreesToRadians);
-                //final float tox = (localCoords.x - originX) * scaleX;
-                //final float toy = (localCoords.y - originY) * scaleY;
-                //newX = (newX * cos + newY * sin)+newX;
-                //newY = (newX * -sin + newY * cos)+newY;
-                break;
-           
             case NormalSelectionFollower.L:
-            	newWidth = dimensionsComponent.width + difX*2;
+                newWidth = dimensionsComponent.width + difX*2;
                 break;
             case NormalSelectionFollower.R:
-                newWidth = tmpAdjustmenX - difX;
+                newWidth = tmpAdjustmentX - difX;
                 break;
             case NormalSelectionFollower.B:
-            	newHeight = dimensionsComponent.height + difY*2;
+                newHeight = dimensionsComponent.height + difY*2;
                 break;
             case NormalSelectionFollower.T:
-                newHeight = tmpAdjustmenY - difY;
+                newHeight = tmpAdjustmentY - difY;
                 break;
             case NormalSelectionFollower.LT:
-            	newWidth = dimensionsComponent.width + difX*2;
-            	newHeight = tmpAdjustmenY - difY;
+                newWidth = dimensionsComponent.width + difX*2;
+                newHeight = tmpAdjustmentY - difY;
                 break;
             case NormalSelectionFollower.RT:
-            	newWidth = tmpAdjustmenX - difX;
-            	newHeight = tmpAdjustmenY - difY;
+                newWidth = tmpAdjustmentX - difX;
+                newHeight = tmpAdjustmentY - difY;
                 break;
             case NormalSelectionFollower.RB:
-            	newWidth = tmpAdjustmenX - difX;
-            	newHeight = dimensionsComponent.height + difY*2;
+                newWidth = tmpAdjustmentX - difX;
+                newHeight = dimensionsComponent.height + difY*2;
                 break;
             case NormalSelectionFollower.LB:
-            	newWidth = dimensionsComponent.width + difX*2;
-            	newHeight = dimensionsComponent.height + difY*2;
+                newWidth = dimensionsComponent.width + difX*2;
+                newHeight = dimensionsComponent.height + difY*2;
                 break;
         }
-        
 
+
+        // This was making sure for proportional sizing
         if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
             float enclosingRectSize = Math.max(newWidth, newHeight);
             if (dimensionsComponent.width >= dimensionsComponent.height) {
@@ -238,38 +212,139 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
         }
 
-        if(anchor != NormalSelectionFollower.ORIGIN) {
-            newOriginX = (newWidth/(dimensionsComponent.width * transformComponent.scaleX)) * newOriginX;
-            newOriginY = (newHeight/(dimensionsComponent.height * transformComponent.scaleY)) * newOriginY;
-        }
-
+        // Rotating
         if(anchor >= NormalSelectionFollower.ROTATION_LT && anchor <= NormalSelectionFollower.ROTATION_LB) {
             Vector2 originPoint = new Vector2(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
-        	mousePointStage.sub(originPoint);
+            mousePointStage.sub(originPoint);
             float currentAngle = mousePointStage.angle();
             float angleDiff = currentAngle - lastTransformAngle;
             transformComponent.rotation = lastEntityAngle+angleDiff;
         }
 
-        
-        //transformComponent.y = newY;
-        if(EntityUtils.getType(follower.getEntity()) == EntityFactory.NINE_PATCH) {
-            NinePatchComponent ninePatchComponent = ComponentRetriever.get(follower.getEntity(), NinePatchComponent.class);
-            if(newWidth < ninePatchComponent.ninePatch.getTotalWidth()) newWidth = ninePatchComponent.ninePatch.getTotalWidth();
-            if(newHeight < ninePatchComponent.ninePatch.getTotalHeight()) newHeight = ninePatchComponent.ninePatch.getTotalHeight();
 
-            dimensionsComponent.width = newWidth;
-            dimensionsComponent.height = newHeight;
-        } else{
-            transformComponent.scaleX = newWidth / dimensionsComponent.width;
-            transformComponent.scaleY = newHeight / dimensionsComponent.height;            
-        }
-        
+        transformComponent.scaleX = newWidth / dimensionsComponent.width;
+        transformComponent.scaleY = newHeight / dimensionsComponent.height;
+
         transformComponent.x = newX;
         transformComponent.y = newY;
-        
-        //transformComponent.originX = newOriginX;
-        //transformComponent.originY = newOriginY;
+    }
+
+    private void ninePatchAnchorDraggedLogic(Vector2 mousePointStage, int anchor, Entity entity) {
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+
+        float newX = transformComponent.x;
+        float newY = transformComponent.y;
+        float newWidth = dimensionsComponent.width;
+        float newHeight = dimensionsComponent.height;
+
+        NinePatchComponent ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
+        float minWidth = ninePatchComponent.ninePatch.getTotalWidth();
+        float minHeight = ninePatchComponent.ninePatch.getTotalHeight();
+
+        switch (anchor) {
+            case NormalSelectionFollower.L:
+                newWidth = dimensionsComponent.width + (transformComponent.x-mousePointStage.x);
+                if(newWidth < minWidth) {
+                    newX = mousePointStage.x - (minWidth-newWidth);
+                    newWidth = minWidth;
+                } else {
+                    newX = mousePointStage.x;
+                }
+                break;
+            case NormalSelectionFollower.R:
+                newWidth = dimensionsComponent.width + (mousePointStage.x - (transformComponent.x+dimensionsComponent.width));
+                if(newWidth < minWidth) {
+                    newWidth = minWidth;
+                }
+                break;
+            case NormalSelectionFollower.B:
+                newHeight = dimensionsComponent.height + (transformComponent.y-mousePointStage.y);
+                if(newHeight < minHeight) {
+                    newY = mousePointStage.y - (minHeight-newHeight);
+                    newHeight = minHeight;
+                } else {
+                    newY = mousePointStage.y;
+                }
+                break;
+            case NormalSelectionFollower.T:
+                newHeight = dimensionsComponent.height + (mousePointStage.y - (transformComponent.y+dimensionsComponent.height));
+                if(newHeight < minHeight) {
+                    newHeight = minHeight;
+                }
+                break;
+            case NormalSelectionFollower.LT:
+                newWidth = dimensionsComponent.width + (transformComponent.x-mousePointStage.x);
+                newHeight = dimensionsComponent.height + (mousePointStage.y - (transformComponent.y+dimensionsComponent.height));
+                if(newWidth < minWidth) {
+                    newX = mousePointStage.x - (minWidth-newWidth);
+                    newWidth = minWidth;
+                } else {
+                    newX = mousePointStage.x;
+                }
+                if(newHeight < minHeight) {
+                    newHeight = minHeight;
+                }
+                break;
+            case NormalSelectionFollower.RT:
+                newWidth = dimensionsComponent.width + (mousePointStage.x - (transformComponent.x+dimensionsComponent.width));
+                newHeight = dimensionsComponent.height + (mousePointStage.y - (transformComponent.y+dimensionsComponent.height));
+                if(newHeight < minHeight) {
+                    newHeight = minHeight;
+                }
+                if(newWidth < minWidth) {
+                    newWidth = minWidth;
+                }
+                break;
+            case NormalSelectionFollower.RB:
+                newWidth = dimensionsComponent.width + (mousePointStage.x - (transformComponent.x+dimensionsComponent.width));
+                newHeight = dimensionsComponent.height + (transformComponent.y-mousePointStage.y);
+                if(newWidth < minWidth) {
+                    newWidth = minWidth;
+                }
+                if(newHeight < minHeight) {
+                    newY = mousePointStage.y - (minHeight-newHeight);
+                    newHeight = minHeight;
+                } else {
+                    newY = mousePointStage.y;
+                }
+                break;
+            case NormalSelectionFollower.LB:
+                newWidth = dimensionsComponent.width + (transformComponent.x-mousePointStage.x);
+                newHeight = dimensionsComponent.height + (transformComponent.y-mousePointStage.y);
+                if(newWidth < minWidth) {
+                    newX = mousePointStage.x - (minWidth-newWidth);
+                    newWidth = minWidth;
+                } else {
+                    newX = mousePointStage.x;
+                }
+                if(newHeight < minHeight) {
+                    newY = mousePointStage.y - (minHeight-newHeight);
+                    newHeight = minHeight;
+                } else {
+                    newY = mousePointStage.y;
+                }
+                break;
+        }
+
+
+        transformComponent.x = newX;
+        transformComponent.y = newY;
+        dimensionsComponent.width = newWidth;
+        dimensionsComponent.height = newHeight;
+    }
+
+    @Override
+    public void anchorDragged(NormalSelectionFollower follower, int anchor, float x, float y) {
+        Sandbox sandbox = Sandbox.getInstance();
+
+        Vector2 mousePointStage = sandbox.screenToWorld(x, y);
+
+        if(EntityUtils.getType(follower.getEntity()) == EntityFactory.NINE_PATCH) {
+            ninePatchAnchorDraggedLogic(mousePointStage, anchor, follower.getEntity());
+        } else {
+            defaultAnchorDraggedLogic(mousePointStage, anchor, follower.getEntity());
+        }
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
       
