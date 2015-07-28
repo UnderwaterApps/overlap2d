@@ -25,11 +25,15 @@ import java.util.Set;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -39,38 +43,59 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
     private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteItemsCommand";
     public static final String DONE = CLASS_NAME + "DONE";
 
-   private HashMap<Integer, Collection<Component>> backup;
+    private String backup;
+    private Array<Integer> entityIdsToDelete;
 
     private void backup() {
-        backup = EntityUtils.cloneEntities(sandbox.getSelector().getSelectedItems());
+        Set<Entity> entitySet = new HashSet<>();
+        if(entityIdsToDelete == null) {
+            entityIdsToDelete = new Array<>();
+            entitySet = sandbox.getSelector().getSelectedItems();
+            for(Entity entity: entitySet) {
+                entityIdsToDelete.add(EntityUtils.getEntityId(entity));
+            }
+        } else {
+            for(Integer entityId: entityIdsToDelete) {
+                entitySet.add(EntityUtils.getByUniqueId(entityId));
+            }
+        }
+
+        backup = CopyItemsCommand.getJsonStringFromEntities(entitySet);
     }
 
     @Override
     public void doAction() {
         backup();
-        sandbox.getSelector().removeCurrentSelectedItems();
+
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        for (Integer entityId : entityIdsToDelete) {
+            Entity item = EntityUtils.getByUniqueId(entityId);
+            followersUIMediator.removeFollower(item);
+            sandbox.getEngine().removeEntity(item);
+        }
+
+        sandbox.getSelector().getCurrentSelection().clear();
 
         facade.sendNotification(DONE);
     }
 
     @Override
     public void undoAction() {
-        Set<Entity> newEntitiesList = new HashSet<>();
-        for (Collection<Component> components : backup.values()) {
-            Entity entity = new Entity();
-            for(Component component: components) {
-                entity.add(component);
-            }
-            sandbox.getEngine().addEntity(entity);
-            sandbox.getSceneControl().sceneLoader.entityFactory.updateMap(entity);
-            Entity parentEntity = entity.getComponent(ParentNodeComponent.class).parentEntity;
-            NodeComponent nodeComponent = parentEntity.getComponent(NodeComponent.class);
-            nodeComponent.addChild(entity);
-            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        Json json =  new Json();
+        CompositeVO compositeVO = json.fromJson(CompositeVO.class, backup);
+        Set<Entity> newEntitiesList = PasteItemsCommand.createEntitiesFromVO(compositeVO);
 
-            newEntitiesList.add(entity);
+        for (Entity entity : newEntitiesList) {
+            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
         }
 
         sandbox.getSelector().setSelections(newEntitiesList, true);
+    }
+
+    public void setItemsToDelete(Set<Entity> entities) {
+        entityIdsToDelete = new Array<>();
+        for(Entity entity: entities) {
+            entityIdsToDelete.add(EntityUtils.getEntityId(entity));
+        }
     }
 }

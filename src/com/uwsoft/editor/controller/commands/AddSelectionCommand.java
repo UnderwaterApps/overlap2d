@@ -34,10 +34,13 @@ public class AddSelectionCommand extends RevertableCommand {
 
     @Override
     public void doAction() {
-        Set<Entity> items = getNotification().getBody();
-        Sandbox.getInstance().getSelector().addSelections(items);
+        if(entityIds == null) {
+            Set<Entity> items = getNotification().getBody();
+            entityIds = EntityUtils.getEntityId(items);
+        }
 
-        entityIds = EntityUtils.getEntityId(items);
+        Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
+        Sandbox.getInstance().getSelector().addSelections(items);
     }
 
     @Override

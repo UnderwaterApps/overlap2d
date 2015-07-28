@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.view.frame;
 
-import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2DFacade;
 
 import java.awt.dnd.DropTargetDragEvent;

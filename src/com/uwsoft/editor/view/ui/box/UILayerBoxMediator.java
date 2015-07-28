@@ -30,6 +30,9 @@ import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
+import com.uwsoft.editor.controller.commands.NewLayerCommand;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.UILayerBox.UILayerItem;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
@@ -64,13 +67,16 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 SceneDataManager.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
-                UILayerBox.DELETE_NEW_LAYER,
+                UILayerBox.DELETE_LAYER,
                 UILayerBox.LOCK_LAYER,
                 UILayerBox.HIDE_LAYER,
                 CompositeCameraChangeCommand.DONE,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 ItemFactory.NEW_ITEM_ADDED,
-                UILayerBox.LAYER_DROPPED
+                UILayerBox.LAYER_DROPPED,
+                DeleteLayerCommand.DONE,
+                DeleteLayerCommand.UNDONE,
+                NewLayerCommand.DONE
 
 
         }).flatMap(Stream::of).toArray(String[]::new);
@@ -83,9 +89,28 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initLayerData();
+                viewComponent.setCurrentSelectedLayer(0);
+                viewComponent.currentSelectedLayerIndex = 0;
                 break;
             case CompositeCameraChangeCommand.DONE:
                 initLayerData();
+                viewComponent.setCurrentSelectedLayer(0);
+                viewComponent.currentSelectedLayerIndex = 0;
+                break;
+            case NewLayerCommand.DONE:
+                initLayerData();
+                setSelectedByName(notification.getBody());
+                break;
+            case DeleteLayerCommand.DONE:
+                initLayerData();
+                int deletedIndex = (int)notification.getBody()-1;
+                if(deletedIndex == -1) deletedIndex = 0;
+                viewComponent.setCurrentSelectedLayer(deletedIndex);
+                viewComponent.currentSelectedLayerIndex = deletedIndex;
+                break;
+            case DeleteLayerCommand.UNDONE:
+                initLayerData();
+                setSelectedByName(notification.getBody());
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
             	layerItem = notification.getBody();
@@ -96,11 +121,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     @Override
                     public void finished(String input) {
                         if (checkIfNameIsUnique(input)) {
-                            LayerItemVO layerVo = new LayerItemVO();
-                            layerVo.layerName = input;
-                            viewComponent.addItem(layerVo);
-                            addNewLayerToItemComposite(layerVo);
-                            initLayerData();
+                            Object[] payload = NewLayerCommand.payload(viewComponent.getCurrentSelectedLayerIndex()+1, input);
+                            facade.sendNotification(Sandbox.ACTION_NEW_LAYER, payload);
                         } else {
                             // show error dialog
                         }
@@ -115,11 +137,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 // remake layers array
                 remakeLayersArray();
                 break;
-            case UILayerBox.DELETE_NEW_LAYER:
+            case UILayerBox.DELETE_LAYER:
                 if (layers == null) return;
-                if (viewComponent.getCurrentSelectedLayerIndex() != -1 && !layers.get(viewComponent.getCurrentSelectedLayerIndex()).layerName.equals("Default")) {
-                    layers.remove(viewComponent.getCurrentSelectedLayerIndex());
-                    initLayerData();
+                int deletingLayerIndex = viewComponent.getCurrentSelectedLayerIndex();
+                if(deletingLayerIndex != -1) {
+                    String layerName = layers.get(deletingLayerIndex).layerName;
+                    facade.sendNotification(Sandbox.ACTION_DELETE_LAYER, layerName);
                 }
                 break;
             case UILayerBox.LOCK_LAYER:
@@ -135,7 +158,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 if(selection.size() == 1) {
                     MainItemComponent mainItemComponent = ComponentRetriever.get(selection.iterator().next(), MainItemComponent.class);
                     int index = findLayerByName(mainItemComponent.layer);
-                    viewComponent.setCurrentSelectedLayer(index);
+                    if(index == -1) {
+                        // handle this somehow
+                    } else {
+                        viewComponent.setCurrentSelectedLayer(index);
+                        viewComponent.currentSelectedLayerIndex = index;
+                    }
                 } else if (selection.size() > 1) {
                     // multi selection handling not yet clear
                 }
@@ -144,10 +172,21 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 int index = viewComponent.getCurrentSelectedLayerIndex();
                 Entity item = notification.getBody();
                 MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
-                mainItemComponent.layer = layers.get(index).layerName;
+                if(mainItemComponent.layer == null) mainItemComponent.layer = layers.get(index).layerName;
                 break;
             default:
                 break;
+        }
+    }
+
+    private void setSelectedByName(String name) {
+        String deletedLayerName = name;
+        for(int i = 0; i < layers.size(); i++) {
+            if (layers.get(i).layerName.equals(deletedLayerName)) {
+                viewComponent.setCurrentSelectedLayer(i);
+                viewComponent.currentSelectedLayerIndex = i;
+                break;
+            }
         }
     }
 
@@ -169,7 +208,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
     private void lockLayerByName(UILayerItem layerItem) {
     	String layerName = layerItem.getLayerName();
-    	boolean toLock = layerItem.isLocked();
+    	boolean toLock = !layerItem.isLocked();
     	if(toLock){
     		Sandbox.getInstance().getSelector().clearSelections();
     	}
@@ -208,15 +247,16 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     
     private void hideEntitiesByLayerName(UILayerItem layerItem) {
     	String layerName = layerItem.getLayerName();
-    	boolean toHide = layerItem.isLayerVisible();
+    	boolean toHide = !layerItem.isLayerVisible();
     	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
 
     	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
     	for(int i=0; i<nodeComponent.children.size; i++){
     		Entity entity = nodeComponent.children.get(i);
-    		MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-    		if(childeMainItemComponent.layer.equals(layerName)){
-    			childeMainItemComponent.visible = toHide;
+    		MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+    		if(childMainItemComponent.layer.equals(layerName)){
+    			childMainItemComponent.visible = toHide;
+                EntityUtils.getEntityLayer(entity).isVisible = toHide;
     		}
     	}
 	}

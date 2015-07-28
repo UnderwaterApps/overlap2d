@@ -29,6 +29,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.commons.O2DDialog;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.widget.InputFileWidget;
 

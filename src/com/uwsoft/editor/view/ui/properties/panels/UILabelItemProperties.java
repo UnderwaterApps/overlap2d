@@ -161,7 +161,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         alignSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
         boldCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         italicCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        fontSizeField.addChangeListener(new NumberSelectorOverlapListener(getUpdateEventName()));
+        fontSizeField.addListener(new KeyboardListener(getUpdateEventName()));
         textArea.addListener(new KeyboardListener(getUpdateEventName()));
     }
 }

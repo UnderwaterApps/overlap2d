@@ -6,6 +6,7 @@ buildscript {
     dependencies {
         classpath 'net.sf.proguard:proguard-gradle:5.0'
         classpath 'org.ajoberstar:gradle-git:1.2.0'
+        classpath 'com.badlogicgames.gdx:gdx-tools:1.6.4'
     }
 }
 
@@ -13,12 +14,15 @@ allprojects {
     apply plugin: "eclipse"
     apply plugin: "idea"
 
-    version = '0.1.0'
+    version = '0.1.1'
     ext {
         appName = 'Overlap2D'
         gdxVersion = '1.6.2'
         box2DLightsVersion = '1.4'
         visuiVersion = '0.7.6'
+
+        packMain = ["art/textures", "assets/style/", "uiskin"]
+        packSplash = ["art/splash_textures", "assets/splash/", "splash"]
     }
 
     repositories {
@@ -26,6 +30,7 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
+        maven { url "http://repo.serkprojects.com/content/groups/public/" }
         jcenter()
     }
 }
@@ -37,7 +42,7 @@ import org.ajoberstar.grgit.*
 def spineDestination = file("spine-runtimes")
 if(!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
 def o2dRuntimeDestination = file("overlap2d-runtime-libgdx")
-if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/azakhary/overlap2d-runtime-libgdx.git')
+if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/UnderwaterApps/overlap2d-runtime-libgdx.git')
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
@@ -58,7 +63,21 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
     compile "com.mortennobel:java-image-scaling:0.8.5"
+    compile "net.mountainblade:modular:1.0-SNAPSHOT"
 }
+
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+task packTextures << {
+  if (project.ext.has('packMain')) {
+    logger.info "Calling TexturePacker: "+packMain
+    TexturePacker.processIfModified(packMain[0], packMain[1], packMain[2])
+  }
+  if (project.ext.has('packSplash')) {
+    logger.info "Calling TexturePacker: "+packSplash
+    TexturePacker.processIfModified(packSplash[0], packSplash[1], packSplash[2])
+  }
+}
+build.dependsOn packTextures
 
 project(":overlap2d-runtime-libgdx") {
     apply plugin: "java"

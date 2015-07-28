@@ -31,7 +31,6 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 /**
@@ -41,7 +40,7 @@ public class UILayerBox extends UICollapsibleBox {
 
     public static final String LAYER_ROW_CLICKED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_ROW_CLICKED";
     public static final String CREATE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CREATE_NEW_LAYER";
-    public static final String DELETE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
+    public static final String DELETE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
     public static final String LOCK_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LOCK_LAYER";
     public static final String HIDE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".HIDE_LAYER";
     public static final String LAYER_DROPPED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_DROPPED";
@@ -94,7 +93,7 @@ public class UILayerBox extends UICollapsibleBox {
         deleteBtn.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                facade.sendNotification(DELETE_NEW_LAYER);
+                facade.sendNotification(DELETE_LAYER);
             }
         });
         dragAndDrop = new DragAndDrop();
@@ -284,6 +283,10 @@ public class UILayerBox extends UICollapsibleBox {
             add(lockBtn).left();
             add(visibleBtn).left().padRight(6);
             add(layerData.layerName).expandX().fillX();
+
+            lockBtn.setChecked(layerData.isLocked);
+            visibleBtn.setChecked(!layerData.isVisible);
+
             //
             itemSlot.setLayerItem(this);
         }
@@ -327,7 +330,6 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                layerData.isLocked = !layerData.isLocked;
                 facade.sendNotification(LOCK_LAYER, itemSlot.getUiLayerItem());
             }
         }
@@ -336,7 +338,6 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                layerData.isVisible = !layerData.isVisible;
                 facade.sendNotification(HIDE_LAYER, itemSlot.getUiLayerItem());
             }
         }
