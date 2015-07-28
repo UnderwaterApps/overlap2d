@@ -433,6 +433,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 zoomPercent-=amount*4f;
                 if(zoomPercent < 5 ) zoomPercent = 5;
                 sandbox.setZoomPercent(zoomPercent);
+
+                facade.sendNotification(Overlap2D.ZOOM_CHANGED);
             }
             // if item is currently being held with mouse (touched in but not touched out)
             // mouse scroll should rotate the selection around it's origin
