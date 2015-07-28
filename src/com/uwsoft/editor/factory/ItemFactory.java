@@ -22,7 +22,9 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.controller.commands.PasteItemsCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
@@ -135,6 +137,8 @@ public class ItemFactory {
         HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
         CompositeItemVO itemVO = libraryItems.get(libraryName);
+        itemVO.uniqueId = -1;
+        PasteItemsCommand.forceIdChange(itemVO.composite);
         Entity entity = createCompositeItem(itemVO, position);
 
         //adding library name
