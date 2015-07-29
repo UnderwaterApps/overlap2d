@@ -202,9 +202,9 @@ public class ProjectManager extends BaseProxy {
             try {
                 projectContents = FileUtils.readFileToString(projectFile.file());
                 Json json = new Json();
+                json.setIgnoreUnknownFields(true);
                 ProjectVO vo = json.fromJson(ProjectVO.class, projectContents);
                 goThroughVersionMigrationProtocol(projectPath, vo);
-                json.setIgnoreUnknownFields(true);
                 currentProjectVO = vo;
                 String prjInfoFilePath = projectPath + "/project.dt";
                 FileHandle projectInfoFile = Gdx.files.internal(prjInfoFilePath);
