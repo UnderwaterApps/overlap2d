@@ -24,7 +24,3 @@ repositories {
     maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
     maven { url "https://oss.sonatype.org/content/repositories/releases/" }
 }
-
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
-}
