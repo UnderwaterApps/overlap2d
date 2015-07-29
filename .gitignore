@@ -3,7 +3,6 @@ bin/
 .DS_STORE
 .idea/
 .gradle/
-gradle
 build/
 target/
 *.iml
