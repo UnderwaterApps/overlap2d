@@ -83,9 +83,9 @@ public class UIAlignBox extends UICollapsibleBox {
         alignButtonsTable.row().padTop(6);
         alignButtonsTable.add("At Edge:").padRight(8).right();
         alignButtonsTable.add(createAlignButton("align-edge-right", ALIGN_AT_EDGE_LEFT)).padRight(4).left();
-        alignButtonsTable.add(createAlignButton("align-edge-up", ALIGN_AT_EDGE_TOP)).padRight(4).left();
+        alignButtonsTable.add(createAlignButton("align-edge-up", ALIGN_AT_EDGE_BOTTOM)).padRight(4).left();
         alignButtonsTable.add(createAlignButton("align-edge-left", ALIGN_AT_EDGE_RIGHT)).padRight(4).left();
-        alignButtonsTable.add(createAlignButton("align-edge-down", ALIGN_AT_EDGE_BOTTOM)).expandX().left();
+        alignButtonsTable.add(createAlignButton("align-edge-down", ALIGN_AT_EDGE_TOP)).expandX().left();
         //
         createCollapsibleWidget(alignButtonsTable);
     }
