@@ -53,6 +53,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 SceneDataManager.SCENE_LOADED,
                 ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED,
+                Sandbox.ACTION_SET_SELECTION,
                 DeleteItemsCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
@@ -91,8 +92,20 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 }
 
                 break;
+            case Sandbox.ACTION_SET_SELECTION:
+                Set<Entity> items = notification.getBody();
+                if (items == null) {
+                    //TODO viewComponent.
+                } else {
+                    viewComponent.setSelected(items);
+                }
+
+                System.out.println("BLA " + o++);
+                break;
         }
     }
+
+    static int o = 0;
 
     private void addSelectionAction(Entity entity) {
         Set<Entity> items = new HashSet<>();

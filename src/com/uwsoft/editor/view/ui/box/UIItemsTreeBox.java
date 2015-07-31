@@ -20,6 +20,7 @@ package com.uwsoft.editor.view.ui.box;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
@@ -130,6 +131,24 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         return node;
     }
 
+    public void setSelected(Set<Entity> selection) {
+
+        if (tree == null) return;
+        tree.getSelection().clear();
+        Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
+        System.out.println("SELECTING");
+        for (Entity s : selection) {
+            System.out.println("entity " + s.getId());
+            for (Node n : allSceneRootNodes) {
+                System.out.println("node " + n.getObject());
+
+                if(n.getObject().equals(s.getId())) {
+                    tree.getSelection().add(n);
+                    //break;
+                }
+            }
+        }
+    }
 
     public void setSelected(HashMap<Entity, NormalSelectionFollower> currentSelection) {
         if (tree == null) return;
