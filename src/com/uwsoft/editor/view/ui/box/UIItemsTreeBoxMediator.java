@@ -42,6 +42,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     private static final String TAG = UIItemsTreeBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private final Set<Set<Entity>> recentlySelected = new HashSet<>();
+
     public UIItemsTreeBoxMediator() {
         super(NAME, new UIItemsTreeBox());
     }
@@ -54,6 +56,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED,
                 Sandbox.ACTION_SET_SELECTION,
+                Sandbox.ACTION_ADD_SELECTION,
+                Sandbox.ACTION_RELEASE_SELECTION,
                 DeleteItemsCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
@@ -78,6 +82,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
             case UIItemsTreeBox.ITEMS_SELECTED:
                 Selection<Tree.Node> selection = notification.getBody();
                 Array<Tree.Node> nodes = selection.toArray();
+                Set<Entity> items = new HashSet<>();
+
                 for (Tree.Node node : nodes) {
                     Integer entityId = (Integer) node.getObject();
                     Entity item = EntityUtils.getByUniqueId(entityId);
@@ -87,29 +93,39 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                         continue;
                     }
                     if (item != null) {
-                        addSelectionAction(item);
+                        items.add(item);
                     }
                 }
 
+                sendSelectionNotification(items);
+
                 break;
             case Sandbox.ACTION_SET_SELECTION:
-                Set<Entity> items = notification.getBody();
-                if (items == null) {
-                    //TODO viewComponent.
-                } else {
-                    viewComponent.setSelected(items);
+                Set<Entity> selected = notification.getBody();
+                //avoids cyclic mediation
+                if(recentlySelected.contains(selected)) {
+                    recentlySelected.remove(selected);
+                    break;
                 }
+                viewComponent.setSelection(selected);
 
-                System.out.println("BLA " + o++);
+                break;
+            case Sandbox.ACTION_ADD_SELECTION:
+                Set<Entity> addSelected = notification.getBody();
+                viewComponent.addToSelection(addSelected);
+
+                break;
+            case Sandbox.ACTION_RELEASE_SELECTION:
+                Set<Entity> removeSelected = notification.getBody();
+                viewComponent.removeFromSelection(removeSelected);
+
                 break;
         }
     }
 
-    static int o = 0;
-
-    private void addSelectionAction(Entity entity) {
-        Set<Entity> items = new HashSet<>();
-        items.add(entity);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+    private void sendSelectionNotification(Set<Entity> items) {
+        Set<Entity> ntfItems = (items.isEmpty())? null : items;
+        recentlySelected.add(ntfItems);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, ntfItems);
     }
 }
