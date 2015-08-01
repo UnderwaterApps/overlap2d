@@ -89,13 +89,15 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initLayerData();
-                viewComponent.setCurrentSelectedLayer(0);
-                viewComponent.currentSelectedLayerIndex = 0;
+                int layerid = getFirstFreeLayer();
+                viewComponent.setCurrentSelectedLayer(layerid);
+                viewComponent.currentSelectedLayerIndex = layerid;
                 break;
             case CompositeCameraChangeCommand.DONE:
                 initLayerData();
-                viewComponent.setCurrentSelectedLayer(0);
-                viewComponent.currentSelectedLayerIndex = 0;
+                layerid = getFirstFreeLayer();
+                viewComponent.setCurrentSelectedLayer(layerid);
+                viewComponent.currentSelectedLayerIndex = layerid;
                 break;
             case NewLayerCommand.DONE:
                 initLayerData();
@@ -227,6 +229,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 	private void selectEntitiesByLayerName(UILayerItem layerItem) {
 		if(layerItem.isLocked()){
 			Sandbox.getInstance().getSelector().clearSelections();
+            viewComponent.clearSelection();
 			return;
 		}
 		String layerName = layerItem.getLayerName();
@@ -281,6 +284,16 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         return true;
     }
 
+    private int getFirstFreeLayer() {
+        for(int i = 0; i < layers.size(); i++) {
+            if(!layers.get(i).isLocked) {
+                return i;
+            }
+        }
+
+        return -1;
+    }
+
     private void initLayerData() {
 
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
@@ -299,6 +312,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     }
 
     public String getCurrentSelectedLayerName() {
+        if(viewComponent.getCurrentSelectedLayerIndex() == -1) return null;
         return layers.get(viewComponent.getCurrentSelectedLayerIndex()).layerName;
     }
 }

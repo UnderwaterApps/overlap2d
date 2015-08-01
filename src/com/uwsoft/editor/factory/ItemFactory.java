@@ -71,6 +71,8 @@ public class ItemFactory {
         UILayerBoxMediator layerBoxMediator = Overlap2DFacade.getInstance().retrieveMediator(UILayerBoxMediator.NAME);
         String layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
+        if(layerName == null) return false;
+
         vo.layerName = layerName;
 
         // This is for grid
