@@ -23,8 +23,10 @@ import java.util.Set;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -171,10 +173,8 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     }
 
 
-    private class TreeChangeListener extends ChangeListener {
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
+    private class TreeChangeListener extends ClickListener {
+        public void clicked (InputEvent event, float x, float y) {
             Selection<Node> selection = tree.getSelection();
             selection.remove(rootNode);
             facade.sendNotification(ITEMS_SELECTED, selection);

@@ -23,7 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.AddSelectionCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
+import com.uwsoft.editor.controller.commands.ReleaseSelectionCommand;
+import com.uwsoft.editor.controller.commands.SetSelectionCommand;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -42,8 +45,6 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     private static final String TAG = UIItemsTreeBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private final Set<Set<Entity>> recentlySelected = new HashSet<>();
-
     public UIItemsTreeBoxMediator() {
         super(NAME, new UIItemsTreeBox());
     }
@@ -55,9 +56,9 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 SceneDataManager.SCENE_LOADED,
                 ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED,
-                Sandbox.ACTION_SET_SELECTION,
-                Sandbox.ACTION_ADD_SELECTION,
-                Sandbox.ACTION_RELEASE_SELECTION,
+                SetSelectionCommand.DONE,
+                AddSelectionCommand.DONE,
+                ReleaseSelectionCommand.DONE,
                 DeleteItemsCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
@@ -100,24 +101,16 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 sendSelectionNotification(items);
 
                 break;
-            case Sandbox.ACTION_SET_SELECTION:
-                Set<Entity> selected = notification.getBody();
-                //avoids cyclic mediation
-                if(recentlySelected.contains(selected)) {
-                    recentlySelected.remove(selected);
-                    break;
-                }
-                viewComponent.setSelection(selected);
+            case SetSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
 
                 break;
-            case Sandbox.ACTION_ADD_SELECTION:
-                Set<Entity> addSelected = notification.getBody();
-                viewComponent.addToSelection(addSelected);
+            case AddSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
 
                 break;
-            case Sandbox.ACTION_RELEASE_SELECTION:
-                Set<Entity> removeSelected = notification.getBody();
-                viewComponent.removeFromSelection(removeSelected);
+            case ReleaseSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
 
                 break;
         }
@@ -125,7 +118,6 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
 
     private void sendSelectionNotification(Set<Entity> items) {
         Set<Entity> ntfItems = (items.isEmpty())? null : items;
-        recentlySelected.add(ntfItems);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, ntfItems);
     }
 }
