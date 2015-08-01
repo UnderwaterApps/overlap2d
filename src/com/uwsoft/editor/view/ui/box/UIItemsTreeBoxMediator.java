@@ -23,7 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.AddSelectionCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
+import com.uwsoft.editor.controller.commands.ReleaseSelectionCommand;
+import com.uwsoft.editor.controller.commands.SetSelectionCommand;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -53,6 +56,9 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 SceneDataManager.SCENE_LOADED,
                 ItemFactory.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED,
+                SetSelectionCommand.DONE,
+                AddSelectionCommand.DONE,
+                ReleaseSelectionCommand.DONE,
                 DeleteItemsCommand.DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
@@ -77,6 +83,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
             case UIItemsTreeBox.ITEMS_SELECTED:
                 Selection<Tree.Node> selection = notification.getBody();
                 Array<Tree.Node> nodes = selection.toArray();
+                Set<Entity> items = new HashSet<>();
+
                 for (Tree.Node node : nodes) {
                     Integer entityId = (Integer) node.getObject();
                     Entity item = EntityUtils.getByUniqueId(entityId);
@@ -86,17 +94,30 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                         continue;
                     }
                     if (item != null) {
-                        addSelectionAction(item);
+                        items.add(item);
                     }
                 }
+
+                sendSelectionNotification(items);
+
+                break;
+            case SetSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
+
+                break;
+            case AddSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
+
+                break;
+            case ReleaseSelectionCommand.DONE:
+                viewComponent.setSelection(sandbox.getSelector().getSelectedItems());
 
                 break;
         }
     }
 
-    private void addSelectionAction(Entity entity) {
-        Set<Entity> items = new HashSet<>();
-        items.add(entity);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+    private void sendSelectionNotification(Set<Entity> items) {
+        Set<Entity> ntfItems = (items.isEmpty())? null : items;
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, ntfItems);
     }
 }

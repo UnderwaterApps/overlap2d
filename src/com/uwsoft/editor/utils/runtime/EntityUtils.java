@@ -37,6 +37,7 @@ import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -199,10 +200,11 @@ public class EntityUtils {
     }
 
     public static LayerItemVO getEntityLayer(Entity entity) {
+
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         LayerMapComponent layerMapComponent = ComponentRetriever.get(entity.getComponent(ParentNodeComponent.class).parentEntity, LayerMapComponent.class);
-        for(LayerItemVO layerItemVO: layerMapComponent.layers) {
-            if(layerItemVO.layerName.equals(mainItemComponent.layer)) {
+        for (LayerItemVO layerItemVO : layerMapComponent.layers) {
+            if (layerItemVO.layerName.equals(mainItemComponent.layer)) {
                 return layerItemVO;
             }
         }

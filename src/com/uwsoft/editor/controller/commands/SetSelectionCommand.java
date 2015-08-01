@@ -34,6 +34,9 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class SetSelectionCommand extends RevertableCommand {
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.SetSelectionCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
+
     private Array<Integer> previousSelectionIds;
 
     @Override
@@ -46,6 +49,7 @@ public class SetSelectionCommand extends RevertableCommand {
         if(items == null) {
             // deselect all
             sandbox.getSelector().setSelections(items, true);
+            facade.sendNotification(DONE);
             return;
         }
 
@@ -63,10 +67,12 @@ public class SetSelectionCommand extends RevertableCommand {
         } else {
             sandbox.getSelector().setSelections(items, true);
         }
+        facade.sendNotification(DONE);
     }
 
     @Override
     public void undoAction() {
         Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
+        facade.sendNotification(DONE);
     }
 }
