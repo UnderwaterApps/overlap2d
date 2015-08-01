@@ -38,12 +38,7 @@ import com.uwsoft.editor.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIZoomBoxMediator;
-import com.uwsoft.editor.view.ui.dialog.ImportDialogMediator;
-import com.uwsoft.editor.view.ui.dialog.CreateNewResolutionDialogMediator;
-import com.uwsoft.editor.view.ui.dialog.CustomVariablesDialogMediator;
-import com.uwsoft.editor.view.ui.dialog.EditSpriteAnimationDialogMediator;
-import com.uwsoft.editor.view.ui.dialog.ExportSettingsDialogMediator;
-import com.uwsoft.editor.view.ui.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.*;
 
 /**
  * Created by sargis on 4/1/15.
@@ -67,6 +62,7 @@ public class BootstrapViewCommand extends SimpleCommand {
         facade.registerMediator(new ExportSettingsDialogMediator());
         facade.registerMediator(new CreateNewResolutionDialogMediator());
         facade.registerMediator(new CustomVariablesDialogMediator());
+        facade.registerMediator(new TagsDialogMediator());
         facade.registerMediator(new EditSpriteAnimationDialogMediator());
 
         facade.registerMediator(new RulersUIMediator());

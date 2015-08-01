@@ -351,6 +351,12 @@
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
+    "tagBtn": {
+      "down": "toolbar-over",
+      "up": "toolbar-over",
+      "fontColor": "white",
+      "font": "default-font"
+    },
     "toggle": {
       "down": "button-down",
       "up": "button",
