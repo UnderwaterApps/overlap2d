@@ -3,8 +3,10 @@ package com.uwsoft.editor.renderer.utils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.Vector3;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
 
 public class TransformMathUtils {
 	
@@ -19,6 +21,26 @@ public class TransformMathUtils {
 		parentToLocalCoordinates(entity, sceneCoords);
 		return sceneCoords;
 	}
+
+    public static Vector2 globalToLocalCoordinates (Entity entity, Vector2 sceneCoords) {
+        ParentNodeComponent parentNodeComponent = entity.getComponent(ParentNodeComponent.class);
+        Entity parentEntity = null;
+        if(parentNodeComponent != null){
+            ViewPortComponent viewPortComponent = ComponentRetriever.get(parentNodeComponent.parentEntity, ViewPortComponent.class);
+            if(viewPortComponent == null) {
+                parentEntity = parentNodeComponent.parentEntity;
+            } else {
+                Vector3 worldCoordinates = viewPortComponent.viewPort.getCamera().unproject(new Vector3(sceneCoords.x, sceneCoords.y,0));
+                sceneCoords.x = worldCoordinates.x;
+                sceneCoords.y = worldCoordinates.y;
+            }
+        }
+        if (parentEntity != null) {
+            globalToLocalCoordinates(parentEntity, sceneCoords);
+        }
+        parentToLocalCoordinates(entity, sceneCoords);
+        return sceneCoords;
+    }
 
 	
 	/** Converts the coordinates given in the parent's coordinate system to this entity's coordinate system. */

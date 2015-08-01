@@ -30,8 +30,6 @@ public class MainItemVO {
 	
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
-
-    public ArrayList<String> commonScripts = new ArrayList<String>();
 	
 	public MainItemVO() {
 		
@@ -62,21 +60,19 @@ public class MainItemVO {
 		if(vo.physics != null){
             physics = new PhysicsBodyDataVO(vo.physics);
 		}
-
-        commonScripts = (ArrayList<String>) vo.commonScripts.clone();
     }
 
 	public void loadFromEntity(Entity entity) {
 		MainItemComponent mainItemComponent = entity.getComponent(MainItemComponent.class);
 		TransformComponent transformComponent = entity.getComponent(TransformComponent.class);
-        ScriptComponent scriptComponent = entity.getComponent(ScriptComponent.class);
 		TintComponent tintComponent = entity.getComponent(TintComponent.class);
 		ZIndexComponent zindexComponent = entity.getComponent(ZIndexComponent.class);
 
 		uniqueId = mainItemComponent.uniqueId;
 		itemIdentifier = mainItemComponent.itemIdentifier;
 		itemName = mainItemComponent.libraryLink;
-		tags = mainItemComponent.tags;
+        tags = new String[mainItemComponent.tags.size()];
+        tags = mainItemComponent.tags.toArray(tags);
 		customVars = mainItemComponent.customVars;
 
 		x = transformComponent.x;
@@ -86,12 +82,6 @@ public class MainItemVO {
 		originX = transformComponent.originX;
 		originY = transformComponent.originY;
 		rotation = transformComponent.rotation;
-
-        if(scriptComponent != null) {
-            for (IScript name : scriptComponent.scripts) {
-                commonScripts.add(name.getClass().getName());
-            }
-        }
 
         layerName = mainItemComponent.layer;
 

@@ -1,4 +1,4 @@
-package com.uwsoft.editor.renderer.utils;
+package com.uwsoft.editor.renderer.scene2d;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
@@ -7,6 +7,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -28,14 +29,25 @@ public class CompositeActor extends Group {
 
     private HashMap<String, Actor> itemMap = new HashMap<String, Actor>();
     private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
+    private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
+    private HashMap<String, Array<Actor>> itemLayerMap = new HashMap<String, Array<Actor>>();
 
     public CompositeActor(CompositeItemVO vo, IResourceRetriever ir) {
         this.ir= ir;
         this.vo = vo;
 
         pixelsPerWU = ir.getProjectVO().pixelToWorld;
-
+        makeLayerMap(vo);
         build(vo);
+    }
+
+    private void makeLayerMap(CompositeItemVO vo) {
+        layerMap.clear();
+        itemLayerMap.clear();
+        for(int i = 0; i < vo.composite.layers.size(); i++) {
+            layerMap.put(vo.composite.layers.get(i).layerName,vo.composite.layers.get(i));
+            itemLayerMap.put(vo.composite.layers.get(i).layerName, new Array<Actor>());
+        }
     }
 
     private void build(CompositeItemVO vo) {
@@ -45,6 +57,10 @@ public class CompositeActor extends Group {
         buildComposites(vo.composite.sComposites);
         processZIndexes();
         recalculateSize();
+
+        if(vo.tags != null && Arrays.asList(vo.tags).contains("button")) {
+            addListener(new ButtonClickListener());
+        }
     }
 
     private void buildComposites(ArrayList<CompositeItemVO> composites) {
@@ -97,16 +113,17 @@ public class CompositeActor extends Group {
         }
 
         indexes.put(getLayerIndex(vo.layerName)+vo.zIndex, actor);
+        itemLayerMap.get(vo.layerName).add(actor);
+
+        if(layerMap.get(vo.layerName).isVisible) {
+            actor.setVisible(true);
+        } else {
+            actor.setVisible(false);
+        }
     }
 
     private int getLayerIndex(String name) {
-        for(int i =0; i < vo.composite.layers.size(); i++) {
-            if(vo.composite.layers.get(i).layerName.equals(name)) {
-                return i;
-            }
-        }
-
-        return 0;
+        return vo.composite.layers.indexOf(layerMap.get(name));
     }
 
     private void processZIndexes() {
@@ -166,5 +183,12 @@ public class CompositeActor extends Group {
 
         setWidth(upperX - 0);
         setHeight(upperY - 0);
+    }
+
+    public void setLayerVisibility(String layerName, boolean isVisible) {
+        layerMap.get(layerName).isVisible = isVisible;
+        for(Actor actor: itemLayerMap.get(layerName)) {
+            actor.setVisible(isVisible);
+        }
     }
 }

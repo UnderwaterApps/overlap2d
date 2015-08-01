@@ -2,15 +2,20 @@ package com.uwsoft.editor.renderer;
 
 import box2dLight.RayHandler;
 
+import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.systems.IteratingSystem;
+import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Scaling;
+import com.badlogic.gdx.utils.SnapshotArray;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
@@ -154,6 +159,9 @@ public class SceneLoader {
         engine.addSystem(scriptSystem);
 		engine.addSystem(renderer);
 
+        // additional
+        engine.addSystem(new ButtonSystem());
+
 		addEntityRemoveListener();
 	}
 
@@ -229,6 +237,20 @@ public class SceneLoader {
         CompositeItemVO compositeItemVO = projectInfoVO.libraryItems.get(libraryName);
 
        return compositeItemVO;
+    }
+
+    public void addComponentsByTagName(String tagName, Class componentClass) {
+        ImmutableArray<Entity> entities = engine.getEntities();
+        for(Entity entity: entities) {
+            MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            if(mainItemComponent.tags.contains(tagName)) {
+                try {
+                    entity.add(ClassReflection.<Component>newInstance(componentClass));
+                } catch (ReflectionException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
 	/**

@@ -23,6 +23,7 @@ import box2dLight.RayHandler;
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
+import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
@@ -30,6 +31,9 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import java.util.Arrays;
+import java.util.HashSet;
 
 /**
  * Created by azakhary on 5/22/2015.
@@ -75,7 +79,9 @@ public abstract class ComponentFactory {
         component.uniqueId = vo.uniqueId;
         component.itemIdentifier = vo.itemIdentifier;
         component.libraryLink = vo.itemName;
-        component.tags = vo.tags;
+        if(vo.tags != null) {
+            component.tags = new HashSet<String>(Arrays.asList(vo.tags));
+        }
         component.entityType = entityType;
         if(vo.layerName == "" || vo.layerName == null) vo.layerName = "Default";
         component.layer = vo.layerName;
@@ -126,14 +132,7 @@ public abstract class ComponentFactory {
     }
 
     protected ScriptComponent createScriptComponent(Entity entity, MainItemVO vo) {
-
-        if(vo.commonScripts == null || vo.commonScripts.size() == 0) return null;
-
         ScriptComponent component = new ScriptComponent();
-        for(String name: vo.commonScripts) {
-            component.addScript(name);
-        }
-
         entity.add(component);
         return component;
     }
