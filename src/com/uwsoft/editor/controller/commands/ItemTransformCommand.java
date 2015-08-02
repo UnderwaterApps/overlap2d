@@ -8,6 +8,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by Osman on 01.08.2015.
@@ -16,12 +17,15 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
 
     private Array<Object> payload;
 
+    private Integer entityId;
+
     @Override
     public void doAction() {
-
         payload = getNotification().getBody();
         Entity entity = (Entity) payload.get(0);
         Object[] newData = (Object[]) payload.get(2);
+
+        entityId = EntityUtils.getEntityId(entity);
 
         Vector2 newPos = (Vector2) newData[0];
         Vector2 newSize = (Vector2) newData[1];
@@ -45,7 +49,7 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
     @Override
     public void undoAction() {
 
-        Entity entity = (Entity) payload.get(0);
+        Entity entity = EntityUtils.getByUniqueId(entityId);
         Object[] prevData = (Object[]) payload.get(1);
 
         Vector2 prevPos = (Vector2) prevData[0];
