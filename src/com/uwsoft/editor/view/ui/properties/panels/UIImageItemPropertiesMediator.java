@@ -6,10 +6,12 @@ import com.badlogic.gdx.graphics.g2d.PolygonSprite;
 import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 
 /**
@@ -32,7 +34,7 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         if(textureRegionComponent.isRepeat) {
             viewComponent.setRenderMode("REPEAT");
         } else {
-            viewComponent.setRenderMode("NORMAL");
+            viewComponent.setRenderMode("STRETCH");
         }
 
         if(textureRegionComponent.isPolygon) {
@@ -49,16 +51,20 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         } else {
             textureRegionComponent.isRepeat = false;
         }
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
 
         if(viewComponent.getSpriteType().equals("POLYGON")) {
             textureRegionComponent.isPolygon = true;
             PolygonComponent polygonComponent = ComponentRetriever.get(observableReference, PolygonComponent.class);
+
             if (polygonComponent != null && polygonComponent.vertices != null) {
                 textureRegionComponent.setPolygonSprite(polygonComponent);
+                dimensionsComponent.setPolygon(polygonComponent);
             }
         } else {
             textureRegionComponent.polygonSprite = null;
             textureRegionComponent.isPolygon = false;
+            dimensionsComponent.polygon = null;
         }
     }
 }

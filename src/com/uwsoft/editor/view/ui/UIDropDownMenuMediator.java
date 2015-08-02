@@ -67,7 +67,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE);
 
         actionSets.put(IMAGE_RESOURCE_ACTION_SET, new Array<>());
-        actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS);
         //actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE_RESOURCE);
 
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
@@ -110,7 +109,6 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                         actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
                         actionsSet.add(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE);
                     }
-                    actionsSet.add(Sandbox.ACTION_EDIT_PHYSICS);
                     actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
                 }
                 showPopup(actionsSet, sandbox.getSelector().getSelectedItem());

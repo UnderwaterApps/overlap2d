@@ -51,8 +51,8 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(Sandbox.ACTION_PASTE, "Paste");
         actionNames.put(Sandbox.ACTION_DELETE, "Delete");
         actionNames.put(Sandbox.SHOW_ADD_LIBRARY_DIALOG, "Add to library");
-        actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
-        actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
+        //actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
+        //actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
         //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
     }

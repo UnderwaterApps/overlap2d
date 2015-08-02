@@ -43,7 +43,7 @@ public class NormalSelectionFollower extends BasicFollower {
     private EditorTextureManager tm;
     private CursorManager cursorManager;
 
-    private PixelRect pixelRect;
+    protected PixelRect pixelRect;
 
     protected Group transformGroup;
     protected Actor[] miniRects;

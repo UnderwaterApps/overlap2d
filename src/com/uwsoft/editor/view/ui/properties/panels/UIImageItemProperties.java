@@ -19,7 +19,7 @@ public class UIImageItemProperties extends UIItemCollapsibleProperties {
         renderModeBox = new VisSelectBox<>();
         spriteTypeBox = new VisSelectBox<>();
 
-        renderModeBox.setItems("NORMAL", "REPEAT");
+        renderModeBox.setItems("STRETCH", "REPEAT");
         spriteTypeBox.setItems("SQUARE", "POLYGON");
 
         mainTable.add(createLabel("Render Mode:", Align.right)).padRight(5).width(90).left();
