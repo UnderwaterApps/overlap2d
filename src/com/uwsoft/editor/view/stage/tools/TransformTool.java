@@ -28,6 +28,7 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.utils.TransformCommandBuilder;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
@@ -52,6 +53,8 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     private float lastTransformAngle = 0;
     private float lastEntityAngle = 0;
 	private CursorManager cursorManager;
+
+    private TransformCommandBuilder commandBuilder = new TransformCommandBuilder();
 
     @Override
     public String getName() {
@@ -119,6 +122,9 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorDown(NormalSelectionFollower follower, int anchor, float x, float y) {
         Sandbox sandbox = Sandbox.getInstance();
+
+        commandBuilder.begin(follower.getEntity());
+
         TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
         if(anchor == NormalSelectionFollower.ROTATION_LT ||
@@ -141,8 +147,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     
     @Override
     public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
-    	
-        
+        commandBuilder.execute();
     }
     
     private void defaultAnchorDraggedLogic(Vector2 mousePointStage, int anchor, Entity entity) {
@@ -218,13 +223,20 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             mousePointStage.sub(originPoint);
             float currentAngle = mousePointStage.angle();
             float angleDiff = currentAngle - lastTransformAngle;
-            transformComponent.rotation = lastEntityAngle+angleDiff;
+            float newRotation = lastEntityAngle+angleDiff;
+            transformComponent.rotation = newRotation;
+
+            commandBuilder.setRotation(newRotation);
         }
 
+        float newScaleX = newWidth / dimensionsComponent.width;
+        float newScaleY = newHeight / dimensionsComponent.height;
 
-        transformComponent.scaleX = newWidth / dimensionsComponent.width;
-        transformComponent.scaleY = newHeight / dimensionsComponent.height;
+        commandBuilder.setScale(newScaleX, newScaleY);
+        commandBuilder.setPos(newX, newY);
 
+        transformComponent.scaleX = newScaleX;
+        transformComponent.scaleY = newScaleY;
         transformComponent.x = newX;
         transformComponent.y = newY;
     }
@@ -327,6 +339,9 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
                 break;
         }
 
+
+        commandBuilder.setPos(newX, newY);
+        commandBuilder.setSize(newWidth, newHeight);
 
         transformComponent.x = newX;
         transformComponent.y = newY;
