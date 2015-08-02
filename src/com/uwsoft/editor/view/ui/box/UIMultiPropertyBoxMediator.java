@@ -85,6 +85,10 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
 
         int entityType = EntityUtils.getType(entity);
 
+        if(entityType == EntityFactory.IMAGE_TYPE) {
+            mediatorNames.add(UIImageItemPropertiesMediator.NAME);
+        }
+
         if(entityType == EntityFactory.COMPOSITE_TYPE) {
             mediatorNames.add(UICompositeItemPropertiesMediator.NAME);
         }

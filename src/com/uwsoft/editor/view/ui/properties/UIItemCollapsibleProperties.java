@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 public abstract class UIItemCollapsibleProperties extends UIItemProperties {
     protected final String title;
     protected VisTable mainTable;
+    protected VisTable header;
     protected CollapsibleWidget collapsibleWidget;
 
     public UIItemCollapsibleProperties(String title) {
@@ -44,7 +45,7 @@ public abstract class UIItemCollapsibleProperties extends UIItemProperties {
     }
 
     public Table crateHeaderTable() {
-        VisTable header = new VisTable();
+        header = new VisTable();
         header.setBackground(VisUI.getSkin().getDrawable("expandable-properties-active-bg"));
         header.add(createLabel(title)).right().expandX().padRight(6);
         VisImageButton button = new VisImageButton("expandable-properties-button");
@@ -53,11 +54,15 @@ public abstract class UIItemCollapsibleProperties extends UIItemProperties {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
-                header.setBackground(VisUI.getSkin().getDrawable("expandable-properties-" + (collapsibleWidget.isCollapsed() ? "inactive" : "active") + "-bg"));
+                collapse();
             }
         });
         return header;
+    }
+
+    public void collapse() {
+        collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
+        header.setBackground(VisUI.getSkin().getDrawable("expandable-properties-" + (collapsibleWidget.isCollapsed() ? "inactive" : "active") + "-bg"));
     }
 
     private void createCollapsibleWidget() {
