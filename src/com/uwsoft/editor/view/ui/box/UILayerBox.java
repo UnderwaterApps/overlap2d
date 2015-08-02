@@ -30,8 +30,12 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.utils.InputFilters;
+import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -41,6 +45,7 @@ public class UILayerBox extends UICollapsibleBox {
     public static final String LAYER_ROW_CLICKED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_ROW_CLICKED";
     public static final String CREATE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CREATE_NEW_LAYER";
     public static final String DELETE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
+    public static final String CHANGE_LAYER_NAME = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CHANGE_LAYER_NAME";
     public static final String LOCK_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LOCK_LAYER";
     public static final String HIDE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".HIDE_LAYER";
     public static final String LAYER_DROPPED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_DROPPED";
@@ -52,6 +57,8 @@ public class UILayerBox extends UICollapsibleBox {
     private VisTable bottomPane;
     private VisScrollPane scrollPane;
     private VisTable layersTable;
+
+    private SlotSource sourceInEdition;
 
     private Array<UILayerItemSlot> rows = new Array<>();
 
@@ -103,8 +110,26 @@ public class UILayerBox extends UICollapsibleBox {
         createCollapsibleWidget(contentTable);
     }
 
+    public void enableDraggingInEditedSlot() {
+        if(sourceInEdition != null)
+        {
+            dragAndDrop.addSource(sourceInEdition);
+            sourceInEdition = null;
+        }
+    }
+    public void disableDraggingInEditedSlot() {
+        if(sourceInEdition != null)
+        {
+            dragAndDrop.removeSource(sourceInEdition);
+        }
+    }
+
     public int getCurrentSelectedLayerIndex() {
         return currentSelectedLayerIndex;
+    }
+
+    public UILayerItem getCurrentSelectedLayer() {
+        return rows.get(rows.size-1-currentSelectedLayerIndex).uiLayerItem;
     }
 
     public void clearItems() {
@@ -131,7 +156,8 @@ public class UILayerBox extends UICollapsibleBox {
         UILayerItem item = new UILayerItem(itemVO, itemSlot);
         layersTable.add(itemSlot).left().expandX().fillX();
         layersTable.row().padTop(1);
-        dragAndDrop.addSource(new SlotSource(item));
+        SlotSource sourceItem = new SlotSource(item);
+        dragAndDrop.addSource(sourceItem);
         dragAndDrop.addTarget(new SlotTarget(itemSlot));
         dragAndDrop.setDragActorPosition(0, 0);
         rows.add(itemSlot);
@@ -140,11 +166,35 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
+
+                VisTextField textField = itemSlot.getUiLayerItem().getNameField();
+
+                if(sourceInEdition != null)
+                {
+                    VisTextField prevField = ((UILayerItem) sourceInEdition.getActor()).getNameField();
+                    if(textField != prevField)
+                    {
+                        prevField.clearSelection();
+                        prevField.setDisabled(true);
+                        enableDraggingInEditedSlot();
+                    }
+                }
+
                 clearSelection();
                 itemSlot.getUiLayerItem().setSelected(true);
                 currentSelectedLayerIndex = rows.size - rows.indexOf(itemSlot, true) - 1;
 
                 facade.sendNotification(LAYER_ROW_CLICKED, itemSlot.getUiLayerItem());
+
+                // Change name mode if double click
+                if(getTapCount() == 2)
+                {
+                    sourceInEdition = sourceItem;
+                    textField.setDisabled(false);
+                    textField.focusField();
+                    textField.selectAll();
+                    disableDraggingInEditedSlot();
+                }
             }
         });
     }
@@ -273,6 +323,8 @@ public class UILayerBox extends UICollapsibleBox {
         private UILayerItemSlot itemSlot;
         private boolean selected;
 
+        private VisTextField layerNameField;
+
         public UILayerItem(LayerItemVO layerData, UILayerItemSlot itemSlot) {
             super();
             this.layerData = layerData;
@@ -283,13 +335,23 @@ public class UILayerBox extends UICollapsibleBox {
             visibleBtn.addListener(new VisibleClickListener());
             add(lockBtn).left();
             add(visibleBtn).left().padRight(6);
-            add(layerData.layerName).expandX().fillX();
 
+            layerNameField = StandardWidgetsFactory.createTextField("transparent", false);
+            layerNameField.setTextFieldFilter(InputFilters.ALPHANUMERIC);
+            layerNameField.setText(layerData.layerName);
+            layerNameField.setDisabled(true);
+            // This listener will manage Enter and lost focus events
+            layerNameField.addListener(new KeyboardListener(CHANGE_LAYER_NAME));
+
+            add(layerNameField).expandX().fillX();
             lockBtn.setChecked(layerData.isLocked);
             visibleBtn.setChecked(!layerData.isVisible);
 
-            //
             itemSlot.setLayerItem(this);
+        }
+
+        public VisTextField getNameField() {
+            return layerNameField;
         }
 
         public boolean isLocked() {

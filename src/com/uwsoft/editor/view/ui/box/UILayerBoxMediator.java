@@ -27,6 +27,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -34,7 +35,6 @@ import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
 import com.uwsoft.editor.controller.commands.NewLayerCommand;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.box.UILayerBox.UILayerItem;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
@@ -67,6 +67,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 SceneDataManager.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
+                UILayerBox.CHANGE_LAYER_NAME,
                 UILayerBox.DELETE_LAYER,
                 UILayerBox.LOCK_LAYER,
                 UILayerBox.HIDE_LAYER,
@@ -85,7 +86,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
-        UILayerItem layerItem;
+        UILayerBox.UILayerItem layerItem;
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 initLayerData();
@@ -115,7 +116,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 setSelectedByName(notification.getBody());
                 break;
             case UILayerBox.LAYER_ROW_CLICKED:
-            	layerItem = notification.getBody();
+                layerItem = notification.getBody();
                 selectEntitiesByLayerName(layerItem);
                 break;
             case UILayerBox.CREATE_NEW_LAYER:
@@ -148,12 +149,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 }
                 break;
             case UILayerBox.LOCK_LAYER:
-            	layerItem = notification.getBody();
-            	lockLayerByName(layerItem);
+                layerItem = notification.getBody();
+                lockLayerByName(layerItem);
                 break;
             case UILayerBox.HIDE_LAYER:
-            	layerItem = notification.getBody();
-            	hideEntitiesByLayerName(layerItem);
+                layerItem = notification.getBody();
+                hideEntitiesByLayerName(layerItem);
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
@@ -175,6 +176,32 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 Entity item = notification.getBody();
                 MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
                 if(mainItemComponent.layer == null) mainItemComponent.layer = layers.get(index).layerName;
+                break;
+            case UILayerBox.CHANGE_LAYER_NAME:
+                String layerName = notification.getBody();
+                int layerIndex = viewComponent.getCurrentSelectedLayerIndex();
+                LayerItemVO layer_view = layers.get(layerIndex);
+                layerItem = viewComponent.getCurrentSelectedLayer();
+                VisTextField textField = layerItem.getNameField();
+
+                if(layer_view.layerName.equals(layerName))  // Name didn't change
+                {
+                    textField.clearSelection();
+                    textField.setDisabled(true);
+                    viewComponent.enableDraggingInEditedSlot();
+                }
+                else if(checkIfNameIsUnique(layerName)) // Name changed
+                {
+                    textField.clearSelection();
+                    textField.setDisabled(true);
+                    viewComponent.enableDraggingInEditedSlot();
+
+                    layer_view.layerName = layerName;
+                }
+                else
+                {
+                    //Show error dialog
+                }
                 break;
             default:
                 break;
@@ -208,63 +235,63 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         layerMapComponent.layers.add(layerVo);
     }
 
-    private void lockLayerByName(UILayerItem layerItem) {
-    	String layerName = layerItem.getLayerName();
-    	boolean toLock = !layerItem.isLocked();
-    	if(toLock){
-    		Sandbox.getInstance().getSelector().clearSelections();
-    	}
-    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+    private void lockLayerByName(UILayerBox.UILayerItem layerItem) {
+        String layerName = layerItem.getLayerName();
+        boolean toLock = !layerItem.isLocked();
+        if(toLock){
+            Sandbox.getInstance().getSelector().clearSelections();
+        }
+        Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
         for(int i=0; i<layerMapComponent.layers.size(); i++){
-        	LayerItemVO layerVO = layerMapComponent.layers.get(i);
-        	if(layerVO.layerName.equals(layerName)){
-        		layerVO.isLocked = toLock;
-        		break;
-        	}
+            LayerItemVO layerVO = layerMapComponent.layers.get(i);
+            if(layerVO.layerName.equals(layerName)){
+                layerVO.isLocked = toLock;
+                break;
+            }
         }
-        
-	}
 
-	private void selectEntitiesByLayerName(UILayerItem layerItem) {
-		if(layerItem.isLocked()){
-			Sandbox.getInstance().getSelector().clearSelections();
+    }
+
+    private void selectEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
+        if(layerItem.isLocked()){
+            Sandbox.getInstance().getSelector().clearSelections();
             viewComponent.clearSelection();
-			return;
-		}
-		String layerName = layerItem.getLayerName();
-    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+            return;
+        }
+        String layerName = layerItem.getLayerName();
+        Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
 
-    	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
-    	Set<Entity> items = new HashSet<>();
-    	for(int i=0; i<nodeComponent.children.size; i++){
-    		Entity entity = nodeComponent.children.get(i);
-    		MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-    		if(childeMainItemComponent.layer.equals(layerName)){
-    			items.add(entity);
-    		}
-    	}
-    	Sandbox.getInstance().getSelector().clearSelections();
-    	facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
-	}
-    
-    private void hideEntitiesByLayerName(UILayerItem layerItem) {
-    	String layerName = layerItem.getLayerName();
-    	boolean toHide = !layerItem.isLayerVisible();
-    	Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
+        Set<Entity> items = new HashSet<>();
+        for(int i=0; i<nodeComponent.children.size; i++){
+            Entity entity = nodeComponent.children.get(i);
+            MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            if(childeMainItemComponent.layer.equals(layerName)){
+                items.add(entity);
+            }
+        }
+        Sandbox.getInstance().getSelector().clearSelections();
+        facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+    }
 
-    	NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
-    	for(int i=0; i<nodeComponent.children.size; i++){
-    		Entity entity = nodeComponent.children.get(i);
-    		MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-    		if(childMainItemComponent.layer.equals(layerName)){
-    			childMainItemComponent.visible = toHide;
+    private void hideEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
+        String layerName = layerItem.getLayerName();
+        boolean toHide = !layerItem.isLayerVisible();
+        Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+
+        NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
+        for(int i=0; i<nodeComponent.children.size; i++){
+            Entity entity = nodeComponent.children.get(i);
+            MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            if(childMainItemComponent.layer.equals(layerName)){
+                childMainItemComponent.visible = toHide;
                 EntityUtils.getEntityLayer(entity).isVisible = toHide;
-    		}
-    	}
-	}
+            }
+        }
+    }
 
-	private int findLayerByName(String name) {
+    private int findLayerByName(String name) {
         for (int i = 0; i < layers.size(); i++) {
             if (layers.get(i).layerName.equals(name)) {
                 return i;

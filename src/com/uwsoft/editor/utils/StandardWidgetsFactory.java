@@ -67,19 +67,29 @@ public class StandardWidgetsFactory {
     public static  VisTextField createTextField() {
         return createTextField("default");
     }
-
+    
     public static  VisTextField createTextField(String style) {
-        VisTextField visTextField = new VisTextField("", style);
-        visTextField.addListener(new CursorListener(CursorManager.TEXT));
-        return visTextField;
+    	VisTextField visTextField = new VisTextField("", style);
+    	visTextField.addListener(new CursorListener(CursorManager.TEXT));
+    	return visTextField;
     }
 
+    public static  VisTextField createTextField(String style, boolean textCursor)
+    {
+    	VisTextField visTextField = new VisTextField();
+        Skin skin = VisUI.getSkin();
+        visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
+        if(textCursor)
+        	visTextField.addListener(new CursorListener(CursorManager.TEXT));
+        return visTextField;
+    }
+    
     public static  VisTextField createTextField(String style, VisTextField.TextFieldFilter textFieldFilter) {
         VisTextField visTextField = createTextField(style);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }
-
+    
     public static  VisValidableTextField createValidableTextField(InputValidator inputValidator) {
         VisValidableTextField visTextField = createValidableTextField("default", inputValidator);
         return visTextField;
