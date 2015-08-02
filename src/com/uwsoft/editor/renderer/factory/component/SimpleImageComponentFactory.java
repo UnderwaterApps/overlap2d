@@ -68,17 +68,20 @@ public class SimpleImageComponentFactory extends ComponentFactory {
         component.isRepeat = vo.isRepeat;
         component.isPolygon = vo.isPolygon;
 
-        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
-        if(component.isPolygon && polygonComponent != null && polygonComponent.vertices != null) {
-            component.setPolygonSprite(polygonComponent);
-        }
-
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
         ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
         float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        if(component.isPolygon && polygonComponent != null && polygonComponent.vertices != null) {
+            component.setPolygonSprite(polygonComponent);
+            dimensionsComponent.setPolygon(polygonComponent);
+        }
         dimensionsComponent.width = (float) component.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
         dimensionsComponent.height = (float) component.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
+
 
         entity.add(component);
 

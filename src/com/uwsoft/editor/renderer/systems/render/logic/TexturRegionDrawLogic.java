@@ -25,27 +25,59 @@ public class TexturRegionDrawLogic implements Drawable {
 
 	@Override
 	public void draw(Batch batch, Entity entity) {
-		TintComponent tintComponent = tintComponentComponentMapper.get(entity);
-		TransformComponent entityTransformComponent = transformMapper.get(entity);
-		TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-		DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
-
-        batch.setColor(tintComponent.color);
-
+        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         if(entityTextureRegionComponent.polygonSprite != null) {
-            entityTextureRegionComponent.polygonSprite.setPosition(
-                    entityTransformComponent.x+entityTextureRegionComponent.polygonShift.x,
-                    entityTransformComponent.y+entityTextureRegionComponent.polygonShift.y);
-            entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
-            entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
+            if(entityTextureRegionComponent.isRepeat) {
+                drawPolygonSprite(batch, entity);
+            } else {
+                drawPolygonSprite(batch, entity);
+            }
         } else {
-            batch.draw(entityTextureRegionComponent.region,
-                    entityTransformComponent.x, entityTransformComponent.y,
-                    entityTransformComponent.originX, entityTransformComponent.originY,
-                    dimensionsComponent.width, dimensionsComponent.height,
-                    entityTransformComponent.scaleX, entityTransformComponent.scaleY,
-                    entityTransformComponent.rotation);
+            drawSprite(batch, entity);
         }
 	}
 
+    public void drawSprite(Batch batch, Entity entity) {
+        TintComponent tintComponent = tintComponentComponentMapper.get(entity);
+        TransformComponent entityTransformComponent = transformMapper.get(entity);
+        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        batch.setColor(tintComponent.color);
+        batch.draw(entityTextureRegionComponent.region,
+                entityTransformComponent.x, entityTransformComponent.y,
+                entityTransformComponent.originX, entityTransformComponent.originY,
+                dimensionsComponent.width, dimensionsComponent.height,
+                entityTransformComponent.scaleX, entityTransformComponent.scaleY,
+                entityTransformComponent.rotation);
+    }
+
+    public void drawPolygonSprite(Batch batch, Entity entity) {
+        TintComponent tintComponent = tintComponentComponentMapper.get(entity);
+        TransformComponent entityTransformComponent = transformMapper.get(entity);
+        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
+
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+
+        entityTextureRegionComponent.polygonSprite.setPosition(
+                entityTransformComponent.x + entityTextureRegionComponent.polygonShift.x,
+                entityTransformComponent.y + entityTextureRegionComponent.polygonShift.y);
+        entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
+        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
+        entityTextureRegionComponent.polygonSprite.setColor(tintComponent.color);
+        entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
+    }
+
+    public void drawTiledPolygonSprite(Batch batch, Entity entity) {
+        // TODO: this should change to be working
+        TintComponent tintComponent = tintComponentComponentMapper.get(entity);
+        TransformComponent entityTransformComponent = transformMapper.get(entity);
+        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        batch.setColor(tintComponent.color);
+        entityTextureRegionComponent.polygonSprite.setPosition(
+                entityTransformComponent.x+entityTextureRegionComponent.polygonShift.x,
+                entityTransformComponent.y+entityTextureRegionComponent.polygonShift.y);
+        entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
+        entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
+    }
 }
