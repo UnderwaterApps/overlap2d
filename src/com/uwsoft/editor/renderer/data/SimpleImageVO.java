@@ -6,6 +6,8 @@ import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 
 public class SimpleImageVO extends MainItemVO {
 	public String imageName = "";
+    public boolean isRepeat = false;
+    public boolean isPolygon = false;
 	
 	public SimpleImageVO() {
 		super();
@@ -22,5 +24,7 @@ public class SimpleImageVO extends MainItemVO {
 
 		TextureRegionComponent textureRegionComponent = entity.getComponent(TextureRegionComponent.class);
 		imageName = textureRegionComponent.regionName;
+        isRepeat = textureRegionComponent.isRepeat;
+        isPolygon = textureRegionComponent.isPolygon;
 	}
 }

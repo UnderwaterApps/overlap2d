@@ -23,6 +23,7 @@ import box2dLight.RayHandler;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
@@ -30,6 +31,7 @@ import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SimpleImageVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 5/22/2015.
@@ -43,8 +45,8 @@ public class SimpleImageComponentFactory extends ComponentFactory {
     }
 
     public void createComponents(Entity root, Entity entity, MainItemVO vo) {
-        textureRegionComponent = createTextureRegionComponent(entity, (SimpleImageVO) vo);
         createCommonComponents( entity, vo, EntityFactory.IMAGE_TYPE);
+        textureRegionComponent = createTextureRegionComponent(entity, (SimpleImageVO) vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
         createPhysicsComponents(entity, vo);
@@ -53,12 +55,6 @@ public class SimpleImageComponentFactory extends ComponentFactory {
     @Override
     protected DimensionsComponent createDimensionsComponent(Entity entity, MainItemVO vo) {
         DimensionsComponent component = new DimensionsComponent();
-
-        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
-        ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
-        component.width = (float) textureRegionComponent.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
-        component.height = (float) textureRegionComponent.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
 
         entity.add(component);
 
@@ -69,6 +65,20 @@ public class SimpleImageComponentFactory extends ComponentFactory {
         TextureRegionComponent component = new TextureRegionComponent();
         component.regionName = vo.imageName;
         component.region = rm.getTextureRegion(vo.imageName);
+        component.isRepeat = vo.isRepeat;
+        component.isPolygon = vo.isPolygon;
+
+        PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        if(component.isPolygon && polygonComponent != null && polygonComponent.vertices != null) {
+            component.setPolygonSprite(polygonComponent);
+        }
+
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+        ProjectInfoVO projectInfoVO = rm.getProjectVO();
+        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+        dimensionsComponent.width = (float) component.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
+        dimensionsComponent.height = (float) component.region.getRegionHeight() * multiplier / projectInfoVO.pixelToWorld;
 
         entity.add(component);
 
