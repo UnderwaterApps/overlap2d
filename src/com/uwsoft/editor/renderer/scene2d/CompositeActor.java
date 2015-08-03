@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,9 +26,9 @@ public class CompositeActor extends Group {
 
     private float pixelsPerWU;
 
-    private CompositeItemVO vo;
+    protected CompositeItemVO vo;
 
-    private HashMap<String, Actor> itemMap = new HashMap<String, Actor>();
+    protected HashMap<String, Actor> itemMap = new HashMap<String, Actor>();
     private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
     private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
     private HashMap<String, Array<Actor>> itemLayerMap = new HashMap<String, Array<Actor>>();
@@ -190,5 +191,56 @@ public class CompositeActor extends Group {
         for(Actor actor: itemLayerMap.get(layerName)) {
             actor.setVisible(isVisible);
         }
+    }
+
+    /**
+     * return all custom vars for this composite
+     * @return
+     */
+    public CustomVariables getCustomVars() {
+        CustomVariables vars = new CustomVariables();
+        vars.loadFromString(vo.customVars);
+        return vars;
+    }
+
+    /**
+     * gets custom var value by key
+     * @param key
+     * @return
+     */
+    public String getCustomVar(String key) {
+        CustomVariables vars = new CustomVariables();
+        vars.loadFromString(vo.customVars);
+        return vars.getStringVariable(key);
+    }
+
+    /**
+     * gets array of all tags on this composite
+     * @return
+     */
+    public String[] getTags() {
+        return vo.tags;
+    }
+
+    /**
+     * get's list of children that contain a specified tag.
+     * Only works for Composite children.
+     * Does not yet go in depth.
+     *
+     * @param tag
+     * @return
+     */
+    public Array<CompositeActor> getItemsByTag(String tag) {
+        Array<CompositeActor> items = new Array<CompositeActor>();
+        for(Actor actor: itemMap.values()) {
+            if(actor instanceof CompositeActor) {
+                CompositeActor tmp = (CompositeActor) actor;
+                if(Arrays.asList(tmp.getTags()).contains(tag)) {
+                    items.add(tmp);
+                }
+            }
+        }
+
+        return items;
     }
 }
