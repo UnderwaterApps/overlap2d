@@ -1,5 +1,10 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
 public class CompositeItemVO extends MainItemVO {
 
 	public CompositeVO composite;
@@ -9,6 +14,8 @@ public class CompositeItemVO extends MainItemVO {
 	public float scissorWidth; 
 	public float scissorHeight;
 
+	public float width;
+	public float height;
 	
 	public CompositeItemVO() {
 		composite = new CompositeVO();
@@ -44,7 +51,24 @@ public class CompositeItemVO extends MainItemVO {
         tmp.scissorY = scissorY;
         tmp.scissorWidth = scissorWidth;
         tmp.scissorHeight = scissorHeight;
+
+		tmp.width = width;
+		tmp.height = height;
 		
 		return tmp;
+	}
+
+	@Override
+	public void loadFromEntity(Entity entity) {
+		super.loadFromEntity(entity);
+		//scissorsX
+		//scissorsY
+		composite = new CompositeVO();
+		composite.loadFromEntity(entity);
+
+		DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+
+		width = dimensionsComponent.width;
+		height = dimensionsComponent.height;
 	}
 }

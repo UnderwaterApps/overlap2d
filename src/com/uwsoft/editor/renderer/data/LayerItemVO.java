@@ -4,7 +4,7 @@ public class LayerItemVO {
 
 	public String layerName = "";
 	public boolean isLocked = false;
-	public boolean isVisible = true;
+	public boolean isVisible = false;
 	
 	public LayerItemVO() {
 		
@@ -18,6 +18,13 @@ public class LayerItemVO {
 		layerName = new String(vo.layerName);
 		isLocked = vo.isLocked;
 		isVisible = vo.isVisible;
+	}
+
+	public static LayerItemVO createDefault() {
+		LayerItemVO layerItemVO = new LayerItemVO();
+		layerItemVO.layerName = "Default";
+		layerItemVO.isVisible = true;
+		return layerItemVO;
 	}
 	
 }

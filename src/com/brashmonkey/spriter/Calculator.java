@@ -19,7 +19,7 @@ public class Calculator {
 	 * Calculates the smallest difference between angle a and b.
 	 * @param a first angle (in degrees)
 	 * @param b second angle (in degrees)
-	 * @return Smallest difference between a and b (between 180° and -180°).
+	 * @return Smallest difference between a and b (between 180 and -180).
 	 */
 	public static float angleDifference(float a, float b){
 		return ((((a - b) % 360) + 540) % 360) - 180;

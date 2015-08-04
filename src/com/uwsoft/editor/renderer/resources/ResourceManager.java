@@ -5,7 +5,6 @@ import java.util.*;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -31,6 +30,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
      *  Paths (please change if different) this is the default structure exported from editor
      */
     public String packResolutionName = "orig";
+
     public String scenesPath = "scenes";
     public String particleEffectsPath = "particles";
     public String spriteAnimationsPath = "sprite_animations";
@@ -42,14 +42,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
     protected ProjectInfoVO projectVO;
 
-    protected ArrayList<String> preparedSceneNames = new ArrayList<>();
-    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<>();
+    protected ArrayList<String> preparedSceneNames = new ArrayList<String>();
+    protected HashMap<String, SceneVO> loadedSceneVOs = new HashMap<String, SceneVO>();
 
-    protected HashSet<String> particleEffectNamesToLoad = new HashSet<>();
-    protected HashSet<String> spineAnimNamesToLoad = new HashSet<>();
-    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<>();
-    protected HashSet<String> spriterAnimNamesToLoad = new HashSet<>();
-    protected HashSet<FontSizePair> fontsToLoad = new HashSet<>();
+    protected HashSet<String> particleEffectNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spineAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spriteAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<String> spriterAnimNamesToLoad = new HashSet<String>();
+    protected HashSet<FontSizePair> fontsToLoad = new HashSet<FontSizePair>();
 
     protected TextureAtlas mainPack;
     protected HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
@@ -73,7 +73,10 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
      * @param resolution String resolution name, default is "orig" later use resolution names created in editor
      */
     public void setWorkingResolution(String resolution) {
-    	packResolutionName = resolution;
+        ResolutionEntryVO resolutionObject = getProjectVO().getResolution("resolutionName");
+        if(resolutionObject != null) {
+            packResolutionName = resolution;
+        }
     }
 
     /**
@@ -163,7 +166,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
             String[] spriterAnimations = composite.getRecursiveSpriterAnimationList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
-            for(CompositeItemVO library : loadedSceneVOs.get(preparedSceneName).libraryItems.values()) {
+            for(CompositeItemVO library : projectVO.libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
                 Collections.addAll(fontsToLoad, libFonts);
 
@@ -387,6 +390,14 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     @Override
     public ProjectInfoVO getProjectVO() {
         return projectVO;
+    }
+
+    @Override
+    public ResolutionEntryVO getLoadedResolution() {
+        if(packResolutionName.equals("orig")) {
+            return getProjectVO().originalResolution;
+        }
+        return getProjectVO().getResolution(packResolutionName);
     }
 
     public void dispose() {

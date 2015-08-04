@@ -1,5 +1,8 @@
 package com.uwsoft.editor.renderer.data;
 
+import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+
 public class LightVO extends MainItemVO{
 	//public int itemId = -1;
 	public static enum LightType {POINT, CONE}
@@ -29,5 +32,18 @@ public class LightVO extends MainItemVO{
 		isStatic = vo.isStatic;
 		isXRay = vo.isXRay;
 	}
-	
+
+	@Override
+	public void loadFromEntity(Entity entity) {
+		super.loadFromEntity(entity);
+
+		LightObjectComponent lightObjectComponent = entity.getComponent(LightObjectComponent.class);
+		type = lightObjectComponent.getType();
+		rays = lightObjectComponent.rays;
+		distance = lightObjectComponent.distance;
+		directionDegree = lightObjectComponent.directionDegree;
+		coneDegree = lightObjectComponent.coneDegree;
+		isStatic = lightObjectComponent.isStatic;
+		isXRay = lightObjectComponent.isXRay;
+	}
 }
