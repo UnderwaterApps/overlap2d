@@ -227,12 +227,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             layers.add(vo);
         }
         LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
-        layerMapComponent.layers = layers;
+        layerMapComponent.setLayers(layers);
     }
 
     private void addNewLayerToItemComposite(LayerItemVO layerVo) {
         LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
-        layerMapComponent.layers.add(layerVo);
+        layerMapComponent.addLayer(layerVo);
     }
 
     private void lockLayerByName(UILayerBox.UILayerItem layerItem) {
@@ -243,14 +243,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         }
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
-        for(int i=0; i<layerMapComponent.layers.size(); i++){
-            LayerItemVO layerVO = layerMapComponent.layers.get(i);
-            if(layerVO.layerName.equals(layerName)){
-                layerVO.isLocked = toLock;
-                break;
-            }
-        }
 
+        layerMapComponent.getLayer(layerName).isLocked = toLock;
     }
 
     private void selectEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
@@ -285,7 +279,6 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             Entity entity = nodeComponent.children.get(i);
             MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
             if(childMainItemComponent.layer.equals(layerName)){
-                childMainItemComponent.visible = toHide;
                 EntityUtils.getEntityLayer(entity).isVisible = toHide;
             }
         }
@@ -325,7 +318,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
-        layers = layerMapComponent.layers;
+        layers = layerMapComponent.getLayers();
 
         viewComponent.clearItems();
 
