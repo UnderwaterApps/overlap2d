@@ -25,9 +25,7 @@ public class MainItemVO {
 	public int zIndex = 0;
 	public String layerName = "";
 	public float[] tint = {1, 1, 1, 1};
-	public boolean isFlipedH = false;
-	public boolean isFlipedV = false;
-	
+
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
 	
@@ -46,12 +44,11 @@ public class MainItemVO {
 		rotation = vo.rotation;
 		zIndex = vo.zIndex;
 		layerName = new String(vo.layerName);
-		//if(tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
 		if(vo.tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
-		isFlipedH 	= vo.isFlipedH;
-		isFlipedV 	= vo.isFlipedV;
 		scaleX 		= vo.scaleX;
 		scaleY 		= vo.scaleY;
+		originX 	= vo.originX;
+		originY 	= vo.originY;
 
 		if(vo.shape != null) {
 			shape = vo.shape.clone();
