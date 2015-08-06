@@ -19,7 +19,6 @@ public class PhysicsBodyLoader {
     // See http://www.box2d.org/manual.html Units 1.7
     public static float SCALE = 10f/Gdx.graphics.getWidth();
 
-    // Mesh Data
     private final World world;
 
     public PhysicsBodyLoader(World world) {

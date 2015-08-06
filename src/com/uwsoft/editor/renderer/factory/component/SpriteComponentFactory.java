@@ -54,7 +54,6 @@ public class SpriteComponentFactory extends ComponentFactory {
         createCommonComponents(entity, vo, EntityFactory.SPRITE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
-        createPhysicsComponents(entity, vo);
         createSpriteAnimationDataComponent(entity, (SpriteAnimationVO) vo);
     }
 

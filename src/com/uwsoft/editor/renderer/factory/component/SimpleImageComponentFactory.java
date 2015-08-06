@@ -49,7 +49,6 @@ public class SimpleImageComponentFactory extends ComponentFactory {
         textureRegionComponent = createTextureRegionComponent(entity, (SimpleImageVO) vo);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
-        createPhysicsComponents(entity, vo);
     }
 
     @Override

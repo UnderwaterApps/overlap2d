@@ -22,6 +22,7 @@ import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.components.*;
@@ -29,6 +30,8 @@ import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ShapeVO;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
@@ -71,6 +74,7 @@ public abstract class ComponentFactory {
         createZIndexComponent(entity, vo);
         createScriptComponent(entity, vo);
         createMeshComponent(entity, vo);
+        createPhysicsComponents(entity, vo);
     }
 
     protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
@@ -162,7 +166,7 @@ public abstract class ComponentFactory {
         }
         //TODO: Physics logic
         PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent = createPhysicsBodyPropertiesComponent(entity, vo);
-        //createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, meshComponent);
+        createPhysicsBodyComponent(entity, physicsBodyPropertiesComponent, vo.shape);
     }
 
     protected PhysicsBodyPropertiesComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
@@ -185,17 +189,17 @@ public abstract class ComponentFactory {
         return component;
     }
 
-    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, PolygonComponent polygonComponent) {
-        /*
+    protected PhysicsBodyComponent createPhysicsBodyComponent(Entity entity, PhysicsBodyPropertiesComponent physicsBodyPropertiesComponent, ShapeVO shape) {
+        
 		PhysicsBodyComponent component = new PhysicsBodyComponent();
-        component.body = PhysicsBodyLoader.createBody(world, physicsBodyPropertiesComponent, meshComponent.minPolygonData, new Vector2(1, 1)); //TODO resolution thing
+        component.body = PhysicsBodyLoader.createBody(world, physicsBodyPropertiesComponent, shape.polygons, new Vector2(1, 1)); //TODO resolution thing
 
         entity.add(component);
 
         return component;
-        */
+        
 
-        return null;
+        //return null;
     }
 
     protected PolygonComponent createMeshComponent(Entity entity, MainItemVO vo) {

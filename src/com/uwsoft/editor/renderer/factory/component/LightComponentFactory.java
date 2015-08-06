@@ -49,7 +49,6 @@ public class LightComponentFactory extends ComponentFactory {
         createCommonComponents(entity, vo, EntityFactory.LIGHT_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
-        createPhysicsComponents(entity, vo);
         createLightObjectComponent(entity, (LightVO) vo);
     }
 
