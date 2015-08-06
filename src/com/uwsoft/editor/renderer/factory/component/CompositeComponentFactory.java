@@ -77,12 +77,10 @@ public class CompositeComponentFactory extends ComponentFactory {
         CompositeTransformComponent compositeTransform = new CompositeTransformComponent();
 
         LayerMapComponent layerMap = new LayerMapComponent();
-        layerMap.layers = vo.composite.layers;
-
-        if(layerMap.layers.size() == 0) {
-            // make sure we have default layer
-            layerMap.layers.add(LayerItemVO.createDefault());
+        if(vo.composite.layers.size() == 0) {
+            vo.composite.layers.add(LayerItemVO.createDefault());
         }
+        layerMap.setLayers(vo.composite.layers);
 
         entity.add(compositeTransform);
         entity.add(layerMap);

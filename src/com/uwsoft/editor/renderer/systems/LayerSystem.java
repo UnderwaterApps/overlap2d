@@ -8,11 +8,9 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.utils.SnapshotArray;
-import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.LayerMapComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ZIndexComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 public class LayerSystem extends IteratingSystem {
 
@@ -43,6 +41,7 @@ public class LayerSystem extends IteratingSystem {
 		for (int i = 0; i < children.size; i++) {
 			Entity entity = children.get(i);
 			ZIndexComponent zindexComponent = zIndexMapper.get(entity);
+			MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
 			zindexComponent.layerIndex = getlayerIndexByName(zindexComponent.layerName,layerMapComponent);
 			if(zindexComponent.needReOrder){
 				if (zindexComponent.getZIndex() < 0) throw new IllegalArgumentException("ZIndex cannot be < 0.");
@@ -57,6 +56,7 @@ public class LayerSystem extends IteratingSystem {
 				else
 					children.insert(zindexComponent.getZIndex(), entity);
 			}
+			mainItemComponent.visible = layerMapComponent.getLayer(mainItemComponent.layer).isVisible;
         }
 	}
 	
@@ -77,13 +77,7 @@ public class LayerSystem extends IteratingSystem {
 		 if(layerMapComponent == null){
 			 return 0;
 		 }
-		 ArrayList<LayerItemVO> layers = layerMapComponent.layers;
-		 for (int i = 0; i < layers.size(); i++) {
-			 if (layers.get(i).layerName.equals(layerName)) {
-				 return i;
-			 }
-		 }
-		 return 0;
+		return layerMapComponent.getIndexByName(layerName);
 	 }
 	
 	private class ZComparator implements Comparator<Entity> {

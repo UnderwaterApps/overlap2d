@@ -12,6 +12,7 @@ public class LayerItemVO {
 
     public LayerItemVO(String name) {
         layerName = new String(name);
+		isVisible = true;
     }
 	
 	public LayerItemVO(LayerItemVO vo) {
