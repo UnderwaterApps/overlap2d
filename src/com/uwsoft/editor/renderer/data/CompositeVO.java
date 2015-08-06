@@ -366,7 +366,7 @@ public class CompositeVO {
                 sLights.add(vo);
             }
         }
-        
+
         LayerMapComponent layerMapComponent = layerMainItemComponentComponentMapper.get(compositeEntity);
         layers = layerMapComponent.getLayers();
     }
