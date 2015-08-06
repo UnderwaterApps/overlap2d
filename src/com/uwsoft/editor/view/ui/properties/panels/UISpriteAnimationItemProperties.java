@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.event.SelectBoxChangeListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 
@@ -134,7 +135,7 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     }
 
     private void setListeners() {
-        fpsSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        fpsSelector.addListener(new KeyboardListener(getUpdateEventName()));
 
         animationsSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
         playModesSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
