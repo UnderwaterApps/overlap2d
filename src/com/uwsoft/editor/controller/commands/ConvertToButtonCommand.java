@@ -51,8 +51,8 @@ public class ConvertToButtonCommand extends ConvertToCompositeCommand {
 
         //create layers
         LayerMapComponent layerMapComponent = ComponentRetriever.get(entity, LayerMapComponent.class);
-        layerMapComponent.layers.add(new LayerItemVO("normal"));
-        layerMapComponent.layers.add(new LayerItemVO("pressed"));
+        layerMapComponent.addLayer(new LayerItemVO("normal"));
+        layerMapComponent.addLayer(new LayerItemVO("pressed"));
 
         // adding button logic
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);

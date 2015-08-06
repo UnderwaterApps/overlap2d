@@ -203,12 +203,7 @@ public class EntityUtils {
 
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         LayerMapComponent layerMapComponent = ComponentRetriever.get(entity.getComponent(ParentNodeComponent.class).parentEntity, LayerMapComponent.class);
-        for (LayerItemVO layerItemVO : layerMapComponent.layers) {
-            if (layerItemVO.layerName.equals(mainItemComponent.layer)) {
-                return layerItemVO;
-            }
-        }
 
-        return null;
+        return layerMapComponent.getLayer(mainItemComponent.layer);
     }
 }
