@@ -50,7 +50,6 @@ public class ParticleEffectComponentFactory extends ComponentFactory {
         createCommonComponents(entity, vo, EntityFactory.PARTICLE_TYPE);
         createParentNodeComponent(root, entity);
         createNodeComponent(root, entity);
-        createPhysicsComponents(entity, vo);
         createParticleComponent(entity, (ParticleEffectVO) vo);
     }
 

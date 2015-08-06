@@ -11,6 +11,7 @@ import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Scaling;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -75,14 +76,14 @@ public class SceneLoader {
     private void initSceneLoader() {
         RayHandler.setGammaCorrection(true);
         RayHandler.useDiffuseLight(true);
-
+        world = new World(new Vector2(0,-10), true);
         rayHandler = new RayHandler(world);
         rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
         rayHandler.setCulling(true);
         rayHandler.setBlur(true);
         rayHandler.setBlurNum(3);
         rayHandler.setShadows(true);
-
+        
         addSystems();
 
         entityFactory = new EntityFactory(rayHandler, world, rm);
@@ -107,7 +108,7 @@ public class SceneLoader {
 		engine.removeAllEntities();
 
 		sceneVO = rm.getSceneVO(sceneName);
-
+		world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
 		if(sceneVO.composite == null) {
 			sceneVO.composite = new CompositeVO();
 		}
@@ -119,6 +120,7 @@ public class SceneLoader {
 		}
 
 		setAmbienceInfo(sceneVO);
+		rayHandler.useCustomViewport(viewport.getScreenX(), viewport.getScreenY(), viewport.getScreenWidth(), viewport.getScreenHeight());
 
 		return sceneVO;
 	}
@@ -148,6 +150,7 @@ public class SceneLoader {
         ScriptSystem scriptSystem = new ScriptSystem();
 		renderer = new Overlap2dRenderer(new PolygonSpriteBatch());
 		renderer.setRayHandler(rayHandler);
+		renderer.setBox2dWorld(world);
 		
 		engine.addSystem(animationSystem);
 		engine.addSystem(particleSystem);
