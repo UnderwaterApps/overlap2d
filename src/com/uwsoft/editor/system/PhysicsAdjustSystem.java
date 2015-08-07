@@ -1,35 +1,36 @@
 package com.uwsoft.editor.system;
 
-import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.core.Family;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Body;
+import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
+import com.uwsoft.editor.renderer.systems.PhysicsSystem;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
-public class PhysicsAdjustSystem extends IteratingSystem {
+public class PhysicsAdjustSystem extends PhysicsSystem {
 
-	private ComponentMapper<PhysicsBodyComponent> physicsBodyComponentMapper = ComponentMapper.getFor(PhysicsBodyComponent.class);
-	private ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
 	private Vector2 transformVec = new Vector2();
 	
-	public PhysicsAdjustSystem() {
-		super(Family.all(PhysicsBodyComponent.class).get());
+	public PhysicsAdjustSystem(World world) {
+		super(world);
 	}
 
 	@Override
 	protected void processEntity(Entity entity, float deltaTime) {
 		
 		TransformComponent transformComponent =  transformComponentMapper.get(entity);
-		
-		Body body = physicsBodyComponentMapper.get(entity).body;
+		processBody(entity);
+
+		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
+
+		if(physicsBodyComponent.body == null) return;
+
 		transformVec.x = transformComponent.x * PhysicsBodyLoader.SCALE;
 		transformVec.y = transformComponent.y * PhysicsBodyLoader.SCALE;
-		body.setTransform(transformVec, transformComponent.rotation * MathUtils.degreesToRadians);
+		physicsBodyComponent.body.setTransform(transformVec, transformComponent.rotation * MathUtils.degreesToRadians);
 		
 	}
 
