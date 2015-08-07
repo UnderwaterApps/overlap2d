@@ -246,6 +246,15 @@ public class CompositeActor extends Group {
         return items;
     }
 
+    /**
+     * returns children of this actor that are on specified layer
+     * @param layerName
+     * @return
+     */
+    public Array<Actor> getItemsByLayer(String layerName) {
+        return itemLayerMap.get(layerName);
+    }
+
     public CompositeItemVO getVo() {
         return vo;
     }
