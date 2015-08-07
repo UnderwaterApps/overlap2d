@@ -46,7 +46,10 @@ import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.systems.PhysicsSystem;
+import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.system.PhysicsAdjustSystem;
 
 import java.util.HashMap;
 
@@ -165,7 +168,12 @@ public class Sandbox {
 		sceneLoader = new SceneLoader(resourceManager);
         // adding spine as external component
         sceneLoader.injectExternalItemType(new SpineItemType());
-
+        
+        //Remove Physics System and add Adjusting System for box2d objects to follow items and stop world tick
+        sceneLoader.engine.removeSystem(sceneLoader.engine.getSystem(PhysicsSystem.class));
+        sceneLoader.engine.addSystem(new PhysicsAdjustSystem());
+        sceneLoader.engine.getSystem(Overlap2dRenderer.class).setPhysicsOn(false);
+        
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
