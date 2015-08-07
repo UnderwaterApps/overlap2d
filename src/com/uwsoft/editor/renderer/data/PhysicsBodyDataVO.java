@@ -1,7 +1,7 @@
 package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 
 public class PhysicsBodyDataVO {
 
@@ -39,7 +39,7 @@ public class PhysicsBodyDataVO {
         restitution = vo.restitution;
     }
 
-    public void loadFromComponent(PhysicsBodyPropertiesComponent physicsComponent) {
+    public void loadFromComponent(PhysicsBodyComponent physicsComponent) {
         bodyType = physicsComponent.bodyType;
         mass = physicsComponent.mass;
         centerOfMass = physicsComponent.centerOfMass.cpy();

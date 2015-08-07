@@ -2,10 +2,8 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.scripts.IScript;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -98,7 +96,7 @@ public class MainItemVO {
 			shape = new ShapeVO();
 			shape.polygons = polygonComponent.vertices;
 		}
-        PhysicsBodyPropertiesComponent physicsComponent = entity.getComponent(PhysicsBodyPropertiesComponent.class);
+        PhysicsBodyComponent physicsComponent = entity.getComponent(PhysicsBodyComponent.class);
         if(physicsComponent != null) {
             physics = new PhysicsBodyDataVO();
             physics.loadFromComponent(physicsComponent);

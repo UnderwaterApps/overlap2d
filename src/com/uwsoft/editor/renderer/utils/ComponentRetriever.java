@@ -31,7 +31,6 @@ import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
 import com.uwsoft.editor.renderer.components.sprite.AnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationStateComponent;
@@ -78,7 +77,7 @@ public class ComponentRetriever {
 
     	mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
     	mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
-        mappers.put(PhysicsBodyPropertiesComponent.class, ComponentMapper.getFor(PhysicsBodyPropertiesComponent.class));
+        mappers.put(PhysicsBodyComponent.class, ComponentMapper.getFor(PhysicsBodyComponent.class));
 
         mappers.put(AnimationComponent.class, ComponentMapper.getFor(AnimationComponent.class));
         mappers.put(SpriteAnimationComponent.class, ComponentMapper.getFor(SpriteAnimationComponent.class));

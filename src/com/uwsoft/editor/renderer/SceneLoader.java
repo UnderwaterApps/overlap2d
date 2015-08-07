@@ -22,6 +22,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -144,7 +146,7 @@ public class SceneLoader {
 		LightSystem lightSystem = new LightSystem();
 		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();
 		LayerSystem layerSystem = new LayerSystem();
-		PhysicsSystem physicsSystem = new PhysicsSystem();
+		PhysicsSystem physicsSystem = new PhysicsSystem(world);
 		CompositeSystem compositeSystem = new CompositeSystem();
 		LabelSystem labelSystem = new LabelSystem();
         ScriptSystem scriptSystem = new ScriptSystem();
@@ -212,6 +214,12 @@ public class SceneLoader {
 					for (Entity node : nodeComponent.children) {
 						engine.removeEntity(node);
 					}
+				}
+
+				//check for physics
+				PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
+				if(physicsBodyComponent != null) {
+					world.destroyBody(physicsBodyComponent.body);
 				}
 
                 // check if it is light

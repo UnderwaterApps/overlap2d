@@ -7,7 +7,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -25,11 +25,11 @@ public class PhysicsBodyLoader {
         this.world = world;
     }
 
-//    public Body createBody( PhysicsBodyPropertiesComponent pysicsComponent, MeshVO shape,Vector2 mulVec) {
+//    public Body createBody( PhysicsBodyComponent pysicsComponent, MeshVO shape,Vector2 mulVec) {
 //        return PhysicsBodyLoader.createBody(world, pysicsComponent, shape, mulVec);
 //    }
 
-    public static Body createBody(World world, PhysicsBodyPropertiesComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
+    public static Body createBody(World world, PhysicsBodyComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
         FixtureDef fixtureDef = new FixtureDef();
 
         if(pysicsComponent != null) {
