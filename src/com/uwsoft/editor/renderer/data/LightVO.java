@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
 public class LightVO extends MainItemVO{
 	//public int itemId = -1;
@@ -11,6 +12,7 @@ public class LightVO extends MainItemVO{
 	public float distance = 300;
 	public float directionDegree = 0;
 	public float coneDegree = 30;
+	public float softnessLength = distance * 0.1f * PhysicsBodyLoader.SCALE;
 	public boolean isStatic = true;
 	public boolean isXRay = true;
 	
@@ -31,6 +33,7 @@ public class LightVO extends MainItemVO{
 		coneDegree = vo.coneDegree;
 		isStatic = vo.isStatic;
 		isXRay = vo.isXRay;
+		softnessLength = vo.softnessLength;
 	}
 
 	@Override
@@ -45,5 +48,6 @@ public class LightVO extends MainItemVO{
 		coneDegree = lightObjectComponent.coneDegree;
 		isStatic = lightObjectComponent.isStatic;
 		isXRay = lightObjectComponent.isXRay;
+		softnessLength = lightObjectComponent.softnessLength;
 	}
 }

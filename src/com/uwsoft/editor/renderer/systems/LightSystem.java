@@ -66,6 +66,7 @@ public class LightSystem extends IteratingSystem {
 				xx=transformComponent.x-xx;
 			}
 			light.setPosition((relativeX-xx)*PhysicsBodyLoader.SCALE, (relativeY-yy)*PhysicsBodyLoader.SCALE);
+			light.setSoftnessLength(lightObjectComponent.softnessLength);
 		}
 
 		if(lightObjectComponent.getType() == LightType.CONE){
