@@ -42,6 +42,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private VisValidableTextField pointLightRadiusField;
     private VisValidableTextField coneInnerAngleField;
     private VisValidableTextField coneDistanceField;
+    private VisValidableTextField softnessLengthField;
 
     private VisLabel lightTypeLabel;
 
@@ -58,6 +59,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         pointLightRadiusField = new VisValidableTextField(floatValidator);
         coneInnerAngleField = new VisValidableTextField(floatValidator);
         coneDistanceField = new VisValidableTextField(floatValidator);
+        softnessLengthField = new VisValidableTextField(floatValidator);
 
         secondaryTable = new VisTable();
 
@@ -72,6 +74,9 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         mainTable.row().padTop(5);
         mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(75).right();
         mainTable.add(rayCountSelector).left();
+        mainTable.row().padTop(5);
+        mainTable.add(new VisLabel("Softness lenght: ", Align.right)).padRight(5).width(100).right();
+        mainTable.add(softnessLengthField).width(70).left();
         mainTable.row().padTop(5);
 
         mainTable.add(secondaryTable).colspan(2);
@@ -156,6 +161,14 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     public void setDistance(String distance) {
         coneDistanceField.setText(distance);
     }
+    
+    public String getSoftnessLength() {
+        return softnessLengthField.getText();
+    }
+    
+    public void setSoftnessLength(String softness) {
+        softnessLengthField.setText(softness);
+    }
 
     @Override
     public String getPrefix() {
@@ -169,5 +182,6 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
+        softnessLengthField.addListener(new KeyboardListener(getUpdateEventName()));
     }
 }
