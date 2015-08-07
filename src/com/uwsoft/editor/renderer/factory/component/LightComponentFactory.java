@@ -67,6 +67,7 @@ public class LightComponentFactory extends ComponentFactory {
         component.coneDegree = vo.coneDegree;
         component.directionDegree = vo.directionDegree;
         component.distance = vo.distance;
+        component.softnessLength = vo.softnessLength;
         component.isStatic = vo.isStatic;
         component.isXRay = vo.isXRay;
         component.rays = vo.rays;
@@ -76,6 +77,8 @@ public class LightComponentFactory extends ComponentFactory {
         } else {
             component.lightObject = new ConeLight(rayHandler, component.rays, Color.WHITE, 1, 0, 0, 0, 0);
         }
+        
+        component.lightObject.setSoftnessLength(component.softnessLength);
 
         entity.add(component);
         return component;
