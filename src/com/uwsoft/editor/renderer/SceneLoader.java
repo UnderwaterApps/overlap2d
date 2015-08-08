@@ -6,7 +6,6 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.EntityListener;
-import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -14,7 +13,6 @@ import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Scaling;
-import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.badlogic.gdx.utils.viewport.ScalingViewport;
@@ -22,10 +20,10 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
-import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
+import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.renderer.scripts.IScript;
@@ -52,7 +50,8 @@ public class SceneLoader {
 
 	public EntityFactory entityFactory;
 
-	private float pixesPerWU = 1;
+	private float pixelsPerWU = 1;
+
 	private Overlap2dRenderer renderer;
 	private Entity root;
 
@@ -105,7 +104,7 @@ public class SceneLoader {
 
 	public SceneVO loadScene(String sceneName, Viewport viewport) {
 
-		pixesPerWU = rm.getProjectVO().pixelToWorld;
+		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
 		engine.removeAllEntities();
 
@@ -129,7 +128,7 @@ public class SceneLoader {
 
 	public SceneVO loadScene(String sceneName) {
 		ProjectInfoVO projectVO = rm.getProjectVO();
-		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/pixesPerWU, (float)projectVO.originalResolution.height/pixesPerWU, new OrthographicCamera());
+		Viewport viewport = new ScalingViewport(Scaling.stretch, (float)projectVO.originalResolution.width/ pixelsPerWU, (float)projectVO.originalResolution.height/ pixelsPerWU, new OrthographicCamera());
 		return loadScene(sceneName, viewport);
 	}
 
@@ -142,6 +141,8 @@ public class SceneLoader {
 	}
 
 	private void addSystems() {
+        PhysicsBodyLoader.getInstance().setScaleFromPPWU(pixelsPerWU);
+
 		ParticleSystem particleSystem = new ParticleSystem();
 		LightSystem lightSystem = new LightSystem();
 		SpriteAnimationSystem animationSystem = new SpriteAnimationSystem();

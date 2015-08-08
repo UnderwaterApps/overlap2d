@@ -33,8 +33,8 @@ public class PhysicsSystem extends IteratingSystem {
 
 		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 		Body body = physicsBodyComponent.body;
-		transformComponent.x = body.getPosition().x/ PhysicsBodyLoader.SCALE;
-		transformComponent.y = body.getPosition().y/PhysicsBodyLoader.SCALE;
+		transformComponent.x = body.getPosition().x/ PhysicsBodyLoader.getScale();
+		transformComponent.y = body.getPosition().y/ PhysicsBodyLoader.getScale();
 		transformComponent.rotation = body.getAngle() * MathUtils.radiansToDegrees;
 	}
 
@@ -51,7 +51,7 @@ public class PhysicsSystem extends IteratingSystem {
 			if(polygonComponent.vertices == null) return;
 
 			PhysicsBodyComponent bodyPropertiesComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-			physicsBodyComponent.body = PhysicsBodyLoader.createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(1, 1));
+			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(1, 1));
 		}
 	}
 

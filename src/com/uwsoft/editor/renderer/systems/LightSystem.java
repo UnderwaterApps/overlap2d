@@ -23,7 +23,7 @@ public class LightSystem extends IteratingSystem {
     private ComponentMapper<TransformComponent> transformComponentMapper = ComponentMapper.getFor(TransformComponent.class);
     private ComponentMapper<ParentNodeComponent> parentNodeComponentMapper = ComponentMapper.getFor(ParentNodeComponent.class);
     private ComponentMapper<TintComponent> tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
-   
+
 	public LightSystem() {
 		super(Family.all(LightObjectComponent.class).get());
 	}
@@ -65,7 +65,7 @@ public class LightSystem extends IteratingSystem {
 				yy=transformComponent.y-yy;
 				xx=transformComponent.x-xx;
 			}
-			light.setPosition((relativeX-xx)*PhysicsBodyLoader.SCALE, (relativeY-yy)*PhysicsBodyLoader.SCALE);
+			light.setPosition((relativeX-xx)*PhysicsBodyLoader.getScale(), (relativeY-yy)*PhysicsBodyLoader.getScale());
 			light.setSoftnessLength(lightObjectComponent.softnessLength);
 		}
 
@@ -77,14 +77,14 @@ public class LightSystem extends IteratingSystem {
 		if (lightObjectComponent.getType() == LightVO.LightType.POINT) {
 			lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
             // TODO Physics and resolution part
-            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.SCALE);
+            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
             lightObjectComponent.lightObject.setActive(true);
             lightObjectComponent.lightObject.setXray(lightObjectComponent.isXRay);
 
         } else {
         	lightObjectComponent.lightObject.setColor(new Color(tintComponent.color));
-            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.SCALE);
+            lightObjectComponent.lightObject.setDistance(lightObjectComponent.distance * PhysicsBodyLoader.getScale());
             lightObjectComponent.lightObject.setStaticLight(lightObjectComponent.isStatic);
             lightObjectComponent.lightObject.setDirection(lightObjectComponent.directionDegree);
             ((ConeLight) lightObjectComponent.lightObject).setConeDegree(lightObjectComponent.coneDegree);
