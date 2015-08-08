@@ -68,8 +68,14 @@ public class FontManager extends BaseProxy {
             //result[2] = "/System/Library/Fonts";
             return result;
         } else if (SystemUtils.IS_OS_LINUX) {
-            result = new String[1];
-            result[0] = System.getProperty("user.home")+File.separator + ".fonts";
+            String path = System.getProperty("user.home")+File.separator + ".fonts";
+            File tmp = new File(path);
+            if(tmp.exists() && tmp.isDirectory()) {
+                result = new String[1];
+                result[0] = System.getProperty("user.home") + File.separator + ".fonts";
+            } else {
+                result = new String[0];
+            }
             return result;
         }
 
