@@ -72,7 +72,7 @@ public class FontManager extends BaseProxy {
             File tmp = new File(path);
             if(tmp.exists() && tmp.isDirectory()) {
                 result = new String[1];
-                result[0] = System.getProperty("user.home") + File.separator + ".fonts";
+                result[0] = path;
             } else {
                 result = new String[0];
             }
