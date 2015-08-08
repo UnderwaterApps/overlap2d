@@ -28,8 +28,8 @@ public class PhysicsAdjustSystem extends PhysicsSystem {
 
 		if(physicsBodyComponent.body == null) return;
 
-		transformVec.x = transformComponent.x * PhysicsBodyLoader.SCALE;
-		transformVec.y = transformComponent.y * PhysicsBodyLoader.SCALE;
+		transformVec.x = transformComponent.x * PhysicsBodyLoader.getScale();
+		transformVec.y = transformComponent.y * PhysicsBodyLoader.getScale();
 		physicsBodyComponent.body.setTransform(transformVec, transformComponent.rotation * MathUtils.degreesToRadians);
 		
 	}
