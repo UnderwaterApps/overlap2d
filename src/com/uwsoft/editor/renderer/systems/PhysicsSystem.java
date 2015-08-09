@@ -41,6 +41,7 @@ public class PhysicsSystem extends IteratingSystem {
 	protected void processBody(Entity entity) {
 		PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 		PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
 
 		if(polygonComponent == null && physicsBodyComponent.body != null) {
 			world.destroyBody(physicsBodyComponent.body);
@@ -52,6 +53,8 @@ public class PhysicsSystem extends IteratingSystem {
 
 			PhysicsBodyComponent bodyPropertiesComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
 			physicsBodyComponent.body = PhysicsBodyLoader.getInstance().createBody(world, bodyPropertiesComponent, polygonComponent.vertices, new Vector2(1, 1));
+
+            physicsBodyComponent.body.setTransform(new Vector2(transformComponent.x * PhysicsBodyLoader.getScale(), transformComponent.y * PhysicsBodyLoader.getScale()), physicsBodyComponent.body.getAngle());
 		}
 	}
 
