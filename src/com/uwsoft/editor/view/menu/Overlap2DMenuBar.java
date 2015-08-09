@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view;
+package com.uwsoft.editor.view.menu;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -289,5 +289,15 @@ public class Overlap2DMenuBar extends CustomMenuBar {
         }
     }
 
-
+    public void addMenuItem(String menu, String subMenuName, String notificationName) {
+        if(menu.equals(FILE_MENU)) {
+            fileMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
+        }
+        if(menu.equals(EDIT_MENU)) {
+            editMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
+        }
+        if(menu.equals(WINDOW_MENU)) {
+            windowMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
+        }
+    }
 }

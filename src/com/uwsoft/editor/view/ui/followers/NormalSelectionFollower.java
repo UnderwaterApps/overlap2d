@@ -24,7 +24,6 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -44,7 +43,7 @@ public class NormalSelectionFollower extends BasicFollower {
     private EditorTextureManager tm;
     private CursorManager cursorManager;
 
-    private PixelRect pixelRect;
+    protected PixelRect pixelRect;
 
     protected Group transformGroup;
     protected Actor[] miniRects;

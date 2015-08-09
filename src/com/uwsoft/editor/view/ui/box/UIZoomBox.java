@@ -23,8 +23,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.EditableSelectBoxChangeListener;
+import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.view.ui.widget.EditableSelectBox;
 
 /**
@@ -38,7 +40,7 @@ public class UIZoomBox extends UIBaseBox {
     public static final String ZOOM_VALUE_CHANGED = prefix + "ZOOM_VALUE_CHANGED";
 
     private final Skin skin;
-    private EditableSelectBox visSelectBox;
+    private VisTextField percentValueField;
     private VisImageButton zoomInBtn;
     private VisImageButton zoomOutBtn;
 
@@ -79,23 +81,23 @@ public class UIZoomBox extends UIBaseBox {
         zoomOutBtn.addListener(new UIZoomBoxButtonClickListener(2f));
         add(zoomOutBtn).padRight(11).height(25);
         //
-        visSelectBox = new EditableSelectBox("white");
-        visSelectBox.setItems("200%", "100%", "50%", "25%");
-        visSelectBox.addListener(new EditableSelectBoxChangeListener(ZOOM_VALUE_CHANGED));
-        add(visSelectBox).width(114);
+        percentValueField = new VisTextField("white");
+        //percentValueField.setItems("200%", "100%", "50%", "25%");
+        percentValueField.addListener(new KeyboardListener(ZOOM_VALUE_CHANGED));
+        add(percentValueField).width(114);
     }
 
     public String getCurrentZoom() {
-        String percent = visSelectBox.getSelected();
+        String percent = percentValueField.getText();
         if(!percent.substring(percent.length()-1, percent.length()).equals("%")) {
             percent+="%";
-            visSelectBox.setText(percent);
+            percentValueField.setText(percent);
         }
         return percent.substring(0, percent.length()-1);
     }
 
     public void setCurrentZoom(String currentZoom) {
-        visSelectBox.setSelected(currentZoom+'%');
+        percentValueField.setText(currentZoom + '%');
     }
 
     private class UIZoomBoxButtonClickListener extends ClickListener {

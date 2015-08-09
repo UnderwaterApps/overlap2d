@@ -307,6 +307,14 @@
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
+    },
+    "transparent": {
+      "selection": "default-select-selection",
+      "focusBorder": "border",
+      "errorBorder": "border-error",
+      "font": "default-font",
+      "fontColor": "white",
+      "cursor": "cursor"
     }
   },
   "com.kotcrab.vis.ui.widget.VisImageTextButton$VisImageTextButtonStyle": {
@@ -350,6 +358,12 @@
       "font": "big-font-normal",
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
+    },
+    "tagBtn": {
+      "down": "toolbar-over",
+      "up": "toolbar-over",
+      "fontColor": "white",
+      "font": "default-font"
     },
     "toggle": {
       "down": "button-down",

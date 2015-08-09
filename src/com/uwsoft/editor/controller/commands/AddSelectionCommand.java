@@ -30,20 +30,28 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class AddSelectionCommand extends RevertableCommand {
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.AddSelectionCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
+
     private Array<Integer> entityIds;
 
     @Override
     public void doAction() {
-        Set<Entity> items = getNotification().getBody();
-        Sandbox.getInstance().getSelector().addSelections(items);
+        if(entityIds == null) {
+            Set<Entity> items = getNotification().getBody();
+            entityIds = EntityUtils.getEntityId(items);
+        }
 
-        entityIds = EntityUtils.getEntityId(items);
+        Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
+        Sandbox.getInstance().getSelector().addSelections(items);
+        facade.sendNotification(DONE);
     }
 
     @Override
     public void undoAction() {
         Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
         Sandbox.getInstance().getSelector().releaseSelections(items);
+        facade.sendNotification(DONE);
     }
 
 }

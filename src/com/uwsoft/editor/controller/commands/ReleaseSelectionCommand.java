@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.controller.commands;
 
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -31,19 +32,26 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
  */
 public class ReleaseSelectionCommand extends RevertableCommand {
 
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.ReleaseSelectionCommand";
+    public static final String DONE = CLASS_NAME + "DONE";
+
     private Array<Integer> entityIds;
 
     @Override
     public void doAction() {
-        Set<Entity> items = new HashSet<Entity>(getNotification().getBody());
+        Set<Entity> items = new HashSet<>(getNotification().<Collection<Entity>>getBody());
         Sandbox.getInstance().getSelector().releaseSelections(items);
 
         entityIds = EntityUtils.getEntityId(items);
+
+        facade.sendNotification(DONE);
     }
 
     @Override
     public void undoAction() {
         Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
         Sandbox.getInstance().getSelector().addSelections(items);
+
+        facade.sendNotification(DONE);
     }
 }

@@ -21,10 +21,8 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.ButtonToNotificationListener;
-import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.view.ui.properties.UIRemovableProperties;
 
 /**

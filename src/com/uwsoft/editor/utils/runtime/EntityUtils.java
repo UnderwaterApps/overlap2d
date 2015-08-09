@@ -30,13 +30,14 @@ import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
+import org.apache.commons.lang3.ObjectUtils;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -75,11 +76,26 @@ public class EntityUtils {
         HashMap<Integer, Collection<Component>> data = new HashMap<>();
 
         for(Entity entity: entities) {
-            Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+            Collection<Component> components = cloneEntityComponents(entity);
             data.put(EntityUtils.getEntityId(entity), components);
         }
 
         return data;
+    }
+
+    public static Entity cloneEntity(Entity entity) {
+        Entity newEntity = new Entity();
+        Collection<Component> components = cloneEntityComponents(entity);
+        for(Component component: components) {
+            newEntity.add(ComponentCloner.get(component));
+        }
+
+        return newEntity;
+    }
+
+    public static Collection<Component> cloneEntityComponents(Entity entity) {
+        Collection<Component> components = ComponentCloner.cloneAll(ComponentRetriever.getComponents(entity));
+        return components;
     }
 
     public static Vector2 getPosition(Entity entity) {
@@ -167,5 +183,27 @@ public class EntityUtils {
         }
 
         return result;
+    }
+
+    public static void reInstantiateChildren(Entity entity) {
+        NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
+        if (nodeComponent != null) {
+            CompositeVO compositeVo = new CompositeVO();
+            compositeVo.loadFromEntity(entity);
+
+            entity.remove(NodeComponent.class);
+            entity.add(new NodeComponent());
+
+            SceneLoader sceneLoader = Sandbox.getInstance().getSceneControl().sceneLoader;
+            sceneLoader.entityFactory.initAllChildren(Sandbox.getInstance().getEngine(), entity, compositeVo);
+        }
+    }
+
+    public static LayerItemVO getEntityLayer(Entity entity) {
+
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        LayerMapComponent layerMapComponent = ComponentRetriever.get(entity.getComponent(ParentNodeComponent.class).parentEntity, LayerMapComponent.class);
+
+        return layerMapComponent.getLayer(mainItemComponent.layer);
     }
 }

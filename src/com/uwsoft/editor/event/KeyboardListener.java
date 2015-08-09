@@ -86,10 +86,10 @@ public class KeyboardListener implements EventListener {
             return;
         }
         // check for change
-        if(lastValue.equals(target.getText())) {
+        /*if(lastValue.equals(target.getText())) {
             // no change = no event;
             return;
-        }
+        }*/
 
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         facade.sendNotification(eventName, target.getText());

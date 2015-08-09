@@ -18,21 +18,22 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree.Node;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTree;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
@@ -47,6 +48,8 @@ public class UIItemsTreeBox extends UICollapsibleBox {
     
     private ComponentMapper<MainItemComponent> mainItemMapper;
     private MainItemComponent mainItemComponent;
+
+    private Node rootNode;
 
     public UIItemsTreeBox() {
         super("Items Tree", 166);
@@ -103,6 +106,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
 
     private Node addTreeRoot(Entity entity, Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
         Node node = addTreeNode(entity, parentNode);
+        if (parentNode == null) rootNode = node;
 
         NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
 
@@ -130,28 +134,50 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         return node;
     }
 
+    public void setSelection(Set<Entity> selection) {
 
-    public void setSelected(HashMap<Entity, NormalSelectionFollower> currentSelection) {
         if (tree == null) return;
         tree.getSelection().clear();
+        if (selection == null) return;
+        addToSelection(selection);
+    }
+
+    public void addToSelection(Set<Entity> selection) {
+
+        if (tree == null) return;
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
-        for (Object o : currentSelection.entrySet()) {
-            Map.Entry pairs = (Map.Entry) o;
-            for (int i = 0; i < allSceneRootNodes.size; i++) {
-                if ((allSceneRootNodes.get(i).getObject()).equals(pairs.getKey())) {
-                    tree.getSelection().add(allSceneRootNodes.get(i));
+
+        for (int entityId : EntityUtils.getEntityId(selection)) {
+            for (Node n : allSceneRootNodes) {
+                if(n.getObject().equals(entityId)) {
+                    tree.getSelection().add(n);
+                    break;
                 }
             }
-            //it.remove();
+        }
+    }
+
+    public void removeFromSelection(Set<Entity> selection) {
+
+        if (tree == null) return;
+        Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
+
+        for (int entityId : EntityUtils.getEntityId(selection)) {
+            for (Node n : allSceneRootNodes) {
+                if(n.getObject().equals(entityId)) {
+                    tree.getSelection().remove(n);
+                    break;
+                }
+            }
         }
     }
 
 
-    private class TreeChangeListener extends ChangeListener {
-
-        @Override
-        public void changed(ChangeEvent event, Actor actor) {
-            facade.sendNotification(ITEMS_SELECTED, tree.getSelection());
+    private class TreeChangeListener extends ClickListener {
+        public void clicked (InputEvent event, float x, float y) {
+            Selection<Node> selection = tree.getSelection();
+            selection.remove(rootNode);
+            facade.sendNotification(ITEMS_SELECTED, selection);
         }
     }
 }

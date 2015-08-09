@@ -18,7 +18,6 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.mediator.SimpleMediator;

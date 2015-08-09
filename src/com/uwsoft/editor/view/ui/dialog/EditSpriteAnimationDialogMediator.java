@@ -26,7 +26,7 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.Overlap2DMenuBar;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;

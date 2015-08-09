@@ -46,6 +46,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIBasicItemProperties";
     public static final String TINT_COLOR_BUTTON_CLICKED = prefix + ".TINT_COLOR_BUTTON_CLICKED";
     public static final String CUSTOM_VARS_BUTTON_CLICKED = prefix + ".CUSTOM_VARS_BUTTON_CLICKED";
+    public static final String TAGS_BUTTON_CLICKED = prefix + ".TAGS_BUTTON_CLICKED";
     public static final String ADD_COMPONENT_BUTTON_CLICKED = prefix + "ADD_COMPONENT_BUTTON_CLICKED";
     public static final String LINKING_CHANGED = prefix + ".LINKING_CHANGED";
 
@@ -86,6 +87,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     private TintButton tintColorComponent;
     private VisTextField rotationValue;
     private VisTextButton customVarsButton;
+    private VisTextButton tagsButton;
 
     private VisSelectBox<String> nonExistantComponents;
     private VisTextButton addComponentButton;
@@ -127,6 +129,7 @@ public class UIBasicItemProperties extends UIItemProperties {
         tintColorComponent = new TintButton(29, 21);
         rotationValue = StandardWidgetsFactory.createValidableTextField(floatValidator);
         customVarsButton = new VisTextButton("Custom Vars");
+        tagsButton = new VisTextButton("Tags");
 
         nonExistantComponents = new VisSelectBox<>();
         addComponentButton = new VisTextButton("add");
@@ -155,7 +158,11 @@ public class UIBasicItemProperties extends UIItemProperties {
         row().padTop(6);
         add(createLabel("Scale:")).padRight(3).left().top();
         add(getAsTable("X:", scaleXValue, "Y:", scaleYValue)).left();
-        add(customVarsButton).height(21).left().top().padLeft(13);
+        VisTable buttonsTable = new VisTable();
+        buttonsTable.add(customVarsButton);
+        buttonsTable.row();
+        buttonsTable.add(tagsButton).right().padTop(2);
+        add(buttonsTable).height(45).left().top().padLeft(13);
         row();
         addSeparator().padTop(9).padBottom(6).colspan(3);
         add(createLabel("Add additional components:", Align.left)).fillX().colspan(3);
@@ -197,8 +204,8 @@ public class UIBasicItemProperties extends UIItemProperties {
         return positionTable;
     }
 
-    public void setItemType(ItemType type) {
-        itemType.setText(itemTypeNameMap.get(type));
+    public void setItemType(ItemType type, int itemUniqueId) {
+        itemType.setText(itemTypeNameMap.get(type) + " ("+itemUniqueId+")");
         itemTypeIcon.setDrawable(VisUI.getSkin().getDrawable(itemTypeIconMap.get(type)));
         itemTypeIcon.setWidth(22);
     }
@@ -312,6 +319,7 @@ public class UIBasicItemProperties extends UIItemProperties {
 
         tintColorComponent.addListener(new ButtonToNotificationListener(TINT_COLOR_BUTTON_CLICKED));
         customVarsButton.addListener(new ButtonToNotificationListener(CUSTOM_VARS_BUTTON_CLICKED));
+        tagsButton.addListener(new ButtonToNotificationListener(TAGS_BUTTON_CLICKED));
         addComponentButton.addListener(new ButtonToNotificationListener(ADD_COMPONENT_BUTTON_CLICKED));
 
         linkImage.addListener(new ClickListener() {

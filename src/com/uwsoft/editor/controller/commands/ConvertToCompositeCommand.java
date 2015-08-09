@@ -18,12 +18,14 @@
 
 package com.uwsoft.editor.controller.commands;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -41,10 +43,22 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
     protected Integer entityId;
     protected Integer parentEntityId;
 
+    protected HashMap<Integer, String> layersBackup;
+
     @Override
     public void doAction() {
         // get entity list
         HashSet<Entity> entities = (HashSet<Entity>) sandbox.getSelector().getSelectedItems();
+
+        if(layersBackup == null) {
+            // backup layer data
+            layersBackup = new HashMap<>();
+            for(Entity entity: entities) {
+                MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+                int tmpId = EntityUtils.getEntityId(entity);
+                layersBackup.put(tmpId, mainItemComponent.layer);
+            }
+        }
 
         // what will be the position of new composite?
         Vector2 position = EntityUtils.getLeftBottomPoint(entities);
@@ -65,6 +79,10 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
             transformComponent.x-=position.x;
             transformComponent.y-=position.y;
+
+            // put it on default layer
+            MainItemComponent mainItemComponent = ComponentRetriever.get(tmpEntity, MainItemComponent.class);
+            mainItemComponent.layer = "Default";
 
         }
         // recalculate composite size
@@ -95,13 +113,15 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         //rebase children back to root
         EntityUtils.changeParent(children, oldParentEntity);
 
-
-
         //reposition children
         for(Entity tmpEntity: children) {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
             transformComponent.x+=positionDiff.x;
             transformComponent.y+=positionDiff.y;
+
+            // put layer data back
+            MainItemComponent mainItemComponent = ComponentRetriever.get(tmpEntity, MainItemComponent.class);
+            mainItemComponent.layer = layersBackup.get(EntityUtils.getEntityId(tmpEntity));
         }
 
         // remove composite
@@ -109,5 +129,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         sandbox.getEngine().removeEntity(entity);
 
         Overlap2DFacade.getInstance().sendNotification(DONE);
+
+        sandbox.getSelector().setSelections(children, true);
     }
 }

@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
+import com.commons.O2DDialog;
 import org.apache.commons.lang3.math.NumberUtils;
 
 import com.badlogic.ashley.core.Entity;

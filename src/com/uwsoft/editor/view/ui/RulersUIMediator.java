@@ -8,7 +8,9 @@ import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.utils.Guide;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 7/18/2015.
@@ -43,20 +45,19 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
 
-        ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
-        SceneConfigVO sceneConfigVO = projectManager.getCurrentSceneConfigVO();
+        SceneVO sceneVO = Sandbox.getInstance().getSceneControl().getCurrentSceneVO();
 
         switch (notification.getName()) {
             case SceneDataManager.SCENE_LOADED:
                 Array<Guide> guides = new Array<>();
-                for(int i  = 0; i < sceneConfigVO.verticalGuides.size(); i++) {
+                for(int i  = 0; i < sceneVO.verticalGuides.size(); i++) {
                     Guide tmp = new Guide(true);
-                    tmp.pos = sceneConfigVO.verticalGuides.get(i);
+                    tmp.pos = sceneVO.verticalGuides.get(i);
                     guides.add(tmp);
                 }
-                for(int i  = 0; i < sceneConfigVO.horizontalGuides.size(); i++) {
+                for(int i  = 0; i < sceneVO.horizontalGuides.size(); i++) {
                     Guide tmp = new Guide(false);
-                    tmp.pos = sceneConfigVO.horizontalGuides.get(i);
+                    tmp.pos = sceneVO.horizontalGuides.get(i);
                     guides.add(tmp);
                 }
 
@@ -66,14 +67,14 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
                 break;
             case RulersUI.ACTION_GUIDES_MODIFIED:
                 guides = viewComponent.getGuides();
-                sceneConfigVO.verticalGuides.clear();
-                sceneConfigVO.horizontalGuides.clear();
+                sceneVO.verticalGuides.clear();
+                sceneVO.horizontalGuides.clear();
 
                 for(int i  = 0; i < guides.size; i++) {
                     if(guides.get(i).isVertical) {
-                        sceneConfigVO.verticalGuides.add(guides.get(i).pos);
+                        sceneVO.verticalGuides.add(guides.get(i).pos);
                     } else {
-                        sceneConfigVO.horizontalGuides.add(guides.get(i).pos);
+                        sceneVO.horizontalGuides.add(guides.get(i).pos);
                     }
                 }
 

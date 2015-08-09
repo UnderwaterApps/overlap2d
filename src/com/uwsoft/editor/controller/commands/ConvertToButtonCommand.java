@@ -20,11 +20,10 @@ package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
-import com.uwsoft.editor.renderer.components.ScriptComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.additional.ButtonComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.renderer.scripts.ButtonScript;
-import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -52,17 +51,13 @@ public class ConvertToButtonCommand extends ConvertToCompositeCommand {
 
         //create layers
         LayerMapComponent layerMapComponent = ComponentRetriever.get(entity, LayerMapComponent.class);
-        layerMapComponent.layers.add(new LayerItemVO("normal"));
-        layerMapComponent.layers.add(new LayerItemVO("pressed"));
+        layerMapComponent.addLayer(new LayerItemVO("normal"));
+        layerMapComponent.addLayer(new LayerItemVO("pressed"));
 
-        // add script
-        ScriptComponent scriptComponent = ComponentRetriever.get(entity, ScriptComponent.class);
-        if(scriptComponent == null) {
-            scriptComponent = new ScriptComponent();
-        }
-        IScript buttonScript = new ButtonScript();
-        scriptComponent.addScript(buttonScript);
-        buttonScript.init(entity);
+        // adding button logic
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        mainItemComponent.tags.add("button");
+        entity.add(new ButtonComponent());
     }
 
     @Override

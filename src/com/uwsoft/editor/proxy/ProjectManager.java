@@ -25,8 +25,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -37,7 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.data.vo.SceneConfigVO;
-import com.uwsoft.editor.view.Overlap2DMenuBar;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -60,7 +58,6 @@ import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.ShapeVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -205,9 +202,9 @@ public class ProjectManager extends BaseProxy {
             try {
                 projectContents = FileUtils.readFileToString(projectFile.file());
                 Json json = new Json();
+                json.setIgnoreUnknownFields(true);
                 ProjectVO vo = json.fromJson(ProjectVO.class, projectContents);
                 goThroughVersionMigrationProtocol(projectPath, vo);
-                json.setIgnoreUnknownFields(true);
                 currentProjectVO = vo;
                 String prjInfoFilePath = projectPath + "/project.dt";
                 FileHandle projectInfoFile = Gdx.files.internal(prjInfoFilePath);

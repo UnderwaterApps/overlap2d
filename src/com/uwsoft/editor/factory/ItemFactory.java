@@ -22,8 +22,9 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.controller.commands.PasteItemsCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
@@ -69,6 +70,8 @@ public class ItemFactory {
     private boolean setEssentialData(MainItemVO vo, Vector2 position) {
         UILayerBoxMediator layerBoxMediator = Overlap2DFacade.getInstance().retrieveMediator(UILayerBoxMediator.NAME);
         String layerName = layerBoxMediator.getCurrentSelectedLayerName();
+
+        if(layerName == null) return false;
 
         vo.layerName = layerName;
 
@@ -136,6 +139,8 @@ public class ItemFactory {
         HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
 
         CompositeItemVO itemVO = libraryItems.get(libraryName);
+        itemVO.uniqueId = -1;
+        PasteItemsCommand.forceIdChange(itemVO.composite);
         Entity entity = createCompositeItem(itemVO, position);
 
         //adding library name
@@ -205,8 +210,8 @@ public class ItemFactory {
         vo.size = textSettings.getFontSize();
 
         // need to calculate minimum bounds size here
-        vo.width = 120/Sandbox.getInstance().getPixelPerWU();
-        vo.height = 50/Sandbox.getInstance().getPixelPerWU();
+        vo.width = 120f/Sandbox.getInstance().getPixelPerWU();
+        vo.height = 50f/Sandbox.getInstance().getPixelPerWU();
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);

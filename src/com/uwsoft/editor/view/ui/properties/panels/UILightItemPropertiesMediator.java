@@ -54,6 +54,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setRadius(lightObjectComponent.distance + "");
         viewComponent.setAngle(lightObjectComponent.coneDegree + "");
         viewComponent.setDistance(lightObjectComponent.distance + "");
+        viewComponent.setSoftnessLength(lightObjectComponent.softnessLength + "");
     }
 
     @Override
@@ -65,6 +66,8 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         payloadVo.isStatic = viewComponent.isStatic();
         payloadVo.isXRay = viewComponent.isXRay();
         payloadVo.coneDegree = NumberUtils.toFloat(viewComponent.getAngle());
+        payloadVo.softnessLength = NumberUtils.toFloat(viewComponent.getSoftnessLength());
+        
         if(payloadVo.type == LightVO.LightType.POINT) {
             payloadVo.distance = NumberUtils.toFloat(viewComponent.getRadius());
         } else {

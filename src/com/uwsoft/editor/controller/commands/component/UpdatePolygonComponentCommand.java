@@ -23,7 +23,9 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -54,6 +56,14 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         polygonComponent.vertices = dataTo;
 
+        // if it's image update polygon sprite data
+        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+        if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
+            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+            dimensionsComponent.setPolygon(polygonComponent);
+            textureRegionComponent.setPolygonSprite(polygonComponent);
+        }
+
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
 
     }
@@ -64,6 +74,14 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
 
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         polygonComponent.vertices = dataFrom;
+
+        // if it's image update polygon sprite data
+        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+        if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
+            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+            dimensionsComponent.setPolygon(polygonComponent);
+            textureRegionComponent.setPolygonSprite(polygonComponent);
+        }
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
     }

@@ -29,6 +29,8 @@ public class FollowerFactory {
 
     public static BasicFollower createFollower(Entity entity) {
         switch (EntityUtils.getType(entity)) {
+            case EntityFactory.IMAGE_TYPE:
+                return new ImageFollower(entity);
             case EntityFactory.LIGHT_TYPE:
                 return new LightFollower(entity);
             case EntityFactory.LABEL_TYPE:
