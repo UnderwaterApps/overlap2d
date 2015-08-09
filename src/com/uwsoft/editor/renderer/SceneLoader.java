@@ -219,7 +219,7 @@ public class SceneLoader {
 
 				//check for physics
 				PhysicsBodyComponent physicsBodyComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
-				if(physicsBodyComponent != null) {
+				if (physicsBodyComponent != null && physicsBodyComponent.body != null) {
 					world.destroyBody(physicsBodyComponent.body);
 				}
 
