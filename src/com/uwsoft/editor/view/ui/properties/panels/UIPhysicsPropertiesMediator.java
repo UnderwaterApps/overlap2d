@@ -2,8 +2,14 @@ package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
 /**
@@ -20,6 +26,26 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
         super(NAME, new UIPhysicsProperties());
     }
 
+    @Override
+    public String[] listNotificationInterests() {
+        String[] defaultNotifications = super.listNotificationInterests();
+        String[] notificationInterests = new String[]{
+                UIPhysicsProperties.CLOSE_CLICKED
+        };
+
+        return ArrayUtils.addAll(defaultNotifications, notificationInterests);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UIPhysicsProperties.CLOSE_CLICKED:
+                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PhysicsBodyComponent.class));
+                break;
+        }
+    }
     @Override
     protected void translateObservableDataToView(Entity item) {
         physicsComponent = item.getComponent(PhysicsBodyComponent.class);
