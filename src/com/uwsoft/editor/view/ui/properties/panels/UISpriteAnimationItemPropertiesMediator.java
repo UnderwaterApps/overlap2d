@@ -79,7 +79,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     }
 
     @Override
-    protected void translateViewToItemData() {
+    protected void translateViewToItemData(Object customData) {
         Object payload = UpdateSpriteAnimationDataCommand.payload(observableReference,
                 viewComponent.getFPS(),
                 viewComponent.getSelectedAnimation(),

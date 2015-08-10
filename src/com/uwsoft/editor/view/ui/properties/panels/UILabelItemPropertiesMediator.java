@@ -17,11 +17,14 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     private static final String TAG = UILabelItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
+    private String prevText = null;
+
     private FontManager fontManager;
 
     public UILabelItemPropertiesMediator() {
         super(NAME, new UILabelItemProperties());
     }
+
 
     @Override
     public void onRegister() {
@@ -39,20 +42,32 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setFontSize(labelComponent.fontSize);
         viewComponent.setAlignValue(labelComponent.labelAlign);
         viewComponent.setText(labelComponent.text.toString());
+
     }
 
     @Override
-    protected void translateViewToItemData() {
-        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-        resourceManager.prepareEmbeddingFont(viewComponent.getFontFamily(),viewComponent.getFontSize());
+    protected void translateViewToItemData(Object customData) {
 
-        Object[] payload = new Object[5];
+        final String newText = viewComponent.getText();
+        if(prevText == null) this.prevText = newText;
+
+        if (UILabelItemProperties.LABEL_TEXT_CHAR_TYPED.equals(customData)) {
+            LabelComponent labelComponent = ComponentRetriever.get(observableReference, LabelComponent.class);
+            labelComponent.setText(viewComponent.getText());
+            return;
+        }
+
+        Object[] payload = new Object[6];
         payload[0] = observableReference;
         payload[1] = viewComponent.getFontFamily();
         payload[2] = viewComponent.getFontSize();
         payload[3] = viewComponent.getAlignValue();
-        payload[4] = viewComponent.getText();
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
+        payload[4] = newText;
+        payload[5] = prevText;
+        sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
+
+        this.prevText = newText;
+
     }
 
     @Override

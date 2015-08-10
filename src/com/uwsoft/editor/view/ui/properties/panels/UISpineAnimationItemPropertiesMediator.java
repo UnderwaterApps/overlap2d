@@ -56,7 +56,7 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
     }
 
     @Override
-    protected void translateViewToItemData() {
+    protected void translateViewToItemData(Object customData) {
         spineObjectComponent.setAnimation(viewComponent.getSelected());
     }
 }

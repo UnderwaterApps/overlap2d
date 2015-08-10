@@ -39,7 +39,7 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
     }
 
     @Override
-    protected void translateViewToItemData() {
+    protected void translateViewToItemData(Object customData) {
         physicsComponent = observableReference.getComponent(PhysicsBodyComponent.class);
         physicsComponent.bodyType = viewComponent.getBodyType();
         physicsComponent.mass = NumberUtils.toFloat(viewComponent.getMassField().getText());

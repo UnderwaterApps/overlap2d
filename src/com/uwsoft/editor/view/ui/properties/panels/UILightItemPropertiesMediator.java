@@ -58,7 +58,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     }
 
     @Override
-    protected void translateViewToItemData() {
+    protected void translateViewToItemData(Object customData) {
         LightVO payloadVo = new LightVO();
         payloadVo.loadFromEntity(observableReference);
 
