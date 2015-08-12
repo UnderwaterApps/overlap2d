@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -15,12 +16,14 @@ public class TexturRegionDrawLogic implements Drawable {
 	private ComponentMapper<TextureRegionComponent> textureRegionMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentComponentMapper;
+	private ComponentMapper<ShaderComponent> shaderComponentMapper;
 
 	public TexturRegionDrawLogic() {
 		tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		textureRegionMapper = ComponentMapper.getFor(TextureRegionComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
 		dimensionsComponentComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
+		shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	}
 
 	@Override
@@ -43,12 +46,30 @@ public class TexturRegionDrawLogic implements Drawable {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
         batch.setColor(tintComponent.color);
+        
+        if(shaderComponentMapper.has(entity)){
+			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
+			batch.setShader(shaderComponent.shaderProgram);
+			//shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
+			//shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
+			shaderComponent.shaderProgram.setUniformf("rt_w", 1f);
+			shaderComponent.shaderProgram.setUniformf("rt_h", 1f);
+			shaderComponent.shaderProgram.setUniformf("vx_offset", 1f);
+			//System.out.println("SHADER SET");
+		}
+		
+		
+        
         batch.draw(entityTextureRegionComponent.region,
                 entityTransformComponent.x, entityTransformComponent.y,
                 entityTransformComponent.originX, entityTransformComponent.originY,
                 dimensionsComponent.width, dimensionsComponent.height,
                 entityTransformComponent.scaleX, entityTransformComponent.scaleY,
                 entityTransformComponent.rotation);
+        
+        if(shaderComponentMapper.has(entity)){
+			batch.setShader(null);
+		}
     }
 
     public void drawPolygonSprite(Batch batch, Entity entity) {

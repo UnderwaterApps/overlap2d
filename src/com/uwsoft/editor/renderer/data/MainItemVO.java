@@ -27,6 +27,7 @@ public class MainItemVO {
 	public float[] tint = {1, 1, 1, 1};
 	public boolean isFlipedH = false;
 	public boolean isFlipedV = false;
+	public String shaderName = "";
 	
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;

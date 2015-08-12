@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Json;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.utils.MySkin;
@@ -37,6 +38,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     public String spriterAnimationsPath = "spriter_animations";
     public String spineAnimationsPath = "spine_animations";
     public String fontsPath = "freetypefonts";
+    public String shadersPath = "shaders";
 
     protected float resMultiplier;
 
@@ -50,6 +52,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     protected HashSet<String> spriteAnimNamesToLoad = new HashSet<String>();
     protected HashSet<String> spriterAnimNamesToLoad = new HashSet<String>();
     protected HashSet<FontSizePair> fontsToLoad = new HashSet<FontSizePair>();
+    protected HashSet<String> shaderNamesToLoad = new HashSet<String>();
 
     protected TextureAtlas mainPack;
     protected HashMap<String, ParticleEffect> particleEffects = new HashMap<String, ParticleEffect>();
@@ -60,6 +63,8 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
     protected HashMap<String, TextureAtlas> spriteAnimations = new HashMap<String, TextureAtlas>();
     protected HashMap<String, FileHandle> spriterAnimations = new HashMap<String, FileHandle>();
     protected HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<FontSizePair, BitmapFont>();
+    protected HashMap<String, ShaderProgram> shaderPrograms = new HashMap<String, ShaderProgram>();
+    
 
     /**
      * Constructor does nothing
@@ -154,6 +159,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         spriteAnimNamesToLoad.clear();
         spriterAnimNamesToLoad.clear();
         fontsToLoad.clear();
+        shaderPrograms.clear();
 
         for (String preparedSceneName : preparedSceneNames) {
             CompositeVO composite = loadedSceneVOs.get(preparedSceneName).composite;
@@ -165,6 +171,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             String[] spineAnimations = composite.getRecursiveSpineAnimationList();
             String[] spriteAnimations = composite.getRecursiveSpriteAnimationList();
             String[] spriterAnimations = composite.getRecursiveSpriterAnimationList();
+            String[] shaderNames = composite.getRecursiveShaderList();
             FontSizePair[] fonts = composite.getRecursiveFontList();
             for(CompositeItemVO library : projectVO.libraryItems.values()) {
                 FontSizePair[] libFonts = library.composite.getRecursiveFontList();
@@ -181,6 +188,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
             Collections.addAll(spriteAnimNamesToLoad, spriteAnimations);
             Collections.addAll(spriterAnimNamesToLoad, spriterAnimations);
             Collections.addAll(fontsToLoad, fonts);
+            Collections.addAll(shaderNamesToLoad, shaderNames);
         }
     }
 
@@ -195,6 +203,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
         loadSpriteAnimations();
         loadSpriterAnimations();
         loadFonts();
+        loadShaders();
     }
 
     @Override
@@ -338,6 +347,22 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
         return projectVO;
     }
+    
+    @Override
+	public void loadShaders() {
+    	// empty existing ones that are not scheduled to load
+        for (String key : shaderPrograms.keySet()) {
+            if (!shaderNamesToLoad.contains(key)) {
+            	shaderPrograms.get(key).dispose();
+            	shaderPrograms.remove(key);
+            }
+        }
+
+        for (String name : shaderNamesToLoad) {
+            ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(shadersPath + File.separator + name + ".vert"), Gdx.files.internal(shadersPath + File.separator + name + ".frag"));
+            shaderPrograms.put(name, shaderProgram);
+        }
+	}
 
     /**
      * Following methods are for retriever interface, which is intended for runtime internal use
@@ -407,5 +432,11 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 	@Override
 	public FileHandle getSCMLFile(String name) {
 		return spriterAnimations.get(name);
+	}
+
+	@Override
+	public ShaderProgram getShaderProgram(String shaderName) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
