@@ -127,7 +127,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 if(viewComponent.checkDropRegionHit(dropPos)) {
                     DropTargetDropEvent dtde = notification.getBody();
                     String[] paths = catchFiles(dtde);
-                    postPathObrainAction(paths);
+                    postPathObtainAction(paths);
                 }
                 break;
             case ImportDialog.CANCEL_BTN_CLICKED:
@@ -139,7 +139,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
         }
     }
 
-    private void postPathObrainAction(String[] paths) {
+    private void postPathObtainAction(String[] paths) {
         int type = ImportUtils.getImportType(paths);
 
         if (type <= 0) {
@@ -171,7 +171,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                     paths[i] = files.get(i).path();
                 }
                 if(paths.length > 0) {
-                    postPathObrainAction(paths);
+                    postPathObtainAction(paths);
                 }
             }
         });
@@ -204,6 +204,9 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 break;
             case ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE:
                 projectManager.importSpriteAnimationsIntoProject(files, progressHandler);
+                break;
+            case ImportUtils.TYPE_SHADER:
+                projectManager.importShaderIntoProject(files, progressHandler);
                 break;
         }
 

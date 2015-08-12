@@ -19,7 +19,9 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.SelectBoxChangeListener;
@@ -35,7 +37,7 @@ public class UIShaderProperties extends UIRemovableProperties {
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UIShaderProperties";
     public static final String CLOSE_CLICKED = prefix + ".CLOSE_CLICKED";
 
-    private VisSelectBox shadersSelector;
+    private VisSelectBox<String> shadersSelector;
 
     public UIShaderProperties() {
         super("Custom Shader Component");
@@ -44,14 +46,17 @@ public class UIShaderProperties extends UIRemovableProperties {
     public void initView(HashMap<String, ShaderProgram> shaders) {
         mainTable.clear();
 
-        shadersSelector = new VisSelectBox();
+        shadersSelector = new VisSelectBox<>();
         Array<String> shaderNames = new Array<>();
         shaderNames.add("Default");
         shaders.keySet().forEach(shaderNames::add);
 
-        shadersSelector.setItems(shaders);
+        shadersSelector.setItems(shaderNames);
 
         shadersSelector.addListener(new SelectBoxChangeListener(getUpdateEventName()));
+
+        mainTable.add(new VisLabel("Shader: ", Align.right)).padRight(5).width(75).right();
+        mainTable.add(shadersSelector).left();
     }
 
     @Override
@@ -64,6 +69,6 @@ public class UIShaderProperties extends UIRemovableProperties {
     }
 
     public String getShader() {
-        return (String) shadersSelector.getSelected();
+        return shadersSelector.getSelected();
     }
 }

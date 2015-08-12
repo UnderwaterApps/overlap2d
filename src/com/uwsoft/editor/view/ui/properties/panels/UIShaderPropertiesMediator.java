@@ -41,7 +41,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
     public UIShaderPropertiesMediator() {
         super(NAME, new UIShaderProperties());
 
-        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
         viewComponent.initView(resourceManager.getShaders());
     }
 
@@ -57,7 +57,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
 
     @Override
     protected void translateObservableDataToView(Entity item) {
-        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
 
         ShaderComponent shaderComponent = ComponentRetriever.get(item, ShaderComponent.class);
         String currShaderName = findShaderProgramName(resourceManager.getShaders(), shaderComponent.shaderProgram);
@@ -66,7 +66,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
 
     @Override
     protected void translateViewToItemData() {
-        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
         ShaderComponent shaderComponent = ComponentRetriever.get(observableReference, ShaderComponent.class);
         String shaderName = viewComponent.getShader();
         if(shaderName.equals("Default")) {

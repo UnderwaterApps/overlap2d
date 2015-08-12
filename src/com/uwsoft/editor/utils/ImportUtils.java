@@ -49,6 +49,7 @@ public class ImportUtils  {
     public static final int TYPE_BITMAP_FONT = 7;
     public static final int TYPE_PARTICLE_EFFECT = 8;
     public static final int TYPE_TEXTURE_ATLAS = 9;
+    public static final int TYPE_SHADER = 10;
 
     private ArrayList<Integer> supportedTypes = new ArrayList<>();
 
@@ -59,6 +60,7 @@ public class ImportUtils  {
         supportedTypes.add(TYPE_SPINE_ANIMATION);
         supportedTypes.add(TYPE_SPRITER_ANIMATION);
         supportedTypes.add(TYPE_PARTICLE_EFFECT);
+        supportedTypes.add(TYPE_SHADER);
         // TODO: not yet supported
         //supportedTypes.add(TYPE_TEXTURE_ATLAS);
         //supportedTypes.add(TYPE_TTF_FONT);
@@ -121,6 +123,9 @@ public class ImportUtils  {
         }
         if(ext.equals("scml")) {
             return TYPE_SPRITER_ANIMATION;
+        }
+        if(ext.equals("vert") || ext.equals("frag")) {
+            return TYPE_SHADER;
         }
 
         return TYPE_UNCKNOWN;
