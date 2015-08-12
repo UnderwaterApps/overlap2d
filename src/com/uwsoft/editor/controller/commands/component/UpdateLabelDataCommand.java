@@ -19,7 +19,11 @@
 package com.uwsoft.editor.controller.commands.component;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.renderer.resources.IResourceLoader;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.resources.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
@@ -29,10 +33,18 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 6/11/2015.
+ *
  */
 public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
 
     Integer entityId;
+
+    String prevFontName;
+    int prevFontSize;
+    int prevLabelAlign;
+    int prevLineAlign;
+    String prevText;
+    Label.LabelStyle prevStyle;
 
     @Override
     public void doAction() {
@@ -42,18 +54,47 @@ public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
 
         LabelComponent labelComponent = ComponentRetriever.get(entity, LabelComponent.class);
 
+
+        this.prevFontName = labelComponent.fontName;
+        this.prevFontSize = labelComponent.fontSize;
+        this.prevLabelAlign = labelComponent.labelAlign;
+        this.prevLineAlign = labelComponent.lineAlign;
+        this.prevStyle = labelComponent.getStyle();
+        this.prevText = (String) payload[5];
+
+
         labelComponent.fontName = (String) payload[1];
         labelComponent.fontSize = (int) payload[2];
         labelComponent.setAlignment((Integer) payload[3]);
-        labelComponent.setText((CharSequence) payload[4]);
-
-        labelComponent.setStyle(LabelComponentFactory.generateStyle(Sandbox.getInstance().getSceneControl().sceneLoader.getRm(), labelComponent.fontName, labelComponent.fontSize));
+        labelComponent.setText((String) payload[4]);
+        labelComponent.setStyle(getNewStyle(labelComponent.fontName, labelComponent.fontSize));
 
         facade.sendNotification(Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING, entity);
     }
 
+    private Label.LabelStyle getNewStyle(String fontName, int fontSize) {
+
+        IResourceRetriever rm = Sandbox.getInstance().getSceneControl().sceneLoader.getRm();
+        final boolean hasBitmapFont = rm.getBitmapFont(fontName, fontSize) != null;
+
+        if(!hasBitmapFont) {
+            com.uwsoft.editor.proxy.ResourceManager resourceManager = facade.retrieveProxy(com.uwsoft.editor.proxy.ResourceManager.NAME);
+            resourceManager.prepareEmbeddingFont(fontName, fontSize);
+        }
+        return LabelComponentFactory.generateStyle(rm, fontName, fontSize);
+    }
+
     @Override
     public void undoAction() {
+
+        final Entity entity = EntityUtils.getByUniqueId(entityId);
+        final LabelComponent labelComponent = ComponentRetriever.get(entity, LabelComponent.class);
+
+        labelComponent.fontName = prevFontName;
+        labelComponent.fontSize = prevFontSize;
+        labelComponent.setAlignment(prevLabelAlign, prevLineAlign);
+        labelComponent.setText(prevText);
+        labelComponent.setStyle(prevStyle);
 
     }
 }
