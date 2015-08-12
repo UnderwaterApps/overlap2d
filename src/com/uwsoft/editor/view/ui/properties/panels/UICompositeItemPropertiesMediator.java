@@ -39,7 +39,7 @@ public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
 
     }
 }

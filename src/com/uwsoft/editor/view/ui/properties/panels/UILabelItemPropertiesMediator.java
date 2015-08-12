@@ -1,6 +1,7 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.FontManager;
@@ -8,6 +9,9 @@ import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.Arrays;
 
 /**
  * Created by avetiszakharyan on 4/24/15.
@@ -25,6 +29,25 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         super(NAME, new UILabelItemProperties());
     }
 
+    @Override
+    public String[] listNotificationInterests() {
+        final String[] parentInterests = super.listNotificationInterests();
+        return ArrayUtils.add(parentInterests, UILabelItemProperties.LABEL_TEXT_CHAR_TYPED);
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+        if(notification.getName().equals(UILabelItemProperties.LABEL_TEXT_CHAR_TYPED)) {
+            onTextChange();
+        }
+    }
+
+    private void onTextChange() {
+
+        LabelComponent labelComponent = ComponentRetriever.get(observableReference, LabelComponent.class);
+        labelComponent.setText(viewComponent.getText());
+    }
 
     @Override
     public void onRegister() {
@@ -43,19 +66,13 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setAlignValue(labelComponent.labelAlign);
         viewComponent.setText(labelComponent.text.toString());
 
+        if(prevText == null) this.prevText = viewComponent.getText();
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
 
         final String newText = viewComponent.getText();
-        if(prevText == null) this.prevText = newText;
-
-        if (UILabelItemProperties.LABEL_TEXT_CHAR_TYPED.equals(customData)) {
-            LabelComponent labelComponent = ComponentRetriever.get(observableReference, LabelComponent.class);
-            labelComponent.setText(viewComponent.getText());
-            return;
-        }
 
         Object[] payload = new Object[6];
         payload[0] = observableReference;

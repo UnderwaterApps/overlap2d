@@ -40,7 +40,7 @@ public class UITextToolPropertiesMediator extends UIAbstractPropertiesMediator<T
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
         observableReference.setFontFamily(viewComponent.getFontFamily());
         observableReference.setFontSize(viewComponent.getFontSize());
     }

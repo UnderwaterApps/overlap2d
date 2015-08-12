@@ -172,7 +172,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         textArea.addListener(textArea.new TextAreaListener() {
             @Override
             public boolean keyTyped(InputEvent event, char character) {
-                facade.sendNotification(eventName, LABEL_TEXT_CHAR_TYPED);
+                facade.sendNotification(LABEL_TEXT_CHAR_TYPED, null);
                 return true;//super.keyTyped(event, character);
             }
         });

@@ -45,7 +45,7 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
         if(viewComponent.getRenderMode().equals("REPEAT")) {
             textureRegionComponent.isRepeat = true;
         } else {

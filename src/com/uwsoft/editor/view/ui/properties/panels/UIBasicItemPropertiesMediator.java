@@ -180,7 +180,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
     	Entity entity  = observableReference;
 
         transformComponent = ComponentCloner.get(ComponentRetriever.get(entity, TransformComponent.class));

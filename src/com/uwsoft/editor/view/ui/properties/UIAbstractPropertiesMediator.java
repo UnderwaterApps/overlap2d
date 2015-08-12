@@ -62,7 +62,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
         if(notification.getName().equals(viewComponent.getUpdateEventName())) {
             if(!lockUpdates) {
-                translateViewToItemData(notification.getBody());
+                translateViewToItemData();
             }
         }
 
@@ -90,5 +90,5 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     protected abstract void translateObservableDataToView(T item);
 
-    protected abstract void translateViewToItemData(Object customData);
+    protected abstract void translateViewToItemData();
 }

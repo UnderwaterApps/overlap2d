@@ -98,7 +98,7 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
 
     }
 

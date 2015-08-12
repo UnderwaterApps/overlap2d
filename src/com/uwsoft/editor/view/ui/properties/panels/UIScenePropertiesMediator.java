@@ -95,7 +95,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
     }
 
     @Override
-    protected void translateViewToItemData(Object customData) {
+    protected void translateViewToItemData() {
         PhysicsPropertiesVO physicsVO = observableReference.physicsPropertiesVO;
         physicsVO.gravityX = NumberUtils.toFloat(viewComponent.getGravityXValue(), physicsVO.gravityX);
         physicsVO.gravityY = NumberUtils.toFloat(viewComponent.getGravityYValue(), physicsVO.gravityY);

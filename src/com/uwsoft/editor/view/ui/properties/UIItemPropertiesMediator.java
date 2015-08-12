@@ -37,7 +37,7 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
 
         if(notification.getName().equals(viewComponent.getUpdateEventName())) {
             if(!lockUpdates) {
-                translateViewToItemData(notification.getBody());
+                translateViewToItemData();
                 afterItemDataModified();
             }
         }
