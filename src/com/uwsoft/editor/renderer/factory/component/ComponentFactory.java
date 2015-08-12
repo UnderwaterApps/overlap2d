@@ -69,9 +69,20 @@ public abstract class ComponentFactory {
         createScriptComponent(entity, vo);
         createMeshComponent(entity, vo);
         createPhysicsComponents(entity, vo);
+        createShaderComponent(entity, vo);
     }
 
-    protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
+    protected ShaderComponent createShaderComponent(Entity entity, MainItemVO vo) {
+    	if(vo.shaderName == null || vo.shaderName.isEmpty()){
+    		return null;
+    	}
+		ShaderComponent component = new ShaderComponent();
+		component.shaderProgram = rm.getShaderProgram(vo.shaderName);
+		entity.add(component);
+		return component;
+	}
+
+	protected MainItemComponent createMainItemComponent(Entity entity, MainItemVO vo, int entityType) {
         MainItemComponent component = new MainItemComponent();
         component.customVars = vo.customVars;
         component.uniqueId = vo.uniqueId;

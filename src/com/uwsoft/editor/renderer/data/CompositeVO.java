@@ -265,6 +265,18 @@ public class CompositeVO {
 
         return finalList;
     }
+    
+    public String[] getRecursiveShaderList() {
+    	HashSet<String> list = new HashSet<String>();
+    	for (MainItemVO item : getAllItems()) {
+            if(item.shaderName != null && !item.shaderName.isEmpty()){
+            	list.add(item.shaderName);
+            }
+        }
+    	String[] finalList = new String[list.size()];
+        list.toArray(finalList);
+    	return finalList;
+    }
 
     public ArrayList<MainItemVO> getAllItems() {
         ArrayList<MainItemVO> itemsList = new ArrayList<MainItemVO>();

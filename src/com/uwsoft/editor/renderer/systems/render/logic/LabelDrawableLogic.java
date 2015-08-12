@@ -5,6 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
@@ -17,12 +18,14 @@ public class LabelDrawableLogic implements Drawable {
 	private ComponentMapper<TintComponent> tintComponentMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
+	private ComponentMapper<ShaderComponent> shaderComponentMapper;
 	
 	public LabelDrawableLogic() {
 		labelComponentMapper = ComponentMapper.getFor(LabelComponent.class);
 		tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		dimensionsComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
+		shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	}
 	
 	@Override
@@ -44,7 +47,14 @@ public class LabelDrawableLogic implements Drawable {
 		
 		labelComponent.cache.tint(Color.WHITE);
 		labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
+		if(shaderComponentMapper.has(entity)){
+			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
+			batch.setShader(shaderComponent.shaderProgram);
+		}
 		labelComponent.cache.draw(batch);
+		if(shaderComponentMapper.has(entity)){
+			batch.setShader(null);
+		}
 	}
 
 }

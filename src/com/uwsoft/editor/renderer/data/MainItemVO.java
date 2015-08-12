@@ -24,6 +24,8 @@ public class MainItemVO {
 	public String layerName = "";
 	public float[] tint = {1, 1, 1, 1};
 
+	public String shaderName = "";
+
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
 	
