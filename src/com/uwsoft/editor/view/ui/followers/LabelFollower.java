@@ -125,7 +125,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
                 break;
             case NormalSelectionFollower.RB:
                 newY = y;
-                newWidth = x - follower.getX();
+                newWidth = x - transformComponent.x;
                 newHeight = newHeight + (transformComponent.y - y);
                 break;
             case NormalSelectionFollower.R:
