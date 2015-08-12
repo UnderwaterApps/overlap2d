@@ -393,4 +393,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 		// TODO Auto-generated method stub
 		return shaderPrograms.get(shaderName);
 	}
+
+    public HashMap<String, ShaderProgram> getShaders() {
+        return shaderPrograms;
+    }
 }

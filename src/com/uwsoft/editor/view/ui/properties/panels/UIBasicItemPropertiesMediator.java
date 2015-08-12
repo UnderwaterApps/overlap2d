@@ -80,6 +80,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
         componentClassMap.put("Polygon Component", PolygonComponent.class);
         componentClassMap.put("Physics Component", PhysicsBodyComponent.class);
+        componentClassMap.put("Shader Component", ShaderComponent.class);
     }
 
     @Override
