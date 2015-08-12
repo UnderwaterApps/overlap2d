@@ -178,8 +178,10 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 if(mainItemComponent.layer == null) mainItemComponent.layer = layers.get(index).layerName;
                 break;
             case UILayerBox.CHANGE_LAYER_NAME:
+                // TODO: this needs to be command
                 String layerName = notification.getBody();
                 int layerIndex = viewComponent.getCurrentSelectedLayerIndex();
+                if(layerIndex == -1) break;
                 LayerItemVO layer_view = layers.get(layerIndex);
                 layerItem = viewComponent.getCurrentSelectedLayer();
                 VisTextField textField = layerItem.getNameField();
@@ -195,8 +197,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     textField.clearSelection();
                     textField.setDisabled(true);
                     viewComponent.enableDraggingInEditedSlot();
-
+                    String prevName = layer_view.layerName;
                     layer_view.layerName = layerName;
+                    // update the map
+                    Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+                    LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
+                    layerMapComponent.rename(prevName, layerName);
                 }
                 else
                 {
