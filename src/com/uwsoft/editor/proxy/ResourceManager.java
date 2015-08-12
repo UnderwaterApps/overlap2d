@@ -7,8 +7,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 import com.uwsoft.editor.renderer.data.*;
+
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 
@@ -20,6 +23,8 @@ import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.badlogic.gdx.maps.Map;
 import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.data.SpineAnimData;
@@ -44,8 +49,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     private HashMap<String, SpineAnimData> spineAnimAtlases = new HashMap<String, SpineAnimData>();
     private HashMap<String, TextureAtlas> spriteAnimAtlases = new HashMap<String, TextureAtlas>();
     private HashMap<String, FileHandle> spriterAnimFiles = new HashMap<String, FileHandle>();
-
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<>();
+    private HashMap<String, ShaderProgram> shaderPrograms = new HashMap<String, ShaderProgram>(1);
 
     private ResolutionManager resolutionManager;
 
@@ -149,6 +154,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
         loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
         loadCurrentProjectBitmapFonts(currentWorkingPath + "/" + projectName, curResolution);
+        loadCurrentProjectShaders(currentWorkingPath + "/" + projectName + "/assets/shaders/");
     }
 
     private void loadCurrentProjectParticles(String path) {
@@ -256,6 +262,25 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             }
         }
     }
+    
+    private void loadCurrentProjectShaders(String path) {
+    	Iterator<Entry<String, ShaderProgram>> it = shaderPrograms.entrySet().iterator();
+    	while (it.hasNext()) {
+    		Entry<String, ShaderProgram> pair = it.next();
+    		pair.getValue().dispose();
+    		it.remove(); 
+    	}
+        shaderPrograms.clear();
+        FileHandle sourceDir = new FileHandle(path);
+        for (FileHandle entry : sourceDir.list()) {
+            File file = entry.file();
+            String filename = file.getName().replace(".vert", "").replace(".frag", "");
+            if (file.isDirectory() || filename.endsWith(".DS_Store") || shaderPrograms.containsKey(filename)) continue;
+            ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"), Gdx.files.internal(path + filename + ".frag"));
+            shaderPrograms.put(filename, shaderProgram);
+        }
+
+    }
 
     /**
      * @param fontPath
@@ -362,4 +387,10 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         }
         return getProjectVO().getResolution(packResolutionName);
     }
+
+	@Override
+	public ShaderProgram getShaderProgram(String shaderName) {
+		// TODO Auto-generated method stub
+		return shaderPrograms.get(shaderName);
+	}
 }
