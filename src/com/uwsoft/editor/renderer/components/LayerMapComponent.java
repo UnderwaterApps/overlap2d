@@ -58,4 +58,10 @@ public class LayerMapComponent extends Component {
 		layers.remove(getIndexByName(layerName));
 		layerMap.remove(layerName);
 	}
+
+	public void rename(String prevName, String newName) {
+		LayerItemVO vo = layerMap.get(prevName);
+		layerMap.remove(prevName);
+		layerMap.put(newName, vo);
+	}
 }
