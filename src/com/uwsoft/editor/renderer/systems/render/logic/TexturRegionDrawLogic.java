@@ -2,6 +2,8 @@ package com.uwsoft.editor.renderer.systems.render.logic;
 
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -50,12 +52,19 @@ public class TexturRegionDrawLogic implements Drawable {
         if(shaderComponentMapper.has(entity)){
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
 			batch.setShader(shaderComponent.shaderProgram);
-			//shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
-			//shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
-			shaderComponent.shaderProgram.setUniformf("rt_w", 1f);
-			shaderComponent.shaderProgram.setUniformf("rt_h", 1f);
-			shaderComponent.shaderProgram.setUniformf("vx_offset", 1f);
+			shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
+			shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
+			//shaderComponent.shaderProgram.setUniformf("rt_w", 1f);
+			//shaderComponent.shaderProgram.setUniformf("rt_h", 1f);
+			//shaderComponent.shaderProgram.setUniformf("vx_offset", 1f);
 			//System.out.println("SHADER SET");
+			
+			GL20 gl = Gdx.gl20;
+	        int error;
+	        //while ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
+	            Gdx.app.log("opengl",shaderComponent.shaderProgram.getLog());
+	            //throw new RuntimeException( ": glError " + error);
+	        //}
 		}
 		
 		
