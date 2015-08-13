@@ -7,29 +7,39 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 
 /**
  * Created by azakhary on 9/28/2014.
  */
 public class PhysicsBodyLoader {
 
+    private static PhysicsBodyLoader instance;
 
-    // Ensures optimal box2d resolution of below 10 meters on the longest size
-    // See http://www.box2d.org/manual.html Units 1.7
-    public static float SCALE = 10f/Gdx.graphics.getWidth();
+    private float scale;
 
-    private final World world;
+    private PhysicsBodyLoader() {
 
-    public PhysicsBodyLoader(World world) {
-        this.world = world;
     }
 
-//    public Body createBody( PhysicsBodyPropertiesComponent pysicsComponent, MeshVO shape,Vector2 mulVec) {
-//        return PhysicsBodyLoader.createBody(world, pysicsComponent, shape, mulVec);
-//    }
+    public static PhysicsBodyLoader getInstance() {
+        if(instance == null) {
+            instance = new PhysicsBodyLoader();
+        }
 
-    public static Body createBody(World world, PhysicsBodyPropertiesComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
+        return instance;
+    }
+
+    public void setScaleFromPPWU(float pixelPerWU) {
+        scale = 1f/(20f*pixelPerWU);
+    }
+
+    public static float getScale() {
+        return getInstance().scale;
+    }
+
+    public Body createBody(World world, PhysicsBodyComponent pysicsComponent, Vector2[][] minPolygonData, Vector2 mulVec) {
+
         FixtureDef fixtureDef = new FixtureDef();
 
         if(pysicsComponent != null) {
@@ -56,8 +66,8 @@ public class PhysicsBodyLoader {
         for(int i = 0; i < minPolygonData.length; i++) {
         	float[] verts = new float[minPolygonData[i].length * 2];
         	for(int j=0;j<verts.length;j+=2){
-        		verts[j] = minPolygonData[i][j/2].x * mulVec.x * SCALE;
-        		verts[j+1] = minPolygonData[i][j/2].y * mulVec.y * SCALE;
+        		verts[j] = minPolygonData[i][j/2].x * mulVec.x * scale;
+        		verts[j+1] = minPolygonData[i][j/2].y * mulVec.y * scale;
         	}
             polygonShape.set(verts);
             fixtureDef.shape = polygonShape;

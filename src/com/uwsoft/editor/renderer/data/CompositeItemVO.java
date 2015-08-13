@@ -37,8 +37,6 @@ public class CompositeItemVO extends MainItemVO {
 	public CompositeItemVO clone() {
 		CompositeItemVO tmp = new CompositeItemVO();
 		tmp.composite = composite;
-        tmp.isFlipedH = isFlipedH;
-        tmp.isFlipedV = isFlipedV;
         tmp.itemName = itemName;
         tmp.layerName = layerName;
         tmp.rotation = rotation;

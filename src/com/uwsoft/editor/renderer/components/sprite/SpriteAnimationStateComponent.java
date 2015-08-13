@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.FrameRange;
 
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,12 +38,18 @@ public class SpriteAnimationStateComponent extends Component {
     }
 
     private Array<TextureAtlas.AtlasRegion> sortAndGetRegions(Array<TextureAtlas.AtlasRegion> regions) {
-        TextureAtlas.AtlasRegion[] animationAtlasRegions = new TextureAtlas.AtlasRegion[regions.size];
-        for (int ri = 0; ri < regions.size; ri++) {
-            String regName = regions.get(ri).name;
-            animationAtlasRegions[regNameToFrame(regName) - 1] = regions.get(ri);
+        regions.sort(new SortRegionsComparator());
+
+        return regions;
+    }
+
+    private class SortRegionsComparator implements Comparator<TextureAtlas.AtlasRegion> {
+        @Override
+        public int compare(TextureAtlas.AtlasRegion o1, TextureAtlas.AtlasRegion o2) {
+            int index1 = regNameToFrame(o1.name);
+            int index2 = regNameToFrame(o2.name);
+            return index1 < index2 ? -1 : index1 == index2 ? 0 : 1;
         }
-        return new Array<TextureAtlas.AtlasRegion>(animationAtlasRegions);
     }
 
     private int regNameToFrame(String name) {

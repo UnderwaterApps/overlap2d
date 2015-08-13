@@ -65,11 +65,11 @@ public class Overlap2dRenderer extends IteratingSystem {
 		batch.end();
 
 		
-		//TODO kinda not cool
+		//TODO kinda not cool (this should be done in separate lights renderer maybe?
 		if(rayHandler != null) {
 			rayHandler.setCulling(false);
 			OrthographicCamera orthoCamera = (OrthographicCamera) camera;
-			camera.combined.scl(1f/PhysicsBodyLoader.SCALE);
+			camera.combined.scl(1f/PhysicsBodyLoader.getScale());
 			rayHandler.setCombinedMatrix(orthoCamera); 
 			rayHandler.updateAndRender();
 		}

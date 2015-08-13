@@ -2,10 +2,8 @@ package com.uwsoft.editor.renderer.data;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
-import com.uwsoft.editor.renderer.scripts.IScript;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 
 
@@ -25,10 +23,8 @@ public class MainItemVO {
 	public int zIndex = 0;
 	public String layerName = "";
 	public float[] tint = {1, 1, 1, 1};
-	public boolean isFlipedH = false;
-	public boolean isFlipedV = false;
+
 	public String shaderName = "";
-	
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
 	
@@ -47,12 +43,11 @@ public class MainItemVO {
 		rotation = vo.rotation;
 		zIndex = vo.zIndex;
 		layerName = new String(vo.layerName);
-		//if(tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
 		if(vo.tint != null) tint = Arrays.copyOf(vo.tint, vo.tint.length);
-		isFlipedH 	= vo.isFlipedH;
-		isFlipedV 	= vo.isFlipedV;
 		scaleX 		= vo.scaleX;
 		scaleY 		= vo.scaleY;
+		originX 	= vo.originX;
+		originY 	= vo.originY;
 
 		if(vo.shape != null) {
 			shape = vo.shape.clone();
@@ -102,7 +97,7 @@ public class MainItemVO {
 			shape = new ShapeVO();
 			shape.polygons = polygonComponent.vertices;
 		}
-        PhysicsBodyPropertiesComponent physicsComponent = entity.getComponent(PhysicsBodyPropertiesComponent.class);
+        PhysicsBodyComponent physicsComponent = entity.getComponent(PhysicsBodyComponent.class);
         if(physicsComponent != null) {
             physics = new PhysicsBodyDataVO();
             physics.loadFromComponent(physicsComponent);

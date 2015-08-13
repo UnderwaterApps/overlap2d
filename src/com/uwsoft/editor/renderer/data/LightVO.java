@@ -12,7 +12,7 @@ public class LightVO extends MainItemVO{
 	public float distance = 300;
 	public float directionDegree = 0;
 	public float coneDegree = 30;
-	public float softnessLength = distance * 0.1f * PhysicsBodyLoader.SCALE;
+	public float softnessLength = -1f;
 	public boolean isStatic = true;
 	public boolean isXRay = true;
 	

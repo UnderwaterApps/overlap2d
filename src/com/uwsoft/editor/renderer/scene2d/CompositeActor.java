@@ -97,6 +97,8 @@ public class CompositeActor extends Group {
             Label.LabelStyle style = new Label.LabelStyle(ir.getBitmapFont(labels.get(i).style, labels.get(i).size), Color.WHITE);
             Label label = new Label(labels.get(i).text, style);
             label.setAlignment(labels.get(i).align);
+            label.setWidth(labels.get(i).width*pixelsPerWU);
+            label.setHeight(labels.get(i).height*pixelsPerWU);
             processMain(label, labels.get(i));
             addActor(label);
         }
@@ -242,5 +244,18 @@ public class CompositeActor extends Group {
         }
 
         return items;
+    }
+
+    /**
+     * returns children of this actor that are on specified layer
+     * @param layerName
+     * @return
+     */
+    public Array<Actor> getItemsByLayer(String layerName) {
+        return itemLayerMap.get(layerName);
+    }
+
+    public CompositeItemVO getVo() {
+        return vo;
     }
 }
