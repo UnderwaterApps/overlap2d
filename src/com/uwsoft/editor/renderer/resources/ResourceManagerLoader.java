@@ -11,7 +11,6 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.GdxRuntimeException;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.resources.ResourceManager;
 
 import java.io.File;
 import java.util.HashSet;
@@ -21,76 +20,76 @@ import java.util.Map;
 /**
  * Created by socheat on 8/13/15.
  */
-public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManager, ResourceManagerLoader.ResourceManagerParam> {
+public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManager, ResourceManagerLoader.AsyncResourceManagerParam> {
 
-    private ResourceManager resourceManager;
+    private AsyncResourceManager asyncResourceManager;
 
     private ProjectInfoVO projectInfoVO;
 
     public ResourceManagerLoader(FileHandleResolver resolver) {
         super(resolver);
-        this.resourceManager = new ResourceManager();
+        this.asyncResourceManager = new AsyncResourceManager();
     }
 
     @Override
-    public void loadAsync(AssetManager manager, String fileName, FileHandle file, ResourceManagerParam parameter) {
+    public void loadAsync(AssetManager manager, String fileName, FileHandle file, AsyncResourceManagerParam parameter) {
     }
 
     @Override
-    public com.uwsoft.editor.renderer.resources.ResourceManager loadSync(AssetManager manager, String fileName, FileHandle file, ResourceManagerParam parameter) {
+    public com.uwsoft.editor.renderer.resources.ResourceManager loadSync(AssetManager manager, String fileName, FileHandle file, AsyncResourceManagerParam parameter) {
         if (!fileName.equals("project.dt")) {
             throw new GdxRuntimeException("fileName must be project.dt");
         }
 
-        FileHandle packFile = Gdx.files.internal(this.resourceManager.packResolutionName + File.separator + "pack.atlas");
+        FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + "pack.atlas");
         TextureAtlas textureAtlas = manager.get(packFile.path(), TextureAtlas.class);
-        this.resourceManager.setMainPack(textureAtlas);
-        this.resourceManager.loadParticleEffects();
-        this.resourceManager.loadSpineAnimations(manager);
-        this.resourceManager.loadSpriteAnimations(manager);
-        this.resourceManager.loadSpriterAnimations();
-        this.resourceManager.loadFonts();
+        this.asyncResourceManager.setMainPack(textureAtlas);
+        this.asyncResourceManager.loadParticleEffects();
+        this.asyncResourceManager.loadSpineAnimations(manager);
+        this.asyncResourceManager.loadSpriteAnimations(manager);
+        this.asyncResourceManager.loadSpriterAnimations();
+        this.asyncResourceManager.loadFonts();
 
-        return this.resourceManager;
+        return this.asyncResourceManager;
     }
 
     @Override
-    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, ResourceManagerParam parameter) {
+    public Array<AssetDescriptor> getDependencies(String fileName, FileHandle file, AsyncResourceManagerParam parameter) {
         if (!fileName.equals("project.dt")) {
             throw new GdxRuntimeException("fileName must be project.dt");
         }
-        this.projectInfoVO = this.resourceManager.loadProjectVO();
+        this.projectInfoVO = this.asyncResourceManager.loadProjectVO();
         for (int i = 0; i < this.projectInfoVO.scenes.size(); i++) {
-            this.resourceManager.loadSceneVO(this.projectInfoVO.scenes.get(i).sceneName);
-            this.resourceManager.scheduleScene(this.projectInfoVO.scenes.get(i).sceneName);
+            this.asyncResourceManager.loadSceneVO(this.projectInfoVO.scenes.get(i).sceneName);
+            this.asyncResourceManager.scheduleScene(this.projectInfoVO.scenes.get(i).sceneName);
         }
-        this.resourceManager.prepareAssetsToLoad();
+        this.asyncResourceManager.prepareAssetsToLoad();
 
         Array<AssetDescriptor> deps = new Array();
         {
-            FileHandle packFile = Gdx.files.internal(this.resourceManager.packResolutionName + File.separator + "pack.atlas");
+            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + "pack.atlas");
             if (packFile.exists()) {
                 deps.add(new AssetDescriptor(packFile, TextureAtlas.class));
             }
         }
 
-        for (String name : this.resourceManager.getSpineAnimNamesToLoad()) {
-            FileHandle packFile = Gdx.files.internal(this.resourceManager + File.separator + this.resourceManager.spineAnimationsPath + File.separator + name + File.separator + name + ".atlas");
+        for (String name : this.asyncResourceManager.getSpineAnimNamesToLoad()) {
+            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager + File.separator + this.asyncResourceManager.spineAnimationsPath + File.separator + name + File.separator + name + ".atlas");
             deps.add(new AssetDescriptor(packFile, TextureAtlas.class));
         }
 
-        for (String name : this.resourceManager.getSpriteAnimNamesToLoad()) {
-            FileHandle packFile = Gdx.files.internal(this.resourceManager.packResolutionName + File.separator + this.resourceManager.spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
+        for (String name : this.asyncResourceManager.getSpriteAnimNamesToLoad()) {
+            FileHandle packFile = Gdx.files.internal(this.asyncResourceManager.packResolutionName + File.separator + this.asyncResourceManager.spriteAnimationsPath + File.separator + name + File.separator + name + ".atlas");
             deps.add(new AssetDescriptor(packFile, TextureAtlas.class));
         }
 
         return deps;
     }
 
-    public static class ResourceManagerParam extends AssetLoaderParameters<com.uwsoft.editor.renderer.resources.ResourceManager> {
+    public static class AsyncResourceManagerParam extends AssetLoaderParameters<com.uwsoft.editor.renderer.resources.ResourceManager> {
     }
 
-    private static class ResourceManager extends com.uwsoft.editor.renderer.resources.ResourceManager {
+    private static class AsyncResourceManager extends com.uwsoft.editor.renderer.resources.ResourceManager {
 
         @Override
         public ProjectInfoVO getProjectVO() {
@@ -169,3 +168,4 @@ public class ResourceManagerLoader extends AsynchronousAssetLoader<ResourceManag
         }
     }
 }
+
