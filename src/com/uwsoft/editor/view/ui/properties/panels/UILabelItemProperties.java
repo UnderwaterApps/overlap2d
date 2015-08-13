@@ -3,14 +3,15 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import java.util.HashMap;
 import java.util.Map;
 
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.brashmonkey.spriter.Timeline;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
-import com.uwsoft.editor.event.CheckBoxChangeListener;
-import com.uwsoft.editor.event.KeyboardListener;
-import com.uwsoft.editor.event.NumberSelectorOverlapListener;
-import com.uwsoft.editor.event.SelectBoxChangeListener;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.event.*;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 
 /**
@@ -20,9 +21,12 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
 
     public static final String prefix = "com.uwsoft.editor.view.ui.properties.panels.UILabelItemProperties";
 
-    public static final String FONT_FAMILY_SELECTED = prefix + ".FONT_FAMILY_SELECTED";
+    public static final String LABEL_TEXT_CHAR_TYPED = prefix + ".LABEL_TEXT_CHANGED";
+
 
     private HashMap<Integer, String> alignNames = new HashMap<>();
+
+    private Overlap2DFacade facade;
 
     private VisSelectBox<String> fontFamilySelectBox;
     private VisSelectBox<String> alignSelectBox;
@@ -36,6 +40,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
 
         Validators.IntegerValidator intValidator = new Validators.IntegerValidator();
 
+        facade = Overlap2DFacade.getInstance();
         fontFamilySelectBox = new VisSelectBox<>();
         alignSelectBox = new VisSelectBox<>();
         boldCheckBox = new VisCheckBox(null);
@@ -157,11 +162,22 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     }
 
     private void setListeners() {
-        fontFamilySelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
-        alignSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
-        boldCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        italicCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        fontSizeField.addListener(new KeyboardListener(getUpdateEventName()));
-        textArea.addListener(new KeyboardListener(getUpdateEventName()));
+        final String eventName = getUpdateEventName();
+        fontFamilySelectBox.addListener(new SelectBoxChangeListener(eventName));
+        alignSelectBox.addListener(new SelectBoxChangeListener(eventName));
+        boldCheckBox.addListener(new CheckBoxChangeListener(eventName));
+        italicCheckBox.addListener(new CheckBoxChangeListener(eventName));
+        fontSizeField.addListener(new KeyboardListener(eventName));
+        textArea.addListener(new KeyboardListener(eventName));
+        textArea.addListener(textArea.new TextAreaListener() {
+            @Override
+            public boolean keyTyped(InputEvent event, char character) {
+                facade.sendNotification(LABEL_TEXT_CHAR_TYPED, null);
+                return true;//super.keyTyped(event, character);
+            }
+        });
+
     }
+
+
 }

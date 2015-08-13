@@ -26,7 +26,7 @@ public class NewLayerCommand extends EntityModifyRevertableCommand {
 
         LayerItemVO vo = new LayerItemVO(layerName);
         vo.isVisible = true;
-        layerMapComponent.layers.add(index, vo);
+        layerMapComponent.addLayer(index, vo);
 
         facade.sendNotification(DONE, layerName);
     }
@@ -36,12 +36,7 @@ public class NewLayerCommand extends EntityModifyRevertableCommand {
         Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
-        for(LayerItemVO vo: layerMapComponent.layers) {
-            if (vo.layerName.equals(layerName)) {
-                layerMapComponent.layers.remove(vo);
-                break;
-            }
-        }
+        layerMapComponent.deleteLayer(layerName);
 
         facade.sendNotification(DONE, layerName);
     }

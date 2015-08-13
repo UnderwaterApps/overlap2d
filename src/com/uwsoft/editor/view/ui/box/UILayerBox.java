@@ -145,6 +145,7 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public void setCurrentSelectedLayer(int index) {
+        if(index == -1) return;
         UILayerItemSlot slot = rows.get(rows.size-1-index);
 
         clearSelection();
@@ -187,7 +188,7 @@ public class UILayerBox extends UICollapsibleBox {
                 facade.sendNotification(LAYER_ROW_CLICKED, itemSlot.getUiLayerItem());
 
                 // Change name mode if double click
-                if(getTapCount() == 2)
+                if(getTapCount() == 2 && !itemSlot.getUiLayerItem().getData().isLocked)
                 {
                     sourceInEdition = sourceItem;
                     textField.setDisabled(false);

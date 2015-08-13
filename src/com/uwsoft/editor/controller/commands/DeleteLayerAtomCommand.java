@@ -27,15 +27,10 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
         Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
-        if(layerMapComponent.layers.size() > 1) {
-            for(LayerItemVO vo: layerMapComponent.layers) {
-                if(vo.layerName.equals(layerName)) {
-                    layerItemVO = vo;
-                    layerIndex = layerMapComponent.layers.indexOf(vo);
-                    layerMapComponent.layers.remove(vo);
-                    break;
-                }
-            }
+
+
+        if(layerMapComponent.getLayers().size() > 1) {
+            layerMapComponent.deleteLayer(layerName);
         } else {
             cancel();
         }
@@ -46,7 +41,7 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
         Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
-        layerMapComponent.layers.add(layerIndex, layerItemVO);
+        layerMapComponent.addLayer(layerIndex, layerItemVO);
     }
 
     public int getLayerIndex() {

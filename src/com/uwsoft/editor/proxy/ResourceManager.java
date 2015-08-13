@@ -276,8 +276,11 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             File file = entry.file();
             String filename = file.getName().replace(".vert", "").replace(".frag", "");
             if (file.isDirectory() || filename.endsWith(".DS_Store") || shaderPrograms.containsKey(filename)) continue;
-            ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"), Gdx.files.internal(path + filename + ".frag"));
-            shaderPrograms.put(filename, shaderProgram);
+            // check if pair exists.
+            if(Gdx.files.internal(path + filename + ".vert").exists() && Gdx.files.internal(path + filename + ".frag").exists()) {
+                ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"), Gdx.files.internal(path + filename + ".frag"));
+                shaderPrograms.put(filename, shaderProgram);
+            }
         }
 
     }
@@ -393,4 +396,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 		// TODO Auto-generated method stub
 		return shaderPrograms.get(shaderName);
 	}
+
+    public HashMap<String, ShaderProgram> getShaders() {
+        return shaderPrograms;
+    }
 }

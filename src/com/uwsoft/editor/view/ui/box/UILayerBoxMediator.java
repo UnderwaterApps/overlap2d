@@ -178,8 +178,10 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 if(mainItemComponent.layer == null) mainItemComponent.layer = layers.get(index).layerName;
                 break;
             case UILayerBox.CHANGE_LAYER_NAME:
+                // TODO: this needs to be command
                 String layerName = notification.getBody();
                 int layerIndex = viewComponent.getCurrentSelectedLayerIndex();
+                if(layerIndex == -1) break;
                 LayerItemVO layer_view = layers.get(layerIndex);
                 layerItem = viewComponent.getCurrentSelectedLayer();
                 VisTextField textField = layerItem.getNameField();
@@ -195,8 +197,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     textField.clearSelection();
                     textField.setDisabled(true);
                     viewComponent.enableDraggingInEditedSlot();
-
+                    String prevName = layer_view.layerName;
                     layer_view.layerName = layerName;
+                    // update the map
+                    Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+                    LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
+                    layerMapComponent.rename(prevName, layerName);
                 }
                 else
                 {
@@ -227,12 +233,12 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             layers.add(vo);
         }
         LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
-        layerMapComponent.layers = layers;
+        layerMapComponent.setLayers(layers);
     }
 
     private void addNewLayerToItemComposite(LayerItemVO layerVo) {
         LayerMapComponent layerMapComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), LayerMapComponent.class);
-        layerMapComponent.layers.add(layerVo);
+        layerMapComponent.addLayer(layerVo);
     }
 
     private void lockLayerByName(UILayerBox.UILayerItem layerItem) {
@@ -243,14 +249,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         }
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
-        for(int i=0; i<layerMapComponent.layers.size(); i++){
-            LayerItemVO layerVO = layerMapComponent.layers.get(i);
-            if(layerVO.layerName.equals(layerName)){
-                layerVO.isLocked = toLock;
-                break;
-            }
-        }
 
+        layerMapComponent.getLayer(layerName).isLocked = toLock;
     }
 
     private void selectEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
@@ -285,7 +285,6 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             Entity entity = nodeComponent.children.get(i);
             MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
             if(childMainItemComponent.layer.equals(layerName)){
-                childMainItemComponent.visible = toHide;
                 EntityUtils.getEntityLayer(entity).isVisible = toHide;
             }
         }
@@ -325,7 +324,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
 
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
-        layers = layerMapComponent.layers;
+        layers = layerMapComponent.getLayers();
 
         viewComponent.clearItems();
 

@@ -37,6 +37,7 @@ import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
 
+import com.uwsoft.editor.view.ui.dialog.ImportDialogMediator;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.w3c.dom.NodeList;
@@ -1050,5 +1051,38 @@ public class ProjectManager extends BaseProxy {
         currentProjectVO.sceneConfigs.add(newConfig);
 
         return newConfig;
+    }
+
+    public void importShaderIntoProject(Array<FileHandle> files, ProgressHandler progressHandler) {
+        if (files == null) {
+            return;
+        }
+        handler = progressHandler;
+        currentPercent = 0;
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        executor.execute(() -> {
+            for (FileHandle handle : files) {
+                // check if shaders folder exists
+                String shadersPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/shaders";
+                File destination = new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/shaders/"+handle.name());
+                try {
+                    FileUtils.forceMkdir(new File(shadersPath));
+                    FileUtils.copyFile(handle.file(), destination);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+        });
+        executor.execute(() -> {
+            changePercentBy(100 - currentPercent);
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            handler.progressComplete();
+        });
+        executor.shutdown();
     }
 }

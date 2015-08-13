@@ -27,7 +27,7 @@ import com.badlogic.gdx.utils.reflect.ReflectionException;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyPropertiesComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.ui.widget.components.color.ColorPickerAdapter;
 import com.uwsoft.editor.view.ui.widget.components.color.CustomColorPicker;
@@ -79,7 +79,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
 
         componentClassMap.put("Polygon Component", PolygonComponent.class);
-        componentClassMap.put("Physics Component", PhysicsBodyPropertiesComponent.class);
+        componentClassMap.put("Physics Component", PhysicsBodyComponent.class);
+        componentClassMap.put("Shader Component", ShaderComponent.class);
     }
 
     @Override
