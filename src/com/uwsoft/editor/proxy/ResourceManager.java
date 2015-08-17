@@ -279,6 +279,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             // check if pair exists.
             if(Gdx.files.internal(path + filename + ".vert").exists() && Gdx.files.internal(path + filename + ".frag").exists()) {
                 ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"), Gdx.files.internal(path + filename + ".frag"));
+                System.out.println(shaderProgram.getLog());
                 shaderPrograms.put(filename, shaderProgram);
             }
         }

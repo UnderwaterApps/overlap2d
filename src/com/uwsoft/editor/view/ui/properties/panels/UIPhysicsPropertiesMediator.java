@@ -46,6 +46,8 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
                 break;
         }
     }
+
+
     @Override
     protected void translateObservableDataToView(Entity item) {
         physicsComponent = item.getComponent(PhysicsBodyComponent.class);

@@ -20,11 +20,15 @@ package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
+import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.renderer.components.ShaderComponent;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import org.apache.commons.lang3.ArrayUtils;
 
@@ -56,11 +60,22 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
     }
 
     @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+
+        switch (notification.getName()) {
+            case UIPhysicsProperties.CLOSE_CLICKED:
+                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, ShaderComponent.class));
+                break;
+        }
+    }
+
+    @Override
     protected void translateObservableDataToView(Entity item) {
         ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
 
         ShaderComponent shaderComponent = ComponentRetriever.get(item, ShaderComponent.class);
-        String currShaderName = findShaderProgramName(resourceManager.getShaders(), shaderComponent.shaderProgram);
+        String currShaderName = shaderComponent.shaderName;
         viewComponent.setSelected(currShaderName);
     }
 
@@ -70,9 +85,9 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
         ShaderComponent shaderComponent = ComponentRetriever.get(observableReference, ShaderComponent.class);
         String shaderName = viewComponent.getShader();
         if(shaderName.equals("Default")) {
-            shaderComponent.shaderProgram = null;
+            shaderComponent.clear();
         } else {
-            shaderComponent.shaderProgram = resourceManager.getShaderProgram(shaderName);
+            shaderComponent.setShader(shaderName, resourceManager.getShaderProgram(shaderName));
         }
     }
 
