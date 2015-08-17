@@ -9,7 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 
-public class DimensionsComponent extends Component {
+public class DimensionsComponent implements Component {
 	public float width = 0;
 	public float height = 0;
 

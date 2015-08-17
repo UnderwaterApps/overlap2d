@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.FrameRange;
 
-public class SpriteAnimationComponent extends Component {
+public class SpriteAnimationComponent implements Component {
 	public String animationName = "";
 	public int fps = 24;
 	public HashMap<String, FrameRange> frameRangeMap = new HashMap<String, FrameRange>();

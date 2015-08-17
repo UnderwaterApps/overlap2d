@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 
-public class TextureRegionComponent extends Component {
+public class TextureRegionComponent implements Component {
 	public String regionName = "";
 	public TextureRegion region = null;
     public boolean isRepeat = false;

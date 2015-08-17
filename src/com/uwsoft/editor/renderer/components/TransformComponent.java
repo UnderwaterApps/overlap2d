@@ -2,7 +2,7 @@ package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
 
-public class TransformComponent extends Component {
+public class TransformComponent implements Component {
 	public float x; 
 	public float y;
 	public float scaleX	=	1f; 

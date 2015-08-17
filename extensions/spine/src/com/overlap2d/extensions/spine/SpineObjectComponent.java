@@ -7,7 +7,7 @@ import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 
-public class SpineObjectComponent extends Component {
+public class SpineObjectComponent implements Component {
 	public SkeletonData skeletonData;
 	public Skeleton skeleton;
 	public SkeletonJson skeletonJson;

@@ -9,7 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.StringBuilder;
 
-public class LabelComponent extends Component {
+public class LabelComponent implements Component {
 	public  LabelStyle style;
 	public final GlyphLayout layout = new GlyphLayout();
 	public BitmapFontCache cache;
