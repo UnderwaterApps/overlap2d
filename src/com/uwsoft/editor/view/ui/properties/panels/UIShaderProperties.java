@@ -56,7 +56,7 @@ public class UIShaderProperties extends UIRemovableProperties {
         shadersSelector.addListener(new SelectBoxChangeListener(getUpdateEventName()));
 
         mainTable.add(new VisLabel("Shader: ", Align.right)).padRight(5).width(75).right();
-        mainTable.add(shadersSelector).left();
+        mainTable.add(shadersSelector).width(100).left();
     }
 
     @Override
