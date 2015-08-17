@@ -33,7 +33,7 @@ public class TexturRegionDrawLogic implements Drawable {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         if(entityTextureRegionComponent.polygonSprite != null) {
             if(entityTextureRegionComponent.isRepeat) {
-                drawPolygonSprite(batch, entity);
+            	drawTiledPolygonSprite(batch, entity);
             } else {
                 drawPolygonSprite(batch, entity);
             }
