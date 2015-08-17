@@ -3,7 +3,7 @@ package com.uwsoft.editor.view.stage.input;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.gdx.utils.Array;
 
-public class InputListenerComponent extends Component {
+public class InputListenerComponent implements Component {
 	private Array<InputListener> listeners = new Array<InputListener>(1); 
 	
 	public void addListener(InputListener listener){
