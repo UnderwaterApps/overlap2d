@@ -47,14 +47,7 @@ public class LabelDrawableLogic implements Drawable {
 		
 		labelComponent.cache.tint(Color.WHITE);
 		labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
-		if(shaderComponentMapper.has(entity)){
-			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-			batch.setShader(shaderComponent.shaderProgram);
-		}
 		labelComponent.cache.draw(batch);
-		if(shaderComponentMapper.has(entity)){
-			batch.setShader(null);
-		}
 	}
 
 }

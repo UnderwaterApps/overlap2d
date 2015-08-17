@@ -103,5 +103,10 @@ public class MainItemVO {
             physics = new PhysicsBodyDataVO();
             physics.loadFromComponent(physicsComponent);
         }
+
+		ShaderComponent shaderComponent = entity.getComponent(ShaderComponent.class);
+		if(shaderComponent != null) {
+			shaderName = shaderComponent.shaderName;
+		}
 	}
 }
