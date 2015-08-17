@@ -105,7 +105,7 @@ public class MainItemVO {
         }
 
 		ShaderComponent shaderComponent = entity.getComponent(ShaderComponent.class);
-		if(shaderComponent != null) {
+		if(shaderComponent != null && shaderComponent.shaderName != null) {
 			shaderName = shaderComponent.shaderName;
 		}
 	}

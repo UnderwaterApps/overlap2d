@@ -11,4 +11,13 @@ public class ShaderComponent implements Component {
 		shaderName = name;
 		shaderProgram = program;
 	}
+
+	public ShaderProgram getShader() {
+		return shaderProgram;
+	}
+
+	public void clear() {
+		shaderName = null;
+		shaderProgram = null;
+	}
 }

@@ -18,14 +18,12 @@ public class LabelDrawableLogic implements Drawable {
 	private ComponentMapper<TintComponent> tintComponentMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
-	private ComponentMapper<ShaderComponent> shaderComponentMapper;
 	
 	public LabelDrawableLogic() {
 		labelComponentMapper = ComponentMapper.getFor(LabelComponent.class);
 		tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
 		dimensionsComponentMapper = ComponentMapper.getFor(DimensionsComponent.class);
 		transformMapper = ComponentMapper.getFor(TransformComponent.class);
-		shaderComponentMapper = ComponentMapper.getFor(ShaderComponent.class);
 	}
 	
 	@Override
