@@ -102,8 +102,7 @@ public class ComponentRetriever {
         mappers.put(ScriptComponent.class, ComponentMapper.getFor(ScriptComponent.class));
 
         mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
-        
-        
+        mappers.put(ShaderComponent.class, ComponentMapper.getFor(ShaderComponent.class));
     }
 
     /**

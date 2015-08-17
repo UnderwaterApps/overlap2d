@@ -11,7 +11,7 @@ import java.util.Iterator;
 /**
  * Created by azakhary on 6/19/2015.
  */
-public class ScriptComponent extends Component {
+public class ScriptComponent implements Component {
 
     public Array<IScript> scripts = new Array<IScript>();
 

@@ -51,17 +51,19 @@ public class TexturRegionDrawLogic implements Drawable {
         
         if(shaderComponentMapper.has(entity)){
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
-			batch.setShader(shaderComponent.shaderProgram);
-			//shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
-			//shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
-			
-			GL20 gl = Gdx.gl20;
-	        int error;
-	        if((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
-	        	Gdx.app.log("opengl", "Error: " + error);
-	            Gdx.app.log("opengl",shaderComponent.shaderProgram.getLog());
-	            //throw new RuntimeException( ": glError " + error);
-	        }
+            if(shaderComponent.getShader() != null) {
+                batch.setShader(shaderComponent.getShader());
+                //shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
+                //shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
+
+                GL20 gl = Gdx.gl20;
+                int error;
+                if ((error = gl.glGetError()) != GL20.GL_NO_ERROR) {
+                    Gdx.app.log("opengl", "Error: " + error);
+                    Gdx.app.log("opengl", shaderComponent.getShader().getLog());
+                    //throw new RuntimeException( ": glError " + error);
+                }
+            }
 		}
 		
 		

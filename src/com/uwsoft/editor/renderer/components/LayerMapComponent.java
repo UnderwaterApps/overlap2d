@@ -6,7 +6,7 @@ import java.util.HashMap;
 import com.badlogic.ashley.core.Component;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 
-public class LayerMapComponent extends Component {
+public class LayerMapComponent implements Component {
 	private ArrayList<LayerItemVO> layers = new ArrayList<LayerItemVO>();
 
 	private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();

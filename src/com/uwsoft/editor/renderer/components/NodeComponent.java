@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.SnapshotArray;
 
-public class NodeComponent extends Component {
+public class NodeComponent implements Component {
 	public SnapshotArray<Entity> children = new SnapshotArray<Entity>(true, 1, Entity.class);
 
 	public void removeChild(Entity entity) {

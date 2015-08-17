@@ -2,7 +2,7 @@ package com.uwsoft.editor.renderer.components;
 
 import com.badlogic.ashley.core.Component;
 
-public class ZIndexComponent extends Component {
+public class ZIndexComponent implements Component {
     private int zIndex = 0;
     public boolean needReOrder = false;
     public String layerName = "";

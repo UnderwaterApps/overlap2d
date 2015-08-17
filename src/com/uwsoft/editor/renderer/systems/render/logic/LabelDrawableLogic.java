@@ -46,7 +46,6 @@ public class LabelDrawableLogic implements Drawable {
 		labelComponent.cache.tint(Color.WHITE);
 		labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
 		labelComponent.cache.draw(batch);
-		
 	}
 
 }

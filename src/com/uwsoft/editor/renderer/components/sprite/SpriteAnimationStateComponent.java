@@ -11,7 +11,7 @@ import java.util.Comparator;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class SpriteAnimationStateComponent extends Component {
+public class SpriteAnimationStateComponent implements Component {
     public Array<TextureAtlas.AtlasRegion> allRegions;
 	public Animation currentAnimation;
 	public float time = 0.0f;

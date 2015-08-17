@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 /**
  * Created by azakhary on 8/1/2015.
  */
-public class ButtonComponent extends Component {
+public class ButtonComponent implements Component {
 
     public boolean isTouched = false;
 

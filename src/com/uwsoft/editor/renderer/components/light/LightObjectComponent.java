@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Component;
 import com.uwsoft.editor.renderer.data.LightVO.LightType;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 
-public class LightObjectComponent extends Component {
+public class LightObjectComponent implements Component {
 	private LightType type;
 	
 	public LightObjectComponent(LightType type) {

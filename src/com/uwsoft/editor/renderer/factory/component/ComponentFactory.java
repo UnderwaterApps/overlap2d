@@ -77,7 +77,7 @@ public abstract class ComponentFactory {
     		return null;
     	}
 		ShaderComponent component = new ShaderComponent();
-		component.shaderProgram = rm.getShaderProgram(vo.shaderName);
+		component.setShader(vo.shaderName, rm.getShaderProgram(vo.shaderName));
 		entity.add(component);
 		return component;
 	}

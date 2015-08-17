@@ -25,6 +25,7 @@ public class MainItemVO {
 	public float[] tint = {1, 1, 1, 1};
 
 	public String shaderName = "";
+
 	public ShapeVO shape = null;
 	public PhysicsBodyDataVO physics = null;
 	
@@ -102,5 +103,10 @@ public class MainItemVO {
             physics = new PhysicsBodyDataVO();
             physics.loadFromComponent(physicsComponent);
         }
+
+		ShaderComponent shaderComponent = entity.getComponent(ShaderComponent.class);
+		if(shaderComponent != null && shaderComponent.shaderName != null) {
+			shaderName = shaderComponent.shaderName;
+		}
 	}
 }

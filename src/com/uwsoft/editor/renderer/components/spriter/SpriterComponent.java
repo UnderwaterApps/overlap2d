@@ -6,7 +6,7 @@ import com.badlogic.ashley.core.Component;
 import com.brashmonkey.spriter.Data;
 import com.brashmonkey.spriter.Player;
 
-public class SpriterComponent extends Component {
+public class SpriterComponent implements Component {
 	public Player player;
 	public Data data;
 	public ArrayList<String> animations = new ArrayList<String>();
