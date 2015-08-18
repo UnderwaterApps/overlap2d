@@ -4,6 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 
@@ -47,8 +48,8 @@ public class DeleteLayerCommand extends TransactiveCommand {
         NodeComponent nodeComponent = ComponentRetriever.get(viewingEntity, NodeComponent.class);
         for(int i = 0; i < nodeComponent.children.size; i++) {
             Entity child = nodeComponent.children.get(i);
-            MainItemComponent mainItemComponent = ComponentRetriever.get(child, MainItemComponent.class);
-            if(mainItemComponent.layer.equals(layerName)) {
+            ZIndexComponent zIndexComponent = ComponentRetriever.get(child, ZIndexComponent.class);
+            if(zIndexComponent.layerName.equals(layerName)) {
                 result.add(child);
             }
         }

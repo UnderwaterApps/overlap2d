@@ -201,9 +201,9 @@ public class EntityUtils {
 
     public static LayerItemVO getEntityLayer(Entity entity) {
 
-        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         LayerMapComponent layerMapComponent = ComponentRetriever.get(entity.getComponent(ParentNodeComponent.class).parentEntity, LayerMapComponent.class);
 
-        return layerMapComponent.getLayer(mainItemComponent.layer);
+        return layerMapComponent.getLayer(zIndexComponent.layerName);
     }
 }

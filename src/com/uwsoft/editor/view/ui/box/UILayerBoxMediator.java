@@ -34,6 +34,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
 import com.uwsoft.editor.controller.commands.LayerSwapCommand;
 import com.uwsoft.editor.controller.commands.NewLayerCommand;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
@@ -165,8 +166,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             case Overlap2D.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
-                    MainItemComponent mainItemComponent = ComponentRetriever.get(selection.iterator().next(), MainItemComponent.class);
-                    index = findLayerByName(mainItemComponent.layer);
+                    ZIndexComponent zIndexComponent = ComponentRetriever.get(selection.iterator().next(), ZIndexComponent.class);
+                    index = findLayerByName(zIndexComponent.layerName);
                     if(index == -1) {
                         // handle this somehow
                     } else {
@@ -180,8 +181,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             case ItemFactory.NEW_ITEM_ADDED:
                 index = viewComponent.getCurrentSelectedLayerIndex();
                 Entity item = notification.getBody();
-                MainItemComponent mainItemComponent = ComponentRetriever.get(item, MainItemComponent.class);
-                if(mainItemComponent.layer == null) mainItemComponent.layer = layers.get(index).layerName;
+                ZIndexComponent zIndexComponent = ComponentRetriever.get(item, ZIndexComponent.class);
+                if(zIndexComponent.layerName == null) zIndexComponent.layerName = layers.get(index).layerName;
                 break;
             case UILayerBox.CHANGE_LAYER_NAME:
                 // TODO: this needs to be command
@@ -275,8 +276,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         Set<Entity> items = new HashSet<>();
         for(int i=0; i<nodeComponent.children.size; i++){
             Entity entity = nodeComponent.children.get(i);
-            MainItemComponent childeMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-            if(childeMainItemComponent.layer.equals(layerName)){
+            ZIndexComponent childZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            if(childZComponent.layerName.equals(layerName)){
                 items.add(entity);
             }
         }
@@ -292,8 +293,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
         for(int i=0; i<nodeComponent.children.size; i++){
             Entity entity = nodeComponent.children.get(i);
-            MainItemComponent childMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-            if(childMainItemComponent.layer.equals(layerName)){
+            ZIndexComponent childZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            if(childZComponent.layerName.equals(layerName)){
                 EntityUtils.getEntityLayer(entity).isVisible = toHide;
             }
         }

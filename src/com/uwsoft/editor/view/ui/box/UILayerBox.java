@@ -129,6 +129,10 @@ public class UILayerBox extends UICollapsibleBox {
         return currentSelectedLayerIndex;
     }
 
+    public int getRowCount() {
+        return rows.size;
+    }
+
     public UILayerItem getCurrentSelectedLayer() {
         return rows.get(rows.size-1-currentSelectedLayerIndex).uiLayerItem;
     }
