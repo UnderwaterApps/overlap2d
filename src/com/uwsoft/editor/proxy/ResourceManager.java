@@ -72,6 +72,10 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         return reg;
     }
 
+    public TextureAtlas getTextureAtlas() {
+        return currentProjectAtlas;
+    }
+
     @Override
     public ParticleEffect getParticleEffect(String name) {
         return new ParticleEffect(particleEffects.get(name));

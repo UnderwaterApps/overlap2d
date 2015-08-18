@@ -57,6 +57,10 @@ public class UIDropDownMenu extends PopupMenu {
         //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
     }
 
+    public void setActionName(String action, String name) {
+        actionNames.put(action, name);
+    }
+
     public void setActionList(Array<String> actions) {
         currentActionList.clear();
         currentActionList.addAll(actions);

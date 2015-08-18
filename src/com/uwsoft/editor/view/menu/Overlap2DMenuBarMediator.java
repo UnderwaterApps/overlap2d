@@ -27,7 +27,6 @@ import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.data.manager.PreferencesManager;
-import com.commons.plugins.MenuConnector;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.CommandManager;
@@ -38,7 +37,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 /**
  * Created by sargis on 3/25/15.
  */
-public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> implements MenuConnector {
+public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     private static final String TAG = Overlap2DMenuBarMediator.class.getCanonicalName();
     public static final String NAME = TAG;
     private ProjectManager projectManager;
@@ -257,7 +256,6 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> i
         sandbox.loadScene(sceneName);
     }
 
-    @Override
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
         viewComponent.addMenuItem(menu, subMenuName, notificationName);
     }

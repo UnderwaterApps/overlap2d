@@ -18,7 +18,6 @@
 
 package com.overlap2d.plugins.performance;
 
-import com.commons.plugins.MenuConnector;
 import com.commons.plugins.O2DPluginAdapter;
 import net.mountainblade.modular.annotations.Implementation;
 
@@ -42,10 +41,6 @@ public class PerformancePlugin extends O2DPluginAdapter {
     @Override
     public void initPlugin() {
         facade.registerMediator(performancePanelMediator);
-    }
-
-    @Override
-    public void initMenuItems(MenuConnector menuConnector) {
-        menuConnector.addMenuItem(WINDOWS_MENU, "Performance", PANEL_OPEN);
+        pluginAPI.addMenuItem(WINDOWS_MENU, "Performance", PANEL_OPEN);
     }
 }

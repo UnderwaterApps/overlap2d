@@ -62,7 +62,7 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
                 viewComponent.setEngine(engine);
                 break;
             case PerformancePlugin.PANEL_OPEN:
-                viewComponent.show(performancePlugin.getUiStage());
+                viewComponent.show(performancePlugin.getStage());
                 break;
         }
     }
