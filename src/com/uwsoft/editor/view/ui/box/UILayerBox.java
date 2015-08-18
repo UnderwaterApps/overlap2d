@@ -26,6 +26,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Array;
+import com.esotericsoftware.spine.Slot;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
@@ -225,6 +226,11 @@ public class UILayerBox extends UICollapsibleBox {
                 uiLayerItemActor.setItemSlot(uiLayerItemSlotTarget);
                 uiLayerItemTarget.setItemSlot(uiLayerItemSlot);
 
+                String sourceLayer = uiLayerItemActor.getLayerName();
+                String targetLayer = uiLayerItemTarget.getLayerName();
+                String[] notificationPayload = {sourceLayer, targetLayer};
+
+                Overlap2DFacade.getInstance().sendNotification(LAYER_DROPPED, notificationPayload);
             } else {
                 uiLayerItemActor.setItemSlot(uiLayerItemSlot);
             }
@@ -233,7 +239,7 @@ public class UILayerBox extends UICollapsibleBox {
 
     private static class SlotTarget extends DragAndDrop.Target {
 
-//        private Slot targetSlot;
+        //private Slot targetSlot;
 
         public SlotTarget(UILayerItemSlot item) {
             super(item);
@@ -254,7 +260,7 @@ public class UILayerBox extends UICollapsibleBox {
 
         @Override
         public void drop(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-            Overlap2DFacade.getInstance().sendNotification(LAYER_DROPPED);
+            //Overlap2DFacade.getInstance().sendNotification(LAYER_DROPPED);
         }
 
         @Override
@@ -265,7 +271,11 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public static class UILayerItemDragActor extends VisTable {
+
+        public String layerName;
+
         public UILayerItemDragActor(UILayerItem actor) {
+            layerName = actor.getLayerName();
             setWidth(actor.getWidth());
             setHeight(actor.getPrefHeight());
             VisImageButton lockBtn = new VisImageButton("layer-lock");

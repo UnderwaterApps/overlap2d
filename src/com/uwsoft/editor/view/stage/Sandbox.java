@@ -77,6 +77,7 @@ public class Sandbox {
 
     public static final String ACTION_DELETE_LAYER = CLASS_NAME + "ACTION_DELETE_LAYER";
     public static final String ACTION_NEW_LAYER = CLASS_NAME + "ACTION_NEW_LAYER";
+    public static final String ACTION_SWAP_LAYERS = CLASS_NAME + "ACTION_SWAP_LAYERS";
 
     public static final String ACTION_ADD_COMPONENT = CLASS_NAME + "ACTION_ADD_COMPONENT";
     public static final String ACTION_REMOVE_COMPONENT = CLASS_NAME + "ACTION_REMOVE_COMPONENT";
