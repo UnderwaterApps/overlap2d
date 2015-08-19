@@ -260,7 +260,6 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
         public void progressComplete() {
             Gdx.app.postRunnable(() -> {
                 Sandbox sandbox = Sandbox.getInstance();
-                UIStage uiStage = sandbox.getUIStage();
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
                 projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
                 sandbox.loadCurrentProject();

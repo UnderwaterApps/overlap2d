@@ -18,46 +18,57 @@
 
 package com.commons.plugins;
 import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.facade.Facade;
 import net.mountainblade.modular.Module;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 7/24/2015.
  */
-public class O2DPluginAdapter implements O2DPlugin, Module {
+public abstract class O2DPluginAdapter implements O2DPlugin, Module {
 
-    protected Stage uiStage;
-    protected Engine engine;
     public Facade facade;
+    protected Engine engine;
+    protected Stage stage;
+    protected PluginAPI pluginAPI;
 
-    @Override
     public String getName() {
         return "";
     }
 
     @Override
-    public void injectDependencies(Facade facade, Stage uiStage, Engine engine) {
-        this.uiStage = uiStage;
+    public void setFacade(Facade facade) {
         this.facade = facade;
+    }
+    @Override
+    public void setEngine(Engine engine) {
         this.engine = engine;
     }
+    @Override
+    public void setStage(Stage stage) {
+        this.stage = stage;
+    }
+    @Override
+    public void setAPI(PluginAPI pluginAPI) {
+        this.pluginAPI = pluginAPI;
+    }
 
     @Override
-    public void initPlugin() {
+    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
 
     }
 
-    @Override
-    public void initMenuItems(MenuConnector menuConnector) {
-
+    public Stage getStage() {
+        return stage;
     }
-
-    public Stage getUiStage() {
-        return uiStage;
-    }
-
     public Engine getEngine() {
         return engine;
+    }
+    public PluginAPI getAPI() {
+        return pluginAPI;
     }
 }

@@ -18,9 +18,15 @@
 
 package com.commons.plugins;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
 /**
  * Created by azakhary on 7/24/2015.
  */
-public interface MenuConnector {
+public interface PluginAPI {
     public void addMenuItem(String menu, String subMenuName, String notificationName);
+    public void setDropDownItemName(String action, String name);
+    public String getProjectPath();
+    public TextureAtlas getProjectTextureAtlas();
+    public void reLoadProject();
 }

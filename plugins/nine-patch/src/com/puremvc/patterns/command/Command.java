@@ -15,29 +15,23 @@
  *  * limitations under the License.
  *  *****************************************************************************
  */
+package com.puremvc.patterns.command;
 
-package com.commons.plugins;
-
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.facade.Facade;
-
-import java.util.Set;
+import com.puremvc.patterns.observer.Notification;
+import com.puremvc.patterns.observer.Notifier;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * The interface definition for a PureMVC Command.
+ *
+ * @see com.puremvc.patterns.observer Notification
  */
-public interface O2DPlugin {
+public interface Command extends Notifier {
 
-    String getName();
-    void initPlugin();
-
-    public void setFacade(Facade facade);
-    public void setEngine(Engine engine);
-    public void setStage(Stage stage);
-    public void setAPI(PluginAPI pluginAPI);
-
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet);
+    /**
+     * Execute the <code>Command</code>'s logic to handle a given
+     * <code>Notification</code>.
+     *
+     * @param notification an <code>Notification</code> to handle.
+     */
+    void execute(Notification notification);
 }

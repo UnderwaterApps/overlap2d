@@ -50,7 +50,6 @@ public class BootstrapPlugins extends SimpleCommand {
         ModuleManager manager = new DefaultModuleManager();
         Collection<Module> loadedPlugins = manager.loadModules(pluginDir);
 
-        System.out.println(loadedPlugins.size());
         for(Module module: loadedPlugins) {
             try {
                 pluginManager.initPlugin((O2DPlugin) module.getClass().newInstance());

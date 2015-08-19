@@ -18,9 +18,26 @@
 
 package com.commons.plugins;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.utils.Array;
+import com.puremvc.patterns.facade.Facade;
+
+import java.util.Set;
+
 /**
  * Created by azakhary on 7/24/2015.
  */
-public interface MenuConnector {
-    public void addMenuItem(String menu, String subMenuName, String notificationName);
+public interface O2DPlugin {
+
+    String getName();
+    void initPlugin();
+
+    public void setFacade(Facade facade);
+    public void setEngine(Engine engine);
+    public void setStage(Stage stage);
+    public void setAPI(PluginAPI pluginAPI);
+
+    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet);
 }
