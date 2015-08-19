@@ -25,6 +25,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
@@ -33,6 +35,9 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 
 /**
@@ -42,11 +47,9 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
     private static final String TAG = com.overlap2d.plugins.ninepatch.MainPanelMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public static final String SCENE_LOADED = "com.uwsoft.editor.proxy.SceneDataManager.SCENE_LOADED";
-    public static final String NEW_ITEM_ADDED = "com.uwsoft.editor.factory.ItemFactory.NEW_ITEM_ADDED";
-    public static final String ACTION_DELETE = "com.uwsoft.editor.controller.commands.DeleteItemsCommandDONE";
-
     private NinePatchPlugin plugin;
+
+    private ImageUtils imageUtils = new ImageUtils();
 
     public MainPanelMediator(NinePatchPlugin plugin) {
         super(NAME, new MainPanel());
@@ -56,7 +59,8 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                NinePatchPlugin.PANEL_OPEN
+                NinePatchPlugin.PANEL_OPEN,
+                MainPanel.SAVE_CLICKED
         };
     }
 
@@ -70,35 +74,57 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
                 loadRegion(ninePatchComponent.textureRegionName);
                 viewComponent.show(plugin.getStage());
                 break;
+            case MainPanel.SAVE_CLICKED:
+                entity = plugin.currEditingEntity;
+                ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
+                applyNewSplits(ninePatchComponent.textureRegionName, viewComponent.getSplits());
+                viewComponent.hide();
+                break;
+        }
+    }
+
+    private void applyNewSplits(String textureRegionName, int[] splits) {
+        // first need to modify original image
+        FileHandle packAtlas = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
+        FileHandle imagesDir = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/pack/");
+        TextureAtlas.TextureAtlasData atlas = new TextureAtlas.TextureAtlasData(packAtlas, imagesDir, false);
+        BufferedImage finalImage = imageUtils.extractImage(atlas, textureRegionName, splits);
+        imageUtils.saveImage(finalImage, plugin.getAPI().getProjectPath() + "/assets/orig/images/qaq_"+textureRegionName+".9.png");
+
+        // now need to modify the pack
+        String content = packAtlas.readString();
+        int regionIndex = content.indexOf(textureRegionName);
+        int splitStart = content.indexOf("split: ", regionIndex) + "split: ".length();
+        int splitEnd = content.indexOf("orig: ", splitStart);
+        String splitStr = splits[0]+", "+splits[1]+", "+splits[2]+", "+splits[3]+"\n  ";
+        String newContent = content.substring(0, splitStart) + splitStr + content.substring(splitEnd, content.length());
+        File test = new File(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
+        writeFile(newContent, test);
+
+        // reload
+        plugin.getAPI().reLoadProject();
+    }
+
+    private void writeFile(String content, File file) {
+        BufferedWriter output = null;
+        try {
+            output = new BufferedWriter(new FileWriter(file));
+            output.write(content);
+        } catch ( IOException e ) {
+            e.printStackTrace();
+        } finally {
+            if ( output != null ) try {
+                output.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     private void loadRegion(String name) {
-        /*
-        FileHandle imageFile = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/images/"+name+".9.png");
-        BufferedImage image;
-        try {
-            image = ImageIO.read(imageFile.file());
-        } catch (IOException ex) {
-            return;
-        }
-        if (image == null) return;
-        ImageUtils imageUtils = new ImageUtils();
-        imageUtils.getSplits(image, name);
-        //Texture texture = new Texture(Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/images/"+name+".9.png"));
-        int width = image.getWidth(), height = image.getHeight();
-        // Strip split pixels.
-        width -= 2;
-        height -= 2;
-        BufferedImage newImage = new BufferedImage(width, height, BufferedImage.TYPE_4BYTE_ABGR);
-        newImage.getGraphics().drawImage(image, 0, 0, width, height, 1, 1, width + 1, height + 1, null);
-        image = newImage;
-
-        Texture texture = new Texture(new Pixmap(image));
-
-        //viewComponent.setTexture(texture);
-        */
         TextureAtlas atlas = plugin.getAPI().getProjectTextureAtlas();
         viewComponent.setTexture(atlas.findRegion(name));
+
+        viewComponent.setListeners(plugin.getStage());
     }
 }

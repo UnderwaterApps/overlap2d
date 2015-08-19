@@ -34,10 +34,10 @@ import java.util.Set;
  */
 @Implementation(authors = "azakhary", version = "0.0.1")
 public class NinePatchPlugin extends O2DPluginAdapter {
-    public static final String CLASS_NAME = "com.uwsoft.editor.plugins.ninepatch";
+    public static final String CLASS_NAME = "com.uwsoft.editor.plugins.ninepatch.NinePatchPlugin";
 
     public static final String PANEL_OPEN = CLASS_NAME + ".PANEL_OPEN";
-    public static final String WINDOWS_MENU = "com.uwsoft.editor.view.Overlap2DMenuBar.WINDOW_MENU";
+    public static final String SCENE_LOADED = "com.uwsoft.editor.proxy.SceneDataManager.SCENE_LOADED";
 
     private MainPanelMediator performancePanelMediator;
 

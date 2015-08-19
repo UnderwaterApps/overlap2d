@@ -88,6 +88,15 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         return resourceManager.getTextureAtlas();
     }
 
+    @Override
+    public void reLoadProject() {
+        Sandbox sandbox = Sandbox.getInstance();
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
+        sandbox.loadCurrentProject();
+        facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);
+    }
+
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
         Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
         overlap2DMenuBarMediator.addMenuItem(menu, subMenuName, notificationName);

@@ -57,5 +57,4 @@ public class UIDraggablePanel extends O2DDialog {
         float heightDiff = heightOld - getHeight();
         setPosition(getX(), getY() + heightDiff);
     }
-
 }

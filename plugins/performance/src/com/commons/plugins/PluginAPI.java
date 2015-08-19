@@ -28,4 +28,5 @@ public interface PluginAPI {
     public void setDropDownItemName(String action, String name);
     public String getProjectPath();
     public TextureAtlas getProjectTextureAtlas();
+    public void reLoadProject();
 }

@@ -17,14 +17,20 @@
  */
 
 package com.overlap2d.plugins.ninepatch;
-
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
+import com.badlogic.gdx.utils.Align;
+import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.puremvc.patterns.facade.SimpleFacade;
 import com.commons.UIDraggablePanel;
 
@@ -32,6 +38,9 @@ import com.commons.UIDraggablePanel;
  * Created by azakhary on 8/18/2015.
  */
 public class MainPanel extends UIDraggablePanel {
+    public static final String CLASS_NAME = "com.uwsoft.editor.plugins.ninepatch.MainPanel";
+
+    public static final String SAVE_CLICKED = CLASS_NAME + ".SAVE_CLICKED";
 
     private SimpleFacade facade;
 
@@ -42,6 +51,7 @@ public class MainPanel extends UIDraggablePanel {
     private VisTable previewTable;
 
     private EditingZone editingZone;
+    private PreviewWidget previewWidget;
 
     public MainPanel() {
         super("Nine Patch");
@@ -59,7 +69,7 @@ public class MainPanel extends UIDraggablePanel {
         mainTable.row();
     }
 
-    public void initView() {
+    private void initView() {
         editingTable.clear();
         editingZone = new EditingZone();
         editingZone.setTexture(texture);
@@ -68,11 +78,34 @@ public class MainPanel extends UIDraggablePanel {
         editingZone.setWidth(310);
         editingZone.setHeight(310);
 
-        editingTable.addListener(new InputListener() {
+        editingZone.setListener(new EditingZone.PatchChangeListener() {
             @Override
-            public boolean scrolled (InputEvent event, float x, float y, int amount) {
-                editingZone.zoomBy(amount);
-                return false;
+            public void changed(int[] splits) {
+                previewWidget.update((TextureAtlas.AtlasRegion) texture, splits);
+            }
+        });
+    }
+
+    private void initPreView() {
+        previewTable.clear();
+        previewWidget = new PreviewWidget();
+        previewWidget.setHeight(205);
+        previewTable.add(previewWidget).width(200).height(205).top();
+        previewTable.row();
+        previewWidget.update((TextureAtlas.AtlasRegion) texture, ((TextureAtlas.AtlasRegion) texture).splits);
+
+        VisLabel label = new VisLabel("Note: after saving, your \n scene will reload to \n apply changes.");
+        label.setAlignment(Align.center);
+        previewTable.add(label).pad(10).fillY().expandY();
+        previewTable.row();
+
+        VisTextButton saveBtn = new VisTextButton("apply and save");
+        previewTable.add(saveBtn).pad(5);
+        previewTable.row();
+
+        saveBtn.addListener(new ClickListener() {
+            public void clicked (InputEvent event, float x, float y) {
+                facade.sendNotification(SAVE_CLICKED);
             }
         });
     }
@@ -81,5 +114,21 @@ public class MainPanel extends UIDraggablePanel {
         this.texture = texture;
 
         initView();
+        initPreView();
     }
+
+    public void setListeners(Stage stage) {
+        stage.addListener(new InputListener() {
+            @Override
+            public boolean scrolled(InputEvent event, float x, float y, int amount) {
+                editingZone.zoomBy(amount);
+                return false;
+            }
+        });
+    }
+
+    public int[] getSplits() {
+        return editingZone.getSplits();
+    }
+
 }

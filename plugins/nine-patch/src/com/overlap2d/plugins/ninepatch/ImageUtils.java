@@ -18,14 +18,27 @@
 
 package com.overlap2d.plugins.ninepatch;
 
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.WritableRaster;
+import java.io.File;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
- * Created by azakhary on 8/18/2015.
+ * Created by various artists on 8/18/2015.
  */
 public class ImageUtils {
+
+
+    private static final int NINEPATCH_PADDING = 1;
+    private static final String OUTPUT_TYPE = "png";
+
 
     /** Returns the pads, or null if the image had no pads or the pads match the splits. Pads are an int[4] that has left, right,
      * top, bottom. */
@@ -154,5 +167,86 @@ public class ImageUtils {
         }
 
         return 0;
+    }
+
+    public BufferedImage extractImage(TextureAtlas.TextureAtlasData atlas, String regionName, int[] splits) {
+        for (TextureAtlas.TextureAtlasData.Region region : atlas.getRegions()) {
+            if(region.name.equals(regionName)) {
+                TextureAtlas.TextureAtlasData.Page page = region.page;
+                BufferedImage img = null;
+                try {
+                    img = ImageIO.read(page.textureFile.file());
+                } catch (IOException e) {
+
+                }
+                region.splits = splits;
+                return extractNinePatch(img, region);
+            }
+        }
+        return null;
+    }
+
+    private BufferedImage extractImage (BufferedImage page, TextureAtlas.TextureAtlasData.Region region, int padding) {
+        BufferedImage splitImage = null;
+
+        // get the needed part of the page and rotate if needed
+        if (region.rotate) {
+            BufferedImage srcImage = page.getSubimage(region.left, region.top, region.height, region.width);
+            splitImage = new BufferedImage(region.width, region.height, page.getType());
+
+            AffineTransform transform = new AffineTransform();
+            transform.rotate(Math.toRadians(90.0));
+            transform.translate(0, -region.width);
+            AffineTransformOp op = new AffineTransformOp(transform, AffineTransformOp.TYPE_BILINEAR);
+            op.filter(srcImage, splitImage);
+        } else {
+            splitImage = page.getSubimage(region.left, region.top, region.width, region.height);
+        }
+
+        // draw the image to a bigger one if padding is needed
+        if (padding > 0) {
+            BufferedImage paddedImage = new BufferedImage(splitImage.getWidth() + padding * 2, splitImage.getHeight() + padding * 2,
+                    page.getType());
+            Graphics2D g2 = paddedImage.createGraphics();
+            g2.drawImage(splitImage, padding, padding, null);
+            g2.dispose();
+            return paddedImage;
+        } else {
+            return splitImage;
+        }
+    }
+
+
+    private BufferedImage extractNinePatch (BufferedImage page, TextureAtlas.TextureAtlasData.Region region) {
+        BufferedImage splitImage = extractImage(page, region, NINEPATCH_PADDING);
+        Graphics2D g2 = splitImage.createGraphics();
+        g2.setColor(Color.BLACK);
+
+        // Draw the four lines to save the ninepatch's padding and splits
+        int startX = region.splits[0] + NINEPATCH_PADDING;
+        int endX = region.width - region.splits[1] + NINEPATCH_PADDING - 1;
+        int startY = region.splits[2] + NINEPATCH_PADDING;
+        int endY = region.height - region.splits[3] + NINEPATCH_PADDING - 1;
+        if (endX >= startX) g2.drawLine(startX, 0, endX, 0);
+        if (endY >= startY) g2.drawLine(0, startY, 0, endY);
+        if (region.pads != null) {
+            int padStartX = region.pads[0] + NINEPATCH_PADDING;
+            int padEndX = region.width - region.pads[1] + NINEPATCH_PADDING - 1;
+            int padStartY = region.pads[2] + NINEPATCH_PADDING;
+            int padEndY = region.height - region.pads[3] + NINEPATCH_PADDING - 1;
+            g2.drawLine(padStartX, splitImage.getHeight() - 1, padEndX, splitImage.getHeight() - 1);
+            g2.drawLine(splitImage.getWidth() - 1, padStartY, splitImage.getWidth() - 1, padEndY);
+        }
+        g2.dispose();
+
+        return splitImage;
+    }
+
+    public void saveImage(BufferedImage image, String path) {
+        try {
+            ImageIO.write(image, OUTPUT_TYPE, new File(path));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
