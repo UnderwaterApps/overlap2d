@@ -24,13 +24,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import javax.imageio.ImageIO;
@@ -39,6 +44,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.file.Files;
 
 /**
  * Created by azakhary on 8/18/2015.
@@ -59,7 +65,8 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                NinePatchPlugin.PANEL_OPEN,
+                NinePatchPlugin.EDIT_NINE_PATCH,
+                NinePatchPlugin.CONVERT_TO_NINE_PATCH,
                 MainPanel.SAVE_CLICKED
         };
     }
@@ -68,19 +75,64 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case NinePatchPlugin.PANEL_OPEN:
-                Entity entity = plugin.currEditingEntity;
-                NinePatchComponent ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
-                loadRegion(ninePatchComponent.textureRegionName);
-                viewComponent.show(plugin.getStage());
+            case NinePatchPlugin.EDIT_NINE_PATCH:
+                loadNinePatch();
+                break;
+            case NinePatchPlugin.CONVERT_TO_NINE_PATCH:
+                convertImageToNinePatch();
+                loadNinePatch();
                 break;
             case MainPanel.SAVE_CLICKED:
-                entity = plugin.currEditingEntity;
-                ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
+                Entity entity = plugin.currEditingEntity;
+                NinePatchComponent ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
                 applyNewSplits(ninePatchComponent.textureRegionName, viewComponent.getSplits());
                 viewComponent.hide();
                 break;
         }
+    }
+
+    private void convertImageToNinePatch() {
+        Entity entity = plugin.currEditingEntity;
+        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        mainItemComponent.entityType = EntityFactory.NINE_PATCH;
+        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+        String regionName = textureRegionComponent.regionName;
+        NinePatchComponent ninePatchComponent = new NinePatchComponent();
+        ninePatchComponent.textureRegionName = regionName;
+        TextureAtlas.AtlasRegion newRegion = (TextureAtlas.AtlasRegion) textureRegionComponent.region;
+        int[] splits = {0, 0, 0, 0};
+        newRegion.splits = splits;
+        ninePatchComponent.ninePatch = new NinePatch(textureRegionComponent.region, 0, 0, 0, 0);
+        entity.add(ninePatchComponent);
+
+        //remove original image
+        File originalImg = new File(plugin.getAPI().getProjectPath() + "/assets/orig/images/"+regionName+".png");
+        originalImg.delete();
+
+        //save project
+        plugin.getAPI().saveProject();
+
+        //save split data
+        addSplitsToImageInAtlas(regionName, splits);
+        applyNewSplits(regionName, splits);
+    }
+
+    private void loadNinePatch() {
+        Entity entity = plugin.currEditingEntity;
+        NinePatchComponent ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
+        loadRegion(ninePatchComponent.textureRegionName);
+        viewComponent.show(plugin.getStage());
+    }
+
+    private void addSplitsToImageInAtlas(String textureRegionName, int[] splits) {
+        FileHandle packAtlas = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
+        String content = packAtlas.readString();
+        int regionIndex = content.indexOf(textureRegionName);
+        int splitEnd = content.indexOf("orig: ", regionIndex);
+        String splitStr = "split: "+splits[0]+", "+splits[1]+", "+splits[2]+", "+splits[3]+"\n  ";
+        String newContent = content.substring(0, splitEnd) + splitStr + content.substring(splitEnd, content.length());
+        File test = new File(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
+        writeFile(newContent, test);
     }
 
     private void applyNewSplits(String textureRegionName, int[] splits) {
@@ -89,7 +141,7 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         FileHandle imagesDir = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/pack/");
         TextureAtlas.TextureAtlasData atlas = new TextureAtlas.TextureAtlasData(packAtlas, imagesDir, false);
         BufferedImage finalImage = imageUtils.extractImage(atlas, textureRegionName, splits);
-        imageUtils.saveImage(finalImage, plugin.getAPI().getProjectPath() + "/assets/orig/images/qaq_"+textureRegionName+".9.png");
+        imageUtils.saveImage(finalImage, plugin.getAPI().getProjectPath() + "/assets/orig/images/"+textureRegionName+".9.png");
 
         // now need to modify the pack
         String content = packAtlas.readString();

@@ -25,6 +25,7 @@ import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.commons.plugins.O2DPlugin;
 import com.commons.plugins.PluginAPI;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
@@ -95,6 +96,14 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
         sandbox.loadCurrentProject();
         facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);
+    }
+
+    @Override
+    public void saveProject() {
+        Sandbox sandbox = Sandbox.getInstance();
+        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+        SceneVO vo = sandbox.sceneVoFromItems();
+        sceneDataManager.saveScene(vo);
     }
 
     public void addMenuItem(String menu, String subMenuName, String notificationName) {

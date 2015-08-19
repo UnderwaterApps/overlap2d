@@ -36,7 +36,8 @@ import java.util.Set;
 public class NinePatchPlugin extends O2DPluginAdapter {
     public static final String CLASS_NAME = "com.uwsoft.editor.plugins.ninepatch.NinePatchPlugin";
 
-    public static final String PANEL_OPEN = CLASS_NAME + ".PANEL_OPEN";
+    public static final String EDIT_NINE_PATCH = CLASS_NAME + ".EDIT_NINE_PATCH";
+    public static final String CONVERT_TO_NINE_PATCH = CLASS_NAME + ".CONVERT_TO_NINE_PATCH";
     public static final String SCENE_LOADED = "com.uwsoft.editor.proxy.SceneDataManager.SCENE_LOADED";
 
     private MainPanelMediator performancePanelMediator;
@@ -50,7 +51,8 @@ public class NinePatchPlugin extends O2DPluginAdapter {
     @Override
     public void initPlugin() {
         facade.registerMediator(performancePanelMediator);
-        pluginAPI.setDropDownItemName(PANEL_OPEN, "Edit NinePatch");
+        pluginAPI.setDropDownItemName(EDIT_NINE_PATCH, "Edit NinePatch");
+        pluginAPI.setDropDownItemName(CONVERT_TO_NINE_PATCH, "Convert to NinePatch");
     }
 
     @Override
@@ -62,7 +64,12 @@ public class NinePatchPlugin extends O2DPluginAdapter {
             if(mainItemComponent.entityType == EntityFactory.NINE_PATCH) {
                 // it's our guy
                 currEditingEntity = entity;
-                actionsSet.add(PANEL_OPEN);
+                actionsSet.add(EDIT_NINE_PATCH);
+            }
+            if(mainItemComponent.entityType == EntityFactory.IMAGE_TYPE) {
+                // it's our guy
+                currEditingEntity = entity;
+                actionsSet.add(CONVERT_TO_NINE_PATCH);
             }
         }
     }
