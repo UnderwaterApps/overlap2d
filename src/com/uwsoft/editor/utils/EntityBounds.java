@@ -29,6 +29,9 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
  */
 public class EntityBounds extends Rectangle {
 
+    private final float scaleX;
+    private final float scaleY;
+
     public EntityBounds(Entity entity) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
@@ -36,13 +39,16 @@ public class EntityBounds extends Rectangle {
         y = transformComponent.y;
         width = dimensionsComponent.width;
         height = dimensionsComponent.height;
+
+        scaleX = transformComponent.scaleX;
+        scaleY = transformComponent.scaleY;
     }
 
-    public float getVisualX() {return Math.min(getX(), getX() + getWidth());}
-    public float getVisualY() {return Math.min(getY(), getY() + getHeight());}
-    public float getVisualWidth() {return Math.abs(getWidth());}
-    public float getVisualHeight() {return Math.abs(getHeight());}
+    public float getVisualX() {return Math.min(getX(), getX() + getWidth() * scaleX);}
+    public float getVisualY() {return Math.min(getY(), getY() + getHeight() * scaleY);}
+    public float getVisualWidth() {return Math.abs(getWidth() * scaleX);}
+    public float getVisualHeight() {return Math.abs(getHeight() * scaleY);}
 
-    public float getVisualRightX() {return Math.max(getX(), getX() + getWidth());}
-    public float getVisualTopY() {return Math.max(getY(), getY() + getHeight());}
+    public float getVisualRightX() {return Math.max(getX(), getX() + getWidth() * scaleX);}
+    public float getVisualTopY() {return Math.max(getY(), getY() + getHeight() * scaleY);}
 }
