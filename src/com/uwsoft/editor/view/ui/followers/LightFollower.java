@@ -19,6 +19,8 @@
 package com.uwsoft.editor.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -42,6 +44,16 @@ public class LightFollower extends BasicFollower {
         icon.setX(-icon.getWidth() / 2);
         icon.setY(-icon.getHeight() / 2);
         addActor(icon);
+    }
+
+    @Override
+    public void act(float delta) {
+        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+            setVisible(false);
+        } else {
+            setVisible(true);
+        }
+        super.act(delta);
     }
 
     @Override
