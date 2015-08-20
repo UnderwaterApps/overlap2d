@@ -28,8 +28,8 @@ public class CompositeActor extends Group {
 
     protected CompositeItemVO vo;
 
-    private HashMap<Integer, Actor> indexes = new HashMap<>();
-    private HashMap<String, LayerItemVO> layerMap = new HashMap<>();
+    private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
+    private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
 
     public CompositeActor(CompositeItemVO vo, IResourceRetriever ir) {
         this.ir= ir;
@@ -224,7 +224,7 @@ public class CompositeActor extends Group {
      * @return
      */
     public Array<Actor> getItemsByTag(String tag) {
-        Array<Actor> items = new Array<>();
+        Array<Actor> items = new Array<Actor>();
         for(Actor actor: getChildren()) {
             Object userObject = actor.getUserObject();
             if(userObject != null && userObject instanceof CoreActorData) {
@@ -244,7 +244,7 @@ public class CompositeActor extends Group {
      */
     public Array<Actor> getItemsByLayer(String layerName) {
         final int layerIndex = getLayerIndex(layerName);
-        Array<Actor> items = new Array<>();
+        Array<Actor> items = new Array<Actor>();
 
         for(Actor actor: getChildren()) {
             Object userObject = actor.getUserObject();
