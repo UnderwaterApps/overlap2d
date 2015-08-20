@@ -42,7 +42,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/30/2015.
- */
+ */ //TODO all the new Vector2 instances should be replaced by tmp instances
 public class SelectionTool extends SimpleTool {
 
     public static final String NAME = "SELECTION_TOOL";
@@ -138,36 +138,36 @@ public class SelectionTool extends SimpleTool {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
-        if(!isEntityVisible(entity)) return false;
-
         currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
 
-        // if shift is pressed we are in add/remove selection mode
-        if (isShiftPressed()) {
-            //TODO block selection handling (wat?)
-            if (!currentTouchedItemWasSelected) {
-                // item was not selected, adding it to selection
-                Set<Entity> items = new HashSet<>();
-                items.add(entity);
-                facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
-            }
-        } else {
+        if(isEntityVisible(entity)) {
+            // if shift is pressed we are in add/remove selection mode
+            if (isShiftPressed()) {
+                //TODO block selection handling (wat?)
+                if (!currentTouchedItemWasSelected) {
+                    // item was not selected, adding it to selection
+                    Set<Entity> items = new HashSet<>();
+                    items.add(entity);
+                    facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+                }
+            } else {
 
-        	//TODO fix and uncomment layer locking
+                //TODO fix and uncomment layer locking
 //            if (item.isLockedByLayer()) {
 //                // this is considered empty space click and thus should release all selections
 //                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
 //                commands.getSelector().clearSelections();
 //                return false;
 //            } else {
-                if(!currentTouchedItemWasSelected) {
+                if (!currentTouchedItemWasSelected) {
                     // get selection, add this item to selection
                     Set<Entity> items = new HashSet<>();
                     items.add(entity);
                     facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
 
                 }
-            //}
+                //}
+            }
         }
 
         // remembering local touch position for each of selected boxes, if planning to drag
