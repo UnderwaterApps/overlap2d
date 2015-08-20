@@ -98,7 +98,7 @@ public class TexturRegionDrawLogic implements Drawable {
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         
-        batch.getShader().setUniformf("isRepeat", 1);
+        batch.getShader().setUniformi("isRepeat", 1);
         batch.getShader().setUniformf("atlasCoord", new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV()));
     	batch.getShader().setUniformf("atlasSize", new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV()));
         
