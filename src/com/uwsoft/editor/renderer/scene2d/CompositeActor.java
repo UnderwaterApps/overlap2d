@@ -28,10 +28,8 @@ public class CompositeActor extends Group {
 
     protected CompositeItemVO vo;
 
-    protected HashMap<String, Actor> itemMap = new HashMap<String, Actor>();
-    private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
-    private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
-    private HashMap<String, Array<Actor>> itemLayerMap = new HashMap<String, Array<Actor>>();
+    private HashMap<Integer, Actor> indexes = new HashMap<>();
+    private HashMap<String, LayerItemVO> layerMap = new HashMap<>();
 
     public CompositeActor(CompositeItemVO vo, IResourceRetriever ir) {
         this.ir= ir;
@@ -44,10 +42,8 @@ public class CompositeActor extends Group {
 
     private void makeLayerMap(CompositeItemVO vo) {
         layerMap.clear();
-        itemLayerMap.clear();
         for(int i = 0; i < vo.composite.layers.size(); i++) {
             layerMap.put(vo.composite.layers.get(i).layerName,vo.composite.layers.get(i));
-            itemLayerMap.put(vo.composite.layers.get(i).layerName, new Array<Actor>());
         }
     }
 
@@ -105,18 +101,29 @@ public class CompositeActor extends Group {
     }
 
     private void processMain(Actor actor, MainItemVO vo) {
-        actor.setPosition(vo.x*pixelsPerWU, vo.y*pixelsPerWU);
-        actor.setOrigin(vo.originX*pixelsPerWU, vo.originY*pixelsPerWU);
+        //custom variables
+        CustomVariables cv = null;
+        if(vo.customVars != null && !vo.customVars.isEmpty()) {
+            cv = new CustomVariables();
+            cv.loadFromString(vo.customVars);
+        }
+
+        //core data
+        CoreActorData data = new CoreActorData();
+        data.id = vo.itemIdentifier;
+        data.layerIndex = getLayerIndex(vo.layerName);
+        data.tags = vo.tags;
+        data.customVars = cv;
+
+        //actor properties
+        actor.setPosition(vo.x * pixelsPerWU, vo.y * pixelsPerWU);
+        actor.setOrigin(vo.originX * pixelsPerWU, vo.originY * pixelsPerWU);
         actor.setScale(vo.scaleX, vo.scaleY);
         actor.setRotation(vo.rotation);
         actor.setColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
+        actor.setUserObject(data);
 
-        if(vo.itemIdentifier != null && vo.itemIdentifier.length() > 0) {
-            itemMap.put(vo.itemIdentifier, actor);
-        }
-
-        indexes.put(getLayerIndex(vo.layerName)+vo.zIndex, actor);
-        itemLayerMap.get(vo.layerName).add(actor);
+        indexes.put(data.layerIndex + vo.zIndex, actor);
 
         if(layerMap.get(vo.layerName).isVisible) {
             actor.setVisible(true);
@@ -125,9 +132,6 @@ public class CompositeActor extends Group {
         }
     }
 
-    private int getLayerIndex(String name) {
-        return vo.composite.layers.indexOf(layerMap.get(name));
-    }
 
     private void processZIndexes() {
         Object[] indexArray = indexes.keySet().toArray();
@@ -138,8 +142,19 @@ public class CompositeActor extends Group {
         }
     }
 
+    public int getLayerIndex(String name) {
+        return vo.composite.layers.indexOf(layerMap.get(name));
+    }
+
     public Actor getItem(String id) {
-        return itemMap.get(id);
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && (id.equals(((CoreActorData) userObject).id))) {
+                return actor;
+            }
+        }
+        return null;
     }
 
     public void recalculateSize() {
@@ -189,57 +204,33 @@ public class CompositeActor extends Group {
     }
 
     public void setLayerVisibility(String layerName, boolean isVisible) {
+        final int layerIndex = getLayerIndex(layerName);
         layerMap.get(layerName).isVisible = isVisible;
-        for(Actor actor: itemLayerMap.get(layerName)) {
-            actor.setVisible(isVisible);
+
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && ((CoreActorData)userObject).layerIndex == layerIndex) {
+                actor.setVisible(isVisible);
+            }
         }
     }
 
     /**
-     * return all custom vars for this composite
-     * @return
-     */
-    public CustomVariables getCustomVars() {
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(vo.customVars);
-        return vars;
-    }
-
-    /**
-     * gets custom var value by key
-     * @param key
-     * @return
-     */
-    public String getCustomVar(String key) {
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(vo.customVars);
-        return vars.getStringVariable(key);
-    }
-
-    /**
-     * gets array of all tags on this composite
-     * @return
-     */
-    public String[] getTags() {
-        return vo.tags;
-    }
-
-    /**
      * get's list of children that contain a specified tag.
-     * Only works for Composite children.
      * Does not yet go in depth.
      *
      * @param tag
      * @return
      */
-    public Array<CompositeActor> getItemsByTag(String tag) {
-        Array<CompositeActor> items = new Array<CompositeActor>();
-        for(Actor actor: itemMap.values()) {
-            if(actor instanceof CompositeActor) {
-                CompositeActor tmp = (CompositeActor) actor;
-                if(Arrays.asList(tmp.getTags()).contains(tag)) {
-                    items.add(tmp);
-                }
+    public Array<Actor> getItemsByTag(String tag) {
+        Array<Actor> items = new Array<>();
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData) {
+                CoreActorData data = (CoreActorData) userObject;
+                if(data.tags != null && Arrays.asList(data.tags).contains(tag))
+                    items.add(actor);
             }
         }
 
@@ -252,7 +243,17 @@ public class CompositeActor extends Group {
      * @return
      */
     public Array<Actor> getItemsByLayer(String layerName) {
-        return itemLayerMap.get(layerName);
+        final int layerIndex = getLayerIndex(layerName);
+        Array<Actor> items = new Array<>();
+
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && ((CoreActorData)userObject).layerIndex == layerIndex) {
+                items.add(actor);
+            }
+        }
+        return items;
     }
 
     public CompositeItemVO getVo() {
