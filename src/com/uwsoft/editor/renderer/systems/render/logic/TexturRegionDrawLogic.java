@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
+import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
@@ -31,30 +32,11 @@ public class TexturRegionDrawLogic implements Drawable {
 	@Override
 	public void draw(Batch batch, Entity entity) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        if(entityTextureRegionComponent.polygonSprite != null) {
-            if(entityTextureRegionComponent.isRepeat) {
-                drawPolygonSprite(batch, entity);
-            } else {
-                drawPolygonSprite(batch, entity);
-            }
-        } else {
-            drawSprite(batch, entity);
-        }
-	}
-
-    public void drawSprite(Batch batch, Entity entity) {
-        TintComponent tintComponent = tintComponentComponentMapper.get(entity);
-        TransformComponent entityTransformComponent = transformMapper.get(entity);
-        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
-        batch.setColor(tintComponent.color);
-        
         if(shaderComponentMapper.has(entity)){
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
             if(shaderComponent.getShader() != null) {
                 batch.setShader(shaderComponent.getShader());
-                //shaderComponent.shaderProgram.setUniformf("rt_w", entityTextureRegionComponent.region.getRegionWidth());
-                //shaderComponent.shaderProgram.setUniformf("rt_h", entityTextureRegionComponent.region.getRegionHeight());
+                //System.out.println("asdasdsdas" + new Vector2(entityTextureRegionComponent.region.getRegionX(), entityTextureRegionComponent.region.getRegionY()));
 
                 GL20 gl = Gdx.gl20;
                 int error;
@@ -65,19 +47,35 @@ public class TexturRegionDrawLogic implements Drawable {
                 }
             }
 		}
-		
-		
         
+        if(entityTextureRegionComponent.polygonSprite != null) {
+//            if(entityTextureRegionComponent.isRepeat) {
+            	drawTiledPolygonSprite(batch, entity);
+//            } else {
+//                drawPolygonSprite(batch, entity);
+//            }
+        } else {
+            drawSprite(batch, entity);
+        }
+
+        if(shaderComponentMapper.has(entity)){
+			batch.setShader(null);
+		}
+	}
+
+    public void drawSprite(Batch batch, Entity entity) {
+        TintComponent tintComponent = tintComponentComponentMapper.get(entity);
+        TransformComponent entityTransformComponent = transformMapper.get(entity);
+        TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        batch.setColor(tintComponent.color);
+
         batch.draw(entityTextureRegionComponent.region,
                 entityTransformComponent.x, entityTransformComponent.y,
                 entityTransformComponent.originX, entityTransformComponent.originY,
                 dimensionsComponent.width, dimensionsComponent.height,
                 entityTransformComponent.scaleX, entityTransformComponent.scaleY,
                 entityTransformComponent.rotation);
-        
-        if(shaderComponentMapper.has(entity)){
-			batch.setShader(null);
-		}
     }
 
     public void drawPolygonSprite(Batch batch, Entity entity) {
@@ -87,9 +85,7 @@ public class TexturRegionDrawLogic implements Drawable {
 
         DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
 
-        entityTextureRegionComponent.polygonSprite.setPosition(
-                entityTransformComponent.x + entityTextureRegionComponent.polygonShift.x,
-                entityTransformComponent.y + entityTextureRegionComponent.polygonShift.y);
+        entityTextureRegionComponent.polygonSprite.setPosition(entityTransformComponent.x, entityTransformComponent.y);
         entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
         entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
         entityTextureRegionComponent.polygonSprite.setColor(tintComponent.color);
@@ -97,15 +93,18 @@ public class TexturRegionDrawLogic implements Drawable {
     }
 
     public void drawTiledPolygonSprite(Batch batch, Entity entity) {
-        // TODO: this should change to be working
+        
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
-        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        
+        batch.getShader().setUniformf("isRepeat", 1);
+        batch.getShader().setUniformf("atlasCoord", new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV()));
+    	batch.getShader().setUniformf("atlasSize", new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV()));
+        
         batch.setColor(tintComponent.color);
-        entityTextureRegionComponent.polygonSprite.setPosition(
-                entityTransformComponent.x+entityTextureRegionComponent.polygonShift.x,
-                entityTransformComponent.y+entityTextureRegionComponent.polygonShift.y);
+        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
+        entityTextureRegionComponent.polygonSprite.setPosition(entityTransformComponent.x, entityTransformComponent.y);
         entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
         entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
     }
