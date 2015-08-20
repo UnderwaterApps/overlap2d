@@ -1,6 +1,7 @@
 package com.uwsoft.editor.renderer.components;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import com.badlogic.ashley.core.Component;
@@ -63,5 +64,11 @@ public class LayerMapComponent implements Component {
 		LayerItemVO vo = layerMap.get(prevName);
 		layerMap.remove(prevName);
 		layerMap.put(newName, vo);
+	}
+
+	public void swap(String source, String target) {
+		LayerItemVO sourceVO = getLayer(source);
+		LayerItemVO targetVO = getLayer(target);
+		Collections.swap(layers, layers.indexOf(sourceVO), layers.indexOf(targetVO));
 	}
 }

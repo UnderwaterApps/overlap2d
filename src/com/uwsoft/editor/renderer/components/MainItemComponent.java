@@ -13,6 +13,5 @@ public class MainItemComponent implements Component {
     public Set<String> tags = new HashSet<String>();
     public String customVars = "";
 	public int entityType;
-    public String layer;
 	public boolean visible = true;
 }
