@@ -534,20 +534,16 @@ public class ItemSelector {
     }
 
     public boolean selectionIsOneItem() {
-        if(getCurrentSelection().size() == 1) {
-            return true;
-        }
-
-        return false;
+        return getCurrentSelection().size() == 1;
     }
 
     public boolean selectionIsComposite() {
+
+        if(currentSelection.isEmpty()) return false;
+
         Entity entity = currentSelection.stream().findFirst().get();
         NodeComponent nodeComponent = entity.getComponent(NodeComponent.class);
-        if(nodeComponent != null) {
-            return true;
-        }
 
-        return false;
+        return nodeComponent != null;
     }
 }

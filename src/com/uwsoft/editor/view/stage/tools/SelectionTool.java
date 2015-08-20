@@ -34,7 +34,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -53,6 +52,8 @@ public class SelectionTool extends SimpleTool {
     private boolean isDragging = false;
     private boolean currentTouchedItemWasSelected = false;
     private boolean isCastingRectangle = false;
+
+    private Rectangle tmp = new Rectangle();
 
     private Vector2 directionVector = null;
 
@@ -137,6 +138,8 @@ public class SelectionTool extends SimpleTool {
         sandbox = Sandbox.getInstance();
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
 
+        if(!isEntityVisible(entity)) return false;
+
         currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
 
         // if shift is pressed we are in add/remove selection mode
@@ -162,6 +165,7 @@ public class SelectionTool extends SimpleTool {
                     Set<Entity> items = new HashSet<>();
                     items.add(entity);
                     facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+
                 }
             //}
         }
@@ -332,7 +336,8 @@ public class SelectionTool extends SimpleTool {
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
-            if (Intersector.overlaps(sR, new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
+            if (isEntityVisible(entity) &&
+                    Intersector.overlaps(sR, tmp.set(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
                 curr.add(entity);
             }
         }
@@ -346,6 +351,10 @@ public class SelectionTool extends SimpleTool {
         }
         
         facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+    }
+
+    private boolean isEntityVisible(Entity e) {
+        return EntityUtils.getEntityLayer(e).isVisible;
     }
 
     @Override
