@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.proxy.PluginManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
@@ -93,6 +94,21 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         };
     }
 
+    private void applyItemTypeMutators(Array<String> actionsSet) {
+        // generic mutators
+        if (sandbox.getSelector().getCurrentSelection().size() == 1) {
+            if(sandbox.getSelector().selectionIsComposite()) {
+                actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
+                actionsSet.add(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE);
+            }
+            actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
+        }
+
+        // external plugin mutators
+        PluginManager pluginManager = facade.retrieveProxy(PluginManager.NAME);
+        pluginManager.dropDownActionSets(sandbox.getSelector().getCurrentSelection(), actionsSet);
+    }
+
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
@@ -104,13 +120,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
                 Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
-                if (sandbox.getSelector().getCurrentSelection().size() == 1) {
-                    if(sandbox.getSelector().selectionIsComposite()) {
-                        actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
-                        actionsSet.add(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE);
-                    }
-                    actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
-                }
+                applyItemTypeMutators(actionsSet);
                 showPopup(actionsSet, sandbox.getSelector().getSelectedItem());
                 break;
             case UIResourcesBoxMediator.IMAGE_RIGHT_CLICK:

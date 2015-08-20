@@ -15,12 +15,23 @@
  *  * limitations under the License.
  *  *****************************************************************************
  */
+package com.puremvc.patterns.command;
 
-package com.commons.plugins;
+import com.puremvc.patterns.observer.Notification;
+import com.puremvc.patterns.observer.Notifier;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * The interface definition for a PureMVC Command.
+ *
+ * @see com.puremvc.patterns.observer Notification
  */
-public interface MenuConnector {
-    public void addMenuItem(String menu, String subMenuName, String notificationName);
+public interface Command extends Notifier {
+
+    /**
+     * Execute the <code>Command</code>'s logic to handle a given
+     * <code>Notification</code>.
+     *
+     * @param notification an <code>Notification</code> to handle.
+     */
+    void execute(Notification notification);
 }

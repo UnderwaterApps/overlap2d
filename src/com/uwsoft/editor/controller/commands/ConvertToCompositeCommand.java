@@ -26,6 +26,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -54,9 +55,9 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             // backup layer data
             layersBackup = new HashMap<>();
             for(Entity entity: entities) {
-                MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+                ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
                 int tmpId = EntityUtils.getEntityId(entity);
-                layersBackup.put(tmpId, mainItemComponent.layer);
+                layersBackup.put(tmpId, zIndexComponent.layerName);
             }
         }
 
@@ -81,8 +82,8 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             transformComponent.y-=position.y;
 
             // put it on default layer
-            MainItemComponent mainItemComponent = ComponentRetriever.get(tmpEntity, MainItemComponent.class);
-            mainItemComponent.layer = "Default";
+            ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            zIndexComponent.layerName = "Default";
 
         }
         // recalculate composite size
@@ -120,8 +121,8 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
             transformComponent.y+=positionDiff.y;
 
             // put layer data back
-            MainItemComponent mainItemComponent = ComponentRetriever.get(tmpEntity, MainItemComponent.class);
-            mainItemComponent.layer = layersBackup.get(EntityUtils.getEntityId(tmpEntity));
+            ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            zIndexComponent.layerName = layersBackup.get(EntityUtils.getEntityId(tmpEntity));
         }
 
         // remove composite

@@ -34,7 +34,6 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -43,7 +42,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Created by azakhary on 4/30/2015.
- */
+ */ //TODO all the new Vector2 instances should be replaced by tmp instances
 public class SelectionTool extends SimpleTool {
 
     public static final String NAME = "SELECTION_TOOL";
@@ -53,6 +52,8 @@ public class SelectionTool extends SimpleTool {
     private boolean isDragging = false;
     private boolean currentTouchedItemWasSelected = false;
     private boolean isCastingRectangle = false;
+
+    private Rectangle tmp = new Rectangle();
 
     private Vector2 directionVector = null;
 
@@ -139,31 +140,34 @@ public class SelectionTool extends SimpleTool {
 
         currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
 
-        // if shift is pressed we are in add/remove selection mode
-        if (isShiftPressed()) {
-            //TODO block selection handling (wat?)
-            if (!currentTouchedItemWasSelected) {
-                // item was not selected, adding it to selection
-                Set<Entity> items = new HashSet<>();
-                items.add(entity);
-                facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
-            }
-        } else {
+        if(isEntityVisible(entity)) {
+            // if shift is pressed we are in add/remove selection mode
+            if (isShiftPressed()) {
+                //TODO block selection handling (wat?)
+                if (!currentTouchedItemWasSelected) {
+                    // item was not selected, adding it to selection
+                    Set<Entity> items = new HashSet<>();
+                    items.add(entity);
+                    facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+                }
+            } else {
 
-        	//TODO fix and uncomment layer locking
+                //TODO fix and uncomment layer locking
 //            if (item.isLockedByLayer()) {
 //                // this is considered empty space click and thus should release all selections
 //                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
 //                commands.getSelector().clearSelections();
 //                return false;
 //            } else {
-                if(!currentTouchedItemWasSelected) {
+                if (!currentTouchedItemWasSelected) {
                     // get selection, add this item to selection
                     Set<Entity> items = new HashSet<>();
                     items.add(entity);
                     facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+
                 }
-            //}
+                //}
+            }
         }
 
         // remembering local touch position for each of selected boxes, if planning to drag
@@ -332,7 +336,8 @@ public class SelectionTool extends SimpleTool {
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
-            if (Intersector.overlaps(sR, new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
+            if (isEntityVisible(entity) &&
+                    Intersector.overlaps(sR, tmp.set(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
                 curr.add(entity);
             }
         }
@@ -346,6 +351,10 @@ public class SelectionTool extends SimpleTool {
         }
         
         facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+    }
+
+    private boolean isEntityVisible(Entity e) {
+        return EntityUtils.getEntityLayer(e).isVisible;
     }
 
     @Override

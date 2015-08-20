@@ -46,6 +46,7 @@ public class BootstrapCommand extends SimpleCommand {
 
         facade.registerCommand(Sandbox.ACTION_DELETE_LAYER, DeleteLayerCommand.class);
         facade.registerCommand(Sandbox.ACTION_NEW_LAYER, NewLayerCommand.class);
+        facade.registerCommand(Sandbox.ACTION_SWAP_LAYERS, LayerSwapCommand.class);
 
         facade.registerCommand(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.class);
         facade.registerCommand(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.class);
