@@ -98,9 +98,16 @@ public class TexturRegionDrawLogic implements Drawable {
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        float ppwu = dimensionsComponent.width/entityTextureRegionComponent.region.getRegionWidth();
+        ppwu*=100f;
+        Vector2 atlasCoordsVector = new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV());
+        Vector2 atlasSizeVector = new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV());
+        //atlasCoordsVector.scl(0.001f);
+        atlasSizeVector.scl(0.00125f);
         batch.getShader().setUniformi("isRepeat", 1);
-        batch.getShader().setUniformf("atlasCoord", new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV()));
-    	batch.getShader().setUniformf("atlasSize", new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV()));
+        batch.getShader().setUniformf("atlasCoord", atlasCoordsVector);
+    	batch.getShader().setUniformf("atlasSize", atlasSizeVector);
         
         batch.setColor(tintComponent.color);
         entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
