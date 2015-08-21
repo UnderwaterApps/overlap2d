@@ -80,7 +80,7 @@ public class MainItemVO {
 		originY = transformComponent.originY;
 		rotation = transformComponent.rotation;
 
-        layerName = mainItemComponent.layer;
+        layerName = zindexComponent.layerName;
 
 		tint = new float[4];
 		tint[0] = tintComponent.color.r;

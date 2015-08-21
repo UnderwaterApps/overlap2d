@@ -18,7 +18,9 @@ public class LabelDrawableLogic implements Drawable {
 	private ComponentMapper<TintComponent> tintComponentMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentMapper;
 	private ComponentMapper<TransformComponent> transformMapper;
-	
+
+	private final Color tmpColor = new Color();
+
 	public LabelDrawableLogic() {
 		labelComponentMapper = ComponentMapper.getFor(LabelComponent.class);
 		tintComponentMapper = ComponentMapper.getFor(TintComponent.class);
@@ -32,18 +34,19 @@ public class LabelDrawableLogic implements Drawable {
 		LabelComponent labelComponent = labelComponentMapper.get(entity);
 		DimensionsComponent dimenstionsComponent = dimensionsComponentMapper.get(entity);
 		TintComponent tint = tintComponentMapper.get(entity);
-		//TODO parent alpha thing
-		//tint.color.a *= parentAlpha;
+
+		tmpColor.set(tint.color);
+
 		if (labelComponent.style.background != null) {
-			batch.setColor(tint.color.r, tint.color.g, tint.color.b, tint.color.a);
+			batch.setColor(tmpColor);
 			labelComponent.style.background.draw(batch, entityTransformComponent.x, entityTransformComponent.y, dimenstionsComponent.width, dimenstionsComponent.height);
 			//System.out.println("LAbel BG");
 		}
-		//TODO we need tmp color here
-		//if (labelComponent.style.fontColor != null) tint.color.mul(labelComponent.style.fontColor);
-		//labelComponent.cache.tint(tint.color);
-		
-		labelComponent.cache.tint(Color.WHITE);
+
+		if(labelComponent.style.fontColor != null) tmpColor.mul(labelComponent.style.fontColor);
+		//tmpColor.a *= TODO consider parent alpha
+
+		labelComponent.cache.tint(tmpColor);
 		labelComponent.cache.setPosition(entityTransformComponent.x, entityTransformComponent.y);
 		labelComponent.cache.draw(batch);
 	}

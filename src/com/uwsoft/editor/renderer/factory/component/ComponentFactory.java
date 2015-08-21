@@ -92,8 +92,6 @@ public abstract class ComponentFactory {
             component.tags = new HashSet<String>(Arrays.asList(vo.tags));
         }
         component.entityType = entityType;
-        if(vo.layerName == "" || vo.layerName == null) vo.layerName = "Default";
-        component.layer = vo.layerName;
 
         entity.add(component);
 
@@ -132,6 +130,9 @@ public abstract class ComponentFactory {
 
     protected ZIndexComponent createZIndexComponent(Entity entity, MainItemVO vo) {
         ZIndexComponent component = new ZIndexComponent();
+
+        if(vo.layerName == "" || vo.layerName == null) vo.layerName = "Default";
+
         component.layerName = vo.layerName;
         component.setZIndex(vo.zIndex);
         component.needReOrder = false;
@@ -155,7 +156,8 @@ public abstract class ComponentFactory {
         // TODO: I do not likes this part
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         LayerMapComponent layerMapComponent = ComponentRetriever.get(root, LayerMapComponent.class);
-        mainItemComponent.visible = layerMapComponent.isVisible(mainItemComponent.layer);
+        ZIndexComponent zIndexComponent = ComponentRetriever.get(root, ZIndexComponent.class);
+        mainItemComponent.visible = layerMapComponent.isVisible(zIndexComponent.layerName);
 
         return component;
     }
