@@ -28,95 +28,107 @@ public class CompositeActor extends Group {
 
     protected CompositeItemVO vo;
 
-    protected HashMap<String, Actor> itemMap = new HashMap<String, Actor>();
     private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
     private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
-    private HashMap<String, Array<Actor>> itemLayerMap = new HashMap<String, Array<Actor>>();
 
     public CompositeActor(CompositeItemVO vo, IResourceRetriever ir) {
+        this(vo, ir, BuiltItemHandler.DEFAULT);
+    }
+
+    public CompositeActor(CompositeItemVO vo, IResourceRetriever ir, BuiltItemHandler itemHandler) {
+        this(vo, ir, itemHandler, true);
+    }
+
+    private CompositeActor(CompositeItemVO vo, IResourceRetriever ir, BuiltItemHandler itemHandler, boolean isRoot) {
         this.ir= ir;
         this.vo = vo;
 
         pixelsPerWU = ir.getProjectVO().pixelToWorld;
         makeLayerMap(vo);
-        build(vo);
+        build(vo, itemHandler, isRoot);
     }
 
     private void makeLayerMap(CompositeItemVO vo) {
         layerMap.clear();
-        itemLayerMap.clear();
         for(int i = 0; i < vo.composite.layers.size(); i++) {
             layerMap.put(vo.composite.layers.get(i).layerName,vo.composite.layers.get(i));
-            itemLayerMap.put(vo.composite.layers.get(i).layerName, new Array<Actor>());
         }
     }
 
-    private void build(CompositeItemVO vo) {
-        buildImages(vo.composite.sImages);
-        build9PatchImages(vo.composite.sImage9patchs);
-        buildLabels(vo.composite.sLabels);
-        buildComposites(vo.composite.sComposites);
+    private void build(CompositeItemVO vo, BuiltItemHandler itemHandler, boolean isRoot) {
+        buildImages(vo.composite.sImages, itemHandler);
+        build9PatchImages(vo.composite.sImage9patchs, itemHandler);
+        buildLabels(vo.composite.sLabels, itemHandler);
+        buildComposites(vo.composite.sComposites, itemHandler);
         processZIndexes();
         recalculateSize();
 
-        if(vo.tags != null && Arrays.asList(vo.tags).contains("button")) {
-            addListener(new ButtonClickListener());
+        if(isRoot) {
+            buildCoreData(this, vo);
+            itemHandler.onItemBuild(this);
         }
     }
 
-    private void buildComposites(ArrayList<CompositeItemVO> composites) {
+    private void buildComposites(ArrayList<CompositeItemVO> composites, BuiltItemHandler itemHandler) {
         for(int i = 0; i < composites.size(); i++) {
-            CompositeActor actor = new CompositeActor(composites.get(i), ir);
+            CompositeActor actor = new CompositeActor(composites.get(i), ir, itemHandler, false);
             processMain(actor, composites.get(i));
             addActor(actor);
+
+            itemHandler.onItemBuild(actor);
         }
     }
 
-    private void buildImages(ArrayList<SimpleImageVO> images) {
+    private void buildImages(ArrayList<SimpleImageVO> images, BuiltItemHandler itemHandler) {
         for(int i = 0; i < images.size(); i++) {
             Image image = new Image(ir.getTextureRegion(images.get(i).imageName));
             processMain(image, images.get(i));
             addActor(image);
+
+            itemHandler.onItemBuild(image);
         }
     }
 
-    private void build9PatchImages(ArrayList<Image9patchVO> patches) {
+    private void build9PatchImages(ArrayList<Image9patchVO> patches, BuiltItemHandler itemHandler) {
         for(int i = 0; i < patches.size(); i++) {
             TextureAtlas.AtlasRegion region = (TextureAtlas.AtlasRegion) ir.getTextureRegion(patches.get(i).imageName);
             NinePatch ninePatch = new NinePatch(region, region.splits[0], region.splits[1], region.splits[2], region.splits[3]);
             Image image = new Image(ninePatch);
             image.setWidth(patches.get(i).width*pixelsPerWU);
-            image.setHeight(patches.get(i).height*pixelsPerWU);
+            image.setHeight(patches.get(i).height * pixelsPerWU);
             processMain(image, patches.get(i));
             addActor(image);
+
+            itemHandler.onItemBuild(image);
         }
     }
 
-    private void buildLabels(ArrayList<LabelVO> labels) {
+    private void buildLabels(ArrayList<LabelVO> labels, BuiltItemHandler itemHandler) {
         for(int i = 0; i < labels.size(); i++) {
             Label.LabelStyle style = new Label.LabelStyle(ir.getBitmapFont(labels.get(i).style, labels.get(i).size), Color.WHITE);
             Label label = new Label(labels.get(i).text, style);
             label.setAlignment(labels.get(i).align);
-            label.setWidth(labels.get(i).width*pixelsPerWU);
-            label.setHeight(labels.get(i).height*pixelsPerWU);
+            label.setWidth(labels.get(i).width * pixelsPerWU);
+            label.setHeight(labels.get(i).height * pixelsPerWU);
             processMain(label, labels.get(i));
             addActor(label);
+
+            itemHandler.onItemBuild(label);
         }
     }
 
     private void processMain(Actor actor, MainItemVO vo) {
-        actor.setPosition(vo.x*pixelsPerWU, vo.y*pixelsPerWU);
-        actor.setOrigin(vo.originX*pixelsPerWU, vo.originY*pixelsPerWU);
+
+        buildCoreData(actor, vo);
+
+        //actor properties
+        actor.setPosition(vo.x * pixelsPerWU, vo.y * pixelsPerWU);
+        actor.setOrigin(vo.originX * pixelsPerWU, vo.originY * pixelsPerWU);
         actor.setScale(vo.scaleX, vo.scaleY);
         actor.setRotation(vo.rotation);
         actor.setColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
 
-        if(vo.itemIdentifier != null && vo.itemIdentifier.length() > 0) {
-            itemMap.put(vo.itemIdentifier, actor);
-        }
-
-        indexes.put(getLayerIndex(vo.layerName)+vo.zIndex, actor);
-        itemLayerMap.get(vo.layerName).add(actor);
+        indexes.put(getLayerIndex(vo.layerName) + vo.zIndex, actor);
 
         if(layerMap.get(vo.layerName).isVisible) {
             actor.setVisible(true);
@@ -125,9 +137,25 @@ public class CompositeActor extends Group {
         }
     }
 
-    private int getLayerIndex(String name) {
-        return vo.composite.layers.indexOf(layerMap.get(name));
+    private void buildCoreData(Actor actor, MainItemVO vo){
+
+        //custom variables
+        CustomVariables cv = null;
+        if(vo.customVars != null && !vo.customVars.isEmpty()) {
+            cv = new CustomVariables();
+            cv.loadFromString(vo.customVars);
+        }
+
+        //core data
+        CoreActorData data = new CoreActorData();
+        data.id = vo.itemIdentifier;
+        data.layerIndex = getLayerIndex(vo.layerName);
+        data.tags = vo.tags;
+        data.customVars = cv;
+
+        actor.setUserObject(data);
     }
+
 
     private void processZIndexes() {
         Object[] indexArray = indexes.keySet().toArray();
@@ -138,8 +166,19 @@ public class CompositeActor extends Group {
         }
     }
 
+    public int getLayerIndex(String name) {
+        return vo.composite.layers.indexOf(layerMap.get(name));
+    }
+
     public Actor getItem(String id) {
-        return itemMap.get(id);
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && (id.equals(((CoreActorData) userObject).id))) {
+                return actor;
+            }
+        }
+        return null;
     }
 
     public void recalculateSize() {
@@ -189,57 +228,33 @@ public class CompositeActor extends Group {
     }
 
     public void setLayerVisibility(String layerName, boolean isVisible) {
+        final int layerIndex = getLayerIndex(layerName);
         layerMap.get(layerName).isVisible = isVisible;
-        for(Actor actor: itemLayerMap.get(layerName)) {
-            actor.setVisible(isVisible);
+
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && ((CoreActorData)userObject).layerIndex == layerIndex) {
+                actor.setVisible(isVisible);
+            }
         }
     }
 
     /**
-     * return all custom vars for this composite
-     * @return
-     */
-    public CustomVariables getCustomVars() {
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(vo.customVars);
-        return vars;
-    }
-
-    /**
-     * gets custom var value by key
-     * @param key
-     * @return
-     */
-    public String getCustomVar(String key) {
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(vo.customVars);
-        return vars.getStringVariable(key);
-    }
-
-    /**
-     * gets array of all tags on this composite
-     * @return
-     */
-    public String[] getTags() {
-        return vo.tags;
-    }
-
-    /**
      * get's list of children that contain a specified tag.
-     * Only works for Composite children.
      * Does not yet go in depth.
      *
      * @param tag
      * @return
      */
-    public Array<CompositeActor> getItemsByTag(String tag) {
-        Array<CompositeActor> items = new Array<CompositeActor>();
-        for(Actor actor: itemMap.values()) {
-            if(actor instanceof CompositeActor) {
-                CompositeActor tmp = (CompositeActor) actor;
-                if(Arrays.asList(tmp.getTags()).contains(tag)) {
-                    items.add(tmp);
-                }
+    public Array<Actor> getItemsByTag(String tag) {
+        Array<Actor> items = new Array<Actor>();
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData) {
+                CoreActorData data = (CoreActorData) userObject;
+                if(data.tags != null && Arrays.asList(data.tags).contains(tag))
+                    items.add(actor);
             }
         }
 
@@ -252,10 +267,44 @@ public class CompositeActor extends Group {
      * @return
      */
     public Array<Actor> getItemsByLayer(String layerName) {
-        return itemLayerMap.get(layerName);
+        final int layerIndex = getLayerIndex(layerName);
+        Array<Actor> items = new Array<Actor>();
+
+        for(Actor actor: getChildren()) {
+            Object userObject = actor.getUserObject();
+            if(userObject != null && userObject instanceof CoreActorData
+                    && ((CoreActorData)userObject).layerIndex == layerIndex) {
+                items.add(actor);
+            }
+        }
+        return items;
     }
 
     public CompositeItemVO getVo() {
         return vo;
+    }
+
+    /**
+     * Enables customization of the CompositeActor during building.
+     * Example use cases: tag handling, custom variables handling
+     */
+    public interface BuiltItemHandler {
+
+        /**
+         * @param item newly built and added to a parent (in case it's not a root actor)
+         */
+        void onItemBuild(Actor item);
+
+        BuiltItemHandler DEFAULT = new BuiltItemHandler() {
+            @Override
+            public void onItemBuild(Actor item) {
+
+                if(item instanceof CompositeActor) {
+                    CoreActorData data = (CoreActorData) item.getUserObject();
+                    if(data != null && data.tags != null && Arrays.asList(data.tags).contains("button"))
+                        item.addListener(new ButtonClickListener());
+                }
+            }
+        };
     }
 }
