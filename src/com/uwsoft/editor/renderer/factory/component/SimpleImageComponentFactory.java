@@ -75,7 +75,7 @@ public class SimpleImageComponentFactory extends ComponentFactory {
 
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         if(component.isPolygon && polygonComponent != null && polygonComponent.vertices != null) {
-            component.setPolygonSprite(polygonComponent);
+            component.setPolygonSprite(polygonComponent, projectInfoVO.pixelToWorld);
             dimensionsComponent.setPolygon(polygonComponent);
         }
         dimensionsComponent.width = (float) component.region.getRegionWidth() * multiplier / projectInfoVO.pixelToWorld;
