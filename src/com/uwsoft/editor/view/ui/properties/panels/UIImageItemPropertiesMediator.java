@@ -58,7 +58,8 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             PolygonComponent polygonComponent = ComponentRetriever.get(observableReference, PolygonComponent.class);
 
             if (polygonComponent != null && polygonComponent.vertices != null) {
-                textureRegionComponent.setPolygonSprite(polygonComponent);
+            	float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
+                textureRegionComponent.setPolygonSprite(polygonComponent,1f/ppwu);
                 dimensionsComponent.setPolygon(polygonComponent);
             }
         } else {

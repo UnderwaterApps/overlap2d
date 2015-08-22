@@ -60,8 +60,9 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
         TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
         if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
             DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+            float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
             dimensionsComponent.setPolygon(polygonComponent);
-            textureRegionComponent.setPolygonSprite(polygonComponent);
+            textureRegionComponent.setPolygonSprite(polygonComponent,1f/ppwu);
         }
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
@@ -79,8 +80,9 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
         TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
         if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
             DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+            float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
             dimensionsComponent.setPolygon(polygonComponent);
-            textureRegionComponent.setPolygonSprite(polygonComponent);
+            textureRegionComponent.setPolygonSprite(polygonComponent, 1f/ppwu);
         }
 
         Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
