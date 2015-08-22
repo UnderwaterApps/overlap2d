@@ -93,19 +93,29 @@ public class TexturRegionDrawLogic implements Drawable {
     }
 
     public void drawTiledPolygonSprite(Batch batch, Entity entity) {
-        
+    	batch.flush();
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         
+        DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
+        float ppwu = dimensionsComponent.width/entityTextureRegionComponent.region.getRegionWidth();
+
+        Vector2 atlasCoordsVector = new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV());
+        Vector2 atlasSizeVector = new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV());
+        
         batch.getShader().setUniformi("isRepeat", 1);
-        batch.getShader().setUniformf("atlasCoord", new Vector2(entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV()));
-    	batch.getShader().setUniformf("atlasSize", new Vector2(entityTextureRegionComponent.region.getU2()-entityTextureRegionComponent.region.getU(), entityTextureRegionComponent.region.getV2()-entityTextureRegionComponent.region.getV()));
+        batch.getShader().setUniformf("atlasCoord", atlasCoordsVector);
+    	batch.getShader().setUniformf("atlasSize", atlasSizeVector);
         
         batch.setColor(tintComponent.color);
         entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
         entityTextureRegionComponent.polygonSprite.setPosition(entityTransformComponent.x, entityTransformComponent.y);
         entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
+        entityTextureRegionComponent.polygonSprite.setScale(ppwu);
         entityTextureRegionComponent.polygonSprite.draw((PolygonSpriteBatch) batch);
+        batch.flush();
+        batch.getShader().setUniformi("isRepeat", 0);
+       
     }
 }
