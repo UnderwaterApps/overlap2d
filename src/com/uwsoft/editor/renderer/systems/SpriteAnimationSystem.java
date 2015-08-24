@@ -27,7 +27,9 @@ public class SpriteAnimationSystem extends IteratingSystem {
 		SpriteAnimationStateComponent state = sm.get(entity);
         state.currentAnimation.setFrameDuration(1f/sa.get(entity).fps);
 		tex.region = state.currentAnimation.getKeyFrame(state.time);
-		state.time += deltaTime;
-	}
 
+        if(!state.paused) {
+            state.time += deltaTime;
+        }
+	}
 }

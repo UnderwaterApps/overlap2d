@@ -254,5 +254,9 @@ public class Overlap2dRenderer extends IteratingSystem {
 	public void setPhysicsOn(boolean isPhysicsOn) {
 		this.isPhysicsOn = isPhysicsOn;
 	}
+
+    public Batch getBatch() {
+        return batch;
+    }
 }
 
