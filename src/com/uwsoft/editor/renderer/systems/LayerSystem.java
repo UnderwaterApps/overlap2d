@@ -34,7 +34,10 @@ public class LayerSystem extends IteratingSystem {
 		updateLayers(nodeComponent.children, layerMapComponent);
 
 		sort(nodeComponent.children);
-		updateZindexes(nodeComponent.children);
+		
+		if(layerMapComponent.autoIndexing){
+			updateZindexes(nodeComponent.children);
+		}
 	}
 	
 	private void updateLayers(SnapshotArray<Entity> children, LayerMapComponent layerMapComponent) {
@@ -43,7 +46,7 @@ public class LayerSystem extends IteratingSystem {
 			ZIndexComponent zindexComponent = zIndexMapper.get(entity);
 			MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
 			zindexComponent.layerIndex = getlayerIndexByName(zindexComponent.layerName,layerMapComponent);
-			if(zindexComponent.needReOrder){
+			if(zindexComponent.needReOrder && layerMapComponent.autoIndexing){
 				if (zindexComponent.getZIndex() < 0) throw new IllegalArgumentException("ZIndex cannot be < 0.");
 				if (children.size == 1){ 
 					zindexComponent.setZIndex(0);
