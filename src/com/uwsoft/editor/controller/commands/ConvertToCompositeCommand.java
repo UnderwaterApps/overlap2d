@@ -78,13 +78,13 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         EntityUtils.changeParent(entities, entity);
 
         //reposition children
-        for(Entity tmpEntity: entities) {
-            TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
+        for(Entity childEntity: entities) {
+            TransformComponent transformComponent = ComponentRetriever.get(childEntity, TransformComponent.class);
             transformComponent.x -= position.x;
             transformComponent.y -=position.y;
 
             // put it on default layer
-            ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            ZIndexComponent zIndexComponent = ComponentRetriever.get(childEntity, ZIndexComponent.class);
             zIndexComponent.layerName = "Default";
 
         }
