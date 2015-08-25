@@ -24,7 +24,6 @@ import java.util.Set;
 import java.util.stream.Stream;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.widget.VisTextField;
@@ -41,7 +40,6 @@ import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -72,7 +70,9 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 UILayerBox.CHANGE_LAYER_NAME,
                 UILayerBox.DELETE_LAYER,
                 UILayerBox.LOCK_LAYER,
+                UILayerBox.UNLOCK_LAYER,
                 UILayerBox.HIDE_LAYER,
+                UILayerBox.UNHIDE_LAYER,
                 CompositeCameraChangeCommand.DONE,
                 Overlap2D.ITEM_SELECTION_CHANGED,
                 ItemFactory.NEW_ITEM_ADDED,
@@ -157,11 +157,19 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 break;
             case UILayerBox.LOCK_LAYER:
                 layerItem = notification.getBody();
-                lockLayerByName(layerItem);
+                lockLayerByName(layerItem, true);
+                break;
+            case UILayerBox.UNLOCK_LAYER:
+                layerItem = notification.getBody();
+                lockLayerByName(layerItem, false);
                 break;
             case UILayerBox.HIDE_LAYER:
                 layerItem = notification.getBody();
-                hideEntitiesByLayerName(layerItem);
+                setEntityVisibilityByLayer(layerItem, false);
+                break;
+            case UILayerBox.UNHIDE_LAYER:
+                layerItem = notification.getBody();
+                setEntityVisibilityByLayer(layerItem, true);
                 break;
             case Overlap2D.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
@@ -251,16 +259,15 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         layerMapComponent.addLayer(layerVo);
     }
 
-    private void lockLayerByName(UILayerBox.UILayerItem layerItem) {
+    private void lockLayerByName(UILayerBox.UILayerItem layerItem, boolean setLocked) {
         String layerName = layerItem.getLayerName();
-        boolean toLock = !layerItem.isLocked();
-        if(toLock){
+        if(setLocked){
             Sandbox.getInstance().getSelector().clearSelections();
         }
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
 
-        layerMapComponent.getLayer(layerName).isLocked = toLock;
+        layerMapComponent.getLayer(layerName).isLocked = setLocked;
     }
 
     private void selectEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
@@ -285,9 +292,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
     }
 
-    private void hideEntitiesByLayerName(UILayerBox.UILayerItem layerItem) {
+    private void setEntityVisibilityByLayer(UILayerBox.UILayerItem layerItem, boolean setVisible) {
         String layerName = layerItem.getLayerName();
-        boolean toHide = !layerItem.isLayerVisible();
         Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
 
         NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
@@ -295,7 +301,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             Entity entity = nodeComponent.children.get(i);
             ZIndexComponent childZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
             if(childZComponent.layerName.equals(layerName)){
-                EntityUtils.getEntityLayer(entity).isVisible = toHide;
+                EntityUtils.getEntityLayer(entity).isVisible = setVisible;
             }
         }
     }
