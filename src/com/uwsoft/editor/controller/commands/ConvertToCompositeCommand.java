@@ -32,6 +32,7 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -50,6 +51,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
     public void doAction() {
         // get entity list
         HashSet<Entity> entities = (HashSet<Entity>) sandbox.getSelector().getSelectedItems();
+        UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
 
         if(layersBackup == null) {
             // backup layer data
@@ -76,13 +78,13 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         EntityUtils.changeParent(entities, entity);
 
         //reposition children
-        for(Entity tmpEntity: entities) {
-            TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
-            transformComponent.x-=position.x;
-            transformComponent.y-=position.y;
+        for(Entity childEntity: entities) {
+            TransformComponent transformComponent = ComponentRetriever.get(childEntity, TransformComponent.class);
+            transformComponent.x -= position.x;
+            transformComponent.y -=position.y;
 
             // put it on default layer
-            ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+            ZIndexComponent zIndexComponent = ComponentRetriever.get(childEntity, ZIndexComponent.class);
             zIndexComponent.layerName = "Default";
 
         }
@@ -91,6 +93,9 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         Vector2 newSize = EntityUtils.getRightTopPoint(entities);
         dimensionsComponent.width = newSize.x;
         dimensionsComponent.height = newSize.y;
+
+        ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+        zIndexComponent.layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
         //let everyone know
         Overlap2DFacade.getInstance().sendNotification(DONE);
