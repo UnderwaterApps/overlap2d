@@ -106,6 +106,9 @@ public class SceneLoader {
 
 	public SceneVO loadScene(String sceneName, Viewport viewport) {
 
+		// this has to be done differently.
+		engine.removeAllEntities();
+
 		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
 		sceneVO = rm.getSceneVO(sceneName);
