@@ -9,6 +9,7 @@ import com.badlogic.ashley.core.EntityListener;
 import com.badlogic.ashley.utils.ImmutableArray;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.math.Vector2;
@@ -105,9 +106,10 @@ public class SceneLoader {
 
 	public SceneVO loadScene(String sceneName, Viewport viewport) {
 
-		pixelsPerWU = rm.getProjectVO().pixelToWorld;
-
+		// this has to be done differently.
 		engine.removeAllEntities();
+
+		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 
 		sceneVO = rm.getSceneVO(sceneName);
 		world.setGravity(new Vector2(sceneVO.physicsPropertiesVO.gravityX, sceneVO.physicsPropertiesVO.gravityY));
@@ -348,4 +350,8 @@ public class SceneLoader {
 		return shader;
 	}
 
+
+    public Batch getBatch() {
+        return renderer.getBatch();
+    }
 }

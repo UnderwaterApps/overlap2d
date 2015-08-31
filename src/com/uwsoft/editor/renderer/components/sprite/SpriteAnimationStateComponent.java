@@ -16,6 +16,8 @@ public class SpriteAnimationStateComponent implements Component {
 	public Animation currentAnimation;
 	public float time = 0.0f;
 
+    public  boolean paused = false;
+
     public SpriteAnimationStateComponent(Array<TextureAtlas.AtlasRegion> allRegions) {
         this.allRegions = sortAndGetRegions(allRegions);
     }

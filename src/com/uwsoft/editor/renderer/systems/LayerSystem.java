@@ -60,7 +60,10 @@ public class LayerSystem extends IteratingSystem {
 					children.insert(zindexComponent.getZIndex(), entity);
 			}
 			if(layerMapComponent.getLayer(zindexComponent.layerName) != null) {
-				mainItemComponent.visible = layerMapComponent.getLayer(zindexComponent.layerName).isVisible;
+                boolean isLayerVisible = layerMapComponent.getLayer(zindexComponent.layerName).isVisible;
+                if(mainItemComponent.visible) {
+                    mainItemComponent.visible = isLayerVisible;
+                }
 			}
         }
 	}
