@@ -43,13 +43,17 @@ import com.uwsoft.editor.utils.StandardWidgetsFactory;
  */
 public class UILayerBox extends UICollapsibleBox {
 
-    public static final String LAYER_ROW_CLICKED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_ROW_CLICKED";
-    public static final String CREATE_NEW_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CREATE_NEW_LAYER";
-    public static final String DELETE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".DELETE_NEW_LAYER";
-    public static final String CHANGE_LAYER_NAME = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".CHANGE_LAYER_NAME";
-    public static final String LOCK_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LOCK_LAYER";
-    public static final String HIDE_LAYER = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".HIDE_LAYER";
-    public static final String LAYER_DROPPED = "com.uwsoft.editor.view.ui.box.UILayerBox" + ".LAYER_DROPPED";
+    private static final String prefix = "com.uwsoft.editor.view.ui.box.UILayerBox";
+
+    public static final String LAYER_ROW_CLICKED =  prefix + ".LAYER_ROW_CLICKED";
+    public static final String CREATE_NEW_LAYER =   prefix + ".CREATE_NEW_LAYER";
+    public static final String DELETE_LAYER =       prefix + ".DELETE_NEW_LAYER";
+    public static final String CHANGE_LAYER_NAME =  prefix + ".CHANGE_LAYER_NAME";
+    public static final String LOCK_LAYER =         prefix + ".LOCK_LAYER";
+    public static final String UNLOCK_LAYER =       prefix + ".UNLOCK_LAYER";
+    public static final String HIDE_LAYER =         prefix + ".HIDE_LAYER";
+    public static final String UNHIDE_LAYER =       prefix + ".UNHIDE_LAYER";
+    public static final String LAYER_DROPPED =      prefix + ".LAYER_DROPPED";
 
     private final DragAndDrop dragAndDrop;
     public int currentSelectedLayerIndex = 0;
@@ -344,10 +348,13 @@ public class UILayerBox extends UICollapsibleBox {
             super();
             this.layerData = layerData;
             this.itemSlot = itemSlot;
+
             VisImageButton lockBtn = new VisImageButton("layer-lock");
-            lockBtn.addListener(new LockClickListener());
+            lockBtn.addListener(new CheckClickListener(lockBtn, LOCK_LAYER, UNLOCK_LAYER));
+
             VisImageButton visibleBtn = new VisImageButton("layer-visible");
-            visibleBtn.addListener(new VisibleClickListener());
+            visibleBtn.addListener(new CheckClickListener(visibleBtn, HIDE_LAYER, UNHIDE_LAYER));
+
             add(lockBtn).left();
             add(visibleBtn).left().padRight(6);
 
@@ -404,19 +411,23 @@ public class UILayerBox extends UICollapsibleBox {
             itemSlot.setSelected(selected);
         }
 
-        private class LockClickListener extends ClickListener {
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                facade.sendNotification(LOCK_LAYER, itemSlot.getUiLayerItem());
-            }
-        }
+        private class CheckClickListener extends ClickListener {
 
-        private class VisibleClickListener extends ClickListener {
+            final VisImageButton owner;
+            final String eventOnUnchecking;
+            final String eventOnChecking;
+
+            CheckClickListener(VisImageButton owner, String eventOnUnchecking, String eventOnChecking) {
+                this.owner = owner;
+                this.eventOnChecking = eventOnChecking;
+                this.eventOnUnchecking = eventOnUnchecking;
+            }
+
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                facade.sendNotification(HIDE_LAYER, itemSlot.getUiLayerItem());
+                final String sendEvent = (owner.isChecked())? eventOnUnchecking : eventOnChecking;
+                facade.sendNotification(sendEvent, itemSlot.getUiLayerItem());
             }
         }
 
