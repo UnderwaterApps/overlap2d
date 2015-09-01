@@ -22,10 +22,7 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.widget.VisLabel;
-import com.kotcrab.vis.ui.widget.VisSelectBox;
-import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.commons.O2DDialog;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -38,6 +35,7 @@ public class ExportSettingsDialog extends O2DDialog {
     public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
     public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
     private final InputFileWidget exportSettingsInputFileWidget;
+    private VisCheckBox duplicateCheckBox;
     private VisSelectBox<Integer> widthSelectBox;
     private VisSelectBox<Integer> heightSelectBox;
 
@@ -52,8 +50,11 @@ public class ExportSettingsDialog extends O2DDialog {
         exportSettingsInputFileWidget.setTextFieldWidth(250);
         mainTable.add(exportSettingsInputFileWidget);
         mainTable.row().padTop(10);
-        mainTable.add("Atlas Max Size:").right().top().padRight(5);;
+        mainTable.add("Atlas Max Size:").right().top().padRight(5);
         mainTable.add(getDimensionsTable()).left();
+        mainTable.row().padTop(10);
+        duplicateCheckBox = new VisCheckBox("Duplicate edge pixels in atlas");
+        mainTable.add(duplicateCheckBox).colspan(2);
         mainTable.row().padTop(23);
         VisTable buttonsTable = new VisTable();
         VisTextButton saveSettingsBtn = new VisTextButton("Save Settings");
@@ -98,6 +99,7 @@ public class ExportSettingsDialog extends O2DDialog {
             ExportSettingsVO exportSettingsVO = new ExportSettingsVO();
             exportSettingsVO.width = widthSelectBox.getSelected();
             exportSettingsVO.height = heightSelectBox.getSelected();
+            exportSettingsVO.duplicate = duplicateCheckBox.isChecked();
             exportSettingsVO.fileHandle = exportSettingsInputFileWidget.getValue();
             facade.sendNotification(command, exportSettingsVO);
         }
@@ -107,5 +109,6 @@ public class ExportSettingsDialog extends O2DDialog {
         public int width;
         public int height;
         public FileHandle fileHandle;
+        public boolean duplicate;
     }
 }

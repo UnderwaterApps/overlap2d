@@ -335,6 +335,7 @@ public class ResolutionManager extends BaseProxy {
         settings.maxWidth = Integer.parseInt(projectManager.getCurrentProjectVO().texturepackerWidth);
         settings.filterMag = Texture.TextureFilter.Linear;
         settings.filterMin = Texture.TextureFilter.Linear;
+        settings.duplicatePadding = projectManager.getCurrentProjectVO().texturepackerDuplicate;
 
         TexturePacker tp = new TexturePacker(settings);
 
@@ -499,4 +500,3 @@ public class ResolutionManager extends BaseProxy {
 
 
 }
-

@@ -83,6 +83,7 @@ public class ExportSettingsDialogMediator extends SimpleMediator<ExportSettingsD
     private void saveExportSettings(ExportSettingsDialog.ExportSettingsVO settingsVO) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         projectManager.setTexturePackerSizes(settingsVO.width, settingsVO.height);
+        projectManager.setTexturePackerDuplicate(settingsVO.duplicate);
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
         resolutionManager.rePackProjectImagesForAllResolutions();
         projectManager.setExportPaths(settingsVO.fileHandle.file());
