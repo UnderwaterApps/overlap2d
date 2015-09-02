@@ -970,6 +970,10 @@ public class ProjectManager extends BaseProxy {
         currentProjectVO.texturepackerHeight = String.valueOf(height);
     }
 
+    public void setTexturePackerDuplicate(boolean duplicate) {
+        currentProjectVO.texturepackerDuplicate = duplicate;
+    }
+
     public String getRootPath() {
         File root = new File(new File(".").getAbsolutePath()).getParentFile();
         return root.getAbsolutePath();
