@@ -14,14 +14,10 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.commons.IExternalItemType;
-import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
-import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ParentNodeComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.physics.PhysicsBodyLoader;
 import com.uwsoft.editor.renderer.systems.render.logic.DrawableLogicMapper;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 
 public class Overlap2dRenderer extends IteratingSystem {
@@ -114,7 +110,14 @@ public class Overlap2dRenderer extends IteratingSystem {
 		if (curCompositeTransformComponent.transform) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
-				
+
+				LayerMapComponent rootLayers = ComponentRetriever.get(rootEntity, LayerMapComponent.class);
+				ZIndexComponent childZIndexComponent = ComponentRetriever.get(child, ZIndexComponent.class);
+
+				if(!rootLayers.isVisible(childZIndexComponent.layerName)) {
+					continue;
+				}
+
 				MainItemComponent childMainItemComponent = mainItemComponentMapper.get(child);
 				if(!childMainItemComponent.visible){
 					continue;
