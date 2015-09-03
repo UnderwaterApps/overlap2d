@@ -36,13 +36,15 @@ allprojects {
 }
 
 apply plugin: "java"
+apply plugin: 'jacoco'
 
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+import org.ajoberstar.grgit.Grgit
 
-import org.ajoberstar.grgit.*
 def spineDestination = file("spine-runtimes")
-if(!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
+if (!spineDestination.exists()) Grgit.clone(dir: spineDestination, uri: 'https://github.com/EsotericSoftware/spine-runtimes.git')
 def o2dRuntimeDestination = file("overlap2d-runtime-libgdx")
-if(!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/UnderwaterApps/overlap2d-runtime-libgdx.git')
+if (!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri: 'https://github.com/UnderwaterApps/overlap2d-runtime-libgdx.git')
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
@@ -64,24 +66,28 @@ dependencies {
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
     compile "com.mortennobel:java-image-scaling:0.8.5"
     compile "net.mountainblade:modular:1.0-SNAPSHOT"
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-core:1.10.19'
+    testCompile 'org.powermock:powermock-module-junit4:1.6.2'
+    testCompile 'org.powermock:powermock-api-mockito:1.6.2'
 }
 
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 task packTextures << {
-  if (project.ext.has('packMain')) {
-    logger.info "Calling TexturePacker: "+packMain
-    TexturePacker.processIfModified(file(packMain[0]).absolutePath, file(packMain[1]).absolutePath, packMain[2])
-  }
-  if (project.ext.has('packSplash')) {
-    logger.info "Calling TexturePacker: "+packSplash
-    TexturePacker.processIfModified(file(packSplash[0]).absolutePath, file(packSplash[1]).absolutePath, packSplash[2])
-  }
+    if (project.ext.has('packMain')) {
+        logger.info "Calling TexturePacker: " + packMain
+        TexturePacker.processIfModified(file(packMain[0]).absolutePath, file(packMain[1]).absolutePath, packMain[2])
+    }
+    if (project.ext.has('packSplash')) {
+        logger.info "Calling TexturePacker: " + packSplash
+        TexturePacker.processIfModified(file(packSplash[0]).absolutePath, file(packSplash[1]).absolutePath, packSplash[2])
+    }
 }
 build.dependsOn packTextures
 
 project(":overlap2d-runtime-libgdx") {
     apply plugin: "java"
     sourceSets.main.java.srcDirs = ["src/"]
+    sourceSets.test.java.srcDirs = ["test/"]
 
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
@@ -113,6 +119,7 @@ project(":spine-runtime-libgdx") {
 
 sourceCompatibility = 1.8
 sourceSets.main.java.srcDirs = ["src/"]
+sourceSets.test.java.srcDirs = ["test/"]
 
 project.ext.mainClassName = "com.uwsoft.editor.Main"
 project.ext.assetsDir = new File("assets/");
@@ -164,4 +171,8 @@ if (JavaVersion.current().isJava8Compatible()) {
             options.addStringOption('Xdoclint:none', '-quiet')
         }
     }
+}
+
+jacoco {
+    toolVersion = "0.7.2.201409121644"
 }
