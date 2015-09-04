@@ -11,11 +11,6 @@ import java.util.Collection;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-/**
- * Created by Huang YunKun on 2015/9/4.
- * WebSite: http://www.huangyunkun.com
- * Email: htynkn@163.com
- */
 public class MacroCommandTest {
     private MacroCommand macroCommand;
 
