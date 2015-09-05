@@ -25,7 +25,6 @@ public class LibgdxRule extends ExternalResource {
 
     @Override
     protected void after() {
-        Gdx.app.exit();
         try {
             FileUtils.deleteDirectory(externalStoragePath);
         } catch (IOException e) {
