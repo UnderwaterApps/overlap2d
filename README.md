@@ -1,4 +1,6 @@
-![logo](http://overlap2d.com/wp-content/uploads/2015/09/github_logo.jpg)
+# overlap2d platform
+
+![logo](http://overlap2d.com/wp-content/uploads/2015/09/github_logo_small.jpg)
 
 [![Build Status](https://travis-ci.org/UnderwaterApps/overlap2d.svg?branch=master)](https://travis-ci.org/UnderwaterApps/overlap2d)
 
