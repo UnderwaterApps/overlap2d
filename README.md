@@ -1,4 +1,4 @@
-# overlap2d platform
+# overlap2d editor
 
 ![logo](http://overlap2d.com/wp-content/uploads/2015/09/github_logo_small.jpg)
 
