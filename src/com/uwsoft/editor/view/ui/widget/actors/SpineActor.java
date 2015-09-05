@@ -1,6 +1,7 @@
 package com.uwsoft.editor.view.ui.widget.actors;
 
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.*;
@@ -89,7 +90,7 @@ public class SpineActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        renderer.draw(batch, skeleton);
+        renderer.draw((PolygonSpriteBatch)batch, skeleton);
         super.draw(batch, parentAlpha);
     }
 

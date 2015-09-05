@@ -19,6 +19,7 @@
 package com.uwsoft.editor.view.stage;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.*;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -40,7 +41,7 @@ public class UIStage extends Stage {
 
 
     public UIStage() {
-        super(new ScreenViewport());
+        super(new ScreenViewport(), new PolygonSpriteBatch());
 
         facade = Overlap2DFacade.getInstance();
 
