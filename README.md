@@ -1,4 +1,8 @@
-![logo](http://overlap2d.com/wp-content/uploads/2015/04/logo_tmp_mini_a.jpg)
+# overlap2d platform
+
+![logo](http://overlap2d.com/wp-content/uploads/2015/09/github_logo_small.jpg)
+
+[![Build Status](https://travis-ci.org/UnderwaterApps/overlap2d.svg?branch=master)](https://travis-ci.org/UnderwaterApps/overlap2d)
 
 Overlap2D is a 2D level and UI editor with an engine agnostic philosophy for game development.
 Made to separate coding from content, it enables developer to create rich content using images,
