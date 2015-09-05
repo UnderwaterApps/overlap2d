@@ -1,4 +1,4 @@
-apply plugin: 'cobertura'
+apply plugin: 'jacoco'
 apply plugin: 'com.github.kt3k.coveralls'
 
 buildscript {
@@ -10,12 +10,16 @@ buildscript {
         classpath 'net.sf.proguard:proguard-gradle:5.0'
         classpath 'org.ajoberstar:gradle-git:1.2.0'
         classpath 'com.badlogicgames.gdx:gdx-tools:1.6.4'
-        classpath 'net.saliman:gradle-cobertura-plugin:2.0.0' // cobertura plugin
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.4.0'
     }
 }
 
-cobertura.coverageFormats = ['html', 'xml'] // coveralls plugin depends on xml format report
+jacocoTestReport {
+    reports {
+        xml.enabled = true // coveralls plugin depends on xml format report
+        html.enabled = true
+    }
+}
 
 allprojects {
     apply plugin: "eclipse"
