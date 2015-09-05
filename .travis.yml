@@ -1,5 +1,4 @@
 language: java
-service_name: travis_ci
 script: ./gradlew build jacocoTestReport
 jdk:
 - oraclejdk8
