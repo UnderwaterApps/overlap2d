@@ -8,9 +8,6 @@ Overlap2D is a 2D level and UI editor with an engine agnostic philosophy for gam
 Made to separate coding from content, it enables developer to create rich content using images,
 animations, particle effects, light system, physics and complex grouped items.
 
-### Note
-This is a RC candidate that does not yet output a data file that is readable by latest official runtime.
-We will push next runtime very soon. 
 
 ### Getting Started
 
