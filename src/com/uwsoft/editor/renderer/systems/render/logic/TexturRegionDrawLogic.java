@@ -30,7 +30,7 @@ public class TexturRegionDrawLogic implements Drawable {
 	}
 
 	@Override
-	public void draw(Batch batch, Entity entity) {
+	public void draw(Batch batch, Entity entity, float parentAlpha) {
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         if(shaderComponentMapper.has(entity)){
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
@@ -55,7 +55,7 @@ public class TexturRegionDrawLogic implements Drawable {
 //                drawPolygonSprite(batch, entity);
 //            }
         } else {
-            drawSprite(batch, entity);
+            drawSprite(batch, entity, parentAlpha);
         }
 
         if(shaderComponentMapper.has(entity)){
@@ -63,12 +63,12 @@ public class TexturRegionDrawLogic implements Drawable {
 		}
 	}
 
-    public void drawSprite(Batch batch, Entity entity) {
+    public void drawSprite(Batch batch, Entity entity, float parentAlpha) {
         TintComponent tintComponent = tintComponentComponentMapper.get(entity);
         TransformComponent entityTransformComponent = transformMapper.get(entity);
         TextureRegionComponent entityTextureRegionComponent = textureRegionMapper.get(entity);
         DimensionsComponent dimensionsComponent = dimensionsComponentComponentMapper.get(entity);
-        batch.setColor(tintComponent.color);
+        batch.setColor(tintComponent.color.r, tintComponent.color.g, tintComponent.color.b, tintComponent.color.a * parentAlpha);
 
         batch.draw(entityTextureRegionComponent.region,
                 entityTransformComponent.x, entityTransformComponent.y,

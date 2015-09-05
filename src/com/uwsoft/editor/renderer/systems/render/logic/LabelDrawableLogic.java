@@ -29,7 +29,7 @@ public class LabelDrawableLogic implements Drawable {
 	}
 	
 	@Override
-	public void draw(Batch batch, Entity entity) {
+	public void draw(Batch batch, Entity entity, float parentAlpha) {
 		TransformComponent entityTransformComponent = transformMapper.get(entity);
 		LabelComponent labelComponent = labelComponentMapper.get(entity);
 		DimensionsComponent dimenstionsComponent = dimensionsComponentMapper.get(entity);

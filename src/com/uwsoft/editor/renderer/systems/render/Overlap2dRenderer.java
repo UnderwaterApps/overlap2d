@@ -7,6 +7,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.badlogic.gdx.graphics.Camera;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Affine2;
@@ -57,7 +58,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 		camera.update();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		drawRecursively(entity);
+		drawRecursively(entity, 1f);
 		batch.end();
 
 		
@@ -89,7 +90,7 @@ public class Overlap2dRenderer extends IteratingSystem {
 	    }
 	}
 
-	private void drawRecursively(Entity rootEntity) {
+	private void drawRecursively(Entity rootEntity, float parentAlpha) {
 		
 		
 		//currentComposite = rootEntity;
@@ -100,13 +101,17 @@ public class Overlap2dRenderer extends IteratingSystem {
 			computeTransform(rootEntity);
 			applyTransform(rootEntity, batch);
 		}
-		drawChildren(rootEntity, batch, curCompositeTransformComponent);
+        TintComponent tintComponent = ComponentRetriever.get(rootEntity, TintComponent.class);
+        parentAlpha *= tintComponent.color.a;
+
+		drawChildren(rootEntity, batch, curCompositeTransformComponent, parentAlpha);
 		if (curCompositeTransformComponent.transform) resetTransform(rootEntity, batch);
 	}
 
-	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent) {
+	private void drawChildren(Entity rootEntity, Batch batch, CompositeTransformComponent curCompositeTransformComponent, float parentAlpha) {
 		NodeComponent nodeComponent = nodeMapper.get(rootEntity);
 		Entity[] children = nodeComponent.children.begin();
+
 		if (curCompositeTransformComponent.transform) {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
@@ -124,18 +129,16 @@ public class Overlap2dRenderer extends IteratingSystem {
 				}
 				
 				int entityType = childMainItemComponent.entityType;
-				
-				//TODO Alpha thing
-				
+
 				NodeComponent childNodeComponent = nodeMapper.get(child);
 				
 				
 				if(childNodeComponent ==null){
 					//Find logic from the mapper and draw it
-					drawableLogicMapper.getDrawable(entityType).draw(batch, child);
+					drawableLogicMapper.getDrawable(entityType).draw(batch, child, parentAlpha);
 				}else{
 					//Step into Composite
-					drawRecursively(child);
+					drawRecursively(child, parentAlpha);
 				}
 			}
 		} else {
@@ -152,10 +155,6 @@ public class Overlap2dRenderer extends IteratingSystem {
 			for (int i = 0, n = nodeComponent.children.size; i < n; i++) {
 				Entity child = children[i];
 
-				//TODO visibility and parent Alpha thing
-				//if (!child.isVisible()) continue;
-				//if (!child.isVisible()) continue;
-				
 				TransformComponent childTransformComponent = transformMapper.get(child);
 				float cx = childTransformComponent.x, cy = childTransformComponent.y;
 				childTransformComponent.x = cx + offsetX;
@@ -165,17 +164,17 @@ public class Overlap2dRenderer extends IteratingSystem {
 				int entityType = mainItemComponentMapper.get(child).entityType;
 				
 				if(childNodeComponent ==null){
-					//Finde the logic from mapper and draw it
-					drawableLogicMapper.getDrawable(entityType).draw(batch, child);
+					//Find the logic from mapper and draw it
+					drawableLogicMapper.getDrawable(entityType).draw(batch, child, parentAlpha);
 				}else{
 					//Step into Composite
-					drawRecursively(child);
+					drawRecursively(child, parentAlpha);
 				}
 				childTransformComponent.x = cx;
 				childTransformComponent.y = cy;
 				
 				if(childNodeComponent !=null){
-					drawRecursively(child);
+					drawRecursively(child, parentAlpha);
 				}
 			}
 		}
