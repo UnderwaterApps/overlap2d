@@ -8,6 +8,8 @@ import com.runner.exception.LibgdxInitException;
 import com.runner.util.ConditionWaiter;
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Description;
+import org.junit.runner.Result;
+import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -34,6 +36,7 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
             cfg.title = "Libgdx Runner";
             cfg.width = 1;
             cfg.height = 1;
+            cfg.forceExit = true;
             new JglfwApplication(new TestApplicationListener(), cfg);
             ConditionWaiter.wait(() -> Gdx.files != null, "Jglfw init failed.", 10);
             prefs = new File(Gdx.files.getExternalStoragePath(), "tmp/");
@@ -49,6 +52,12 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void run(RunNotifier notifier) {
+        notifier.addListener(new CloseLibgdxListener());
+        super.run(notifier);
     }
 
     @Override
@@ -72,5 +81,13 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
 
     private class TestApplicationListener extends ApplicationAdapter {
 
+    }
+
+    private class CloseLibgdxListener extends RunListener {
+        @Override
+        public void testRunFinished(Result result) throws Exception {
+            Gdx.app.exit();
+            ConditionWaiter.wait(() -> Gdx.app == null, "Gdx exit failed", 10);
+        }
     }
 }
