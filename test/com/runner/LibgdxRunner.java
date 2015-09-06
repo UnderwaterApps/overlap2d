@@ -35,7 +35,7 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
             cfg.width = 1;
             cfg.height = 1;
             new JglfwApplication(new TestApplicationListener(), cfg);
-            ConditionWaiter.wait(() -> Gdx.app != null, "Jglfw init failed.", 10);
+            ConditionWaiter.wait(() -> Gdx.files != null, "Jglfw init failed.", 10);
             prefs = new File(Gdx.files.getExternalStoragePath(), "tmp/");
             safeCleanDir();
         } catch (Exception ex) {
