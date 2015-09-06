@@ -1,7 +1,5 @@
 package com.commons;
 
-import com.runner.LibgdxRunner;
-import com.runner.NeedGL;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -9,6 +7,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.runner.LibgdxRunner;
+import com.runner.NeedGL;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +51,7 @@ public class O2DDialogTest {
 
     @Test
     @NeedGL
-    public void shouldCreateValidableTextField() throws Exception {
+    public void shouldAddCloseButton() throws Exception {
         o2DDialog.addCloseButton();
 
         Table titleTable = o2DDialog.getTitleTable();
