@@ -1,9 +1,9 @@
 package com.uwsoft.editor.data.manager;
 
-import com.LibgdxRule;
+import com.runner.LibgdxRunner;
 import org.junit.Before;
-import org.junit.ClassRule;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 import java.util.List;
 
@@ -11,9 +11,8 @@ import static org.hamcrest.CoreMatchers.hasItem;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+@RunWith(LibgdxRunner.class)
 public class PreferencesManagerTest {
-    @ClassRule
-    public static LibgdxRule libgdxRule = new LibgdxRule();
     private PreferencesManager preferencesManager;
 
     @Before
