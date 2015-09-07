@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
+import com.runner.LibgdxRunner;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.ExternalResource;
 
@@ -11,6 +12,10 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
+/**
+ * Use {@link LibgdxRunner LibgdxRunner}
+ **/
+@Deprecated
 public class LibgdxRule extends ExternalResource {
     private Random random = new Random();
     private File externalStoragePath;
@@ -33,6 +38,9 @@ public class LibgdxRule extends ExternalResource {
     }
 
     class TestApplicationListener extends ApplicationAdapter {
-
+        @Override
+        public void render() {
+            System.out.printf(Gdx.gl.toString());
+        }
     }
 }
