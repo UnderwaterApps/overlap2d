@@ -18,11 +18,14 @@
 
 package com.uwsoft.editor.data.manager;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Array;
+import org.apache.commons.io.FilenameUtils;
 
 public class PreferencesManager {
 	private static final String TAG = PreferencesManager.class.getCanonicalName();
@@ -96,6 +99,7 @@ public class PreferencesManager {
 	}
 	
 	public void storeRecentHistory() {
+		cleanDuplicates(recentHistory);
 		for (int i = 0; i < recentHistory.size(); i++)
 		{
 			if (i > getInteger("recentHistory"))
@@ -104,6 +108,21 @@ public class PreferencesManager {
 			prefs.putString(String.format("recent.%d",i), recentHistory.get(i));
 		}
 		flush();
+	}
+
+	private void cleanDuplicates(ArrayList<String> paths) {
+		Array<Integer> duplicates = new Array<>();
+		for(int i = 0; i < paths.size()-1; i++) {
+			if(duplicates.contains(i, false)) continue;
+			for(int j = i + 1; j < paths.size(); j++) {
+				if(FilenameUtils.equalsNormalized(paths.get(i), paths.get(j))) {
+					duplicates.add(j);
+				}
+			}
+		}
+		for(int i = 0; i < duplicates.size; i++) {
+			paths.remove((int)duplicates.get(i));
+		}
 	}
 	
 	public void pushHistory(String file) {

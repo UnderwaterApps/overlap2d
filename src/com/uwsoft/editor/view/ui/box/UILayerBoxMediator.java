@@ -30,13 +30,10 @@ import com.kotcrab.vis.ui.widget.VisTextField;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
-import com.uwsoft.editor.controller.commands.LayerSwapCommand;
-import com.uwsoft.editor.controller.commands.NewLayerCommand;
+import com.uwsoft.editor.controller.commands.*;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
@@ -80,7 +77,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 DeleteLayerCommand.DONE,
                 DeleteLayerCommand.UNDONE,
                 NewLayerCommand.DONE,
-                LayerSwapCommand.DONE
+                LayerSwapCommand.DONE,
+                RenameLayerCommand.DONE
 
 
         }).flatMap(Stream::of).toArray(String[]::new);
@@ -193,36 +191,17 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 if(zIndexComponent.layerName == null) zIndexComponent.layerName = layers.get(index).layerName;
                 break;
             case UILayerBox.CHANGE_LAYER_NAME:
-                // TODO: this needs to be command
                 String layerName = notification.getBody();
                 int layerIndex = viewComponent.getCurrentSelectedLayerIndex();
                 if(layerIndex == -1) break;
-                LayerItemVO layer_view = layers.get(layerIndex);
-                layerItem = viewComponent.getCurrentSelectedLayer();
-                VisTextField textField = layerItem.getNameField();
+                LayerItemVO layerVO = layers.get(layerIndex);
 
-                if(layer_view.layerName.equals(layerName))  // Name didn't change
-                {
-                    textField.clearSelection();
-                    textField.setDisabled(true);
-                    viewComponent.enableDraggingInEditedSlot();
-                }
-                else if(checkIfNameIsUnique(layerName)) // Name changed
-                {
-                    textField.clearSelection();
-                    textField.setDisabled(true);
-                    viewComponent.enableDraggingInEditedSlot();
-                    String prevName = layer_view.layerName;
-                    layer_view.layerName = layerName;
-                    // update the map
-                    Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
-                    LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
-                    layerMapComponent.rename(prevName, layerName);
-                }
-                else
-                {
-                    //Show error dialog
-                }
+                facade.sendNotification(Sandbox.ACTION_RENAME_LAYER, RenameLayerCommand.payload(layerVO.layerName, layerName));
+                break;
+            case RenameLayerCommand.DONE:
+                index = viewComponent.getCurrentSelectedLayerIndex();
+                initLayerData();
+                viewComponent.setCurrentSelectedLayer(index);
                 break;
             default:
                 break;
