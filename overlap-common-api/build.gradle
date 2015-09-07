@@ -21,7 +21,7 @@ apply plugin: "java"
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
-    gdxVersion = '1.6.4'
+    gdxVersion = '1.6.5'
     ashleyVersion = '1.5.0'
 }
 
