@@ -5,7 +5,7 @@ sourceCompatibility = 1.6
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
-    gdxVersion = '1.6.4'
+    gdxVersion = '1.6.5'
     box2dlightsVersion = '1.4'
     ashleyVersion = '1.6.0'
 }
