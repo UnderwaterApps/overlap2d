@@ -21,6 +21,7 @@ package com.uwsoft.editor.renderer.factory.component;
 import box2dLight.RayHandler;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.physics.box2d.World;
 import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -58,7 +59,7 @@ public class CompositeComponentFactory extends ComponentFactory {
         DimensionsComponent component = new DimensionsComponent();
         component.width = ((CompositeItemVO) vo).width;
         component.height = ((CompositeItemVO) vo).height;
-
+        component.boundBox = new Rectangle(0,0,component.width,component.height);
         entity.add(component);
         return component;
     }
