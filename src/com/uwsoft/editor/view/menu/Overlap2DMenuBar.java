@@ -228,15 +228,15 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             addScenes(scenes);
         }
 
-        public String getFolderName(String path) {
+        public String getFolderNameAndPath(String path) {
             File path1 = new File(path);
             File path2 = new File(path1.getParent());
-            return path2.getName();
+            return path2.getName() + " - [ " + path + "]";
         }
 
         public void addRecent(ArrayList<String> paths) {
             for (String path : paths) {
-                MenuItem menuItem = new MenuItem(getFolderName(path), new MenuItemListener(RECENT_PROJECTS, path, FILE_MENU));
+                MenuItem menuItem = new MenuItem(getFolderNameAndPath(path) , new MenuItemListener(RECENT_PROJECTS, path, FILE_MENU));
                 recentProjectsMenuItems.add(menuItem);
                 recentProjectsPopupMenu.addItem(menuItem);
             }
