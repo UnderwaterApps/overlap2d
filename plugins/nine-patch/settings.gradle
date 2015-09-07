@@ -1,0 +1,2 @@
+include 'overlap-common-api'
+project(':overlap-common-api').projectDir = new File(settingsDir, '../../overlap-common-api')
