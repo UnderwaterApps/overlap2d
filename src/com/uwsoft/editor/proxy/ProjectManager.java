@@ -63,6 +63,7 @@ import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.utils.MySkin;
+import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.Overlap2DUtils;
 
 
@@ -1022,6 +1023,10 @@ public class ProjectManager extends BaseProxy {
             }
             Sandbox.getInstance().loadCurrentProject();
             facade.sendNotification(PROJECT_OPENED);
+            
+            //Set title with opened file path
+            Gdx.graphics.setTitle(getFormatedTitle(projectPath));
+            
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1038,10 +1043,18 @@ public class ProjectManager extends BaseProxy {
         // here we load all data
         openProjectAndLoadAllData(projectName);
         Sandbox.getInstance().loadCurrentProject();
-
-
+        
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
+
+        //Set title with opened file path
+        Gdx.graphics.setTitle(getFormatedTitle(path));
     }
+
+
+	private String getFormatedTitle(String path) {
+		//App Name + Version + path to opened file
+		return "Overlap2D - Public Aplha v" + AppConfig.getInstance().version + " - [ " + path + " ]";
+	}
 
     public SceneConfigVO getCurrentSceneConfigVO() {
         for(int i = 0; i < currentProjectVO.sceneConfigs.size(); i++) {
