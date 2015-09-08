@@ -46,27 +46,68 @@ public class CompositeSystem extends IteratingSystem {
         float cos = 0;
 		float sin = 0;
 		float x1,y1,x2,y2,x3,y3,x4,y4;
+		float worldOriginX;
+		float worldOriginY;
+		float fx;
+		float fy;
+		float fx2;
+		float fy2;
 		
         for (int i = 0; i < entities.size; i++) {
             Entity entity = entities.get(i);
             transformComponent = transformMapper.get(entity);
             DimensionsComponent childDimentionsComponent = dimensionsMapper.get(entity);
-            
-            cos = MathUtils.cosDeg(transformComponent.rotation);
-			sin = MathUtils.sinDeg(transformComponent.rotation);
 			
-			x1 = (-transformComponent.originX) * cos - (-transformComponent.originY) * sin+transformComponent.x+transformComponent.originX;
-			y1 = (-transformComponent.originX) * sin + (-transformComponent.originY) * cos+transformComponent.y+transformComponent.originY;
+			worldOriginX = transformComponent.x+transformComponent.originX;
+			worldOriginY = transformComponent.y+transformComponent.originY;
 			
-			x2 = (-transformComponent.originX) * cos - (childDimentionsComponent.height-transformComponent.originY) * sin+transformComponent.x+transformComponent.originX;
-			y2 = (-transformComponent.originX) * sin + (childDimentionsComponent.height-transformComponent.originY) * cos+transformComponent.y+transformComponent.originY;
+			fx = -transformComponent.originX;
+			fy = -transformComponent.originY;
+			fx2 = childDimentionsComponent.width-transformComponent.originX;
+			fy2 = childDimentionsComponent.height-transformComponent.originY;
 			
-			x3 = (childDimentionsComponent.width-transformComponent.originX) * cos - (-transformComponent.originY) * sin+transformComponent.x+transformComponent.originX;
-			y3 = (childDimentionsComponent.width-transformComponent.originX) * sin + (-transformComponent.originY) * cos+transformComponent.y+transformComponent.originY;
+			if (transformComponent.scaleX != 1 || transformComponent.scaleY != 1) {
+				fx *= transformComponent.scaleX;
+				fy *= transformComponent.scaleY;
+				fx2 *= transformComponent.scaleX;
+				fy2 *= transformComponent.scaleY;
+			}
 			
-			x4 = (childDimentionsComponent.width-transformComponent.originX) * cos - (childDimentionsComponent.height-transformComponent.originY) * sin+transformComponent.x+transformComponent.originX;
-			y4 = (childDimentionsComponent.width-transformComponent.originX) * sin + (childDimentionsComponent.height-transformComponent.originY) * cos+transformComponent.y+transformComponent.originY;
+			x1 = fx;
+			y1 = fy;
+			x2 = fx;
+			y2 = fy2;
+			x3 = fx2;
+			y3 = fy;
+			x4 = fx2;
+			y4 = fy2;
 			
+			if(transformComponent.rotation != 0){
+				cos = MathUtils.cosDeg(transformComponent.rotation);
+				sin = MathUtils.sinDeg(transformComponent.rotation);
+				
+				x1 = fx * cos - fy * sin;
+				y1 = fx * sin + fy * cos;
+				
+				x2 = fx * cos - fy2 * sin;
+				y2 = fx * sin + fy2 * cos;
+				
+				x3 = fx2 * cos - fy * sin;
+				y3 = fx2 * sin + fy * cos;
+				
+				x4 = fx2 * cos - fy2 * sin;
+				y4 = fx2 * sin + fy2 * cos;
+			}
+			
+			x1 += worldOriginX;
+			y1 += worldOriginY;
+			x2 += worldOriginX;
+			y2 += worldOriginY;
+			x3 += worldOriginX;
+			y3 += worldOriginY;
+			x4 += worldOriginX;
+			y4 += worldOriginY;
+						
 			lowerX = Math.min(Math.min(Math.min(Math.min(x1, x2),x3),x4),lowerX);
 			upperX = Math.max(Math.max(Math.max(Math.max(x1, x2),x3),x4),upperX);
 			lowerY = Math.min(Math.min(Math.min(Math.min(y1, y2),y3),y4),lowerY);
