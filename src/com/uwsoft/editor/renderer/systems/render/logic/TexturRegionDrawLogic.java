@@ -12,6 +12,7 @@ import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.components.TintComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 
 public class TexturRegionDrawLogic implements Drawable {
 
@@ -20,6 +21,7 @@ public class TexturRegionDrawLogic implements Drawable {
 	private ComponentMapper<TransformComponent> transformMapper;
 	private ComponentMapper<DimensionsComponent> dimensionsComponentComponentMapper;
 	private ComponentMapper<ShaderComponent> shaderComponentMapper;
+
 
 	public TexturRegionDrawLogic() {
 		tintComponentComponentMapper = ComponentMapper.getFor(TintComponent.class);
@@ -36,7 +38,9 @@ public class TexturRegionDrawLogic implements Drawable {
 			ShaderComponent shaderComponent = shaderComponentMapper.get(entity);
             if(shaderComponent.getShader() != null) {
                 batch.setShader(shaderComponent.getShader());
-                //System.out.println("asdasdsdas" + new Vector2(entityTextureRegionComponent.region.getRegionX(), entityTextureRegionComponent.region.getRegionY()));
+
+                batch.getShader().setUniformf("deltaTime", Gdx.graphics.getDeltaTime());
+                batch.getShader().setUniformf("time", Overlap2dRenderer.timeRunning);
 
                 GL20 gl = Gdx.gl20;
                 int error;

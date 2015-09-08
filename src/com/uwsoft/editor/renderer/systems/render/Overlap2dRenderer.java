@@ -38,6 +38,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 	
 	private float accumulator = 0;
 	//private Box2DDebugRenderer debugRenderer = new Box2DDebugRenderer();
+
+	public static float timeRunning = 0;
 	
 	public Batch batch;
 
@@ -53,6 +55,8 @@ public class Overlap2dRenderer extends IteratingSystem {
 
 	@Override
 	public void processEntity(Entity entity, float deltaTime) {
+		timeRunning+=deltaTime;
+
 		ViewPortComponent ViewPortComponent = viewPortMapper.get(entity);
 		Camera camera = ViewPortComponent.viewPort.getCamera();
 		camera.update();
