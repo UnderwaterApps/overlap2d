@@ -165,7 +165,7 @@ public class ImportUtils  {
             }
 
             // checking for spine animation
-            if(contents.contains("\"skeleton\":{\"")) {
+            if(contents.contains("\"skeleton\":{\"") || contents.contains("\"skeleton\": { \"")) {
                 type = TYPE_SPINE_ANIMATION;
                 return type;
             }
