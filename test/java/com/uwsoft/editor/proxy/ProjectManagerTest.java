@@ -60,6 +60,38 @@ public class ProjectManagerTest {
         cleanDirectory(currentProjectVO);
     }
 
+    @Test
+    public void shouldExportProject() throws Exception {
+        Overlap2DFacade.getInstance().registerProxy(new SceneDataManager());
+        Overlap2DFacade.getInstance().registerProxy(projectManager);
+        projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
+
+        ProjectVO currentProjectVO = projectManager.getCurrentProjectVO();
+        File exportFolder = new File(projectManager.getCurrentWorkingPath(), currentProjectVO.projectName + "export");
+        assertThat(exportFolder.list().length, is(0));
+        projectManager.exportProject();
+
+        assertThat(exportFolder.list().length, is(4));
+        cleanDirectory(currentProjectVO);
+    }
+
+    @Test
+    public void shouldCreateDTFileAfterSaveProject() throws Exception {
+        Overlap2DFacade.getInstance().registerProxy(new SceneDataManager());
+        Overlap2DFacade.getInstance().registerProxy(projectManager);
+        projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
+        File exportFolder = new File(projectManager.getCurrentWorkingPath(), projectManager.currentProjectVO.projectName);
+        File[] files = exportFolder.listFiles((dir, name) -> {
+            return name.contains("project.dt");
+        });
+        FileUtils.forceDelete(files[0]);
+        projectManager.saveCurrentProject();
+        files = exportFolder.listFiles((dir, name) -> {
+            return name.contains("project.dt");
+        });
+        assertThat(files.length, is(1));
+    }
+
     private void cleanDirectory(ProjectVO currentProjectVO) {
         File projectFolder = new File(projectManager.getCurrentWorkingPath(), currentProjectVO.projectName);
         try {

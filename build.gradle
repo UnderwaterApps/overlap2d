@@ -132,8 +132,21 @@ project(":overlap-common-api") {
 
 
 sourceCompatibility = 1.8
-sourceSets.main.java.srcDirs = ["src/"]
-sourceSets.test.java.srcDirs = ["test/"]
+sourceSets {
+    main {
+        java {
+            srcDir 'src/'
+        }
+    }
+    test {
+        java {
+            srcDir 'test/java'
+        }
+        resources {
+            srcDir 'test/resources'
+        }
+    }
+}
 
 project.ext.mainClassName = "com.uwsoft.editor.Main"
 project.ext.assetsDir = new File("assets/");
@@ -190,11 +203,6 @@ if (JavaVersion.current().isJava8Compatible()) {
 task wrapper(type: Wrapper) {
     gradleVersion = '2.6'
 }
-
-jacoco {
-    toolVersion = "0.7.2.201409121644"
-}
-
 
 jacocoTestReport {
     reports {
