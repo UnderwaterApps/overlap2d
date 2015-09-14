@@ -209,4 +209,33 @@ jacocoTestReport {
     }
 }
 
+coveralls {
+    sourceDirs = files('overlap2d-common-api/src', 'overlap2d/src')
+    jacocoReportPath = "overlap2d/build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
+}
+
+task checkTest() << {
+    def fails = 0;
+    def count = 0;
+    fileTree('overlap2d/build/test-results') {
+        include '*.xml'
+    }.each { File file ->
+        def testResult = (new XmlParser()).parse(file)
+        count += Integer.valueOf(testResult.@tests);
+        fails += Integer.valueOf(testResult.@failures);
+        fails += Integer.valueOf(testResult.@errors);
+        if (Integer.valueOf(testResult.@failures) + Integer.valueOf(testResult.@errors) > 0) {
+            println "Test ${testResult.@name} failed";
+        }
+    }
+    println "All test:" + count;
+    println "Failed test:" + fails;
+    if (fails > 0) {
+        throw new Exception("${fails} test failed");
+    } else if (count == 0) {
+        throw new Exception("Test don't finish successful");
+    }
+}
+
 check.dependsOn jacocoTestReport
+check.dependsOn packTextures
