@@ -210,14 +210,10 @@ jacocoTestReport {
     }
 }
 
-coveralls {
-    jacocoReportPath = "overlap2d/build/reports/jacoco/jacocoRootReport/jacocoRootReport.xml"
-}
-
 task checkTest() << {
     def fails = 0;
     def count = 0;
-    fileTree('overlap2d/build/test-results') {
+    fileTree('build/test-results') {
         include '*.xml'
     }.each { File file ->
         def testResult = (new XmlParser()).parse(file)
