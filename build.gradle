@@ -32,7 +32,6 @@ allprojects {
         mavenCentral()
         maven { url "https://oss.sonatype.org/content/repositories/snapshots/" }
         maven { url "https://oss.sonatype.org/content/repositories/releases/" }
-        maven { url "http://repo.serkprojects.com/content/groups/public/" }
         jcenter()
     }
 }
@@ -69,8 +68,6 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
     compile "com.mortennobel:java-image-scaling:0.8.5"
-    //compile "net.mountainblade:modular:1.0-SNAPSHOT"
-    compile files('overlap2d-common-api/libs/mountainblade.modular.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-library:1.3'
     testCompile 'org.mockito:mockito-core:1.10.19'
