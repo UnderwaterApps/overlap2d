@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.proxy;
+package com.uwsoft.editor.proxy;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.scenes.scene2d.Stage;

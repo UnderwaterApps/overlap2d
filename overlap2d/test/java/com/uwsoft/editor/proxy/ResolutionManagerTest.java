@@ -1,12 +1,9 @@
-package java.com.uwsoft.editor.proxy;
+package com.uwsoft.editor.proxy;
 
 import com.google.common.io.Resources;
-import java.com.runner.LibgdxRunner;
-import java.com.runner.NeedGL;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -15,7 +12,6 @@ import java.io.File;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
-@RunWith(LibgdxRunner.class)
 public class ResolutionManagerTest {
     private ResolutionManager resolutionManager;
 
@@ -26,7 +22,6 @@ public class ResolutionManagerTest {
     }
 
     @Test
-    @NeedGL
     public void shouldResizeImage() throws Exception {
         File targetFile = new File(Resources.getResource("images/logo.png").getFile());
         BufferedImage originImage = ImageIO.read(targetFile);

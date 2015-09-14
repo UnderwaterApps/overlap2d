@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.proxy;
+package com.uwsoft.editor.proxy;
 
 import com.uwsoft.editor.controller.commands.RevertableCommand;
 import org.junit.Before;

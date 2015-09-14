@@ -1,6 +1,6 @@
-package java.com.uwsoft.editor.proxy;
+package com.uwsoft.editor.proxy;
 
-import java.com.runner.LibgdxRunner;
+import com.runner.LibgdxRunner;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;

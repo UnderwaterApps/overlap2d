@@ -1,4 +1,4 @@
-package java.com.commons;
+package com.commons;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
@@ -7,8 +7,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
-import java.com.runner.LibgdxRunner;
-import java.com.runner.NeedGL;
+import com.runner.LibgdxRunner;
+import com.runner.NeedGL;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ public class O2DDialogTest {
     @Before
     public void setUp() throws Exception {
         VisUI visUI = new VisUI();
-        visUI.load(Gdx.files.local("assets/style/uiskin.json"));
+        visUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         o2DDialog = new O2DDialog("O2DDialog Test");
     }
 

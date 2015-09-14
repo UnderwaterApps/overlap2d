@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.utils.poly;
+package com.uwsoft.editor.utils.poly;
 
 import com.badlogic.gdx.math.Vector2;
 import org.junit.Test;

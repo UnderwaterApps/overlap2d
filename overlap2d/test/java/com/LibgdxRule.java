@@ -1,10 +1,10 @@
-package java.com;
+package com;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import java.com.runner.LibgdxRunner;
+import com.runner.LibgdxRunner;
 import org.apache.commons.io.FileUtils;
 import org.junit.rules.ExternalResource;
 

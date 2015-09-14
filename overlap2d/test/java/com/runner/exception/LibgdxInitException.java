@@ -1,4 +1,4 @@
-package java.com.runner.exception;
+package com.runner.exception;
 
 public class LibgdxInitException extends RuntimeException {
     public LibgdxInitException(Throwable cause) {

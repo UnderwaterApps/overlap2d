@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.controller;
+package com.uwsoft.editor.controller;
 
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2DFacade;
