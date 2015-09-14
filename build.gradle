@@ -23,8 +23,8 @@ allprojects {
         box2DLightsVersion = '1.4'
         visuiVersion = '0.7.6'
 
-        packMain = ["art/textures", "assets/style/", "uiskin"]
-        packSplash = ["art/splash_textures", "assets/splash/", "splash"]
+        packMain = ["overlap2d/art/textures", "overlap2d/assets/style/", "overlap2d/uiskin"]
+        packSplash = ["overlap2d/art/splash_textures", "overlap2d/assets/splash/", "overlap2d/splash"]
     }
 
     repositories {
@@ -51,7 +51,7 @@ if (!o2dRuntimeDestination.exists()) Grgit.clone(dir: o2dRuntimeDestination, uri
 
 dependencies {
     compile "com.kotcrab.vis:vis-ui:$visuiVersion"
-    compile project(":overlap-common-api")
+    compile project(":overlap2d-common-api")
     compile project(":overlap2d-runtime-libgdx")
     compile project(":spine-runtime-libgdx")
     compile project(":spine-o2d-extension")
@@ -69,7 +69,8 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
     compile "com.badlogicgames.box2dlights:box2dlights:$box2DLightsVersion"
     compile "com.mortennobel:java-image-scaling:0.8.5"
-    compile "net.mountainblade:modular:1.0-SNAPSHOT"
+    //compile "net.mountainblade:modular:1.0-SNAPSHOT"
+    compile files('overlap2d-common-api/libs/mountainblade.modular.jar')
     testCompile 'junit:junit:4.12'
     testCompile 'org.hamcrest:hamcrest-library:1.3'
     testCompile 'org.mockito:mockito-core:1.10.19'
@@ -121,7 +122,7 @@ project(":spine-runtime-libgdx") {
     }
 }
 
-project(":overlap-common-api") {
+project(":overlap2d-common-api") {
     apply plugin: "java"
     sourceSets.main.java.srcDirs = ["src/"]
 
@@ -135,21 +136,21 @@ sourceCompatibility = 1.8
 sourceSets {
     main {
         java {
-            srcDir 'src/'
+            srcDir 'overlap2d/src/'
         }
     }
     test {
         java {
-            srcDir 'test/java'
+            srcDir 'overlap2d/test/java'
         }
         resources {
-            srcDir 'test/resources'
+            srcDir 'overlap2d/test/resources'
         }
     }
 }
 
 project.ext.mainClassName = "com.uwsoft.editor.Main"
-project.ext.assetsDir = new File("assets/");
+project.ext.assetsDir = new File("overlap2d/assets/");
 
 
 task run(dependsOn: classes, type: JavaExec) {
@@ -180,7 +181,7 @@ idea {
 task afterEclipseImport(description: "Post processing after project generation", group: "IDE") {
     doLast {
         def classpath = new XmlParser().parse(file(".classpath"))
-        new Node(classpath, "classpathentry", [kind: 'src', path: 'assets']);
+        new Node(classpath, "classpathentry", [kind: 'src', path: 'overlap2d/assets']);
         def writer = new FileWriter(file(".classpath"))
         def printer = new XmlNodePrinter(new PrintWriter(writer))
         printer.setPreserveWhitespace(true)
