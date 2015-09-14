@@ -1,6 +1,6 @@
-package java.com.runner.util;
+package com.runner.util;
 
-import java.com.runner.exception.TimeoutException;
+import com.runner.exception.TimeoutException;
 import org.junit.runner.Description;
 
 import java.util.concurrent.TimeUnit;

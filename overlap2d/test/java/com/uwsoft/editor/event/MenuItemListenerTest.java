@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.event;
+package com.uwsoft.editor.event;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;

@@ -1,6 +1,6 @@
-package java.com.uwsoft.editor.data.manager;
+package com.uwsoft.editor.data.manager;
 
-import java.com.runner.LibgdxRunner;
+import com.runner.LibgdxRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

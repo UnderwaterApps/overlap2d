@@ -1,4 +1,4 @@
-package java.com.puremvc.core;
+package com.puremvc.core;
 
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.BaseNotification;

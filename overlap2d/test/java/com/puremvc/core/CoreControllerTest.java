@@ -1,4 +1,4 @@
-package java.com.puremvc.core;
+package com.puremvc.core;
 
 import com.puremvc.patterns.command.Command;
 import com.puremvc.patterns.observer.Notification;

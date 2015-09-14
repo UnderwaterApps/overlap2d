@@ -1,7 +1,7 @@
-package java.com.uwsoft.editor.proxy;
+package com.uwsoft.editor.proxy;
 
 import com.badlogic.gdx.utils.Array;
-import java.com.runner.LibgdxRunner;
+import com.runner.LibgdxRunner;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;

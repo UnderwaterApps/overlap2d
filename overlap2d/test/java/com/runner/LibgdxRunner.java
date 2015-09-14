@@ -1,11 +1,11 @@
-package java.com.runner;
+package com.runner;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
-import java.com.runner.exception.LibgdxInitException;
-import java.com.runner.util.ConditionWaiter;
+import com.runner.exception.LibgdxInitException;
+import com.runner.util.ConditionWaiter;
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Description;
 import org.junit.runner.Result;

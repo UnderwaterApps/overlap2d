@@ -1,4 +1,4 @@
-package java.com.runner.util;
+package com.runner.util;
 
 public interface Condition {
     /**

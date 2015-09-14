@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.event;
+package com.uwsoft.editor.event;
 
 import com.uwsoft.editor.Overlap2DFacade;
 import org.junit.Before;

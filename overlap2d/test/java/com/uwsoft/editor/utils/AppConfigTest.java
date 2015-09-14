@@ -1,4 +1,4 @@
-package java.com.uwsoft.editor.utils;
+package com.uwsoft.editor.utils;
 
 import com.google.common.base.Charsets;
 import com.google.common.io.Files;
