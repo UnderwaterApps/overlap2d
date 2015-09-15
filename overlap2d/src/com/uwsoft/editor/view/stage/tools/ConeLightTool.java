@@ -30,6 +30,7 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 public class ConeLightTool extends ItemDropTool {
 
     public static final String NAME = "CONE_LIGHT_TOOL";
+    public static final String TOOL_TIP = "CONE_LIGHT_TOOL TOOL TIP";
 
 
     @Override

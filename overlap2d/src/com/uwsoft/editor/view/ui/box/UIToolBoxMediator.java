@@ -18,11 +18,21 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import com.badlogic.gdx.utils.Array;
+
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.stage.tools.*;
+import com.uwsoft.editor.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.view.stage.tools.PolygonTool;
+import com.uwsoft.editor.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.view.stage.tools.TextTool;
+import com.uwsoft.editor.view.stage.tools.TransformTool;
 
 /**
  * Created by sargis on 4/9/15.
@@ -34,10 +44,8 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
     public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
-
     private String currentTool;
-    private Array<String> toolList;
-
+    private Map<String, String> toolList;
 
     public UIToolBoxMediator() {
         super(NAME, new UIToolBox());
@@ -54,15 +62,24 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     }
 
 
-    public Array<String> getToolNameList() {
-        Array<String> toolNames = new Array();
-        toolNames.add(SelectionTool.NAME);
-        toolNames.add(TransformTool.NAME);
-        toolNames.add(TextTool.NAME);
-        toolNames.add(PointLightTool.NAME);
-        toolNames.add(ConeLightTool.NAME);
-        toolNames.add(PolygonTool.NAME);
-        return toolNames;
+    public Map<String, String> getToolNameList() {
+//        Array<String> toolNames = new Array();
+//        toolNames.add(SelectionTool.NAME);
+//        toolNames.add(TransformTool.NAME);
+//        toolNames.add(TextTool.NAME);
+//        toolNames.add(PointLightTool.NAME);
+//        toolNames.add(ConeLightTool.NAME);
+//        toolNames.add(PolygonTool.NAME);
+    	 return Collections.unmodifiableMap(new LinkedHashMap<String, String>() {
+             {
+                 put(SelectionTool.NAME, SelectionTool.TOOL_TIP);
+                 put(TransformTool.NAME, TransformTool.TOOL_TIP);
+                 put(TextTool.NAME, TextTool.TOOL_TIP);
+                 put(PointLightTool.NAME, PointLightTool.TOOL_TIP);
+                 put(ConeLightTool.NAME, ConeLightTool.TOOL_TIP);
+                 put(PolygonTool.NAME, PolygonTool.TOOL_TIP);
+             }
+         });
     }
 
     @Override

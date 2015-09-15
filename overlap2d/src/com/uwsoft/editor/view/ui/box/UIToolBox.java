@@ -20,11 +20,14 @@ package com.uwsoft.editor.view.ui.box;
 
 
 import java.util.HashMap;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.Tooltip;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -42,22 +45,26 @@ public class UIToolBox extends VisTable {
         toolsButtonGroup = new ButtonGroup<>();
     }
 
-    public void createToolButtons(Array<String> toolList) {
-        for(int i = 0; i < toolList.size; i++) {
-            addToolButton(toolList.get(i));
-            row();
-            if(i == 1) addSeparator().width(31);
-        }
+    public void createToolButtons(Map<String, String> toolList) {
+    	int index = 0;
+    	for (Entry<String, String> entry : toolList.entrySet()) {
+    		addToolButton(entry.getKey(), entry.getValue());
+    		row();
+    		if(index == 1)
+    			addSeparator().width(31f);
+    		index++;
+    	}
     }
 
-    private void addToolButton(String name) {
-        VisImageButton button = createButton("tool-" + name, name);
+    private void addToolButton(String name, String toolTip) {
+        VisImageButton button = createButton("tool-" + name, name, toolTip);
         buttonMap.put(name, button);
         add(button).width(31).height(31);
     }
 
-    private VisImageButton createButton(String styleName, String toolId) {
+    private VisImageButton createButton(String styleName, String toolId, String toolTip) {
         VisImageButton visImageButton = new VisImageButton(styleName);
+        new Tooltip(visImageButton, toolTip);
         toolsButtonGroup.add(visImageButton);
         visImageButton.addListener(new ToolboxButtonClickListener(toolId));
         return visImageButton;
