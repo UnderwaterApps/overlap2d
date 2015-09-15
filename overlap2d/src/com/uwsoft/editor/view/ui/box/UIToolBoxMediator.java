@@ -20,7 +20,6 @@ package com.uwsoft.editor.view.ui.box;
 
 
 import java.util.Collections;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -63,13 +62,6 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
 
 
     public Map<String, String> getToolNameList() {
-//        Array<String> toolNames = new Array();
-//        toolNames.add(SelectionTool.NAME);
-//        toolNames.add(TransformTool.NAME);
-//        toolNames.add(TextTool.NAME);
-//        toolNames.add(PointLightTool.NAME);
-//        toolNames.add(ConeLightTool.NAME);
-//        toolNames.add(PolygonTool.NAME);
     	 return Collections.unmodifiableMap(new LinkedHashMap<String, String>() {
              {
                  put(SelectionTool.NAME, SelectionTool.TOOL_TIP);
