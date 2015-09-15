@@ -87,7 +87,7 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
         @Override
         public void testRunFinished(Result result) throws Exception {
             Gdx.app.exit();
-            ConditionWaiter.wait(() -> Gdx.app == null, "Gdx exit failed", 10);
+            ConditionWaiter.wait(() -> Gdx.app == null, "Gdx exit failed", 20);
         }
     }
 }

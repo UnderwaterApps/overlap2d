@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -24,6 +25,7 @@ public class NewProjectDialogTest {
     @Test
     @NeedGL
     public void shouldFillDifferentValue() throws Exception {
+        assertThat(newProjectDialog.getTitleLabel().getText().toString(), is("Create New Project"));
         assertThat(newProjectDialog.getOriginWidth(), is("1920"));
         assertThat(newProjectDialog.getOriginHeight(), is("1200"));
         assertThat(newProjectDialog.getPixelPerWorldUnit(), is("80"));
