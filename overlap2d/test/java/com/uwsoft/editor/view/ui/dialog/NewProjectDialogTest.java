@@ -1,0 +1,31 @@
+package com.uwsoft.editor.view.ui.dialog;
+
+import com.badlogic.gdx.Gdx;
+import com.kotcrab.vis.ui.VisUI;
+import com.runner.LibgdxRunner;
+import com.runner.NeedGL;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
+@RunWith(LibgdxRunner.class)
+public class NewProjectDialogTest {
+    private NewProjectDialog newProjectDialog;
+
+    @Before
+    public void setUp() throws Exception {
+        VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
+        newProjectDialog = new NewProjectDialog();
+    }
+
+    @Test
+    @NeedGL
+    public void shouldFillDifferentValue() throws Exception {
+        assertThat(newProjectDialog.getOriginWidth(), is("1920"));
+        assertThat(newProjectDialog.getOriginHeight(), is("1200"));
+        assertThat(newProjectDialog.getPixelPerWorldUnit(), is("80"));
+    }
+}
