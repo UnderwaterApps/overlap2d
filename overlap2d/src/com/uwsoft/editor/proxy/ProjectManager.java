@@ -18,6 +18,36 @@
 
 package com.uwsoft.editor.proxy;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker;
+import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
+import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.Json;
+import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.manager.PreferencesManager;
+import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
+import com.uwsoft.editor.data.vo.EditorConfigVO;
+import com.uwsoft.editor.data.vo.ProjectVO;
+import com.uwsoft.editor.data.vo.SceneConfigVO;
+import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.utils.MySkin;
+import com.uwsoft.editor.utils.AppConfig;
+import com.uwsoft.editor.utils.Overlap2DUtils;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.widget.ProgressHandler;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.File;
@@ -27,43 +57,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-
-import com.uwsoft.editor.data.manager.PreferencesManager;
-import com.uwsoft.editor.data.vo.SceneConfigVO;
-import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker;
-import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
-import com.badlogic.gdx.utils.Array;
-import com.badlogic.gdx.utils.Json;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
-import com.uwsoft.editor.data.vo.EditorConfigVO;
-import com.uwsoft.editor.data.vo.ProjectVO;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.widget.ProgressHandler;
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
-import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.utils.MySkin;
-import com.uwsoft.editor.utils.AppConfig;
-import com.uwsoft.editor.utils.Overlap2DUtils;
 
 
 public class ProjectManager extends BaseProxy {
@@ -113,7 +106,7 @@ public class ProjectManager extends BaseProxy {
         try {
             editorConfigVO = getEditorConfig();
             String myDocPath = Overlap2DUtils.MY_DOCUMENTS_PATH;
-            workspacePath = myDocPath + "/" + DEFAULT_FOLDER;
+            workspacePath = myDocPath + File.separator + DEFAULT_FOLDER;
             FileUtils.forceMkdir(new File(workspacePath));
             currentWorkingPath = workspacePath;
         } catch (IOException e) {
@@ -506,11 +499,11 @@ public class ProjectManager extends BaseProxy {
         Array<File> imgs = getAtlasPages(fileHandle);
 
         Array<FileHandle> imgHandles = new Array<>();
-        for(int i = 0; i < imgs.size; i++) {
+        for (int i = 0; i < imgs.size; i++) {
             imgHandles.add(new FileHandle(imgs.get(i)));
         }
 
-        return  imgHandles;
+        return imgHandles;
     }
 
     private boolean addParticleEffectImages(FileHandle fileHandle, Array<FileHandle> imgs) {
@@ -521,15 +514,15 @@ public class ProjectManager extends BaseProxy {
                 if (line == null) break;
                 if (line.trim().equals("- Image Path -")) {
                     line = reader.readLine();
-                    if(line.contains("\\") || line.contains("/")) {
+                    if (line.contains("\\") || line.contains("/")) {
                         // then it's a path let's see if exists.
                         File tmp = new File(line);
-                        if(tmp.exists()) {
+                        if (tmp.exists()) {
                             imgs.add(new FileHandle(tmp));
                         } else {
                             line = FilenameUtils.getBaseName(line) + ".png";
                             File file = new File(FilenameUtils.getFullPath(fileHandle.path()) + line);
-                            if(file.exists()) {
+                            if (file.exists()) {
                                 imgs.add(new FileHandle(file));
                             } else {
                                 return false;
@@ -537,7 +530,7 @@ public class ProjectManager extends BaseProxy {
                         }
                     } else {
                         File file = new File(FilenameUtils.getFullPath(fileHandle.path()) + line);
-                        if(file.exists()) {
+                        if (file.exists()) {
                             imgs.add(new FileHandle(file));
                         } else {
                             return false;
@@ -567,7 +560,7 @@ public class ProjectManager extends BaseProxy {
                     try {
                         //copy images
                         boolean allImagesFound = addParticleEffectImages(fileHandle, imgs);
-                        if(allImagesFound) {
+                        if (allImagesFound) {
                             // copy the fileHandle
                             String newName = fileHandle.name();
                             File target = new File(targetPath + "/" + newName);
@@ -580,7 +573,7 @@ public class ProjectManager extends BaseProxy {
                     }
                 }
             }
-            if(imgs.size > 0) {
+            if (imgs.size > 0) {
                 copyImageFilesForAllResolutionsIntoProject(imgs, false);
             }
             ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
@@ -619,7 +612,6 @@ public class ProjectManager extends BaseProxy {
         });
         executor.shutdown();
     }
-
 
 
     public void importImagesIntoProject(final Array<FileHandle> files, ProgressHandler progressHandler) {
@@ -1022,10 +1014,10 @@ public class ProjectManager extends BaseProxy {
             }
             Sandbox.getInstance().loadCurrentProject();
             facade.sendNotification(PROJECT_OPENED);
-            
+
             //Set title with opened file path
             Gdx.graphics.setTitle(getFormatedTitle(projectPath));
-            
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -1042,7 +1034,7 @@ public class ProjectManager extends BaseProxy {
         // here we load all data
         openProjectAndLoadAllData(projectName);
         Sandbox.getInstance().loadCurrentProject();
-        
+
         facade.sendNotification(ProjectManager.PROJECT_OPENED);
 
         //Set title with opened file path
@@ -1050,14 +1042,14 @@ public class ProjectManager extends BaseProxy {
     }
 
 
-	private String getFormatedTitle(String path) {
-		//App Name + Version + path to opened file
-		return "Overlap2D - Public Aplha v" + AppConfig.getInstance().version + " - [ " + path + " ]";
-	}
+    private String getFormatedTitle(String path) {
+        //App Name + Version + path to opened file
+        return "Overlap2D - Public Aplha v" + AppConfig.getInstance().version + " - [ " + path + " ]";
+    }
 
     public SceneConfigVO getCurrentSceneConfigVO() {
-        for(int i = 0; i < currentProjectVO.sceneConfigs.size(); i++) {
-            if(currentProjectVO.sceneConfigs.get(i).sceneName.equals(Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName)) {
+        for (int i = 0; i < currentProjectVO.sceneConfigs.size(); i++) {
+            if (currentProjectVO.sceneConfigs.get(i).sceneName.equals(Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName)) {
                 return currentProjectVO.sceneConfigs.get(i);
             }
         }
@@ -1080,7 +1072,7 @@ public class ProjectManager extends BaseProxy {
             for (FileHandle handle : files) {
                 // check if shaders folder exists
                 String shadersPath = currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/shaders";
-                File destination = new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/shaders/"+handle.name());
+                File destination = new File(currentWorkingPath + "/" + currentProjectVO.projectName + "/assets/shaders/" + handle.name());
                 try {
                     FileUtils.forceMkdir(new File(shadersPath));
                     FileUtils.copyFile(handle.file(), destination);

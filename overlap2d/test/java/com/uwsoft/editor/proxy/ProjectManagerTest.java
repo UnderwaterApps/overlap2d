@@ -6,11 +6,12 @@ import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.Random;
 
 import static java.io.File.separator;
@@ -22,12 +23,17 @@ import static org.mockito.MockitoAnnotations.initMocks;
 public class ProjectManagerTest {
     private Random random = new Random();
     private ProjectManager projectManager;
+    @Rule
+    public TemporaryFolder temporaryFolder = new TemporaryFolder();
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
         projectManager = new ProjectManager();
-        projectManager.onRegister();
+        Overlap2DFacade overlap2DFacade = Overlap2DFacade.getInstance();
+        overlap2DFacade.registerProxy(projectManager);
+        overlap2DFacade.registerProxy(new SceneDataManager());
+        projectManager.setWorkspacePath(temporaryFolder.newFolder().getAbsolutePath());
     }
 
     @Test
@@ -43,8 +49,6 @@ public class ProjectManagerTest {
 
     @Test
     public void shouldAbleToCreateNewProject() throws Exception {
-        Overlap2DFacade.getInstance().registerProxy(new SceneDataManager());
-        Overlap2DFacade.getInstance().registerProxy(projectManager);
         projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
 
         ProjectVO currentProjectVO = projectManager.getCurrentProjectVO();
@@ -57,13 +61,10 @@ public class ProjectManagerTest {
         assertThat(currentProjectInfoVO.originalResolution.width, is(800));
         assertThat(currentProjectInfoVO.originalResolution.height, is(600));
         assertThat(currentProjectInfoVO.pixelToWorld, is(1));
-        cleanDirectory(currentProjectVO);
     }
 
     @Test
     public void shouldExportProject() throws Exception {
-        Overlap2DFacade.getInstance().registerProxy(new SceneDataManager());
-        Overlap2DFacade.getInstance().registerProxy(projectManager);
         projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
 
         ProjectVO currentProjectVO = projectManager.getCurrentProjectVO();
@@ -72,13 +73,10 @@ public class ProjectManagerTest {
         projectManager.exportProject();
 
         assertThat(exportFolder.list().length, is(4));
-        cleanDirectory(currentProjectVO);
     }
 
     @Test
     public void shouldCreateDTFileAfterSaveProject() throws Exception {
-        Overlap2DFacade.getInstance().registerProxy(new SceneDataManager());
-        Overlap2DFacade.getInstance().registerProxy(projectManager);
         projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
         File exportFolder = new File(projectManager.getCurrentWorkingPath(), projectManager.currentProjectVO.projectName);
         File[] files = exportFolder.listFiles((dir, name) -> {
@@ -90,14 +88,5 @@ public class ProjectManagerTest {
             return name.contains("project.dt");
         });
         assertThat(files.length, is(1));
-    }
-
-    private void cleanDirectory(ProjectVO currentProjectVO) {
-        File projectFolder = new File(projectManager.getCurrentWorkingPath(), currentProjectVO.projectName);
-        try {
-            FileUtils.deleteDirectory(projectFolder);
-        } catch (IOException e) {
-
-        }
     }
 }

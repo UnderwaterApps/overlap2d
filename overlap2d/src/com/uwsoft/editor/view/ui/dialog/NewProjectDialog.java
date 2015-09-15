@@ -18,20 +18,21 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
-import java.io.File;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.commons.O2DDialog;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
 import com.kotcrab.vis.ui.widget.*;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
-import com.commons.O2DDialog;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.view.ui.validator.NewProjectDialogValidator;
 import com.uwsoft.editor.view.ui.widget.InputFileWidget;
+
+import java.io.File;
 
 public class NewProjectDialog extends O2DDialog {
     public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
@@ -39,13 +40,13 @@ public class NewProjectDialog extends O2DDialog {
     private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
     private static final String DEFAULT_PPWU = "80";
 
-    //    private final VisValidableTextField projectName;
     private final InputFileWidget workspacePathField;
     private final VisValidableTextField projectName;
     private VisTextField originWidthTextField;
     private VisTextField originHeightTextField;
     private String defaultWorkspacePath;
     private VisTextField pixelsPerWorldUnitField;
+    private NewProjectDialogValidator newProjectDialogValidator;
 
     NewProjectDialog() {
         super("Create New Project");
@@ -85,6 +86,8 @@ public class NewProjectDialog extends O2DDialog {
         add(mainTable);
         //
         createBtn.addListener(new BtnClickListener(CREATE_BTN_CLICKED));
+
+        newProjectDialogValidator = new NewProjectDialogValidator();
     }
 
     private Table getDimensionsTable() {
@@ -144,7 +147,9 @@ public class NewProjectDialog extends O2DDialog {
         public void clicked(InputEvent event, float x, float y) {
             super.clicked(event, x, y);
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
-            facade.sendNotification(command, workspacePathField.getValue().path() + File.separator + projectName.getText());
+            if (newProjectDialogValidator.validate(getStage(), projectName)) {
+                facade.sendNotification(command, workspacePathField.getValue().path() + File.separator + projectName.getText());
+            }
         }
     }
 }
