@@ -21,7 +21,7 @@ public class SpriterDrawableLogic implements Drawable {
 	}
 	
 	@Override
-	public void draw(Batch batch, Entity entity) {
+	public void draw(Batch batch, Entity entity, float parentAlpha) {
 		TransformComponent entityTransformComponent = transformMapper.get(entity);
 		SpriterDrawerComponent spriterDrawerComponent = spriterDrawerMapper.get(entity);
 		SpriterComponent spriter = spriterMapper.get(entity);

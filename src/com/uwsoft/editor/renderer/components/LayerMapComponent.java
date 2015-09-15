@@ -63,6 +63,7 @@ public class LayerMapComponent implements Component {
 
 	public void rename(String prevName, String newName) {
 		LayerItemVO vo = layerMap.get(prevName);
+		vo.layerName = newName;
 		layerMap.remove(prevName);
 		layerMap.put(newName, vo);
 	}

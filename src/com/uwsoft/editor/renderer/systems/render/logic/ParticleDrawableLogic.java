@@ -15,7 +15,7 @@ public class ParticleDrawableLogic implements Drawable {
 	}
 	
 	@Override
-	public void draw(Batch batch, Entity entity) {
+	public void draw(Batch batch, Entity entity, float parentAlpha) {
 		ParticleComponent particleComponent = particleMapper.get(entity);
 		Matrix4 matrix = batch.getTransformMatrix().scl(particleComponent.worldMultiplyer);
 		batch.setTransformMatrix(matrix);

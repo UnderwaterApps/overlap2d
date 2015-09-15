@@ -6,8 +6,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 public class SpriteDrawableLogic extends TexturRegionDrawLogic {
 
 	@Override
-	public void draw(Batch batch, Entity entity) {
-		super.draw(batch, entity);
+	public void draw(Batch batch, Entity entity, float parentAlpha) {
+		super.draw(batch, entity, parentAlpha);
 		//TODO in case we need specific things 
 	}
 
