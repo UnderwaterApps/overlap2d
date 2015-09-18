@@ -8,6 +8,7 @@ import com.esotericsoftware.spine.*;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
+import com.esotericsoftware.spine.attachments.SkinnedMeshAttachment;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class SpineActor extends Actor {
@@ -40,7 +41,7 @@ public class SpineActor extends Actor {
             Slot slot = skeleton.getSlots().get(i);
             Attachment attachment = slot.getAttachment();
             if (attachment == null) continue;
-            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment))) continue;
+            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment instanceof SkinnedMeshAttachment))) continue;
             float[] vertices = new float[0];
             if ((attachment instanceof RegionAttachment)) {
                 RegionAttachment region = (RegionAttachment) attachment;
@@ -52,6 +53,12 @@ public class SpineActor extends Actor {
                 region.updateWorldVertices(slot, false);
                 vertices = region.getWorldVertices();
             }
+            if ((attachment instanceof SkinnedMeshAttachment)) {
+                SkinnedMeshAttachment region = (SkinnedMeshAttachment) attachment;
+                region.updateWorldVertices(slot, false);
+                vertices = region.getWorldVertices();
+            }
+
 
             for (int ii = 0, nn = vertices.length; ii < nn; ii += 5) {
                 minX = Math.min(minX, vertices[ii]);
