@@ -135,7 +135,7 @@ public class ImportUtils  {
         // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
         long fileSizeInKB = fileSizeInBytes / 1024;
 
-        if(fileSizeInKB > 200) {
+        if(fileSizeInKB > 1000) {
             return TYPE_UNCKNOWN;
         }
 
