@@ -6,6 +6,7 @@ import com.esotericsoftware.spine.*;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
+import com.esotericsoftware.spine.attachments.SkinnedMeshAttachment;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 
 public class SpineObjectComponent implements Component {
@@ -38,7 +39,7 @@ public class SpineObjectComponent implements Component {
             Slot slot = skeleton.getSlots().get(i);
             Attachment attachment = slot.getAttachment();
             if (attachment == null) continue;
-            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment))) continue;
+            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment instanceof SkinnedMeshAttachment))) continue;
             float[] vertices = new float[0];
             if ((attachment instanceof RegionAttachment)) {
                 RegionAttachment region = (RegionAttachment) attachment;
@@ -47,6 +48,11 @@ public class SpineObjectComponent implements Component {
             }
             if ((attachment instanceof MeshAttachment)) {
                 MeshAttachment region = (MeshAttachment) attachment;
+                region.updateWorldVertices(slot, false);
+                vertices = region.getWorldVertices();
+            }
+            if ((attachment instanceof SkinnedMeshAttachment)) {
+                SkinnedMeshAttachment region = (SkinnedMeshAttachment) attachment;
                 region.updateWorldVertices(slot, false);
                 vertices = region.getWorldVertices();
             }
