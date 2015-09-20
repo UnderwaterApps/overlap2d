@@ -52,7 +52,6 @@ public class SplashScreen extends ApplicationAdapter {
 
     @Override
     public void create () {
-
         atlas = new TextureAtlas(Gdx.files.internal("splash/splash.atlas"));
 
         stage = new Stage();

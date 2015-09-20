@@ -121,17 +121,9 @@ public class ProjectManager extends BaseProxy {
 
     public void createEmptyProject(String projectPath, String projectName, int width, int height, int pixelPerWorldUnit) throws IOException {
 
-
-        //why is new project assigned the default path instead of choosen project path?
-        //if (workspacePath.endsWith(File.separator)) {
-        //    workspacePath = workspacePath.substring(0, workspacePath.length() - 1);
-        //}
-
-        projectPath = new File(projectPath).getParent();
-
-        String projPath = projectPath + File.separator + projectName;
+        workspacePath = new File(projectPath).getParent();
+        String projPath = workspacePath + File.separator + projectName;
         currentWorkingPath = workspacePath;
-        workspacePath = projectPath;
 
         FileUtils.forceMkdir(new File(projPath));
         FileUtils.forceMkdir(new File(projPath + File.separator + "export"));
@@ -275,7 +267,6 @@ public class ProjectManager extends BaseProxy {
     public void setWorkspacePath(String path) {
         workspacePath = path;
     }
-
 
     public void saveCurrentProject() {
         try {
@@ -1004,7 +995,6 @@ public class ProjectManager extends BaseProxy {
         if (projectPath == null || projectPath.equals("")) {
             return;
         }
-
         String projectName = new File(projectPath).getName();
 
         if (projectName.equals("")) {
