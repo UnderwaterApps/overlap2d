@@ -4,6 +4,7 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.kotcrab.vis.ui.VisUI;
 import com.runner.exception.LibgdxInitException;
 import com.runner.util.ConditionWaiter;
 import org.apache.commons.io.FileUtils;
@@ -89,6 +90,9 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
     }
 
     private class TestApplicationListener extends ApplicationAdapter {
-
+        @Override
+        public void create() {
+            VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
+        }
     }
 }

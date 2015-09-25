@@ -26,7 +26,6 @@ public class ExportSettingsDialogTest {
 
     @Before
     public void setUp() throws Exception {
-        VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         exportSettingsDialog = new ExportSettingsDialog();
     }
 

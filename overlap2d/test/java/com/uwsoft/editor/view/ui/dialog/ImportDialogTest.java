@@ -20,7 +20,6 @@ public class ImportDialogTest {
 
     @Before
     public void setUp() throws Exception {
-        VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         importDialog = new ImportDialog();
     }
 
