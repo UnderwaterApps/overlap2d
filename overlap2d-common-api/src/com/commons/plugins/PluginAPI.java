@@ -30,4 +30,5 @@ public interface PluginAPI {
     public TextureAtlas getProjectTextureAtlas();
     public void reLoadProject();
     public void saveProject();
+    public String getPluginDir();
 }

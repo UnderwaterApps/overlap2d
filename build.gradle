@@ -19,7 +19,7 @@ allprojects {
     version = '0.1.1'
     ext {
         appName = 'Overlap2D'
-        gdxVersion = '1.6.2'
+        gdxVersion = '1.7.0'
         box2DLightsVersion = '1.4'
         visuiVersion = '0.7.6'
 
