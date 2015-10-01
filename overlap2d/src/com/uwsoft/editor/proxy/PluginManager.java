@@ -41,6 +41,7 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public static final String NAME = TAG;
 
     private ArrayList<O2DPlugin> plugins = new ArrayList<>();
+    private String pluginDir;
 
     public PluginManager() {
         super(NAME);
@@ -109,5 +110,15 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
         Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
         overlap2DMenuBarMediator.addMenuItem(menu, subMenuName, notificationName);
+    }
+
+    public void setPluginDir(String pluginDir) {
+        this.pluginDir = pluginDir;
+    }
+
+
+    @Override
+    public String getPluginDir() {
+        return pluginDir;
     }
 }

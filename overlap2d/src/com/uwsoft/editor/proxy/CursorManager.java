@@ -19,6 +19,7 @@
 package com.uwsoft.editor.proxy;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.view.ui.widget.CursorData;
@@ -76,7 +77,8 @@ public class CursorManager extends BaseProxy {
         }
 
         Pixmap pm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
-        Gdx.input.setCursorImage(pm, cursor.getHotspotX(), currentCursor.getHotspotY());
+        Cursor cursorObj = Gdx.graphics.newCursor(pm, cursor.getHotspotX(), currentCursor.getHotspotY());
+        Gdx.graphics.setCursor(cursorObj);
         pm.dispose();
     }
 }
