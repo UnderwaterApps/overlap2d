@@ -12,7 +12,7 @@ dependencies {
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     compile "com.kotcrab.vis:vis-ui:0.7.6"
     compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1"
-    compile files('libs/modular.jar')
+    compile 'net.mountainblade:modular:1.0'
 }
 
 repositories {
