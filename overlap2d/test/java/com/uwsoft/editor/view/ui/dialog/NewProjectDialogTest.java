@@ -18,7 +18,6 @@ public class NewProjectDialogTest {
 
     @Before
     public void setUp() throws Exception {
-        VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         newProjectDialog = new NewProjectDialog();
     }
 

@@ -4,12 +4,11 @@ import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.jglfw.JglfwApplication;
 import com.badlogic.gdx.backends.jglfw.JglfwApplicationConfiguration;
+import com.kotcrab.vis.ui.VisUI;
 import com.runner.exception.LibgdxInitException;
 import com.runner.util.ConditionWaiter;
 import org.apache.commons.io.FileUtils;
 import org.junit.runner.Description;
-import org.junit.runner.Result;
-import org.junit.runner.notification.RunListener;
 import org.junit.runner.notification.RunNotifier;
 import org.junit.runners.BlockJUnit4ClassRunner;
 import org.junit.runners.model.FrameworkMethod;
@@ -21,12 +20,15 @@ import java.util.Random;
 import java.util.concurrent.atomic.AtomicBoolean;
 
 public class LibgdxRunner extends BlockJUnit4ClassRunner {
-    private File prefs;
     private Random random = new Random();
+    private static File prefs;
+    private static AtomicBoolean init = new AtomicBoolean(false);
 
     public LibgdxRunner(Class<?> klass) throws InitializationError {
         super(klass);
-        initApplication();
+        if (init.compareAndSet(false, true)) {
+            initApplication();
+        }
     }
 
     private void initApplication() {
@@ -40,13 +42,16 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
             new JglfwApplication(new TestApplicationListener(), cfg);
             ConditionWaiter.wait(() -> Gdx.files != null, "Jglfw init failed.", 10);
             prefs = new File(Gdx.files.getExternalStoragePath(), "tmp/");
-            safeCleanDir();
+            Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+                safeCleanDir();
+                closeGdxApplication();
+            }));
         } catch (Exception ex) {
             throw new LibgdxInitException(ex);
         }
     }
 
-    public void safeCleanDir() {
+    private void safeCleanDir() {
         try {
             FileUtils.deleteDirectory(prefs);
         } catch (IOException e) {
@@ -54,9 +59,12 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
         }
     }
 
+    private void closeGdxApplication() {
+        Gdx.app.exit();
+    }
+
     @Override
     public void run(RunNotifier notifier) {
-        notifier.addListener(new CloseLibgdxListener());
         super.run(notifier);
     }
 
@@ -73,21 +81,18 @@ public class LibgdxRunner extends BlockJUnit4ClassRunner {
                 }
                 running.set(false);
             });
-            ConditionWaiter.wait(() -> !running.get(), description, 30);
+            ConditionWaiter.wait(() -> !running.get(), description, 30, () -> {
+                closeGdxApplication();
+            });
         } else {
             runLeaf(methodBlock(method), description, notifier);
         }
     }
 
     private class TestApplicationListener extends ApplicationAdapter {
-
-    }
-
-    private class CloseLibgdxListener extends RunListener {
         @Override
-        public void testRunFinished(Result result) throws Exception {
-            Gdx.app.exit();
-            ConditionWaiter.wait(() -> Gdx.app == null, "Gdx exit failed", 20);
+        public void create() {
+            VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         }
     }
 }
