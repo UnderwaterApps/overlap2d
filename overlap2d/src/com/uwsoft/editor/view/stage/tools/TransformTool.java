@@ -49,6 +49,7 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 public class TransformTool extends SelectionTool implements FollowerTransformationListener {
 
     public static final String NAME = "TRANSFORM_TOOL";
+    public static final String TOOL_TIP = "TRANSFORM_TOOL TOOL TIP";
 
     private float lastTransformAngle = 0;
     private float lastEntityAngle = 0;

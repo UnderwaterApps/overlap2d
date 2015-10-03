@@ -30,6 +30,7 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 public class PointLightTool extends ItemDropTool {
 
     public static final String NAME = "POINT_LIGHT_TOOL";
+    public static final String TOOL_TIP = "POINT_LIGHT_TOOL TOOL TIP";
 
 
     @Override

@@ -33,6 +33,7 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 public class TextTool extends ItemDropTool {
 
     public static final String NAME = "TEXT_TOOL";
+    public static final String TOOL_TIP = "TEXT_TOOL TOOL TIP";
 
     private String fontFamily;
     private boolean isBold;

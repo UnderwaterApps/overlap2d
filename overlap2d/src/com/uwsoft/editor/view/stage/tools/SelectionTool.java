@@ -46,6 +46,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 public class SelectionTool extends SimpleTool {
 
     public static final String NAME = "SELECTION_TOOL";
+    public static final String TOOL_TIP = "SELECTION_TOOL TOOL TIP";
 
     protected Sandbox sandbox;
 
