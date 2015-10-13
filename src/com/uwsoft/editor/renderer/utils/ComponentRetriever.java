@@ -103,6 +103,8 @@ public class ComponentRetriever {
 
         mappers.put(PolygonComponent.class, ComponentMapper.getFor(PolygonComponent.class));
         mappers.put(ShaderComponent.class, ComponentMapper.getFor(ShaderComponent.class));
+
+        mappers.put(ActionComponent.class, ComponentMapper.getFor(ActionComponent.class));
     }
 
     /**
