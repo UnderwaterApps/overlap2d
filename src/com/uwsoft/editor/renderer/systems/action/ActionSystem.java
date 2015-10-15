@@ -5,9 +5,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
 import com.badlogic.ashley.systems.IteratingSystem;
 import com.uwsoft.editor.renderer.components.ActionComponent;
-import com.uwsoft.editor.renderer.systems.action.logic.Action;
-import com.uwsoft.editor.renderer.systems.action.logic.Actions;
-import com.uwsoft.editor.renderer.systems.action.logic.MoveToAction;
+import com.uwsoft.editor.renderer.systems.action.logic.*;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +25,7 @@ public class ActionSystem extends IteratingSystem {
 
     private void createActions() {
         actionsMap.put(Actions.MOVE_TO, new MoveToAction());
+        actionsMap.put(Actions.MOVE_BY, new MoveByAction());
     }
 
     @Override

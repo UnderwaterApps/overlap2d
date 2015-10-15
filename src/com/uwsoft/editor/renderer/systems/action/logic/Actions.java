@@ -10,6 +10,7 @@ import com.uwsoft.editor.renderer.systems.action.ActionSystem;
  */
 public class Actions {
     public static final String MOVE_TO = "MOVE_TO";
+    public static final String MOVE_BY = "MOVE_BY";
 
     public static void moveTo(Entity entity, float x, float y, float duration) {
         moveTo(entity, x, y, duration, null);
@@ -20,6 +21,20 @@ public class Actions {
         moveToComponent.logicType = Actions.MOVE_TO;
         moveToComponent.endX = x;
         moveToComponent.endY = y;
+        moveToComponent.duration = duration;
+        moveToComponent.interpolation = interpolation;
+        entity.add(moveToComponent);
+    }
+
+    public static void moveBy(Entity entity, float x, float y, float duration) {
+        moveBy(entity, x, y, duration, null);
+    }
+
+    public static void moveBy(Entity entity, float x, float y, float duration, Interpolation interpolation){
+        ActionComponent moveToComponent = new ActionComponent();
+        moveToComponent.logicType = Actions.MOVE_BY;
+        moveToComponent.amountX = x;
+        moveToComponent.amountY = y;
         moveToComponent.duration = duration;
         moveToComponent.interpolation = interpolation;
         entity.add(moveToComponent);
