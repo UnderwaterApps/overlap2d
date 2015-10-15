@@ -2,6 +2,7 @@ package com.uwsoft.editor.renderer.systems.action.logic;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.ActionComponent;
+import com.uwsoft.editor.renderer.systems.action.data.TemporalData;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
@@ -10,38 +11,31 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 public abstract class TemporalAction extends Action {
     @Override
     public boolean act(float delta, Entity entity) {
-        ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
+        ActionComponent<TemporalData> actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
 
-        if (actionComponent.complete) return true;
+        if (actionComponent.data.complete) return true;
 
-        if (!actionComponent.began) {
+        if (!actionComponent.data.began) {
             begin(entity);
-            actionComponent.began = true;
+            actionComponent.data.began = true;
         }
 
-        actionComponent.passedTime += delta;
-        actionComponent.complete = actionComponent.passedTime >= actionComponent.duration;
+        actionComponent.data.passedTime += delta;
+        actionComponent.data.complete = actionComponent.data.passedTime >= actionComponent.data.duration;
         float percent;
-        if (actionComponent.complete) {
+        if (actionComponent.data.complete) {
             percent = 1;
         } else {
-            percent = actionComponent.passedTime / actionComponent.duration;
-            if (actionComponent.interpolation != null) percent = actionComponent.interpolation.apply(percent);
+            percent = actionComponent.data.passedTime / actionComponent.data.duration;
+            if (actionComponent.data.interpolation != null) percent = actionComponent.data.interpolation.apply(percent);
         }
         update(percent, entity);
-        if (actionComponent.complete) end(entity);
-        return actionComponent.complete;
+        if (actionComponent.data.complete) end(entity);
+        return actionComponent.data.complete;
     }
 
     abstract protected void update (float percent, Entity entity);
 
-    @Override
-    public void begin(Entity entity) {
-
-    }
-
-    @Override
-    public void end(Entity entity) {
-
-    }
+    abstract public void begin(Entity entity);
+    abstract public void end(Entity entity);
 }
