@@ -8,36 +8,47 @@ import com.uwsoft.editor.renderer.components.ActionComponent;
 import com.uwsoft.editor.renderer.systems.action.data.*;
 import com.uwsoft.editor.renderer.systems.action.logic.*;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 
 /**
  * Created by Eduard on 10/13/2015.
  */
 public class ActionSystem extends IteratingSystem {
     private final ComponentMapper<ActionComponent> actionMapper;
-    private HashMap<String, Action> actionsMap = new HashMap<String, Action>();
 
     public ActionSystem() {
         super(Family.all(ActionComponent.class).get());
         actionMapper = ComponentMapper.getFor(ActionComponent.class);
-        createActions();
-    }
-
-    private void createActions() {
-        actionsMap.put(MoveToData.class.getName(), new MoveToAction());
-        actionsMap.put(MoveByData.class.getName(), new MoveByAction());
-        actionsMap.put(RunnableData.class.getName(), new RunnableAction());
-        actionsMap.put(DelayData.class.getName(), new DelayAction());
     }
 
     @Override
     protected void processEntity(Entity entity, float deltaTime) {
+        checkAndAddScheduledActions(entity);
+
         ActionComponent actionComponent = actionMapper.get(entity);
-        Action actionLogic = actionsMap.get(actionComponent.data.getClass().getName());
-        if (actionLogic.act(deltaTime, entity)) {
-            entity.remove(ActionComponent.class);
+        ArrayList<ActionData> dataArray = actionComponent.dataArray;
+        for (int i = dataArray.size()-1; i >= 0; i--) {
+            ActionData data = dataArray.get(i);
+            ActionLogic actionLogic = Actions.actionLogicMap.get(data.logicClassName);
+            if (actionLogic.act(deltaTime, entity, data)) {
+                dataArray.remove(data);
+            }
         }
+        if (dataArray.size() == 0) {
+            entity.remove(ActionComponent.class);
+            Actions.scheduledActionsMap.remove(entity);
+        }
+    }
 
+    private void checkAndAddScheduledActions(Entity entity) {
+        if (Actions.scheduledActionsMap.get(entity).size() == 0) {
+            return;
+        }
+        ActionComponent actionComponent = actionMapper.get(entity);
+        ArrayList<ActionData> dataArray = actionComponent.dataArray;
 
+        while (Actions.scheduledActionsMap.get(entity).size() > 0) {
+            dataArray.add(Actions.scheduledActionsMap.get(entity).pop());
+        }
     }
 }

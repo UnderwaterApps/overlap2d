@@ -10,4 +10,10 @@ public class MoveToData extends TemporalData{
     public float startY;
     public float endX;
     public float endY;
+
+    public MoveToData(Interpolation interpolation, float duration, float endX, float endY) {
+        super(interpolation, duration);
+        this.endX = endX;
+        this.endY = endY;
+    }
 }

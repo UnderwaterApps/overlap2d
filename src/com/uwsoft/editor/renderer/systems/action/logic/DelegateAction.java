@@ -1,25 +1,16 @@
 package com.uwsoft.editor.renderer.systems.action.logic;
 
 import com.badlogic.ashley.core.Entity;
+import com.uwsoft.editor.renderer.systems.action.data.DelegateData;
 
 /**
  * Created by Eduard on 10/15/2015.
  */
-public abstract class DelegateAction extends Action {
+public abstract class DelegateAction<T extends DelegateData> extends ActionLogic<T> {
     @Override
-    public boolean act(float delta, Entity entity) {
-        return delegate(delta, entity);
+    public boolean act(float delta, Entity entity, T actionData) {
+        return delegate(delta, entity, actionData);
     }
 
-    @Override
-    public void begin(Entity entity) {
-
-    }
-
-    @Override
-    public void end(Entity entity) {
-
-    }
-
-    abstract protected boolean delegate (float delta, Entity entity);
+    abstract protected boolean delegate (float delta, Entity entity, T data);
 }
