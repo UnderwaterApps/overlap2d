@@ -16,19 +16,5 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget.components.color;
-
-import com.badlogic.gdx.graphics.Color;
-
-/**
- * Created by azakhary on 7/14/2015.
- */
-public interface ColorPickerListener {
-    /** Called when color selection was canceled by user (either by clicking cancel or closing the window) */
-    public void canceled ();
-
-    /** Called when user finises selecting new color */
-    public void finished (Color newColor);
-
-    public void changed (Color newColor);
-}
+include 'overlap2d-common-api'
+project(':overlap2d-runtime-libgdx').projectDir = new File(settingsDir, '../overlap2d-runtime-libgdx')

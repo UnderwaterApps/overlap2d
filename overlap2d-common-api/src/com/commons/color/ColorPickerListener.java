@@ -16,22 +16,19 @@
  *  *****************************************************************************
  */
 
-package com.commons.plugins;
+package com.commons.color;
 
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.uwsoft.editor.renderer.SceneLoader;
+import com.badlogic.gdx.graphics.Color;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * Created by azakhary on 7/14/2015.
  */
-public interface PluginAPI {
-    public void addMenuItem(String menu, String subMenuName, String notificationName);
-    public void setDropDownItemName(String action, String name);
-    public String getProjectPath();
-    public TextureAtlas getProjectTextureAtlas();
-    public void reLoadProject();
-    public void saveProject();
-    public String getPluginDir();
+public interface ColorPickerListener {
+    /** Called when color selection was canceled by user (either by clicking cancel or closing the window) */
+    public void canceled ();
 
-    SceneLoader getSceneLoader();
+    /** Called when user finises selecting new color */
+    public void finished (Color newColor);
+
+    public void changed (Color newColor);
 }

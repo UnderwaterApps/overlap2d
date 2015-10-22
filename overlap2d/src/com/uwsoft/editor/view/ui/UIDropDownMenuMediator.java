@@ -114,13 +114,17 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
 
+        Array<String> actionsSet;
+
         switch (notification.getName()) {
             case Overlap2D.SCENE_RIGHT_CLICK:
                 Vector2 stageCoords = notification.getBody();
-                showPopup(SCENE_ACTIONS_SET, stageCoords);
+                actionsSet = new Array<>(actionSets.get(SCENE_ACTIONS_SET));
+                applyItemTypeMutators(actionsSet);
+                showPopup(actionsSet, stageCoords);
                 break;
             case Overlap2D.ITEM_RIGHT_CLICK:
-                Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
+                actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
                 applyItemTypeMutators(actionsSet);
                 showPopup(actionsSet, sandbox.getSelector().getSelectedItem());
                 break;

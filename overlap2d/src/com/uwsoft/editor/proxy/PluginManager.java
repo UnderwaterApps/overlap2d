@@ -25,6 +25,7 @@ import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.commons.plugins.O2DPlugin;
 import com.commons.plugins.PluginAPI;
+import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -120,5 +121,10 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     @Override
     public String getPluginDir() {
         return pluginDir;
+    }
+
+    @Override
+    public SceneLoader getSceneLoader() {
+        return Sandbox.getInstance().getSceneControl().sceneLoader;
     }
 }
