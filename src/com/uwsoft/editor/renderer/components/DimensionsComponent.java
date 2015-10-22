@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.EarClippingTriangulator;
 import com.badlogic.gdx.math.Polygon;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.renderer.data.ShapeVO;
 import com.uwsoft.editor.renderer.utils.PolygonUtils;
 
 public class DimensionsComponent implements Component {
@@ -16,7 +17,7 @@ public class DimensionsComponent implements Component {
 	public Rectangle boundBox;
     public Polygon polygon;
 
-	public boolean hit(float x, float y){
+    public boolean hit(float x, float y){
         if(polygon != null) {
             return polygon.contains(x, y);
         } else if(boundBox != null) {
@@ -34,5 +35,28 @@ public class DimensionsComponent implements Component {
             vertices[i*2+1] = (verticesArray[i].y);
         }
         polygon = new Polygon(vertices);
+    }
+
+    public void setFromShape(ShapeVO shape) {
+        Vector2 minPoint = new Vector2();
+        Vector2 maxPoint = new Vector2();
+        if(shape.polygons != null) {
+            for(int i = 0; i < shape.polygons.length; i++) {
+                for(int j = 0; j < shape.polygons[i].length; j++) {
+                    if(i == 0 && j == 0) {
+                        minPoint.x = shape.polygons[i][j].x;
+                        minPoint.y = shape.polygons[i][j].y;
+                        maxPoint.x = shape.polygons[i][j].x;
+                        maxPoint.y = shape.polygons[i][j].y;
+                    }
+                    if(minPoint.x > shape.polygons[i][j].x) minPoint.x = shape.polygons[i][j].x;
+                    if(minPoint.y > shape.polygons[i][j].y) minPoint.y = shape.polygons[i][j].y;
+                    if(maxPoint.x < shape.polygons[i][j].x) maxPoint.x = shape.polygons[i][j].x;
+                    if(maxPoint.y < shape.polygons[i][j].y) maxPoint.y = shape.polygons[i][j].y;
+                }
+            }
+            width = maxPoint.x - minPoint.x;
+            height = maxPoint.y - minPoint.y;
+        }
     }
 }

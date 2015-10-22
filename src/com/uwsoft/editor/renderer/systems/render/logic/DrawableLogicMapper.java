@@ -18,6 +18,7 @@ public class DrawableLogicMapper {
 		logicClassMap.put(EntityFactory.PARTICLE_TYPE, 	new ParticleDrawableLogic());
 		logicClassMap.put(EntityFactory.SPRITE_TYPE, 	new SpriteDrawableLogic());
 		logicClassMap.put(EntityFactory.SPRITER_TYPE, 	new SpriterDrawableLogic());
+		logicClassMap.put(EntityFactory.COLOR_PRIMITIVE,new TexturRegionDrawLogic());
 		//TODO
 		logicClassMap.put(EntityFactory.LIGHT_TYPE,new Drawable() {@Override public void draw(Batch batch, Entity entity, float parentAlpha) {}}); //Empty drawable for not checking on null
 	}
