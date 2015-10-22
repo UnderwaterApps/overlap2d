@@ -77,6 +77,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
+        itemTypeMap.put("ENTITY_"+EntityFactory.COLOR_PRIMITIVE, UIBasicItemProperties.ItemType.primitive);
 
         componentClassMap.put("Polygon Component", PolygonComponent.class);
         componentClassMap.put("Physics Component", PhysicsBodyComponent.class);

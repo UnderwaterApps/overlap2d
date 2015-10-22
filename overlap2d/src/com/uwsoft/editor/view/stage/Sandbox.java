@@ -90,6 +90,8 @@ public class Sandbox {
     public static final String ACTION_ITEMS_MOVE_TO = CLASS_NAME + "ACTION_ITEMS_MOVE_TO";
     public static final String ACTION_ITEM_TRANSFORM_TO = CLASS_NAME + "ACTION_ITEM_TRANSFORM_TO";
 
+    public static final String ACTION_CREATE_PRIMITIVE = CLASS_NAME + "ACTION_CREATE_PRIMITIVE";
+
     public static final String ACTION_SET_SELECTION = CLASS_NAME + "ACTION_SET_SELECTION";
     public static final String ACTION_ADD_SELECTION = CLASS_NAME + "ACTION_ADD_SELECTION";
     public static final String ACTION_RELEASE_SELECTION = CLASS_NAME + "ACTION_RELEASE_SELECTION";

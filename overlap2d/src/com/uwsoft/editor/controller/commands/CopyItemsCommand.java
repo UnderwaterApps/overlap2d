@@ -93,6 +93,11 @@ public class CopyItemsCommand extends RevertableCommand {
                 vo.loadFromEntity(entity);
                 holderComposite.sSpineAnimations.add(vo);
             }
+            if(entityType == EntityFactory.COLOR_PRIMITIVE) {
+                ColorPrimitiveVO vo = new ColorPrimitiveVO();
+                vo.loadFromEntity(entity);
+                holderComposite.sColorPrimitives.add(vo);
+            }
             if(entityType == EntityFactory.LIGHT_TYPE) {
                 LightVO vo = new LightVO();
                 vo.loadFromEntity(entity);

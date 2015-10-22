@@ -24,6 +24,9 @@ import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.controller.commands.PasteItemsCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
+import com.uwsoft.editor.utils.poly.Clipper;
+import com.uwsoft.editor.utils.poly.PolygonUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
@@ -35,6 +38,8 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
+import java.awt.*;
+import java.util.Collections;
 import java.util.HashMap;
 
 /**
@@ -135,6 +140,20 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+
+        return true;
+    }
+
+    public boolean createPrimitive(Vector2 position, ShapeVO shape) {
+        ColorPrimitiveVO vo = new ColorPrimitiveVO();
+        vo.shape = shape.clone();
+
+        shape.polygons = Clipper.polygonize(Clipper.Polygonizer.EWJORDAN, shape.polygons[0]);
+
+        if(!setEssentialData(vo, position)) return false;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+
         Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
 
         return true;

@@ -72,7 +72,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 //EDIT
                 Overlap2DMenuBar.CUT,
                 Overlap2DMenuBar.COPY,
-                Overlap2DMenuBar.PAST,
+                Overlap2DMenuBar.PASTE,
                 Overlap2DMenuBar.UNDO,
                 Overlap2DMenuBar.REDO,
                 //General
@@ -124,7 +124,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
             case Overlap2DMenuBar.COPY:
                 facade.sendNotification(Sandbox.ACTION_COPY);
                 break;
-            case Overlap2DMenuBar.PAST:
+            case Overlap2DMenuBar.PASTE:
                 facade.sendNotification(Sandbox.ACTION_PASTE);
                 break;
             case Overlap2DMenuBar.UNDO:

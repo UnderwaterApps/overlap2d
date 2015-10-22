@@ -63,6 +63,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
         actionSets.put(SCENE_ACTIONS_SET, new Array<>());
         actionSets.get(SCENE_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
+        actionSets.get(SCENE_ACTIONS_SET).add(Sandbox.ACTION_CREATE_PRIMITIVE);
 
         actionSets.put(RESOURCE_ACTION_SET, new Array<>());
         actionSets.get(RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE);
