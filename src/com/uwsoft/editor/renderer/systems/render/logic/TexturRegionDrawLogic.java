@@ -107,10 +107,10 @@ public class TexturRegionDrawLogic implements Drawable {
         batch.getShader().setUniformi("isRepeat", 1);
         batch.getShader().setUniformf("atlasCoord", atlasCoordsVector);
     	batch.getShader().setUniformf("atlasSize", atlasSizeVector);
-        //System.out.println(entityTextureRegionComponent.polygonSprite.getVertices()[0] + " " + entityTextureRegionComponent.polygonSprite.getVertices()[1]);
+        //System.out.println(entityTransformComponent.originX);
         //batch.setColor(tintComponent.color);
         entityTextureRegionComponent.polygonSprite.setColor(tintComponent.color);
-        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX, entityTransformComponent.originY);
+        entityTextureRegionComponent.polygonSprite.setOrigin(entityTransformComponent.originX * ppwu, entityTransformComponent.originY * ppwu);
         entityTextureRegionComponent.polygonSprite.setPosition(entityTransformComponent.x, entityTransformComponent.y);
         entityTextureRegionComponent.polygonSprite.setRotation(entityTransformComponent.rotation);
         entityTextureRegionComponent.polygonSprite.setScale(ppwu);

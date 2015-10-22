@@ -56,8 +56,8 @@ public class ColorPrimitiveComponentFactory extends ComponentFactory {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         dimensionsComponent.setPolygon(polygonComponent);
-        ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        textureRegionComponent.setPolygonSprite(polygonComponent, projectInfoVO.pixelToWorld);
+        float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
+        textureRegionComponent.setPolygonSprite(polygonComponent, 1f/ppwu);
     }
 
     @Override
