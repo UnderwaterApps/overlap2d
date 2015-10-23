@@ -28,8 +28,14 @@ public class Actions {
         actionLogicMap.put(RotateByAction.class.getName(), new RotateByAction());
         actionLogicMap.put(RunnableAction.class.getName(), new RunnableAction());
         actionLogicMap.put(DelayAction.class.getName(), new DelayAction());
+        actionLogicMap.put(ParallelAction.class.getName(), new ParallelAction());
+        actionLogicMap.put(SequenceAction.class.getName(), new SequenceAction());
         initialized = true;
     }
+
+//    public static void registerActionClass(Class<T extends ActionLogic> type) {
+//        actionLogicMap.put(type.getName(), type.newInstance());
+//    }
 
     private static void checkInit() {
         if (!initialized) initialize();
@@ -110,6 +116,19 @@ public class Actions {
         );
         addActionObject(entity, actionData, actionLogicMap.get("RotaBy"));
     }*/
+
+    static public ParallelData parallel(ActionData... actionDatas) {
+        ParallelData actionData = new ParallelData(actionDatas);
+        actionData.logicClassName = ParallelAction.class.getName();
+        return actionData;
+    }
+
+
+    static public SequenceData sequence(ActionData... actionDatas) {
+        SequenceData actionData = new SequenceData(actionDatas);
+        actionData.logicClassName = SequenceAction.class.getName();
+        return actionData;
+    }
 
 
     public static void addAction(final Entity entity, ActionData data){
