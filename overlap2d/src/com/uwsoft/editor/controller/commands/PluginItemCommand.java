@@ -16,38 +16,38 @@
  *  *****************************************************************************
  */
 
-package com.commons.plugins;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.facade.Facade;
-import net.mountainblade.modular.Module;
+package com.uwsoft.editor.controller.commands;
 
-import java.util.Set;
+import com.commons.IItemCommand;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * Created by azakhary on 10/23/2015.
  */
-public abstract class O2DPluginAdapter implements O2DPlugin, Module {
+public class PluginItemCommand extends EntityModifyRevertableCommand {
 
-    public Facade facade;
-    protected PluginAPI pluginAPI;
+    private IItemCommand command;
+    private Object body;
 
-    public String getName() {
-        return "";
+    @Override
+    public void doAction() {
+        if(command == null) {
+            Object[] payload = notification.getBody();
+            command = (IItemCommand) payload[0];
+            body = payload[1];
+        }
+
+        command.doAction(body);
     }
 
     @Override
-    public void setAPI(PluginAPI pluginAPI) {
-        this.pluginAPI = pluginAPI;
-        facade = pluginAPI.getFacade();
+    public void undoAction() {
+        command.undoAction(body);
     }
 
-    @Override
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
-
-    }
-
-    public PluginAPI getAPI() {
-        return pluginAPI;
+    public static Object build(IItemCommand command, Object body) {
+        Object[] payload = new Object[2];
+        payload[0] = command;
+        payload[1] = body;
+        return payload;
     }
 }

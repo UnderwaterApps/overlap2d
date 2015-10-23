@@ -16,38 +16,26 @@
  *  *****************************************************************************
  */
 
-package com.commons.plugins;
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.facade.Facade;
-import net.mountainblade.modular.Module;
+package com.commons.color;
 
-import java.util.Set;
+import com.badlogic.gdx.graphics.Color;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * Created by azakhary on 7/14/2015.
  */
-public abstract class O2DPluginAdapter implements O2DPlugin, Module {
+public class ColorPickerAdapter implements ColorPickerListener {
+    @Override
+    public void canceled() {
 
-    public Facade facade;
-    protected PluginAPI pluginAPI;
-
-    public String getName() {
-        return "";
     }
 
     @Override
-    public void setAPI(PluginAPI pluginAPI) {
-        this.pluginAPI = pluginAPI;
-        facade = pluginAPI.getFacade();
+    public void finished(Color newColor) {
+
     }
 
     @Override
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
+    public void changed(Color newColor) {
 
-    }
-
-    public PluginAPI getAPI() {
-        return pluginAPI;
     }
 }

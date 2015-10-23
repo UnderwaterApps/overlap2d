@@ -18,10 +18,6 @@
 
 package com.uwsoft.editor.view.stage.tools;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -32,13 +28,19 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.stage.Sandbox;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.CursorManager;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.ParentNodeComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -129,7 +131,7 @@ public class SelectionTool extends SimpleTool {
         Entity currentView = sandbox.getCurrentViewingEntity();
         ParentNodeComponent parentNodeComponent = ComponentRetriever.get(currentView, ParentNodeComponent.class);
         if(parentNodeComponent != null) {
-            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, parentNodeComponent.parentEntity);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, parentNodeComponent.parentEntity);
         }
     }
 
@@ -148,14 +150,14 @@ public class SelectionTool extends SimpleTool {
                     // item was not selected, adding it to selection
                     Set<Entity> items = new HashSet<>();
                     items.add(entity);
-                    facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+                    facade.sendNotification(MsgAPI.ACTION_ADD_SELECTION, items);
                 }
             } else {
 
                 //TODO fix and uncomment layer locking
 //            if (item.isLockedByLayer()) {
 //                // this is considered empty space click and thus should release all selections
-//                facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
+//                facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, null);
 //                commands.getSelector().clearSelections();
 //                return false;
 //            } else {
@@ -163,7 +165,7 @@ public class SelectionTool extends SimpleTool {
                     // get selection, add this item to selection
                     Set<Entity> items = new HashSet<>();
                     items.add(entity);
-                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, items);
+                    facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, items);
 
                 }
                 //}
@@ -183,7 +185,7 @@ public class SelectionTool extends SimpleTool {
         dragMouseStartPosition = new Vector2(x, y);
 
         // pining UI to update current item properties tools
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
 
         return true;
     }
@@ -244,7 +246,7 @@ public class SelectionTool extends SimpleTool {
                 //value.hide();
 
                 // pining UI to update current item properties tools
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, itemInstance);
+                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, itemInstance);
             }
         }
 
@@ -261,7 +263,7 @@ public class SelectionTool extends SimpleTool {
             if (isShiftPressed()) {
                 Set<Entity> items = new HashSet<>();
                 items.add(entity);
-                facade.sendNotification(Sandbox.ACTION_RELEASE_SELECTION, items);
+                facade.sendNotification(MsgAPI.ACTION_RELEASE_SELECTION, items);
             }
         }
 
@@ -293,7 +295,7 @@ public class SelectionTool extends SimpleTool {
                 payloads.add(payload);
             }
 
-            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_ITEMS_MOVE_TO, payloads);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_ITEMS_MOVE_TO, payloads);
         }
 
         isDragging = false;
@@ -303,7 +305,7 @@ public class SelectionTool extends SimpleTool {
     @Override
     public void itemMouseDoubleClick(Entity item, float x, float y) {
         if(sandbox.getSelector().selectionIsComposite()) {
-            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, item);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, item);
         }
     }
 
@@ -343,14 +345,14 @@ public class SelectionTool extends SimpleTool {
         }
 
         if (curr.size() == 0) {
-            facade.sendNotification(Overlap2D.EMPTY_SPACE_CLICKED);
+            facade.sendNotification(MsgAPI.EMPTY_SPACE_CLICKED);
 
             //remove visual selection command
-            facade.sendNotification(Sandbox.ACTION_SET_SELECTION, null);
+            facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, null);
             return;
         }
         
-        facade.sendNotification(Sandbox.ACTION_SET_SELECTION, curr);
+        facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, curr);
     }
 
     private boolean isEntityVisible(Entity e) {
@@ -398,7 +400,7 @@ public class SelectionTool extends SimpleTool {
 
         // Delete
         if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_DELETE);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_DELETE);
         }
     }
 

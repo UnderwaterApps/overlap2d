@@ -18,24 +18,21 @@
 
 package com.uwsoft.editor.proxy;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-
-import org.apache.commons.io.FileUtils;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by sargis on 3/23/15.
  */
 public class SceneDataManager extends BaseProxy {
-    private static final String EVENT_PREFIX = "com.uwsoft.editor.proxy.SceneDataManager";
-    public static final String SCENE_LOADED = EVENT_PREFIX + ".SCENE_LOADED";
 
     private static final String TAG = SceneDataManager.class.getCanonicalName();
     public static final String NAME = TAG;

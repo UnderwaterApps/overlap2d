@@ -18,28 +18,26 @@
 
 package com.uwsoft.editor.view.ui;
 
-import java.util.HashMap;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.controller.commands.ConvertToCompositeCommand;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
-import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.proxy.SceneDataManager;
+import com.uwsoft.editor.controller.commands.ConvertToCompositeCommand;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.PanTool;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.FollowerFactory;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
+
+import java.util.HashMap;
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/20/2015.
@@ -62,17 +60,17 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED,
-                Overlap2D.ITEM_DATA_UPDATED,
-                Overlap2D.ITEM_SELECTION_CHANGED,
-                Overlap2D.SHOW_SELECTIONS,
-                Overlap2D.HIDE_SELECTIONS,
-                ItemFactory.NEW_ITEM_ADDED,
+                MsgAPI.SCENE_LOADED,
+                MsgAPI.ITEM_DATA_UPDATED,
+                MsgAPI.ITEM_SELECTION_CHANGED,
+                MsgAPI.SHOW_SELECTIONS,
+                MsgAPI.HIDE_SELECTIONS,
+                MsgAPI.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
+                MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
                 CompositeCameraChangeCommand.DONE,
-                Overlap2D.ZOOM_CHANGED,
+                MsgAPI.ZOOM_CHANGED,
                 ConvertToCompositeCommand.DONE
         };
     }
@@ -83,19 +81,19 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
         switch (notification.getName()) {
             case CompositeCameraChangeCommand.DONE:
                 createFollowersForAllVisible();
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 createFollowersForAllVisible();
                 break;
-            case ItemFactory.NEW_ITEM_ADDED:
+            case MsgAPI.NEW_ITEM_ADDED:
                 createFollower(notification.getBody());
                 break;
-            case Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING:
+            case MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING:
                 BasicFollower follower = followers.get(notification.getBody());
                 if(follower != null) {
                     follower.update();
                 }
                 break;
-            case Overlap2D.ITEM_DATA_UPDATED:
+            case MsgAPI.ITEM_DATA_UPDATED:
                 follower = followers.get(notification.getBody());
                 if(follower != null) {
                     follower.update();
@@ -104,20 +102,20 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
             case PanTool.SCENE_PANNED:
                 updateAllFollowers();
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 clearAllSubFollowersExceptNew(notification.getBody());
                 setNewSelectionConfiguration(notification.getBody());
                 break;
-            case Overlap2D.HIDE_SELECTIONS:
+            case MsgAPI.HIDE_SELECTIONS:
                 hideAllFollowers(notification.getBody());
                 break;
-            case Overlap2D.SHOW_SELECTIONS:
+            case MsgAPI.SHOW_SELECTIONS:
                 showAllFollowers(notification.getBody());
                 break;
             case UIToolBoxMediator.TOOL_SELECTED:
                 pushNotificationToFollowers(notification);
                 break;
-            case Overlap2D.ZOOM_CHANGED:
+            case MsgAPI.ZOOM_CHANGED:
                 updateAllFollowers();
                 break;
             case ConvertToCompositeCommand.DONE:

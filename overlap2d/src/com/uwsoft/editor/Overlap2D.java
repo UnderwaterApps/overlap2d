@@ -21,6 +21,7 @@ package com.uwsoft.editor;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.utils.Align;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.proxy.Proxy;
 import com.uwsoft.editor.proxy.EditorTextureManager;
@@ -28,31 +29,6 @@ import com.uwsoft.editor.proxy.EditorTextureManager;
 public class Overlap2D extends ApplicationAdapter implements Proxy {
     private static final String TAG = Overlap2D.class.getCanonicalName();
     public static final String NAME = TAG;
-    private static final String EVENT_PREFIX = "com.uwsoft.editor.Overlap2D";
-    public static final String PAUSE = EVENT_PREFIX + ".PAUSE";
-    public static final String RESUME = EVENT_PREFIX + ".RESUME";
-    public static final String RENDER = EVENT_PREFIX + ".RENDER";
-    public static final String RESIZE = EVENT_PREFIX + ".RESIZE";
-    public static final String DISPOSE = EVENT_PREFIX + ".DISPOSE";
-    public static final String CREATE = EVENT_PREFIX + ".CREATE_BTN_CLICKED";
-
-    // tmp events
-    public static final String ZOOM_CHANGED = EVENT_PREFIX + ".ZOOM_CHANGED";
-    public static final String GRID_SIZE_CHANGED = EVENT_PREFIX + ".GRID_SIZE_CHANGED";
-    public static final String ITEM_DATA_UPDATED = EVENT_PREFIX + ".ITEM_DATA_UPDATED";
-    public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = EVENT_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
-
-
-    // this should move
-    public static final String HIDE_SELECTIONS = EVENT_PREFIX + ".HIDE_SELECTIONS";
-    public static final String SHOW_SELECTIONS = EVENT_PREFIX + ".SHOW_SELECTIONS";
-    public static final String ITEM_SELECTION_CHANGED = EVENT_PREFIX + ".ITEM_SELECTION_CHANGED";
-    public static final String EMPTY_SPACE_CLICKED = EVENT_PREFIX + ".EMPTY_SPACE_CLICKED";
-
-    public static final String SCENE_RIGHT_CLICK = EVENT_PREFIX + ".SCENE_RIGHT_CLICK";
-    public static final String ITEM_RIGHT_CLICK = EVENT_PREFIX + ".ITEM_RIGHT_CLICK";
-
-    public static final String LIBRARY_LIST_UPDATED = EVENT_PREFIX + ".LIBRARY_LIST_UPDATED";
 
     //
     public EditorTextureManager textureManager;
@@ -67,28 +43,28 @@ public class Overlap2D extends ApplicationAdapter implements Proxy {
         VisUI.setDefaultTitleAlign(Align.center);
         facade = Overlap2DFacade.getInstance();
         facade.startup(this);
-        sendNotification(CREATE);
+        sendNotification(MsgAPI.CREATE);
     }
 
 
     public void pause() {
-        sendNotification(PAUSE);
+        sendNotification(MsgAPI.PAUSE);
     }
 
     public void resume() {
-        sendNotification(RESUME);
+        sendNotification(MsgAPI.RESUME);
     }
 
     public void render() {
-        sendNotification(RENDER, Gdx.graphics.getDeltaTime());
+        sendNotification(MsgAPI.RENDER, Gdx.graphics.getDeltaTime());
     }
 
     public void resize(int width, int height) {
-        sendNotification(RESIZE, new int[]{width, height});
+        sendNotification(MsgAPI.RESIZE, new int[]{width, height});
     }
 
     public void dispose() {
-        sendNotification(DISPOSE);
+        sendNotification(MsgAPI.DISPOSE);
         VisUI.dispose();
     }
 

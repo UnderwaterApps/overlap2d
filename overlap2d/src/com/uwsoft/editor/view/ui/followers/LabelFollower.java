@@ -20,12 +20,12 @@ package com.uwsoft.editor.view.ui.followers;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.stage.Sandbox;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 import java.util.HashMap;
 
@@ -142,7 +142,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
         dimensionsComponent.width = newWidth;
         dimensionsComponent.height = newHeight;
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED);
     }
 
     @Override

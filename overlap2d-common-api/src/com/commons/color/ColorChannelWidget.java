@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget.components.color;
+package com.commons.color;
 
 /**
  * Created by azakhary on 7/14/2015.

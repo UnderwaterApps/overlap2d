@@ -1,10 +1,7 @@
 package com.uwsoft.editor.proxy;
 
-import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.commons.plugins.O2DPlugin;
 import com.commons.plugins.PluginAPI;
-import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.view.stage.Sandbox;
 import org.junit.Before;
 import org.junit.Test;
@@ -57,9 +54,6 @@ public class PluginManagerTest {
         pluginManager.initPlugin(plugin);
 
         verify(plugin).setAPI(any(PluginAPI.class));
-        verify(plugin).setEngine(any(Engine.class));
-        verify(plugin).setFacade(any(Facade.class));
-        verify(plugin).setStage(any(Stage.class));
     }
 
     @Test
@@ -68,8 +62,5 @@ public class PluginManagerTest {
         reset(plugin);
         pluginManager.initPlugin(plugin);
         verify(plugin, never()).setAPI(any(PluginAPI.class));
-        verify(plugin, never()).setEngine(any(Engine.class));
-        verify(plugin, never()).setFacade(any(Facade.class));
-        verify(plugin, never()).setStage(any(Stage.class));
     }
 }

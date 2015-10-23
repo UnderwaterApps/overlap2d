@@ -18,33 +18,24 @@
 
 package com.overlap2d.plugins.ninepatch;
 
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
-import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
-import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.nio.file.Files;
 
 /**
  * Created by azakhary on 8/18/2015.
@@ -121,7 +112,7 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         Entity entity = plugin.currEditingEntity;
         NinePatchComponent ninePatchComponent = ComponentRetriever.get(entity, NinePatchComponent.class);
         loadRegion(ninePatchComponent.textureRegionName);
-        viewComponent.show(plugin.getStage());
+        viewComponent.show(plugin.getAPI().getUIStage());
     }
 
     private void addSplitsToImageInAtlas(String textureRegionName, int[] splits) {
@@ -177,6 +168,6 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         TextureAtlas atlas = plugin.getAPI().getProjectTextureAtlas();
         viewComponent.setTexture(atlas.findRegion(name));
 
-        viewComponent.setListeners(plugin.getStage());
+        viewComponent.setListeners(plugin.getAPI().getUIStage());
     }
 }

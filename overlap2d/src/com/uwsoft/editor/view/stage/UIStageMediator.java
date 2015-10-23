@@ -19,6 +19,7 @@
 package com.uwsoft.editor.view.stage;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
@@ -45,14 +46,14 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Sandbox.SHOW_ADD_LIBRARY_DIALOG
+                MsgAPI.SHOW_ADD_LIBRARY_DIALOG
         };
     }
 
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case Sandbox.SHOW_ADD_LIBRARY_DIALOG:
+            case MsgAPI.SHOW_ADD_LIBRARY_DIALOG:
                 Sandbox sandbox = Sandbox.getInstance();
 
                 Entity item = notification.getBody();
@@ -63,7 +64,7 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
                         Object[] payload = new Object[2];
                         payload[0] = item;
                         payload[1] = input;
-                        facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, payload);
+                        facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY, payload);
                     }
 
                     @Override

@@ -20,7 +20,7 @@ package com.uwsoft.editor.controller.commands.component;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.Overlap2D;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
@@ -65,7 +65,7 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
             textureRegionComponent.setPolygonSprite(polygonComponent,1f/ppwu);
         }
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
 
     }
 
@@ -85,7 +85,7 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
             textureRegionComponent.setPolygonSprite(polygonComponent, 1f/ppwu);
         }
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payloadInitialState(Entity entity) {

@@ -18,16 +18,24 @@
 
 package com.uwsoft.editor.proxy;
 
+import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
+import com.commons.IItemCommand;
+import com.commons.MsgAPI;
+import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.commons.plugins.O2DPlugin;
 import com.commons.plugins.PluginAPI;
+import com.uwsoft.editor.controller.commands.PluginItemCommand;
+import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 
 import java.util.ArrayList;
@@ -58,12 +66,7 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         if(plugins.contains(plugin)) return;
 
         registerPlugin(plugin);
-
         plugin.setAPI(this);
-        plugin.setEngine(Sandbox.getInstance().getEngine());
-        plugin.setFacade(Overlap2DFacade.getInstance());
-        plugin.setStage(Sandbox.getInstance().getUIStage());
-
         plugin.initPlugin();
     }
 
@@ -107,6 +110,18 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         sceneDataManager.saveScene(vo);
     }
 
+    @Override
+    public void revertableCommand(IItemCommand command, Object body) {
+        Object payload = PluginItemCommand.build(command, body);
+        facade.sendNotification(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, payload);
+    }
+
+    @Override
+    public void removeFollower(Entity entity) {
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        followersUIMediator.removeFollower(entity);
+    }
+
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
         Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
         overlap2DMenuBarMediator.addMenuItem(menu, subMenuName, notificationName);
@@ -120,5 +135,25 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     @Override
     public String getPluginDir() {
         return pluginDir;
+    }
+
+    @Override
+    public SceneLoader getSceneLoader() {
+        return Sandbox.getInstance().getSceneControl().sceneLoader;
+    }
+
+    @Override
+    public Facade getFacade() {
+        return facade;
+    }
+
+    @Override
+    public Engine getEngine() {
+        return getSceneLoader().getEngine();
+    }
+
+    @Override
+    public Stage getUIStage() {
+        return Sandbox.getInstance().getUIStage();
     }
 }

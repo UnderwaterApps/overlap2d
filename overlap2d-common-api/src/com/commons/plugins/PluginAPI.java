@@ -18,17 +18,43 @@
 
 package com.commons.plugins;
 
+import com.badlogic.ashley.core.Engine;
+import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.commons.IItemCommand;
+import com.puremvc.patterns.facade.Facade;
+import com.uwsoft.editor.renderer.SceneLoader;
 
 /**
  * Created by azakhary on 7/24/2015.
  */
 public interface PluginAPI {
-    public void addMenuItem(String menu, String subMenuName, String notificationName);
-    public void setDropDownItemName(String action, String name);
+    /**
+     * Getters List
+     */
+    SceneLoader getSceneLoader();
+    public Facade getFacade();
+    public Engine getEngine();
+    public Stage getUIStage();
+
+    // Less common
+    public String getPluginDir();
     public String getProjectPath();
     public TextureAtlas getProjectTextureAtlas();
+
+    /**
+     * Menues and Drop Downs
+     */
+    public void addMenuItem(String menu, String subMenuName, String notificationName);
+    public void setDropDownItemName(String action, String name);
+
+    /**
+     * Editor Actions
+     */
     public void reLoadProject();
     public void saveProject();
-    public String getPluginDir();
+    public void revertableCommand(IItemCommand command, Object body);
+    public void removeFollower(Entity entity);
+
 }

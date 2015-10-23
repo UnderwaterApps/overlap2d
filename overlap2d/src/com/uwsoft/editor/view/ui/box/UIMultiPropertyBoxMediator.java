@@ -18,35 +18,35 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.reflect.ClassReflection;
 import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
+import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
+import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.view.ui.properties.panels.*;
-import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Set;
+import java.util.stream.Stream;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -125,10 +125,10 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
         return Stream.of(parentNotifications, new String[]{
-                SceneDataManager.SCENE_LOADED,
-                Overlap2D.EMPTY_SPACE_CLICKED,
-                Overlap2D.ITEM_DATA_UPDATED,
-                Overlap2D.ITEM_SELECTION_CHANGED,
+                MsgAPI.SCENE_LOADED,
+                MsgAPI.EMPTY_SPACE_CLICKED,
+                MsgAPI.ITEM_DATA_UPDATED,
+                MsgAPI.ITEM_SELECTION_CHANGED,
                 DeleteItemsCommand.DONE,
                 SandboxMediator.SANDBOX_TOOL_CHANGED,
                 AddComponentToItemCommand.DONE,
@@ -140,13 +140,13 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 initAllPropertyBoxes(null);
                 break;
-            case Overlap2D.EMPTY_SPACE_CLICKED:
+            case MsgAPI.EMPTY_SPACE_CLICKED:
                 initAllPropertyBoxes(null);
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
                     initAllPropertyBoxes(selection.iterator().next());

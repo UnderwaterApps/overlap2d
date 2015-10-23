@@ -18,13 +18,13 @@
 
 package com.uwsoft.editor.view.ui;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.event.MenuItemListener;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.
@@ -43,18 +43,19 @@ public class UIDropDownMenu extends PopupMenu {
     private HashMap<String, String> actionNames = new HashMap<>();
 
     public UIDropDownMenu() {
-        actionNames.put(Sandbox.ACTION_GROUP_ITEMS, "Convert into composite");
-        actionNames.put(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, "Edit composite");
-        actionNames.put(Sandbox.ACTION_CONVERT_TO_BUTTON, "Convert to button");
-        actionNames.put(Sandbox.ACTION_CUT, "Cut");
-        actionNames.put(Sandbox.ACTION_COPY, "Copy");
-        actionNames.put(Sandbox.ACTION_PASTE, "Paste");
-        actionNames.put(Sandbox.ACTION_DELETE, "Delete");
-        actionNames.put(Sandbox.SHOW_ADD_LIBRARY_DIALOG, "Add to library");
-        //actionNames.put(Sandbox.ACTION_EDIT_PHYSICS, "Edit physics");
+        actionNames.put(MsgAPI.ACTION_GROUP_ITEMS, "Convert into composite");
+        actionNames.put(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, "Edit composite");
+        actionNames.put(MsgAPI.ACTION_CONVERT_TO_BUTTON, "Convert to button");
+        actionNames.put(MsgAPI.ACTION_CUT, "Cut");
+        actionNames.put(MsgAPI.ACTION_COPY, "Copy");
+        actionNames.put(MsgAPI.ACTION_PASTE, "Paste");
+        actionNames.put(MsgAPI.ACTION_DELETE, "Delete");
+        actionNames.put(MsgAPI.SHOW_ADD_LIBRARY_DIALOG, "Add to library");
+        //actionNames.put(MsgAPI.ACTION_EDIT_PHYSICS, "Edit physics");
         //actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
-        actionNames.put(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
-        //actionNames.put(Sandbox.ACTION_DELETE_RESOURCE, "Delete");
+        actionNames.put(MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
+        //actionNames.put(MsgAPI.ACTION_DELETE_RESOURCE, "Delete");
+        actionNames.put(MsgAPI.ACTION_CREATE_PRIMITIVE, "Create Primitive");
     }
 
     public void setActionName(String action, String name) {

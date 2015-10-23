@@ -19,8 +19,8 @@
 package com.uwsoft.editor.view.ui.properties;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
@@ -43,7 +43,7 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
         }
 
         switch (notification.getName()) {
-            case Overlap2D.ITEM_DATA_UPDATED:
+            case MsgAPI.ITEM_DATA_UPDATED:
                 if(observableReference == null) return;
                 onItemDataUpdate();
                 break;

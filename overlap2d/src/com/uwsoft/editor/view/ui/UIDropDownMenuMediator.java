@@ -18,18 +18,18 @@
 
 package com.uwsoft.editor.view.ui;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.PluginManager;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/20/2015.
@@ -62,21 +62,22 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         sandbox = Sandbox.getInstance();
 
         actionSets.put(SCENE_ACTIONS_SET, new Array<>());
-        actionSets.get(SCENE_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
+        actionSets.get(SCENE_ACTIONS_SET).add(MsgAPI.ACTION_PASTE);
+        actionSets.get(SCENE_ACTIONS_SET).add(MsgAPI.ACTION_CREATE_PRIMITIVE);
 
         actionSets.put(RESOURCE_ACTION_SET, new Array<>());
-        actionSets.get(RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE);
+        actionSets.get(RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE);
 
         actionSets.put(IMAGE_RESOURCE_ACTION_SET, new Array<>());
-        //actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(Sandbox.ACTION_DELETE_RESOURCE);
+        //actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE_RESOURCE);
 
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CUT);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_COPY);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_PASTE);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_DELETE);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_GROUP_ITEMS);
-        actionSets.get(ITEMS_ACTIONS_SET).add(Sandbox.ACTION_CONVERT_TO_BUTTON);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CUT);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_COPY);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_PASTE);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_DELETE);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_GROUP_ITEMS);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CONVERT_TO_BUTTON);
 
         facade = Overlap2DFacade.getInstance();
     }
@@ -84,8 +85,8 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.SCENE_RIGHT_CLICK,
-                Overlap2D.ITEM_RIGHT_CLICK,
+                MsgAPI.SCENE_RIGHT_CLICK,
+                MsgAPI.ITEM_RIGHT_CLICK,
                 UIDropDownMenu.ITEM_CLICKED,
                 UIResourcesBoxMediator.IMAGE_RIGHT_CLICK,
                 UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK,
@@ -98,10 +99,10 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         // generic mutators
         if (sandbox.getSelector().getCurrentSelection().size() == 1) {
             if(sandbox.getSelector().selectionIsComposite()) {
-                actionsSet.add(Sandbox.SHOW_ADD_LIBRARY_DIALOG);
-                actionsSet.add(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE);
+                actionsSet.add(MsgAPI.SHOW_ADD_LIBRARY_DIALOG);
+                actionsSet.add(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE);
             }
-            actionsSet.add(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM);
+            actionsSet.add(MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM);
         }
 
         // external plugin mutators
@@ -113,13 +114,17 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
 
+        Array<String> actionsSet;
+
         switch (notification.getName()) {
-            case Overlap2D.SCENE_RIGHT_CLICK:
+            case MsgAPI.SCENE_RIGHT_CLICK:
                 Vector2 stageCoords = notification.getBody();
-                showPopup(SCENE_ACTIONS_SET, stageCoords);
+                actionsSet = new Array<>(actionSets.get(SCENE_ACTIONS_SET));
+                applyItemTypeMutators(actionsSet);
+                showPopup(actionsSet, stageCoords);
                 break;
-            case Overlap2D.ITEM_RIGHT_CLICK:
-                Array<String> actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
+            case MsgAPI.ITEM_RIGHT_CLICK:
+                actionsSet = new Array<>(actionSets.get(ITEMS_ACTIONS_SET));
                 applyItemTypeMutators(actionsSet);
                 showPopup(actionsSet, sandbox.getSelector().getSelectedItem());
                 break;

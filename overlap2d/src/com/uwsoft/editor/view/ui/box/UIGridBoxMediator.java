@@ -18,11 +18,11 @@
 
 package com.uwsoft.editor.view.ui.box;
 
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -39,7 +39,7 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 ProjectManager.PROJECT_OPENED,
-                Overlap2D.GRID_SIZE_CHANGED,
+                MsgAPI.GRID_SIZE_CHANGED,
                 UIGridBox.GRID_SIZE_TEXT_FIELD_UPDATED
         };
     }
@@ -54,7 +54,7 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
                 viewComponent.update();
                 viewComponent.setGridSize(sandbox.getGridSize());
                 break;
-            case Overlap2D.GRID_SIZE_CHANGED:
+            case MsgAPI.GRID_SIZE_CHANGED:
                 viewComponent.setGridSize(sandbox.getGridSize());
                 break;
             case UIGridBox.GRID_SIZE_TEXT_FIELD_UPDATED:

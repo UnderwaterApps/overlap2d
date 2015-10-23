@@ -55,4 +55,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-//libsDirName = 'D:\\work\\plugins'
+libsDirName = 'D:\\work\\plugins'
