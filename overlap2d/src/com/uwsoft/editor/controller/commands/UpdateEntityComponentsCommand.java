@@ -21,9 +21,9 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
@@ -62,6 +62,6 @@ public class UpdateEntityComponentsCommand extends EntityModifyRevertableCommand
             ComponentCloner.set(entityComponent, backupComponents.get(i));
         }
 
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 }

@@ -20,19 +20,20 @@ package com.uwsoft.editor.view.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.data.manager.PreferencesManager;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by sargis on 3/25/15.
@@ -119,13 +120,13 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case Overlap2DMenuBar.CUT:
-                facade.sendNotification(Sandbox.ACTION_CUT);
+                facade.sendNotification(MsgAPI.ACTION_CUT);
                 break;
             case Overlap2DMenuBar.COPY:
-                facade.sendNotification(Sandbox.ACTION_COPY);
+                facade.sendNotification(MsgAPI.ACTION_COPY);
                 break;
             case Overlap2DMenuBar.PASTE:
-                facade.sendNotification(Sandbox.ACTION_PASTE);
+                facade.sendNotification(MsgAPI.ACTION_PASTE);
                 break;
             case Overlap2DMenuBar.UNDO:
                 CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);

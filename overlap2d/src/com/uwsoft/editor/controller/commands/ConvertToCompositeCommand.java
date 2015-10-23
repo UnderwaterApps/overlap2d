@@ -18,20 +18,21 @@
 
 package com.uwsoft.editor.controller.commands;
 
-import java.util.HashMap;
-import java.util.HashSet;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.renderer.components.ZIndexComponent;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -98,7 +99,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
 
         //let everyone know
         Overlap2DFacade.getInstance().sendNotification(DONE);
-        Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
         sandbox.getSelector().setSelection(entity, true);
 
     }

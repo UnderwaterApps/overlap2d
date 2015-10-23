@@ -18,23 +18,26 @@
 
 package com.uwsoft.editor.controller.commands;
 
-import java.util.*;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
-import com.uwsoft.editor.renderer.components.*;
+import com.commons.MsgAPI;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -68,7 +71,7 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
             UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
             zIndexComponent.layerName = layerBoxMediator.getCurrentSelectedLayerName();
-            Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
             pastedEntityIds.add(EntityUtils.getEntityId(entity));
         }
         sandbox.getSelector().setSelections(newEntitiesList, true);

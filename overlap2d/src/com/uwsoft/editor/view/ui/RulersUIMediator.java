@@ -1,11 +1,10 @@
 package com.uwsoft.editor.view.ui;
 
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.SceneDataManager;
-
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.utils.Guide;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -34,7 +33,7 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED,
+                MsgAPI.SCENE_LOADED,
                 RulersUI.ACTION_GUIDES_MODIFIED
         };
     }
@@ -46,7 +45,7 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
         SceneVO sceneVO = Sandbox.getInstance().getSceneControl().getCurrentSceneVO();
 
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 Array<Guide> guides = new Array<>();
                 for(int i  = 0; i < sceneVO.verticalGuides.size(); i++) {
                     Guide tmp = new Guide(true);

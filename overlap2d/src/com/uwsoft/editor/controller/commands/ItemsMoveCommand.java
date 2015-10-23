@@ -18,17 +18,17 @@
 
 package com.uwsoft.editor.controller.commands;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.Overlap2D;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by azakhary on 6/4/2015.
@@ -60,7 +60,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
             transformComponent.y = newLocation.y;
 
             // pining UI to update current item properties tools
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
         }
     }
 
@@ -77,7 +77,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
             transformComponent.y = prevLocation.y;
 
             // pining UI to update current item properties tools
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
         }
 
     }

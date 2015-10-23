@@ -22,19 +22,19 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
-import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.utils.poly.PolygonUtils;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.PolygonFollower;
 import com.uwsoft.editor.view.ui.followers.PolygonTransformationListener;
@@ -78,10 +78,10 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
             case RemoveComponentFromItemCommand.DONE:
                 updateSubFollowerList();
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 updateSubFollowerList();
                 break;
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 updateSubFollowerList();
                 break;
         }
@@ -196,7 +196,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         follower.setProblems(null);
 
         currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
     }
 
     private Vector2[][] polygonize(Vector2[] vertices) {
@@ -244,7 +244,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
             }
 
             currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
-            Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
 
             follower.updateDraw();
 

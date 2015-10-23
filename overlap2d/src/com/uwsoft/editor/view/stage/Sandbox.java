@@ -28,18 +28,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.commons.MsgAPI;
 import com.overlap2d.extensions.spine.SpineItemType;
-import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.data.vo.SceneConfigVO;
-import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
-import com.uwsoft.editor.view.ItemControlMediator;
-import com.uwsoft.editor.view.SceneControlMediator;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
-import com.uwsoft.editor.view.stage.input.InputListener;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -50,6 +46,10 @@ import com.uwsoft.editor.renderer.systems.PhysicsSystem;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.system.PhysicsAdjustSystem;
+import com.uwsoft.editor.view.ItemControlMediator;
+import com.uwsoft.editor.view.SceneControlMediator;
+import com.uwsoft.editor.view.stage.input.InputListener;
+import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 
 import java.util.HashMap;
 
@@ -63,44 +63,6 @@ import java.util.HashMap;
 public class Sandbox {
 
     private static Sandbox instance = null;
-
-    private static final String CLASS_NAME = "com.uwsoft.editor.gdx.commands.Sandbox";
-
-    public static final String ACTION_GROUP_ITEMS = CLASS_NAME + "ACTION_GROUP_ITEMS";
-    public static final String ACTION_CAMERA_CHANGE_COMPOSITE = CLASS_NAME + "ACTION_CAMERA_CHANGE_COMPOSITE";
-    public static final String ACTION_CONVERT_TO_BUTTON = CLASS_NAME + "ACTION_CONVERT_TO_BUTTON";
-    public static final String ACTION_CUT = CLASS_NAME + "ACTION_CUT";
-    public static final String ACTION_COPY = CLASS_NAME + "ACTION_COPY";
-    public static final String ACTION_PASTE = CLASS_NAME + "ACTION_PASTE";
-    public static final String ACTION_DELETE = CLASS_NAME + "ACTION_DELETE";
-    public static final String ACTION_CREATE_ITEM = CLASS_NAME + "ACTION_CREATE_ITEM";
-
-    public static final String ACTION_DELETE_LAYER = CLASS_NAME + "ACTION_DELETE_LAYER";
-    public static final String ACTION_NEW_LAYER = CLASS_NAME + "ACTION_NEW_LAYER";
-    public static final String ACTION_SWAP_LAYERS = CLASS_NAME + "ACTION_SWAP_LAYERS";
-    public static final String ACTION_RENAME_LAYER = CLASS_NAME + "ACTION_RENAME_LAYER";
-
-    public static final String ACTION_ADD_COMPONENT = CLASS_NAME + "ACTION_ADD_COMPONENT";
-    public static final String ACTION_REMOVE_COMPONENT = CLASS_NAME + "ACTION_REMOVE_COMPONENT";
-
-    public static final String SHOW_ADD_LIBRARY_DIALOG = CLASS_NAME + "SHOW_ADD_LIBRARY_DIALOG";
-    public static final String ACTION_ADD_TO_LIBRARY = CLASS_NAME + "ACTION_ADD_TO_LIBRARY";
-    public static final String ACTION_EDIT_PHYSICS = CLASS_NAME + "ACTION_EDIT_PHYSICS";
-    public static final String ACTION_SET_GRID_SIZE_FROM_ITEM = CLASS_NAME + "ACTION_SET_GRID_SIZE_FROM_ITEM";
-    public static final String ACTION_ITEMS_MOVE_TO = CLASS_NAME + "ACTION_ITEMS_MOVE_TO";
-    public static final String ACTION_ITEM_TRANSFORM_TO = CLASS_NAME + "ACTION_ITEM_TRANSFORM_TO";
-
-    public static final String ACTION_CREATE_PRIMITIVE = CLASS_NAME + "ACTION_CREATE_PRIMITIVE";
-
-    public static final String ACTION_SET_SELECTION = CLASS_NAME + "ACTION_SET_SELECTION";
-    public static final String ACTION_ADD_SELECTION = CLASS_NAME + "ACTION_ADD_SELECTION";
-    public static final String ACTION_RELEASE_SELECTION = CLASS_NAME + "ACTION_RELEASE_SELECTION";
-
-    public static final String ACTION_UPDATE_ITEM_DATA = CLASS_NAME + "ACTION_UPDATE_ITEM_DATA";
-    public static final String ACTION_UPDATE_LABEL_DATA = CLASS_NAME + "ACTION_UPDATE_LABEL_DATA";
-    public static final String ACTION_UPDATE_LIGHT_DATA = CLASS_NAME + "ACTION_UPDATE_LIGHT_DATA";
-    public static final String ACTION_UPDATE_SPRITE_ANIMATION_DATA = CLASS_NAME + "ACTION_UPDATE_SPRITE_ANIMATION_DATA";
-    public static final String ACTION_UPDATE_MESH_DATA = CLASS_NAME + "ACTION_UPDATE_MESH_DATA";
 
 
     public SceneControlMediator sceneControl;
@@ -257,13 +219,13 @@ public class Sandbox {
       //TODO fix and uncomment
         //sandboxStage.getCamera().position.set(0, 0, 0);
 
-        facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+        facade.sendNotification(MsgAPI.LIBRARY_LIST_UPDATED);
 
         currentViewingEntity = getRootEntity();
 
         //TODO: move this into SceneDataManager!
         SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-        sceneDataManager.sendNotification(SceneDataManager.SCENE_LOADED);
+        sceneDataManager.sendNotification(MsgAPI.SCENE_LOADED);
 
         ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
         SceneConfigVO sceneConfigVO = projectManager.getCurrentSceneConfigVO();
@@ -413,7 +375,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
-        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
+        facade.sendNotification(MsgAPI.ZOOM_CHANGED);
     }
 
     public void zoomDevideBy(float amount) {
@@ -423,7 +385,7 @@ public class Sandbox {
         if (zoomPercent > 1000) zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
-        facade.sendNotification(Overlap2D.ZOOM_CHANGED);
+        facade.sendNotification(MsgAPI.ZOOM_CHANGED);
     }
 
     public float getWorldGridSize(){
@@ -436,7 +398,7 @@ public class Sandbox {
 
     public void setGridSize(int gridSize) {
         this.gridSize = gridSize;
-        facade.sendNotification(Overlap2D.GRID_SIZE_CHANGED, gridSize);
+        facade.sendNotification(MsgAPI.GRID_SIZE_CHANGED, gridSize);
     }
 
     

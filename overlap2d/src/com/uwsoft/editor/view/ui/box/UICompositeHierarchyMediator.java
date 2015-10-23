@@ -2,9 +2,9 @@ package com.uwsoft.editor.view.ui.box;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
@@ -12,6 +12,7 @@ import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by CyberJoe on 4/22/2015.
@@ -50,7 +51,7 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
                 break;
             case UICompositeHierarchy.SWITCH_VIEW_COMPOSITE_CLICKED:
                 entityId = notification.getBody();
-                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, EntityUtils.getByUniqueId(entityId));
+                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, EntityUtils.getByUniqueId(entityId));
                 break;
             default:
                 break;

@@ -19,14 +19,13 @@
 package com.uwsoft.editor.view;
 
 import com.badlogic.ashley.core.Engine;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.ui.widget.actors.basic.SandboxBackUI;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.SceneDataManager;
-import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.renderer.systems.render.Overlap2dRenderer;
+import com.uwsoft.editor.view.stage.SandboxMediator;
+import com.uwsoft.editor.view.ui.widget.actors.basic.SandboxBackUI;
 
 /**
  * Created by sargis on 3/30/15.
@@ -42,13 +41,13 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.CREATE,
-                Overlap2D.PAUSE,
-                Overlap2D.RESUME,
-                Overlap2D.RENDER,
-                Overlap2D.RESIZE,
-                Overlap2D.DISPOSE,
-                SceneDataManager.SCENE_LOADED
+                MsgAPI.CREATE,
+                MsgAPI.PAUSE,
+                MsgAPI.RESUME,
+                MsgAPI.RENDER,
+                MsgAPI.RESIZE,
+                MsgAPI.DISPOSE,
+                MsgAPI.SCENE_LOADED
         };
     }
 
@@ -56,7 +55,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case Overlap2D.CREATE:
+            case MsgAPI.CREATE:
             	setViewComponent(new Overlap2DScreen());
             	//TODO this must be changed to Command 
             	facade = Overlap2DFacade.getInstance();
@@ -67,7 +66,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
             	getViewComponent().setEngine(engine);
                 viewComponent.show();
                 break;
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 facade = Overlap2DFacade.getInstance();
                 sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
                 engine = sandboxMediator.getViewComponent().getEngine();
@@ -75,20 +74,20 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
                 getViewComponent().setBackUI(sandboxBackUI);
                 getViewComponent().disableDrawingBgLogo();
                 break;
-            case Overlap2D.PAUSE:
+            case MsgAPI.PAUSE:
                 viewComponent.pause();
                 break;
-            case Overlap2D.RESUME:
+            case MsgAPI.RESUME:
                 viewComponent.resume();
                 break;
-            case Overlap2D.RENDER:
+            case MsgAPI.RENDER:
                 viewComponent.render(notification.getBody());
                 break;
-            case Overlap2D.RESIZE:
+            case MsgAPI.RESIZE:
                 int[] data = notification.getBody();
                 viewComponent.resize(data[0], data[1]);
                 break;
-            case Overlap2D.DISPOSE:
+            case MsgAPI.DISPOSE:
                 break;
         }
     }

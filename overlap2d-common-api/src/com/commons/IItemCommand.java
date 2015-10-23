@@ -16,5 +16,14 @@
  *  *****************************************************************************
  */
 
-include 'overlap2d-common-api'
-project(':overlap2d-runtime-libgdx').projectDir = new File(settingsDir, '../overlap2d-runtime-libgdx')
+package com.commons;
+
+/**
+ * Created by azakhary on 10/23/2015.
+ */
+public interface IItemCommand {
+
+    void doAction(Object body);
+    void undoAction(Object body);
+
+}

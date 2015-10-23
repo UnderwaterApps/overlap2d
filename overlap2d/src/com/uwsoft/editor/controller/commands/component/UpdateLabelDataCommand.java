@@ -20,14 +20,14 @@ package com.uwsoft.editor.controller.commands.component;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.renderer.resources.IResourceRetriever;
-import com.uwsoft.editor.view.stage.Sandbox;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
+import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 6/11/2015.
@@ -67,7 +67,7 @@ public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
         labelComponent.setText((String) payload[4]);
         labelComponent.setStyle(getNewStyle(labelComponent.fontName, labelComponent.fontSize));
 
-        facade.sendNotification(Overlap2D.ITEM_PROPERTY_DATA_FINISHED_MODIFYING, entity);
+        facade.sendNotification(MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING, entity);
     }
 
     private Label.LabelStyle getNewStyle(String fontName, int fontSize) {

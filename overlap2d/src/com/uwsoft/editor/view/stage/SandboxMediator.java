@@ -18,9 +18,6 @@
 
 package com.uwsoft.editor.view.stage;
 
-import java.awt.Cursor;
-import java.util.HashMap;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -29,9 +26,9 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
@@ -39,13 +36,16 @@ import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.input.EntityClickListener;
 import com.uwsoft.editor.view.stage.input.InputListenerComponent;
 import com.uwsoft.editor.view.stage.tools.*;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.renderer.components.ViewPortComponent;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import java.awt.*;
+import java.util.HashMap;
 
 /**
  * Created by sargis on 4/20/15.
@@ -102,13 +102,13 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED,
+                MsgAPI.SCENE_LOADED,
                 UIToolBoxMediator.TOOL_SELECTED,
-                ItemFactory.NEW_ITEM_ADDED,
+                MsgAPI.NEW_ITEM_ADDED,
                 CompositeCameraChangeCommand.DONE,
                 AddComponentToItemCommand.DONE,
                 RemoveComponentFromItemCommand.DONE,
-                Overlap2D.ITEM_SELECTION_CHANGED
+                MsgAPI.ITEM_SELECTION_CHANGED
         };
     }
 
@@ -116,13 +116,13 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 handleSceneLoaded(notification);
                 break;
             case UIToolBoxMediator.TOOL_SELECTED:
                 setCurrentTool(notification.getBody());
                 break;
-            case ItemFactory.NEW_ITEM_ADDED:
+            case MsgAPI.NEW_ITEM_ADDED:
                 addListenerToItem(notification.getBody());
                 break;
             case CompositeCameraChangeCommand.DONE:
@@ -229,7 +229,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
             if (button == Input.Buttons.RIGHT) {
                 // if right clicked on an item, drop down for current selection
-                Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_RIGHT_CLICK);
+                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_RIGHT_CLICK);
             }
         }
 
@@ -271,7 +271,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
                 if (keycode == Input.Keys.A) {
                     // Ctrl+A means select all
-                    facade.sendNotification(Sandbox.ACTION_SET_SELECTION, sandbox.getSelector().getAllFreeItems());
+                    facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, sandbox.getSelector().getAllFreeItems());
                 }
                 // Aligning Selections
                 if (keycode == Input.Keys.NUM_1 && Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
@@ -289,16 +289,16 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
                     sandbox.setZoomPercent(100);
                     sandbox.getCamera().position.set(0 ,0, 0);
-                    facade.sendNotification(Overlap2D.ZOOM_CHANGED);
+                    facade.sendNotification(MsgAPI.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
-                    facade.sendNotification(Sandbox.ACTION_CUT);
+                    facade.sendNotification(MsgAPI.ACTION_CUT);
                 }
                 if (keycode == Input.Keys.C) {
-                    facade.sendNotification(Sandbox.ACTION_COPY);
+                    facade.sendNotification(MsgAPI.ACTION_COPY);
                 }
                 if (keycode == Input.Keys.V) {
-                    facade.sendNotification(Sandbox.ACTION_PASTE);
+                    facade.sendNotification(MsgAPI.ACTION_PASTE);
                 }
                 if(keycode == Input.Keys.Z) {
                     if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
@@ -393,7 +393,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 sandbox.getSelector().clearSelections();
 
                 // show default dropdown
-                facade.sendNotification(Overlap2D.SCENE_RIGHT_CLICK, new Vector2(x, y));
+                facade.sendNotification(MsgAPI.SCENE_RIGHT_CLICK, new Vector2(x, y));
 
                 return;
             }
@@ -434,7 +434,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if(zoomPercent < 5 ) zoomPercent = 5;
                 sandbox.setZoomPercent(zoomPercent);
 
-                facade.sendNotification(Overlap2D.ZOOM_CHANGED);
+                facade.sendNotification(MsgAPI.ZOOM_CHANGED);
             }
             // if item is currently being held with mouse (touched in but not touched out)
             // mouse scroll should rotate the selection around it's origin
@@ -450,7 +450,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                     value.getHostAsActor().rotateBy(degreeAmount);
                     value.update();
                 }
-                facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+                facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED);
                 commands.dirty = true;
             } else if (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT)) {
                 // if not item is touched then we can use this for zoom

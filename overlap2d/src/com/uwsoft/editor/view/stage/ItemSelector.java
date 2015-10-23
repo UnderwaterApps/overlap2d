@@ -18,26 +18,26 @@
 
 package com.uwsoft.editor.view.stage;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.SnapshotArray;
+import com.commons.MsgAPI;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.EntityBounds;
+import com.uwsoft.editor.utils.MoveCommandBuilder;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.SceneControlMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
+
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.stream.Collectors;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Align;
-import com.badlogic.gdx.utils.SnapshotArray;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.SceneControlMediator;
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
-import com.uwsoft.editor.renderer.components.NodeComponent;
-import com.uwsoft.editor.utils.EntityBounds;
-import com.uwsoft.editor.utils.MoveCommandBuilder;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
  * Managing item selections, selecting by criteria and so on
@@ -215,7 +215,7 @@ public class ItemSelector {
 
         currentSelection.add(item);
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
     /**
@@ -241,18 +241,18 @@ public class ItemSelector {
         currentSelection.clear();
 
         if(items == null) {
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, currentSelection);
             return;
         }
 
         currentSelection.addAll(items.stream().collect(Collectors.toList()));
 
         if (alsoShow) {
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.SHOW_SELECTIONS, currentSelection);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.SHOW_SELECTIONS, currentSelection);
         } else {
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.HIDE_SELECTIONS, currentSelection);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.HIDE_SELECTIONS, currentSelection);
         }
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
     /**
@@ -272,7 +272,7 @@ public class ItemSelector {
     public void releaseSelection(Entity item) {
         currentSelection.remove(item);
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
     /**
@@ -281,7 +281,7 @@ public class ItemSelector {
     public void clearSelections() {
         currentSelection.clear();
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_SELECTION_CHANGED, currentSelection);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, currentSelection);
     }
 
 
@@ -527,7 +527,7 @@ public class ItemSelector {
     public void moveSelectedItemsBy(float x, float y) {
         for (Entity entity : currentSelection) {
             sandbox.itemControl.moveItemBy(entity, x, y);
-            Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
         }
 
         sandbox.saveSceneCurrentSceneData();

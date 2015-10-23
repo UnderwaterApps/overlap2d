@@ -20,8 +20,8 @@ package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
@@ -74,7 +74,7 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 pasteMesh();
                 break;
             case UIPolygonComponentProperties.CLOSE_CLICKED:
-                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
+                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
                 break;
         }
     }
@@ -106,7 +106,7 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
         polygonComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, observableReference);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, observableReference);
     }
 
     private void copyMesh() {
@@ -119,6 +119,6 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         if(vertices == null) return;
         Object[] payload = UpdatePolygonComponentCommand.payloadInitialState(observableReference);
         payload = UpdatePolygonComponentCommand.payload(payload, vertices);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_MESH_DATA, payload);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, payload);
     }
 }
