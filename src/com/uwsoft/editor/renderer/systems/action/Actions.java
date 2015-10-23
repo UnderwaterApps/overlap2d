@@ -21,24 +21,31 @@ public class Actions {
     public static HashMap<Entity, LinkedList<ActionData>> scheduledActionsMap = new HashMap<Entity, LinkedList<ActionData>>();
     private static boolean initialized;
 
-    private static void initialize() {
-        actionLogicMap.put(MoveToAction.class.getName(), new MoveToAction());
-        actionLogicMap.put(MoveByAction.class.getName(), new MoveByAction());
-        actionLogicMap.put(RotateToAction.class.getName(), new RotateToAction());
-        actionLogicMap.put(RotateByAction.class.getName(), new RotateByAction());
-        actionLogicMap.put(RunnableAction.class.getName(), new RunnableAction());
-        actionLogicMap.put(DelayAction.class.getName(), new DelayAction());
-        actionLogicMap.put(ParallelAction.class.getName(), new ParallelAction());
-        actionLogicMap.put(SequenceAction.class.getName(), new SequenceAction());
+    private static void initialize() throws InstantiationException, IllegalAccessException {
+        registerActionClass(MoveToAction.class);
+        registerActionClass(MoveByAction.class);
+        registerActionClass(RotateToAction.class);
+        registerActionClass(RotateByAction.class);
+        registerActionClass(RunnableAction.class);
+        registerActionClass(DelayAction.class);
+        registerActionClass(ParallelAction.class);
+        registerActionClass(SequenceAction.class);
+
         initialized = true;
     }
 
-//    public static void registerActionClass(Class<T extends ActionLogic> type) {
-//        actionLogicMap.put(type.getName(), type.newInstance());
-//    }
+    public static <T extends ActionLogic> void registerActionClass(Class<T> type) throws IllegalAccessException, InstantiationException {
+        actionLogicMap.put(type.getName(), type.newInstance());
+    }
 
     private static void checkInit() {
-        if (!initialized) initialize();
+        if (!initialized) try {
+            initialize();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public static ActionData moveTo(float x, float y, float duration) {
