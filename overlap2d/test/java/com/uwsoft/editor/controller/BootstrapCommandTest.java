@@ -51,8 +51,8 @@ public class BootstrapCommandTest {
 
         bootstrapCommand.execute(new BaseNotification("baseNotification"));
 
-        verify(overlap2DFacade, times(26)).registerCommand(anyString(), any());
-        assertThat(commandsList.size(), is(26));
+        verify(overlap2DFacade, times(10)).registerCommand(anyString(), any());
+        assertThat(commandsList.size(), is(10));
         assertThat(commandsList, hasItems(CopyItemsCommand.class, DeleteItemsCommand.class, AddComponentToItemCommand.class));
         assertThat(commandsList, hasItems(ItemTransformCommand.class, AddSelectionCommand.class, UpdateEntityComponentsCommand.class));
     }
