@@ -42,6 +42,12 @@ public abstract class O2DPluginAdapter implements O2DPlugin, Module {
         facade = pluginAPI.getFacade();
     }
 
+    /**
+     * Triggered whenever a context menu is displayed
+     *
+     * @param selectedEntities list of entities that were selected when context menu was created about, if right clicked on empty space empty array is used
+     * @param actionsSet list of current actions (notification id's) planned for this particular context menu, it can be modified by adding or removing elements.
+     */
     @Override
     public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
 
