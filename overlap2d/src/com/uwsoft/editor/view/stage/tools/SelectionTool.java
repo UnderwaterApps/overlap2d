@@ -34,6 +34,7 @@ import com.uwsoft.editor.proxy.CursorManager;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -356,7 +357,8 @@ public class SelectionTool extends SimpleTool {
     }
 
     private boolean isEntityVisible(Entity e) {
-        return EntityUtils.getEntityLayer(e).isVisible;
+        LayerItemVO layer = EntityUtils.getEntityLayer(e);
+        return layer != null && layer.isVisible;
     }
 
     @Override
