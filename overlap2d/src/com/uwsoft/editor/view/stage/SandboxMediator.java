@@ -95,8 +95,11 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
     private void setCurrentTool(String toolName) {
         currentSelectedTool = sandboxTools.get(toolName);
-        facade.sendNotification(SANDBOX_TOOL_CHANGED, currentSelectedTool);
-        currentSelectedTool.initTool();
+
+        if (currentSelectedTool != null) {
+            facade.sendNotification(SANDBOX_TOOL_CHANGED, currentSelectedTool);
+            currentSelectedTool.initTool();
+        }
     }
 
     @Override
@@ -207,7 +210,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             }
 
             Vector2 coords = getStageCoordinates();
-            return currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
+            return currentSelectedTool != null && currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
 
         
@@ -220,11 +223,13 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 toolHotSwapBack();
             }
 
-            currentSelectedTool.itemMouseUp(entity, x, y);
+            if (currentSelectedTool != null) {
+                currentSelectedTool.itemMouseUp(entity, x, y);
 
-            if (getTapCount() == 2) {
-                // this is double click
-                currentSelectedTool.itemMouseDoubleClick(entity, coords.x, coords.y);
+                if (getTapCount() == 2) {
+                    // this is double click
+                    currentSelectedTool.itemMouseDoubleClick(entity, coords.x, coords.y);
+                }
             }
 
             if (button == Input.Buttons.RIGHT) {
@@ -236,7 +241,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         @Override
         public void touchDragged(Entity entity, float x, float y, int pointer) {
             Vector2 coords = getStageCoordinates();
-            currentSelectedTool.itemMouseDragged(entity, coords.x, coords.y);
+
+            if (currentSelectedTool != null) {
+                currentSelectedTool.itemMouseDragged(entity, coords.x, coords.y);
+            }
         }
 
     }
@@ -374,7 +382,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                     break;
             }
 
-            currentSelectedTool.stageMouseDown(x, y);
+            if (currentSelectedTool != null) {
+                currentSelectedTool.stageMouseDown(x, y);
+            }
 
             return true;
         }
@@ -409,15 +419,18 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         }
 
         private void doubleClick(Entity entity, float x, float y) {
-            Sandbox sandbox = Sandbox.getInstance();
-            currentSelectedTool.stageMouseDoubleClick(x, y);
+            if (currentSelectedTool != null) {
+                Sandbox sandbox = Sandbox.getInstance();
+                currentSelectedTool.stageMouseDoubleClick(x, y);
+            }
         }
 
         @Override
         public void touchDragged(Entity entity, float x, float y, int pointer) {
-            Sandbox sandbox = Sandbox.getInstance();
-
-            currentSelectedTool.stageMouseDragged(x, y);
+            if (currentSelectedTool != null) {
+                Sandbox sandbox = Sandbox.getInstance();
+                currentSelectedTool.stageMouseDragged(x, y);
+            }
         }
 
 
@@ -489,9 +502,6 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     }
 
     public String getCurrentSelectedToolName() {
-        if(currentSelectedTool == null) {
-            return "";
-        }
-        return currentSelectedTool.getName();
+        return currentSelectedTool != null ? currentSelectedTool.getName() : "";
     }
 }
