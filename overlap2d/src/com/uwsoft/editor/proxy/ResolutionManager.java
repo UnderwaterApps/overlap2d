@@ -484,6 +484,12 @@ public class ResolutionManager extends BaseProxy {
         } catch (IOException ignored) {
             ignored.printStackTrace();
         }
+
+        currentResolutionName = getOriginalResolution().name;
+
+        ProjectInfoVO projectInfo = projectManager.getCurrentProjectInfoVO();
+        projectInfo.resolutions.removeValue(resolutionEntryVO, false);
+        Overlap2DFacade.getInstance().sendNotification(RESOLUTION_LIST_CHANGED);
         projectManager.saveCurrentProject();
         projectManager.openProjectAndLoadAllData(projectManager.currentProjectVO.projectName, "orig");
     }
@@ -497,6 +503,4 @@ public class ResolutionManager extends BaseProxy {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         return projectManager.getCurrentProjectInfoVO().originalResolution;
     }
-
-
 }
