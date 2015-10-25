@@ -64,12 +64,13 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
 
     @Override
     protected void initList(String searchText) {
+        searchText = searchText.toLowerCase();
         ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
         HashMap<String, CompositeItemVO> items = projectManager.currentProjectInfoVO.libraryItems;
 
         Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
-            if(!key.contains(searchText))continue;
+            if(!key.toLowerCase().contains(searchText))continue;
             DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
             draggableResource.setFactoryFunction(ItemFactory.get()::createItemFromLibrary);
             draggableResource.initDragDrop();
