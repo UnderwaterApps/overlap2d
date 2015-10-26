@@ -10,8 +10,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.renderer.scripts.IActorScript;
+import com.uwsoft.editor.renderer.scripts.IScript;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -27,7 +30,7 @@ public class CompositeActor extends Group {
     private float pixelsPerWU;
 
     protected CompositeItemVO vo;
-
+    private ArrayList<IActorScript> scripts = new ArrayList<IActorScript>(3);
     private HashMap<Integer, Actor> indexes = new HashMap<Integer, Actor>();
     private HashMap<String, LayerItemVO> layerMap = new HashMap<String, LayerItemVO>();
 
@@ -70,13 +73,40 @@ public class CompositeActor extends Group {
     }
 
     private void buildComposites(ArrayList<CompositeItemVO> composites, BuiltItemHandler itemHandler) {
+
         for(int i = 0; i < composites.size(); i++) {
-            CompositeActor actor = new CompositeActor(composites.get(i), ir, itemHandler, false);
+            String className   =   getClassName(composites.get(i).customVars);
+            CompositeActor actor;
+            if(className!=null){
+                try {
+                    Class<?> c = Class.forName(className);
+                    actor   =   (CompositeActor) c.getConstructors()[0].newInstance(composites.get(i), ir, itemHandler);
+                }catch (Exception ex){
+                    actor  = new CompositeActor(composites.get(i), ir, itemHandler, false);
+                }
+            }else {
+                actor  = new CompositeActor(composites.get(i), ir, itemHandler, false);
+            }
             processMain(actor, composites.get(i));
             addActor(actor);
 
             itemHandler.onItemBuild(actor);
         }
+    }
+
+    private String getClassName(String customVars) {
+        CustomVariables cv = new CustomVariables();
+        cv.loadFromString(customVars);
+        String className    =   cv.getStringVariable("className");
+        if(className!=null && className.equals("")){
+            className   =   null;
+        }
+        return className;
+    }
+
+    public void addScript(IActorScript iScript) {
+        scripts.add(iScript);
+        iScript.init(this);
     }
 
     private void buildImages(ArrayList<SimpleImageVO> images, BuiltItemHandler itemHandler) {
@@ -306,5 +336,13 @@ public class CompositeActor extends Group {
                 }
             }
         };
+    }
+
+    @Override
+    public void act(float delta) {
+        for (int i = 0; i < scripts.size(); i++) {
+            scripts.get(i).act(delta);
+        }
+        super.act(delta);
     }
 }
