@@ -16,22 +16,38 @@
  *  *****************************************************************************
  */
 
-package com.commons.plugins;
+package com.uwsoft.editor.controller.commands;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.Set;
+import com.commons.IItemCommand;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * Created by azakhary on 10/23/2015.
  */
-public interface O2DPlugin {
+public class PluginItemCommand extends EntityModifyRevertableCommand {
 
-    String getName();
-    void initPlugin();
+    private IItemCommand command;
+    private Object body;
 
-    public void setAPI(PluginAPI pluginAPI);
+    @Override
+    public void doAction() {
+        if(command == null) {
+            Object[] payload = notification.getBody();
+            command = (IItemCommand) payload[0];
+            body = payload[1];
+        }
 
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet);
+        command.doAction(body);
+    }
+
+    @Override
+    public void undoAction() {
+        command.undoAction(body);
+    }
+
+    public static Object build(IItemCommand command, Object body) {
+        Object[] payload = new Object[2];
+        payload[0] = command;
+        payload[1] = body;
+        return payload;
+    }
 }

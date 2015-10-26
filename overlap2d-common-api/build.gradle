@@ -11,7 +11,7 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     compile "com.kotcrab.vis:vis-ui:0.7.6"
-    compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1"
+    compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.2-SNAPSHOT"
     compile 'net.mountainblade:modular:1.0'
 }
 

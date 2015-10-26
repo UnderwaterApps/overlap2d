@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget.components.color;
+package com.commons.color;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;

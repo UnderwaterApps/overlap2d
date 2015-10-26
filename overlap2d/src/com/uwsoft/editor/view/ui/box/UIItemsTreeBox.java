@@ -96,6 +96,8 @@ public class UIItemsTreeBox extends UICollapsibleBox {
                     return "SpriteAnimation";
                 case EntityFactory.SPRITER_TYPE:
                     return "SpriterAnimation";
+                case EntityFactory.COLOR_PRIMITIVE:
+                    return "Primitive";
                 default:
                     return "unknown";
             }

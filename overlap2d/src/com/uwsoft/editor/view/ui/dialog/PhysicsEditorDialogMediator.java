@@ -19,11 +19,12 @@
 package com.uwsoft.editor.view.ui.dialog;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.SceneDataManager;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
 
@@ -51,8 +52,8 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                SceneDataManager.SCENE_LOADED,
-                Sandbox.ACTION_EDIT_PHYSICS,
+                MsgAPI.SCENE_LOADED,
+                MsgAPI.ACTION_EDIT_PHYSICS,
                 UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS,
                 PhysicsEditorDialog.CLEAR_MESH_CLICKED,
                 PhysicsEditorDialog.CREATE_FRESH_COPY_CLICKED,
@@ -66,12 +67,12 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         super.handleNotification(notification);
 
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 Sandbox sandbox = Sandbox.getInstance();
               //TODO fix and uncomment
                 //viewComponent.getItemPhysicsEditor().resVec = new Vector2(commands.getCurrentScene().mulX, commands.getCurrentScene().mulY);
                 break;
-            case Sandbox.ACTION_EDIT_PHYSICS:
+            case MsgAPI.ACTION_EDIT_PHYSICS:
                 setItem((Entity) notification.getBody());
                 break;
             case UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS:

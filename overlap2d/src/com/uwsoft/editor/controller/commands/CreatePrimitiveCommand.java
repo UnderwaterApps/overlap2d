@@ -16,19 +16,28 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget.components.color;
+package com.uwsoft.editor.controller.commands;
 
-import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.renderer.data.ColorPrimitiveVO;
+import com.uwsoft.editor.renderer.data.ShapeVO;
 
 /**
- * Created by azakhary on 7/14/2015.
+ * Created by azakhary on 10/21/2015.
  */
-public interface ColorPickerListener {
-    /** Called when color selection was canceled by user (either by clicking cancel or closing the window) */
-    public void canceled ();
+public class CreatePrimitiveCommand extends EntityModifyRevertableCommand {
 
-    /** Called when user finises selecting new color */
-    public void finished (Color newColor);
+    @Override
+    public void doAction() {
+        Vector2 position = new Vector2(0, 0);
+        ShapeVO shape = ShapeVO.createRect(100f / sandbox.getPixelPerWU(), 100f / sandbox.getPixelPerWU());
 
-    public void changed (Color newColor);
+        ItemFactory.get().createPrimitive(position, shape);
+    }
+
+    @Override
+    public void undoAction() {
+
+    }
 }

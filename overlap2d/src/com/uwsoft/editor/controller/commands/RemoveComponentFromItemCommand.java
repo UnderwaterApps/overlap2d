@@ -2,7 +2,7 @@ package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.Overlap2D;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 
 /**
@@ -29,7 +29,7 @@ public class RemoveComponentFromItemCommand extends EntityModifyRevertableComman
         entity.remove(component.getClass());
 
         Overlap2DFacade.getInstance().sendNotification(DONE, entity);
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     @Override
@@ -37,7 +37,7 @@ public class RemoveComponentFromItemCommand extends EntityModifyRevertableComman
         entity.add(component);
 
         Overlap2DFacade.getInstance().sendNotification(DONE, entity);
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payload(Entity entity, Class componentClass) {

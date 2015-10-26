@@ -16,22 +16,26 @@
  *  *****************************************************************************
  */
 
-package com.commons.plugins;
+package com.commons.color;
 
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-
-import java.util.Set;
+import com.badlogic.gdx.graphics.Color;
 
 /**
- * Created by azakhary on 7/24/2015.
+ * Created by azakhary on 7/14/2015.
  */
-public interface O2DPlugin {
+public class ColorPickerAdapter implements ColorPickerListener {
+    @Override
+    public void canceled() {
 
-    String getName();
-    void initPlugin();
+    }
 
-    public void setAPI(PluginAPI pluginAPI);
+    @Override
+    public void finished(Color newColor) {
 
-    public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet);
+    }
+
+    @Override
+    public void changed(Color newColor) {
+
+    }
 }

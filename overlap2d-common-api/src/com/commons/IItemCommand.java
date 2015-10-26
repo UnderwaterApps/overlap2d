@@ -16,26 +16,14 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget.components.color;
-
-import com.badlogic.gdx.graphics.Color;
+package com.commons;
 
 /**
- * Created by azakhary on 7/14/2015.
+ * Created by azakhary on 10/23/2015.
  */
-public class ColorPickerAdapter implements ColorPickerListener {
-    @Override
-    public void canceled() {
+public interface IItemCommand {
 
-    }
+    void doAction(Object body);
+    void undoAction(Object body);
 
-    @Override
-    public void finished(Color newColor) {
-
-    }
-
-    @Override
-    public void changed(Color newColor) {
-
-    }
 }

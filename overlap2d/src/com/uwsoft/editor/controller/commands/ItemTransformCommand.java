@@ -3,7 +3,7 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.Overlap2D;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -43,7 +43,7 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
         if(newScale != null) transformComponent.scaleY = newScale.y;
         if(newRotation != null) transformComponent.rotation = newRotation;
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     @Override
@@ -68,6 +68,6 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
         transformComponent.scaleY = prevScale.y;
         transformComponent.rotation = prevRotation;
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 }

@@ -18,33 +18,33 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
-
-import com.badlogic.gdx.utils.reflect.ClassReflection;
-import com.badlogic.gdx.utils.reflect.ReflectionException;
-import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
-import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
-import com.uwsoft.editor.renderer.components.*;
-import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.ui.widget.components.color.ColorPickerAdapter;
-import com.uwsoft.editor.view.ui.widget.components.color.CustomColorPicker;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.reflect.ClassReflection;
+import com.badlogic.gdx.utils.reflect.ReflectionException;
+import com.commons.MsgAPI;
+import com.commons.color.ColorPickerAdapter;
+import com.commons.color.CustomColorPicker;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
+import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
+import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
-import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.ComponentCloner;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
+
+import java.util.HashMap;
+import java.util.Locale;
+import java.util.Map;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -77,6 +77,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
         itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
         itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
+        itemTypeMap.put("ENTITY_"+EntityFactory.COLOR_PRIMITIVE, UIBasicItemProperties.ItemType.primitive);
 
         componentClassMap.put("Polygon Component", PolygonComponent.class);
         componentClassMap.put("Physics Component", PhysicsBodyComponent.class);
@@ -122,9 +123,9 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             case UIBasicItemProperties.LINKING_CHANGED:
                 boolean isLinked = notification.getBody();
                 if(!isLinked) {
-                    facade.sendNotification(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
+                    facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
                 } else {
-                    facade.sendNotification(Sandbox.SHOW_ADD_LIBRARY_DIALOG, observableReference);
+                    facade.sendNotification(MsgAPI.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
                 break;
             case UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED:
@@ -132,7 +133,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                     Class componentClass = componentClassMap.get(viewComponent.getSelectedComponent());
                     if(componentClass == null) break;
                     Component component = (Component) ClassReflection.newInstance(componentClass);
-                    facade.sendNotification(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.payload(observableReference, component));
+                    facade.sendNotification(MsgAPI.ACTION_ADD_COMPONENT, AddComponentToItemCommand.payload(observableReference, component));
                 } catch (ReflectionException ignored) {}
                 break;
             default:
@@ -211,6 +212,6 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         Object[] payload = new Object[2];
         payload[0] = entity;
         payload[1] = componentsToUpdate;
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_UPDATE_ITEM_DATA, payload);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_ITEM_DATA, payload);
     }
 }

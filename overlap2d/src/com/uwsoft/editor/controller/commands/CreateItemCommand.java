@@ -20,14 +20,14 @@ package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 
 import java.util.HashSet;
 
@@ -52,7 +52,7 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
         ZIndexComponent zindexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         zindexComponent.setZIndex(nodeComponent.children.size);
 
-        Overlap2DFacade.getInstance().sendNotification(ItemFactory.NEW_ITEM_ADDED, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
 
         // select newly created item
         // get current selection

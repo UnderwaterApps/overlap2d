@@ -18,19 +18,18 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel;
 
-import java.util.HashMap;
-
-import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.ProjectManager;
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
+import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list.LibraryItemResource;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import org.apache.commons.lang3.ArrayUtils;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -48,14 +47,14 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
     @Override
     public String[] listNotificationInterests() {
         String[] listNotification = super.listNotificationInterests();
-        return ArrayUtils.add(listNotification, Overlap2D.LIBRARY_LIST_UPDATED);
+        return ArrayUtils.add(listNotification, MsgAPI.LIBRARY_LIST_UPDATED);
     }
 
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case Overlap2D.LIBRARY_LIST_UPDATED:
+            case MsgAPI.LIBRARY_LIST_UPDATED:
                 initList(viewComponent.searchString);
 
             default:
@@ -65,12 +64,13 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
 
     @Override
     protected void initList(String searchText) {
+        searchText = searchText.toLowerCase();
         ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
         HashMap<String, CompositeItemVO> items = projectManager.currentProjectInfoVO.libraryItems;
 
         Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
-            if(!key.contains(searchText))continue;
+            if(!key.toLowerCase().contains(searchText))continue;
             DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
             draggableResource.setFactoryFunction(ItemFactory.get()::createItemFromLibrary);
             draggableResource.initDragDrop();

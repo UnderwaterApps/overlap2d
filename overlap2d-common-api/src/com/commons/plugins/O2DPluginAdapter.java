@@ -17,9 +17,7 @@
  */
 
 package com.commons.plugins;
-import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.facade.Facade;
 import net.mountainblade.modular.Module;
@@ -32,8 +30,6 @@ import java.util.Set;
 public abstract class O2DPluginAdapter implements O2DPlugin, Module {
 
     public Facade facade;
-    protected Engine engine;
-    protected Stage stage;
     protected PluginAPI pluginAPI;
 
     public String getName() {
@@ -41,33 +37,22 @@ public abstract class O2DPluginAdapter implements O2DPlugin, Module {
     }
 
     @Override
-    public void setFacade(Facade facade) {
-        this.facade = facade;
-    }
-    @Override
-    public void setEngine(Engine engine) {
-        this.engine = engine;
-    }
-    @Override
-    public void setStage(Stage stage) {
-        this.stage = stage;
-    }
-    @Override
     public void setAPI(PluginAPI pluginAPI) {
         this.pluginAPI = pluginAPI;
+        facade = pluginAPI.getFacade();
     }
 
+    /**
+     * Triggered whenever a context menu is displayed
+     *
+     * @param selectedEntities list of entities that were selected when context menu was created about, if right clicked on empty space empty array is used
+     * @param actionsSet list of current actions (notification id's) planned for this particular context menu, it can be modified by adding or removing elements.
+     */
     @Override
     public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
 
     }
 
-    public Stage getStage() {
-        return stage;
-    }
-    public Engine getEngine() {
-        return engine;
-    }
     public PluginAPI getAPI() {
         return pluginAPI;
     }

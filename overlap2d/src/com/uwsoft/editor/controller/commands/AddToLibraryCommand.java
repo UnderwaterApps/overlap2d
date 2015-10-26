@@ -19,7 +19,7 @@
 package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
-import com.uwsoft.editor.Overlap2D;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
@@ -63,13 +63,13 @@ public class AddToLibraryCommand extends RevertableCommand {
 
             //mark this entity as belonging to library
             mainItemComponent.libraryLink = createdLibraryItemName;
-            facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+            facade.sendNotification(MsgAPI.LIBRARY_LIST_UPDATED);
         } else {
             prevName = mainItemComponent.libraryLink;
             // unlink it
             mainItemComponent.libraryLink = "";
         }
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED);
     }
 
     @Override
@@ -83,12 +83,12 @@ public class AddToLibraryCommand extends RevertableCommand {
             if (overwritten != null) {
                 libraryItems.put(createdLibraryItemName, overwritten);
             }
-            facade.sendNotification(Overlap2D.LIBRARY_LIST_UPDATED);
+            facade.sendNotification(MsgAPI.LIBRARY_LIST_UPDATED);
         } else {
             Entity entity = EntityUtils.getByUniqueId(entityId);
             MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
             mainItemComponent.libraryLink = prevName;
-            facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+            facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED);
         }
     }
 

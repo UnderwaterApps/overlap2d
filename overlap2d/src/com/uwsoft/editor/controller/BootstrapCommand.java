@@ -18,15 +18,14 @@
 
 package com.uwsoft.editor.controller;
 
+import com.commons.MsgAPI;
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.*;
-import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateLabelDataCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateLightDataCommand;
+import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateSpriteAnimationDataCommand;
 
 /**
@@ -37,37 +36,42 @@ public class BootstrapCommand extends SimpleCommand {
     public void execute(Notification notification) {
         super.execute(notification);
         facade = Overlap2DFacade.getInstance();
-        facade.registerCommand(Sandbox.ACTION_CUT, CutItemsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_COPY, CopyItemsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_PASTE, PasteItemsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_DELETE, DeleteItemsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_CREATE_ITEM, CreateItemCommand.class);
-        facade.registerCommand(Sandbox.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_CUT, CutItemsCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_COPY, CopyItemsCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_PASTE, PasteItemsCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE, DeleteItemsCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_CREATE_ITEM, CreateItemCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_CREATE_PRIMITIVE, CreatePrimitiveCommand.class);
 
-        facade.registerCommand(Sandbox.ACTION_DELETE_LAYER, DeleteLayerCommand.class);
-        facade.registerCommand(Sandbox.ACTION_NEW_LAYER, NewLayerCommand.class);
-        facade.registerCommand(Sandbox.ACTION_SWAP_LAYERS, LayerSwapCommand.class);
-        facade.registerCommand(Sandbox.ACTION_RENAME_LAYER, RenameLayerCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_LAYER, DeleteLayerCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_NEW_LAYER, NewLayerCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_SWAP_LAYERS, LayerSwapCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_RENAME_LAYER, RenameLayerCommand.class);
 
-        facade.registerCommand(Sandbox.ACTION_ADD_COMPONENT, AddComponentToItemCommand.class);
-        facade.registerCommand(Sandbox.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_ADD_COMPONENT, AddComponentToItemCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.class);
 
-        facade.registerCommand(Sandbox.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
-        facade.registerCommand(Sandbox.ACTION_ITEM_TRANSFORM_TO, ItemTransformCommand.class);
-        facade.registerCommand(Sandbox.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
-        facade.registerCommand(Sandbox.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
-        facade.registerCommand(Sandbox.ACTION_GROUP_ITEMS, ConvertToCompositeCommand.class);
-        facade.registerCommand(Sandbox.ACTION_SET_GRID_SIZE_FROM_ITEM, SetGridSizeFromItemCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_ITEM_TRANSFORM_TO, ItemTransformCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_CONVERT_TO_BUTTON, ConvertToButtonCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_GROUP_ITEMS, ConvertToCompositeCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM, SetGridSizeFromItemCommand.class);
 
-        facade.registerCommand(Sandbox.ACTION_SET_SELECTION, SetSelectionCommand.class);
-        facade.registerCommand(Sandbox.ACTION_ADD_SELECTION, AddSelectionCommand.class);
-        facade.registerCommand(Sandbox.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_SET_SELECTION, SetSelectionCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_ADD_SELECTION, AddSelectionCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
 
         // DATA MODIFY by components
-        facade.registerCommand(Sandbox.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, UpdateSpriteAnimationDataCommand.class);
-        facade.registerCommand(Sandbox.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_LABEL_DATA, UpdateLabelDataCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_LIGHT_DATA, UpdateLightDataCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_SPRITE_ANIMATION_DATA, UpdateSpriteAnimationDataCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
+
+        facade.registerCommand(MsgAPI.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
+
+        facade.registerCommand(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, PluginItemCommand.class);
     }
 }
