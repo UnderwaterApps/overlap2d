@@ -2,7 +2,7 @@ package com.uwsoft.editor.renderer.data;
 
 public class ResolutionEntryVO {
 
-    public String name;
+    public String name = "";
 
     public int width;
     public int height;
@@ -14,6 +14,18 @@ public class ResolutionEntryVO {
             return name;
         }
         return width + "x" + height + " (" + name + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final ResolutionEntryVO other = (ResolutionEntryVO) obj;
+        return other.name.equals(name);
     }
 
     public float getMultiplier(ResolutionEntryVO originalResolution) {
