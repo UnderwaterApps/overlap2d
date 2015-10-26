@@ -165,4 +165,30 @@ public class Actions {
         }
         scheduledActionsMap.get(entity).add(data);
     }
+
+    public static void removeActions(Entity entity) {
+        ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
+        if (scheduledActionsMap.get(entity) != null) {
+            scheduledActionsMap.remove(entity);
+        }
+
+        if (actionComponent != null){
+            entity.remove(ActionComponent.class);
+        }
+    }
+
+    public static void removeAction(Entity entity, ActionData data) {
+        ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
+        if (scheduledActionsMap.get(entity) != null) {
+            if (scheduledActionsMap.get(entity).contains(data)){
+                scheduledActionsMap.get(entity).remove(data);
+            }
+        }
+
+        if (actionComponent != null) {
+            if (actionComponent.dataArray.contains(data)) {
+                actionComponent.dataArray.remove(data);
+            }
+        }
+    }
 }
