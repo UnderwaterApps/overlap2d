@@ -119,12 +119,9 @@ public class ProjectManager extends BaseProxy {
         handler.progressChanged(currentPercent);
     }
 
-    public void createEmptyProject(String projectName, int width, int height, int pixelPerWorldUnit) throws IOException {
+    public void createEmptyProject(String projectPath, String projectName, int width, int height, int pixelPerWorldUnit) throws IOException {
 
-        if (workspacePath.endsWith(File.separator)) {
-            workspacePath = workspacePath.substring(0, workspacePath.length() - 1);
-        }
-
+        workspacePath = new File(projectPath).getParent();
         String projPath = workspacePath + File.separator + projectName;
         currentWorkingPath = workspacePath;
 
@@ -1005,7 +1002,7 @@ public class ProjectManager extends BaseProxy {
         }
 
         try {
-            createEmptyProject(projectName, originWidth, originHeight, pixelPerWorldUnit);
+            createEmptyProject(projectPath, projectName, originWidth, originHeight, pixelPerWorldUnit);
             openProjectAndLoadAllData(projectName);
             String workSpacePath = projectPath.substring(0, projectPath.lastIndexOf(projectName));
             if (workSpacePath.length() > 0) {

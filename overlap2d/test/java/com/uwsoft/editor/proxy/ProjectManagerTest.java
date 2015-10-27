@@ -49,7 +49,7 @@ public class ProjectManagerTest {
 
     @Test
     public void shouldAbleToCreateNewProject() throws Exception {
-        projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
+        projectManager.createEmptyProject(projectManager.getCurrentWorkingPath(),String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
 
         ProjectVO currentProjectVO = projectManager.getCurrentProjectVO();
         ProjectInfoVO currentProjectInfoVO = projectManager.getCurrentProjectInfoVO();
@@ -65,7 +65,7 @@ public class ProjectManagerTest {
 
     @Test
     public void shouldExportProject() throws Exception {
-        projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
+        projectManager.createEmptyProject(projectManager.getCurrentWorkingPath(),String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
 
         ProjectVO currentProjectVO = projectManager.getCurrentProjectVO();
         File exportFolder = new File(projectManager.getCurrentWorkingPath(), currentProjectVO.projectName + "export");
@@ -77,7 +77,7 @@ public class ProjectManagerTest {
 
     @Test
     public void shouldCreateDTFileAfterSaveProject() throws Exception {
-        projectManager.createEmptyProject(String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
+        projectManager.createEmptyProject(projectManager.getCurrentWorkingPath(),String.format("%d%s", random.nextLong(), separator), 800, 600, 1);
         File exportFolder = new File(projectManager.getCurrentWorkingPath(), projectManager.currentProjectVO.projectName);
         File[] files = exportFolder.listFiles((dir, name) -> {
             return name.contains("project.dt");
