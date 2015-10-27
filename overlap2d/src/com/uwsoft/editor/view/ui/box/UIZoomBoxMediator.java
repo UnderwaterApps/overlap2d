@@ -18,14 +18,13 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import org.apache.commons.lang3.math.NumberUtils;
-
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.view.stage.Sandbox;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by sargis on 4/9/15.
@@ -52,7 +51,7 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
                 ProjectManager.PROJECT_OPENED,
                 UIZoomBox.ZOOM_SHIFT_REQUESTED,
                 UIZoomBox.ZOOM_VALUE_CHANGED,
-                Overlap2D.ZOOM_CHANGED
+                MsgAPI.ZOOM_CHANGED
         };
     }
 
@@ -71,9 +70,9 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
                 break;
             case  UIZoomBox.ZOOM_VALUE_CHANGED:
                 sandbox.setZoomPercent(NumberUtils.toInt(viewComponent.getCurrentZoom()));
-                facade.sendNotification(Overlap2D.ZOOM_CHANGED);
+                facade.sendNotification(MsgAPI.ZOOM_CHANGED);
                 break;
-            case  Overlap2D.ZOOM_CHANGED:
+            case  MsgAPI.ZOOM_CHANGED:
                 viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
         }

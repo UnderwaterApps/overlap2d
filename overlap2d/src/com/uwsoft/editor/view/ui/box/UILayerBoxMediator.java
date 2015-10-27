@@ -18,27 +18,27 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
-
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.*;
-import com.uwsoft.editor.renderer.components.ZIndexComponent;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
 
 
 /**
@@ -60,7 +60,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
         return Stream.of(parentNotifications, new String[]{
-                SceneDataManager.SCENE_LOADED,
+                MsgAPI.SCENE_LOADED,
                 UILayerBox.LAYER_ROW_CLICKED,
                 UILayerBox.CREATE_NEW_LAYER,
                 UILayerBox.CHANGE_LAYER_NAME,
@@ -70,8 +70,8 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 UILayerBox.HIDE_LAYER,
                 UILayerBox.UNHIDE_LAYER,
                 CompositeCameraChangeCommand.DONE,
-                Overlap2D.ITEM_SELECTION_CHANGED,
-                ItemFactory.NEW_ITEM_ADDED,
+                MsgAPI.ITEM_SELECTION_CHANGED,
+                MsgAPI.NEW_ITEM_ADDED,
                 UILayerBox.LAYER_DROPPED,
                 DeleteLayerCommand.DONE,
                 DeleteLayerCommand.UNDONE,
@@ -88,7 +88,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
         super.handleNotification(notification);
         UILayerBox.UILayerItem layerItem;
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
                 initLayerData();
                 int layerid = getFirstFreeLayer();
                 viewComponent.setCurrentSelectedLayer(layerid);
@@ -125,7 +125,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     public void finished(String input) {
                         if (checkIfNameIsUnique(input)) {
                             Object[] payload = NewLayerCommand.payload(viewComponent.getCurrentSelectedLayerIndex()+1, input);
-                            facade.sendNotification(Sandbox.ACTION_NEW_LAYER, payload);
+                            facade.sendNotification(MsgAPI.ACTION_NEW_LAYER, payload);
                         } else {
                             // show error dialog
                         }
@@ -137,7 +137,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 });
                 break;
             case UILayerBox.LAYER_DROPPED:
-                facade.sendNotification(Sandbox.ACTION_SWAP_LAYERS, notification.getBody());
+                facade.sendNotification(MsgAPI.ACTION_SWAP_LAYERS, notification.getBody());
                 break;
             case LayerSwapCommand.DONE:
                 int index = viewComponent.getCurrentSelectedLayerIndex();
@@ -149,7 +149,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 int deletingLayerIndex = viewComponent.getCurrentSelectedLayerIndex();
                 if(deletingLayerIndex != -1) {
                     String layerName = layers.get(deletingLayerIndex).layerName;
-                    facade.sendNotification(Sandbox.ACTION_DELETE_LAYER, layerName);
+                    facade.sendNotification(MsgAPI.ACTION_DELETE_LAYER, layerName);
                 }
                 break;
             case UILayerBox.LOCK_LAYER:
@@ -168,7 +168,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 layerItem = notification.getBody();
                 setEntityVisibilityByLayer(layerItem, true);
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
                     ZIndexComponent zIndexComponent = ComponentRetriever.get(selection.iterator().next(), ZIndexComponent.class);
@@ -183,7 +183,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                     // multi selection handling not yet clear
                 }
                 break;
-            case ItemFactory.NEW_ITEM_ADDED:
+            case MsgAPI.NEW_ITEM_ADDED:
                 index = viewComponent.getCurrentSelectedLayerIndex();
                 Entity item = notification.getBody();
                 ZIndexComponent zIndexComponent = ComponentRetriever.get(item, ZIndexComponent.class);
@@ -195,7 +195,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 if(layerIndex == -1) break;
                 LayerItemVO layerVO = layers.get(layerIndex);
 
-                facade.sendNotification(Sandbox.ACTION_RENAME_LAYER, RenameLayerCommand.payload(layerVO.layerName, layerName));
+                facade.sendNotification(MsgAPI.ACTION_RENAME_LAYER, RenameLayerCommand.payload(layerVO.layerName, layerName));
                 break;
             case RenameLayerCommand.DONE:
                 index = viewComponent.getCurrentSelectedLayerIndex();
@@ -267,7 +267,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
             }
         }
         Sandbox.getInstance().getSelector().clearSelections();
-        facade.sendNotification(Sandbox.ACTION_ADD_SELECTION, items);
+        facade.sendNotification(MsgAPI.ACTION_ADD_SELECTION, items);
     }
 
     private void setEntityVisibilityByLayer(UILayerBox.UILayerItem layerItem, boolean setVisible) {

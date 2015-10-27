@@ -18,8 +18,8 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import com.uwsoft.editor.view.ui.widget.components.color.ColorPickerAdapter;
-import com.uwsoft.editor.view.ui.widget.components.color.CustomColorPicker;
+import com.commons.color.ColorPickerAdapter;
+import com.commons.color.CustomColorPicker;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 

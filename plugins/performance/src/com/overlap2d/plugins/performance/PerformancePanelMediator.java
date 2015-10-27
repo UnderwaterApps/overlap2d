@@ -58,11 +58,11 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
         switch (notification.getName()) {
             case SCENE_LOADED:
                 viewComponent.initView();
-                Engine engine = performancePlugin.getEngine();
+                Engine engine = performancePlugin.getAPI().getEngine();
                 viewComponent.setEngine(engine);
                 break;
             case PerformancePlugin.PANEL_OPEN:
-                viewComponent.show(performancePlugin.getStage());
+                viewComponent.show(performancePlugin.getAPI().getUIStage());
                 break;
         }
     }

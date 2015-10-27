@@ -18,16 +18,15 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.controller.commands.component.UpdateSpriteAnimationDataCommand;
-import org.apache.commons.lang3.ArrayUtils;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import com.uwsoft.editor.controller.commands.component.UpdateSpriteAnimationDataCommand;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -85,6 +84,6 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
                 viewComponent.getSelectedAnimation(),
                 viewComponent.getPlayMode());
 
-        facade.sendNotification(Sandbox.ACTION_UPDATE_SPRITE_ANIMATION_DATA, payload);
+        facade.sendNotification(MsgAPI.ACTION_UPDATE_SPRITE_ANIMATION_DATA, payload);
     }
 }

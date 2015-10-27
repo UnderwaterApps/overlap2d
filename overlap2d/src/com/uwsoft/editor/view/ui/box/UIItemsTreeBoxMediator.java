@@ -22,17 +22,18 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.ui.Tree;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddSelectionCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.ReleaseSelectionCommand;
 import com.uwsoft.editor.controller.commands.SetSelectionCommand;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.SceneDataManager;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -53,8 +54,8 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
         return Stream.of(parentNotifications, new String[]{
-                SceneDataManager.SCENE_LOADED,
-                ItemFactory.NEW_ITEM_ADDED,
+                MsgAPI.SCENE_LOADED,
+                MsgAPI.NEW_ITEM_ADDED,
                 UIItemsTreeBox.ITEMS_SELECTED,
                 SetSelectionCommand.DONE,
                 AddSelectionCommand.DONE,
@@ -68,11 +69,11 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
         super.handleNotification(notification);
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
-            case SceneDataManager.SCENE_LOADED:
+            case MsgAPI.SCENE_LOADED:
             	Entity rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;
-            case ItemFactory.NEW_ITEM_ADDED:
+            case MsgAPI.NEW_ITEM_ADDED:
                 rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;
@@ -118,6 +119,6 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
 
     private void sendSelectionNotification(Set<Entity> items) {
         Set<Entity> ntfItems = (items.isEmpty())? null : items;
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_SET_SELECTION, ntfItems);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_SET_SELECTION, ntfItems);
     }
 }

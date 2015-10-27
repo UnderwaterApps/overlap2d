@@ -1,9 +1,9 @@
 package com.uwsoft.editor.view.ui.dialog;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -36,8 +36,8 @@ public class TagsDialogMediator extends SimpleMediator<TagsDialog> {
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_SELECTION_CHANGED,
-                Overlap2D.EMPTY_SPACE_CLICKED,
+                MsgAPI.ITEM_SELECTION_CHANGED,
+                MsgAPI.EMPTY_SPACE_CLICKED,
                 UIBasicItemProperties.TAGS_BUTTON_CLICKED,
                 TagsDialog.LIST_CHANGED
         };
@@ -54,13 +54,13 @@ public class TagsDialogMediator extends SimpleMediator<TagsDialog> {
             case UIBasicItemProperties.TAGS_BUTTON_CLICKED:
                 viewComponent.show(uiStage);
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
                     setObservable(selection.iterator().next());
                 }
                 break;
-            case Overlap2D.EMPTY_SPACE_CLICKED:
+            case MsgAPI.EMPTY_SPACE_CLICKED:
                 setObservable(null);
                 break;
             case TagsDialog.LIST_CHANGED:

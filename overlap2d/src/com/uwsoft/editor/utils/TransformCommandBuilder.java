@@ -3,11 +3,11 @@ package com.uwsoft.editor.utils;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by Osman on 01.08.2015.
@@ -71,7 +71,7 @@ public class TransformCommandBuilder {
         Object[] newData = (Object[]) payload.get(2);
         for(Object o : newData) {
             if (o != null) {
-                Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_ITEM_TRANSFORM_TO, payload);
+                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_ITEM_TRANSFORM_TO, payload);
                 return;
             }
         }

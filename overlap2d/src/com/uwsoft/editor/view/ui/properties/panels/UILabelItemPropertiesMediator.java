@@ -1,13 +1,13 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.FontManager;
-import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import org.apache.commons.lang3.ArrayUtils;
 
 /**
@@ -78,7 +78,7 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         payload[3] = viewComponent.getAlignValue();
         payload[4] = newText;
         payload[5] = prevText;
-        sendNotification(Sandbox.ACTION_UPDATE_LABEL_DATA, payload);
+        sendNotification(MsgAPI.ACTION_UPDATE_LABEL_DATA, payload);
 
         this.prevText = newText;
 

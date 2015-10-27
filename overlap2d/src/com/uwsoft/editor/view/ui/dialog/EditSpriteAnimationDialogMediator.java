@@ -18,22 +18,22 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
-import com.uwsoft.editor.view.stage.UIStage;
-import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties;
 import com.uwsoft.editor.renderer.components.sprite.SpriteAnimationComponent;
 import com.uwsoft.editor.renderer.data.FrameRange;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.stage.UIStage;
+import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -58,8 +58,8 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_SELECTION_CHANGED,
-                Overlap2D.EMPTY_SPACE_CLICKED,
+                MsgAPI.ITEM_SELECTION_CHANGED,
+                MsgAPI.EMPTY_SPACE_CLICKED,
                 UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED,
                 EditSpriteAnimationDialog.ADD_BUTTON_PRESSED,
                 EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED,
@@ -81,7 +81,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
             case UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED:
                 viewComponent.show(uiStage);
                 break;
-            case Overlap2D.ITEM_SELECTION_CHANGED:
+            case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
                 if(selection.size() == 1) {
                     Entity entity = selection.iterator().next();
@@ -94,7 +94,7 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                 }
 
             break;
-            case Overlap2D.EMPTY_SPACE_CLICKED:
+            case MsgAPI.EMPTY_SPACE_CLICKED:
                 setObservable(null);
                 break;
             case EditSpriteAnimationDialog.ADD_BUTTON_PRESSED:
@@ -133,13 +133,13 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
         spriteAnimationComponent.frameRangeMap.put(name, new FrameRange(name, frameFrom, frameTo));
 
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, observable);
     }
 
     private void removeAnimation(String name) {
         SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
         spriteAnimationComponent.frameRangeMap.remove(name);
 
-        facade.sendNotification(Overlap2D.ITEM_DATA_UPDATED, observable);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, observable);
     }
 }

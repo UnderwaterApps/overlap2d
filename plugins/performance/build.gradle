@@ -28,13 +28,13 @@ ext {
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
-    compile project(":overlap-common-api")
+    compile project(":overlap2d-common-api")
     compile "com.kotcrab.vis:vis-ui:0.7.6"
     compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1"
     compile "net.mountainblade:modular:1.0-SNAPSHOT"
 }
 
-project(":overlap-common-api") {
+project(":overlap2d-common-api") {
     apply plugin: "java"
     sourceSets.main.java.srcDirs = ["src/"]
 
@@ -55,4 +55,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-//libsDirName = 'D:\\work\\plugins'
+libsDirName = 'D:\\work\\plugins'

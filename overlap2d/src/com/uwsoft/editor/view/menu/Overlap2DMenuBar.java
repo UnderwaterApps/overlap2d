@@ -55,7 +55,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
     public static final String EDIT_MENU = prefix + ".EDIT_MENU";
     public static final String CUT = prefix + ".CUT";
     public static final String COPY = prefix + ".COPY";
-    public static final String PAST = prefix + ".PAST";
+    public static final String PASTE = prefix + ".PASTE";
     public static final String UNDO = prefix + ".UNDO";
     public static final String REDO = prefix + ".REDO";
     //
@@ -140,7 +140,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             super("Edit");
             cut = new MenuItem("Cut", new MenuItemListener(CUT, null, EDIT_MENU)).setShortcut(maskKey + " + X");
             copy = new MenuItem("Copy", new MenuItemListener(COPY, null, EDIT_MENU)).setShortcut(maskKey + " + C");
-            paste = new MenuItem("Paste", new MenuItemListener(PAST, null, EDIT_MENU)).setShortcut(maskKey + " + P");
+            paste = new MenuItem("Paste", new MenuItemListener(PASTE, null, EDIT_MENU)).setShortcut(maskKey + " + P");
             undo = new MenuItem("Undo", new MenuItemListener(UNDO, null, EDIT_MENU)).setShortcut(maskKey + " + Z");
             redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(maskKey + " + Shift + Z");
             addItem(cut);

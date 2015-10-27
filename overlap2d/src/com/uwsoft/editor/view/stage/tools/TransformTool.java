@@ -18,30 +18,30 @@
 
 package com.uwsoft.editor.view.stage.tools;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.utils.TransformCommandBuilder;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CursorManager;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
-import com.uwsoft.editor.view.ui.followers.FollowerTransformationListener;
-import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.TransformCommandBuilder;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
+import com.uwsoft.editor.view.ui.followers.FollowerTransformationListener;
+import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by azakhary on 4/30/2015.
@@ -79,7 +79,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void handleNotification(Notification notification) {
         switch (notification.getName()) {
-            case ItemFactory.NEW_ITEM_ADDED:
+            case MsgAPI.NEW_ITEM_ADDED:
                 updateListeners((Entity) notification.getBody());
                 break;
         }
@@ -361,7 +361,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
             defaultAnchorDraggedLogic(mousePointStage, anchor, follower.getEntity());
         }
 
-        Overlap2DFacade.getInstance().sendNotification(Overlap2D.ITEM_DATA_UPDATED);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED);
       
     }
 

@@ -18,11 +18,11 @@
 
 package com.uwsoft.editor.view.ui.properties;
 
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.Overlap2D;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -50,7 +50,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
     @Override
     public String[] listNotificationInterests() {
         return new String[]{
-                Overlap2D.ITEM_DATA_UPDATED,
+                MsgAPI.ITEM_DATA_UPDATED,
                 viewComponent.getUpdateEventName()
         };
     }
@@ -67,7 +67,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
         }
 
         switch (notification.getName()) {
-            case Overlap2D.ITEM_DATA_UPDATED:
+            case MsgAPI.ITEM_DATA_UPDATED:
                 onItemDataUpdate();
                 break;
             default:

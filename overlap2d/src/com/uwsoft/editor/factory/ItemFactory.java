@@ -22,17 +22,18 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.PasteItemsCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
-import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 
 import java.util.HashMap;
@@ -42,9 +43,6 @@ import java.util.HashMap;
  *
  */
 public class ItemFactory {
-
-    private static final String EVENT_PREFIX = "com.uwsoft.editor.factory.ItemFactory";
-    public static final String NEW_ITEM_ADDED = EVENT_PREFIX + ".NEW_ITEM_ADDED";
 
     private EntityFactory entityFactory;
     private SceneLoader sceneLoader;
@@ -90,7 +88,7 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -101,7 +99,7 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -113,7 +111,7 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -124,7 +122,7 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -135,7 +133,21 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
+
+        return true;
+    }
+
+    public boolean createPrimitive(Vector2 position, ShapeVO shape) {
+        ColorPrimitiveVO vo = new ColorPrimitiveVO();
+        vo.shape = shape.clone();
+        vo.originX = 0;
+        vo.originY = 0;
+
+        if(!setEssentialData(vo, position)) return false;
+        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -153,7 +165,7 @@ public class ItemFactory {
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         mainItemComponent.libraryLink = libraryName;
 
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return true;
     }
@@ -179,7 +191,7 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return null;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
 
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
         return entity;
     }
 
@@ -196,7 +208,7 @@ public class ItemFactory {
 
         if(!setEssentialData(vo, position)) return null;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return entity;
     }
@@ -220,7 +232,7 @@ public class ItemFactory {
         vo.height = 50f/Sandbox.getInstance().getPixelPerWU();
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(Sandbox.ACTION_CREATE_ITEM, entity);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
         return entity;
     }
