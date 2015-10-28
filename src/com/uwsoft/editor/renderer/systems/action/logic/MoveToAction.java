@@ -8,9 +8,9 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 /**
  * Created by Eduard on 10/13/2015.
  */
-public class MoveToAction extends TemporalAction<MoveToData> {
+public class MoveToAction<T extends MoveToData> extends TemporalAction<T> {
     @Override
-    public void update(float percent, Entity entity, MoveToData actionData) {
+    public void update(float percent, Entity entity, T actionData) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
 
         float x = actionData.startX + (actionData.endX - actionData.startX) * percent;
@@ -21,11 +21,10 @@ public class MoveToAction extends TemporalAction<MoveToData> {
     }
 
     @Override
-    public void begin(Entity entity, MoveToData actionData) {
-        MoveToData data = actionData;
+    public void begin(Entity entity, T actionData) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-        data.startX = transformComponent.x;
-        data.startY = transformComponent.y;
+        actionData.startX = transformComponent.x;
+        actionData.startY = transformComponent.y;
     }
 
     @Override

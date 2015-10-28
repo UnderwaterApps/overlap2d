@@ -24,6 +24,10 @@ public class Actions {
     private static void initialize() throws InstantiationException, IllegalAccessException {
         registerActionClass(MoveToAction.class);
         registerActionClass(MoveByAction.class);
+        registerActionClass(SizeToAction.class);
+        registerActionClass(SizeByAction.class);
+        registerActionClass(ScaleToAction.class);
+        registerActionClass(ScaleByAction.class);
         registerActionClass(RotateToAction.class);
         registerActionClass(RotateByAction.class);
         registerActionClass(RunnableAction.class);
@@ -114,19 +118,70 @@ public class Actions {
         actionData.logicClassName = RotateByAction.class.getName();
         return actionData;
     }
-/*
-    static public void customAction(Entity entity, Data, Logic) {
-        RotateByData actionData =  new RotateByData(
-                interpolation,
-                duration,
-                amount
-        );
-        addActionObject(entity, actionData, actionLogicMap.get("RotaBy"));
-    }*/
 
     static public ParallelData parallel(ActionData... actionDatas) {
         ParallelData actionData = new ParallelData(actionDatas);
         actionData.logicClassName = ParallelAction.class.getName();
+        return actionData;
+    }
+
+    public static SizeToData sizeTo (float width, float height, float duration) {
+        return sizeTo(width, height, duration, null);
+    }
+
+    public static SizeToData sizeTo (float width, float height, float duration, Interpolation interpolation) {
+        SizeToData actionData = new SizeToData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = SizeToAction.class.getName();
+        return actionData;
+    }
+
+    public static SizeByData sizeBy (float width, float height, float duration) {
+        return sizeBy(width, height, duration, null);
+    }
+
+    public static SizeByData sizeBy (float width, float height, float duration, Interpolation interpolation) {
+        SizeByData actionData = new SizeByData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = SizeByAction.class.getName();
+        return actionData;
+    }
+
+    public static ScaleToData scaleTo (float width, float height, float duration) {
+        return scaleTo(width, height, duration, null);
+    }
+
+    public static ScaleToData scaleTo (float width, float height, float duration, Interpolation interpolation) {
+        ScaleToData actionData = new ScaleToData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = ScaleToAction.class.getName();
+        return actionData;
+    }
+
+    public static ScaleByData scaleBy (float width, float height, float duration) {
+        return scaleBy(width, height, duration, null);
+    }
+
+    public static ScaleByData scaleBy (float width, float height, float duration, Interpolation interpolation) {
+        ScaleByData actionData = new ScaleByData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = ScaleByAction.class.getName();
         return actionData;
     }
 
