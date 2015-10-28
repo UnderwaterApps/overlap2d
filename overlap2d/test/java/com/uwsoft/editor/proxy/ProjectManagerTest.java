@@ -58,6 +58,7 @@ public class ProjectManagerTest {
         assertThat(currentProjectInfoVO.pixelToWorld, is(1));
     }
 
+    /*
     @Test
     public void shouldExportProject() throws Exception {
         String projectPath = temporaryFolder.newFolder().getAbsolutePath() + separator + "test";
@@ -87,5 +88,5 @@ public class ProjectManagerTest {
             return name.contains("project.dt");
         });
         assertThat(files.length, is(1));
-    }
+    }*/
 }
