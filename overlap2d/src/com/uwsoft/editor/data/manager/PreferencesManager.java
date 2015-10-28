@@ -19,6 +19,7 @@
 package com.uwsoft.editor.data.manager;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 import com.badlogic.gdx.Gdx;
@@ -119,6 +120,8 @@ public class PreferencesManager {
 				}
 			}
 		}
+		duplicates.sort();
+		duplicates.reverse();
 		for(int i = 0; i < duplicates.size; i++) {
 			paths.remove((int)duplicates.get(i));
 		}

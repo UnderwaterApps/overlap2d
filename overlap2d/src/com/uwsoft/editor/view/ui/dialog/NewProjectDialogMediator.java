@@ -51,7 +51,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
         facade = Overlap2DFacade.getInstance();
 
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        viewComponent.setDefaultWorkspacePath(projectManager.getWorkspacePath());
+        viewComponent.setDefaultWorkspacePath(projectManager.getWorkspacePath().path());
     }
 
     @Override

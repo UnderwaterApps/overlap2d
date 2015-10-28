@@ -148,16 +148,16 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         return json.fromJson(SceneVO.class, file.readString());
     }
 
-    public void loadCurrentProjectData(String currentWorkingPath, String projectName, String curResolution) {
+    public void loadCurrentProjectData(String projectPath, String curResolution) {
         packResolutionName = curResolution;
-        loadCurrentProjectAssets(currentWorkingPath + "/" + projectName + "/assets/" + curResolution + "/pack/pack.atlas");
-        loadCurrentProjectSkin(currentWorkingPath + "/" + projectName + "/assets/orig/styles");
-        loadCurrentProjectParticles(currentWorkingPath + "/" + projectName + "/assets/orig/particles");
-        loadCurrentProjectSpineAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
-        loadCurrentProjectSpriteAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
-        loadCurrentProjectSpriterAnimations(currentWorkingPath + "/" + projectName + "/assets/", curResolution);
-        loadCurrentProjectBitmapFonts(currentWorkingPath + "/" + projectName, curResolution);
-        loadCurrentProjectShaders(currentWorkingPath + "/" + projectName + "/assets/shaders/");
+        loadCurrentProjectAssets(projectPath + "/assets/" + curResolution + "/pack/pack.atlas");
+        loadCurrentProjectSkin(projectPath + "/assets/orig/styles");
+        loadCurrentProjectParticles(projectPath + "/assets/orig/particles");
+        loadCurrentProjectSpineAnimations(projectPath + "/assets/", curResolution);
+        loadCurrentProjectSpriteAnimations(projectPath + "/assets/", curResolution);
+        loadCurrentProjectSpriterAnimations(projectPath + "/assets/", curResolution);
+        loadCurrentProjectBitmapFonts(projectPath, curResolution);
+        loadCurrentProjectShaders(projectPath + "/assets/shaders/");
     }
 
     private void loadCurrentProjectParticles(String path) {
