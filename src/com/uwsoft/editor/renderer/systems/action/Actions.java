@@ -3,6 +3,7 @@ package com.uwsoft.editor.renderer.systems.action;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.signals.Listener;
 import com.badlogic.ashley.signals.Signal;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.uwsoft.editor.renderer.components.ActionComponent;
 import com.uwsoft.editor.renderer.systems.action.data.*;
@@ -30,8 +31,11 @@ public class Actions {
         registerActionClass(ScaleByAction.class);
         registerActionClass(RotateToAction.class);
         registerActionClass(RotateByAction.class);
+        registerActionClass(ColorAction.class);
+
         registerActionClass(RunnableAction.class);
         registerActionClass(DelayAction.class);
+
         registerActionClass(ParallelAction.class);
         registerActionClass(SequenceAction.class);
 
@@ -192,6 +196,19 @@ public class Actions {
         return actionData;
     }
 
+    public static ColorData color (Color color, float duration) {
+        return color(color, duration, null);
+    }
+
+    public static ColorData color (Color color, float duration, Interpolation interpolation) {
+        ColorData colorData = new ColorData(
+                interpolation,
+                duration,
+                color
+        );
+        colorData.logicClassName = ColorAction.class.getName();
+        return colorData;
+    }
 
     public static void addAction(final Entity entity, ActionData data){
         checkInit();
