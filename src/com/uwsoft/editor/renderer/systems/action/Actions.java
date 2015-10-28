@@ -32,6 +32,7 @@ public class Actions {
         registerActionClass(RotateToAction.class);
         registerActionClass(RotateByAction.class);
         registerActionClass(ColorAction.class);
+        registerActionClass(AlphaAction.class);
 
         registerActionClass(RunnableAction.class);
         registerActionClass(DelayAction.class);
@@ -123,12 +124,6 @@ public class Actions {
         return actionData;
     }
 
-    static public ParallelData parallel(ActionData... actionDatas) {
-        ParallelData actionData = new ParallelData(actionDatas);
-        actionData.logicClassName = ParallelAction.class.getName();
-        return actionData;
-    }
-
     public static SizeToData sizeTo (float width, float height, float duration) {
         return sizeTo(width, height, duration, null);
     }
@@ -190,12 +185,6 @@ public class Actions {
     }
 
 
-    static public SequenceData sequence(ActionData... actionDatas) {
-        SequenceData actionData = new SequenceData(actionDatas);
-        actionData.logicClassName = SequenceAction.class.getName();
-        return actionData;
-    }
-
     public static ColorData color (Color color, float duration) {
         return color(color, duration, null);
     }
@@ -208,6 +197,57 @@ public class Actions {
         );
         colorData.logicClassName = ColorAction.class.getName();
         return colorData;
+    }
+
+    public static AlphaData alpha (float alpha, float duration) {
+        return alpha(alpha, duration, null);
+    }
+
+    public static AlphaData alpha (float alpha, float duration, Interpolation interpolation) {
+        AlphaData alphaData = new AlphaData(
+                interpolation,
+                duration,
+                alpha
+        );
+        alphaData.logicClassName = AlphaAction.class.getName();
+        return  alphaData;
+    }
+
+    public static AlphaData fadeIn (float duration) {
+        return alpha(1, duration, null);
+    }
+
+    public static AlphaData fadeIn (float duration, Interpolation interpolation) {
+        return alpha(1, duration, interpolation);
+    }
+
+
+    public static AlphaData fadeOut (float duration) {
+        return alpha(0, duration, null);
+    }
+
+    public static AlphaData fadeOut (float duration, Interpolation interpolation) {
+        return alpha(0, duration, interpolation);
+    }
+
+    public static DelayData delay (float duration) {
+        DelayData delayData = new DelayData(
+                duration
+        );
+        delayData.logicClassName = DelayAction.class.getName();
+        return delayData;
+    }
+
+    static public ParallelData parallel(ActionData... actionDatas) {
+        ParallelData actionData = new ParallelData(actionDatas);
+        actionData.logicClassName = ParallelAction.class.getName();
+        return actionData;
+    }
+
+    static public SequenceData sequence(ActionData... actionDatas) {
+        SequenceData actionData = new SequenceData(actionDatas);
+        actionData.logicClassName = SequenceAction.class.getName();
+        return actionData;
     }
 
     public static void addAction(final Entity entity, ActionData data){

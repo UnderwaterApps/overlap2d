@@ -9,9 +9,8 @@ public class DelayData extends DelegateData {
     public float duration;
     public float passedTime;
 
-    public DelayData(Interpolation interpolation, float duration, float passedTime) {
-        super(interpolation);
+    public DelayData(float duration) {
+        super();
         this.duration = duration;
-        this.passedTime = passedTime;
     }
 }
