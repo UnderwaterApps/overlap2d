@@ -84,7 +84,7 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     @Override
     public String getProjectPath() {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        return projectManager.getCurrentWorkingPath() + "/" + projectManager.getCurrentProjectVO().projectName;
+        return projectManager.getCurrentProjectPath();
     }
 
     @Override
@@ -97,7 +97,7 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public void reLoadProject() {
         Sandbox sandbox = Sandbox.getInstance();
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
+        projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectPath());
         sandbox.loadCurrentProject();
         facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);
     }
