@@ -8,22 +8,14 @@ import com.uwsoft.editor.renderer.systems.action.data.DelegateData;
 /**
  * Created by Eduard on 10/15/2015.
  */
-public class DelayAction  extends DelegateAction{
+public class DelayAction<T extends DelayData>  extends DelegateAction<T>{
 
     @Override
-    protected boolean delegate(float delta, Entity entity, DelegateData actionData) {
-        DelayData data = cast(actionData);
-        if (data.passedTime < data.duration) {
-            data.passedTime += delta;
-            if (data.passedTime < data.duration) return false;
-            delta = data.passedTime - data.duration;
+    protected boolean delegate(float delta, Entity entity, T actionData) {
+        if (actionData.passedTime < actionData.duration) {
+            actionData.passedTime += delta;
+            if (actionData.passedTime < actionData.duration) return false;
         }
-        /*if (action == null) return true;
-        return action.act(delta);*/
-        return  true;
-    }
-
-    private DelayData cast(ActionData data) {
-        return (DelayData) data;
+        return true;
     }
 }

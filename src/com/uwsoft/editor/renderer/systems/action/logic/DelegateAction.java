@@ -12,5 +12,5 @@ public abstract class DelegateAction<T extends DelegateData> extends ActionLogic
         return delegate(delta, entity, actionData);
     }
 
-    abstract protected boolean delegate (float delta, Entity entity, T data);
+    abstract protected boolean delegate (float delta, Entity entity, T actionData);
 }
