@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.systems.action.data.ActionData;
 
 /**
- * Created by Eduard on 10/14/2015.
+ * Created by ZeppLondon on 10/14/2015.
  */
 abstract public class ActionLogic<T extends ActionData> {
 

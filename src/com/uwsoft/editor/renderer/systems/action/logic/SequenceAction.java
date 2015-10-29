@@ -2,8 +2,6 @@ package com.uwsoft.editor.renderer.systems.action.logic;
 
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.systems.action.Actions;
-import com.uwsoft.editor.renderer.systems.action.data.ActionData;
-import com.uwsoft.editor.renderer.systems.action.data.ParallelData;
 import com.uwsoft.editor.renderer.systems.action.data.SequenceData;
 
 /**

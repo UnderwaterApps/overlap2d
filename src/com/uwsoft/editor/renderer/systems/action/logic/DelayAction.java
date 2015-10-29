@@ -6,7 +6,7 @@ import com.uwsoft.editor.renderer.systems.action.data.DelayData;
 import com.uwsoft.editor.renderer.systems.action.data.DelegateData;
 
 /**
- * Created by Eduard on 10/15/2015.
+ * Created by ZeppLondon on 10/15/2015.
  */
 public class DelayAction<T extends DelayData>  extends DelegateAction<T>{
 

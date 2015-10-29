@@ -1,8 +1,6 @@
 package com.uwsoft.editor.renderer.systems.action;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.uwsoft.editor.renderer.components.ActionComponent;
@@ -11,7 +9,6 @@ import com.uwsoft.editor.renderer.systems.action.logic.*;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * Created by Eduard on 10/13/2015.
@@ -19,7 +16,6 @@ import java.util.LinkedList;
 public class Actions {
 
     public static HashMap<String, ActionLogic> actionLogicMap = new HashMap<String, ActionLogic>();
-    public static HashMap<Entity, LinkedList<ActionData>> scheduledActionsMap = new HashMap<Entity, LinkedList<ActionData>>();
     private static boolean initialized;
 
     private static void initialize() throws InstantiationException, IllegalAccessException {
@@ -255,35 +251,16 @@ public class Actions {
         ActionComponent actionComponent;
         actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
 
-        if (actionComponent != null) {
-            if (actionComponent.dataArray.size() == 0) {
-                // action is scheduled for remove, so we "schedule" add new ActionComponent after its removal
-                entity.componentAdded.add(new Listener<Entity>() {
-                    @Override
-                    public void receive(Signal<Entity> signal, Entity object) {
-                        entity.add(new ActionComponent());
-                    }
-                });
-            }
-        } else {
-            if ((scheduledActionsMap.get(entity) == null || scheduledActionsMap.get(entity).size() == 0)) {
-                // There was no add ActionComponent scheduled, so we add the component
-                entity.add(new ActionComponent());
-            }
+        if (actionComponent == null) {
+            actionComponent = new ActionComponent();
+            entity.add(actionComponent);
         }
 
-        if (scheduledActionsMap.get(entity) == null) {
-            scheduledActionsMap.put(entity, new LinkedList<ActionData>());
-        }
-        scheduledActionsMap.get(entity).add(data);
+        actionComponent.dataArray.add(data);
     }
 
     public static void removeActions(Entity entity) {
         ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
-        if (scheduledActionsMap.get(entity) != null) {
-            scheduledActionsMap.remove(entity);
-        }
-
         if (actionComponent != null){
             entity.remove(ActionComponent.class);
         }
@@ -291,15 +268,9 @@ public class Actions {
 
     public static void removeAction(Entity entity, ActionData data) {
         ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
-        if (scheduledActionsMap.get(entity) != null) {
-            if (scheduledActionsMap.get(entity).contains(data)){
-                scheduledActionsMap.get(entity).remove(data);
-            }
-        }
-
         if (actionComponent != null) {
-            if (actionComponent.dataArray.contains(data)) {
-                actionComponent.dataArray.remove(data);
+            if (actionComponent.dataArray.contains(data, true)) {
+                actionComponent.dataArray.removeValue(data, true);
             }
         }
     }

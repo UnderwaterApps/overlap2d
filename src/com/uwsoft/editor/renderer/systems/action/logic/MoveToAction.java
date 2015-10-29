@@ -6,7 +6,7 @@ import com.uwsoft.editor.renderer.systems.action.data.MoveToData;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * Created by Eduard on 10/13/2015.
+ * Created by ZeppLondon on 10/13/2015.
  */
 public class MoveToAction<T extends MoveToData> extends TemporalAction<T> {
     @Override

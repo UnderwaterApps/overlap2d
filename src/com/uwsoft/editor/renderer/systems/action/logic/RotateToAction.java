@@ -6,7 +6,7 @@ import com.uwsoft.editor.renderer.systems.action.data.RotateToData;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * Created by Eduard on 10/16/2015.
+ * Created by ZeppLondon on 10/16/2015.
  */
 public class RotateToAction<T extends RotateToData> extends TemporalAction<T> {
     @Override
