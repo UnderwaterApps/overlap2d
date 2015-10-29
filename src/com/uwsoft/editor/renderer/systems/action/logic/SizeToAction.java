@@ -15,7 +15,6 @@ public class SizeToAction <T extends SizeToData> extends TemporalAction<T>  {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
         dimensionsComponent.width = actionData.startWidth + (actionData.endHeight - actionData.startWidth) * percent;
         dimensionsComponent.height = actionData.startHeight + (actionData.endHeight - actionData.startHeight) * percent;
-        System.out.println("w " + dimensionsComponent.width);
     }
 
     @Override
