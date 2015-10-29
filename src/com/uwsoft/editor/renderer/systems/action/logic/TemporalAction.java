@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.systems.action.data.TemporalData;
 
 /**
- * Created by Eduard on 10/15/2015.
+ * Created by ZeppLondon on 10/15/2015.
  */
 public abstract class TemporalAction<T extends TemporalData> extends ActionLogic<T> {
     @Override

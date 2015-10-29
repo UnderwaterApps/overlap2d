@@ -1,7 +1,5 @@
 package com.uwsoft.editor.renderer.systems.action.data;
 
-import java.util.ArrayList;
-
 /**
  * Created by ZeppLondon on 10/23/15.
  */

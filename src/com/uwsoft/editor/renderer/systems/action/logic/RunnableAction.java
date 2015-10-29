@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.systems.action.data.RunnableData;
 
 /**
- * Created by Eduard on 10/15/2015.
+ * Created by ZeppLondon on 10/15/2015.
  */
-public class RunnableAction extends ActionLogic<RunnableData> {
+public class RunnableAction<T extends RunnableData> extends ActionLogic<T> {
     @Override
-    public boolean act(float delta, Entity entity, RunnableData actionData) {
+    public boolean act(float delta, Entity entity, T actionData) {
         if (!actionData.ran) {
             actionData.ran = true;
             run(entity, actionData);
@@ -16,7 +16,7 @@ public class RunnableAction extends ActionLogic<RunnableData> {
         return true;
     }
 
-    public void run(Entity entity, RunnableData actionData) {
+    public void run(Entity entity, T actionData) {
         actionData.runnable.run();
     }
 }

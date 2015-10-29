@@ -1,8 +1,7 @@
 package com.uwsoft.editor.renderer.systems.action;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.ashley.signals.Listener;
-import com.badlogic.ashley.signals.Signal;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.uwsoft.editor.renderer.components.ActionComponent;
 import com.uwsoft.editor.renderer.systems.action.data.*;
@@ -10,7 +9,6 @@ import com.uwsoft.editor.renderer.systems.action.logic.*;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 import java.util.HashMap;
-import java.util.LinkedList;
 
 /**
  * Created by Eduard on 10/13/2015.
@@ -18,16 +16,23 @@ import java.util.LinkedList;
 public class Actions {
 
     public static HashMap<String, ActionLogic> actionLogicMap = new HashMap<String, ActionLogic>();
-    public static HashMap<Entity, LinkedList<ActionData>> scheduledActionsMap = new HashMap<Entity, LinkedList<ActionData>>();
     private static boolean initialized;
 
     private static void initialize() throws InstantiationException, IllegalAccessException {
         registerActionClass(MoveToAction.class);
         registerActionClass(MoveByAction.class);
+        registerActionClass(SizeToAction.class);
+        registerActionClass(SizeByAction.class);
+        registerActionClass(ScaleToAction.class);
+        registerActionClass(ScaleByAction.class);
         registerActionClass(RotateToAction.class);
         registerActionClass(RotateByAction.class);
+        registerActionClass(ColorAction.class);
+        registerActionClass(AlphaAction.class);
+
         registerActionClass(RunnableAction.class);
         registerActionClass(DelayAction.class);
+
         registerActionClass(ParallelAction.class);
         registerActionClass(SequenceAction.class);
 
@@ -114,15 +119,120 @@ public class Actions {
         actionData.logicClassName = RotateByAction.class.getName();
         return actionData;
     }
-/*
-    static public void customAction(Entity entity, Data, Logic) {
-        RotateByData actionData =  new RotateByData(
+
+    public static SizeToData sizeTo (float width, float height, float duration) {
+        return sizeTo(width, height, duration, null);
+    }
+
+    public static SizeToData sizeTo (float width, float height, float duration, Interpolation interpolation) {
+        SizeToData actionData = new SizeToData(
                 interpolation,
                 duration,
-                amount
+                width,
+                height
         );
-        addActionObject(entity, actionData, actionLogicMap.get("RotaBy"));
-    }*/
+        actionData.logicClassName = SizeToAction.class.getName();
+        return actionData;
+    }
+
+    public static SizeByData sizeBy (float width, float height, float duration) {
+        return sizeBy(width, height, duration, null);
+    }
+
+    public static SizeByData sizeBy (float width, float height, float duration, Interpolation interpolation) {
+        SizeByData actionData = new SizeByData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = SizeByAction.class.getName();
+        return actionData;
+    }
+
+    public static ScaleToData scaleTo (float width, float height, float duration) {
+        return scaleTo(width, height, duration, null);
+    }
+
+    public static ScaleToData scaleTo (float width, float height, float duration, Interpolation interpolation) {
+        ScaleToData actionData = new ScaleToData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = ScaleToAction.class.getName();
+        return actionData;
+    }
+
+    public static ScaleByData scaleBy (float width, float height, float duration) {
+        return scaleBy(width, height, duration, null);
+    }
+
+    public static ScaleByData scaleBy (float width, float height, float duration, Interpolation interpolation) {
+        ScaleByData actionData = new ScaleByData(
+                interpolation,
+                duration,
+                width,
+                height
+        );
+        actionData.logicClassName = ScaleByAction.class.getName();
+        return actionData;
+    }
+
+
+    public static ColorData color (Color color, float duration) {
+        return color(color, duration, null);
+    }
+
+    public static ColorData color (Color color, float duration, Interpolation interpolation) {
+        ColorData colorData = new ColorData(
+                interpolation,
+                duration,
+                color
+        );
+        colorData.logicClassName = ColorAction.class.getName();
+        return colorData;
+    }
+
+    public static AlphaData alpha (float alpha, float duration) {
+        return alpha(alpha, duration, null);
+    }
+
+    public static AlphaData alpha (float alpha, float duration, Interpolation interpolation) {
+        AlphaData alphaData = new AlphaData(
+                interpolation,
+                duration,
+                alpha
+        );
+        alphaData.logicClassName = AlphaAction.class.getName();
+        return  alphaData;
+    }
+
+    public static AlphaData fadeIn (float duration) {
+        return alpha(1, duration, null);
+    }
+
+    public static AlphaData fadeIn (float duration, Interpolation interpolation) {
+        return alpha(1, duration, interpolation);
+    }
+
+
+    public static AlphaData fadeOut (float duration) {
+        return alpha(0, duration, null);
+    }
+
+    public static AlphaData fadeOut (float duration, Interpolation interpolation) {
+        return alpha(0, duration, interpolation);
+    }
+
+    public static DelayData delay (float duration) {
+        DelayData delayData = new DelayData(
+                duration
+        );
+        delayData.logicClassName = DelayAction.class.getName();
+        return delayData;
+    }
 
     static public ParallelData parallel(ActionData... actionDatas) {
         ParallelData actionData = new ParallelData(actionDatas);
@@ -130,39 +240,38 @@ public class Actions {
         return actionData;
     }
 
-
     static public SequenceData sequence(ActionData... actionDatas) {
         SequenceData actionData = new SequenceData(actionDatas);
         actionData.logicClassName = SequenceAction.class.getName();
         return actionData;
     }
 
-
     public static void addAction(final Entity entity, ActionData data){
         checkInit();
         ActionComponent actionComponent;
         actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
 
-        if (actionComponent != null) {
-            if (actionComponent.dataArray.size() == 0) {
-                // action is scheduled for remove, so we "schedule" add new ActionComponent after its removal
-                entity.componentAdded.add(new Listener<Entity>() {
-                    @Override
-                    public void receive(Signal<Entity> signal, Entity object) {
-                        entity.add(new ActionComponent());
-                    }
-                });
-            }
-        } else {
-            if ((scheduledActionsMap.get(entity) == null || scheduledActionsMap.get(entity).size() == 0)) {
-                // There was no add ActionComponent scheduled, so we add the component
-                entity.add(new ActionComponent());
-            }
+        if (actionComponent == null) {
+            actionComponent = new ActionComponent();
+            entity.add(actionComponent);
         }
 
-        if (scheduledActionsMap.get(entity) == null) {
-            scheduledActionsMap.put(entity, new LinkedList<ActionData>());
+        actionComponent.dataArray.add(data);
+    }
+
+    public static void removeActions(Entity entity) {
+        ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
+        if (actionComponent != null){
+            entity.remove(ActionComponent.class);
         }
-        scheduledActionsMap.get(entity).add(data);
+    }
+
+    public static void removeAction(Entity entity, ActionData data) {
+        ActionComponent actionComponent = ComponentRetriever.get(entity, ActionComponent.class);
+        if (actionComponent != null) {
+            if (actionComponent.dataArray.contains(data, true)) {
+                actionComponent.dataArray.removeValue(data, true);
+            }
+        }
     }
 }

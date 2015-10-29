@@ -6,11 +6,11 @@ import com.uwsoft.editor.renderer.systems.action.data.MoveByData;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * Created by Eduard on 10/15/2015.
+ * Created by ZeppLondon on 10/15/2015.
  */
-public class MoveByAction extends RelativeTemporalAction<MoveByData> {
+public class MoveByAction<T extends MoveByData> extends RelativeTemporalAction<T> {
     @Override
-    protected void updateRelative(float percentDelta, Entity entity, MoveByData actionData) {
+    protected void updateRelative(float percentDelta, Entity entity, T actionData) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
 
         float amountX = actionData.amountX*percentDelta;

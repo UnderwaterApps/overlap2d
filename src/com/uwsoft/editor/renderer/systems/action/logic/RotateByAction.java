@@ -7,11 +7,11 @@ import com.uwsoft.editor.renderer.systems.action.data.RotateByData;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
- * Created by Eduard on 10/16/2015.
+ * Created by ZeppLondon on 10/16/2015.
  */
-public class RotateByAction extends RelativeTemporalAction<RotateByData> {
+public class RotateByAction<T extends RotateByData> extends RelativeTemporalAction<T> {
     @Override
-    protected void updateRelative(float percentDelta, Entity entity, RotateByData actionData) {
+    protected void updateRelative(float percentDelta, Entity entity, T actionData) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         transformComponent.rotation += actionData.amount * percentDelta;
     }

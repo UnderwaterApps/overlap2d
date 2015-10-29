@@ -4,7 +4,7 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.systems.action.data.DelegateData;
 
 /**
- * Created by Eduard on 10/15/2015.
+ * Created by ZeppLondon on 10/15/2015.
  */
 public abstract class DelegateAction<T extends DelegateData> extends ActionLogic<T> {
     @Override
@@ -12,5 +12,5 @@ public abstract class DelegateAction<T extends DelegateData> extends ActionLogic
         return delegate(delta, entity, actionData);
     }
 
-    abstract protected boolean delegate (float delta, Entity entity, T data);
+    abstract protected boolean delegate (float delta, Entity entity, T actionData);
 }
