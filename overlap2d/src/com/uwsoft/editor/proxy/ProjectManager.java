@@ -1087,7 +1087,7 @@ public class ProjectManager extends BaseProxy {
     }
 
     public FileHandle getWorkspacePath() {
-        if(editorConfigVO.lastOpenedSystemPath != null) {
+        if (!editorConfigVO.lastOpenedSystemPath.isEmpty()) {
             return new FileHandle(editorConfigVO.lastOpenedSystemPath);
         }
         return new FileHandle(defaultWorkspacePath);
