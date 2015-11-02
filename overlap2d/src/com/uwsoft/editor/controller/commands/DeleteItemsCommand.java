@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
@@ -43,14 +42,14 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
     private void backup() {
         Set<Entity> entitySet = new HashSet<>();
-        if(entityIdsToDelete == null) {
+        if (entityIdsToDelete == null) {
             entityIdsToDelete = new Array<>();
             entitySet = sandbox.getSelector().getSelectedItems();
-            for(Entity entity: entitySet) {
+            for (Entity entity : entitySet) {
                 entityIdsToDelete.add(EntityUtils.getEntityId(entity));
             }
         } else {
-            for(Integer entityId: entityIdsToDelete) {
+            for (Integer entityId : entityIdsToDelete) {
                 entitySet.add(EntityUtils.getByUniqueId(entityId));
             }
         }
@@ -62,7 +61,7 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
     public void doAction() {
         backup();
 
-        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = facade.retrieveMediator(FollowersUIMediator.NAME);
         for (Integer entityId : entityIdsToDelete) {
             Entity item = EntityUtils.getByUniqueId(entityId);
             followersUIMediator.removeFollower(item);
@@ -76,12 +75,12 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
-        Json json =  new Json();
+        Json json = new Json();
         CompositeVO compositeVO = json.fromJson(CompositeVO.class, backup);
         Set<Entity> newEntitiesList = PasteItemsCommand.createEntitiesFromVO(compositeVO);
 
         for (Entity entity : newEntitiesList) {
-            Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
+            facade.sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
         }
 
         sandbox.getSelector().setSelections(newEntitiesList, true);
@@ -89,7 +88,7 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
     public void setItemsToDelete(Set<Entity> entities) {
         entityIdsToDelete = new Array<>();
-        for(Entity entity: entities) {
+        for (Entity entity : entities) {
             entityIdsToDelete.add(EntityUtils.getEntityId(entity));
         }
     }

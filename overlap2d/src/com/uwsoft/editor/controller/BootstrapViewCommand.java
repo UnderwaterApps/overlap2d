@@ -21,11 +21,11 @@ package com.uwsoft.editor.controller;
 import com.puremvc.patterns.command.SimpleCommand;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.FollowersUIMediator;
-import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.Overlap2DScreenMediator;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.UIStageMediator;
+import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.RulersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIAlignBoxMediator;
@@ -38,7 +38,13 @@ import com.uwsoft.editor.view.ui.box.UIResolutionBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIZoomBoxMediator;
-import com.uwsoft.editor.view.ui.dialog.*;
+import com.uwsoft.editor.view.ui.dialog.CreateNewResolutionDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.CustomVariablesDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.EditSpriteAnimationDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.ExportSettingsDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.ImportDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.NewProjectDialogMediator;
+import com.uwsoft.editor.view.ui.dialog.TagsDialogMediator;
 
 /**
  * Created by sargis on 4/1/15.

@@ -18,11 +18,10 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -30,9 +29,10 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.commons.UIDraggablePanel;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
+
+import java.util.Map;
 
 /**
  * Created by azakhary on 5/12/2015.
@@ -101,8 +101,16 @@ public class CustomVariablesDialog extends UIDraggablePanel {
         variablesList.clear();
         createAddVariableTable();
 
-        variablesList.add(StandardWidgetsFactory.createLabel("Key name")).width(124).height(20).align(Align.center).padLeft(6);
-        variablesList.add(StandardWidgetsFactory.createLabel("Value")).width(124).height(20).align(Align.center).padLeft(1);
+        variablesList.add(StandardWidgetsFactory.createLabel("Key name"))
+                     .width(124)
+                     .height(20)
+                     .align(Align.center)
+                     .padLeft(6);
+        variablesList.add(StandardWidgetsFactory.createLabel("Value"))
+                     .width(124)
+                     .height(20)
+                     .align(Align.center)
+                     .padLeft(1);
         variablesList.row();
 
         for (Map.Entry<String, String> entry : vars.getHashMap().entrySet()) {

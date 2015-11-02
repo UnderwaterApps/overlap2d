@@ -1,7 +1,5 @@
 package com.uwsoft.editor.view.ui.dialog;
 
-import com.badlogic.gdx.Gdx;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
@@ -34,10 +32,12 @@ public class ExportSettingsDialogTest {
     public void shouldSendExportInformationAfterClickButton() throws Exception {
         Mediator mediator = mock(Mediator.class);
         given(mediator.getMediatorName()).willReturn(ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED);
-        given(mediator.listNotificationInterests()).willReturn(new String[]{ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED});
+        given(mediator.listNotificationInterests()).willReturn(
+                new String[]{ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED});
         Overlap2DFacade.getInstance().registerMediator(mediator);
 
-        VisTextButton visTextButton = UIHelper.findActorByText(exportSettingsDialog, "Save Settings and Export", VisTextButton.class);
+        VisTextButton visTextButton = UIHelper.findActorByText(exportSettingsDialog, "Save Settings and Export",
+                VisTextButton.class);
 
         assertThat(visTextButton.getListeners().size, is(3));
         UIHelper.invokeClickableActor(visTextButton);

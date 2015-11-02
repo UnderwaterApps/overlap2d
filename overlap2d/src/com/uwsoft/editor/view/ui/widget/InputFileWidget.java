@@ -41,17 +41,20 @@ public class InputFileWidget extends VisTable {
     private FileHandle value;
     private Array<FileHandle> values;
 
-    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled, boolean setVisDefaults) {
+    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode,
+            boolean multiselectionEnabled, boolean setVisDefaults) {
         super(setVisDefaults);
         initWidget();
         initFileChooser(mode, selectionMode, multiselectionEnabled);
     }
 
-    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
+    public InputFileWidget(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode,
+            boolean multiselectionEnabled) {
         this(mode, selectionMode, multiselectionEnabled, true);
     }
 
-    private void initFileChooser(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
+    private void initFileChooser(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode,
+            boolean multiselectionEnabled) {
         fileChooser = new FileChooser(mode);
         fileChooser.setSelectionMode(selectionMode);
         fileChooser.setMultiselectionEnabled(multiselectionEnabled);

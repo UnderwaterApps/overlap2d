@@ -21,7 +21,6 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
@@ -53,10 +52,10 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         HashSet<Entity> entities = (HashSet<Entity>) sandbox.getSelector().getSelectedItems();
         UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
 
-        if(layersBackup == null) {
+        if (layersBackup == null) {
             // backup layer data
             layersBackup = new HashMap<>();
-            for(Entity entity: entities) {
+            for (Entity entity : entities) {
                 ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
                 int tmpId = EntityUtils.getEntityId(entity);
                 layersBackup.put(tmpId, zIndexComponent.layerName);
@@ -78,10 +77,10 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         EntityUtils.changeParent(entities, entity);
 
         //reposition children
-        for(Entity childEntity: entities) {
+        for (Entity childEntity : entities) {
             TransformComponent transformComponent = ComponentRetriever.get(childEntity, TransformComponent.class);
             transformComponent.x -= position.x;
-            transformComponent.y -=position.y;
+            transformComponent.y -= position.y;
 
             // put it on default layer
             ZIndexComponent zIndexComponent = ComponentRetriever.get(childEntity, ZIndexComponent.class);
@@ -98,15 +97,15 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         zIndexComponent.layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
         //let everyone know
-        Overlap2DFacade.getInstance().sendNotification(DONE);
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
+        facade.sendNotification(DONE);
+        facade.sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
         sandbox.getSelector().setSelection(entity, true);
 
     }
 
     @Override
     public void undoAction() {
-        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = facade.retrieveMediator(FollowersUIMediator.NAME);
 
         //get the entity
         Entity entity = EntityUtils.getByUniqueId(entityId);
@@ -120,10 +119,10 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         EntityUtils.changeParent(children, oldParentEntity);
 
         //reposition children
-        for(Entity tmpEntity: children) {
+        for (Entity tmpEntity : children) {
             TransformComponent transformComponent = ComponentRetriever.get(tmpEntity, TransformComponent.class);
-            transformComponent.x+=positionDiff.x;
-            transformComponent.y+=positionDiff.y;
+            transformComponent.x += positionDiff.x;
+            transformComponent.y += positionDiff.y;
 
             // put layer data back
             ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
@@ -134,7 +133,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         followersUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
 
-        Overlap2DFacade.getInstance().sendNotification(DONE);
+        facade.sendNotification(DONE);
 
         sandbox.getSelector().setSelections(children, true);
     }

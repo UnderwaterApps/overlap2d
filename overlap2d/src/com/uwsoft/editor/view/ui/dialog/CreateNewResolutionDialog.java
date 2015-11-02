@@ -22,17 +22,18 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.commons.O2DDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisRadioButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.commons.O2DDialog;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 public class CreateNewResolutionDialog extends O2DDialog {
-    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.CreateNewResolutionDialog" + ".CREATE_BTN_CLICKED";
+    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.CreateNewResolutionDialog" + "" +
+            ".CREATE_BTN_CLICKED";
     private final VisTextField nameVisTextField;
     private VisTextField widthVisTextField;
     private VisTextField heightVisTextField;
@@ -62,7 +63,8 @@ public class CreateNewResolutionDialog extends O2DDialog {
 
     private Table getDimensionsTable() {
         buttonGroup = new ButtonGroup<>();
-        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
+        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter
+                .DigitsOnlyFilter();
         VisTable dimensionsTable = new VisTable();
         widthVisTextField = createTextField("", digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);

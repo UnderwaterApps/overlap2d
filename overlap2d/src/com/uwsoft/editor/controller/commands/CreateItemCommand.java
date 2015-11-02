@@ -21,12 +21,10 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 
 import java.util.HashSet;
@@ -48,15 +46,15 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
         sandbox.getEngine().addEntity(entity);
 
         // z-index
-        NodeComponent nodeComponent = ComponentRetriever.get(Sandbox.getInstance().getCurrentViewingEntity(), NodeComponent.class);
+        NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
         ZIndexComponent zindexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         zindexComponent.setZIndex(nodeComponent.children.size);
 
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
+        facade.sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
 
         // select newly created item
         // get current selection
-        HashSet<Entity> previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
+        HashSet<Entity> previousSelection = new HashSet<>(sandbox.getSelector().getSelectedItems());
         previousSelectionIds = EntityUtils.getEntityId(previousSelection);
         sandbox.getSelector().setSelection(entity, true);
     }
@@ -65,10 +63,10 @@ public class CreateItemCommand extends EntityModifyRevertableCommand {
     public void undoAction() {
         Entity entity = EntityUtils.getByUniqueId(entityId);
 
-        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = facade.retrieveMediator(FollowersUIMediator.NAME);
         followersUIMediator.removeFollower(entity);
         sandbox.getEngine().removeEntity(entity);
 
-        Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
+        sandbox.getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
     }
 }

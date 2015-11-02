@@ -23,11 +23,14 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
-import com.uwsoft.editor.view.ui.widget.components.TintButton;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
+import com.uwsoft.editor.view.ui.widget.components.TintButton;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -35,7 +38,8 @@ import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
 public class UISceneProperties extends UIAbstractProperties {
 
 
-    public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.view.ui.properties.panels.UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
+    public static final String AMBIENT_COLOR_BUTTON_CLICKED = "com.uwsoft.editor.view.ui.properties.panels" +
+            ".UISceneProperties" + ".AMBIENT_COLOR_BUTTON_CLICKED";
 
     private VisLabel pixelsPerWorldUnitField;
     private VisCheckBox physicsEnabledCheckBox;
@@ -151,7 +155,7 @@ public class UISceneProperties extends UIAbstractProperties {
     }
 
     public void setPixelsPerWorldUnit(int value) {
-        pixelsPerWorldUnitField.setText(value+"");
+        pixelsPerWorldUnitField.setText(value + "");
     }
 
     @Override

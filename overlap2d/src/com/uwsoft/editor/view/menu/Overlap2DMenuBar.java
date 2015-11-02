@@ -18,21 +18,20 @@
 
 package com.uwsoft.editor.view.menu;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import org.apache.commons.lang3.SystemUtils;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.event.MenuItemListener;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.ui.widget.CustomMenu;
 import com.uwsoft.editor.view.ui.widget.CustomMenuBar;
+import org.apache.commons.lang3.SystemUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class Overlap2DMenuBar extends CustomMenuBar {
 
@@ -80,7 +79,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
         fileMenu = new FileMenu();
         editMenu = new EditMenu();
         windowMenu = new WindowMenu();
-//        getTable().debug();
+        //        getTable().debug();
         addMenu(fileMenu);
         addMenu(editMenu);
         addMenu(windowMenu);
@@ -114,8 +113,10 @@ public class Overlap2DMenuBar extends CustomMenuBar {
 
         public WindowMenu() {
             super("Window");
-            customVars = new MenuItem("Custom Variables", new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
-            animations = new MenuItem("Sprite Animations", new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
+            customVars = new MenuItem("Custom Variables",
+                    new MenuItemListener(CUSTOM_VARIABLES_EDITOR_OPEN, null, WINDOW_MENU));
+            animations = new MenuItem("Sprite Animations",
+                    new MenuItemListener(SPRITE_ANIMATIONS_EDITOR_OPEN, null, WINDOW_MENU));
             addItem(customVars);
             addItem(animations);
         }
@@ -142,7 +143,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             copy = new MenuItem("Copy", new MenuItemListener(COPY, null, EDIT_MENU)).setShortcut(maskKey + " + C");
             paste = new MenuItem("Paste", new MenuItemListener(PASTE, null, EDIT_MENU)).setShortcut(maskKey + " + P");
             undo = new MenuItem("Undo", new MenuItemListener(UNDO, null, EDIT_MENU)).setShortcut(maskKey + " + Z");
-            redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(maskKey + " + Shift + Z");
+            redo = new MenuItem("Redo", new MenuItemListener(REDO, null, EDIT_MENU)).setShortcut(
+                    maskKey + " + Shift + Z");
             addItem(cut);
             addItem(copy);
             addItem(paste);
@@ -189,7 +191,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             addItem(scenesMenuItem);
             //
             addSeparator();
-            importToLibrary = new MenuItem("Import Resources", new MenuItemListener(IMPORT_TO_LIBRARY, null, FILE_MENU));
+            importToLibrary = new MenuItem("Import Resources",
+                    new MenuItemListener(IMPORT_TO_LIBRARY, null, FILE_MENU));
             export = new MenuItem("Export", new MenuItemListener(EXPORT, null, FILE_MENU));
             exportSettings = new MenuItem("Export Settings", new MenuItemListener(EXPORT_SETTINGS, null, FILE_MENU));
             addItem(importToLibrary);
@@ -207,13 +210,14 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             reInitRecent(prefs.getRecentHistory());
             //
             addSeparator();
-            addItem(new MenuItem("Exit", new MenuItemListener(EXIT, null , FILE_MENU)));
+            addItem(new MenuItem("Exit", new MenuItemListener(EXIT, null, FILE_MENU)));
             sceneMenuItems = new Array<>();
         }
 
         public void addScenes(ArrayList<SceneVO> scenes) {
             for (SceneVO sceneVO : scenes) {
-                MenuItem menuItem = new MenuItem(sceneVO.sceneName, new MenuItemListener(SELECT_SCENE, sceneVO.sceneName, FILE_MENU));
+                MenuItem menuItem = new MenuItem(sceneVO.sceneName,
+                        new MenuItemListener(SELECT_SCENE, sceneVO.sceneName, FILE_MENU));
                 sceneMenuItems.add(menuItem);
                 scenesPopupMenu.addItem(menuItem);
             }
@@ -223,7 +227,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             sceneMenuItems.clear();
             scenesPopupMenu.clear();
             scenesPopupMenu.addItem(new MenuItem("Create New Scene", new MenuItemListener(NEW_SCENE, null, FILE_MENU)));
-            scenesPopupMenu.addItem(new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, null, FILE_MENU)));
+            scenesPopupMenu.addItem(
+                    new MenuItem("Delete Current Scene", new MenuItemListener(DELETE_CURRENT_SCENE, null, FILE_MENU)));
             scenesPopupMenu.addSeparator();
             addScenes(scenes);
         }
@@ -236,7 +241,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
 
         public void addRecent(ArrayList<String> paths) {
             for (String path : paths) {
-                MenuItem menuItem = new MenuItem(getFolderNameAndPath(path) , new MenuItemListener(RECENT_PROJECTS, path, FILE_MENU));
+                MenuItem menuItem = new MenuItem(getFolderNameAndPath(path),
+                        new MenuItemListener(RECENT_PROJECTS, path, FILE_MENU));
                 recentProjectsMenuItems.add(menuItem);
                 recentProjectsPopupMenu.addItem(menuItem);
             }
@@ -249,7 +255,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             addRecent(paths);
 
             if (paths.size() > 0) {
-            	recentProjectsPopupMenu.addSeparator();
+                recentProjectsPopupMenu.addSeparator();
             }
 
             MenuItem menuItem = new MenuItem("Clear list", new MenuItemListener(CLEAR_RECENTS, null, FILE_MENU));
@@ -265,19 +271,19 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             exportSettings.setDisabled(!open);
         }
 
-//        private class RecentProjectListener extends ChangeListener {
-//            private final String path;
-//
-//            public RecentProjectListener(String path) {
-//                this.path = path;
-//            }
-//
-//            @Override
-//            public void changed(ChangeEvent event, Actor actor) {
-//                Gdx.app.log(TAG, "recentProject : " + path);
-//                mediator.recentProjectItemClicked(path);
-//            }
-//        }
+        //        private class RecentProjectListener extends ChangeListener {
+        //            private final String path;
+        //
+        //            public RecentProjectListener(String path) {
+        //                this.path = path;
+        //            }
+        //
+        //            @Override
+        //            public void changed(ChangeEvent event, Actor actor) {
+        //                Gdx.app.log(TAG, "recentProject : " + path);
+        //                mediator.recentProjectItemClicked(path);
+        //            }
+        //        }
     }
 
     class O2DMenu extends CustomMenu {
@@ -290,13 +296,13 @@ public class Overlap2DMenuBar extends CustomMenuBar {
     }
 
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
-        if(menu.equals(FILE_MENU)) {
+        if (menu.equals(FILE_MENU)) {
             fileMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
         }
-        if(menu.equals(EDIT_MENU)) {
+        if (menu.equals(EDIT_MENU)) {
             editMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
         }
-        if(menu.equals(WINDOW_MENU)) {
+        if (menu.equals(WINDOW_MENU)) {
             windowMenu.addItem(new MenuItem(subMenuName, new MenuItemListener(notificationName, null, menu)));
         }
     }

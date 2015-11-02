@@ -24,7 +24,7 @@ package com.commons;
 public class MsgAPI {
 
     /**
-     *  Previous Overlap2D class notifications
+     * Previous Overlap2D class notifications
      */
     public static final String GLOBAL_PREFIX = "com.uwsoft.editor.Overlap2D";
 
@@ -39,7 +39,8 @@ public class MsgAPI {
     public static final String ZOOM_CHANGED = GLOBAL_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = GLOBAL_PREFIX + ".GRID_SIZE_CHANGED";
     public static final String ITEM_DATA_UPDATED = GLOBAL_PREFIX + ".ITEM_DATA_UPDATED";
-    public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = GLOBAL_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
+    public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = GLOBAL_PREFIX + "" +
+            ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
 
     // this should move
     public static final String HIDE_SELECTIONS = GLOBAL_PREFIX + ".HIDE_SELECTIONS";
@@ -54,7 +55,7 @@ public class MsgAPI {
 
 
     /**
-     *  Previous Sandbox class notifications
+     * Previous Sandbox class notifications
      */
     public static final String SANDBOX_PREFIX = "com.uwsoft.editor.gdx.commands.Sandbox";
 
@@ -91,14 +92,15 @@ public class MsgAPI {
     public static final String ACTION_UPDATE_ITEM_DATA = SANDBOX_PREFIX + "ACTION_UPDATE_ITEM_DATA";
     public static final String ACTION_UPDATE_LABEL_DATA = SANDBOX_PREFIX + "ACTION_UPDATE_LABEL_DATA";
     public static final String ACTION_UPDATE_LIGHT_DATA = SANDBOX_PREFIX + "ACTION_UPDATE_LIGHT_DATA";
-    public static final String ACTION_UPDATE_SPRITE_ANIMATION_DATA = SANDBOX_PREFIX + "ACTION_UPDATE_SPRITE_ANIMATION_DATA";
+    public static final String ACTION_UPDATE_SPRITE_ANIMATION_DATA = SANDBOX_PREFIX +
+            "ACTION_UPDATE_SPRITE_ANIMATION_DATA";
     public static final String ACTION_UPDATE_MESH_DATA = SANDBOX_PREFIX + "ACTION_UPDATE_MESH_DATA";
 
     public static final String ACTION_PLUGIN_PROXY_COMMAND = SANDBOX_PREFIX + "ACTION_PLUGIN_PROXY_COMMAND";
 
 
     /**
-     *  Other
+     * Other
      */
     public static final String ITEM_FACTORY_PREFIX = "com.uwsoft.editor.factory.ItemFactory";
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";

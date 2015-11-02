@@ -35,7 +35,8 @@ public class CommandManagerTest {
         commandManager.addCommand(command);
 
         int cursor = (int) Whitebox.getInternalState(commandManager, "cursor");
-        ArrayList<RevertableCommand> commands = (ArrayList<RevertableCommand>) Whitebox.getInternalState(commandManager, "commands");
+        ArrayList<RevertableCommand> commands = (ArrayList<RevertableCommand>) Whitebox.getInternalState(commandManager,
+                "commands");
 
         assertThat(cursor, is(0));
         assertThat(commands, hasSize(2));

@@ -48,7 +48,8 @@ public class UIResourcesBox extends UICollapsibleBox {
         tabbedPane.addListener(new TabbedPaneListener() {
             @Override
             public void switchedTab(Tab tab) {
-                if (tab == null) return;
+                if (tab == null)
+                    return;
                 setActiveTabContent(tab);
             }
 

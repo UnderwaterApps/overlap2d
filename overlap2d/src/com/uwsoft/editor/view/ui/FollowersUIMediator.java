@@ -59,20 +59,10 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.SCENE_LOADED,
-                MsgAPI.ITEM_DATA_UPDATED,
-                MsgAPI.ITEM_SELECTION_CHANGED,
-                MsgAPI.SHOW_SELECTIONS,
-                MsgAPI.HIDE_SELECTIONS,
-                MsgAPI.NEW_ITEM_ADDED,
-                PanTool.SCENE_PANNED,
-                UIToolBoxMediator.TOOL_SELECTED,
-                MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
-                CompositeCameraChangeCommand.DONE,
-                MsgAPI.ZOOM_CHANGED,
-                ConvertToCompositeCommand.DONE
-        };
+        return new String[]{MsgAPI.SCENE_LOADED, MsgAPI.ITEM_DATA_UPDATED, MsgAPI.ITEM_SELECTION_CHANGED, MsgAPI
+                .SHOW_SELECTIONS, MsgAPI.HIDE_SELECTIONS, MsgAPI.NEW_ITEM_ADDED, PanTool.SCENE_PANNED,
+                UIToolBoxMediator.TOOL_SELECTED, MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
+                CompositeCameraChangeCommand.DONE, MsgAPI.ZOOM_CHANGED, ConvertToCompositeCommand.DONE};
     }
 
     @Override
@@ -89,13 +79,13 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
                 break;
             case MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING:
                 BasicFollower follower = followers.get(notification.getBody());
-                if(follower != null) {
+                if (follower != null) {
                     follower.update();
                 }
                 break;
             case MsgAPI.ITEM_DATA_UPDATED:
                 follower = followers.get(notification.getBody());
-                if(follower != null) {
+                if (follower != null) {
                     follower.update();
                 }
                 break;
@@ -134,9 +124,9 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
 
     private void clearAllSubFollowersExceptNew(Set<Entity> items) {
         for (BasicFollower follower : followers.values()) {
-            if(!items.contains(follower)) {
-                if(follower instanceof NormalSelectionFollower) {
-                    ((NormalSelectionFollower)follower).clearSubFollowers();
+            if (!items.contains(follower)) {
+                if (follower instanceof NormalSelectionFollower) {
+                    ((NormalSelectionFollower) follower).clearSubFollowers();
                 }
             }
         }
@@ -154,7 +144,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
         Sandbox sandbox = Sandbox.getInstance();
         NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
 
-        for (Entity entity: nodeComponent.children) {
+        for (Entity entity : nodeComponent.children) {
             createFollower(entity);
         }
     }
@@ -186,7 +176,8 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
         followers.put(entity, follower);
 
         SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
-        follower.handleNotification(new BaseNotification(UIToolBoxMediator.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
+        follower.handleNotification(
+                new BaseNotification(UIToolBoxMediator.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
     }
 
     public void removeFollower(Entity entity) {

@@ -26,7 +26,7 @@ public abstract class ItemDropTool extends SelectionTool {
 
     @Override
     public boolean itemMouseDown(Entity entity, float x, float y) {
-        if(checkFilter(entity)) {
+        if (checkFilter(entity)) {
             return super.itemMouseDown(entity, x, y);
         } else {
             stageMouseDown(x, y);
@@ -37,7 +37,7 @@ public abstract class ItemDropTool extends SelectionTool {
 
     @Override
     public void itemMouseDragged(Entity entity, float x, float y) {
-        if(checkFilter(entity)) {
+        if (checkFilter(entity)) {
             super.itemMouseDragged(entity, x, y);
         }
 
@@ -45,15 +45,15 @@ public abstract class ItemDropTool extends SelectionTool {
 
     @Override
     public void itemMouseUp(Entity entity, float x, float y) {
-        if(checkFilter(entity)) {
+        if (checkFilter(entity)) {
             super.itemMouseUp(entity, x, y);
         }
     }
 
     protected boolean checkFilter(Entity entity) {
         int[] itemTypes = listItemFilters();
-        for(int i = 0; i < itemTypes.length; i++) {
-            if(itemTypes[i] == EntityUtils.getType(entity)) {
+        for (int i = 0; i < itemTypes.length; i++) {
+            if (itemTypes[i] == EntityUtils.getType(entity)) {
                 return true;
             }
         }

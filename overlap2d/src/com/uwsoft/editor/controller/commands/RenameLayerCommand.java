@@ -23,7 +23,6 @@ import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 9/7/2015.
@@ -38,7 +37,8 @@ public class RenameLayerCommand extends EntityModifyRevertableCommand {
         String oldName = payload[0];
         String newName = payload[1];
 
-        if(oldName.equals(newName)) cancel();
+        if (oldName.equals(newName))
+            cancel();
 
         renameLayer(oldName, newName);
 
@@ -57,15 +57,15 @@ public class RenameLayerCommand extends EntityModifyRevertableCommand {
     }
 
     private void renameLayer(String fromName, String toName) {
-        Entity viewEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        Entity viewEntity = sandbox.getCurrentViewingEntity();
         NodeComponent nodeComponent = ComponentRetriever.get(viewEntity, NodeComponent.class);
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewEntity, LayerMapComponent.class);
 
         layerMapComponent.rename(fromName, toName);
 
-        for(Entity childEntity: nodeComponent.children) {
+        for (Entity childEntity : nodeComponent.children) {
             ZIndexComponent zIndexComponent = ComponentRetriever.get(childEntity, ZIndexComponent.class);
-            if(zIndexComponent.layerName.equals(fromName)) {
+            if (zIndexComponent.layerName.equals(fromName)) {
                 zIndexComponent.layerName = toName;
             }
         }

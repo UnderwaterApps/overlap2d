@@ -27,5 +27,6 @@ public abstract class SubFollower extends Actor {
     }
 
     public abstract void create();
+
     public abstract void update();
 }

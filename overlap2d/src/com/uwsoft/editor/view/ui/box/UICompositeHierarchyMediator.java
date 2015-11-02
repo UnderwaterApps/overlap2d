@@ -28,11 +28,8 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     }
 
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                CompositeCameraChangeCommand.DONE,
-                UICompositeHierarchy.SWITCH_VIEW_COMPOSITE_CLICKED
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED, CompositeCameraChangeCommand.DONE, UICompositeHierarchy
+                .SWITCH_VIEW_COMPOSITE_CLICKED};
     }
 
     @Override
@@ -51,7 +48,9 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
                 break;
             case UICompositeHierarchy.SWITCH_VIEW_COMPOSITE_CLICKED:
                 entityId = notification.getBody();
-                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, EntityUtils.getByUniqueId(entityId));
+                Overlap2DFacade.getInstance()
+                               .sendNotification(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE,
+                                       EntityUtils.getByUniqueId(entityId));
                 break;
             default:
                 break;
@@ -62,7 +61,7 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
         Array<Integer> composites = new Array<>();
         viewComponent.clearItems();
 
-        while(true) {
+        while (true) {
             Integer entityId = EntityUtils.getEntityId(entity);
             composites.add(entityId);
             ParentNodeComponent parentNodeComponent = ComponentRetriever.get(entity, ParentNodeComponent.class);
@@ -72,8 +71,8 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
             entity = parentNodeComponent.parentEntity;
         }
 
-        for(int i = composites.size - 1; i >= 0 ; i--) {
-            if(i == composites.size - 1) {
+        for (int i = composites.size - 1; i >= 0; i--) {
+            if (i == composites.size - 1) {
                 viewComponent.addItem("root", composites.get(i));
             } else {
                 viewComponent.addItem("composite", composites.get(i));
@@ -86,24 +85,24 @@ public class UICompositeHierarchyMediator extends SimpleMediator<UICompositeHier
     }
 
     public void updateOriginalItem() {
-    	//TODO fix and uncomment
+        //TODO fix and uncomment
         //updateOriginalItem(scenes.get(scenes.size() - 1), commands.sceneControl.getCurrentScene());
     }
 
     private void updateOriginalItem(CompositeItemVO updatableVo, Entity currItem) {
-    	//TODO fix and uncomment
-//        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
-//
-//        String libName = currItem.getDataVO().libraryLink;
-//        CompositeItemVO libItem = commands.sceneControl.getCurrentSceneVO().libraryItems.get(libName);
-//
-//        if (libItem != null) {
-//            libItem.update(currItem.getDataVO());
-//
-//
-//            //TODO: update other items with same name
-//            revursiveUpdateLibraryVO(libName, commands.sceneControl.getRootSceneVO(), currItem.getDataVO());
-//        }
+        //TODO fix and uncomment
+        //        updatableVo.update(new CompositeItemVO(currItem.getDataVO().composite));
+        //
+        //        String libName = currItem.getDataVO().libraryLink;
+        //        CompositeItemVO libItem = commands.sceneControl.getCurrentSceneVO().libraryItems.get(libName);
+        //
+        //        if (libItem != null) {
+        //            libItem.update(currItem.getDataVO());
+        //
+        //
+        //            //TODO: update other items with same name
+        //            revursiveUpdateLibraryVO(libName, commands.sceneControl.getRootSceneVO(), currItem.getDataVO());
+        //        }
     }
 
     /*

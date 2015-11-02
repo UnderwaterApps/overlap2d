@@ -51,7 +51,7 @@ public class SplashScreen extends ApplicationAdapter {
     public SplashListener listener;
 
     @Override
-    public void create () {
+    public void create() {
         atlas = new TextureAtlas(Gdx.files.internal("splash/splash.atlas"));
 
         stage = new Stage();
@@ -69,12 +69,12 @@ public class SplashScreen extends ApplicationAdapter {
 
         Image logo = new Image(atlas.findRegion("logo"));
         logo.setX(stage.getWidth() / 2 - logo.getWidth() / 2);
-        logo.setY(graphic.getY() - logo.getHeight()-3);
+        logo.setY(graphic.getY() - logo.getHeight() - 3);
         stage.addActor(logo);
 
         progressBarBg = new Image(getNinePatch(atlas.findRegion("progressBg")));
         progressBar = new Image(getNinePatch(atlas.findRegion("progressBar")));
-        progressBarBg.setWidth(stage.getWidth()-24);
+        progressBarBg.setWidth(stage.getWidth() - 24);
         progressBarBg.setX(stage.getWidth() / 2 - progressBarBg.getWidth() / 2);
         progressBarBg.setY(89);
         progressBar.setWidth(6);
@@ -84,13 +84,14 @@ public class SplashScreen extends ApplicationAdapter {
         stage.addActor(progressBar);
 
         Image separator = new Image(atlas.findRegion("devider"));
-        separator.setScaleX(stage.getWidth()-24);
+        separator.setScaleX(stage.getWidth() - 24);
         separator.setX(stage.getWidth() / 2 - separator.getScaleX() / 2);
         separator.setY(61);
         stage.addActor(separator);
 
         BitmapFont robotFont = new BitmapFont(Gdx.files.internal("splash/roboto.fnt"));
-        Label.LabelStyle labelStyle = new Label.LabelStyle(robotFont, new Color(224f/255f, 224f/255f, 224f/255f, 1f));
+        Label.LabelStyle labelStyle = new Label.LabelStyle(robotFont,
+                new Color(224f / 255f, 224f / 255f, 224f / 255f, 1f));
 
         Label companyName = new Label("Underwater Apps LLC", labelStyle);
         companyName.setX(13);
@@ -108,7 +109,7 @@ public class SplashScreen extends ApplicationAdapter {
         stage.addActor(version);
 
         progress = new Label("Loading fonts", labelStyle);
-        progress.setX(stage.getWidth()/2 - progress.getWidth()/2);
+        progress.setX(stage.getWidth() / 2 - progress.getWidth() / 2);
         progress.setY(progressBar.getY() + 11);
         stage.addActor(progress);
 
@@ -118,8 +119,8 @@ public class SplashScreen extends ApplicationAdapter {
         stage.addActor(percent);
 
         Image logoLbl = new Image(atlas.findRegion("logoText"));
-        logoLbl.setX(stage.getWidth()/2 - logoLbl.getWidth()/2);
-        logoLbl.setY(stage.getHeight()-24);
+        logoLbl.setX(stage.getWidth() / 2 - logoLbl.getWidth() / 2);
+        logoLbl.setY(stage.getHeight() - 24);
         stage.addActor(logoLbl);
 
         setProgress(0);
@@ -131,7 +132,7 @@ public class SplashScreen extends ApplicationAdapter {
     private void loadData() {
         //TODO: do some server connecting here to check for new versions.
 
-        if(listener != null) {
+        if (listener != null) {
             setProgress(100);
 
             stage.addAction(Actions.sequence(Actions.delay(0.3f), Actions.run(() -> listener.loadingComplete())));
@@ -140,15 +141,16 @@ public class SplashScreen extends ApplicationAdapter {
 
     public void setProgressStatus(String status) {
         progress.setText(status);
-        progress.setX(stage.getWidth()/2 - progress.getWidth()/2);
+        progress.setX(stage.getWidth() / 2 - progress.getWidth() / 2);
     }
 
     public void setProgress(float percentNum) {
-        percent.setText((int)percentNum + "%");
+        percent.setText((int) percentNum + "%");
         percent.setX(stage.getWidth() - 13 - percent.getWidth());
 
-        float newWidth = (percentNum/100f) * progressBarBg.getWidth();
-        if(newWidth < 6) newWidth = 6;
+        float newWidth = (percentNum / 100f) * progressBarBg.getWidth();
+        if (newWidth < 6)
+            newWidth = 6;
         progressBar.clearActions();
         progressBar.addAction(Actions.sizeTo(newWidth, progressBar.getHeight(), 0.2f));
     }
@@ -158,7 +160,7 @@ public class SplashScreen extends ApplicationAdapter {
     }
 
     @Override
-    public void render () {
+    public void render() {
         stage.act();
         stage.draw();
     }

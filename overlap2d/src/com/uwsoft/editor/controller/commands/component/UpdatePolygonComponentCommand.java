@@ -21,7 +21,6 @@ package com.uwsoft.editor.controller.commands.component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.EntityModifyRevertableCommand;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
@@ -58,14 +57,14 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
 
         // if it's image update polygon sprite data
         TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
-        if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
+        if (textureRegionComponent != null && textureRegionComponent.isPolygon) {
             DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-            float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
+            float ppwu = dimensionsComponent.width / textureRegionComponent.region.getRegionWidth();
             dimensionsComponent.setPolygon(polygonComponent);
-            textureRegionComponent.setPolygonSprite(polygonComponent,1f/ppwu);
+            textureRegionComponent.setPolygonSprite(polygonComponent, 1f / ppwu);
         }
 
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
 
     }
 
@@ -78,14 +77,14 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
 
         // if it's image update polygon sprite data
         TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
-        if(textureRegionComponent != null && textureRegionComponent.isPolygon) {
+        if (textureRegionComponent != null && textureRegionComponent.isPolygon) {
             DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-            float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
+            float ppwu = dimensionsComponent.width / textureRegionComponent.region.getRegionWidth();
             dimensionsComponent.setPolygon(polygonComponent);
-            textureRegionComponent.setPolygonSprite(polygonComponent, 1f/ppwu);
+            textureRegionComponent.setPolygonSprite(polygonComponent, 1f / ppwu);
         }
 
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     public static Object[] payloadInitialState(Entity entity) {
@@ -105,9 +104,9 @@ public class UpdatePolygonComponentCommand extends EntityModifyRevertableCommand
 
     private static Vector2[][] cloneData(Vector2[][] data) {
         Vector2[][] newData = new Vector2[data.length][];
-        for(int i = 0; i < data.length; i++) {
+        for (int i = 0; i < data.length; i++) {
             newData[i] = new Vector2[data[i].length];
-            for(int j = 0; j < data[i].length; j++) {
+            for (int j = 0; j < data[i].length; j++) {
                 newData[i][j] = data[i][j].cpy();
             }
         }

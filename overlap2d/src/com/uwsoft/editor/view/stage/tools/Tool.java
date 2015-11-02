@@ -27,15 +27,26 @@ import com.puremvc.patterns.observer.Notification;
  */
 public interface Tool {
     public void initTool();
+
     public boolean stageMouseDown(float x, float y);
+
     public void stageMouseUp(float x, float y);
+
     public void stageMouseDragged(float x, float y);
+
     public void stageMouseDoubleClick(float x, float y);
+
     public boolean itemMouseDown(Entity entity, float x, float y);
+
     public void itemMouseUp(Entity entity, float x, float y);
+
     public void itemMouseDragged(Entity entity, float x, float y);
+
     public void itemMouseDoubleClick(Entity entity, float x, float y);
+
     public String getName();
+
     public void handleNotification(Notification notification);
+
     public void keyDown(Entity entity, int keycode);
 }

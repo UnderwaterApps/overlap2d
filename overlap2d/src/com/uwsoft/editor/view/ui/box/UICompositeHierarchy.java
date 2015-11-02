@@ -1,11 +1,11 @@
 package com.uwsoft.editor.view.ui.box;
 
-import java.util.Stack;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.HorizontalGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.kotcrab.vis.ui.widget.VisImageTextButton;
+
+import java.util.Stack;
 
 /**
  * Created by CyberJoe on 4/22/2015.
@@ -34,7 +34,8 @@ public class UICompositeHierarchy extends UIBaseBox {
 
     public void addItem(String name, Integer id) {
         String classType = "hierarchy-item";
-        if(name.equals("root")) classType+="-root";
+        if (name.equals("root"))
+            classType += "-root";
 
         VisImageTextButton button = new VisImageTextButton(name, classType);
         button.getLabelCell().padLeft(3);

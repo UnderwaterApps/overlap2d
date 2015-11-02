@@ -33,7 +33,7 @@ import com.uwsoft.editor.view.ui.widget.CursorListener;
 /**
  * Creates standard widgets like labels or text fields with provided standard Overlap2D specific visual style.
  * Singleton helper class
- *
+ * <p>
  * Created by azakhary on 5/12/2015.
  */
 public class StandardWidgetsFactory {
@@ -45,7 +45,7 @@ public class StandardWidgetsFactory {
     }
 
     public static StandardWidgetsFactory getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new StandardWidgetsFactory();
         }
 
@@ -64,38 +64,37 @@ public class StandardWidgetsFactory {
     }
 
 
-    public static  VisTextField createTextField() {
+    public static VisTextField createTextField() {
         return createTextField("default");
     }
-    
-    public static  VisTextField createTextField(String style) {
-    	VisTextField visTextField = new VisTextField("", style);
-    	visTextField.addListener(new CursorListener(CursorManager.TEXT));
-    	return visTextField;
-    }
 
-    public static  VisTextField createTextField(String style, boolean textCursor)
-    {
-    	VisTextField visTextField = new VisTextField();
-        Skin skin = VisUI.getSkin();
-        visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
-        if(textCursor)
-        	visTextField.addListener(new CursorListener(CursorManager.TEXT));
+    public static VisTextField createTextField(String style) {
+        VisTextField visTextField = new VisTextField("", style);
+        visTextField.addListener(new CursorListener(CursorManager.TEXT));
         return visTextField;
     }
-    
-    public static  VisTextField createTextField(String style, VisTextField.TextFieldFilter textFieldFilter) {
+
+    public static VisTextField createTextField(String style, boolean textCursor) {
+        VisTextField visTextField = new VisTextField();
+        Skin skin = VisUI.getSkin();
+        visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
+        if (textCursor)
+            visTextField.addListener(new CursorListener(CursorManager.TEXT));
+        return visTextField;
+    }
+
+    public static VisTextField createTextField(String style, VisTextField.TextFieldFilter textFieldFilter) {
         VisTextField visTextField = createTextField(style);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }
-    
-    public static  VisValidableTextField createValidableTextField(InputValidator inputValidator) {
+
+    public static VisValidableTextField createValidableTextField(InputValidator inputValidator) {
         VisValidableTextField visTextField = createValidableTextField("default", inputValidator);
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator) {
+    public static VisValidableTextField createValidableTextField(String style, InputValidator inputValidator) {
         VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
         Skin skin = VisUI.getSkin();
         visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
@@ -103,7 +102,8 @@ public class StandardWidgetsFactory {
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+    public static VisValidableTextField createValidableTextField(String style, InputValidator inputValidator,
+            VisTextField.TextFieldFilter textFieldFilter) {
         VisValidableTextField visTextField = createValidableTextField(style, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         visTextField.addListener(new CursorListener(CursorManager.TEXT));

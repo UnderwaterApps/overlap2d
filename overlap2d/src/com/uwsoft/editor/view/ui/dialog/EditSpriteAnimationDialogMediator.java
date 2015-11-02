@@ -57,14 +57,10 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.ITEM_SELECTION_CHANGED,
-                MsgAPI.EMPTY_SPACE_CLICKED,
-                UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED,
-                EditSpriteAnimationDialog.ADD_BUTTON_PRESSED,
-                EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED,
-                Overlap2DMenuBar.SPRITE_ANIMATIONS_EDITOR_OPEN
-        };
+        return new String[]{MsgAPI.ITEM_SELECTION_CHANGED, MsgAPI.EMPTY_SPACE_CLICKED,
+                UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED, EditSpriteAnimationDialog
+                .ADD_BUTTON_PRESSED, EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED, Overlap2DMenuBar
+                .SPRITE_ANIMATIONS_EDITOR_OPEN};
     }
 
     @Override
@@ -83,9 +79,9 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                 break;
             case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
-                if(selection.size() == 1) {
+                if (selection.size() == 1) {
                     Entity entity = selection.iterator().next();
-                    if(EntityUtils.getType(entity) == EntityFactory.SPRITE_TYPE) {
+                    if (EntityUtils.getType(entity) == EntityFactory.SPRITE_TYPE) {
                         setObservable(entity);
                     } else {
                         observable = null;
@@ -93,18 +89,18 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
                     }
                 }
 
-            break;
+                break;
             case MsgAPI.EMPTY_SPACE_CLICKED:
                 setObservable(null);
                 break;
             case EditSpriteAnimationDialog.ADD_BUTTON_PRESSED:
                 addAnimation();
                 updateView();
-            break;
+                break;
             case EditSpriteAnimationDialog.DELETE_BUTTON_PRESSED:
                 removeAnimation(notification.getBody());
                 updateView();
-            break;
+                break;
         }
     }
 
@@ -117,10 +113,11 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
     }
 
     private void updateView() {
-        if(observable == null) {
+        if (observable == null) {
             viewComponent.setEmpty("No item selected");
         } else {
-            SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+            SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable,
+                    SpriteAnimationComponent.class);
             viewComponent.updateView(spriteAnimationComponent.frameRangeMap);
         }
     }
@@ -130,14 +127,16 @@ public class EditSpriteAnimationDialogMediator extends SimpleMediator<EditSprite
         int frameFrom = viewComponent.getFrameFrom();
         int frameTo = viewComponent.getFrameTo();
 
-        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable,
+                SpriteAnimationComponent.class);
         spriteAnimationComponent.frameRangeMap.put(name, new FrameRange(name, frameFrom, frameTo));
 
         facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, observable);
     }
 
     private void removeAnimation(String name) {
-        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable, SpriteAnimationComponent.class);
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(observable,
+                SpriteAnimationComponent.class);
         spriteAnimationComponent.frameRangeMap.remove(name);
 
         facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, observable);

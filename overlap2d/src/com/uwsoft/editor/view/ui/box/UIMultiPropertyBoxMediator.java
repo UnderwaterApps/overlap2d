@@ -28,7 +28,6 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
@@ -41,7 +40,18 @@ import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.TextTool;
 import com.uwsoft.editor.view.ui.properties.UIAbstractProperties;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
-import com.uwsoft.editor.view.ui.properties.panels.*;
+import com.uwsoft.editor.view.ui.properties.panels.UIBasicItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UICompositeItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UIImageItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UILabelItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UILightItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UIPhysicsPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UIPolygonComponentPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UIScenePropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UIShaderPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UISpineAnimationItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemPropertiesMediator;
+import com.uwsoft.editor.view.ui.properties.panels.UITextToolPropertiesMediator;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -82,27 +92,27 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
         classToMediatorMap.get(TextTool.class.getName()).add(UITextToolPropertiesMediator.NAME);
     }
 
-    private void initEntityProperties( ArrayList<String> mediatorNames, Entity entity) {
+    private void initEntityProperties(ArrayList<String> mediatorNames, Entity entity) {
 
         int entityType = EntityUtils.getType(entity);
 
-        if(entityType == EntityFactory.IMAGE_TYPE) {
+        if (entityType == EntityFactory.IMAGE_TYPE) {
             mediatorNames.add(UIImageItemPropertiesMediator.NAME);
         }
 
-        if(entityType == EntityFactory.COMPOSITE_TYPE) {
+        if (entityType == EntityFactory.COMPOSITE_TYPE) {
             mediatorNames.add(UICompositeItemPropertiesMediator.NAME);
         }
-        if(entityType == EntityFactory.LABEL_TYPE) {
+        if (entityType == EntityFactory.LABEL_TYPE) {
             mediatorNames.add(UILabelItemPropertiesMediator.NAME);
         }
-        if(entityType == EntityFactory.SPRITE_TYPE) {
+        if (entityType == EntityFactory.SPRITE_TYPE) {
             mediatorNames.add(UISpriteAnimationItemPropertiesMediator.NAME);
         }
-        if(entityType == EntityFactory.SPINE_TYPE) {
+        if (entityType == EntityFactory.SPINE_TYPE) {
             mediatorNames.add(UISpineAnimationItemPropertiesMediator.NAME);
         }
-        if(entityType == EntityFactory.LIGHT_TYPE) {
+        if (entityType == EntityFactory.LIGHT_TYPE) {
             mediatorNames.add(UILightItemPropertiesMediator.NAME);
         }
 
@@ -110,13 +120,13 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
         PolygonComponent polygonComponent = ComponentRetriever.get(entity, PolygonComponent.class);
         PhysicsBodyComponent physicsComponent = ComponentRetriever.get(entity, PhysicsBodyComponent.class);
         ShaderComponent shaderComponent = ComponentRetriever.get(entity, ShaderComponent.class);
-        if(polygonComponent != null) {
+        if (polygonComponent != null) {
             mediatorNames.add(UIPolygonComponentPropertiesMediator.NAME);
         }
-        if(physicsComponent != null) {
+        if (physicsComponent != null) {
             mediatorNames.add(UIPhysicsPropertiesMediator.NAME);
         }
-        if(shaderComponent != null) {
+        if (shaderComponent != null) {
             mediatorNames.add(UIShaderPropertiesMediator.NAME);
         }
     }
@@ -124,16 +134,12 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
     @Override
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
-        return Stream.of(parentNotifications, new String[]{
-                MsgAPI.SCENE_LOADED,
-                MsgAPI.EMPTY_SPACE_CLICKED,
-                MsgAPI.ITEM_DATA_UPDATED,
-                MsgAPI.ITEM_SELECTION_CHANGED,
-                DeleteItemsCommand.DONE,
-                SandboxMediator.SANDBOX_TOOL_CHANGED,
-                AddComponentToItemCommand.DONE,
-                RemoveComponentFromItemCommand.DONE
-        }).flatMap(Stream::of).toArray(String[]::new);
+        return Stream.of(parentNotifications,
+                new String[]{MsgAPI.SCENE_LOADED, MsgAPI.EMPTY_SPACE_CLICKED, MsgAPI.ITEM_DATA_UPDATED, MsgAPI
+                        .ITEM_SELECTION_CHANGED, DeleteItemsCommand.DONE, SandboxMediator.SANDBOX_TOOL_CHANGED,
+                        AddComponentToItemCommand.DONE, RemoveComponentFromItemCommand.DONE})
+                     .flatMap(Stream::of)
+                     .toArray(String[]::new);
     }
 
     @Override
@@ -148,7 +154,7 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 break;
             case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
-                if(selection.size() == 1) {
+                if (selection.size() == 1) {
                     initAllPropertyBoxes(selection.iterator().next());
                 }
                 break;
@@ -171,30 +177,32 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
 
     private void initAllPropertyBoxes(Object observable) {
 
-        if(observable == null) {
+        if (observable == null) {
             // if there is nothing to observe, always observe current scene
             observable = Sandbox.getInstance().sceneControl.getCurrentSceneVO();
         }
-        
+
         String mapName = observable.getClass().getName();
 
-        if(classToMediatorMap.get(mapName) == null) return;
+        if (classToMediatorMap.get(mapName) == null)
+            return;
 
         // retrieve a list of property panels to show
         ArrayList<String> mediatorNames = new ArrayList<>(classToMediatorMap.get(mapName));
 
         // TODO: this is not uber cool, gotta think a new way to make this class know nothing about entities
-        if(observable instanceof Entity){
+        if (observable instanceof Entity) {
             initEntityProperties(mediatorNames, (Entity) observable);
         }
 
-        if(mediatorNames == null) return;
+        if (mediatorNames == null)
+            return;
 
         //clear all current enabled panels
         viewComponent.clearAll();
 
         //unregister all current mediators
-        for(UIAbstractPropertiesMediator mediator: currentRegisteredPropertyBoxes) {
+        for (UIAbstractPropertiesMediator mediator : currentRegisteredPropertyBoxes) {
             facade.removeMediator(mediator.getMediatorName());
         }
         currentRegisteredPropertyBoxes.clear();
@@ -203,7 +211,9 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
             try {
                 facade.registerMediator((Mediator) ClassReflection.newInstance(ClassReflection.forName(mediatorName)));
 
-                UIAbstractPropertiesMediator<Object, UIAbstractProperties> propertyBoxMediator = facade.retrieveMediator(mediatorName);
+                UIAbstractPropertiesMediator<Object, UIAbstractProperties> propertyBoxMediator = facade
+                        .retrieveMediator(
+                        mediatorName);
                 currentRegisteredPropertyBoxes.add(propertyBoxMediator);
                 propertyBoxMediator.setItem(observable);
                 viewComponent.addPropertyBox(propertyBoxMediator.getViewComponent());

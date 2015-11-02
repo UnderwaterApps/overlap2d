@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -30,13 +28,21 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.event.ButtonToNotificationListener;
-import com.uwsoft.editor.view.ui.widget.components.TintButton;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
-import com.uwsoft.editor.view.ui.properties.UIItemProperties;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
+import com.uwsoft.editor.view.ui.properties.UIItemProperties;
+import com.uwsoft.editor.view.ui.widget.components.TintButton;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -206,7 +212,7 @@ public class UIBasicItemProperties extends UIItemProperties {
     }
 
     public void setItemType(ItemType type, int itemUniqueId) {
-        itemType.setText(itemTypeNameMap.get(type) + " ("+itemUniqueId+")");
+        itemType.setText(itemTypeNameMap.get(type) + " (" + itemUniqueId + ")");
         itemTypeIcon.setDrawable(VisUI.getSkin().getDrawable(itemTypeIconMap.get(type)));
         itemTypeIcon.setWidth(22);
     }

@@ -18,16 +18,15 @@
 
 package com.uwsoft.editor.data.migrations;
 
-import java.io.IOException;
-
-import com.uwsoft.editor.data.migrations.migrators.VersionMigTo009;
-import org.apache.commons.io.FileUtils;
-
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.data.migrations.migrators.DummyMig;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
+import com.uwsoft.editor.data.migrations.migrators.VersionMigTo009;
 import com.uwsoft.editor.data.vo.ProjectVO;
+import org.apache.commons.io.FileUtils;
+
+import java.io.IOException;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -63,7 +62,8 @@ public class ProjectVersionMigrator {
     }
 
     private void migrationIterator() {
-        if (projectVo.projectVersion.equals(dataFormatVersion)) return;
+        if (projectVo.projectVersion.equals(dataFormatVersion))
+            return;
 
         if (safetyIterator > 100) {
             System.out.println("Emergency exit from version migration process due to safety lock");
@@ -75,7 +75,8 @@ public class ProjectVersionMigrator {
             VersionMigTo005 vmt = new VersionMigTo005();
             doMigartion(vmt, "0.0.5");
         }
-        if (projectVo.projectVersion.equals("0.0.5") || projectVo.projectVersion.equals("0.0.6") || projectVo.projectVersion.equals("0.0.7")) {
+        if (projectVo.projectVersion.equals("0.0.5") || projectVo.projectVersion.equals(
+                "0.0.6") || projectVo.projectVersion.equals("0.0.7")) {
             DummyMig vmt = new DummyMig();
             doMigartion(vmt, "0.0.8");
         }

@@ -94,12 +94,13 @@ public interface Facade extends Notifier {
      * @param commandClassRef a reference to the <code>Class</code> of the
      *                        <code>ICommand</code>.
      */
-    void registerCommand(String noteName, Class<? extends Command>  commandClassRef);
+    void registerCommand(String noteName, Class<? extends Command> commandClassRef);
 
     /**
      * Remove a previously registered <code>ICommand</code> to <code>INotification</code> mapping from the Controller.
      *
-     * @param notificationName the name of the <code>INotification</code> to remove the <code>ICommand</code> mapping for
+     * @param notificationName the name of the <code>INotification</code> to remove the <code>ICommand</code> mapping
+     *                         for
      */
     void removeCommand(String notificationName);
 

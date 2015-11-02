@@ -20,14 +20,13 @@ package com.puremvc.patterns.mediator;
 
 import com.puremvc.patterns.observer.BaseNotifier;
 import com.puremvc.patterns.observer.Notification;
-import com.puremvc.patterns.observer.Notifier;
 
 /**
  * A base <code>Mediator</code> implementation.
  *
  * @see com.puremvc.core.View View
  */
-public class SimpleMediator<V> extends BaseNotifier implements Mediator<V>, Notifier {
+public class SimpleMediator<V> extends BaseNotifier implements Mediator<V> {
 
     /**
      * The default name of the <code>SimpleMediator</code>.

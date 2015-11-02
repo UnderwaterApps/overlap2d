@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -42,7 +41,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
 
         Array<Object[]> payload = getNotification().getBody();
 
-        for(int i = 0; i < payload.size; i++) {
+        for (int i = 0; i < payload.size; i++) {
             Object[] itemData = payload.get(i);
 
             Entity entity = (Entity) itemData[0];
@@ -51,7 +50,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
 
             Vector2 prevLocation = new Vector2(transformComponent.x, transformComponent.y);
-            if(itemData.length > 2) {
+            if (itemData.length > 2) {
                 prevLocation = (Vector2) itemData[2];
             }
             prevLocations.put(EntityUtils.getEntityId(entity), prevLocation);
@@ -60,7 +59,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
             transformComponent.y = newLocation.y;
 
             // pining UI to update current item properties tools
-            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+            facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
         }
     }
 
@@ -77,8 +76,7 @@ public class ItemsMoveCommand extends EntityModifyRevertableCommand {
             transformComponent.y = prevLocation.y;
 
             // pining UI to update current item properties tools
-            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+            facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
         }
-
     }
 }

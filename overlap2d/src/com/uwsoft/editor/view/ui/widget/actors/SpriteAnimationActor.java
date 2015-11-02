@@ -24,7 +24,7 @@ public class SpriteAnimationActor extends Actor {
     public SpriteAnimationActor(String animationName, IResourceRetriever rm) {
         this.animationName = animationName;
         this.rm = rm;
-        animation = new Animation(1/24f, rm.getSpriteAnimation(animationName).getRegions());
+        animation = new Animation(1 / 24f, rm.getSpriteAnimation(animationName).getRegions());
         animation.setPlayMode(Animation.PlayMode.LOOP);
 
         TextureRegion region = animation.getKeyFrame(stateTime);
@@ -38,18 +38,20 @@ public class SpriteAnimationActor extends Actor {
         setWidth(region.getRegionWidth());
         setHeight(region.getRegionHeight());
         batch.setColor(getColor());
-        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(), getScaleY(), getRotation());
+        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(), getScaleX(),
+                getScaleY(), getRotation());
     }
 
     @Override
     public void act(float delta) {
-        if(paused) return;
-        stateTime+=delta;
+        if (paused)
+            return;
+        stateTime += delta;
     }
 
     public void setFPS(int fps) {
         this.fps = fps;
-        animation.setFrameDuration(1f/fps);
+        animation.setFrameDuration(1f / fps);
     }
 
     public int getFPS() {

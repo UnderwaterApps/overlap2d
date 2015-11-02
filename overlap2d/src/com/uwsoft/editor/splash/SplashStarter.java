@@ -18,10 +18,9 @@
 
 package com.uwsoft.editor.splash;
 
+import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import org.apache.commons.lang3.SystemUtils;
 import org.lwjgl.openal.AL;
-
-import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 
 /**
  * Created by azakhary on 5/15/2015.

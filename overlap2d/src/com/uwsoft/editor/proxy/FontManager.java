@@ -1,8 +1,16 @@
 package com.uwsoft.editor.proxy;
 
-import java.awt.Font;
-import java.awt.FontFormatException;
-import java.awt.GraphicsEnvironment;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
+import com.puremvc.patterns.proxy.BaseProxy;
+import com.uwsoft.editor.Overlap2DFacade;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SystemUtils;
+
+import java.awt.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -12,17 +20,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.SystemUtils;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Preferences;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.utils.Array;
-import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.Overlap2DFacade;
 
 /**
  * Created by azakhary on 4/24/2015.
@@ -91,7 +88,8 @@ public class FontManager extends BaseProxy {
 
         for (int i = 0; i < paths.length; i++) {
             File fontDirectory = new File(paths[i]);
-            if (!fontDirectory.exists()) break;
+            if (!fontDirectory.exists())
+                break;
             files.addAll(FileUtils.listFiles(fontDirectory, extensions, true));
         }
 

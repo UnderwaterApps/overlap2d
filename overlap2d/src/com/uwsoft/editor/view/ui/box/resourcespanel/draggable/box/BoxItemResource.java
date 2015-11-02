@@ -20,9 +20,9 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
-import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResourceView;
+import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 
 /**
  * Created by sargis on 5/6/15.

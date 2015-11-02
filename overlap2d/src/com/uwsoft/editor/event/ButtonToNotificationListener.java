@@ -7,7 +7,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class ButtonToNotificationListener extends ClickListener{
+public class ButtonToNotificationListener extends ClickListener {
 
     private String notificationName;
 

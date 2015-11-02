@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by CyberJoe on 7/25/2015.
@@ -24,12 +23,11 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void doAction() {
-        Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        Entity viewingEntity = sandbox.getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
 
-
-        if(layerMapComponent.getLayers().size() > 1) {
+        if (layerMapComponent.getLayers().size() > 1) {
             layerMapComponent.deleteLayer(layerName);
         } else {
             cancel();
@@ -38,7 +36,7 @@ public class DeleteLayerAtomCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void undoAction() {
-        Entity viewingEntity = Sandbox.getInstance().getCurrentViewingEntity();
+        Entity viewingEntity = sandbox.getCurrentViewingEntity();
         LayerMapComponent layerMapComponent = ComponentRetriever.get(viewingEntity, LayerMapComponent.class);
 
         layerMapComponent.addLayer(layerIndex, layerItemVO);

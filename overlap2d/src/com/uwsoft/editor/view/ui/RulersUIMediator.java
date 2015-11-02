@@ -32,10 +32,7 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.SCENE_LOADED,
-                RulersUI.ACTION_GUIDES_MODIFIED
-        };
+        return new String[]{MsgAPI.SCENE_LOADED, RulersUI.ACTION_GUIDES_MODIFIED};
     }
 
     @Override
@@ -47,12 +44,12 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
         switch (notification.getName()) {
             case MsgAPI.SCENE_LOADED:
                 Array<Guide> guides = new Array<>();
-                for(int i  = 0; i < sceneVO.verticalGuides.size(); i++) {
+                for (int i = 0; i < sceneVO.verticalGuides.size(); i++) {
                     Guide tmp = new Guide(true);
                     tmp.pos = sceneVO.verticalGuides.get(i);
                     guides.add(tmp);
                 }
-                for(int i  = 0; i < sceneVO.horizontalGuides.size(); i++) {
+                for (int i = 0; i < sceneVO.horizontalGuides.size(); i++) {
                     Guide tmp = new Guide(false);
                     tmp.pos = sceneVO.horizontalGuides.get(i);
                     guides.add(tmp);
@@ -67,8 +64,8 @@ public class RulersUIMediator extends SimpleMediator<RulersUI> {
                 sceneVO.verticalGuides.clear();
                 sceneVO.horizontalGuides.clear();
 
-                for(int i  = 0; i < guides.size; i++) {
-                    if(guides.get(i).isVertical) {
+                for (int i = 0; i < guides.size; i++) {
+                    if (guides.get(i).isVertical) {
                         sceneVO.verticalGuides.add(guides.get(i).pos);
                     } else {
                         sceneVO.horizontalGuides.add(guides.get(i).pos);

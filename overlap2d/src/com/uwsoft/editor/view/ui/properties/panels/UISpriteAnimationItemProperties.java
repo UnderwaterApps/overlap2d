@@ -38,7 +38,8 @@ import java.util.Map;
  */
 public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties {
 
-    public static final String EDIT_ANIMATIONS_CLICKED = "com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties" + ".EDIT_ANIMATIONS_CLICKED";
+    public static final String EDIT_ANIMATIONS_CLICKED = "com.uwsoft.editor.view.ui.properties.panels" +
+            ".UISpriteAnimationItemProperties" + ".EDIT_ANIMATIONS_CLICKED";
 
 
     private NumberSelector fpsSelector;
@@ -102,7 +103,7 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
         for (Map.Entry<Animation.PlayMode, String> entry : playModes.entrySet()) {
             Animation.PlayMode key = entry.getKey();
             String value = entry.getValue();
-            if(playModesSelectBox.getSelected().equals(value)) {
+            if (playModesSelectBox.getSelected().equals(value)) {
                 return key;
             }
         }

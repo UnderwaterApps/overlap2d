@@ -19,8 +19,8 @@
 package com.uwsoft.editor.controller;
 
 import com.puremvc.patterns.command.SimpleCommand;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 4/28/2015.

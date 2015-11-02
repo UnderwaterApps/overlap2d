@@ -59,18 +59,22 @@ public class UIHelper {
 
 
     public static void invokeClickableActor(Actor actor) {
-        Optional<EventListener> command = FluentIterable.from(actor.getListeners()).firstMatch(new Predicate<EventListener>() {
-            @Override
-            public boolean apply(EventListener eventListener) {
-                try {
-                    return eventListener instanceof ClickListener &&
-                            StringUtils.isNotEmpty(Whitebox.getInternalState(eventListener, "command").toString());
-                } catch (Exception e) {
+        Optional<EventListener> command = FluentIterable.from(actor.getListeners())
+                                                        .firstMatch(new Predicate<EventListener>() {
+                                                            @Override
+                                                            public boolean apply(EventListener eventListener) {
+                                                                try {
+                                                                    return eventListener instanceof ClickListener &&
+                                                                            StringUtils
+                                                                            .isNotEmpty(Whitebox.getInternalState(
+                                                                                    eventListener, "command")
+                                                                                                .toString());
+                                                                } catch (Exception e) {
 
-                }
-                return false;
-            }
-        });
+                                                                }
+                                                                return false;
+                                                            }
+                                                        });
         ClickListener clickListener = (ClickListener) command.get();
         clickListener.clicked(new InputEvent(), 1, 1);
     }

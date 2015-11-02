@@ -4,14 +4,12 @@ import com.runner.LibgdxRunner;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
-import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.TemporaryFolder;
 import org.junit.runner.RunWith;
 
-import java.io.File;
 import java.util.Random;
 
 import static java.io.File.separator;

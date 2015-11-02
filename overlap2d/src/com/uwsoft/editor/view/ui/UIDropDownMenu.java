@@ -77,7 +77,7 @@ public class UIDropDownMenu extends PopupMenu {
     private void initView() {
         clear();
 
-        for(int i = 0; i < currentActionList.size; i++) {
+        for (int i = 0; i < currentActionList.size; i++) {
             String itemName = actionNames.get(currentActionList.get(i));
             MenuItem menuItem = new MenuItem(itemName, new MenuItemListener(ITEM_CLICKED, currentActionList.get(i)));
             addItem(menuItem);

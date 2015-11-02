@@ -23,7 +23,6 @@ import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
@@ -51,15 +50,9 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.SCENE_LOADED,
-                MsgAPI.ACTION_EDIT_PHYSICS,
-                UIDropDownMenu.ACTION_EDIT_RESOURCE_PHYSICS,
-                PhysicsEditorDialog.CLEAR_MESH_CLICKED,
-                PhysicsEditorDialog.CREATE_FRESH_COPY_CLICKED,
-                PhysicsEditorDialog.RETRACE_CLICKED,
-                PhysicsEditorDialog.SAVE_CLICKED
-        };
+        return new String[]{MsgAPI.SCENE_LOADED, MsgAPI.ACTION_EDIT_PHYSICS, UIDropDownMenu
+                .ACTION_EDIT_RESOURCE_PHYSICS, PhysicsEditorDialog.CLEAR_MESH_CLICKED, PhysicsEditorDialog
+                .CREATE_FRESH_COPY_CLICKED, PhysicsEditorDialog.RETRACE_CLICKED, PhysicsEditorDialog.SAVE_CLICKED};
     }
 
     @Override
@@ -69,8 +62,9 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
         switch (notification.getName()) {
             case MsgAPI.SCENE_LOADED:
                 Sandbox sandbox = Sandbox.getInstance();
-              //TODO fix and uncomment
-                //viewComponent.getItemPhysicsEditor().resVec = new Vector2(commands.getCurrentScene().mulX, commands.getCurrentScene().mulY);
+                //TODO fix and uncomment
+                //viewComponent.getItemPhysicsEditor().resVec = new Vector2(commands.getCurrentScene().mulX, commands
+                // .getCurrentScene().mulY);
                 break;
             case MsgAPI.ACTION_EDIT_PHYSICS:
                 setItem((Entity) notification.getBody());
@@ -85,27 +79,27 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     }
 
     public void setData() {
-    	//TODO fix and uncomment
-//        ItemPhysicsEditor itemPhysicsEditor = viewComponent.getItemPhysicsEditor();
-//        PhysicsBodyDataVO currentPhysicsDataVO = itemPhysicsEditor.physicsBodyDataVO;
-//
-//        viewComponent.setBodyType(currentPhysicsDataVO.bodyType);
-//        viewComponent.setMass(String.valueOf(currentPhysicsDataVO.mass));
-//        viewComponent.setCenterOfMass(new Vector2(currentPhysicsDataVO.centerOfMass));
-//        viewComponent.setRotationalIntertia(String.valueOf(currentPhysicsDataVO.mass));
-//        viewComponent.setDumping(String.valueOf(currentPhysicsDataVO.damping));
-//        viewComponent.setGravityScale(String.valueOf(currentPhysicsDataVO.gravityScale));
-//        viewComponent.setDensity(String.valueOf(currentPhysicsDataVO.density));
-//        viewComponent.setFriction(String.valueOf(currentPhysicsDataVO.friction));
-//        viewComponent.setRestitution(String.valueOf(currentPhysicsDataVO.restitution));
-//        viewComponent.setAllowSleep(currentPhysicsDataVO.allowSleep);
-//        viewComponent.setAwake(currentPhysicsDataVO.awake);
-//        viewComponent.setBullet(currentPhysicsDataVO.bullet);
-//        viewComponent.setPoligonyzer("BAYAZIT");
-//        viewComponent.setHullTolerance("2.5");
-//        viewComponent.setAlphaTolerance("128");
-//        viewComponent.setMultiPartDetection(false);
-//        viewComponent.setHoleDetection(false);
+        //TODO fix and uncomment
+        //        ItemPhysicsEditor itemPhysicsEditor = viewComponent.getItemPhysicsEditor();
+        //        PhysicsBodyDataVO currentPhysicsDataVO = itemPhysicsEditor.physicsBodyDataVO;
+        //
+        //        viewComponent.setBodyType(currentPhysicsDataVO.bodyType);
+        //        viewComponent.setMass(String.valueOf(currentPhysicsDataVO.mass));
+        //        viewComponent.setCenterOfMass(new Vector2(currentPhysicsDataVO.centerOfMass));
+        //        viewComponent.setRotationalIntertia(String.valueOf(currentPhysicsDataVO.mass));
+        //        viewComponent.setDumping(String.valueOf(currentPhysicsDataVO.damping));
+        //        viewComponent.setGravityScale(String.valueOf(currentPhysicsDataVO.gravityScale));
+        //        viewComponent.setDensity(String.valueOf(currentPhysicsDataVO.density));
+        //        viewComponent.setFriction(String.valueOf(currentPhysicsDataVO.friction));
+        //        viewComponent.setRestitution(String.valueOf(currentPhysicsDataVO.restitution));
+        //        viewComponent.setAllowSleep(currentPhysicsDataVO.allowSleep);
+        //        viewComponent.setAwake(currentPhysicsDataVO.awake);
+        //        viewComponent.setBullet(currentPhysicsDataVO.bullet);
+        //        viewComponent.setPoligonyzer("BAYAZIT");
+        //        viewComponent.setHullTolerance("2.5");
+        //        viewComponent.setAlphaTolerance("128");
+        //        viewComponent.setMultiPartDetection(false);
+        //        viewComponent.setHoleDetection(false);
     }
 
     private void collectData() {
@@ -133,18 +127,18 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     }
 
     public void setItem(Entity item) {
-    	//TODO fix and uncomment
-//        Sandbox commands = Sandbox.getInstance();
-//        UIStage uiStage = commands.getUIStage();
-//
-//        currentItem = item;
-//        viewComponent.getItemPhysicsEditor().originalItem = item;
-//
-//        viewComponent.show(uiStage);
-//        viewComponent.getCreateFreshCopyButton().setDisabled(false);
-//
-//        viewComponent.setItem(duplicateItem(item));
-//        setData();
+        //TODO fix and uncomment
+        //        Sandbox commands = Sandbox.getInstance();
+        //        UIStage uiStage = commands.getUIStage();
+        //
+        //        currentItem = item;
+        //        viewComponent.getItemPhysicsEditor().originalItem = item;
+        //
+        //        viewComponent.show(uiStage);
+        //        viewComponent.getCreateFreshCopyButton().setDisabled(false);
+        //
+        //        viewComponent.setItem(duplicateItem(item));
+        //        setData();
     }
 
     public void setItem(String asset) {
@@ -159,51 +153,51 @@ public class PhysicsEditorDialogMediator extends SimpleMediator<PhysicsEditorDia
     }
 
     private Entity duplicateItem(Entity item) {
-    	return null;
-    	//TODO fix and uncomment
-//        MainItemVO data = item.getDataVO();
-//        String className = data.getClass().getSimpleName();
-//
-//        IBaseItem itemCopy = null;
-//        Essentials essentials = Sandbox.getInstance().getSandboxStage().essentials;
-//
-//        if (className.equals("SimpleImageVO")) {
-//            itemCopy = new ImageItem((SimpleImageVO) data, essentials);
-//        }
-//        if (className.equals("Image9patchVO")) {
-//            return null;
-//        }
-//        if (className.equals("TextBoxVO")) {
-//            return null;
-//        }
-//        if (className.equals("ButtonVO")) {
-//            return null;
-//        }
-//        if (className.equals("LabelVO")) {
-//            return null;
-//        }
-//        if (className.equals("CompositeItemVO")) {
-//            itemCopy = new CompositeItem((CompositeItemVO) data, essentials);
-//        }
-//        if (className.equals("CheckBoxVO")) {
-//            return null;
-//        }
-//        if (className.equals("SelectBoxVO")) {
-//            return null;
-//        }
-//        if (className.equals("ParticleEffectVO")) {
-//            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
-//        }
-//        if (className.equals("LightVO")) {
-//            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
-//        }
-//        if (className.equals("SpineVO")) {
-//            itemCopy = new SpineActor((SpineVO) data, essentials);
-//        }
-//        if (className.equals("SpriteAnimationVO")) {
-//            itemCopy = new SpriteAnimation((SpriteAnimationVO) data, essentials);
-//        }
-//
-//        return itemCopy;
+        return null;
+        //TODO fix and uncomment
+        //        MainItemVO data = item.getDataVO();
+        //        String className = data.getClass().getSimpleName();
+        //
+        //        IBaseItem itemCopy = null;
+        //        Essentials essentials = Sandbox.getInstance().getSandboxStage().essentials;
+        //
+        //        if (className.equals("SimpleImageVO")) {
+        //            itemCopy = new ImageItem((SimpleImageVO) data, essentials);
+        //        }
+        //        if (className.equals("Image9patchVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("TextBoxVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("ButtonVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("LabelVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("CompositeItemVO")) {
+        //            itemCopy = new CompositeItem((CompositeItemVO) data, essentials);
+        //        }
+        //        if (className.equals("CheckBoxVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("SelectBoxVO")) {
+        //            return null;
+        //        }
+        //        if (className.equals("ParticleEffectVO")) {
+        //            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
+        //        }
+        //        if (className.equals("LightVO")) {
+        //            itemCopy = new ParticleItem((ParticleEffectVO) data, essentials);
+        //        }
+        //        if (className.equals("SpineVO")) {
+        //            itemCopy = new SpineActor((SpineVO) data, essentials);
+        //        }
+        //        if (className.equals("SpriteAnimationVO")) {
+        //            itemCopy = new SpriteAnimation((SpriteAnimationVO) data, essentials);
+        //        }
+        //
+        //        return itemCopy;
     }
 }
