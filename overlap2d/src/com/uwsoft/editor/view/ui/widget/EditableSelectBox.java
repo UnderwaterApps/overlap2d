@@ -49,7 +49,7 @@ public class EditableSelectBox extends VisTable {
     }
 
     @Override
-    public void draw (Batch batch, float parentAlpha) {
+    public void draw(Batch batch, float parentAlpha) {
         super.draw(batch, parentAlpha);
     }
 
@@ -73,8 +73,8 @@ public class EditableSelectBox extends VisTable {
 
         textField.addListener(new InputListener() {
             @Override
-            public boolean keyUp (InputEvent event, int keycode) {
-                if(keycode == Input.Keys.ENTER) {
+            public boolean keyUp(InputEvent event, int keycode) {
+                if (keycode == Input.Keys.ENTER) {
                     fireChanged();
                 }
                 return super.keyUp(event, keycode);
@@ -90,13 +90,14 @@ public class EditableSelectBox extends VisTable {
     }
 
     @Override
-    public boolean addListener (EventListener listener) {
-        if (!listeners.contains((ChangeListener)listener, true)) {
-            listeners.add((ChangeListener)listener);
+    public boolean addListener(EventListener listener) {
+        if (!listeners.contains((ChangeListener) listener, true)) {
+            listeners.add((ChangeListener) listener);
             return true;
         }
         return false;
     }
+
     public void setText(String text) {
         textField.setText(text);
     }

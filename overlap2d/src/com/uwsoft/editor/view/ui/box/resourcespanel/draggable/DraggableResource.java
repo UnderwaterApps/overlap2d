@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable;
 
-import java.util.function.BiFunction;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -29,6 +27,8 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+
+import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -51,7 +51,7 @@ public class DraggableResource extends DragAndDrop {
                 Actor dragActor = viewComponent.getDragActor();
 
                 OrthographicCamera runtimeCamera = Sandbox.getInstance().getCamera();
-                dragActor.setScale(1f/runtimeCamera.zoom);
+                dragActor.setScale(1f / runtimeCamera.zoom);
 
                 ResourcePayloadObject payloadData = viewComponent.getPayloadData();
                 payloadData.xOffset = runtimeCamera.zoom * dragActor.getWidth() / 2f;
@@ -82,7 +82,8 @@ public class DraggableResource extends DragAndDrop {
         ResourcePayloadObject resourcePayloadObject = (ResourcePayloadObject) payload.getObject();
         ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
 
-        vector2.sub(resourcePayloadObject.xOffset/resourceManager.getProjectVO().pixelToWorld, resourcePayloadObject.yOffset/resourceManager.getProjectVO().pixelToWorld);
+        vector2.sub(resourcePayloadObject.xOffset / resourceManager.getProjectVO().pixelToWorld,
+                resourcePayloadObject.yOffset / resourceManager.getProjectVO().pixelToWorld);
         factoryFunction.apply(resourcePayloadObject.name, vector2);
     }
 

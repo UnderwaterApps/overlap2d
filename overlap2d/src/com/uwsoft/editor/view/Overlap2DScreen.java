@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view;
 
-import java.io.File;
-
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -32,22 +30,24 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
-import com.uwsoft.editor.view.ui.widget.actors.basic.SandboxBackUI;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
+import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.stage.input.SandboxInputAdapter;
-import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.view.ui.widget.actors.basic.SandboxBackUI;
+
+import java.io.File;
 
 public class Overlap2DScreen implements Screen, InputProcessor {
     private static final String TAG = Overlap2DScreen.class.getCanonicalName();
     //public SandboxStage sandboxStage;
-    
+
     public UIStage uiStage;
-    
-	private Engine engine;
-    
+
+    private Engine engine;
+
     private InputMultiplexer multiplexer;
     private Overlap2DFacade facade;
     private ProjectManager projectManager;
@@ -82,13 +82,14 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         gl.glClearColor(bgColor.r, bgColor.g, bgColor.b, bgColor.a);
         gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        if(isDrawingBgLogo) {
+        if (isDrawingBgLogo) {
             batch.begin();
             batch.setColor(1, 1, 1, 0.12f);
-            batch.draw(bgLogo, screenSize.x/2 - bgLogo.getWidth()/2, screenSize.y/2 - bgLogo.getHeight()/2);
+            batch.draw(bgLogo, screenSize.x / 2 - bgLogo.getWidth() / 2, screenSize.y / 2 - bgLogo.getHeight() / 2);
             batch.end();
         } else {
-            if (sandboxBackUI != null) sandboxBackUI.render(deltaTime);
+            if (sandboxBackUI != null)
+                sandboxBackUI.render(deltaTime);
             engine.update(deltaTime);
         }
 
@@ -97,7 +98,8 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     }
 
     public void disableDrawingBgLogo() {
-        if(!isDrawingBgLogo) return;
+        if (!isDrawingBgLogo)
+            return;
 
         this.isDrawingBgLogo = false;
         bgLogo.dispose();
@@ -130,18 +132,19 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         sandbox = Sandbox.getInstance();
         uiStage = sandbox.getUIStage();
         //sandboxStage = commands.getSandboxStage();
-        
+
         //sandboxStage.commands = commands;
 
         projectManager = facade.retrieveProxy(ProjectManager.NAME);
         // check for demo project
-        File demoDir = new File(projectManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
+        File demoDir = new File(
+                projectManager.getRootPath() + File.separator + "examples" + File.separator + "OverlapDemo");
         //if (demoDir.isDirectory() && demoDir.exists()) {
         // TODO: temp not opening the demo
         if (false) {
             projectManager.openProjectFromPath(demoDir.getAbsolutePath() + File.separator + "project.pit");
             sandbox.loadCurrentProject();
-            if(sandbox.getViewport() != null) {
+            if (sandbox.getViewport() != null) {
                 sandbox.getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
             }
             facade.sendNotification(ProjectManager.PROJECT_OPENED);
@@ -161,14 +164,15 @@ public class Overlap2DScreen implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         uiStage.resize(width, height);
-        if(Sandbox.getInstance().getViewport() != null) {
+        if (Sandbox.getInstance().getViewport() != null) {
             Sandbox.getInstance().getViewport().update(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         }
     }
 
     @Override
     public boolean keyDown(int keycode) {
-        if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(
+                Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)) {
             switch (keycode) {
                 case Input.Keys.N:
                     //uiStage.menuMediator.showDialog("createNewProjectDialog");
@@ -223,9 +227,9 @@ public class Overlap2DScreen implements Screen, InputProcessor {
         return false;
     }
 
-	public void setEngine(Engine engine) {
-		this.engine = engine;
-	}
+    public void setEngine(Engine engine) {
+        this.engine = engine;
+    }
 
     public void setBackUI(SandboxBackUI sandboxBackUI) {
         this.sandboxBackUI = sandboxBackUI;

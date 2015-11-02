@@ -31,7 +31,10 @@ public abstract class UIRemovableProperties extends UIItemCollapsibleProperties 
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
                 collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
-                header.setBackground(VisUI.getSkin().getDrawable("expandable-properties-" + (collapsibleWidget.isCollapsed() ? "inactive" : "active") + "-bg"));
+                header.setBackground(VisUI.getSkin()
+                                          .getDrawable(
+                                                  "expandable-properties-" + (collapsibleWidget.isCollapsed() ?
+                                                          "inactive" : "active") + "-bg"));
             }
         });
         closeButton.addListener(new ClickListener() {

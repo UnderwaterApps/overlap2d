@@ -66,7 +66,7 @@ public class KeyboardListener implements EventListener {
 
     private void handleFocusListener(FocusListener.FocusEvent event) {
         VisTextField field = (VisTextField) event.getTarget();
-        if(event.isFocused()) {
+        if (event.isFocused()) {
             //it was a focus in event, which is no change
             lastValue = field.getText();
             return;
@@ -82,11 +82,11 @@ public class KeyboardListener implements EventListener {
     }
 
     private void keyboardHandler(VisTextField target) {
-        if(!target.isInputValid()) {
+        if (!target.isInputValid()) {
             return;
         }
         // check for change
-        if(lastValue.equals(target.getText())) {
+        if (lastValue.equals(target.getText())) {
             // no change = no event;
             return;
         }

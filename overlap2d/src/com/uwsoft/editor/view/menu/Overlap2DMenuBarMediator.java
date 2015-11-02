@@ -58,28 +58,15 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     public String[] listNotificationInterests() {
         return new String[]{
                 //FILE
-                Overlap2DMenuBar.NEW_PROJECT,
-                Overlap2DMenuBar.OPEN_PROJECT,
-                Overlap2DMenuBar.SAVE_PROJECT,
-                Overlap2DMenuBar.IMPORT_TO_LIBRARY,
-                Overlap2DMenuBar.EXPORT,
-                Overlap2DMenuBar.EXPORT_SETTINGS,
-                Overlap2DMenuBar.RECENT_PROJECTS,
-                Overlap2DMenuBar.CLEAR_RECENTS,
-                Overlap2DMenuBar.EXIT,
-                Overlap2DMenuBar.NEW_SCENE,
-                Overlap2DMenuBar.SELECT_SCENE,
-                Overlap2DMenuBar.DELETE_CURRENT_SCENE,
+                Overlap2DMenuBar.NEW_PROJECT, Overlap2DMenuBar.OPEN_PROJECT, Overlap2DMenuBar.SAVE_PROJECT,
+                Overlap2DMenuBar.IMPORT_TO_LIBRARY, Overlap2DMenuBar.EXPORT, Overlap2DMenuBar.EXPORT_SETTINGS,
+                Overlap2DMenuBar.RECENT_PROJECTS, Overlap2DMenuBar.CLEAR_RECENTS, Overlap2DMenuBar.EXIT,
+                Overlap2DMenuBar.NEW_SCENE, Overlap2DMenuBar.SELECT_SCENE, Overlap2DMenuBar.DELETE_CURRENT_SCENE,
                 //EDIT
-                Overlap2DMenuBar.CUT,
-                Overlap2DMenuBar.COPY,
-                Overlap2DMenuBar.PASTE,
-                Overlap2DMenuBar.UNDO,
+                Overlap2DMenuBar.CUT, Overlap2DMenuBar.COPY, Overlap2DMenuBar.PASTE, Overlap2DMenuBar.UNDO,
                 Overlap2DMenuBar.REDO,
                 //General
-                ProjectManager.PROJECT_OPENED,
-                Overlap2DMenuBar.RECENT_LIST_MODIFIED
-        };
+                ProjectManager.PROJECT_OPENED, Overlap2DMenuBar.RECENT_LIST_MODIFIED};
     }
 
     @Override
@@ -87,7 +74,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         super.handleNotification(notification);
         String type = notification.getType();
 
-        if(notification.getName().equals(Overlap2DMenuBar.RECENT_LIST_MODIFIED)) {
+        if (notification.getName().equals(Overlap2DMenuBar.RECENT_LIST_MODIFIED)) {
             PreferencesManager prefs = PreferencesManager.getInstance();
             viewComponent.reInitRecent(prefs.getRecentHistory());
         }
@@ -171,30 +158,31 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Gdx.app.exit();
                 break;
             case Overlap2DMenuBar.NEW_SCENE:
-                DialogUtils.showInputDialog(sandbox.getUIStage(), "Create New Scene", "Scene Name : ", new InputDialogListener() {
-                    @Override
-                    public void finished(String input) {
-                        if (input == null || input.equals("")) {
-                            return;
-                        }
-                        SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
-                        sceneDataManager.createNewScene(input);
-                        sandbox.loadScene(input);
-                        onScenesChanged();
-                    }
+                DialogUtils.showInputDialog(sandbox.getUIStage(), "Create New Scene", "Scene Name : ",
+                        new InputDialogListener() {
+                            @Override
+                            public void finished(String input) {
+                                if (input == null || input.equals("")) {
+                                    return;
+                                }
+                                SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);
+                                sceneDataManager.createNewScene(input);
+                                sandbox.loadScene(input);
+                                onScenesChanged();
+                            }
 
-                    @Override
-                    public void canceled() {
+                            @Override
+                            public void canceled() {
 
-                    }
-                });
+                            }
+                        });
                 break;
             case Overlap2DMenuBar.SELECT_SCENE:
                 sceneMenuItemClicked(notification.getBody());
                 break;
             case Overlap2DMenuBar.DELETE_CURRENT_SCENE:
-                DialogUtils.showConfirmDialog(sandbox.getUIStage(),
-                        "Delete Scene", "Do you realy want to delete '" + projectManager.currentProjectVO.lastOpenScene + "' scene?",
+                DialogUtils.showConfirmDialog(sandbox.getUIStage(), "Delete Scene",
+                        "Do you realy want to delete '" + projectManager.currentProjectVO.lastOpenScene + "' scene?",
                         new String[]{"Delete", "Cancel"}, new Integer[]{0, 1}, result -> {
                             if (result == 0) {
                                 SceneDataManager sceneDataManager = facade.retrieveProxy(SceneDataManager.NAME);

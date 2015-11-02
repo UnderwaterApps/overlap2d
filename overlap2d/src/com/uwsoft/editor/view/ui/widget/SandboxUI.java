@@ -19,9 +19,9 @@
 package com.uwsoft.editor.view.ui.widget;
 
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.widget.actors.GridView;
 import com.uwsoft.editor.view.ui.widget.actors.ResolutionBounds;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 public class SandboxUI extends Group {
 

@@ -30,7 +30,7 @@ public class PluginItemCommand extends EntityModifyRevertableCommand {
 
     @Override
     public void doAction() {
-        if(command == null) {
+        if (command == null) {
             Object[] payload = notification.getBody();
             command = (IItemCommand) payload[0];
             body = payload[1];

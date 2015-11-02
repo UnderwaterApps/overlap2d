@@ -28,7 +28,6 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.poly.Clipper;
@@ -100,7 +99,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     private void updateSubFollowerList() {
         Sandbox sandbox = Sandbox.getInstance();
         Set<Entity> selectedEntities = sandbox.getSelector().getSelectedItems();
-        for(Entity entity: selectedEntities) {
+        for (Entity entity : selectedEntities) {
             BasicFollower follower = followersUIMediator.getFollower(entity);
             follower.removeSubFollower(PolygonFollower.class);
             PolygonFollower meshFollower = new PolygonFollower(entity);
@@ -161,7 +160,7 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
 
         // check if any of near lines intersect
         int[] intersections = checkForIntersection(anchor, points);
-        if(intersections == null) {
+        if (intersections == null) {
             polygonComponent.vertices = polygonize(points);
             follower.setProblems(null);
         } else {
@@ -178,18 +177,18 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
 
         int[] intersections = checkForIntersection(anchor, points);
-        if(intersections == null) {
-            if(PolygonUtils.isPolygonCCW(points)){
+        if (intersections == null) {
+            if (PolygonUtils.isPolygonCCW(points)) {
                 Collections.reverse(follower.getOriginalPoints());
                 points = follower.getOriginalPoints().toArray(new Vector2[0]);
             }
             polygonComponent.vertices = polygonize(points);
         }
 
-        if(polygonComponent.vertices == null) {
+        if (polygonComponent.vertices == null) {
             // restore from backup
             polygonComponent.vertices = polygonBackup.clone();
-        } else if(intersections != null) {
+        } else if (intersections != null) {
             polygonComponent.vertices = polygonBackup.clone();
         }
 
@@ -205,8 +204,8 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
 
     @Override
     public void keyDown(Entity entity, int keycode) {
-        if(keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
-            if(!deleteSelectedAnchor()) {
+        if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
+            if (!deleteSelectedAnchor()) {
                 super.keyDown(entity, keycode);
             }
         } else {
@@ -215,7 +214,8 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     }
 
     private PolygonFollower getMeshFollower(Entity entity) {
-        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance()
+                                                                 .retrieveMediator(FollowersUIMediator.NAME);
         BasicFollower follower = followersUIMediator.getFollower(entity);
 
         PolygonFollower meshFollower = (PolygonFollower) (follower).getSubFollower(PolygonFollower.class);
@@ -225,25 +225,28 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
     private boolean deleteSelectedAnchor() {
         PolygonFollower follower = lastSelectedMeshFollower;
         PolygonComponent polygonComponent = ComponentRetriever.get(follower.getEntity(), PolygonComponent.class);
-        if(follower != null) {
-            if(polygonComponent == null || polygonComponent.vertices == null || polygonComponent.vertices.length == 0) return false;
-            if(follower.getOriginalPoints().size() <= 3) return false;
+        if (follower != null) {
+            if (polygonComponent == null || polygonComponent.vertices == null || polygonComponent.vertices.length == 0)
+                return false;
+            if (follower.getOriginalPoints().size() <= 3)
+                return false;
 
             polygonBackup = polygonComponent.vertices.clone();
             currentCommandPayload = UpdatePolygonComponentCommand.payloadInitialState(follower.getEntity());
 
             follower.getOriginalPoints().remove(follower.getSelectedAnchorId());
-            follower.getSelectedAnchorId(follower.getSelectedAnchorId()-1);
+            follower.getSelectedAnchorId(follower.getSelectedAnchorId() - 1);
             Vector2[] points = follower.getOriginalPoints().toArray(new Vector2[0]);
             polygonComponent.vertices = polygonize(points);
 
-            if(polygonComponent.vertices == null) {
+            if (polygonComponent.vertices == null) {
                 // restore from backup
                 polygonComponent.vertices = polygonBackup.clone();
                 follower.update();
             }
 
-            currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload, polygonComponent.vertices);
+            currentCommandPayload = UpdatePolygonComponentCommand.payload(currentCommandPayload,
+                    polygonComponent.vertices);
             Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, currentCommandPayload);
 
             follower.updateDraw();
@@ -256,8 +259,11 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
 
     private boolean intersectSegments(Vector2[] points, int index1, int index2, int index3, int index4) {
         Vector2 intersectionPoint = new Vector2(points[index1]);
-        boolean isIntersecting = Intersector.intersectSegments(points[index1], points[index2], points[index3], points[index4], intersectionPoint);
-        if(isIntersecting && !isSamePoint(intersectionPoint, points[index1]) && !isSamePoint(intersectionPoint, points[index2]) && !isSamePoint(intersectionPoint, points[index3]) && !isSamePoint(intersectionPoint, points[index4])) {
+        boolean isIntersecting = Intersector.intersectSegments(points[index1], points[index2], points[index3],
+                points[index4], intersectionPoint);
+        if (isIntersecting && !isSamePoint(intersectionPoint, points[index1]) && !isSamePoint(intersectionPoint,
+                points[index2]) && !isSamePoint(intersectionPoint, points[index3]) && !isSamePoint(intersectionPoint,
+                points[index4])) {
             return true;
         }
 
@@ -269,50 +275,52 @@ public class PolygonTool extends SelectionTool implements PolygonTransformationL
         int precision = 10000 * pixelsPerWU;
         Vector2 pointA = new Vector2(point1);
         Vector2 pointB = new Vector2(point2);
-        pointA.x = Math.round(point1.x * precision) / (float)precision;
-        pointA.y = Math.round(point1.y * precision) / (float)precision;
-        pointB.x = Math.round(point2.x * precision) / (float)precision;
-        pointB.y = Math.round(point2.y * precision) / (float)precision;
+        pointA.x = Math.round(point1.x * precision) / (float) precision;
+        pointA.y = Math.round(point1.y * precision) / (float) precision;
+        pointB.x = Math.round(point2.x * precision) / (float) precision;
+        pointB.y = Math.round(point2.y * precision) / (float) precision;
 
         return pointA.equals(pointB);
     }
 
 
     private int[] checkForIntersection(int anchor, Vector2[] points) {
-        int leftPointIndex = points.length-1;
+        int leftPointIndex = points.length - 1;
         int rightPointIndex = 0;
-        if(anchor > 0) {
-            leftPointIndex = anchor-1;
+        if (anchor > 0) {
+            leftPointIndex = anchor - 1;
         }
-        if(anchor < points.length-1) {
-            rightPointIndex =  anchor+1;
+        if (anchor < points.length - 1) {
+            rightPointIndex = anchor + 1;
         }
 
         HashSet<Integer> problems = new HashSet<>();
 
-        for(int i = 0; i < points.length-1; i++) {
+        for (int i = 0; i < points.length - 1; i++) {
 
-           if(i != leftPointIndex && i != anchor) {
-               if(intersectSegments(points, i, i+1, leftPointIndex, anchor)) {
-                   problems.add(leftPointIndex);
-               }
-               if(intersectSegments(points, i, i+1, anchor, rightPointIndex)) {
-                   problems.add(anchor);
-               }
-           }
+            if (i != leftPointIndex && i != anchor) {
+                if (intersectSegments(points, i, i + 1, leftPointIndex, anchor)) {
+                    problems.add(leftPointIndex);
+                }
+                if (intersectSegments(points, i, i + 1, anchor, rightPointIndex)) {
+                    problems.add(anchor);
+                }
+            }
         }
-        if(anchor != points.length-1 && leftPointIndex != points.length-1 && intersectSegments(points, points.length-1, 0, leftPointIndex, anchor)) {
+        if (anchor != points.length - 1 && leftPointIndex != points.length - 1 && intersectSegments(points,
+                points.length - 1, 0, leftPointIndex, anchor)) {
             problems.add(leftPointIndex);
         }
-        if(anchor != points.length-1 && leftPointIndex != points.length-1 && intersectSegments(points, points.length-1, 0, anchor, rightPointIndex)) {
+        if (anchor != points.length - 1 && leftPointIndex != points.length - 1 && intersectSegments(points,
+                points.length - 1, 0, anchor, rightPointIndex)) {
             problems.add(anchor);
         }
 
-        if(problems.size() == 0) {
+        if (problems.size() == 0) {
             return null;
         }
 
-        int[] result = problems.stream().mapToInt(i->i).toArray();
+        int[] result = problems.stream().mapToInt(i -> i).toArray();
 
         return result;
     }

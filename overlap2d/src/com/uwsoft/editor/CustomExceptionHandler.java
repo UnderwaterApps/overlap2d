@@ -18,7 +18,17 @@
 
 package com.uwsoft.editor;
 
-import java.awt.EventQueue;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Net.HttpMethods;
+import com.badlogic.gdx.Net.HttpRequest;
+import com.badlogic.gdx.Net.HttpResponse;
+import com.badlogic.gdx.Net.HttpResponseListener;
+import com.badlogic.gdx.net.HttpParametersUtils;
+import com.uwsoft.editor.utils.AppConfig;
+import org.apache.commons.lang3.SystemUtils;
+
+import javax.swing.*;
+import java.awt.*;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -27,18 +37,6 @@ import java.io.StringWriter;
 import java.io.Writer;
 import java.lang.Thread.UncaughtExceptionHandler;
 import java.util.HashMap;
-
-import javax.swing.JOptionPane;
-
-import org.apache.commons.lang3.SystemUtils;
-
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Net.HttpMethods;
-import com.badlogic.gdx.Net.HttpRequest;
-import com.badlogic.gdx.Net.HttpResponse;
-import com.badlogic.gdx.Net.HttpResponseListener;
-import com.badlogic.gdx.net.HttpParametersUtils;
-import com.uwsoft.editor.utils.AppConfig;
 
 
 public class CustomExceptionHandler implements UncaughtExceptionHandler {
@@ -61,7 +59,9 @@ public class CustomExceptionHandler implements UncaughtExceptionHandler {
 
                     @Override
                     public void run() {
-                        JOptionPane.showMessageDialog(null, "Overlap2D just crashed, see stacktrace in overlog.txt file", "Error", JOptionPane.ERROR_MESSAGE);
+                        JOptionPane.showMessageDialog(null,
+                                "Overlap2D just crashed, see stacktrace in overlog.txt file", "Error",
+                                JOptionPane.ERROR_MESSAGE);
                     }
 
                 });

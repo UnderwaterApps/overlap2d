@@ -78,7 +78,10 @@ public class UIAlignBox extends UICollapsibleBox {
         alignButtonsTable.row().padTop(6);
         alignButtonsTable.add("Center:").padRight(8).right();
         alignButtonsTable.add(createAlignButton("align-center-vertical", ALIGN_CENTER_VERTICAL)).padRight(4).left();
-        alignButtonsTable.add(createAlignButton("align-center-horisontal", ALIGN_CENTER_HORISONTAL)).expandX().left().colspan(3);
+        alignButtonsTable.add(createAlignButton("align-center-horisontal", ALIGN_CENTER_HORISONTAL))
+                         .expandX()
+                         .left()
+                         .colspan(3);
         //
         alignButtonsTable.row().padTop(6);
         alignButtonsTable.add("At Edge:").padRight(8).right();

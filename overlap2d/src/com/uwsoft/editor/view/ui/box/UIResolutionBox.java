@@ -34,16 +34,20 @@ import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 public class UIResolutionBox extends VisTable {
-    public static final String CREATE_NEW_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
-    public static final String CHANGE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + ".CHANGE_RESOLUTION_BTN_CLICKED";
-    public static final String DELETE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + ".DELETE_RESOLUTION_BTN_CLICKED";
-    public static final String REPACK_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + ".REPACK_BTN_CLICKED";
+    public static final String CREATE_NEW_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" +
+            ".CREATE_NEW_RESOLUTION_BTN_CLICKED";
+    public static final String CHANGE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + "" +
+            ".CHANGE_RESOLUTION_BTN_CLICKED";
+    public static final String DELETE_RESOLUTION_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + "" +
+            ".DELETE_RESOLUTION_BTN_CLICKED";
+    public static final String REPACK_BTN_CLICKED = "com.uwsoft.editor.view.ui.box.UIResolutionBox" + "" +
+            ".REPACK_BTN_CLICKED";
     //    private final String currentResolutionName;
     private final Overlap2DFacade facade;
     private final ResolutionManager resolutionManager;
     private final Skin skin;
     private VisSelectBox<ResolutionEntryVO> visSelectBox;
-//    private final ProjectManager projectManager;
+    //    private final ProjectManager projectManager;
 
     private VisImageButton deleteBtn;
 
@@ -71,7 +75,8 @@ public class UIResolutionBox extends VisTable {
         visSelectBox.setItems(resolutionEntryVOs);
         add("Resolution:").padRight(4);
         add(visSelectBox).padRight(11).width(156);
-        VisImageButton.VisImageButtonStyle visImageButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
+        VisImageButton.VisImageButtonStyle visImageButtonStyle = new VisImageButton.VisImageButtonStyle(
+                skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         visImageButtonStyle.imageUp = skin.getDrawable("icon-trash");
         visImageButtonStyle.imageOver = skin.getDrawable("icon-trash-over");
         visImageButtonStyle.imageDisabled = skin.getDrawable("icon-trash-disabled");

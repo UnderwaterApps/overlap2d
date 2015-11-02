@@ -65,7 +65,7 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
     }
 
     public void setVerticesCount(int count) {
-        verticesCountLbl.setText(count+"");
+        verticesCountLbl.setText(count + "");
     }
 
     public void initEmptyView() {

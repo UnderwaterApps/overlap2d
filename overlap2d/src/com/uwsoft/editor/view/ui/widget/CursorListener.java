@@ -33,16 +33,18 @@ public class CursorListener extends InputListener {
 
     private CursorData prevCursor;
 
-    public CursorListener (CursorData cursor) {
+    public CursorListener(CursorData cursor) {
         this.cursor = cursor;
         cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
     }
 
-    public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-        if (pointer == -1) cursorManager.setOverrideCursor(cursor);
+    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+        if (pointer == -1)
+            cursorManager.setOverrideCursor(cursor);
     }
 
-    public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
-        if (pointer == -1) cursorManager.setOverrideCursor(null);
+    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
+        if (pointer == -1)
+            cursorManager.setOverrideCursor(null);
     }
 }

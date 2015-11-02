@@ -26,15 +26,15 @@ import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.utils.ImportUtils;
-import com.uwsoft.editor.view.frame.FileDropListener;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
-import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.utils.ImportUtils;
+import com.uwsoft.editor.view.frame.FileDropListener;
+import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.stage.UIStage;
+import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 
 import java.awt.datatransfer.DataFlavor;
 import java.awt.datatransfer.Transferable;
@@ -68,26 +68,19 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                Overlap2DMenuBar.IMPORT_TO_LIBRARY,
-                ImportDialog.BROWSE_BTN_CLICKED,
-                ImportDialog.CANCEL_BTN_CLICKED,
-                ImportDialog.IMPORT_BTN_CLICKED,
-                FileDropListener.ACTION_DRAG_ENTER,
-                FileDropListener.ACTION_DRAG_OVER,
-                FileDropListener.ACTION_DRAG_EXIT,
-                FileDropListener.ACTION_DROP,
-        };
+        return new String[]{Overlap2DMenuBar.IMPORT_TO_LIBRARY, ImportDialog.BROWSE_BTN_CLICKED, ImportDialog
+                .CANCEL_BTN_CLICKED, ImportDialog.IMPORT_BTN_CLICKED, FileDropListener.ACTION_DRAG_ENTER,
+                FileDropListener.ACTION_DRAG_OVER, FileDropListener.ACTION_DRAG_EXIT, FileDropListener.ACTION_DROP,};
     }
 
     public Vector2 getLocationFromDtde(DropTargetDragEvent dtde) {
-        Vector2 pos = new Vector2((float)(dtde).getLocation().getX(),(float)(dtde).getLocation().getY());
+        Vector2 pos = new Vector2((float) (dtde).getLocation().getX(), (float) (dtde).getLocation().getY());
 
         return pos;
     }
 
     public Vector2 getLocationFromDropEvent(DropTargetDropEvent dtde) {
-        Vector2 pos = new Vector2((float)(dtde).getLocation().getX(),(float)(dtde).getLocation().getY());
+        Vector2 pos = new Vector2((float) (dtde).getLocation().getX(), (float) (dtde).getLocation().getY());
 
         return pos;
     }
@@ -106,25 +99,25 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
                 break;
             case FileDropListener.ACTION_DRAG_ENTER:
                 Vector2 dropPos = getLocationFromDtde(notification.getBody());
-                if(viewComponent.checkDropRegionHit(dropPos)) {
+                if (viewComponent.checkDropRegionHit(dropPos)) {
                     viewComponent.dragOver();
                 }
                 break;
             case FileDropListener.ACTION_DRAG_OVER:
                 dropPos = getLocationFromDtde(notification.getBody());
-                if(viewComponent.checkDropRegionHit(dropPos)) {
+                if (viewComponent.checkDropRegionHit(dropPos)) {
                     viewComponent.dragOver();
                 }
                 break;
             case FileDropListener.ACTION_DRAG_EXIT:
                 dropPos = getLocationFromDtde(notification.getBody());
-                if(viewComponent.checkDropRegionHit(dropPos)) {
+                if (viewComponent.checkDropRegionHit(dropPos)) {
                     viewComponent.dragExit();
                 }
                 break;
             case FileDropListener.ACTION_DROP:
                 dropPos = getLocationFromDropEvent(notification.getBody());
-                if(viewComponent.checkDropRegionHit(dropPos)) {
+                if (viewComponent.checkDropRegionHit(dropPos)) {
                     DropTargetDropEvent dtde = notification.getBody();
                     String[] paths = catchFiles(dtde);
                     postPathObtainAction(paths);
@@ -147,8 +140,10 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
             viewComponent.showError(type);
         } else {
             boolean isMultiple = false;
-            if (paths.length > 1) isMultiple = true;
-            if (type == ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE) isMultiple = false;
+            if (paths.length > 1)
+                isMultiple = true;
+            if (type == ImportUtils.TYPE_ANIMATION_PNG_SEQUENCE)
+                isMultiple = false;
             viewComponent.setImportingView(type, isMultiple);
 
             this.paths = paths;
@@ -159,7 +154,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     }
 
     private void showFileChoose() {
-         Sandbox sandbox = Sandbox.getInstance();
+        Sandbox sandbox = Sandbox.getInstance();
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
 
         fileChooser.setMultiselectionEnabled(true);
@@ -167,10 +162,10 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
             @Override
             public void selected(Array<FileHandle> files) {
                 String paths[] = new String[files.size];
-                for(int i = 0; i < files.size; i++) {
+                for (int i = 0; i < files.size; i++) {
                     paths[i] = files.get(i).path();
                 }
-                if(paths.length > 0) {
+                if (paths.length > 0) {
                     postPathObtainAction(paths);
                 }
             }
@@ -215,9 +210,9 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
         projectManager.saveCurrentProject(vo);
     }
 
-    private  Array<FileHandle> getFilesFromPaths(String[] paths) {
+    private Array<FileHandle> getFilesFromPaths(String[] paths) {
         Array<FileHandle> files = new Array<>();
-        for(int i = 0; i < paths.length;i++) {
+        for (int i = 0; i < paths.length; i++) {
             files.add(new FileHandle(new File(paths[i])));
         }
 
@@ -227,17 +222,16 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
     public String[] catchFiles(DropTargetDropEvent dtde) {
         dtde.acceptDrop(DnDConstants.ACTION_COPY_OR_MOVE);
 
-        Transferable t= dtde.getTransferable();
+        Transferable t = dtde.getTransferable();
         if (t.isDataFlavorSupported(DataFlavor.javaFileListFlavor)) {
             try {
-                List<File> list = (List<File>)dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
+                List<File> list = (List<File>) dtde.getTransferable().getTransferData(DataFlavor.javaFileListFlavor);
                 String[] paths = new String[list.size()];
-                for(int i = 0; i < list.size(); i++) {
+                for (int i = 0; i < list.size(); i++) {
                     paths[i] = list.get(i).getAbsolutePath();
                 }
                 return paths;
-            }
-            catch (Exception ufe) {
+            } catch (Exception ufe) {
             }
         }
 

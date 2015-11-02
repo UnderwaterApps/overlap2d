@@ -27,8 +27,8 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
-import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -161,11 +161,11 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     public void setDistance(String distance) {
         coneDistanceField.setText(distance);
     }
-    
+
     public String getSoftnessLength() {
         return softnessLengthField.getText();
     }
-    
+
     public void setSoftnessLength(String softness) {
         softnessLengthField.setText(softness);
     }

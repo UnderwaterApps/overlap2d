@@ -119,11 +119,11 @@ public class PixelRect extends Group {
         return r;
     }
 
-	 public void setThickness(float thickness) {
-		  lines[0].setThickness(thickness);
-		  lines[1].setThickness(thickness);
-		  lines[2].setThickness(thickness);
-		  lines[3].setThickness(thickness);
-	 }
+    public void setThickness(float thickness) {
+        lines[0].setThickness(thickness);
+        lines[1].setThickness(thickness);
+        lines[2].setThickness(thickness);
+        lines[3].setThickness(thickness);
+    }
 
 }

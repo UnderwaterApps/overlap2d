@@ -4,11 +4,11 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
+import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.Overlap2DFacade;
 
 /**
  * Created by CyberJoe on 5/1/2015.
@@ -80,8 +80,10 @@ public class PanTool extends SimpleTool {
         ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
         OrthographicCamera camera = sandbox.getCamera();
 
-        float currX = camera.position.x + (lastCoordinates.x - Gdx.input.getX()) * camera.zoom / resourceManager.getProjectVO().pixelToWorld;
-        float currY = camera.position.y + (Gdx.input.getY() - lastCoordinates.y) * camera.zoom / resourceManager.getProjectVO().pixelToWorld;
+        float currX = camera.position.x + (lastCoordinates.x - Gdx.input.getX()) * camera.zoom / resourceManager
+                .getProjectVO().pixelToWorld;
+        float currY = camera.position.y + (Gdx.input.getY() - lastCoordinates.y) * camera.zoom / resourceManager
+                .getProjectVO().pixelToWorld;
 
         sandbox.getCamera().position.set(currX, currY, 0);
 

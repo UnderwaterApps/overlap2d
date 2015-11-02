@@ -32,7 +32,11 @@ import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
 import com.uwsoft.editor.data.vo.EditorConfigVO;
 import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.data.vo.SceneConfigVO;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.Overlap2DUtils;
@@ -54,7 +58,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -120,7 +123,8 @@ public class ProjectManager extends BaseProxy {
         handler.progressChanged(currentPercent);
     }
 
-    public void createEmptyProject(String projectPath, int width, int height, int pixelPerWorldUnit) throws IOException {
+    public void createEmptyProject(String projectPath, int width, int height,
+            int pixelPerWorldUnit) throws IOException {
 
         /*
         if (workspacePath.endsWith(File.separator)) {
@@ -215,7 +219,8 @@ public class ProjectManager extends BaseProxy {
             }
             ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
             if (resolution == null) {
-                resolutionManager.currentResolutionName = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" : currentProjectVO.lastOpenResolution;
+                resolutionManager.currentResolutionName = currentProjectVO.lastOpenResolution.isEmpty() ? "orig" :
+                        currentProjectVO.lastOpenResolution;
             } else {
                 resolutionManager.currentResolutionName = resolution;
                 currentProjectVO.lastOpenResolution = resolutionManager.currentResolutionName;
@@ -242,11 +247,13 @@ public class ProjectManager extends BaseProxy {
                 Json json = new Json();
                 json.setIgnoreUnknownFields(true);
                 SceneVO sceneVO = json.fromJson(SceneVO.class, entry);
-                if (sceneVO.composite == null) continue;
+                if (sceneVO.composite == null)
+                    continue;
                 ArrayList<MainItemVO> items = sceneVO.composite.getAllItems();
 
                 for (CompositeItemVO libraryItem : currentProjectInfoVO.libraryItems.values()) {
-                    if (libraryItem.composite == null) continue;
+                    if (libraryItem.composite == null)
+                        continue;
                     items = libraryItem.composite.getAllItems();
                 }
             }
@@ -263,8 +270,10 @@ public class ProjectManager extends BaseProxy {
 
     public void saveCurrentProject() {
         try {
-            FileUtils.writeStringToFile(new File(currentProjectPath + "/project.pit"), currentProjectVO.constructJsonString(), "utf-8");
-            FileUtils.writeStringToFile(new File(currentProjectPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(currentProjectPath + "/project.pit"),
+                    currentProjectVO.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(currentProjectPath + "/project.dt"),
+                    currentProjectInfoVO.constructJsonString(), "utf-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -287,7 +296,12 @@ public class ProjectManager extends BaseProxy {
             NodeList nodeList = document.getElementsByTagName("file");
             for (int x = 0, size = nodeList.getLength(); x < size; x++) {
                 String absolutePath = fileHandle.path();
-                String path = absolutePath.substring(0, FilenameUtils.indexOfLastSeparator(fileHandle.path())) + File.separator + nodeList.item(x).getAttributes().getNamedItem("name").getNodeValue();
+                String path = absolutePath.substring(0,
+                        FilenameUtils.indexOfLastSeparator(fileHandle.path())) + File.separator + nodeList.item(x)
+                                                                                                          .getAttributes()
+                                                                                                          .getNamedItem(
+                                                                                                                  "name")
+                                                                                                          .getNodeValue();
                 File imgFile = new File(path);
                 images.add(imgFile);
             }
@@ -333,9 +347,10 @@ public class ProjectManager extends BaseProxy {
     public File importExternalAnimationIntoProject(FileHandle animationFileSource) {
         try {
             String fileName = animationFileSource.name();
-            if (!Overlap2DUtils.JSON_FILTER.accept(null, fileName) &&
-                    !Overlap2DUtils.SCML_FILTER.accept(null, fileName)) {
-                //showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation should be a .scml file with images in same folder");
+            if (!Overlap2DUtils.JSON_FILTER.accept(null, fileName) && !Overlap2DUtils.SCML_FILTER.accept(null,
+                    fileName)) {
+                //showError("Spine animation should be a .json file with atlas in same folder \n Spriter animation
+                // should be a .scml file with images in same folder");
                 return null;
             }
 
@@ -348,7 +363,8 @@ public class ProjectManager extends BaseProxy {
 
                 animationDataPath = FilenameUtils.getFullPathNoEndSeparator(sourcePath);
                 targetPath = currentProjectPath + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt;
-                FileHandle atlasFileSource = new FileHandle(animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
+                FileHandle atlasFileSource = new FileHandle(
+                        animationDataPath + File.separator + fileNameWithOutExt + ".atlas");
                 if (!atlasFileSource.exists()) {
                     //showError("the atlas file needs to have same name and location as the json file");
                     return null;
@@ -371,7 +387,8 @@ public class ProjectManager extends BaseProxy {
 
 
             } else if (Overlap2DUtils.SCML_FILTER.accept(null, fileName)) {
-                targetPath = currentProjectPath + "/assets/orig/spriter-animations" + File.separator + fileNameWithOutExt;
+                targetPath = currentProjectPath + "/assets/orig/spriter-animations" + File.separator +
+                        fileNameWithOutExt;
                 File scmlFileTarget = new File(targetPath + File.separator + fileNameWithOutExt + ".scml");
                 ArrayList<File> imageFiles = getScmlFileImagesList(animationFileSource);
 
@@ -391,7 +408,8 @@ public class ProjectManager extends BaseProxy {
     }
 
 
-    public void importSpriteAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
+    public void importSpriteAnimationsIntoProject(final Array<FileHandle> fileHandles,
+            ProgressHandler progressHandler) {
         if (fileHandles == null) {
             return;
         }
@@ -417,7 +435,8 @@ public class ProjectManager extends BaseProxy {
                 }
                 String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
                 String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
-                String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
+                String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator +
+                        fileNameWithoutFrame;
                 File targetDir = new File(targetPath);
                 if (targetDir.exists()) {
                     try {
@@ -433,7 +452,8 @@ public class ProjectManager extends BaseProxy {
                     try {
                         Array<File> imgs = getAtlasPages(fileHandle);
                         String fileNameWithoutExt = FilenameUtils.removeExtension(fileHandle.name());
-                        String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutExt;
+                        String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator +
+                                fileNameWithoutExt;
                         File targetDir = new File(targetPath);
                         if (targetDir.exists()) {
                             FileUtils.deleteDirectory(targetDir);
@@ -473,7 +493,8 @@ public class ProjectManager extends BaseProxy {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
             while (true) {
                 String line = reader.readLine();
-                if (line == null) break;
+                if (line == null)
+                    break;
                 if (line.trim().length() == 0) {
                     line = reader.readLine();
                     imgs.add(new File(FilenameUtils.getFullPath(fileHandle.path()) + line));
@@ -501,7 +522,8 @@ public class ProjectManager extends BaseProxy {
             BufferedReader reader = new BufferedReader(new InputStreamReader(fileHandle.read()), 64);
             while (true) {
                 String line = reader.readLine();
-                if (line == null) break;
+                if (line == null)
+                    break;
                 if (line.trim().equals("- Image Path -")) {
                     line = reader.readLine();
                     if (line.contains("\\") || line.contains("/")) {
@@ -559,7 +581,8 @@ public class ProjectManager extends BaseProxy {
                     } catch (Exception e) {
                         //e.printStackTrace();
                         //System.out.println("Error importing particles");
-                        //showError("Error importing particles \n Particle Atals not found \n Please place particle atlas and particle effect fileHandle in the same directory ");
+                        //showError("Error importing particles \n Particle Atals not found \n Please place particle
+                        // atlas and particle effect fileHandle in the same directory ");
                     }
                 }
             }
@@ -636,7 +659,9 @@ public class ProjectManager extends BaseProxy {
             totalWarnings += copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
         }
         if (totalWarnings > 0) {
-            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning",
+                    totalWarnings + " images were not resized for smaller resolutions due to already small size ( < " +
+                            "3px )");
         }
     }
 
@@ -646,7 +671,8 @@ public class ProjectManager extends BaseProxy {
      * @param performResize
      * @return number of images that did needed to be resized but failed
      */
-    private int copyImageFilesIntoProject(Array<FileHandle> files, ResolutionEntryVO resolution, Boolean performResize) {
+    private int copyImageFilesIntoProject(Array<FileHandle> files, ResolutionEntryVO resolution,
+            Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
         String targetPath = currentProjectPath + "/assets/" + resolution.name + "/images";
         float perCopyPercent = 95.0f / files.size;
@@ -737,7 +763,8 @@ public class ProjectManager extends BaseProxy {
             for (int i = 0; i < skin.fontFiles.size(); i++) {
                 File copyFontFile = new File(handle.path(), skin.fontFiles.get(i) + ".fnt");
                 File copyImageFile = new File(handle.path(), skin.fontFiles.get(i) + ".png");
-                if (!handle.isDirectory() && handle.exists() && copyFontFile.isFile() && copyFontFile.exists() && copyImageFile.isFile() && copyImageFile.exists()) {
+                if (!handle.isDirectory() && handle.exists() && copyFontFile.isFile() && copyFontFile.exists() &&
+                        copyImageFile.isFile() && copyImageFile.exists()) {
                     File fileTarget = new File(targetPath + "/" + handle.name());
                     File fontTarget = new File(targetPath + "/" + copyFontFile.getName());
                     File imageTarget = new File(targetPath + "/" + copyImageFile.getName());
@@ -1037,7 +1064,8 @@ public class ProjectManager extends BaseProxy {
 
     public SceneConfigVO getCurrentSceneConfigVO() {
         for (int i = 0; i < currentProjectVO.sceneConfigs.size(); i++) {
-            if (currentProjectVO.sceneConfigs.get(i).sceneName.equals(Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName)) {
+            if (currentProjectVO.sceneConfigs.get(i).sceneName.equals(
+                    Sandbox.getInstance().getSceneControl().getCurrentSceneVO().sceneName)) {
                 return currentProjectVO.sceneConfigs.get(i);
             }
         }
@@ -1087,7 +1115,7 @@ public class ProjectManager extends BaseProxy {
     }
 
     public FileHandle getWorkspacePath() {
-        if(editorConfigVO.lastOpenedSystemPath != null) {
+        if (!editorConfigVO.lastOpenedSystemPath.isEmpty()) {
             return new FileHandle(editorConfigVO.lastOpenedSystemPath);
         }
         return new FileHandle(defaultWorkspacePath);

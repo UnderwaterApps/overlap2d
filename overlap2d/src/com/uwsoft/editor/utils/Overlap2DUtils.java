@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.utils;
 
+import org.apache.commons.io.filefilter.SuffixFileFilter;
+import org.apache.commons.lang3.SystemUtils;
+
 import java.io.File;
 import java.io.FilenameFilter;
 import java.io.InputStream;
-
-import org.apache.commons.io.filefilter.SuffixFileFilter;
-import org.apache.commons.lang3.SystemUtils;
 
 /**
  * Created by sargis on 4/1/15.
@@ -44,7 +44,9 @@ public class Overlap2DUtils {
                 myDocuments = System.getProperty("user.home") + File.separator + "Documents";
             }
             if (SystemUtils.IS_OS_WINDOWS) {
-                Process p = Runtime.getRuntime().exec("reg query \"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders\" /v personal");
+                Process p = Runtime.getRuntime().exec("reg query " +
+                        "\"HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell " +
+                        "Folders\" /v personal");
                 p.waitFor();
 
                 InputStream in = p.getInputStream();

@@ -44,11 +44,27 @@ public class EntityBounds extends Rectangle {
         scaleY = transformComponent.scaleY;
     }
 
-    public float getVisualX() {return Math.min(getX(), getX() + getWidth() * scaleX);}
-    public float getVisualY() {return Math.min(getY(), getY() + getHeight() * scaleY);}
-    public float getVisualWidth() {return Math.abs(getWidth() * scaleX);}
-    public float getVisualHeight() {return Math.abs(getHeight() * scaleY);}
+    public float getVisualX() {
+        return Math.min(getX(), getX() + getWidth() * scaleX);
+    }
 
-    public float getVisualRightX() {return Math.max(getX(), getX() + getWidth() * scaleX);}
-    public float getVisualTopY() {return Math.max(getY(), getY() + getHeight() * scaleY);}
+    public float getVisualY() {
+        return Math.min(getY(), getY() + getHeight() * scaleY);
+    }
+
+    public float getVisualWidth() {
+        return Math.abs(getWidth() * scaleX);
+    }
+
+    public float getVisualHeight() {
+        return Math.abs(getHeight() * scaleY);
+    }
+
+    public float getVisualRightX() {
+        return Math.max(getX(), getX() + getWidth() * scaleX);
+    }
+
+    public float getVisualTopY() {
+        return Math.max(getY(), getY() + getHeight() * scaleY);
+    }
 }

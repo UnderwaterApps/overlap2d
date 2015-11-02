@@ -22,9 +22,13 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.kotcrab.vis.ui.widget.*;
-import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.commons.O2DDialog;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.widget.InputFileWidget;
 
@@ -32,8 +36,10 @@ import com.uwsoft.editor.view.ui.widget.InputFileWidget;
  * Created by sargis on 7/31/14.
  */
 public class ExportSettingsDialog extends O2DDialog {
-    public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_BTN_CLICKED";
-    public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
+    public static final String SAVE_SETTINGS_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.ExportSettingsDialog" +
+            ".SAVE_SETTINGS_BTN_CLICKED";
+    public static final String SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog" +
+            ".ExportSettingsDialog" + ".SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED";
     private final InputFileWidget exportSettingsInputFileWidget;
     private VisCheckBox duplicateCheckBox;
     private VisSelectBox<Integer> widthSelectBox;
@@ -44,9 +50,10 @@ public class ExportSettingsDialog extends O2DDialog {
         addCloseButton();
         VisTable mainTable = new VisTable();
         mainTable.padTop(6).padRight(6).padBottom(22);
-//        mainTable.debug();
+        //        mainTable.debug();
         mainTable.add("Assets folder:").right().padRight(5);
-        exportSettingsInputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN, FileChooser.SelectionMode.DIRECTORIES, false);
+        exportSettingsInputFileWidget = new InputFileWidget(FileChooser.Mode.OPEN,
+                FileChooser.SelectionMode.DIRECTORIES, false);
         exportSettingsInputFileWidget.setTextFieldWidth(250);
         mainTable.add(exportSettingsInputFileWidget);
         mainTable.row().padTop(10);

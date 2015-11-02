@@ -70,7 +70,8 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
 
         Array<DraggableResource> itemArray = new Array<>();
         for (String key : items.keySet()) {
-            if(!key.toLowerCase().contains(searchText))continue;
+            if (!key.toLowerCase().contains(searchText))
+                continue;
             DraggableResource draggableResource = new DraggableResource(new LibraryItemResource(key));
             draggableResource.setFactoryFunction(ItemFactory.get()::createItemFromLibrary);
             draggableResource.initDragDrop();

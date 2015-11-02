@@ -19,8 +19,6 @@
 package com.uwsoft.editor.view.ui.box;
 
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.ui.ButtonGroup;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
@@ -28,6 +26,8 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.uwsoft.editor.Overlap2DFacade;
+
+import java.util.HashMap;
 
 public class UIToolBox extends VisTable {
 
@@ -43,10 +43,11 @@ public class UIToolBox extends VisTable {
     }
 
     public void createToolButtons(Array<String> toolList) {
-        for(int i = 0; i < toolList.size; i++) {
+        for (int i = 0; i < toolList.size; i++) {
             addToolButton(toolList.get(i));
             row();
-            if(i == 1) addSeparator().width(31);
+            if (i == 1)
+                addSeparator().width(31);
         }
     }
 

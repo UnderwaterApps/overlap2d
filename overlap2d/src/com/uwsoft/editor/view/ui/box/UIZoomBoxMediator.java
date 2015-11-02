@@ -47,12 +47,8 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                UIZoomBox.ZOOM_SHIFT_REQUESTED,
-                UIZoomBox.ZOOM_VALUE_CHANGED,
-                MsgAPI.ZOOM_CHANGED
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED, UIZoomBox.ZOOM_SHIFT_REQUESTED, UIZoomBox
+                .ZOOM_VALUE_CHANGED, MsgAPI.ZOOM_CHANGED};
     }
 
     @Override
@@ -64,15 +60,15 @@ public class UIZoomBoxMediator extends SimpleMediator<UIZoomBox> {
                 viewComponent.update();
                 viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
-            case  UIZoomBox.ZOOM_SHIFT_REQUESTED:
+            case UIZoomBox.ZOOM_SHIFT_REQUESTED:
                 float zoomDevider = notification.getBody();
                 sandbox.zoomDevideBy(zoomDevider);
                 break;
-            case  UIZoomBox.ZOOM_VALUE_CHANGED:
+            case UIZoomBox.ZOOM_VALUE_CHANGED:
                 sandbox.setZoomPercent(NumberUtils.toInt(viewComponent.getCurrentZoom()));
                 facade.sendNotification(MsgAPI.ZOOM_CHANGED);
                 break;
-            case  MsgAPI.ZOOM_CHANGED:
+            case MsgAPI.ZOOM_CHANGED:
                 viewComponent.setCurrentZoom(sandbox.getZoomPercent() + "");
                 break;
         }

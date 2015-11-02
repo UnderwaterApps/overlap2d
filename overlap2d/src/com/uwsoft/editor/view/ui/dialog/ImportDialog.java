@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
@@ -29,14 +27,16 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
+import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisProgressBar;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.commons.UIDraggablePanel;
 import com.uwsoft.editor.utils.ImportUtils;
+
+import java.util.HashMap;
 
 public class ImportDialog extends UIDraggablePanel {
     public static final String CLASS_NAME = "com.uwsoft.editor.view.ui.dialog.ImportDialog";
@@ -110,9 +110,9 @@ public class ImportDialog extends UIDraggablePanel {
     }
 
     public boolean checkDropRegionHit(Vector2 mousePos) {
-        Vector2 pos = new Vector2(mousePos.x-8, mousePos.y-31);
+        Vector2 pos = new Vector2(mousePos.x - 8, mousePos.y - 31);
         pos = dropRegion.screenToLocalCoordinates(pos);
-        if(dropRegion.hit(pos.x, pos.y, false) != null) {
+        if (dropRegion.hit(pos.x, pos.y, false) != null) {
             return true;
         }
 
@@ -133,7 +133,9 @@ public class ImportDialog extends UIDraggablePanel {
     public void setDroppingView() {
         mainTable.clear();
 
-        VisLabel helpLbl = new VisLabel("Supported file types: images, sprite animations (atlas or img sequence), spine animations, spriter scml, particle effects");
+        VisLabel helpLbl = new VisLabel(
+                "Supported file types: images, sprite animations (atlas or img sequence), spine animations, spriter "
+                        + "scml, particle effects");
         helpLbl.setWidth(260);
         helpLbl.setWrap(true);
         mainTable.add(helpLbl).width(260).padLeft(5);
@@ -163,7 +165,8 @@ public class ImportDialog extends UIDraggablePanel {
         errorLabel.clearActions();
 
         String typeText = typeNames.get(type);
-        if(isMultiple) typeText+="'s";
+        if (isMultiple)
+            typeText += "'s";
 
         mainTable.add(new VisLabel("Currently importing: " + typeText)).left();
         mainTable.row().padBottom(5);
@@ -187,7 +190,7 @@ public class ImportDialog extends UIDraggablePanel {
 
     private void initDropListeners(VisTextButton browseBtn) {
         browseBtn.addListener(new ClickListener() {
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 facade.sendNotification(BROWSE_BTN_CLICKED);
             }
         });
@@ -195,12 +198,12 @@ public class ImportDialog extends UIDraggablePanel {
 
     private void initImportListeners(VisTextButton cancelBtn, VisTextButton importBtn) {
         cancelBtn.addListener(new ClickListener() {
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 facade.sendNotification(CANCEL_BTN_CLICKED);
             }
         });
         importBtn.addListener(new ClickListener() {
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 facade.sendNotification(IMPORT_BTN_CLICKED);
             }
         });
@@ -208,10 +211,10 @@ public class ImportDialog extends UIDraggablePanel {
 
     public void showError(int type) {
         String text = "";
-        if(type == ImportUtils.TYPE_UNSUPPORTED || type == ImportUtils.TYPE_UNCKNOWN) {
+        if (type == ImportUtils.TYPE_UNSUPPORTED || type == ImportUtils.TYPE_UNCKNOWN) {
             text = "unsupported file type/types";
         }
-        if(type == ImportUtils.TYPE_MIXED) {
+        if (type == ImportUtils.TYPE_MIXED) {
             text = "Multiple import types, please use one";
         }
 

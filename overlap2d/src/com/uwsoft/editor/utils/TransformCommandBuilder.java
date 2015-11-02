@@ -35,19 +35,19 @@ public class TransformCommandBuilder {
     }
 
     private void setPos(int pIndex, float x, float y) {
-        ((Object[])payload.get(pIndex))[0] = new Vector2(x, y);
+        ((Object[]) payload.get(pIndex))[0] = new Vector2(x, y);
     }
 
     private void setSize(int pIndex, float width, float height) {
-        ((Object[])payload.get(pIndex))[1] = new Vector2(width, height);
+        ((Object[]) payload.get(pIndex))[1] = new Vector2(width, height);
     }
 
     private void setScale(int pIndex, float x, float y) {
-        ((Object[])payload.get(pIndex))[2] = new Vector2(x, y);
+        ((Object[]) payload.get(pIndex))[2] = new Vector2(x, y);
     }
 
     private void setRotation(int pIndex, float rotation) {
-        ((Object[])payload.get(pIndex))[3] = rotation;
+        ((Object[]) payload.get(pIndex))[3] = rotation;
     }
 
     public void setPos(float x, float y) {
@@ -69,7 +69,7 @@ public class TransformCommandBuilder {
     public void execute() {
         // check if payload is worth sending
         Object[] newData = (Object[]) payload.get(2);
-        for(Object o : newData) {
+        for (Object o : newData) {
             if (o != null) {
                 Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_ITEM_TRANSFORM_TO, payload);
                 return;

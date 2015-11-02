@@ -20,7 +20,6 @@ package com.overlap2d.plugins.ninepatch;
 
 import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 
@@ -78,10 +77,11 @@ public class PreviewWidget extends Group {
     }
 
     private float getMinScale(NinePatch horizontalPatch, float width, float height) {
-        float scaleX = width/horizontalPatch.getTotalWidth();
-        float scaleY = height/horizontalPatch.getTotalHeight();
+        float scaleX = width / horizontalPatch.getTotalWidth();
+        float scaleY = height / horizontalPatch.getTotalHeight();
         float scl = Math.min(scaleX, scaleY);
-        if(scl > 1f) scl = 1f;
+        if (scl > 1f)
+            scl = 1f;
 
         return scl;
     }

@@ -56,8 +56,7 @@ public class O2DDialogTest {
 
         Table titleTable = o2DDialog.getTitleTable();
         assertThat(titleTable.getCells().size, is(2));
-        assertThat(titleTable.getCells(), hasItems(
-                hasProperty("actor", instanceOf(Label.class)),
+        assertThat(titleTable.getCells(), hasItems(hasProperty("actor", instanceOf(Label.class)),
                 hasProperty("actor", instanceOf(VisImageButton.class))));
     }
 }

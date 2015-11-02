@@ -18,15 +18,15 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel;
 
-import java.util.HashMap;
-
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ResourceManager;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list.ParticleEffectResource;
+
+import java.util.HashMap;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -49,7 +49,8 @@ public class UIParticleEffectsTabMediator extends UIResourcesTabMediator<UIParti
         HashMap<String, ParticleEffect> particles = resourceManager.getProjectParticleList();
         Array<DraggableResource> itemArray = new Array<>();
         for (String name : particles.keySet()) {
-            if(!name.contains(searchText))continue;
+            if (!name.contains(searchText))
+                continue;
             DraggableResource draggableResource = new DraggableResource(new ParticleEffectResource(name));
             draggableResource.setFactoryFunction(ItemFactory.get()::tryCreateParticleItem);
             itemArray.add(draggableResource);

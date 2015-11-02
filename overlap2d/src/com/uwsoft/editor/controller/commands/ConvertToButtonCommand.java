@@ -42,7 +42,7 @@ public class ConvertToButtonCommand extends ConvertToCompositeCommand {
         HashSet<Entity> entities = (HashSet<Entity>) sandbox.getSelector().getSelectedItems();
         Entity item = entities.iterator().next();
 
-        if(entities.size() == 1 && EntityUtils.getType(item) == EntityFactory.COMPOSITE_TYPE) {
+        if (entities.size() == 1 && EntityUtils.getType(item) == EntityFactory.COMPOSITE_TYPE) {
             entity = item;
         } else {
             super.doAction();

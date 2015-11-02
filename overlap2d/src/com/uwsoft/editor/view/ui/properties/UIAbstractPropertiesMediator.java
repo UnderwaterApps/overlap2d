@@ -49,10 +49,7 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.ITEM_DATA_UPDATED,
-                viewComponent.getUpdateEventName()
-        };
+        return new String[]{MsgAPI.ITEM_DATA_UPDATED, viewComponent.getUpdateEventName()};
     }
 
     @Override
@@ -60,8 +57,8 @@ public abstract class UIAbstractPropertiesMediator<T, V extends UIAbstractProper
         super.handleNotification(notification);
 
 
-        if(notification.getName().equals(viewComponent.getUpdateEventName())) {
-            if(!lockUpdates) {
+        if (notification.getName().equals(viewComponent.getUpdateEventName())) {
+            if (!lockUpdates) {
                 translateViewToItemData();
             }
         }

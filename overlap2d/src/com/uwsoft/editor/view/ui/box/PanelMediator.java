@@ -40,9 +40,7 @@ public class PanelMediator<T extends Actor> extends SimpleMediator<T> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED};
     }
 
     @Override

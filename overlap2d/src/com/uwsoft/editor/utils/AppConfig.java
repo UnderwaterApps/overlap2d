@@ -23,7 +23,7 @@ import java.util.Properties;
 /**
  * Created by azakhary on 9/28/2014.
  */
-public class AppConfig  {
+public class AppConfig {
 
     public static AppConfig instance;
 
@@ -31,10 +31,11 @@ public class AppConfig  {
 
     public Properties properties;
 
-    private AppConfig() {}
+    private AppConfig() {
+    }
 
     public static AppConfig getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new AppConfig();
             instance.loadProperties();
         }
@@ -43,7 +44,7 @@ public class AppConfig  {
     }
 
     private void loadProperties() {
-			// this thing just refused to work so I gave up, fuck it.
+        // this thing just refused to work so I gave up, fuck it.
 
         /*
         properties = new Properties();

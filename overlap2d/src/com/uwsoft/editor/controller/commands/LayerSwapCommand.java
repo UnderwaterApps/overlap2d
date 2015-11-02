@@ -22,7 +22,6 @@ import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 8/18/2015.
@@ -37,11 +36,11 @@ public class LayerSwapCommand extends EntityModifyRevertableCommand {
     private String targetName;
 
     private void backup() {
-        if(entityId == null) {
+        if (entityId == null) {
             Object[] payload = getNotification().getBody();
             sourceName = (String) payload[0];
             targetName = (String) payload[1];
-            entityId = EntityUtils.getEntityId(Sandbox.getInstance().getCurrentViewingEntity());
+            entityId = EntityUtils.getEntityId(sandbox.getCurrentViewingEntity());
         }
     }
 
