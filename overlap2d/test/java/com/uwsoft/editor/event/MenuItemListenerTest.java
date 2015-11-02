@@ -34,7 +34,7 @@ public class MenuItemListenerTest {
     public void shouldSendCommandName() throws Exception {
         menuItemListener.changed(mock(ChangeListener.ChangeEvent.class), mock(Actor.class));
 
-        verify(overlap2DFacade).sendNotification(eq("test"));
+        verify(overlap2DFacade).sendNotification(eq("test"), null, null);
     }
 
     @Test
@@ -43,7 +43,7 @@ public class MenuItemListenerTest {
 
         menuItemListener.changed(mock(ChangeListener.ChangeEvent.class), mock(Actor.class));
 
-        verify(overlap2DFacade).sendNotification(eq("test"), eq("data"));
+        verify(overlap2DFacade).sendNotification(eq("test"), eq("data"), null);
     }
 
     @Test
