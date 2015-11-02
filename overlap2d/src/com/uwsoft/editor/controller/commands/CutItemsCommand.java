@@ -21,9 +21,7 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Json;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.CompositeVO;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 import java.util.Set;
 
@@ -40,9 +38,9 @@ public class CutItemsCommand extends EntityModifyRevertableCommand {
         String data = backup;
 
         Object[] payload = new Object[2];
-        payload[0] = Sandbox.getInstance().getCamera().position.cpy();
+        payload[0] = sandbox.getCamera().position.cpy();
         payload[1] = data;
-        Sandbox.getInstance().copyToClipboard(payload);
+        sandbox.copyToClipboard(payload);
         sandbox.getSelector().removeCurrentSelectedItems();
 
         facade.sendNotification(DeleteItemsCommand.DONE);
@@ -55,7 +53,7 @@ public class CutItemsCommand extends EntityModifyRevertableCommand {
         Set<Entity> newEntitiesList = PasteItemsCommand.createEntitiesFromVO(compositeVO);
 
         for (Entity entity : newEntitiesList) {
-            Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
+            facade.sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
         }
 
         sandbox.getSelector().setSelections(newEntitiesList, true);
