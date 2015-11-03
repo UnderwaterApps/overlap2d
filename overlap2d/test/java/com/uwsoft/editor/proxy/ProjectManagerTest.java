@@ -2,8 +2,8 @@ package com.uwsoft.editor.proxy;
 
 import com.runner.LibgdxRunner;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.data.vo.ProjectVO;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.vo.ProjectVO;
 import org.apache.commons.io.FileUtils;
 import org.junit.Before;
 import org.junit.Rule;
