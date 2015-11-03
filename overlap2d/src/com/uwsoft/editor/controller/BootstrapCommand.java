@@ -34,6 +34,7 @@ import com.uwsoft.editor.controller.commands.CreatePrimitiveCommand;
 import com.uwsoft.editor.controller.commands.CutItemsCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
+import com.uwsoft.editor.controller.commands.ExportProjectCommand;
 import com.uwsoft.editor.controller.commands.ItemTransformCommand;
 import com.uwsoft.editor.controller.commands.ItemsMoveCommand;
 import com.uwsoft.editor.controller.commands.LayerSwapCommand;
