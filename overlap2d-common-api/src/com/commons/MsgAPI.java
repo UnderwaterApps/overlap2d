@@ -96,6 +96,8 @@ public class MsgAPI {
 
     public static final String ACTION_PLUGIN_PROXY_COMMAND = SANDBOX_PREFIX + "ACTION_PLUGIN_PROXY_COMMAND";
 
+    public static final String ACTION_EXPORT_PROJECT = SANDBOX_PREFIX + "ACTION_EXPORT_PROJECT";
+
 
     /**
      *  Other

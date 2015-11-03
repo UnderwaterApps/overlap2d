@@ -72,6 +72,8 @@ public class BootstrapCommand extends SimpleCommand {
 
         facade.registerCommand(MsgAPI.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
 
+        facade.registerCommand(MsgAPI.ACTION_EXPORT_PROJECT, ExportProjectCommand.class);
+
         facade.registerCommand(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, PluginItemCommand.class);
     }
 }

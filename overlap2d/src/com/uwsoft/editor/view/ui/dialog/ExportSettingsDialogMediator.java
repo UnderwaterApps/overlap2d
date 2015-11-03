@@ -18,6 +18,7 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
+import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -76,8 +77,8 @@ public class ExportSettingsDialogMediator extends SimpleMediator<ExportSettingsD
 
     private void exportProject(ExportSettingsDialog.ExportSettingsVO settingsVO) {
         saveExportSettings(settingsVO);
-        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        projectManager.exportProject();
+
+        facade.sendNotification(MsgAPI.ACTION_EXPORT_PROJECT);
     }
 
     private void saveExportSettings(ExportSettingsDialog.ExportSettingsVO settingsVO) {
