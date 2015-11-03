@@ -21,13 +21,13 @@ package com.uwsoft.editor.data.migrations;
 import java.io.IOException;
 
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo009;
+import com.vo.ProjectVO;
 import org.apache.commons.io.FileUtils;
 
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonWriter;
 import com.uwsoft.editor.data.migrations.migrators.DummyMig;
 import com.uwsoft.editor.data.migrations.migrators.VersionMigTo005;
-import com.uwsoft.editor.data.vo.ProjectVO;
 
 /**
  * Created by azakhary on 9/28/2014.
