@@ -24,13 +24,13 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     protected void translateObservableDataToView(Entity item) {
         textureRegionComponent = ComponentRetriever.get(item, TextureRegionComponent.class);
 
-        if(textureRegionComponent.isRepeat) {
+        if (textureRegionComponent.isRepeat) {
             viewComponent.setRenderMode("REPEAT");
         } else {
             viewComponent.setRenderMode("STRETCH");
         }
 
-        if(textureRegionComponent.isPolygon) {
+        if (textureRegionComponent.isPolygon) {
             viewComponent.setSpriteType("POLYGON");
         } else {
             viewComponent.setSpriteType("SQUARE");
@@ -39,20 +39,21 @@ public class UIImageItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     @Override
     protected void translateViewToItemData() {
-        if(viewComponent.getRenderMode().equals("REPEAT")) {
+        if (viewComponent.getRenderMode().equals("REPEAT")) {
             textureRegionComponent.isRepeat = true;
         } else {
             textureRegionComponent.isRepeat = false;
         }
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference,
+                DimensionsComponent.class);
 
-        if(viewComponent.getSpriteType().equals("POLYGON")) {
+        if (viewComponent.getSpriteType().equals("POLYGON")) {
             textureRegionComponent.isPolygon = true;
             PolygonComponent polygonComponent = ComponentRetriever.get(observableReference, PolygonComponent.class);
 
             if (polygonComponent != null && polygonComponent.vertices != null) {
-            	float ppwu = dimensionsComponent.width/textureRegionComponent.region.getRegionWidth();
-                textureRegionComponent.setPolygonSprite(polygonComponent,1f/ppwu);
+                float ppwu = dimensionsComponent.width / textureRegionComponent.region.getRegionWidth();
+                textureRegionComponent.setPolygonSprite(polygonComponent, 1f / ppwu);
                 dimensionsComponent.setPolygon(polygonComponent);
             }
         } else {

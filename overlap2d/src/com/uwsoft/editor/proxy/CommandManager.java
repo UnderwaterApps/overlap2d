@@ -18,11 +18,11 @@
 
 package com.uwsoft.editor.proxy;
 
-import java.util.ArrayList;
-
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.RevertableCommand;
+
+import java.util.ArrayList;
 
 /**
  * Created by azakhary on 5/14/2015.
@@ -47,7 +47,7 @@ public class CommandManager extends BaseProxy {
 
     public void addCommand(RevertableCommand revertableCommand) {
         //remove all commands after the cursor
-        for(int i = commands.size()-1; i > cursor; i--) {
+        for (int i = commands.size() - 1; i > cursor; i--) {
             commands.remove(i);
         }
         commands.add(revertableCommand);
@@ -55,22 +55,24 @@ public class CommandManager extends BaseProxy {
     }
 
     public void undoCommand() {
-        if(cursor < 0) return;
+        if (cursor < 0)
+            return;
         RevertableCommand command = commands.get(cursor);
-        if(command.isStateDone()) {
-            command.callUndoAction();
-            command.setStateDone(false);
-        }
+        //if(command.isStateDone()) {
+        command.callUndoAction();
+        command.setStateDone(false);
+        //}
         cursor--;
     }
 
     public void redoCommand() {
-        if(cursor + 1 >= commands.size()) return;
-        RevertableCommand command = commands.get(cursor+1);
-        if(!command.isStateDone()) {
-            cursor++;
-            command.callDoAction();
-            command.setStateDone(true);
-        }
+        if (cursor + 1 >= commands.size())
+            return;
+        RevertableCommand command = commands.get(cursor + 1);
+        //if(!command.isStateDone()) {
+        cursor++;
+        command.callDoAction();
+        command.setStateDone(true);
+        //}
     }
 }

@@ -27,11 +27,9 @@ import com.uwsoft.editor.renderer.factory.component.LabelComponentFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
-import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by azakhary on 6/11/2015.
- *
  */
 public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
 
@@ -72,11 +70,12 @@ public class UpdateLabelDataCommand extends EntityModifyRevertableCommand {
 
     private Label.LabelStyle getNewStyle(String fontName, int fontSize) {
 
-        IResourceRetriever rm = Sandbox.getInstance().getSceneControl().sceneLoader.getRm();
+        IResourceRetriever rm = sandbox.getSceneControl().sceneLoader.getRm();
         final boolean hasBitmapFont = rm.getBitmapFont(fontName, fontSize) != null;
 
-        if(!hasBitmapFont) {
-            com.uwsoft.editor.proxy.ResourceManager resourceManager = facade.retrieveProxy(com.uwsoft.editor.proxy.ResourceManager.NAME);
+        if (!hasBitmapFont) {
+            com.uwsoft.editor.proxy.ResourceManager resourceManager = facade.retrieveProxy(
+                    com.uwsoft.editor.proxy.ResourceManager.NAME);
             resourceManager.prepareEmbeddingFont(fontName, fontSize);
         }
         return LabelComponentFactory.generateStyle(rm, fontName, fontSize);

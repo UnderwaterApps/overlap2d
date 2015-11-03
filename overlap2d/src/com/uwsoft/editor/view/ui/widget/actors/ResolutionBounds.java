@@ -22,10 +22,10 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.kotcrab.vis.ui.widget.VisLabel;
-import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.EditorTextureManager;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 
 /**
  * Created by sargis on 7/10/14.
@@ -35,8 +35,8 @@ public class ResolutionBounds extends Group {
     private float width;
     private float height;
 
-	 private PixelRect resolutionBounds;
-	 private Label label;
+    private PixelRect resolutionBounds;
+    private Label label;
 
     public ResolutionBounds(Sandbox sandbox) {
         textureManager = Overlap2DFacade.getInstance().retrieveProxy(EditorTextureManager.NAME);
@@ -47,15 +47,16 @@ public class ResolutionBounds extends Group {
     }
 
     private void detectDimensions(Sandbox baseStage) {
-    	//TODO fix and uncomment 
-//        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-//        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-//        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().getResolution(resolutionManager.currentResolutionName);
-//        if (resolutionEntryVO == null) {
-//            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
-//        }
-//        width = resolutionEntryVO.width;
-//        height = resolutionEntryVO.height;
+        //TODO fix and uncomment
+        //        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        //        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        //        ResolutionEntryVO resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO()
+        // .getResolution(resolutionManager.currentResolutionName);
+        //        if (resolutionEntryVO == null) {
+        //            resolutionEntryVO = baseStage.projectManager.getCurrentProjectInfoVO().originalResolution;
+        //        }
+        //        width = resolutionEntryVO.width;
+        //        height = resolutionEntryVO.height;
     }
 
     private void crateResolutionIndicator() {
@@ -70,12 +71,12 @@ public class ResolutionBounds extends Group {
         addActor(resolutionBounds);
     }
 
-	 @Override
-	 public void act(float delta) {
-		  super.act(delta);
+    @Override
+    public void act(float delta) {
+        super.act(delta);
 
-		  // change size according to zoom
-		  OrthographicCamera camera = (OrthographicCamera)getStage().getCamera();
-		  resolutionBounds.setThickness(camera.zoom);
-	 }
+        // change size according to zoom
+        OrthographicCamera camera = (OrthographicCamera) getStage().getCamera();
+        resolutionBounds.setThickness(camera.zoom);
+    }
 }

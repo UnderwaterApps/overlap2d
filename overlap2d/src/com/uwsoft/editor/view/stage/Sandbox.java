@@ -54,8 +54,10 @@ import com.vo.SceneConfigVO;
 import java.util.HashMap;
 
 /**
- * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "commands" the part of editor where
- * user drops all panels, moves them around, and composes the scene. commands is responsible for using runtime to render the visual scene,
+ * Sandbox is a complex hierarchy of managing classes that is supposed to be a main hub for the "commands" the part
+ * of editor where
+ * user drops all panels, moves them around, and composes the scene. commands is responsible for using runtime to
+ * render the visual scene,
  * it is responsible to listen for all the events, item resizing, selecting, aligning, removing and things like that.
  *
  * @author azakhary
@@ -91,15 +93,15 @@ public class Sandbox {
 
     private ProjectManager projectManager;
     private ResourceManager resourceManager;
-    
-    
+
+
     public PixelRect selectionRec;
     //public Group mainBox = new Group();
     //public SandboxUI ui;
     //public Group frontUI;
 
     private SceneLoader sceneLoader;
-	private Array<InputListener> listeners = new Array<InputListener>(1);
+    private Array<InputListener> listeners = new Array<InputListener>(1);
 
 
     /**
@@ -124,31 +126,31 @@ public class Sandbox {
     }
 
     private void init() {
-    	facade = Overlap2DFacade.getInstance();
-    	 projectManager = facade.retrieveProxy(ProjectManager.NAME);
-         resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
         UIStageMediator uiStageMediator = facade.retrieveMediator(UIStageMediator.NAME);
         uiStage = uiStageMediator.getViewComponent();
 
-		sceneLoader = new SceneLoader(resourceManager);
+        sceneLoader = new SceneLoader(resourceManager);
         // adding spine as external component
         sceneLoader.injectExternalItemType(new SpineItemType());
-        
+
         //Remove Physics System and add Adjusting System for box2d objects to follow items and stop world tick
         sceneLoader.engine.removeSystem(sceneLoader.engine.getSystem(PhysicsSystem.class));
         sceneLoader.engine.addSystem(new PhysicsAdjustSystem(sceneLoader.world));
         sceneLoader.engine.getSystem(Overlap2dRenderer.class).setPhysicsOn(false);
-        
+
         sceneControl = new SceneControlMediator(sceneLoader);
         itemControl = new ItemControlMediator(sceneControl);
 
         selector = new ItemSelector(this);
     }
-    
+
     public void initView() {
         //TODO fix and uncomment
-//        getCamera().position.set(0, 0, 0);
+        //        getCamera().position.set(0, 0, 0);
 
         selectionRec = new PixelRect(0, 0);
         selectionRec.setFillColor(new Color(1, 1, 1, 0.1f));
@@ -157,7 +159,7 @@ public class Sandbox {
         uiStage.midUI.addActor(selectionRec);
 
     }
-    
+
     public void setCursor(int cursor) {
         //UIController.instance.sendNotification(NameConstants.SET_CURSOR, cursor);
     }
@@ -165,7 +167,7 @@ public class Sandbox {
     public void setKeyboardFocus() {
         uiStage.setKeyboardFocus(uiStage.midUI);
     }
-    
+
 
     /**
      * Getters *
@@ -178,7 +180,7 @@ public class Sandbox {
     public SceneControlMediator getSceneControl() {
         return sceneControl;
     }
-    
+
     public Engine getEngine() {
         return sceneLoader.getEngine();
     }
@@ -194,7 +196,7 @@ public class Sandbox {
     }
 
     public void loadCurrentProject(String name) {
-    	//TODO fix and uncomment
+        //TODO fix and uncomment
         //sceneControl.getEssentials().rm = resourceManager;
         loadScene(name);
     }
@@ -216,7 +218,7 @@ public class Sandbox {
         ProjectVO projectVO = projectManager.getCurrentProjectVO();
         projectVO.lastOpenScene = sceneName;
         projectManager.saveCurrentProject();
-      //TODO fix and uncomment
+        //TODO fix and uncomment
         //sandboxStage.getCamera().position.set(0, 0, 0);
 
         facade.sendNotification(MsgAPI.LIBRARY_LIST_UPDATED);
@@ -233,25 +235,25 @@ public class Sandbox {
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
-    	//TODO fix and uncomment
+        //TODO fix and uncomment
         //initSceneView(sceneControl.initSceneView(compositeItemVO));
     }
 
     public void initSceneView(Entity composite) {
-    	//TODO fix and uncomment
-//        selector.clearSelections();
-//        sandboxStage.mainBox.clear();
-//        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
-////        if (uiStage.getCompositePanel().isRootScene()) {
-////            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
-////        }
-//
-//        sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
-//        sceneControl.getCurrentScene().setX(0);
-//        sceneControl.getCurrentScene().setY(0);
-//
-//        //uiStage.getLayerPanel().initContent();
-//        forceContinuousParticles(composite);
+        //TODO fix and uncomment
+        //        selector.clearSelections();
+        //        sandboxStage.mainBox.clear();
+        //        sceneControl.initSceneView(composite, true/*uiStage.getCompositePanel().isRootScene()*/);
+        ////        if (uiStage.getCompositePanel().isRootScene()) {
+        ////            uiStage.getCompositePanel().updateRootScene(sceneControl.getRootSceneVO());
+        ////        }
+        //
+        //        sandboxStage.mainBox.addActor(sceneControl.getCurrentScene());
+        //        sceneControl.getCurrentScene().setX(0);
+        //        sceneControl.getCurrentScene().setY(0);
+        //
+        //        //uiStage.getLayerPanel().initContent();
+        //        forceContinuousParticles(composite);
     }
 
     /**
@@ -260,21 +262,21 @@ public class Sandbox {
      *
      * @param composite composite on screen with particles to be forced to be continuous
      */
-  //TODO fix and uncomment
-//    private void forceContinuousParticles(CompositeItem composite) {
-//        ArrayList<IBaseItem> asd = composite.getItems();
-//        for (int i = 0; i < asd.size(); i++) {
-//            IBaseItem item = asd.get(i);
-//            if (item instanceof ParticleItem) {
-//                ((ParticleItem) item).forceContinuous();
-//                continue;
-//            }
-//            if (item instanceof CompositeItem) {
-//                forceContinuousParticles((CompositeItem) item);
-//            }
-//
-//        }
-//    }
+    //TODO fix and uncomment
+    //    private void forceContinuousParticles(CompositeItem composite) {
+    //        ArrayList<IBaseItem> asd = composite.getItems();
+    //        for (int i = 0; i < asd.size(); i++) {
+    //            IBaseItem item = asd.get(i);
+    //            if (item instanceof ParticleItem) {
+    //                ((ParticleItem) item).forceContinuous();
+    //                continue;
+    //            }
+    //            if (item instanceof CompositeItem) {
+    //                forceContinuousParticles((CompositeItem) item);
+    //            }
+    //
+    //        }
+    //    }
 
     /**
      * Well... that's a bummer, I cannot remember why this was for. but the name speaks for itself sort of.
@@ -302,7 +304,7 @@ public class Sandbox {
      * TODO: what does this do? seems to be saving as checkpoint of Flow? it so it should be renamed
      */
     public void saveSceneCurrentSceneData() {
-		//TODO fix and uncomment
+        //TODO fix and uncomment
         //sceneControl.getCurrentScene().updateDataVO();
     }
 
@@ -311,7 +313,7 @@ public class Sandbox {
         sceneControl.getCurrentSceneVO().ambientColor[1] = color.g;
         sceneControl.getCurrentSceneVO().ambientColor[2] = color.b;
         sceneControl.getCurrentSceneVO().ambientColor[3] = color.a;
-      //TODO fix and uncomment
+        //TODO fix and uncomment
         //if (showChange) sceneControl.getEssentials().rayHandler.setAmbientLight(color);
     }
 
@@ -320,8 +322,8 @@ public class Sandbox {
     }
 
     /**
-     * @deprecated
      * @return
+     * @deprecated
      */
     public boolean isComponentSkinAvailable() {
         return true;
@@ -332,7 +334,8 @@ public class Sandbox {
     }
 
     public void setCurrentlyTransforming(Entity item, int transformType) {
-        if (item == null || item.getClass().getSimpleName().equals("LabelItem")) return;
+        if (item == null || item.getClass().getSimpleName().equals("LabelItem"))
+            return;
         currTransformType = transformType;
         currTransformHost = item;
     }
@@ -360,7 +363,7 @@ public class Sandbox {
 
 
     public int getZoomPercent() {
-        return (int)zoomPercent;
+        return (int) zoomPercent;
     }
 
     public void setZoomPercent(float percent) {
@@ -371,8 +374,10 @@ public class Sandbox {
     public void zoomBy(float amount) {
         zoomPercent += -amount * 15f;
 
-        if (zoomPercent < 20) zoomPercent = 20;
-        if (zoomPercent > 1000) zoomPercent = 1000;
+        if (zoomPercent < 20)
+            zoomPercent = 20;
+        if (zoomPercent > 1000)
+            zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
         facade.sendNotification(MsgAPI.ZOOM_CHANGED);
@@ -381,15 +386,17 @@ public class Sandbox {
     public void zoomDevideBy(float amount) {
 
         zoomPercent /= amount;
-        if (zoomPercent < 20) zoomPercent = 20;
-        if (zoomPercent > 1000) zoomPercent = 1000;
+        if (zoomPercent < 20)
+            zoomPercent = 20;
+        if (zoomPercent > 1000)
+            zoomPercent = 1000;
 
         setZoomPercent(zoomPercent);
         facade.sendNotification(MsgAPI.ZOOM_CHANGED);
     }
 
-    public float getWorldGridSize(){
-        return (float)gridSize/sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
+    public float getWorldGridSize() {
+        return (float) gridSize / sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
     }
 
     public int getGridSize() {
@@ -401,33 +408,33 @@ public class Sandbox {
         facade.sendNotification(MsgAPI.GRID_SIZE_CHANGED, gridSize);
     }
 
-    
-    public Entity getRootEntity(){
-    	return sceneControl.getRootEntity();
+
+    public Entity getRootEntity() {
+        return sceneControl.getRootEntity();
     }
-    
-    
+
+
     //Global Listeners part
-    
-    public void addListener(InputListener listener){
-		if (!listeners.contains(listener, true)) {
-			listeners.add(listener);
-		}
-		
-	}
-	
-	public void removeListener(InputListener listener){
-		listeners.removeValue(listener, true);
-	}
-	
-	public void removeAllListener(){
-		listeners.clear();
-	}
-	
-	public Array<InputListener> getAllListeners(){
-		listeners.shrink();
-		return listeners;
-	}
+
+    public void addListener(InputListener listener) {
+        if (!listeners.contains(listener, true)) {
+            listeners.add(listener);
+        }
+
+    }
+
+    public void removeListener(InputListener listener) {
+        listeners.removeValue(listener, true);
+    }
+
+    public void removeAllListener() {
+        listeners.clear();
+    }
+
+    public Array<InputListener> getAllListeners() {
+        listeners.shrink();
+        return listeners;
+    }
 
     public OrthographicCamera getCamera() {
         return (OrthographicCamera) getViewport().getCamera();
@@ -442,18 +449,23 @@ public class Sandbox {
     }
 
     public ViewPortComponent getViewportComponent() {
-        if(getCurrentViewingEntity() == null) return null;
-        ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(), ViewPortComponent.class);
+        if (getCurrentViewingEntity() == null)
+            return null;
+        ViewPortComponent viewPortComponent = ComponentRetriever.get(getCurrentViewingEntity(),
+                ViewPortComponent.class);
         return viewPortComponent;
     }
 
     public Viewport getViewport() {
         ViewPortComponent viewPortComponent = getViewportComponent();
-        if(viewPortComponent == null) return null;
+        if (viewPortComponent == null)
+            return null;
         return viewPortComponent.viewPort;
     }
 
-    /** Transformations **/
+    /**
+     * Transformations
+     **/
 
     public Rectangle screenToWorld(Rectangle rect) {
         Vector2 pos = screenToWorld(new Vector2(rect.x, rect.y));
@@ -466,16 +478,19 @@ public class Sandbox {
     }
 
     public Vector2 screenToWorld(Vector2 vector) {
-        // TODO: now unproject doesnot do well too. I am completely lost here. how hard is it to do screen to world, madafakas.
+        // TODO: now unproject doesnot do well too. I am completely lost here. how hard is it to do screen to world,
+        // madafakas.
         //getViewport().unproject(vector);
         int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
 
-        vector.x = (vector.x - (viewport.getScreenWidth()/2 - camera.position.x*pixelPerWU/camera.zoom))*camera.zoom;
-        vector.y = (vector.y - (viewport.getScreenHeight()/2 - camera.position.y*pixelPerWU/camera.zoom))*camera.zoom;
+        vector.x = (vector.x - (viewport.getScreenWidth() / 2 - camera.position.x * pixelPerWU / camera.zoom)) *
+                camera.zoom;
+        vector.y = (vector.y - (viewport.getScreenHeight() / 2 - camera.position.y * pixelPerWU / camera.zoom)) *
+                camera.zoom;
 
-        vector.scl(1f/pixelPerWU);
+        vector.scl(1f / pixelPerWU);
 
 
         return vector;
@@ -487,8 +502,8 @@ public class Sandbox {
         int pixelPerWU = sceneControl.sceneLoader.getRm().getProjectVO().pixelToWorld;
         OrthographicCamera camera = Sandbox.getInstance().getCamera();
         Viewport viewport = Sandbox.getInstance().getViewport();
-        vector.x = vector.x/camera.zoom + (viewport.getWorldWidth()/2 - (camera.position.x)/camera.zoom);
-        vector.y = vector.y/camera.zoom + (viewport.getWorldHeight()/2 - (camera.position.y)/camera.zoom);
+        vector.x = vector.x / camera.zoom + (viewport.getWorldWidth() / 2 - (camera.position.x) / camera.zoom);
+        vector.y = vector.y / camera.zoom + (viewport.getWorldHeight() / 2 - (camera.position.y) / camera.zoom);
 
         vector.scl(pixelPerWU);
 

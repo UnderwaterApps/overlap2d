@@ -20,10 +20,10 @@ package com.uwsoft.editor.view.ui.dialog;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 
 /**
@@ -39,10 +39,7 @@ public class NewProjectDialogMediator extends SimpleMediator<NewProjectDialog> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                Overlap2DMenuBar.NEW_PROJECT,
-                NewProjectDialog.CREATE_BTN_CLICKED
-        };
+        return new String[]{Overlap2DMenuBar.NEW_PROJECT, NewProjectDialog.CREATE_BTN_CLICKED};
     }
 
     @Override

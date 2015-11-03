@@ -62,7 +62,10 @@ public abstract class UIItemCollapsibleProperties extends UIItemProperties {
 
     public void collapse() {
         collapsibleWidget.setCollapsed(!collapsibleWidget.isCollapsed());
-        header.setBackground(VisUI.getSkin().getDrawable("expandable-properties-" + (collapsibleWidget.isCollapsed() ? "inactive" : "active") + "-bg"));
+        header.setBackground(VisUI.getSkin()
+                                  .getDrawable(
+                                          "expandable-properties-" + (collapsibleWidget.isCollapsed() ? "inactive" :
+                                                  "active") + "-bg"));
     }
 
     private void createCollapsibleWidget() {

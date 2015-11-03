@@ -18,11 +18,11 @@
 package com.puremvc.patterns.command;
 
 
-import java.util.Collection;
-import java.util.Vector;
-
 import com.puremvc.patterns.observer.BaseNotifier;
 import com.puremvc.patterns.observer.Notification;
+
+import java.util.Collection;
+import java.util.Vector;
 
 
 /**

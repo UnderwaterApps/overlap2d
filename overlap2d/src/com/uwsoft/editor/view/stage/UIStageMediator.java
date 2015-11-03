@@ -45,9 +45,7 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.SHOW_ADD_LIBRARY_DIALOG
-        };
+        return new String[]{MsgAPI.SHOW_ADD_LIBRARY_DIALOG};
     }
 
     @Override
@@ -58,20 +56,21 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
 
                 Entity item = notification.getBody();
 
-                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
-                    @Override
-                    public void finished(String input) {
-                        Object[] payload = new Object[2];
-                        payload[0] = item;
-                        payload[1] = input;
-                        facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY, payload);
-                    }
+                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name",
+                        new InputDialogListener() {
+                            @Override
+                            public void finished(String input) {
+                                Object[] payload = new Object[2];
+                                payload[0] = item;
+                                payload[1] = input;
+                                facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY, payload);
+                            }
 
-                    @Override
-                    public void canceled() {
+                            @Override
+                            public void canceled() {
 
-                    }
-                });
+                            }
+                        });
                 break;
         }
     }

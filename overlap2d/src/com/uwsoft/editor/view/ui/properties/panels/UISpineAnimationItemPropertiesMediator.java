@@ -22,14 +22,15 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
 import com.esotericsoftware.spine.Animation;
 import com.overlap2d.extensions.spine.SpineObjectComponent;
-import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import com.uwsoft.editor.renderer.components.SpineDataComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpineAnimationItemProperties> {
+public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity,
+        UISpineAnimationItemProperties> {
     private static final String TAG = UISpineAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -45,7 +46,7 @@ public class UISpineAnimationItemPropertiesMediator extends UIItemPropertiesMedi
 
         spineObjectComponent = ComponentRetriever.get(entity, SpineObjectComponent.class);
         spineDataComponent = ComponentRetriever.get(entity, SpineDataComponent.class);
-    	
+
         Array<String> animations = new Array<>();
         for (Animation animation : spineObjectComponent.getAnimations()) {
             animations.add(animation.getName());

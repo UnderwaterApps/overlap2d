@@ -21,11 +21,11 @@ package com.uwsoft.editor.view.ui.dialog;
 import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBar;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 
 /**
@@ -47,11 +47,8 @@ public class ExportSettingsDialogMediator extends SimpleMediator<ExportSettingsD
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                Overlap2DMenuBar.EXPORT_SETTINGS,
-                ExportSettingsDialog.SAVE_SETTINGS_BTN_CLICKED,
-                ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED
-        };
+        return new String[]{Overlap2DMenuBar.EXPORT_SETTINGS, ExportSettingsDialog.SAVE_SETTINGS_BTN_CLICKED,
+                ExportSettingsDialog.SAVE_SETTINGS_AND_EXPORT_BTN_CLICKED};
     }
 
     @Override
@@ -82,7 +79,8 @@ public class ExportSettingsDialogMediator extends SimpleMediator<ExportSettingsD
     }
 
     private void saveExportSettings(ExportSettingsDialog.ExportSettingsVO settingsVO) {
-        if(settingsVO.fileHandle == null) return;
+        if (settingsVO.fileHandle == null)
+            return;
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         projectManager.setTexturePackerSizes(settingsVO.width, settingsVO.height);
         projectManager.setTexturePackerDuplicate(settingsVO.duplicate);

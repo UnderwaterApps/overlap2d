@@ -20,10 +20,10 @@ package com.overlap2d.plugins.performance;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.Gdx;
+import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.puremvc.patterns.facade.SimpleFacade;
-import com.commons.UIDraggablePanel;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -76,7 +76,7 @@ public class PerformancePanel extends UIDraggablePanel {
     @Override
     public void act(float delta) {
         super.act(delta);
-        if(entitiesCount != null && fpsLbl != null) {
+        if (entitiesCount != null && fpsLbl != null) {
             entitiesCount.setText(engine.getEntities().size() + "");
             fpsLbl.setText(Gdx.graphics.getFramesPerSecond() + "");
         }

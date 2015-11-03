@@ -33,13 +33,14 @@ import com.kotcrab.vis.ui.widget.VisValidableTextField;
 /**
  * Fields used to enter color numbers in color picker, verifies max allowed value
  * provides quick increment/decrement of current value by pressing [shift +] plus or minus on numpad
+ *
  * @author Kotcrab
  */
 public class ColorInputField extends VisValidableTextField {
     private int value;
     private int maxValue;
 
-    public ColorInputField (final int maxValue, final ColorInputFieldListener listener) {
+    public ColorInputField(final int maxValue, final ColorInputFieldListener listener) {
         super(new ColorFieldValidator(maxValue));
         this.value = 0;
         this.maxValue = maxValue;
@@ -50,7 +51,7 @@ public class ColorInputField extends VisValidableTextField {
 
         addListener(new ChangeListener() {
             @Override
-            public void changed (ChangeEvent event, Actor actor) {
+            public void changed(ChangeEvent event, Actor actor) {
                 if (getText().length() > 0)
                     value = Integer.valueOf(getText());
             }
@@ -58,12 +59,15 @@ public class ColorInputField extends VisValidableTextField {
 
         addListener(new InputListener() {
             @Override
-            public boolean keyTyped (InputEvent event, char character) {
+            public boolean keyTyped(InputEvent event, char character) {
                 ColorInputField field = (ColorInputField) event.getListenerActor();
-                if (character == '+') field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 10 : 1);
-                if (character == '-') field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? -10 : -1);
+                if (character == '+')
+                    field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 10 : 1);
+                if (character == '-')
+                    field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? -10 : -1);
 
-                if (character != 0) listener.changed(getValue());
+                if (character != 0)
+                    listener.changed(getValue());
 
                 return true;
             }
@@ -71,43 +75,46 @@ public class ColorInputField extends VisValidableTextField {
 
         addListener(new FocusListener() {
             @Override
-            public void keyboardFocusChanged (FocusEvent event, Actor actor, boolean focused) {
+            public void keyboardFocusChanged(FocusEvent event, Actor actor, boolean focused) {
                 if (focused == false && isInputValid() == false)
-                    setValue(maxValue); //only possibility on invalid field is that entered value will be bigger than maxValue so we set field value to maxValue
+                    setValue(maxValue); //only possibility on invalid field is that entered value will be bigger than
+                // maxValue so we set field value to maxValue
             }
         });
     }
 
-    public void changeValue (int byValue) {
+    public void changeValue(int byValue) {
         this.value += byValue;
 
-        if (value > maxValue) value = maxValue;
-        if (value < 0) value = 0;
+        if (value > maxValue)
+            value = maxValue;
+        if (value < 0)
+            value = 0;
 
         updateUI();
     }
 
-    public int getValue () {
+    public int getValue() {
         return value;
     }
 
-    public void setValue (int value) {
+    public void setValue(int value) {
         this.value = value;
         updateUI();
     }
 
-    private void updateUI () {
+    private void updateUI() {
         setText(String.valueOf(value));
         setCursorPosition(getMaxLength());
     }
 
     interface ColorInputFieldListener {
-        public void changed (int newValue);
+        public void changed(int newValue);
     }
 
     private static class NumberFilter implements TextFieldFilter {
         @Override
-        public boolean acceptChar (VisTextField textField, char c) {
+        public boolean acceptChar(VisTextField textField, char c) {
             return Character.isDigit(c);
         }
     }
@@ -115,16 +122,18 @@ public class ColorInputField extends VisValidableTextField {
     private static class ColorFieldValidator implements InputValidator {
         private int maxValue;
 
-        public ColorFieldValidator (int maxValue) {
+        public ColorFieldValidator(int maxValue) {
             this.maxValue = maxValue;
         }
 
         @Override
-        public boolean validateInput (String input) {
-            if (input.equals("")) return false;
+        public boolean validateInput(String input) {
+            if (input.equals(""))
+                return false;
 
             Integer number = Integer.parseInt(input);
-            if (number > maxValue) return false;
+            if (number > maxValue)
+                return false;
 
             return true;
         }

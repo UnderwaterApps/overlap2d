@@ -19,7 +19,6 @@
 package com.uwsoft.editor.view;
 
 import box2dLight.RayHandler;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
@@ -39,198 +38,197 @@ import com.uwsoft.editor.renderer.data.SceneVO;
  */
 public class SceneControlMediator {
 
-	private final Overlap2DFacade facade;
-	private final ProjectManager projectManager;
-	/**
-	 * main holder of the scene
-	 */
-	public SceneLoader sceneLoader;
+    private final Overlap2DFacade facade;
+    private final ProjectManager projectManager;
+    /**
+     * main holder of the scene
+     */
+    public SceneLoader sceneLoader;
 
-	/**
-	 * runtime essentials
-	 */
-	// private Essentials essentials;
+    /**
+     * runtime essentials
+     */
+    // private Essentials essentials;
 
-	/**
-	 * current scene tools
-	 */
-	private SceneVO currentSceneVo;
+    /**
+     * current scene tools
+     */
+    private SceneVO currentSceneVo;
 
-	/**
-	 * tools object of the root element of the scene
-	 */
-	private CompositeItemVO rootSceneVO;
+    /**
+     * tools object of the root element of the scene
+     */
+    private CompositeItemVO rootSceneVO;
 
-	/**
-	 * current scene rendering item
-	 */
-	private Entity currentScene;
+    /**
+     * current scene rendering item
+     */
+    private Entity currentScene;
 
-	private boolean isLightsEnabled = false;
+    private boolean isLightsEnabled = false;
 
-	public SceneControlMediator(SceneLoader sceneLoader) {
-		this.sceneLoader = sceneLoader;
-		// this.essentials = essentials;
-		facade = Overlap2DFacade.getInstance();
-		projectManager = facade.retrieveProxy(ProjectManager.NAME);
-	}
+    public SceneControlMediator(SceneLoader sceneLoader) {
+        this.sceneLoader = sceneLoader;
+        // this.essentials = essentials;
+        facade = Overlap2DFacade.getInstance();
+        projectManager = facade.retrieveProxy(ProjectManager.NAME);
+    }
 
-	public ProjectInfoVO getProjectInfoVO() {
-		return sceneLoader.getRm().getProjectVO();
-	}
+    public ProjectInfoVO getProjectInfoVO() {
+        return sceneLoader.getRm().getProjectVO();
+    }
 
-	public void initScene(String sceneName) {
-		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-		ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+    public void initScene(String sceneName) {
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
 
-		ScreenViewport viewport = new ScreenViewport();
-		// Yey to whoever made this method
-		viewport.setUnitsPerPixel(1f/resourceManager.getProjectVO().pixelToWorld);
+        ScreenViewport viewport = new ScreenViewport();
+        // Yey to whoever made this method
+        viewport.setUnitsPerPixel(1f / resourceManager.getProjectVO().pixelToWorld);
 
-		currentSceneVo = sceneLoader.loadScene(sceneName, viewport);
-		// TODO: this is now in sceneLoaader but probably will be changed
-		// essentials.world = new World(new
-		// Vector2(currentSceneVo.physicsPropertiesVO.gravityX,
-		// currentSceneVo.physicsPropertiesVO.gravityY), true);
-		// essentials.rayHandler.setWorld(essentials.world);
+        currentSceneVo = sceneLoader.loadScene(sceneName, viewport);
+        // TODO: this is now in sceneLoaader but probably will be changed
+        // essentials.world = new World(new
+        // Vector2(currentSceneVo.physicsPropertiesVO.gravityX,
+        // currentSceneVo.physicsPropertiesVO.gravityY), true);
+        // essentials.rayHandler.setWorld(essentials.world);
 
-		rootSceneVO = new CompositeItemVO(currentSceneVo.composite);
-	}
+        rootSceneVO = new CompositeItemVO(currentSceneVo.composite);
+    }
 
-//	public CompositeItem initSceneView(CompositeItemVO compositeItemVO) {
-//		disableLights(false);
-//
-//		if (getCurrentScene() != null)
-//			getCurrentScene().dispose();
-//
-//		CompositeItemVO itemVo = new CompositeItemVO();
-//		itemVo.composite = compositeItemVO.composite;
-//		itemVo.itemIdentifier = compositeItemVO.itemIdentifier;
-//		itemVo.libraryLink = compositeItemVO.libraryLink;
-//		CompositeItem composite = new CompositeItem(itemVo, getEssentials());
-//
-//		return composite;
-//	}
-//
-//	public void initSceneView(CompositeItem composite, boolean isRootScene) {
-//		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
-//		composite.applyResolution(resolutionManager.currentResolutionName);
-//		currentScene = composite;
-//
-//		if (isRootScene) {
-//			rootSceneVO = currentScene.dataVO;
-//		}
-//
-//		if (currentSceneVo.ambientColor == null) {
-//			currentSceneVo.ambientColor = new float[4];
-//			currentSceneVo.ambientColor[0] = 0.5f;
-//			currentSceneVo.ambientColor[1] = 0.5f;
-//			currentSceneVo.ambientColor[2] = 0.5f;
-//			currentSceneVo.ambientColor[3] = 1.0f;
-//		}
-//	}
+    //	public CompositeItem initSceneView(CompositeItemVO compositeItemVO) {
+    //		disableLights(false);
+    //
+    //		if (getCurrentScene() != null)
+    //			getCurrentScene().dispose();
+    //
+    //		CompositeItemVO itemVo = new CompositeItemVO();
+    //		itemVo.composite = compositeItemVO.composite;
+    //		itemVo.itemIdentifier = compositeItemVO.itemIdentifier;
+    //		itemVo.libraryLink = compositeItemVO.libraryLink;
+    //		CompositeItem composite = new CompositeItem(itemVo, getEssentials());
+    //
+    //		return composite;
+    //	}
+    //
+    //	public void initSceneView(CompositeItem composite, boolean isRootScene) {
+    //		ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+    //		composite.applyResolution(resolutionManager.currentResolutionName);
+    //		currentScene = composite;
+    //
+    //		if (isRootScene) {
+    //			rootSceneVO = currentScene.dataVO;
+    //		}
+    //
+    //		if (currentSceneVo.ambientColor == null) {
+    //			currentSceneVo.ambientColor = new float[4];
+    //			currentSceneVo.ambientColor[0] = 0.5f;
+    //			currentSceneVo.ambientColor[1] = 0.5f;
+    //			currentSceneVo.ambientColor[2] = 0.5f;
+    //			currentSceneVo.ambientColor[3] = 1.0f;
+    //		}
+    //	}
 
-	public void disableLights(boolean disable) {
-		//TODO lights enable disable
-//		ArrayList<LightActor> lights = getAllLights(currentScene);
-//
-//		for (int i = lights.size() - 1; i >= 0; i--) {
-//			LightActor lightActor = lights.get(i);
-//			if (lightActor.lightObject != null) {
-//				lightActor.lightObject.setActive(!disable);
-//			}
-//
-//		}
+    public void disableLights(boolean disable) {
+        //TODO lights enable disable
+        //		ArrayList<LightActor> lights = getAllLights(currentScene);
+        //
+        //		for (int i = lights.size() - 1; i >= 0; i--) {
+        //			LightActor lightActor = lights.get(i);
+        //			if (lightActor.lightObject != null) {
+        //				lightActor.lightObject.setActive(!disable);
+        //			}
+        //
+        //		}
 
-		isLightsEnabled = !disable;
-	}
+        isLightsEnabled = !disable;
+    }
 
-	public void setDiffuse(boolean isDiffuse) {
-		if (isLightsEnabled) {
-			RayHandler.useDiffuseLight(isDiffuse);
-		} else {
-			RayHandler.useDiffuseLight(true);
-		}
-	}
+    public void setDiffuse(boolean isDiffuse) {
+        if (isLightsEnabled) {
+            RayHandler.useDiffuseLight(isDiffuse);
+        } else {
+            RayHandler.useDiffuseLight(true);
+        }
+    }
 
-	public boolean isDiffuse() {
-		return RayHandler.isDiffuse;
-	}
+    public boolean isDiffuse() {
+        return RayHandler.isDiffuse;
+    }
 
-	public boolean isLightsEnabled() {
-		return isLightsEnabled;
-	}
+    public boolean isLightsEnabled() {
+        return isLightsEnabled;
+    }
 
-	public void setAmbienceInfo(SceneVO vo) {
-		Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1],
-				vo.ambientColor[2], vo.ambientColor[3]);
-		sceneLoader.rayHandler.setAmbientLight(clr);
-	}
+    public void setAmbienceInfo(SceneVO vo) {
+        Color clr = new Color(vo.ambientColor[0], vo.ambientColor[1], vo.ambientColor[2], vo.ambientColor[3]);
+        sceneLoader.rayHandler.setAmbientLight(clr);
+    }
 
-	public void disableAmbience(boolean disable) {
-		if (disable) {
-			sceneLoader.rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
-		} else {
-			setAmbienceInfo(sceneLoader.getSceneVO());
-		}
-	}
+    public void disableAmbience(boolean disable) {
+        if (disable) {
+            sceneLoader.rayHandler.setAmbientLight(1f, 1f, 1f, 1f);
+        } else {
+            setAmbienceInfo(sceneLoader.getSceneVO());
+        }
+    }
 
-	//TODO support function for lights on of
-	
-//	private ArrayList<LightActor> getAllLights(CompositeItem curComposite) {
-//
-//		ArrayList<LightActor> lights = new ArrayList<LightActor>();
-//
-//		if (curComposite == null) {
-//			return lights;
-//		}
-//
-//		ArrayList<IBaseItem> items = curComposite.getItems();
-//
-//		ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
-//
-//		for (int i = 0; i < items.size(); i++) {
-//			IBaseItem item = items.get(i);
-//			if (item instanceof LightActor) {
-//				lights.add((LightActor) item);
-//			}
-//
-//			if (item instanceof CompositeItem) {
-//				nestedComposites.add((CompositeItem) item);
-//			}
-//
-//		}
-//
-//		for (int i = 0; i < nestedComposites.size(); i++) {
-//			lights.addAll(getAllLights(nestedComposites.get(i)));
-//		}
-//
-//		return lights;
-//	}
+    //TODO support function for lights on of
 
-	//TODO we don't need this anymore
-//	public Essentials getEssentials() {
-//		return essentials;
-//	}
+    //	private ArrayList<LightActor> getAllLights(CompositeItem curComposite) {
+    //
+    //		ArrayList<LightActor> lights = new ArrayList<LightActor>();
+    //
+    //		if (curComposite == null) {
+    //			return lights;
+    //		}
+    //
+    //		ArrayList<IBaseItem> items = curComposite.getItems();
+    //
+    //		ArrayList<CompositeItem> nestedComposites = new ArrayList<CompositeItem>();
+    //
+    //		for (int i = 0; i < items.size(); i++) {
+    //			IBaseItem item = items.get(i);
+    //			if (item instanceof LightActor) {
+    //				lights.add((LightActor) item);
+    //			}
+    //
+    //			if (item instanceof CompositeItem) {
+    //				nestedComposites.add((CompositeItem) item);
+    //			}
+    //
+    //		}
+    //
+    //		for (int i = 0; i < nestedComposites.size(); i++) {
+    //			lights.addAll(getAllLights(nestedComposites.get(i)));
+    //		}
+    //
+    //		return lights;
+    //	}
 
-	public CompositeItemVO getRootSceneVO() {
-		return rootSceneVO;
-	}
+    //TODO we don't need this anymore
+    //	public Essentials getEssentials() {
+    //		return essentials;
+    //	}
 
-	public Entity getCurrentScene() {
-		return currentScene;
-	}
+    public CompositeItemVO getRootSceneVO() {
+        return rootSceneVO;
+    }
 
-	public SceneVO getCurrentSceneVO() {
-		return currentSceneVo;
-	}
-	
-	public Entity getRootEntity() {
-		return sceneLoader.rootEntity;
-	}
+    public Entity getCurrentScene() {
+        return currentScene;
+    }
 
-//	public CompositeItem getCompositeElement(CompositeItemVO vo) {
-//		return sceneLoader.getCompositeElement(vo);
-//	}
+    public SceneVO getCurrentSceneVO() {
+        return currentSceneVo;
+    }
+
+    public Entity getRootEntity() {
+        return sceneLoader.rootEntity;
+    }
+
+    //	public CompositeItem getCompositeElement(CompositeItemVO vo) {
+    //		return sceneLoader.getCompositeElement(vo);
+    //	}
 
 }

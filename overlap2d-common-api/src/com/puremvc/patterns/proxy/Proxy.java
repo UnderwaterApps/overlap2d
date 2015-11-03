@@ -35,7 +35,8 @@ import com.puremvc.patterns.observer.Notifier;
  * <LI>Maintain references to one or more pieces of model tools.</LI>
  * <LI>Provide methods for manipulating that tools.</LI>
  * <LI>Generate <code>INotifications</code> when their model tools changes.</LI>
- * <LI>Expose their name as a <code>public static const</code> called <code>NAME</code>, if they are not instantiated multiple times.</LI>
+ * <LI>Expose their name as a <code>public static const</code> called <code>NAME</code>, if they are not instantiated
+ * multiple times.</LI>
  * <LI>Encapsulate interaction with local or remote services used to fetch and
  * persist model tools.</LI>
  * </UL>

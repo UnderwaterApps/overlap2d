@@ -18,10 +18,7 @@
 
 package com.uwsoft.editor.utils;
 
-import java.awt.Graphics2D;
-import java.awt.GraphicsConfiguration;
-import java.awt.GraphicsEnvironment;
-import java.awt.Transparency;
+import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.awt.image.Raster;
 import java.util.ArrayList;
@@ -53,8 +50,7 @@ public class NinePatchUtils {
     }
 
     public static BufferedImage removePatches(BufferedImage image) {
-        BufferedImage buffer = createTranslucentCompatibleImage(
-                image.getWidth() - 2, image.getHeight() - 2);
+        BufferedImage buffer = createTranslucentCompatibleImage(image.getWidth() - 2, image.getHeight() - 2);
 
         Graphics2D g2 = buffer.createGraphics();
         g2.drawImage(image, -1, -1, null);
@@ -77,8 +73,7 @@ public class NinePatchUtils {
     }
 
     private static BufferedImage createTranslucentCompatibleImage(int width, int height) {
-        return getGraphicsConfiguration().createCompatibleImage(width, height,
-                Transparency.TRANSLUCENT);
+        return getGraphicsConfiguration().createCompatibleImage(width, height, Transparency.TRANSLUCENT);
     }
 
     private static Pair<Integer> getPadding(java.util.List<Pair<Integer>> pairs) {
@@ -130,7 +125,8 @@ public class NinePatchUtils {
             int pixel = pixels[i];
             if (pixel != lastPixel) {
                 if (lastPixel == 0xFF000000) {
-                    if (first) startWithPatch[0] = true;
+                    if (first)
+                        startWithPatch[0] = true;
                     patches.add(new Pair<Integer>(lastIndex, i));
                 } else {
                     fixed.add(new Pair<Integer>(lastIndex, i));
@@ -142,7 +138,8 @@ public class NinePatchUtils {
             }
         }
         if (lastPixel == 0xFF000000) {
-            if (first) startWithPatch[0] = true;
+            if (first)
+                startWithPatch[0] = true;
             patches.add(new Pair<>(lastIndex, pixels.length - 1));
         } else {
             fixed.add(new Pair<>(lastIndex, pixels.length - 1));

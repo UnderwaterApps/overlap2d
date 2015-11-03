@@ -32,7 +32,7 @@ public class AnchorListener extends ClickListener {
     protected FollowerTransformationListener listener = new EmptyTransformationListener();
 
     protected NormalSelectionFollower follower;
-    
+
     private Vector2 localTOglobal = new Vector2();
 
     public AnchorListener(NormalSelectionFollower follower, int anchorId) {
@@ -47,32 +47,41 @@ public class AnchorListener extends ClickListener {
     }
 
     @Override
-    public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+    public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
         super.touchDown(event, x, y, pointer, button);
         localTOglobal.set(event.getStageX(), event.getStageY());
-        if(listener != null) listener.anchorDown(follower, anchorId, localTOglobal.x, localTOglobal.y);
+        if (listener != null)
+            listener.anchorDown(follower, anchorId, localTOglobal.x, localTOglobal.y);
         return true;
     }
+
     @Override
-    public void touchDragged (InputEvent event, float x, float y, int pointer) {
-    	localTOglobal.set(event.getStageX(), event.getStageY());
-        if(listener != null) listener.anchorDragged(follower, anchorId, localTOglobal.x, localTOglobal.y);
+    public void touchDragged(InputEvent event, float x, float y, int pointer) {
+        localTOglobal.set(event.getStageX(), event.getStageY());
+        if (listener != null)
+            listener.anchorDragged(follower, anchorId, localTOglobal.x, localTOglobal.y);
     }
+
     @Override
-    public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-    	localTOglobal.set(event.getStageX(), event.getStageY());
-        if(listener != null) listener.anchorUp(follower, anchorId, localTOglobal.x, localTOglobal.y);
+    public void touchUp(InputEvent event, float x, float y, int pointer, int button) {
+        localTOglobal.set(event.getStageX(), event.getStageY());
+        if (listener != null)
+            listener.anchorUp(follower, anchorId, localTOglobal.x, localTOglobal.y);
     }
+
     @Override
-    public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
+    public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
         super.enter(event, x, y, pointer, fromActor);
         localTOglobal.set(event.getStageX(), event.getStageY());
-        if(listener != null) listener.anchorMouseEnter(follower, anchorId, localTOglobal.x, localTOglobal.y);
+        if (listener != null)
+            listener.anchorMouseEnter(follower, anchorId, localTOglobal.x, localTOglobal.y);
     }
+
     @Override
-    public void exit (InputEvent event, float x, float y, int pointer, Actor toActor) {
+    public void exit(InputEvent event, float x, float y, int pointer, Actor toActor) {
         super.exit(event, x, y, pointer, toActor);
         localTOglobal.set(event.getStageX(), event.getStageY());
-        if(listener != null) listener.anchorMouseExit(follower, anchorId, localTOglobal.x, localTOglobal.y);
+        if (listener != null)
+            listener.anchorMouseExit(follower, anchorId, localTOglobal.x, localTOglobal.y);
     }
 }

@@ -74,7 +74,8 @@ public abstract class UIItemProperties extends UIAbstractProperties {
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator,
+            VisTextField.TextFieldFilter textFieldFilter) {
         VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;

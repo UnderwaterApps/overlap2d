@@ -24,6 +24,7 @@ package com.commons;
 public interface IItemCommand {
 
     void doAction(Object body);
+
     void undoAction(Object body);
 
 }

@@ -21,12 +21,11 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
-import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
@@ -42,6 +41,7 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
         super.callDoAction();
         postChange();
     }
+
     @Override
     public void callUndoAction() {
         super.callUndoAction();
@@ -56,8 +56,8 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         String link = mainItemComponent.libraryLink;
 
-        if(link != null && link.length() > 0) {
-            ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
+        if (link != null && link.length() > 0) {
+            ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
             HashMap<String, CompositeItemVO> libraryItems = projectManager.currentProjectInfoVO.libraryItems;
             if (libraryItems.containsKey(mainItemComponent.libraryLink)) {
                 CompositeItemVO itemVO = new CompositeItemVO();
@@ -67,9 +67,10 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
 
             Array<Entity> linkedEntities = EntityUtils.getByLibraryLink(link);
             for (Entity dependable : linkedEntities) {
-                if(dependable == entity) continue;
+                if (dependable == entity)
+                    continue;
                 NodeComponent nodeComponent = ComponentRetriever.get(dependable, NodeComponent.class);
-                for(Entity child: nodeComponent.children) {
+                for (Entity child : nodeComponent.children) {
                     sandbox.getEngine().removeEntity(child);
                 }
                 nodeComponent.children.clear();

@@ -18,19 +18,6 @@
 
 package com.uwsoft.editor.proxy;
 
-import java.awt.Graphics2D;
-import java.awt.RenderingHints;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-import javax.imageio.ImageIO;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -40,19 +27,30 @@ import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.mortennobel.imagescaling.ResampleOp;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.utils.NinePatchUtils;
 import com.uwsoft.editor.utils.Overlap2DUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.widget.ProgressHandler;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
+import javax.imageio.ImageIO;
+import java.awt.*;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class ResolutionManager extends BaseProxy {
     private static final String TAG = ResolutionManager.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    public static final String RESOLUTION_LIST_CHANGED = "com.uwsoft.editor.proxy.ResolutionManager" + ".RESOLUTION_LIST_CHANGED";
+    public static final String RESOLUTION_LIST_CHANGED = "com.uwsoft.editor.proxy.ResolutionManager" + "" +
+            ".RESOLUTION_LIST_CHANGED";
 
     private static final String EXTENSION_9PATCH = ".9.png";
     public String currentResolutionName;
@@ -73,7 +71,8 @@ public class ResolutionManager extends BaseProxy {
                 return null;
             }
             // When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
-            // But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
+            // But it should also trigger a warning dialog at the and of the import, to notify the user of non
+            // resized images.
             if (sourceBufferedImage.getWidth() * ratio < 3 || sourceBufferedImage.getHeight() * ratio < 3) {
                 return null;
             }
@@ -92,7 +91,8 @@ public class ResolutionManager extends BaseProxy {
 
                 destinationBufferedImage = new BufferedImage(newWidth, newHeight, BufferedImage.TYPE_INT_ARGB);
                 Graphics2D g2 = destinationBufferedImage.createGraphics();
-                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
+                g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION,
+                        RenderingHints.VALUE_INTERPOLATION_NEAREST_NEIGHBOR);
                 g2.drawImage(sourceBufferedImage, 0, 0, newWidth, newHeight, null);
                 g2.dispose();
 
@@ -150,7 +150,7 @@ public class ResolutionManager extends BaseProxy {
         facade = Overlap2DFacade.getInstance();
     }
 
-//    private static BufferedImage convertTo9Patch(BufferedImage image) {
+    //    private static BufferedImage convertTo9Patch(BufferedImage image) {
 
     //    }
     public void createNewResolution(ResolutionEntryVO resolutionEntryVO) {
@@ -170,7 +170,9 @@ public class ResolutionManager extends BaseProxy {
             createResizedAnimations(resolutionEntryVO);
             changePercentBy(5);
             if (resizeWarnings > 0) {
-                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning",
+                        resizeWarnings + " images were not resized for smaller resolutions due to already small size " +
+                                "( < 3px )");
             }
             Overlap2DFacade.getInstance().sendNotification(RESOLUTION_LIST_CHANGED);
         });
@@ -181,7 +183,7 @@ public class ResolutionManager extends BaseProxy {
                 e.printStackTrace();
             }
             projectManager.saveCurrentProject();
-//            handler.progressComplete();
+            //            handler.progressComplete();
         });
         executor.shutdown();
     }
@@ -222,15 +224,20 @@ public class ResolutionManager extends BaseProxy {
     public void createResizedSpriteAnimation(String animName, ResolutionEntryVO resolution) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         String currProjectPath = projectManager.getCurrentProjectPath();
-        File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/" + animName + ".atlas");
+        File animAtlasFile = new File(
+                currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/" + animName + "" +
+                        ".atlas");
 
         String tmpPath = currProjectPath + File.separator + "assets/orig/sprite-animations/" + animName + "/tmp";
         File tmpFolder = new File(tmpPath);
         try {
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/"));
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
+            FileUtils.forceMkdir(
+                    new File(currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/"));
+            FileUtils.forceMkdir(new File(
+                    currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
 
-            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/sprite-animations/" + animName;
+            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name +
+                    "/sprite-animations/" + animName;
             File targetFolder = new File(targetPath);
 
             unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
@@ -245,7 +252,8 @@ public class ResolutionManager extends BaseProxy {
 
     public void unpackAtlasIntoTmpFolder(File atlasFile, String tmpDir) {
         FileHandle atlasFileHandle = new FileHandle(atlasFile);
-        TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(atlasFileHandle, atlasFileHandle.parent(), false);
+        TextureAtlas.TextureAtlasData atlasData = new TextureAtlas.TextureAtlasData(atlasFileHandle,
+                atlasFileHandle.parent(), false);
         TextureUnpacker unpacker = new TextureUnpacker();
         unpacker.splitAtlas(atlasData, tmpDir);
     }
@@ -254,15 +262,20 @@ public class ResolutionManager extends BaseProxy {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         String currProjectPath = projectManager.getCurrentProjectPath();
 
-        File animAtlasFile = new File(currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/" + animName + ".atlas");
+        File animAtlasFile = new File(
+                currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/" + animName + "" +
+                        ".atlas");
 
         String tmpPath = currProjectPath + File.separator + "assets/orig/spine-animations/" + animName + "/tmp";
         File tmpFolder = new File(tmpPath);
         try {
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/"));
-            FileUtils.forceMkdir(new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
+            FileUtils.forceMkdir(
+                    new File(currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/"));
+            FileUtils.forceMkdir(new File(
+                    currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName));
 
-            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/" + animName;
+            String targetPath = currProjectPath + File.separator + "assets/" + resolution.name + "/spine-animations/"
+                    + animName;
             File targetFolder = new File(targetPath);
 
             unpackAtlasIntoTmpFolder(animAtlasFile, tmpPath);
@@ -278,15 +291,19 @@ public class ResolutionManager extends BaseProxy {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         String currProjectPath = projectManager.getCurrentProjectPath();
 
-        File atlasFile = new File(currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + animName + ".atlas");
+        File atlasFile = new File(
+                currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator +
+                        "sprite-animations" + File.separator + animName + File.separator + animName + ".atlas");
 
-        String tmpDir = currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "sprite-animations" + File.separator + animName + File.separator + "tmp";
+        String tmpDir = currProjectPath + File.separator + "assets" + File.separator + "orig" + File.separator +
+                "sprite-animations" + File.separator + animName + File.separator + "tmp";
         File sourceFolder = new File(tmpDir);
 
         unpackAtlasIntoTmpFolder(atlasFile, tmpDir);
         try {
             for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
-                String spriteAnimationsRoot = currProjectPath + File.separator + "assets" + File.separator + resolutionEntryVO.name + File.separator + "sprite-animations";
+                String spriteAnimationsRoot = currProjectPath + File.separator + "assets" + File.separator +
+                        resolutionEntryVO.name + File.separator + "sprite-animations";
                 FileUtils.forceMkdir(new File(spriteAnimationsRoot));
                 String targetPath = spriteAnimationsRoot + File.separator + animName;
                 File targetFolder = new File(targetPath);
@@ -304,7 +321,8 @@ public class ResolutionManager extends BaseProxy {
 
         String fileNameWithOutExt = FilenameUtils.removeExtension(atlasFile.getName());
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        String tmpDir = projectManager.getCurrentProjectPath() + "/assets/orig/spine-animations" + File.separator + fileNameWithOutExt + File.separator + "tmp";
+        String tmpDir = projectManager.getCurrentProjectPath() + "/assets/orig/spine-animations" + File.separator +
+                fileNameWithOutExt + File.separator + "tmp";
         File sourceFolder = new File(tmpDir);
 
         unpackAtlasIntoTmpFolder(atlasFile, tmpDir);
@@ -313,7 +331,8 @@ public class ResolutionManager extends BaseProxy {
                 FileUtils.forceMkdir(new File(projectManager.getCurrentProjectPath() + File.separator +
                         "assets" + File.separator + resolutionEntryVO.name + File.separator + "spine-animations"));
                 String targetPath = projectManager.getCurrentProjectPath() + File.separator + "assets" +
-                        File.separator + resolutionEntryVO.name + File.separator + "spine-animations" + File.separator + fileNameWithOutExt;
+                        File.separator + resolutionEntryVO.name + File.separator + "spine-animations" + File
+                        .separator + fileNameWithOutExt;
                 FileUtils.forceMkdir(new File(targetPath));
                 File targetFolder = new File(targetPath);
                 resizeImagesTmpDirToResolution(atlasFile.getName(), sourceFolder, resolutionEntryVO, targetFolder);
@@ -329,8 +348,8 @@ public class ResolutionManager extends BaseProxy {
         TexturePacker.Settings settings = new TexturePacker.Settings();
 
         settings.flattenPaths = true;
-//        settings.maxHeight = getMinSquareNum(resEntry.height);
-//        settings.maxWidth = getMinSquareNum(resEntry.height);
+        //        settings.maxHeight = getMinSquareNum(resEntry.height);
+        //        settings.maxWidth = getMinSquareNum(resEntry.height);
         settings.maxHeight = Integer.parseInt(projectManager.getCurrentProjectVO().texturepackerHeight);
         settings.maxWidth = Integer.parseInt(projectManager.getCurrentProjectVO().texturepackerWidth);
         settings.filterMag = Texture.TextureFilter.Linear;
@@ -420,12 +439,15 @@ public class ResolutionManager extends BaseProxy {
 
         if (result)
             return theDir;
-        else return null;
+        else
+            return null;
     }
 
-    public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution, File targetFolder) {
+    public void resizeImagesTmpDirToResolution(String packName, File sourceFolder, ResolutionEntryVO resolution,
+            File targetFolder) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        float ratio = ResolutionManager.getResolutionRatio(resolution, projectManager.getCurrentProjectInfoVO().originalResolution);
+        float ratio = ResolutionManager.getResolutionRatio(resolution,
+                projectManager.getCurrentProjectInfoVO().originalResolution);
 
         if (targetFolder.exists()) {
             try {
@@ -462,7 +484,8 @@ public class ResolutionManager extends BaseProxy {
             if (curRes.base == 0) {
                 mul = (float) curRes.width / (float) projectManager.getCurrentProjectInfoVO().originalResolution.width;
             } else {
-                mul = (float) curRes.height / (float) projectManager.getCurrentProjectInfoVO().originalResolution.height;
+                mul = (float) curRes.height / (float) projectManager.getCurrentProjectInfoVO().originalResolution
+                        .height;
             }
         }
 
@@ -480,7 +503,8 @@ public class ResolutionManager extends BaseProxy {
     public void deleteResolution(ResolutionEntryVO resolutionEntryVO) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         try {
-            FileUtils.deleteDirectory(new File(projectManager.getCurrentProjectPath() + "/assets/" + resolutionEntryVO.name));
+            FileUtils.deleteDirectory(
+                    new File(projectManager.getCurrentProjectPath() + "/assets/" + resolutionEntryVO.name));
         } catch (IOException ignored) {
             ignored.printStackTrace();
         }

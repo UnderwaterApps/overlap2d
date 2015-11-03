@@ -50,7 +50,7 @@ public class SandboxBackUI {
         ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
         batch.begin();
         for (Actor actor : actors) {
-            actor.setScale(1f/resourceManager.getProjectVO().pixelToWorld);
+            actor.setScale(1f / resourceManager.getProjectVO().pixelToWorld);
             actor.act(delta);
             actor.draw(batch, 1);
         }

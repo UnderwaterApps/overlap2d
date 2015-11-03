@@ -42,7 +42,7 @@ public class UpdateEntityComponentsCommand extends EntityModifyRevertableCommand
         entityId = EntityUtils.getEntityId(entity);
         Array<Component> components = (Array<Component>) payload[1];
 
-        for(int i = 0; i < components.size; i++) {
+        for (int i = 0; i < components.size; i++) {
             //backup the original component
             Component originalComponent = ComponentRetriever.get(entity, components.get(i).getClass());
             backupComponents.add(ComponentCloner.get(originalComponent));
@@ -57,7 +57,7 @@ public class UpdateEntityComponentsCommand extends EntityModifyRevertableCommand
     @Override
     public void undoAction() {
         Entity entity = EntityUtils.getByUniqueId(entityId);
-        for(int i = 0; i < backupComponents.size; i++) {
+        for (int i = 0; i < backupComponents.size; i++) {
             Component entityComponent = ComponentRetriever.get(entity, backupComponents.get(i).getClass());
             ComponentCloner.set(entityComponent, backupComponents.get(i));
         }

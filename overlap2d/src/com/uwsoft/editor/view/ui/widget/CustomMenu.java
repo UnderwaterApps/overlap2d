@@ -18,13 +18,14 @@ public class CustomMenu extends PopupMenu {
 
     private String title;
 
-    public CustomMenu (String title) {
+    public CustomMenu(String title) {
         this.title = title;
 
-        openButton = new VisTextButton(title, new VisTextButton.VisTextButtonStyle(VisUI.getSkin().get("menu-bar", VisTextButton.VisTextButtonStyle.class)));
+        openButton = new VisTextButton(title, new VisTextButton.VisTextButtonStyle(
+                VisUI.getSkin().get("menu-bar", VisTextButton.VisTextButtonStyle.class)));
         openButton.addListener(new InputListener() {
             @Override
-            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+            public boolean touchDown(InputEvent event, float x, float y, int pointer, int button) {
                 if (menuBar.getCurrentMenu() == CustomMenu.this) {
                     menuBar.closeMenu();
                     return true;
@@ -36,22 +37,23 @@ public class CustomMenu extends PopupMenu {
             }
 
             @Override
-            public void enter (InputEvent event, float x, float y, int pointer, Actor fromActor) {
-                if (menuBar.getCurrentMenu() != null) switchMenu();
+            public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor) {
+                if (menuBar.getCurrentMenu() != null)
+                    switchMenu();
             }
         });
     }
 
-    public String getTitle () {
+    public String getTitle() {
         return title;
     }
 
-    private void switchMenu () {
+    private void switchMenu() {
         menuBar.closeMenu();
         showMenu();
     }
 
-    private void showMenu () {
+    private void showMenu() {
         Vector2 pos = openButton.localToStageCoordinates(new Vector2(0, 0));
         setPosition(pos.x, pos.y - getHeight());
         openButton.getStage().addActor(this);
@@ -59,20 +61,23 @@ public class CustomMenu extends PopupMenu {
     }
 
     @Override
-    public boolean remove () {
+    public boolean remove() {
         boolean result = super.remove();
         menuBar.setCurrentMenu(null);
         return result;
     }
 
-    /** Called by MenuBar when this menu is added to it */
-    void setMenuBar (CustomMenuBar menuBar) {
-        if (this.menuBar != null) throw new IllegalStateException("Menu was already added to MenuBar");
+    /**
+     * Called by MenuBar when this menu is added to it
+     */
+    void setMenuBar(CustomMenuBar menuBar) {
+        if (this.menuBar != null)
+            throw new IllegalStateException("Menu was already added to MenuBar");
         this.menuBar = menuBar;
-        this.menuBar.defaultStyle   =   openButton.getStyle().up;
+        this.menuBar.defaultStyle = openButton.getStyle().up;
     }
 
-    TextButton getOpenButton () {
+    TextButton getOpenButton() {
         return openButton;
     }
 }

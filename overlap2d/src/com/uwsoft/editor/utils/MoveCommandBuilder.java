@@ -34,7 +34,7 @@ public class MoveCommandBuilder {
     Array<Object[]> payload;
 
     public MoveCommandBuilder() {
-        payload =  new Array<>();
+        payload = new Array<>();
     }
 
     public void setX(Entity entity, float x) {

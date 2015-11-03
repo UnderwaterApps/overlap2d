@@ -18,17 +18,16 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import com.badlogic.gdx.graphics.Color;
 import com.commons.color.ColorPickerAdapter;
 import com.commons.color.CustomColorPicker;
-import org.apache.commons.lang3.ArrayUtils;
-import org.apache.commons.lang3.math.NumberUtils;
-
-import com.badlogic.gdx.graphics.Color;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
+import org.apache.commons.lang3.ArrayUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -44,9 +43,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED
-        };
+        String[] notificationInterests = new String[]{UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -63,6 +60,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
                         viewComponent.setAmbientColor(newColor);
                         facade.sendNotification(viewComponent.getUpdateEventName());
                     }
+
                     @Override
                     public void changed(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
@@ -88,7 +86,8 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         viewComponent.setGravityYValue(physicsVO.gravityY + "");
         viewComponent.setPhysicsEnable(physicsVO.enabled);
         viewComponent.setSleepVelocityValue(physicsVO.sleepVelocity + "");
-        viewComponent.setAmbientColor(new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
+        viewComponent.setAmbientColor(
+                new Color(item.ambientColor[0], item.ambientColor[1], item.ambientColor[2], item.ambientColor[3]));
 
         viewComponent.setLightsEnabled(item.lightSystemEnabled);
         viewComponent.setDiffuse(Sandbox.getInstance().sceneControl.isDiffuse());

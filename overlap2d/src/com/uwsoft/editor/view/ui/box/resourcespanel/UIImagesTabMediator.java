@@ -20,9 +20,9 @@ package com.uwsoft.editor.view.ui.box.resourcespanel;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ResourceManager;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box.ImageResource;
 
@@ -49,7 +49,8 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
         Array<DraggableResource> thumbnailBoxes = new Array<>();
         Array<TextureAtlas.AtlasRegion> atlasRegions = atlas.getRegions();
         for (TextureAtlas.AtlasRegion region : atlasRegions) {
-            if(!region.name.contains(searchText))continue;
+            if (!region.name.contains(searchText))
+                continue;
             boolean is9patch = region.splits != null;
             DraggableResource draggableResource = new DraggableResource(new ImageResource(region));
             if (is9patch) {

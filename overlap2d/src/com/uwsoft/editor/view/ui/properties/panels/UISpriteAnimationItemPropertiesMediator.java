@@ -31,7 +31,8 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * Created by azakhary on 4/16/2015.
  */
-public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity, UISpriteAnimationItemProperties> {
+public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMediator<Entity,
+        UISpriteAnimationItemProperties> {
     private static final String TAG = UISpriteAnimationItemPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
@@ -44,9 +45,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED
-        };
+        String[] notificationInterests = new String[]{UISpriteAnimationItemProperties.EDIT_ANIMATIONS_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -67,7 +66,7 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
     @Override
     protected void translateObservableDataToView(Entity entity) {
 
-    	spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
+        spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
         Array<String> animations = new Array<>();
         spriteAnimationComponent.frameRangeMap.keySet().forEach(animations::add);
 
@@ -79,10 +78,8 @@ public class UISpriteAnimationItemPropertiesMediator extends UIItemPropertiesMed
 
     @Override
     protected void translateViewToItemData() {
-        Object payload = UpdateSpriteAnimationDataCommand.payload(observableReference,
-                viewComponent.getFPS(),
-                viewComponent.getSelectedAnimation(),
-                viewComponent.getPlayMode());
+        Object payload = UpdateSpriteAnimationDataCommand.payload(observableReference, viewComponent.getFPS(),
+                viewComponent.getSelectedAnimation(), viewComponent.getPlayMode());
 
         facade.sendNotification(MsgAPI.ACTION_UPDATE_SPRITE_ANIMATION_DATA, payload);
     }

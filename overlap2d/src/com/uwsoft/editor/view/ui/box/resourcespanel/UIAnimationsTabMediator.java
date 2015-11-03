@@ -18,21 +18,21 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
-import java.util.function.BiFunction;
-
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ResourceManager;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResourceView;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box.SpineResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box.SpriteResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box.SpriterResource;
+
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
+import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -54,22 +54,29 @@ public class UIAnimationsTabMediator extends UIResourcesTabMediator<UIAnimations
         animationBoxes.clear();
         Sandbox sandbox = Sandbox.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
-        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class, ItemFactory.get()::createSpineAnimation, searchText);
-        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class, ItemFactory.get()::createSpriteAnimation, searchText);
-        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class, ItemFactory.get()::createSpriterAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpineAnimationsList().keySet(), SpineResource.class,
+                ItemFactory.get()::createSpineAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriteAnimationsList().keySet(), SpriteResource.class,
+                ItemFactory.get()::createSpriteAnimation, searchText);
+        createAnimationResources(resourceManager.getProjectSpriterAnimationsList().keySet(), SpriterResource.class,
+                ItemFactory.get()::createSpriterAnimation, searchText);
         viewComponent.setThumbnailBoxes(animationBoxes);
     }
 
-    private void createAnimationResources(Set<String> strings, Class resourceClass, BiFunction<String, Vector2, Boolean> factoryFunction, String searchText) {
+    private void createAnimationResources(Set<String> strings, Class resourceClass,
+            BiFunction<String, Vector2, Boolean> factoryFunction, String searchText) {
         for (String animationName : strings) {
-            if(!animationName.contains(searchText))continue;
+            if (!animationName.contains(searchText))
+                continue;
             try {
                 Constructor constructor = resourceClass.getConstructor(String.class);
-                DraggableResource draggableResource = new DraggableResource((DraggableResourceView) constructor.newInstance(animationName));
+                DraggableResource draggableResource = new DraggableResource(
+                        (DraggableResourceView) constructor.newInstance(animationName));
                 draggableResource.initDragDrop();
                 draggableResource.setFactoryFunction(factoryFunction);
                 animationBoxes.add(draggableResource);
-            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException | IllegalAccessException e) {
+            } catch (NoSuchMethodException | InvocationTargetException | InstantiationException |
+                    IllegalAccessException e) {
                 e.printStackTrace();
             }
         }

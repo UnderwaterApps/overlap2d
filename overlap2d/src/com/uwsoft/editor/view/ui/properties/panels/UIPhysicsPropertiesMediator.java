@@ -28,9 +28,7 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UIPhysicsProperties.CLOSE_CLICKED
-        };
+        String[] notificationInterests = new String[]{UIPhysicsProperties.CLOSE_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -41,7 +39,10 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
 
         switch (notification.getName()) {
             case UIPhysicsProperties.CLOSE_CLICKED:
-                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PhysicsBodyComponent.class));
+                Overlap2DFacade.getInstance()
+                               .sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT,
+                                       RemoveComponentFromItemCommand.payload(observableReference,
+                                               PhysicsBodyComponent.class));
                 break;
         }
     }
@@ -71,7 +72,9 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
         physicsComponent.bodyType = viewComponent.getBodyType();
         physicsComponent.mass = NumberUtils.toFloat(viewComponent.getMassField().getText());
 
-        physicsComponent.centerOfMass = new Vector2(NumberUtils.toFloat(viewComponent.getCenterOfMassXField().getText()), NumberUtils.toFloat(viewComponent.getCenterOfMassYField().getText()));
+        physicsComponent.centerOfMass = new Vector2(
+                NumberUtils.toFloat(viewComponent.getCenterOfMassXField().getText()),
+                NumberUtils.toFloat(viewComponent.getCenterOfMassYField().getText()));
 
         physicsComponent.rotationalInertia = NumberUtils.toFloat(viewComponent.getRotationalIntertiaField().getText());
         physicsComponent.damping = NumberUtils.toFloat(viewComponent.getDumpingField().getText());

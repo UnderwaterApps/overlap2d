@@ -45,11 +45,7 @@ public abstract class UIResourcesTabMediator<T extends UIResourcesTab> extends S
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED,
-                UIResourcesTab.SEARCH
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED, ProjectManager.PROJECT_DATA_UPDATED, UIResourcesTab.SEARCH};
     }
 
 

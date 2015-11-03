@@ -29,7 +29,18 @@ import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.ColorPrimitiveVO;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.Image9patchVO;
+import com.uwsoft.editor.renderer.data.LabelVO;
+import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ParticleEffectVO;
+import com.uwsoft.editor.renderer.data.ShapeVO;
+import com.uwsoft.editor.renderer.data.SimpleImageVO;
+import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
+import com.uwsoft.editor.renderer.data.SpriterVO;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -40,7 +51,6 @@ import java.util.HashMap;
 
 /**
  * Created by azakhary on 6/5/2015.
- *
  */
 public class ItemFactory {
 
@@ -57,7 +67,7 @@ public class ItemFactory {
     }
 
     public static ItemFactory get() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ItemFactory(Sandbox.getInstance().sceneControl.sceneLoader);
         }
 
@@ -68,7 +78,8 @@ public class ItemFactory {
         UILayerBoxMediator layerBoxMediator = Overlap2DFacade.getInstance().retrieveMediator(UILayerBoxMediator.NAME);
         String layerName = layerBoxMediator.getCurrentSelectedLayerName();
 
-        if(layerName == null) return false;
+        if (layerName == null)
+            return false;
 
         vo.layerName = layerName;
 
@@ -86,7 +97,8 @@ public class ItemFactory {
         SimpleImageVO vo = new SimpleImageVO();
         vo.imageName = regionName;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -97,7 +109,8 @@ public class ItemFactory {
         Image9patchVO vo = new Image9patchVO();
         vo.imageName = regionName;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -109,7 +122,8 @@ public class ItemFactory {
         vo.animationName = animationName;
         vo.playMode = 2;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -120,7 +134,8 @@ public class ItemFactory {
         SpineVO vo = new SpineVO();
         vo.animationName = animationName;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -131,7 +146,8 @@ public class ItemFactory {
         SpriterVO vo = new SpriterVO();
         vo.animationName = animationName;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -144,7 +160,8 @@ public class ItemFactory {
         vo.originX = 0;
         vo.originY = 0;
 
-        if(!setEssentialData(vo, position)) return false;
+        if (!setEssentialData(vo, position))
+            return false;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
 
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
@@ -171,7 +188,8 @@ public class ItemFactory {
     }
 
     public Entity createCompositeItem(CompositeItemVO vo, Vector2 position) {
-        if(!setEssentialData(vo, position)) return null;
+        if (!setEssentialData(vo, position))
+            return null;
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Engine engine = sceneLoader.engine;
@@ -188,7 +206,8 @@ public class ItemFactory {
     }
 
     public Entity createLightItem(LightVO vo, Vector2 position) {
-        if(!setEssentialData(vo, position)) return null;
+        if (!setEssentialData(vo, position))
+            return null;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
 
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
@@ -197,7 +216,8 @@ public class ItemFactory {
 
     public boolean tryCreateParticleItem(String particleName, Vector2 position) {
         Entity entity = createParticleItem(particleName, position);
-        if(entity == null) return false;
+        if (entity == null)
+            return false;
 
         return true;
     }
@@ -206,7 +226,8 @@ public class ItemFactory {
         ParticleEffectVO vo = new ParticleEffectVO();
         vo.particleName = particleName;
 
-        if(!setEssentialData(vo, position)) return null;
+        if (!setEssentialData(vo, position))
+            return null;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
 
@@ -215,7 +236,8 @@ public class ItemFactory {
 
     public Entity createLabel(TextTool textSettings, Vector2 position) {
         LabelVO vo = new LabelVO();
-        if(!setEssentialData(vo, position)) return null;
+        if (!setEssentialData(vo, position))
+            return null;
 
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
@@ -228,8 +250,8 @@ public class ItemFactory {
         vo.size = textSettings.getFontSize();
 
         // need to calculate minimum bounds size here
-        vo.width = 120f/Sandbox.getInstance().getPixelPerWU();
-        vo.height = 50f/Sandbox.getInstance().getPixelPerWU();
+        vo.width = 120f / Sandbox.getInstance().getPixelPerWU();
+        vo.height = 50f / Sandbox.getInstance().getPixelPerWU();
 
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);

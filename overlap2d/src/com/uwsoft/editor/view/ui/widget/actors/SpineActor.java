@@ -4,7 +4,15 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.*;
+import com.esotericsoftware.spine.Animation;
+import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.BoneData;
+import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonData;
+import com.esotericsoftware.spine.SkeletonJson;
+import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.Slot;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
@@ -40,8 +48,11 @@ public class SpineActor extends Actor {
         for (int i = 0, n = skeleton.getSlots().size; i < n; i++) {
             Slot slot = skeleton.getSlots().get(i);
             Attachment attachment = slot.getAttachment();
-            if (attachment == null) continue;
-            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment instanceof SkinnedMeshAttachment))) continue;
+            if (attachment == null)
+                continue;
+            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment
+                    instanceof SkinnedMeshAttachment)))
+                continue;
             float[] vertices = new float[0];
             if ((attachment instanceof RegionAttachment)) {
                 RegionAttachment region = (RegionAttachment) attachment;
@@ -107,7 +118,7 @@ public class SpineActor extends Actor {
 
     @Override
     public void draw(Batch batch, float parentAlpha) {
-        renderer.draw((PolygonSpriteBatch)batch, skeleton);
+        renderer.draw((PolygonSpriteBatch) batch, skeleton);
         super.draw(batch, parentAlpha);
     }
 

@@ -22,7 +22,12 @@ import com.badlogic.gdx.utils.Array;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.stage.tools.*;
+import com.uwsoft.editor.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.view.stage.tools.PolygonTool;
+import com.uwsoft.editor.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.view.stage.tools.TextTool;
+import com.uwsoft.editor.view.stage.tools.TransformTool;
 
 /**
  * Created by sargis on 4/9/15.
@@ -31,7 +36,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String TAG = UIToolBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private static final String PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
+    private static final String PREFIX = "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
     public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
 
@@ -67,9 +72,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                UIToolBox.TOOL_CLICKED
-        };
+        return new String[]{UIToolBox.TOOL_CLICKED};
     }
 
     @Override

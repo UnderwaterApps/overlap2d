@@ -55,14 +55,9 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.ITEM_SELECTION_CHANGED,
-                MsgAPI.EMPTY_SPACE_CLICKED,
-                UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED,
-                CustomVariablesDialog.ADD_BUTTON_PRESSED,
-                CustomVariablesDialog.DELETE_BUTTON_PRESSED,
-                Overlap2DMenuBar.CUSTOM_VARIABLES_EDITOR_OPEN
-        };
+        return new String[]{MsgAPI.ITEM_SELECTION_CHANGED, MsgAPI.EMPTY_SPACE_CLICKED, UIBasicItemProperties
+                .CUSTOM_VARS_BUTTON_CLICKED, CustomVariablesDialog.ADD_BUTTON_PRESSED, CustomVariablesDialog
+                .DELETE_BUTTON_PRESSED, Overlap2DMenuBar.CUSTOM_VARIABLES_EDITOR_OPEN};
     }
 
     @Override
@@ -81,7 +76,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
                 break;
             case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
-                if(selection.size() == 1) {
+                if (selection.size() == 1) {
                     setObservable(selection.iterator().next());
                 }
                 break;
@@ -125,7 +120,7 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
     }
 
     private void updateView() {
-        if(observable == null) {
+        if (observable == null) {
             viewComponent.setEmpty();
         } else {
             CustomVariables vars = new CustomVariables();

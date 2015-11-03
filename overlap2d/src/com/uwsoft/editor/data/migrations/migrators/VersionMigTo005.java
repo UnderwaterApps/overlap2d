@@ -18,22 +18,21 @@
 
 package com.uwsoft.editor.data.migrations.migrators;
 
-import java.io.File;
-import java.io.IOException;
-
-import org.apache.commons.io.FileUtils;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.JsonReader;
 import com.badlogic.gdx.utils.JsonWriter;
-import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.migrations.IVersionMigrator;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import org.apache.commons.io.FileUtils;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
  * Created by azakhary on 9/28/2014.
@@ -59,9 +58,12 @@ public class VersionMigTo005 implements IVersionMigrator {
     public boolean doMigration() {
 
         // Rename folder animations to spine-animations in orig (if exist);
-        File animationsDir = new File(projectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "animations");
+        File animationsDir = new File(
+                projectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "animations");
         if (animationsDir.exists() && animationsDir.isDirectory()) {
-            File spineAnimationsDir = new File(projectPath + File.separator + "assets" + File.separator + "orig" + File.separator + "spine-animations");
+            File spineAnimationsDir = new File(
+                    projectPath + File.separator + "assets" + File.separator + "orig" + File.separator +
+                            "spine-animations");
             animationsDir.renameTo(spineAnimationsDir);
         }
 

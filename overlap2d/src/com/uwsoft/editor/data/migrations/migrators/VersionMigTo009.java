@@ -68,7 +68,7 @@ public class VersionMigTo009 implements IVersionMigrator {
                     String content = FileUtils.readFileToString(new FileHandle(entry).file());
                     JsonValue value = jsonReader.parse(content);
                     fixAnimations(value.get("composite"));
-                    if(value.get("libraryItems") != null) {
+                    if (value.get("libraryItems") != null) {
                         JsonValue.JsonIterator libraryArr = value.get("libraryItems").iterator();
                         while (libraryArr.hasNext()) {
                             JsonValue libItem = libraryArr.next();
@@ -93,13 +93,15 @@ public class VersionMigTo009 implements IVersionMigrator {
     }
 
     private void fixLibraryItemsLocation(HashMap<String, JsonValue> libraryItems) {
-        if(libraryItems.size() == 0) return;
+        if (libraryItems.size() == 0)
+            return;
         //creating libraryArrayJsonString
         String libraryArrayJsonString = "{";
         for (JsonValue entry : libraryItems.values()) {
-            libraryArrayJsonString +=  "\""+entry.name+"\": " + entry.prettyPrint(JsonWriter.OutputType.json, 1) + ", ";
+            libraryArrayJsonString += "\"" + entry.name + "\": " + entry.prettyPrint(JsonWriter.OutputType.json,
+                    1) + ", ";
         }
-        libraryArrayJsonString = libraryArrayJsonString.substring(0,libraryArrayJsonString.length()-2) + "}";
+        libraryArrayJsonString = libraryArrayJsonString.substring(0, libraryArrayJsonString.length() - 2) + "}";
 
         //ProjectInfo data
         String prjInfoFilePath = projectPath + "/project.dt";
@@ -122,9 +124,10 @@ public class VersionMigTo009 implements IVersionMigrator {
     }
 
     private void fixAnimations(JsonValue value) {
-        if(value.get("sComposites") == null) return;
+        if (value.get("sComposites") == null)
+            return;
 
-        if(value.get("sComposites") != null) {
+        if (value.get("sComposites") != null) {
             JsonValue.JsonIterator compositeArray = value.get("sComposites").iterator();
             while (compositeArray.hasNext()) {
                 JsonValue composite = compositeArray.next();
@@ -134,7 +137,7 @@ public class VersionMigTo009 implements IVersionMigrator {
             }
         }
 
-        if(value.get("sSpriteAnimations") != null) {
+        if (value.get("sSpriteAnimations") != null) {
             JsonValue.JsonIterator spriteArray = value.get("sSpriteAnimations").iterator();
             while (spriteArray.hasNext()) {
                 JsonValue valAnim = spriteArray.next();
@@ -148,9 +151,10 @@ public class VersionMigTo009 implements IVersionMigrator {
                         int startFrame = innerVal.get("startFrame").asInt();
                         int endFrame = innerVal.get("endFrame").asInt();
                         String currName = innerVal.get("name").asString();
-                        cnt += "{\"name\":\""+currName+"\", \"startFrame\":"+startFrame+", \"endFrame\":"+endFrame+"}, ";
+                        cnt += "{\"name\":\"" + currName + "\", \"startFrame\":" + startFrame + ", \"endFrame\":" +
+                                endFrame + "}, ";
                     }
-                    if(cnt.length() == 1) {
+                    if (cnt.length() == 1) {
                         cnt = "[]";
                     } else {
                         cnt = cnt.substring(0, cnt.length() - 2) + "]";
@@ -164,8 +168,10 @@ public class VersionMigTo009 implements IVersionMigrator {
 
     private void setNewKeyToJson(JsonValue container, String newKey, String oldKey, JsonValue newVal) {
         JsonValue oldVal = container.get(oldKey);
-        if(oldVal.prev != null) oldVal.prev.setNext(newVal);
-        if(oldVal.next != null)  oldVal.next.setPrev(newVal);
+        if (oldVal.prev != null)
+            oldVal.prev.setNext(newVal);
+        if (oldVal.next != null)
+            oldVal.next.setPrev(newVal);
         newVal.setPrev(oldVal.prev);
         newVal.setNext(oldVal.next);
         newVal.name = newKey;

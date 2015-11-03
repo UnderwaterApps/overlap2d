@@ -1,16 +1,22 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.NumberSelector;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextArea;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.event.*;
+import com.uwsoft.editor.event.CheckBoxChangeListener;
+import com.uwsoft.editor.event.KeyboardListener;
+import com.uwsoft.editor.event.SelectBoxChangeListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by azakhary on 4/24/15.
@@ -125,7 +131,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         for (Map.Entry<Integer, String> entry : alignNames.entrySet()) {
             Integer key = entry.getKey();
             String value = entry.getValue();
-            if(alignSelectBox.getSelected().equals(value)) {
+            if (alignSelectBox.getSelected().equals(value)) {
                 return key;
             }
         }

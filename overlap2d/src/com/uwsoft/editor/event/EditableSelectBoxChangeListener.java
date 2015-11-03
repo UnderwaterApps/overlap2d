@@ -40,7 +40,7 @@ public class EditableSelectBoxChangeListener extends ChangeListener {
     public void changed(ChangeEvent changeEvent, Actor actor) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         String selected = ((EditableSelectBox) actor).getSelected();
-        if(!lastSelected.equals(selected)) {
+        if (!lastSelected.equals(selected)) {
             lastSelected = selected;
             facade.sendNotification(eventName, selected);
         }

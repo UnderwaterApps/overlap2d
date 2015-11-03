@@ -26,7 +26,8 @@ import com.uwsoft.editor.view.stage.Sandbox;
 /**
  * Created by azakhary on 4/15/2015.
  */
-public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbstractProperties> extends UIAbstractPropertiesMediator<T, V> {
+public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbstractProperties> extends
+        UIAbstractPropertiesMediator<T, V> {
 
     public UIItemPropertiesMediator(String mediatorName, V viewComponent) {
         super(mediatorName, viewComponent);
@@ -35,8 +36,8 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
     @Override
     public void handleNotification(Notification notification) {
 
-        if(notification.getName().equals(viewComponent.getUpdateEventName())) {
-            if(!lockUpdates) {
+        if (notification.getName().equals(viewComponent.getUpdateEventName())) {
+            if (!lockUpdates) {
                 translateViewToItemData();
                 afterItemDataModified();
             }
@@ -44,7 +45,8 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
 
         switch (notification.getName()) {
             case MsgAPI.ITEM_DATA_UPDATED:
-                if(observableReference == null) return;
+                if (observableReference == null)
+                    return;
                 onItemDataUpdate();
                 break;
             default:
@@ -53,8 +55,8 @@ public abstract class UIItemPropertiesMediator<T extends Entity, V extends UIAbs
     }
 
     protected void afterItemDataModified() {
-    	//TODO this was needed with previous runtime don't know will it be needed for new runtime
-    	//observableReference.renew();
+        //TODO this was needed with previous runtime don't know will it be needed for new runtime
+        //observableReference.renew();
 
         // TODO: add this back
         //Sandbox.getInstance().getSelector().updateSelections();

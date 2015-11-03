@@ -59,10 +59,10 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
     @Override
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
-        return Stream.of(parentNotifications, new String[]{
-                ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
-            }).flatMap(Stream::of).toArray(String[]::new);
+        return Stream.of(parentNotifications,
+                new String[]{ProjectManager.PROJECT_OPENED, ProjectManager.PROJECT_DATA_UPDATED})
+                     .flatMap(Stream::of)
+                     .toArray(String[]::new);
     }
 
     @Override

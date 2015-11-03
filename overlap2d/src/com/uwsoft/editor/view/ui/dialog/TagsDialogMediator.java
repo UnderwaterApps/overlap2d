@@ -35,12 +35,8 @@ public class TagsDialogMediator extends SimpleMediator<TagsDialog> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.ITEM_SELECTION_CHANGED,
-                MsgAPI.EMPTY_SPACE_CLICKED,
-                UIBasicItemProperties.TAGS_BUTTON_CLICKED,
-                TagsDialog.LIST_CHANGED
-        };
+        return new String[]{MsgAPI.ITEM_SELECTION_CHANGED, MsgAPI.EMPTY_SPACE_CLICKED, UIBasicItemProperties
+                .TAGS_BUTTON_CLICKED, TagsDialog.LIST_CHANGED};
     }
 
     @Override
@@ -56,7 +52,7 @@ public class TagsDialogMediator extends SimpleMediator<TagsDialog> {
                 break;
             case MsgAPI.ITEM_SELECTION_CHANGED:
                 Set<Entity> selection = notification.getBody();
-                if(selection.size() == 1) {
+                if (selection.size() == 1) {
                     setObservable(selection.iterator().next());
                 }
                 break;
@@ -77,7 +73,7 @@ public class TagsDialogMediator extends SimpleMediator<TagsDialog> {
     }
 
     private void updateView() {
-        if(observable == null) {
+        if (observable == null) {
             viewComponent.setEmpty();
         } else {
             MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);

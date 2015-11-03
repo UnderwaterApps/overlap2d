@@ -31,7 +31,8 @@ import com.uwsoft.editor.event.KeyboardListener;
  */
 public class UIGridBox extends UIBaseBox {
 
-    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.view.ui.box.UIGridBox" + ".GRID_SIZE_TEXT_FIELD_UPDATED";
+    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.view.ui.box.UIGridBox" + "" +
+            ".GRID_SIZE_TEXT_FIELD_UPDATED";
     private VisValidableTextField gridSizeTextField;
 
     public UIGridBox() {

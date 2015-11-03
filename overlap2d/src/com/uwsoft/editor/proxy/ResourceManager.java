@@ -1,20 +1,5 @@
 package com.uwsoft.editor.proxy;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Map.Entry;
-
-import com.uwsoft.editor.renderer.data.*;
-
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-
 import com.badlogic.gdx.Files;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -26,11 +11,28 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.utils.Json;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.data.SpineAnimData;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.SpineAnimData;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.CompositeVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.resources.FontSizePair;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.renderer.utils.MySkin;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Map.Entry;
 
 /**
  * Created by azakhary on 4/26/2015.
@@ -89,11 +91,12 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 
     /**
      * Sets working resolution, please set before doing any loading
+     *
      * @param resolution String resolution name, default is "orig" later use resolution names created in editor
      */
     public void setWorkingResolution(String resolution) {
         ResolutionEntryVO resolutionObject = getProjectVO().getResolution("resolutionName");
-        if(resolutionObject != null) {
+        if (resolutionObject != null) {
             packResolutionName = resolution;
         }
     }
@@ -166,7 +169,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         for (FileHandle entry : sourceDir.list()) {
             File file = entry.file();
             String filename = file.getName();
-            if (file.isDirectory() || filename.endsWith(".DS_Store")) continue;
+            if (file.isDirectory() || filename.endsWith(".DS_Store"))
+                continue;
 
             ParticleEffect particleEffect = new ParticleEffect();
             particleEffect.load(Gdx.files.internal(file.getAbsolutePath()), currentProjectAtlas, "");
@@ -182,8 +186,11 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         for (FileHandle entry : sourceDir.list()) {
             if (entry.file().isDirectory()) {
                 String animName = FilenameUtils.removeExtension(entry.file().getName());
-                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(path + curResolution + "/spine-animations/" + File.separator + animName + File.separator + animName + ".atlas"));
-                FileHandle animJsonFile = Gdx.files.internal(entry.file().getAbsolutePath() + File.separator + animName + ".json");
+                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(
+                        path + curResolution + "/spine-animations/" + File.separator + animName + File.separator +
+                                animName + ".atlas"));
+                FileHandle animJsonFile = Gdx.files.internal(
+                        entry.file().getAbsolutePath() + File.separator + animName + ".json");
                 SpineAnimData data = new SpineAnimData();
                 data.atlas = atlas;
                 data.jsonFile = animJsonFile;
@@ -200,7 +207,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         for (FileHandle entry : sourceDir.list()) {
             if (entry.file().isDirectory()) {
                 String animName = FilenameUtils.removeExtension(entry.file().getName());
-                TextureAtlas atlas = new TextureAtlas(Gdx.files.internal(entry.file().getAbsolutePath() + File.separator + animName + ".atlas"));
+                TextureAtlas atlas = new TextureAtlas(
+                        Gdx.files.internal(entry.file().getAbsolutePath() + File.separator + animName + ".atlas"));
                 spriteAnimAtlases.put(animName, atlas);
             }
         }
@@ -212,7 +220,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         for (FileHandle entry : sourceDir.list()) {
             if (entry.file().isDirectory()) {
                 String animName = entry.file().getName();
-                FileHandle scmlFile = new FileHandle(path + "orig" + "/spriter-animations/" + animName + "/" + animName + ".scml");
+                FileHandle scmlFile = new FileHandle(
+                        path + "orig" + "/spriter-animations/" + animName + "/" + animName + ".scml");
                 spriterAnimFiles.put(animName, scmlFile);
             }
         }
@@ -256,7 +265,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             try {
                 fontFile = getTTFSafely(pair.fontName);
                 FreeTypeFontGenerator generator = new FreeTypeFontGenerator(fontFile);
-                FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+                FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator
+                        .FreeTypeFontParameter();
                 parameter.size = Math.round(pair.fontSize * resolutionManager.getCurrentMul());
                 BitmapFont font = generator.generateFont(parameter);
                 bitmapFonts.put(pair, font);
@@ -265,23 +275,26 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             }
         }
     }
-    
+
     private void loadCurrentProjectShaders(String path) {
-    	Iterator<Entry<String, ShaderProgram>> it = shaderPrograms.entrySet().iterator();
-    	while (it.hasNext()) {
-    		Entry<String, ShaderProgram> pair = it.next();
-    		pair.getValue().dispose();
-    		it.remove(); 
-    	}
+        Iterator<Entry<String, ShaderProgram>> it = shaderPrograms.entrySet().iterator();
+        while (it.hasNext()) {
+            Entry<String, ShaderProgram> pair = it.next();
+            pair.getValue().dispose();
+            it.remove();
+        }
         shaderPrograms.clear();
         FileHandle sourceDir = new FileHandle(path);
         for (FileHandle entry : sourceDir.list()) {
             File file = entry.file();
             String filename = file.getName().replace(".vert", "").replace(".frag", "");
-            if (file.isDirectory() || filename.endsWith(".DS_Store") || shaderPrograms.containsKey(filename)) continue;
+            if (file.isDirectory() || filename.endsWith(".DS_Store") || shaderPrograms.containsKey(filename))
+                continue;
             // check if pair exists.
-            if(Gdx.files.internal(path + filename + ".vert").exists() && Gdx.files.internal(path + filename + ".frag").exists()) {
-                ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"), Gdx.files.internal(path + filename + ".frag"));
+            if (Gdx.files.internal(path + filename + ".vert").exists() && Gdx.files.internal(path + filename + ".frag")
+                                                                                   .exists()) {
+                ShaderProgram shaderProgram = new ShaderProgram(Gdx.files.internal(path + filename + ".vert"),
+                        Gdx.files.internal(path + filename + ".frag"));
                 System.out.println(shaderProgram.getLog());
                 shaderPrograms.put(filename, shaderProgram);
             }
@@ -302,7 +315,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
             projectSkin = new MySkin(f);
             ObjectMap<String, BitmapFont> map = projectSkin.getAll(BitmapFont.class);
             for (ObjectMap.Entry<String, BitmapFont> entry : map.entries()) {
-                projectSkin.getFont(entry.key).getRegion().getTexture().setFilter(Texture.TextureFilter.Linear, Texture.TextureFilter.Linear);
+                projectSkin.getFont(entry.key).getRegion().getTexture().setFilter(Texture.TextureFilter.Linear,
+                Texture.TextureFilter.Linear);
             }
         }
         */
@@ -389,17 +403,17 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 
     @Override
     public ResolutionEntryVO getLoadedResolution() {
-        if(packResolutionName.equals("orig")) {
+        if (packResolutionName.equals("orig")) {
             return getProjectVO().originalResolution;
         }
         return getProjectVO().getResolution(packResolutionName);
     }
 
-	@Override
-	public ShaderProgram getShaderProgram(String shaderName) {
-		// TODO Auto-generated method stub
-		return shaderPrograms.get(shaderName);
-	}
+    @Override
+    public ShaderProgram getShaderProgram(String shaderName) {
+        // TODO Auto-generated method stub
+        return shaderPrograms.get(shaderName);
+    }
 
     public HashMap<String, ShaderProgram> getShaders() {
         return shaderPrograms;

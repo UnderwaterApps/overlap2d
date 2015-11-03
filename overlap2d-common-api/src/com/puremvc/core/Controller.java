@@ -50,7 +50,7 @@ public interface Controller {
      * @param notificationName the name of the <code>INotification</code>
      * @param command          the Class of the <code>ICommand</code>
      */
-    void registerCommand(String notificationName, Class<? extends Command>  command);
+    void registerCommand(String notificationName, Class<? extends Command> command);
 
     /**
      * Execute the <code>ICommand</code> previously registered as the handler

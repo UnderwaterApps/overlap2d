@@ -18,12 +18,12 @@
 
 package com.uwsoft.editor.view;
 
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+
+import java.util.Set;
 
 /**
  * Created by CyberJoe on 3/18/2015.
@@ -31,7 +31,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 public class ItemControlMediator {
 
     private SceneControlMediator sceneControl;
-    
+
     private TransformComponent transformComponent;
     private ZIndexComponent zIndexComponent;
 
@@ -40,30 +40,32 @@ public class ItemControlMediator {
     }
 
 
-    public void itemZIndexChange( Set<Entity> currentSelection, boolean isUp) {
+    public void itemZIndexChange(Set<Entity> currentSelection, boolean isUp) {
         for (Entity item : currentSelection) {
-        	zIndexComponent = ComponentRetriever.get(item, ZIndexComponent.class);
+            zIndexComponent = ComponentRetriever.get(item, ZIndexComponent.class);
 
             int ammount = 1;
-            if (!isUp) ammount = -1;
+            if (!isUp)
+                ammount = -1;
 
             int setting = zIndexComponent.getZIndex() + ammount;
-            if (setting < 0) setting = 0;
+            if (setting < 0)
+                setting = 0;
             zIndexComponent.setZIndex(setting);
         }
     }
 
     public void moveItemBy(Entity entity, float x, float y) {
-    	transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-    	transformComponent.x+=x;
-    	transformComponent.y+=y;
+        transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        transformComponent.x += x;
+        transformComponent.y += y;
     }
 
     public void removeItem(Entity entity) {
-    	//TODO and uncomment
-//        actor.remove();
-//        sceneControl.getCurrentScene().removeItem(item);
-//        item.dispose();
+        //TODO and uncomment
+        //        actor.remove();
+        //        sceneControl.getCurrentScene().removeItem(item);
+        //        item.dispose();
     }
 
 }

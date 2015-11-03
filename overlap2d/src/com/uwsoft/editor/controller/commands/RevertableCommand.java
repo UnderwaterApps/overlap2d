@@ -39,10 +39,12 @@ public abstract class RevertableCommand extends SandboxCommand {
         this.notification = notification;
         callDoAction();
         stateDone = true;
-        if(!isCancelled) commandManager.addCommand(this);
+        if (!isCancelled)
+            commandManager.addCommand(this);
     }
 
     public abstract void doAction();
+
     public abstract void undoAction();
 
     public void callDoAction() {
@@ -50,7 +52,7 @@ public abstract class RevertableCommand extends SandboxCommand {
     }
 
     public void callUndoAction() {
-       undoAction();
+        undoAction();
     }
 
     public Notification getNotification() {

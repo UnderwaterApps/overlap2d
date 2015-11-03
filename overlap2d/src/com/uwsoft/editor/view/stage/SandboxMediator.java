@@ -33,15 +33,20 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.input.EntityClickListener;
 import com.uwsoft.editor.view.stage.input.InputListenerComponent;
-import com.uwsoft.editor.view.stage.tools.*;
+import com.uwsoft.editor.view.stage.tools.ConeLightTool;
+import com.uwsoft.editor.view.stage.tools.PanTool;
+import com.uwsoft.editor.view.stage.tools.PointLightTool;
+import com.uwsoft.editor.view.stage.tools.PolygonTool;
+import com.uwsoft.editor.view.stage.tools.SelectionTool;
+import com.uwsoft.editor.view.stage.tools.TextTool;
+import com.uwsoft.editor.view.stage.tools.Tool;
+import com.uwsoft.editor.view.stage.tools.TransformTool;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.awt.*;
@@ -54,7 +59,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     private static final String TAG = SandboxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private static final String PREFIX =  "com.uwsoft.editor.view.stage.SandboxStageMediator";
+    private static final String PREFIX = "com.uwsoft.editor.view.stage.SandboxStageMediator";
     public static final String SANDBOX_TOOL_CHANGED = PREFIX + ".SANDBOX_TOOL_CHANGED";
 
     private final Vector2 reducedMoveDirection = new Vector2(0, 0);
@@ -104,15 +109,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.SCENE_LOADED,
-                UIToolBoxMediator.TOOL_SELECTED,
-                MsgAPI.NEW_ITEM_ADDED,
-                CompositeCameraChangeCommand.DONE,
-                AddComponentToItemCommand.DONE,
-                RemoveComponentFromItemCommand.DONE,
-                MsgAPI.ITEM_SELECTION_CHANGED
-        };
+        return new String[]{MsgAPI.SCENE_LOADED, UIToolBoxMediator.TOOL_SELECTED, MsgAPI.NEW_ITEM_ADDED,
+                CompositeCameraChangeCommand.DONE, AddComponentToItemCommand.DONE, RemoveComponentFromItemCommand
+                .DONE, MsgAPI.ITEM_SELECTION_CHANGED};
     }
 
     @Override
@@ -134,13 +133,13 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             default:
                 break;
         }
-        if(currentSelectedTool != null) {
+        if (currentSelectedTool != null) {
             currentSelectedTool.handleNotification(notification);
         }
     }
 
     private void handleSceneLoaded(Notification notification) {
-		//TODO fix and uncomment
+        //TODO fix and uncomment
         //viewComponent.addListener(stageListener);
 
         initItemListeners();
@@ -158,7 +157,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         NodeComponent nodeComponent = ComponentRetriever.get(rootEntity, NodeComponent.class);
         SnapshotArray<Entity> childrenEntities = nodeComponent.children;
 
-        for (Entity child: childrenEntities) {
+        for (Entity child : childrenEntities) {
             addListenerToItem(child);
         }
     }
@@ -171,7 +170,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
      */
     private void addListenerToItem(Entity entity) {
         InputListenerComponent inputListenerComponent = entity.getComponent(InputListenerComponent.class);
-        if(inputListenerComponent == null){
+        if (inputListenerComponent == null) {
             inputListenerComponent = new InputListenerComponent();
             entity.add(inputListenerComponent);
         }
@@ -195,7 +194,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     public class SandboxItemEventListener extends EntityClickListener {
 
         public SandboxItemEventListener(final Entity entity) {
-        	
+
         }
 
         @Override
@@ -213,7 +212,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             return currentSelectedTool != null && currentSelectedTool.itemMouseDown(entity, coords.x, coords.y);
         }
 
-        
+
         @Override
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
@@ -263,7 +262,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             // TODO: key pressed 0 for unckown, should be removed?
             // TODO: need to make sure OSX Command button works too.
 
-            if(currentSelectedTool != null) {
+            if (currentSelectedTool != null) {
                 currentSelectedTool.keyDown(entity, keycode);
             }
 
@@ -296,7 +295,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 }
                 if (keycode == Input.Keys.NUM_0 || keycode == Input.Keys.NUMPAD_0) {
                     sandbox.setZoomPercent(100);
-                    sandbox.getCamera().position.set(0 ,0, 0);
+                    sandbox.getCamera().position.set(0, 0, 0);
                     facade.sendNotification(MsgAPI.ZOOM_CHANGED);
                 }
                 if (keycode == Input.Keys.X) {
@@ -308,8 +307,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if (keycode == Input.Keys.V) {
                     facade.sendNotification(MsgAPI.ACTION_PASTE);
                 }
-                if(keycode == Input.Keys.Z) {
-                    if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+                if (keycode == Input.Keys.Z) {
+                    if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                         CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
                         commandManager.redoCommand();
                     } else {
@@ -326,7 +325,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             }
 
             // if space is pressed, that means we are going to pan, so set cursor accordingly
-            // TODO: this pan is kinda different from what happens when you press middle button, so things need to merge right
+            // TODO: this pan is kinda different from what happens when you press middle button, so things need to
+            // merge right
             if (keycode == Input.Keys.SPACE) {
                 sandbox.setCursor(Cursor.HAND_CURSOR);
                 toolHotSwap(sandboxTools.get(PanTool.NAME));
@@ -393,7 +393,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public void touchUp(Entity entity, float x, float y, int pointer, int button) {
             super.touchUp(entity, x, y, pointer, button);
 
-            if(currentSelectedTool != null) {
+            if (currentSelectedTool != null) {
                 currentSelectedTool.stageMouseUp(x, y);
             }
 
@@ -438,13 +438,15 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         public boolean scrolled(Entity entity, int amount) {
             Sandbox sandbox = Sandbox.getInstance();
             // well, duh
-            if (amount == 0) return false;
+            if (amount == 0)
+                return false;
 
             // Control pressed as well
             if (isControlPressed()) {
                 float zoomPercent = sandbox.getZoomPercent();
-                zoomPercent-=amount*4f;
-                if(zoomPercent < 5 ) zoomPercent = 5;
+                zoomPercent -= amount * 4f;
+                if (zoomPercent < 5)
+                    zoomPercent = 5;
                 sandbox.setZoomPercent(zoomPercent);
 
                 facade.sendNotification(MsgAPI.ZOOM_CHANGED);
@@ -475,19 +477,16 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         }
 
         private boolean isControlPressed() {
-            return Gdx.input.isKeyPressed(Input.Keys.SYM)
-                    || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
-                    || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+            return Gdx.input.isKeyPressed(Input.Keys.SYM) || Gdx.input.isKeyPressed(
+                    Input.Keys.CONTROL_LEFT) || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
         }
 
         private boolean isShiftKey(int keycode) {
-            return keycode == Input.Keys.SHIFT_LEFT
-                    || keycode == Input.Keys.SHIFT_RIGHT;
+            return keycode == Input.Keys.SHIFT_LEFT || keycode == Input.Keys.SHIFT_RIGHT;
         }
 
         private boolean isShiftPressed() {
-            return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)
-                    || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
+            return Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.SHIFT_RIGHT);
         }
     }
 
