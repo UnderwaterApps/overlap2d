@@ -50,9 +50,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UIShaderProperties.CLOSE_CLICKED
-        };
+        String[] notificationInterests = new String[]{UIShaderProperties.CLOSE_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -63,7 +61,10 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
 
         switch (notification.getName()) {
             case UIPhysicsProperties.CLOSE_CLICKED:
-                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, ShaderComponent.class));
+                Overlap2DFacade.getInstance()
+                               .sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT,
+                                       RemoveComponentFromItemCommand.payload(observableReference,
+                                               ShaderComponent.class));
                 break;
         }
     }
@@ -82,7 +83,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
         ResourceManager resourceManager = Overlap2DFacade.getInstance().retrieveProxy(ResourceManager.NAME);
         ShaderComponent shaderComponent = ComponentRetriever.get(observableReference, ShaderComponent.class);
         String shaderName = viewComponent.getShader();
-        if(shaderName.equals("Default")) {
+        if (shaderName.equals("Default")) {
             shaderComponent.clear();
         } else {
             shaderComponent.setShader(shaderName, resourceManager.getShaderProgram(shaderName));
@@ -93,7 +94,7 @@ public class UIShaderPropertiesMediator extends UIItemPropertiesMediator<Entity,
         for (Map.Entry<String, ShaderProgram> entry : list.entrySet()) {
             String key = entry.getKey();
             Object value = entry.getValue();
-            if(value == object) {
+            if (value == object) {
                 return key;
             }
         }

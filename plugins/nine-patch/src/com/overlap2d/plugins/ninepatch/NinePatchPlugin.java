@@ -57,16 +57,16 @@ public class NinePatchPlugin extends O2DPluginAdapter {
 
     @Override
     public void onDropDownOpen(Set<Entity> selectedEntities, Array<String> actionsSet) {
-        if(selectedEntities.size() == 1) {
+        if (selectedEntities.size() == 1) {
             Entity entity = selectedEntities.stream().findFirst().get();
             MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
 
-            if(mainItemComponent.entityType == EntityFactory.NINE_PATCH) {
+            if (mainItemComponent.entityType == EntityFactory.NINE_PATCH) {
                 // it's our guy
                 currEditingEntity = entity;
                 actionsSet.add(EDIT_NINE_PATCH);
             }
-            if(mainItemComponent.entityType == EntityFactory.IMAGE_TYPE) {
+            if (mainItemComponent.entityType == EntityFactory.IMAGE_TYPE) {
                 // it's our guy
                 currEditingEntity = entity;
                 actionsSet.add(CONVERT_TO_NINE_PATCH);

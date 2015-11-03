@@ -59,7 +59,8 @@ public class UIZoomBox extends UIBaseBox {
         addSeparator(true).padRight(6);
         add("Zoom:").padRight(5);
         //
-        VisImageButton.VisImageButtonStyle zoominButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
+        VisImageButton.VisImageButtonStyle zoominButtonStyle = new VisImageButton.VisImageButtonStyle(
+                skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         zoominButtonStyle.imageUp = skin.getDrawable("icon-zoomin");
         zoominButtonStyle.imageOver = skin.getDrawable("icon-zoomin-over");
         zoominButtonStyle.imageDisabled = skin.getDrawable("icon-zoomin-disabled");
@@ -69,7 +70,8 @@ public class UIZoomBox extends UIBaseBox {
         zoomInBtn.addListener(new UIZoomBoxButtonClickListener(0.5f));
         add(zoomInBtn).padRight(11).height(25);
         //
-        VisImageButton.VisImageButtonStyle zoomoutButtonStyle = new VisImageButton.VisImageButtonStyle(skin.get("dark", VisImageButton.VisImageButtonStyle.class));
+        VisImageButton.VisImageButtonStyle zoomoutButtonStyle = new VisImageButton.VisImageButtonStyle(
+                skin.get("dark", VisImageButton.VisImageButtonStyle.class));
         zoomoutButtonStyle.imageUp = skin.getDrawable("icon-zoomout");
         zoomoutButtonStyle.imageOver = skin.getDrawable("icon-zoomout-over");
         zoomoutButtonStyle.imageDisabled = skin.getDrawable("icon-zoomout-disabled");
@@ -87,11 +89,11 @@ public class UIZoomBox extends UIBaseBox {
 
     public String getCurrentZoom() {
         String percent = percentValueField.getText();
-        if(!percent.substring(percent.length()-1, percent.length()).equals("%")) {
-            percent+="%";
+        if (!percent.substring(percent.length() - 1, percent.length()).equals("%")) {
+            percent += "%";
             percentValueField.setText(percent);
         }
-        return percent.substring(0, percent.length()-1);
+        return percent.substring(0, percent.length() - 1);
     }
 
     public void setCurrentZoom(String currentZoom) {

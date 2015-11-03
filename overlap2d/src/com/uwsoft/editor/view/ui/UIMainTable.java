@@ -51,13 +51,13 @@ public class UIMainTable extends VisTable {
 
     public UIMainTable() {
         facade = Overlap2DFacade.getInstance();
-//        debug();
+        //        debug();
         setFillParent(true);
         top();
         topTable = new VisTable();
-//        topTable.debug();
+        //        topTable.debug();
         middleTable = new VisTable();
-//        middleTable.debug();
+        //        middleTable.debug();
         add(topTable).fillX().expandX();
         row();
         add(middleTable).fillX().padTop(1);

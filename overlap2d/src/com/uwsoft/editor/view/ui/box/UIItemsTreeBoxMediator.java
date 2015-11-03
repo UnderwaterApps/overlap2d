@@ -29,8 +29,6 @@ import com.uwsoft.editor.controller.commands.AddSelectionCommand;
 import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.ReleaseSelectionCommand;
 import com.uwsoft.editor.controller.commands.SetSelectionCommand;
-import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -53,15 +51,12 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     @Override
     public String[] listNotificationInterests() {
         String[] parentNotifications = super.listNotificationInterests();
-        return Stream.of(parentNotifications, new String[]{
-                MsgAPI.SCENE_LOADED,
-                MsgAPI.NEW_ITEM_ADDED,
-                UIItemsTreeBox.ITEMS_SELECTED,
-                SetSelectionCommand.DONE,
-                AddSelectionCommand.DONE,
-                ReleaseSelectionCommand.DONE,
-                DeleteItemsCommand.DONE
-        }).flatMap(Stream::of).toArray(String[]::new);
+        return Stream.of(parentNotifications,
+                new String[]{MsgAPI.SCENE_LOADED, MsgAPI.NEW_ITEM_ADDED, UIItemsTreeBox.ITEMS_SELECTED,
+                        SetSelectionCommand.DONE, AddSelectionCommand.DONE, ReleaseSelectionCommand.DONE,
+                        DeleteItemsCommand.DONE})
+                     .flatMap(Stream::of)
+                     .toArray(String[]::new);
     }
 
     @Override
@@ -70,7 +65,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
         Sandbox sandbox = Sandbox.getInstance();
         switch (notification.getName()) {
             case MsgAPI.SCENE_LOADED:
-            	Entity rootEntity = sandbox.getRootEntity();
+                Entity rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;
             case MsgAPI.NEW_ITEM_ADDED:
@@ -91,7 +86,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                     Entity item = EntityUtils.getByUniqueId(entityId);
                     //layer lock thing
                     LayerItemVO layerItemVO = EntityUtils.getEntityLayer(item);
-                    if(layerItemVO != null && layerItemVO.isLocked) {
+                    if (layerItemVO != null && layerItemVO.isLocked) {
                         continue;
                     }
                     if (item != null) {
@@ -118,7 +113,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
     }
 
     private void sendSelectionNotification(Set<Entity> items) {
-        Set<Entity> ntfItems = (items.isEmpty())? null : items;
+        Set<Entity> ntfItems = (items.isEmpty()) ? null : items;
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_SET_SELECTION, ntfItems);
     }
 }

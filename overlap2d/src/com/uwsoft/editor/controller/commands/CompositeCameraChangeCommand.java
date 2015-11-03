@@ -45,8 +45,10 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         // check if entity is selected
         wasPrevSelected = sandbox.getSelector().isSelected(entity);
 
-        if(enteringInto == null) enteringInto = EntityUtils.getEntityId(entity);
-        if(previousViewEntityId == null) previousViewEntityId = EntityUtils.getEntityId(oldEntity);
+        if (enteringInto == null)
+            enteringInto = EntityUtils.getEntityId(entity);
+        if (previousViewEntityId == null)
+            previousViewEntityId = EntityUtils.getEntityId(oldEntity);
 
         ViewPortComponent viewPortComponent = ComponentRetriever.get(oldEntity, ViewPortComponent.class);
         oldEntity.remove(ViewPortComponent.class);
@@ -80,7 +82,7 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         previousTransformComponent.disableTransform();
         transformComponent.enableTransform();
 
-        if(wasPrevSelected) {
+        if (wasPrevSelected) {
             sandbox.getSelector().setSelection(EntityUtils.getByUniqueId(enteringInto), true);
         }
     }

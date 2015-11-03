@@ -44,12 +44,7 @@ public class PerformancePanelMediator extends SimpleMediator<PerformancePanel> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                SCENE_LOADED,
-                NEW_ITEM_ADDED,
-                ACTION_DELETE,
-                PerformancePlugin.PANEL_OPEN
-        };
+        return new String[]{SCENE_LOADED, NEW_ITEM_ADDED, ACTION_DELETE, PerformancePlugin.PANEL_OPEN};
     }
 
     @Override

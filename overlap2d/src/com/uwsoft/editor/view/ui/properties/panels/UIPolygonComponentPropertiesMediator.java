@@ -35,7 +35,8 @@ import org.apache.commons.lang3.ArrayUtils;
 /**
  * Created by azakhary on 7/2/2015.
  */
-public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediator<Entity, UIPolygonComponentProperties> {
+public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediator<Entity,
+        UIPolygonComponentProperties> {
 
     private static final String TAG = UIPolygonComponentPropertiesMediator.class.getCanonicalName();
     public static final String NAME = TAG;
@@ -49,12 +50,9 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
-                UIPolygonComponentProperties.COPY_BUTTON_CLICKED,
-                UIPolygonComponentProperties.PASTE_BUTTON_CLICKED,
-                UIPolygonComponentProperties.CLOSE_CLICKED
-        };
+        String[] notificationInterests = new String[]{UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
+                UIPolygonComponentProperties.COPY_BUTTON_CLICKED, UIPolygonComponentProperties.PASTE_BUTTON_CLICKED,
+                UIPolygonComponentProperties.CLOSE_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -74,7 +72,10 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 pasteMesh();
                 break;
             case UIPolygonComponentProperties.CLOSE_CLICKED:
-                Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
+                Overlap2DFacade.getInstance()
+                               .sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT,
+                                       RemoveComponentFromItemCommand.payload(observableReference,
+                                               PolygonComponent.class));
                 break;
         }
     }
@@ -82,11 +83,11 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
     @Override
     protected void translateObservableDataToView(Entity item) {
         polygonComponent = item.getComponent(PolygonComponent.class);
-        if(polygonComponent.vertices != null) {
+        if (polygonComponent.vertices != null) {
             viewComponent.initView();
             int verticesCount = 0;
-            for(int i = 0; i < polygonComponent.vertices.length; i++) {
-                for(int j = 0; j < polygonComponent.vertices[i].length; j++) {
+            for (int i = 0; i < polygonComponent.vertices.length; i++) {
+                for (int j = 0; j < polygonComponent.vertices[i].length; j++) {
                     verticesCount++;
                 }
             }
@@ -103,7 +104,8 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
     }
 
     private void addDefaultMesh() {
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference,
+                DimensionsComponent.class);
         polygonComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
 
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, observableReference);
@@ -116,7 +118,8 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
 
     private void pasteMesh() {
         Vector2[][] vertices = (Vector2[][]) Sandbox.getInstance().retrieveFromLocalClipboard("meshData");
-        if(vertices == null) return;
+        if (vertices == null)
+            return;
         Object[] payload = UpdatePolygonComponentCommand.payloadInitialState(observableReference);
         payload = UpdatePolygonComponentCommand.payload(payload, vertices);
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, payload);

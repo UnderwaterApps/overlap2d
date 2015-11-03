@@ -78,9 +78,8 @@ public class JarUtils {
     /**
      * Copies a directory from a jar file to an external directory.
      */
-    public static void copyResourcesToDirectory(JarFile fromJar, String jarDir, String destDir)
-            throws IOException {
-        for (Enumeration<JarEntry> entries = fromJar.entries(); entries.hasMoreElements();) {
+    public static void copyResourcesToDirectory(JarFile fromJar, String jarDir, String destDir) throws IOException {
+        for (Enumeration<JarEntry> entries = fromJar.entries(); entries.hasMoreElements(); ) {
             JarEntry entry = entries.nextElement();
             if (entry.getName().startsWith(jarDir + "/") && !entry.isDirectory()) {
                 File dest = new File(destDir + "/" + entry.getName().substring(jarDir.length() + 1));
@@ -104,15 +103,18 @@ public class JarUtils {
                 } finally {
                     try {
                         in.close();
-                    } catch (IOException ignored) {}
+                    } catch (IOException ignored) {
+                    }
                     try {
                         out.close();
-                    } catch (IOException ignored) {}
+                    } catch (IOException ignored) {
+                    }
                 }
             }
         }
 
     }
 
-    private JarUtils() {} // non-instantiable
+    private JarUtils() {
+    } // non-instantiable
 }

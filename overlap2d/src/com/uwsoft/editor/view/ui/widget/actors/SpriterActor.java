@@ -44,14 +44,14 @@ public class SpriterActor extends Actor {
     private int frameWidth;
 
     private String animationName = "";
-     private String currentAnimationName = "";
+    private String currentAnimationName = "";
 
     private LibGdxDrawer drawer;
     private Player player;
     private Data data;
     private ArrayList<String> animations = new ArrayList<String>();
     private ArrayList<String> entities = new ArrayList<String>();
-    private int currentEntityIndex	=	0;
+    private int currentEntityIndex = 0;
     private int currentAnimationIndex;
 
     private IResourceRetriever irr;
@@ -65,14 +65,14 @@ public class SpriterActor extends Actor {
 
 
     private void initSpriterAnimation() {
-        FileHandle handle 	=	irr.getSCMLFile(animationName);
-        data 			= 	new SCMLReader(handle.read()).getData();
-        LibGdxLoader loader = 	new LibGdxLoader(data);
+        FileHandle handle = irr.getSCMLFile(animationName);
+        data = new SCMLReader(handle.read()).getData();
+        LibGdxLoader loader = new LibGdxLoader(data);
         loader.load(handle.file());
-        ShapeRenderer renderer	=	new ShapeRenderer();
+        ShapeRenderer renderer = new ShapeRenderer();
         drawer = new LibGdxDrawer(loader, renderer);
-        currentAnimationIndex	=	0;
-        currentEntityIndex		=	0;
+        currentAnimationIndex = 0;
+        currentEntityIndex = 0;
         initPlayer();
     }
 
@@ -110,14 +110,14 @@ public class SpriterActor extends Actor {
         super.draw(batch, parentAlpha);
 
         player.setPosition(getX(), getY());
-        player.setPivot(getWidth()/2, getHeight()/2);
-        player.rotate(getRotation()-player.getAngle());
-        drawer.beforeDraw(player,batch);
+        player.setPivot(getWidth() / 2, getHeight() / 2);
+        player.rotate(getRotation() - player.getAngle());
+        drawer.beforeDraw(player, batch);
     }
 
 
     public ArrayList<String> getAnimations() {
-        animations	=	new ArrayList<String>();
+        animations = new ArrayList<String>();
 
         for (int i = 0; i < data.getEntity(currentEntityIndex).animations(); i++) {
             animations.add(data.getEntity(currentEntityIndex).getAnimation(i).name);

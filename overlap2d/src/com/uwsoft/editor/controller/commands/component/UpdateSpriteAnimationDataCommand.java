@@ -28,8 +28,10 @@ public class UpdateSpriteAnimationDataCommand extends EntityModifyRevertableComm
         String animName = (String) payload[2];
         Animation.PlayMode playMode = (Animation.PlayMode) payload[3];
 
-        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
-        SpriteAnimationStateComponent spriteAnimationStateComponent = ComponentRetriever.get(entity, SpriteAnimationStateComponent.class);
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(entity,
+                SpriteAnimationComponent.class);
+        SpriteAnimationStateComponent spriteAnimationStateComponent = ComponentRetriever.get(entity,
+                SpriteAnimationStateComponent.class);
         previousFps = spriteAnimationComponent.fps;
         previousAnimationName = spriteAnimationComponent.currentAnimation;
         spriteAnimationComponent.fps = fps;
@@ -42,8 +44,10 @@ public class UpdateSpriteAnimationDataCommand extends EntityModifyRevertableComm
     public void undoAction() {
         Entity entity = EntityUtils.getByUniqueId(entityId);
 
-        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(entity, SpriteAnimationComponent.class);
-        SpriteAnimationStateComponent spriteAnimationStateComponent = ComponentRetriever.get(entity, SpriteAnimationStateComponent.class);
+        SpriteAnimationComponent spriteAnimationComponent = ComponentRetriever.get(entity,
+                SpriteAnimationComponent.class);
+        SpriteAnimationStateComponent spriteAnimationStateComponent = ComponentRetriever.get(entity,
+                SpriteAnimationStateComponent.class);
         spriteAnimationComponent.fps = previousFps;
         spriteAnimationComponent.currentAnimation = previousAnimationName;
         spriteAnimationStateComponent.set(spriteAnimationComponent);

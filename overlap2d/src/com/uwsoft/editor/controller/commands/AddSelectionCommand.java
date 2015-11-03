@@ -18,12 +18,11 @@
 
 package com.uwsoft.editor.controller.commands;
 
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/14/2015.
@@ -37,20 +36,20 @@ public class AddSelectionCommand extends RevertableCommand {
 
     @Override
     public void doAction() {
-        if(entityIds == null) {
+        if (entityIds == null) {
             Set<Entity> items = getNotification().getBody();
             entityIds = EntityUtils.getEntityId(items);
         }
 
         Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
-        Sandbox.getInstance().getSelector().addSelections(items);
+        sandbox.getSelector().addSelections(items);
         facade.sendNotification(DONE);
     }
 
     @Override
     public void undoAction() {
         Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
-        Sandbox.getInstance().getSelector().releaseSelections(items);
+        sandbox.getSelector().releaseSelections(items);
         facade.sendNotification(DONE);
     }
 

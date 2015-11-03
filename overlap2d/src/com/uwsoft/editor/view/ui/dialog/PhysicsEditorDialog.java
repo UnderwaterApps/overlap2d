@@ -18,13 +18,11 @@
 
 package com.uwsoft.editor.view.ui.dialog;
 
-import com.commons.O2DDialog;
-import org.apache.commons.lang3.math.NumberUtils;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
+import com.commons.O2DDialog;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
@@ -33,6 +31,7 @@ import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.event.ClickNotifier;
+import org.apache.commons.lang3.math.NumberUtils;
 
 
 /**
@@ -282,7 +281,8 @@ public class PhysicsEditorDialog extends O2DDialog {
     }
 
     public Vector2 getCenterOfMass() {
-        Vector2 centerOfMass = new Vector2(NumberUtils.toFloat(centerOfMassXField.getText()), NumberUtils.toFloat(centerOfMassYField.getText()));
+        Vector2 centerOfMass = new Vector2(NumberUtils.toFloat(centerOfMassXField.getText()),
+                NumberUtils.toFloat(centerOfMassYField.getText()));
         return centerOfMass;
     }
 
@@ -397,10 +397,10 @@ public class PhysicsEditorDialog extends O2DDialog {
 
     //public ItemPhysicsEditor getItemPhysicsEditor() {
     //    return itemPhysicsEditor;
-   // }
+    // }
 
     public boolean isAllowSleep() {
-        return  allowSleepBox.isChecked();
+        return allowSleepBox.isChecked();
     }
 
     public void setAllowSleep(boolean isAllowSleep) {
@@ -408,7 +408,7 @@ public class PhysicsEditorDialog extends O2DDialog {
     }
 
     public boolean isAwake() {
-        return  awakeBox.isChecked();
+        return awakeBox.isChecked();
     }
 
     public void setAwake(boolean isAwake) {
@@ -416,7 +416,7 @@ public class PhysicsEditorDialog extends O2DDialog {
     }
 
     public boolean isBullet() {
-        return  bulletBox.isChecked();
+        return bulletBox.isChecked();
     }
 
     public void setBullet(boolean isBullet) {

@@ -25,11 +25,11 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.commons.IItemCommand;
 import com.commons.MsgAPI;
+import com.commons.plugins.O2DPlugin;
+import com.commons.plugins.PluginAPI;
 import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.commons.plugins.O2DPlugin;
-import com.commons.plugins.PluginAPI;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -63,7 +63,8 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     }
 
     public void initPlugin(O2DPlugin plugin) {
-        if(plugins.contains(plugin)) return;
+        if (plugins.contains(plugin))
+            return;
 
         registerPlugin(plugin);
         plugin.setAPI(this);
@@ -71,7 +72,7 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     }
 
     public void dropDownActionSets(Set<Entity> selectedEntities, Array<String> actionsSet) {
-        for(O2DPlugin plugin: plugins) {
+        for (O2DPlugin plugin : plugins) {
             plugin.onDropDownOpen(selectedEntities, actionsSet);
         }
     }
@@ -118,7 +119,8 @@ public class PluginManager extends BaseProxy implements PluginAPI {
 
     @Override
     public void removeFollower(Entity entity) {
-        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance().retrieveMediator(FollowersUIMediator.NAME);
+        FollowersUIMediator followersUIMediator = Overlap2DFacade.getInstance()
+                                                                 .retrieveMediator(FollowersUIMediator.NAME);
         followersUIMediator.removeFollower(entity);
     }
 

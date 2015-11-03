@@ -19,11 +19,11 @@ public abstract class TransactiveCommand extends RevertableCommand {
 
     @Override
     public void doAction() {
-        for(int i = 0; i < commands.size; i++) {
+        for (int i = 0; i < commands.size; i++) {
             commands.get(i).callDoAction();
-            if(commands.get(i).isCancelled) {
+            if (commands.get(i).isCancelled) {
                 // reverting
-                for(int j = i-1; j >= 0; j--) {
+                for (int j = i - 1; j >= 0; j--) {
                     commands.get(j).callUndoAction();
                 }
                 cancel();
@@ -36,7 +36,7 @@ public abstract class TransactiveCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-        for(int i = commands.size-1; i >= 0; i--) {
+        for (int i = commands.size - 1; i >= 0; i--) {
             commands.get(i).callUndoAction();
         }
 
@@ -44,7 +44,9 @@ public abstract class TransactiveCommand extends RevertableCommand {
     }
 
     public abstract void transaction();
+
     public abstract void onFinish();
+
     public abstract void onFinishUndo();
 
     protected void addInnerCommand(RevertableCommand command) {

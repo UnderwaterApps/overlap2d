@@ -20,7 +20,6 @@ package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.gdx.math.Vector2;
 import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.renderer.data.ColorPrimitiveVO;
 import com.uwsoft.editor.renderer.data.ShapeVO;
 
 /**

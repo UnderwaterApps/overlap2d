@@ -48,7 +48,7 @@ public class LightFollower extends BasicFollower {
 
     @Override
     public void act(float delta) {
-        if(Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)) {
             setVisible(false);
         } else {
             setVisible(true);

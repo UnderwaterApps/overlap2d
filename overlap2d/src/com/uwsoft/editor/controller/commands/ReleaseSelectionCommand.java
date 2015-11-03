@@ -18,14 +18,13 @@
 
 package com.uwsoft.editor.controller.commands;
 
+import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.utils.Array;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
+
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;
-
-import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.utils.runtime.EntityUtils;
 
 /**
  * Created by azakhary on 5/14/2015.
@@ -40,7 +39,7 @@ public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void doAction() {
         Set<Entity> items = new HashSet<>(getNotification().<Collection<Entity>>getBody());
-        Sandbox.getInstance().getSelector().releaseSelections(items);
+        sandbox.getSelector().releaseSelections(items);
 
         entityIds = EntityUtils.getEntityId(items);
 
@@ -50,7 +49,7 @@ public class ReleaseSelectionCommand extends RevertableCommand {
     @Override
     public void undoAction() {
         Set<Entity> items = EntityUtils.getByUniqueId(entityIds);
-        Sandbox.getInstance().getSelector().addSelections(items);
+        sandbox.getSelector().addSelections(items);
 
         facade.sendNotification(DONE);
     }

@@ -31,7 +31,7 @@ import java.util.Arrays;
 /**
  * Created by azakhary on 7/22/2015.
  */
-public class ImportUtils  {
+public class ImportUtils {
 
     private static ImportUtils instance;
 
@@ -66,7 +66,7 @@ public class ImportUtils  {
     }
 
     public static ImportUtils getInstance() {
-        if(instance == null) {
+        if (instance == null) {
             instance = new ImportUtils();
         }
 
@@ -76,25 +76,26 @@ public class ImportUtils  {
     public static int getImportType(String[] paths) {
         int mainType = TYPE_MIXED;
         String[] names = new String[paths.length];
-        for(int i = 0; i < paths.length; i++) {
+        for (int i = 0; i < paths.length; i++) {
             String path = paths[i];
             int type = getFileType(path);
-            if(i == 0) mainType = type;
-            if(mainType != type) {
+            if (i == 0)
+                mainType = type;
+            if (mainType != type) {
                 return TYPE_MIXED;
             }
             names[i] = FilenameUtils.getBaseName(path);
         }
 
-        if(mainType == TYPE_IMAGE) {
+        if (mainType == TYPE_IMAGE) {
             // check they are a PNG sequence;
             boolean isSequence = isAnimationSequence(names);
-            if(isSequence) {
+            if (isSequence) {
                 mainType = TYPE_ANIMATION_PNG_SEQUENCE;
             }
         }
 
-        if(mainType > 0 && !ImportUtils.getInstance().supportedTypes.contains(mainType)) {
+        if (mainType > 0 && !ImportUtils.getInstance().supportedTypes.contains(mainType)) {
             mainType = TYPE_UNSUPPORTED;
         }
 
@@ -103,7 +104,7 @@ public class ImportUtils  {
 
     public static int getFileType(String path) {
         int type = checkFileTypeByExtension(path);
-        if(type == TYPE_UNCKNOWN) {
+        if (type == TYPE_UNCKNOWN) {
             // we have to check by getting into the file
             type = checkFileTypeByContent(path);
         }
@@ -113,16 +114,16 @@ public class ImportUtils  {
 
     public static int checkFileTypeByExtension(String path) {
         String ext = FilenameUtils.getExtension(path).toLowerCase();
-        if(ext.equals("png")) {
+        if (ext.equals("png")) {
             return TYPE_IMAGE;
         }
-        if(ext.equals("ttf")) {
+        if (ext.equals("ttf")) {
             return TYPE_TTF_FONT;
         }
-        if(ext.equals("scml")) {
+        if (ext.equals("scml")) {
             return TYPE_SPRITER_ANIMATION;
         }
-        if(ext.equals("vert") || ext.equals("frag")) {
+        if (ext.equals("vert") || ext.equals("frag")) {
             return TYPE_SHADER;
         }
 
@@ -135,7 +136,7 @@ public class ImportUtils  {
         // Convert the bytes to Kilobytes (1 KB = 1024 Bytes)
         long fileSizeInKB = fileSizeInBytes / 1024;
 
-        if(fileSizeInKB > 1000) {
+        if (fileSizeInKB > 1000) {
             return TYPE_UNCKNOWN;
         }
 
@@ -145,31 +146,32 @@ public class ImportUtils  {
             String contents = FileUtils.readFileToString(file);
 
             // checking for atlas file
-            if(contents.contains("format: ") && contents.contains("filter: ") && contents.contains("xy: ")) {
+            if (contents.contains("format: ") && contents.contains("filter: ") && contents.contains("xy: ")) {
                 type = TYPE_TEXTURE_ATLAS;
                 // need to figure out if atlas is animation or just files.
                 TextureAtlas atlas = new TextureAtlas(new FileHandle(file));
                 String[] regionNames = new String[atlas.getRegions().size];
-                for(int i = 0; i < atlas.getRegions().size; i++) {
+                for (int i = 0; i < atlas.getRegions().size; i++) {
                     regionNames[i] = atlas.getRegions().get(i).name;
                 }
                 boolean isSequence = isAnimationSequence(regionNames);
 
-                if(isSequence) {
-                    type =TYPE_SPRITE_ANIMATION_ATLAS;
+                if (isSequence) {
+                    type = TYPE_SPRITE_ANIMATION_ATLAS;
                 }
 
                 return type;
             }
 
             // checking for spine animation
-            if(contents.contains("\"skeleton\":{\"") || contents.contains("\"skeleton\": { \"")) {
+            if (contents.contains("\"skeleton\":{\"") || contents.contains("\"skeleton\": { \"")) {
                 type = TYPE_SPINE_ANIMATION;
                 return type;
             }
 
             // checking for particle effect
-            if(contents.contains("- Options - ") && contents.contains("- Image Path -") && contents.contains("- Duration -")) {
+            if (contents.contains("- Options - ") && contents.contains("- Image Path -") && contents.contains(
+                    "- Duration -")) {
                 type = TYPE_PARTICLE_EFFECT;
                 return type;
             }
@@ -181,12 +183,14 @@ public class ImportUtils  {
     }
 
     public static boolean isAnimationSequence(String[] names) {
-        if(names.length < 2) return false;
+        if (names.length < 2)
+            return false;
         int[] sequenceArray = new int[names.length];
-        for(int i  = 0; i < names.length; i++) {
+        for (int i = 0; i < names.length; i++) {
             String name = names[i];
             // try to remove extension if any
-            if(name.indexOf(".") > 0) name = name.substring(0, name.indexOf("."));
+            if (name.indexOf(".") > 0)
+                name = name.substring(0, name.indexOf("."));
             try {
                 int intValue = Integer.parseInt(name.replaceAll("[^0-9]", ""));
                 sequenceArray[i] = intValue;
@@ -195,10 +199,10 @@ public class ImportUtils  {
             }
         }
         Arrays.sort(sequenceArray);
-        if(sequenceArray[0] == 0 && sequenceArray[sequenceArray.length-1] == sequenceArray.length-1) {
+        if (sequenceArray[0] == 0 && sequenceArray[sequenceArray.length - 1] == sequenceArray.length - 1) {
             return true;
         }
-        if(sequenceArray[0] == 1 && sequenceArray[sequenceArray.length-1] == sequenceArray.length) {
+        if (sequenceArray[0] == 1 && sequenceArray[sequenceArray.length - 1] == sequenceArray.length) {
             return true;
         }
 

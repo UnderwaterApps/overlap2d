@@ -51,8 +51,8 @@ public class SpriterResource extends BoxItemResource {
             }
             animThumb.setScale(scaleFactor);
 
-            animThumb.setX((getWidth()-animThumb.getWidth())/2);
-            animThumb.setY((getHeight()-animThumb.getHeight())/2);
+            animThumb.setX((getWidth() - animThumb.getWidth()) / 2);
+            animThumb.setY((getHeight() - animThumb.getHeight()) / 2);
 
         } else {
             // put it in middle
@@ -76,7 +76,7 @@ public class SpriterResource extends BoxItemResource {
     @Override
     public void act(float delta) {
         //if (isMouseInside) {
-            super.act(delta);
+        super.act(delta);
         //}
     }
 

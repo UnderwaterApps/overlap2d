@@ -37,11 +37,8 @@ public class UIGridBoxMediator extends SimpleMediator<UIGridBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                MsgAPI.GRID_SIZE_CHANGED,
-                UIGridBox.GRID_SIZE_TEXT_FIELD_UPDATED
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED, MsgAPI.GRID_SIZE_CHANGED, UIGridBox
+                .GRID_SIZE_TEXT_FIELD_UPDATED};
     }
 
     @Override

@@ -53,7 +53,7 @@ public class BootstrapPlugins extends SimpleCommand {
 
         pluginManager.setPluginDir(pluginDir.getAbsolutePath());
 
-        for(Module module: loadedPlugins) {
+        for (Module module : loadedPlugins) {
             try {
                 pluginManager.initPlugin((O2DPlugin) module.getClass().newInstance());
             } catch (InstantiationException e) {

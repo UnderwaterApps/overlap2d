@@ -72,7 +72,7 @@ public class CursorManager extends BaseProxy {
 
     private void setCursorPixmap() {
         CursorData currentCursor = overrideCursor;
-        if(currentCursor == null) {
+        if (currentCursor == null) {
             currentCursor = cursor;
         }
 

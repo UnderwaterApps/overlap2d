@@ -3,7 +3,11 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisCheckBox;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
@@ -132,8 +136,8 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     }
 
     public int getBodyType() {
-        for(Integer key: bodyTypes.keySet()) {
-            if(bodyTypes.get(key).equals(bodyTypeBox.getSelected())) {
+        for (Integer key : bodyTypes.keySet()) {
+            if (bodyTypes.get(key).equals(bodyTypeBox.getSelected())) {
                 return key;
             }
         }

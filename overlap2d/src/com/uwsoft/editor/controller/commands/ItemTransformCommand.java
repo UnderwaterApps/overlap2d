@@ -4,7 +4,6 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
-import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -35,15 +34,22 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
-        if(newPos != null) transformComponent.x = newPos.x;
-        if(newPos != null) transformComponent.y = newPos.y;
-        if(newSize != null) dimensionsComponent.width = newSize.x;
-        if(newSize != null) dimensionsComponent.height = newSize.y;
-        if(newScale != null) transformComponent.scaleX = newScale.x;
-        if(newScale != null) transformComponent.scaleY = newScale.y;
-        if(newRotation != null) transformComponent.rotation = newRotation;
+        if (newPos != null)
+            transformComponent.x = newPos.x;
+        if (newPos != null)
+            transformComponent.y = newPos.y;
+        if (newSize != null)
+            dimensionsComponent.width = newSize.x;
+        if (newSize != null)
+            dimensionsComponent.height = newSize.y;
+        if (newScale != null)
+            transformComponent.scaleX = newScale.x;
+        if (newScale != null)
+            transformComponent.scaleY = newScale.y;
+        if (newRotation != null)
+            transformComponent.rotation = newRotation;
 
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 
     @Override
@@ -68,6 +74,6 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
         transformComponent.scaleY = prevScale.y;
         transformComponent.rotation = prevRotation;
 
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+        facade.sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
     }
 }

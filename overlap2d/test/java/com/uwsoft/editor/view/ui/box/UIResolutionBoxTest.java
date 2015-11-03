@@ -15,7 +15,6 @@ import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.assertThat;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.spy;
 
 @RunWith(LibgdxRunner.class)
 public class UIResolutionBoxTest {
@@ -35,8 +34,8 @@ public class UIResolutionBoxTest {
         uiResolutionBox = new UIResolutionBox();
         uiResolutionBox.update();
 
-        VisSelectBox<ResolutionEntryVO> visSelectBox = (VisSelectBox<ResolutionEntryVO>)
-                Whitebox.getInternalState(uiResolutionBox, "visSelectBox");
+        VisSelectBox<ResolutionEntryVO> visSelectBox = (VisSelectBox<ResolutionEntryVO>) Whitebox.getInternalState(
+                uiResolutionBox, "visSelectBox");
 
         assertThat(visSelectBox.getSelected(), not(nullValue()));
         assertThat(visSelectBox.getSelected().name, is("origin"));

@@ -31,7 +31,12 @@ import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.AddToLibraryCommand;
-import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.PolygonComponent;
+import com.uwsoft.editor.renderer.components.ShaderComponent;
+import com.uwsoft.editor.renderer.components.TintComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -68,16 +73,16 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     @Override
     public void onRegister() {
-        itemTypeMap.put("ENTITY_"+EntityFactory.COMPOSITE_TYPE, UIBasicItemProperties.ItemType.composite);
-        itemTypeMap.put("ENTITY_"+EntityFactory.IMAGE_TYPE, UIBasicItemProperties.ItemType.texture);
-        itemTypeMap.put("ENTITY_"+EntityFactory.PARTICLE_TYPE, UIBasicItemProperties.ItemType.particle);
-        itemTypeMap.put("ENTITY_"+EntityFactory.LABEL_TYPE, UIBasicItemProperties.ItemType.text);
-        itemTypeMap.put("ENTITY_"+EntityFactory.SPRITE_TYPE, UIBasicItemProperties.ItemType.spriteAnimation);
-        itemTypeMap.put("ENTITY_"+EntityFactory.SPRITER_TYPE, UIBasicItemProperties.ItemType.spriterAnimation);
-        itemTypeMap.put("ENTITY_"+EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
-        itemTypeMap.put("ENTITY_"+EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
-        itemTypeMap.put("ENTITY_"+EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
-        itemTypeMap.put("ENTITY_"+EntityFactory.COLOR_PRIMITIVE, UIBasicItemProperties.ItemType.primitive);
+        itemTypeMap.put("ENTITY_" + EntityFactory.COMPOSITE_TYPE, UIBasicItemProperties.ItemType.composite);
+        itemTypeMap.put("ENTITY_" + EntityFactory.IMAGE_TYPE, UIBasicItemProperties.ItemType.texture);
+        itemTypeMap.put("ENTITY_" + EntityFactory.PARTICLE_TYPE, UIBasicItemProperties.ItemType.particle);
+        itemTypeMap.put("ENTITY_" + EntityFactory.LABEL_TYPE, UIBasicItemProperties.ItemType.text);
+        itemTypeMap.put("ENTITY_" + EntityFactory.SPRITE_TYPE, UIBasicItemProperties.ItemType.spriteAnimation);
+        itemTypeMap.put("ENTITY_" + EntityFactory.SPRITER_TYPE, UIBasicItemProperties.ItemType.spriterAnimation);
+        itemTypeMap.put("ENTITY_" + EntityFactory.SPINE_TYPE, UIBasicItemProperties.ItemType.spineAnimation);
+        itemTypeMap.put("ENTITY_" + EntityFactory.LIGHT_TYPE, UIBasicItemProperties.ItemType.light);
+        itemTypeMap.put("ENTITY_" + EntityFactory.NINE_PATCH, UIBasicItemProperties.ItemType.patchImage);
+        itemTypeMap.put("ENTITY_" + EntityFactory.COLOR_PRIMITIVE, UIBasicItemProperties.ItemType.primitive);
 
         componentClassMap.put("Polygon Component", PolygonComponent.class);
         componentClassMap.put("Physics Component", PhysicsBodyComponent.class);
@@ -87,11 +92,8 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     @Override
     public String[] listNotificationInterests() {
         String[] defaultNotifications = super.listNotificationInterests();
-        String[] notificationInterests = new String[]{
-                UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
-                UIBasicItemProperties.LINKING_CHANGED,
-                UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED
-        };
+        String[] notificationInterests = new String[]{UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED,
+                UIBasicItemProperties.LINKING_CHANGED, UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED};
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
     }
@@ -122,8 +124,9 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
                 break;
             case UIBasicItemProperties.LINKING_CHANGED:
                 boolean isLinked = notification.getBody();
-                if(!isLinked) {
-                    facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY, AddToLibraryCommand.payloadUnLink(observableReference));
+                if (!isLinked) {
+                    facade.sendNotification(MsgAPI.ACTION_ADD_TO_LIBRARY,
+                            AddToLibraryCommand.payloadUnLink(observableReference));
                 } else {
                     facade.sendNotification(MsgAPI.SHOW_ADD_LIBRARY_DIALOG, observableReference);
                 }
@@ -131,10 +134,13 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             case UIBasicItemProperties.ADD_COMPONENT_BUTTON_CLICKED:
                 try {
                     Class componentClass = componentClassMap.get(viewComponent.getSelectedComponent());
-                    if(componentClass == null) break;
+                    if (componentClass == null)
+                        break;
                     Component component = (Component) ClassReflection.newInstance(componentClass);
-                    facade.sendNotification(MsgAPI.ACTION_ADD_COMPONENT, AddComponentToItemCommand.payload(observableReference, component));
-                } catch (ReflectionException ignored) {}
+                    facade.sendNotification(MsgAPI.ACTION_ADD_COMPONENT,
+                            AddComponentToItemCommand.payload(observableReference, component));
+                } catch (ReflectionException ignored) {
+                }
                 break;
             default:
                 break;
@@ -142,13 +148,13 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     }
 
     protected void translateObservableDataToView(Entity entity) {
-    	transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-    	mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-    	dimensionComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-    	tintComponent = ComponentRetriever.get(entity, TintComponent.class);
+        transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+        dimensionComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        tintComponent = ComponentRetriever.get(entity, TintComponent.class);
 
-        if(EntityUtils.getType(observableReference) == EntityFactory.COMPOSITE_TYPE) {
-            if(mainItemComponent.libraryLink!= null && mainItemComponent.libraryLink.length() > 0) {
+        if (EntityUtils.getType(observableReference) == EntityFactory.COMPOSITE_TYPE) {
+            if (mainItemComponent.libraryLink != null && mainItemComponent.libraryLink.length() > 0) {
                 viewComponent.setLinkage(true, mainItemComponent.libraryLink);
             } else {
                 viewComponent.setLinkage(false, "not in library");
@@ -173,7 +179,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             String componentName = entry.getKey();
             Class componentClass = entry.getValue();
             Component component = entity.getComponent(componentClass);
-            if(component == null) {
+            if (component == null) {
                 componentsToAddList.add(componentName);
             }
         }
@@ -183,24 +189,27 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
     @Override
     protected void translateViewToItemData() {
-    	Entity entity  = observableReference;
+        Entity entity = observableReference;
 
         transformComponent = ComponentCloner.get(ComponentRetriever.get(entity, TransformComponent.class));
         mainItemComponent = ComponentCloner.get(ComponentRetriever.get(entity, MainItemComponent.class));
         dimensionComponent = ComponentCloner.get(ComponentRetriever.get(entity, DimensionsComponent.class));
         tintComponent = ComponentCloner.get(ComponentRetriever.get(entity, TintComponent.class));
 
-    	mainItemComponent.itemIdentifier = viewComponent.getIdBoxValue();
-    	transformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), transformComponent.x);
-    	transformComponent.y = NumberUtils.toFloat(viewComponent.getYValue(), transformComponent.y);
+        mainItemComponent.itemIdentifier = viewComponent.getIdBoxValue();
+        transformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), transformComponent.x);
+        transformComponent.y = NumberUtils.toFloat(viewComponent.getYValue(), transformComponent.y);
 
         dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
         dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
 
         // TODO: manage width and height
-        transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
-    	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
-    	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
+        transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(),
+                transformComponent.rotation);
+        transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(
+                viewComponent.getScaleXValue(), transformComponent.scaleX);
+        transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(
+                viewComponent.getScaleYValue(), transformComponent.scaleY);
         Color color = viewComponent.getTintColor();
         tintComponent.color.set(color);
 

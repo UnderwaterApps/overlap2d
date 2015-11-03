@@ -29,6 +29,7 @@ import java.util.Set;
 public interface O2DPlugin {
 
     String getName();
+
     void initPlugin();
 
     public void setAPI(PluginAPI pluginAPI);

@@ -53,8 +53,10 @@ public class SceneDataManager extends BaseProxy {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         try {
             String projPath = projectManager.getCurrentProjectPath();
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
-            FileUtils.writeStringToFile(new File(projPath + "/scenes/" + vo.sceneName + ".dt"), vo.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(projPath + "/project.dt"),
+                    projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(projPath + "/scenes/" + vo.sceneName + ".dt"),
+                    vo.constructJsonString(), "utf-8");
             projectManager.currentProjectInfoVO.scenes.add(vo);
         } catch (IOException e) {
             e.printStackTrace();
@@ -82,7 +84,8 @@ public class SceneDataManager extends BaseProxy {
     public void saveScene(SceneVO vo) {
         ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
         try {
-            FileUtils.writeStringToFile(new File(projectManager.getCurrentProjectPath() + "/scenes/" + vo.sceneName + ".dt"),
+            FileUtils.writeStringToFile(
+                    new File(projectManager.getCurrentProjectPath() + "/scenes/" + vo.sceneName + ".dt"),
                     vo.constructJsonString(), "utf-8");
         } catch (IOException e) {
             e.printStackTrace();
@@ -114,7 +117,8 @@ public class SceneDataManager extends BaseProxy {
         projectManager.currentProjectInfoVO.scenes = scenes;
         String projPath = projectManager.getCurrentProjectPath();
         try {
-            FileUtils.writeStringToFile(new File(projPath + "/project.dt"), projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
+            FileUtils.writeStringToFile(new File(projPath + "/project.dt"),
+                    projectManager.currentProjectInfoVO.constructJsonString(), "utf-8");
             FileUtils.forceDelete(new File(projPath + "/scenes/" + sceneName + ".dt"));
         } catch (IOException e) {
             e.printStackTrace();
@@ -133,7 +137,8 @@ public class SceneDataManager extends BaseProxy {
         }
         //copy project dt
         try {
-            FileUtils.copyFile(new File(projectManager.getCurrentProjectPath() + "/project.dt"), new File(targetPath + "/project.dt"));
+            FileUtils.copyFile(new File(projectManager.getCurrentProjectPath() + "/project.dt"),
+                    new File(targetPath + "/project.dt"));
         } catch (IOException e) {
             e.printStackTrace();
         }

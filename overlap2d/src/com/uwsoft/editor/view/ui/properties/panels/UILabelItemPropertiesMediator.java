@@ -35,7 +35,7 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     @Override
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
-        if(notification.getName().equals(UILabelItemProperties.LABEL_TEXT_CHAR_TYPED)) {
+        if (notification.getName().equals(UILabelItemProperties.LABEL_TEXT_CHAR_TYPED)) {
             onTextChange();
         }
     }
@@ -63,7 +63,8 @@ public class UILabelItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setAlignValue(labelComponent.labelAlign);
         viewComponent.setText(labelComponent.text.toString());
 
-        if(prevText == null) this.prevText = viewComponent.getText();
+        if (prevText == null)
+            this.prevText = viewComponent.getText();
     }
 
     @Override

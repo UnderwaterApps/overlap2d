@@ -22,11 +22,11 @@ import com.badlogic.gdx.math.Vector3;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResolutionManager;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.view.stage.Sandbox;
 
 /**
  * Created by sargis on 4/8/15.
@@ -49,13 +49,9 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                ProjectManager.PROJECT_OPENED,
-                UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED,
-                UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED,
-                UIResolutionBox.REPACK_BTN_CLICKED,
-                ResolutionManager.RESOLUTION_LIST_CHANGED
-        };
+        return new String[]{ProjectManager.PROJECT_OPENED, UIResolutionBox.CHANGE_RESOLUTION_BTN_CLICKED,
+                UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED, UIResolutionBox.REPACK_BTN_CLICKED, ResolutionManager
+                .RESOLUTION_LIST_CHANGED};
     }
 
     @Override
@@ -75,18 +71,17 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
                 float zoom = sandbox.getZoomPercent();
                 Vector3 cameraPos = new Vector3(sandbox.getCamera().position);
                 String name = sandbox.sceneControl.getCurrentSceneVO().sceneName;
-                projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectPath(), resolutionEntryVO.name);
+                projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectPath(),
+                        resolutionEntryVO.name);
                 sandbox.loadCurrentProject(name);
                 sandbox.setZoomPercent(zoom);
                 sandbox.getCamera().position.set(cameraPos);
                 break;
             case UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED:
                 resolutionEntryVO = notification.getBody();
-                DialogUtils.showConfirmDialog(sandbox.getUIStage(),
-                        "Delete Resolution",
+                DialogUtils.showConfirmDialog(sandbox.getUIStage(), "Delete Resolution",
                         "Are you sure you want to delete resolution: " + resolutionEntryVO.name + "?",
-                        new String[]{"Delete", "Cancel"}, new Integer[]{0, 1},
-                        result -> {
+                        new String[]{"Delete", "Cancel"}, new Integer[]{0, 1}, result -> {
                             if (result == 0) {
                                 ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
                                 resolutionManager.deleteResolution(resolutionEntryVO);

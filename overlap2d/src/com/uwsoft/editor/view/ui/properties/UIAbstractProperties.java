@@ -37,6 +37,6 @@ public abstract class UIAbstractProperties extends VisTable {
     }
 
     public String getUpdateEventName() {
-        return getPrefix()+"." + "PROPERTIES_UPDATED";
+        return getPrefix() + "." + "PROPERTIES_UPDATED";
     }
 }

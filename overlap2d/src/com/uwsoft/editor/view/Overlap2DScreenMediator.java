@@ -40,15 +40,8 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                MsgAPI.CREATE,
-                MsgAPI.PAUSE,
-                MsgAPI.RESUME,
-                MsgAPI.RENDER,
-                MsgAPI.RESIZE,
-                MsgAPI.DISPOSE,
-                MsgAPI.SCENE_LOADED
-        };
+        return new String[]{MsgAPI.CREATE, MsgAPI.PAUSE, MsgAPI.RESUME, MsgAPI.RENDER, MsgAPI.RESIZE, MsgAPI.DISPOSE,
+                MsgAPI.SCENE_LOADED};
     }
 
     @Override
@@ -56,14 +49,14 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
         super.handleNotification(notification);
         switch (notification.getName()) {
             case MsgAPI.CREATE:
-            	setViewComponent(new Overlap2DScreen());
-            	//TODO this must be changed to Command 
-            	facade = Overlap2DFacade.getInstance();
-            	SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+                setViewComponent(new Overlap2DScreen());
+                //TODO this must be changed to Command
+                facade = Overlap2DFacade.getInstance();
+                SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
 
                 Engine engine = sandboxMediator.getViewComponent().getEngine();
 
-            	getViewComponent().setEngine(engine);
+                getViewComponent().setEngine(engine);
                 viewComponent.show();
                 break;
             case MsgAPI.SCENE_LOADED:

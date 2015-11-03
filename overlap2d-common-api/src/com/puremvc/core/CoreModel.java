@@ -18,10 +18,10 @@
 package com.puremvc.core;
 
 
+import com.puremvc.patterns.proxy.Proxy;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.puremvc.patterns.proxy.Proxy;
 
 /**
  * A Singleton <code>IModel</code> implementation.
@@ -137,7 +137,7 @@ public class CoreModel implements Model {
      * @return the <code>Proxy</code> instance previously registered with the
      * given <code>proxyName</code>.
      */
-    public <T extends Proxy>  T retrieveProxy(String proxy) {
+    public <T extends Proxy> T retrieveProxy(String proxy) {
         return (T) proxyMap.get(proxy);
     }
 

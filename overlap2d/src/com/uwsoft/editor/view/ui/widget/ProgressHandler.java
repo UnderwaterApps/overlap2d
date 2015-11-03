@@ -20,10 +20,10 @@ package com.uwsoft.editor.view.ui.widget;
 
 public interface ProgressHandler {
 
-	public void progressStarted();
-	
-	public void progressChanged(float value);
-	
-	public void progressComplete();
-	
+    public void progressStarted();
+
+    public void progressChanged(float value);
+
+    public void progressComplete();
+
 }

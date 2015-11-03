@@ -20,12 +20,12 @@ package com.uwsoft.editor.view.ui.dialog;
 
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResolutionManager;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.UIStage;
 import com.uwsoft.editor.view.ui.box.UIResolutionBox;
-import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 
 /**
  * Created by sargis on 4/9/15.
@@ -46,10 +46,8 @@ public class CreateNewResolutionDialogMediator extends SimpleMediator<CreateNewR
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                UIResolutionBox.CREATE_NEW_RESOLUTION_BTN_CLICKED,
-                CreateNewResolutionDialog.CREATE_BTN_CLICKED,
-        };
+        return new String[]{UIResolutionBox.CREATE_NEW_RESOLUTION_BTN_CLICKED, CreateNewResolutionDialog
+                .CREATE_BTN_CLICKED,};
     }
 
     @Override

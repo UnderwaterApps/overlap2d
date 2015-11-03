@@ -26,7 +26,13 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.commons.O2DDialog;
 import com.kotcrab.vis.ui.util.form.SimpleFormValidator;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.Separator;
+import com.kotcrab.vis.ui.widget.VisDialog;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
+import com.kotcrab.vis.ui.widget.VisValidableTextField;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.validator.NewProjectDialogValidator;
@@ -35,7 +41,8 @@ import com.uwsoft.editor.view.ui.widget.InputFileWidget;
 import java.io.File;
 
 public class NewProjectDialog extends O2DDialog {
-    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.NewProjectDialog" + ".CREATE_BTN_CLICKED";
+    public static final String CREATE_BTN_CLICKED = "com.uwsoft.editor.view.ui.dialog.NewProjectDialog" + "" +
+            ".CREATE_BTN_CLICKED";
     private static final String DEFAULT_ORIGIN_WIDTH = "1920";
     private static final String DEFAULT_ORIGIN_HEIGHT = "1200";
     private static final String DEFAULT_PPWU = "80";
@@ -53,7 +60,7 @@ public class NewProjectDialog extends O2DDialog {
         setModal(true);
         addCloseButton();
         VisTable mainTable = new VisTable();
-//        mainTable.debug();
+        //        mainTable.debug();
         mainTable.padTop(6).padRight(6).padBottom(22);
         //
         VisLabel projectNameLavel = new VisLabel("Project Name:");
@@ -91,7 +98,8 @@ public class NewProjectDialog extends O2DDialog {
     }
 
     private Table getDimensionsTable() {
-        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter.DigitsOnlyFilter();
+        VisTextField.TextFieldFilter.DigitsOnlyFilter digitsOnlyFilter = new VisTextField.TextFieldFilter
+                .DigitsOnlyFilter();
         VisTable dimensionsTable = new VisTable();
         originWidthTextField = createTextField(DEFAULT_ORIGIN_WIDTH, digitsOnlyFilter);
         dimensionsTable.add(new VisLabel("Width:")).left().padRight(3);
@@ -148,7 +156,8 @@ public class NewProjectDialog extends O2DDialog {
             super.clicked(event, x, y);
             Overlap2DFacade facade = Overlap2DFacade.getInstance();
             if (newProjectDialogValidator.validate(getStage(), projectName)) {
-                facade.sendNotification(command, workspacePathField.getValue().path() + File.separator + projectName.getText());
+                facade.sendNotification(command,
+                        workspacePathField.getValue().path() + File.separator + projectName.getText());
             }
         }
     }

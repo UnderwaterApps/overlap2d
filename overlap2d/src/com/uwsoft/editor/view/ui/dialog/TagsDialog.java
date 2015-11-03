@@ -4,7 +4,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.commons.UIDraggablePanel;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.utils.StandardWidgetsFactory;
 
@@ -68,7 +71,7 @@ public class TagsDialog extends UIDraggablePanel {
         tagTable = new VisTable();
         VisTable inputTable = new VisTable();
 
-        for(String tag: tags) {
+        for (String tag : tags) {
             tagTable.add(new TagItem(tag, tagItemListener)).pad(5).left().expandX().fillX();
             tagTable.row();
         }
@@ -80,9 +83,9 @@ public class TagsDialog extends UIDraggablePanel {
 
         createTagBtn.addListener(new ClickListener() {
             @Override
-            public void clicked (InputEvent event, float x, float y) {
+            public void clicked(InputEvent event, float x, float y) {
                 String tag = newTagField.getText();
-                if(!tagExists(tag)) {
+                if (!tagExists(tag)) {
                     newTagField.setText("");
                     addTag(tag);
                     facade.sendNotification(LIST_CHANGED);

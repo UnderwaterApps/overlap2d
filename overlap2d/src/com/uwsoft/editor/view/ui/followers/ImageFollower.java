@@ -16,8 +16,9 @@ public class ImageFollower extends NormalSelectionFollower {
 
     @Override
     public void update() {
-        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(getEntity(), TextureRegionComponent.class);
-        if(textureRegionComponent.isPolygon) {
+        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(getEntity(),
+                TextureRegionComponent.class);
+        if (textureRegionComponent.isPolygon) {
             pixelRect.setVisible(false);
         } else {
             pixelRect.setVisible(true);

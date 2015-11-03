@@ -42,7 +42,7 @@ public class FileDropListener implements DropTargetListener {
 
     public void sendNotification(String notification, Object data) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        if(facade != null) {
+        if (facade != null) {
             facade.sendNotification(notification, data);
         }
     }

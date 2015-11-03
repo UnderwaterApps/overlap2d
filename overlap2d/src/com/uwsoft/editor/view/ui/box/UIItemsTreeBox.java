@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.box;
 
-import java.util.Set;
-
 import com.badlogic.ashley.core.ComponentMapper;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
@@ -38,12 +36,14 @@ import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
+import java.util.Set;
+
 public class UIItemsTreeBox extends UICollapsibleBox {
     public static final String ITEMS_SELECTED = "com.uwsoft.editor.view.ui.box.UIItemsTreeBox." + ".ITEMS_SELECTED";
     private final Overlap2DFacade facade;
     private final VisTable treeTable;
     private VisTree tree;
-    
+
     private ComponentMapper<MainItemComponent> mainItemMapper;
     private MainItemComponent mainItemComponent;
 
@@ -104,13 +104,15 @@ public class UIItemsTreeBox extends UICollapsibleBox {
         }
     }
 
-    private Node addTreeRoot(Entity entity, Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
+    private Node addTreeRoot(Entity entity,
+            Node parentNode) {  // was like this addTreeRoot(CompositeItem compoiteItem, Node parentNode)
         Node node = addTreeNode(entity, parentNode);
-        if (parentNode == null) rootNode = node;
+        if (parentNode == null)
+            rootNode = node;
 
         NodeComponent nodeComponent = ComponentRetriever.get(entity, NodeComponent.class);
 
-        if(nodeComponent != null) {
+        if (nodeComponent != null) {
             for (Entity item : nodeComponent.children) {
                 if (EntityUtils.getType(entity) == EntityFactory.COMPOSITE_TYPE) {
                     addTreeRoot(item, node);
@@ -136,20 +138,23 @@ public class UIItemsTreeBox extends UICollapsibleBox {
 
     public void setSelection(Set<Entity> selection) {
 
-        if (tree == null) return;
+        if (tree == null)
+            return;
         tree.getSelection().clear();
-        if (selection == null) return;
+        if (selection == null)
+            return;
         addToSelection(selection);
     }
 
     public void addToSelection(Set<Entity> selection) {
 
-        if (tree == null) return;
+        if (tree == null)
+            return;
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
 
         for (int entityId : EntityUtils.getEntityId(selection)) {
             for (Node n : allSceneRootNodes) {
-                if(n.getObject().equals(entityId)) {
+                if (n.getObject().equals(entityId)) {
                     tree.getSelection().add(n);
                     break;
                 }
@@ -159,12 +164,13 @@ public class UIItemsTreeBox extends UICollapsibleBox {
 
     public void removeFromSelection(Set<Entity> selection) {
 
-        if (tree == null) return;
+        if (tree == null)
+            return;
         Array<Node> allSceneRootNodes = tree.getNodes().get(0).getChildren();
 
         for (int entityId : EntityUtils.getEntityId(selection)) {
             for (Node n : allSceneRootNodes) {
-                if(n.getObject().equals(entityId)) {
+                if (n.getObject().equals(entityId)) {
                     tree.getSelection().remove(n);
                     break;
                 }
@@ -174,7 +180,7 @@ public class UIItemsTreeBox extends UICollapsibleBox {
 
 
     private class TreeChangeListener extends ClickListener {
-        public void clicked (InputEvent event, float x, float y) {
+        public void clicked(InputEvent event, float x, float y) {
             Selection<Node> selection = tree.getSelection();
             selection.remove(rootNode);
             facade.sendNotification(ITEMS_SELECTED, selection);

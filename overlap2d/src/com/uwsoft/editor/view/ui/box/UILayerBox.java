@@ -44,15 +44,15 @@ public class UILayerBox extends UICollapsibleBox {
 
     private static final String prefix = "com.uwsoft.editor.view.ui.box.UILayerBox";
 
-    public static final String LAYER_ROW_CLICKED =  prefix + ".LAYER_ROW_CLICKED";
-    public static final String CREATE_NEW_LAYER =   prefix + ".CREATE_NEW_LAYER";
-    public static final String DELETE_LAYER =       prefix + ".DELETE_NEW_LAYER";
-    public static final String CHANGE_LAYER_NAME =  prefix + ".CHANGE_LAYER_NAME";
-    public static final String LOCK_LAYER =         prefix + ".LOCK_LAYER";
-    public static final String UNLOCK_LAYER =       prefix + ".UNLOCK_LAYER";
-    public static final String HIDE_LAYER =         prefix + ".HIDE_LAYER";
-    public static final String UNHIDE_LAYER =       prefix + ".UNHIDE_LAYER";
-    public static final String LAYER_DROPPED =      prefix + ".LAYER_DROPPED";
+    public static final String LAYER_ROW_CLICKED = prefix + ".LAYER_ROW_CLICKED";
+    public static final String CREATE_NEW_LAYER = prefix + ".CREATE_NEW_LAYER";
+    public static final String DELETE_LAYER = prefix + ".DELETE_NEW_LAYER";
+    public static final String CHANGE_LAYER_NAME = prefix + ".CHANGE_LAYER_NAME";
+    public static final String LOCK_LAYER = prefix + ".LOCK_LAYER";
+    public static final String UNLOCK_LAYER = prefix + ".UNLOCK_LAYER";
+    public static final String HIDE_LAYER = prefix + ".HIDE_LAYER";
+    public static final String UNHIDE_LAYER = prefix + ".UNHIDE_LAYER";
+    public static final String LAYER_DROPPED = prefix + ".LAYER_DROPPED";
 
     private final DragAndDrop dragAndDrop;
     public int currentSelectedLayerIndex = 0;
@@ -110,20 +110,18 @@ public class UILayerBox extends UICollapsibleBox {
         dragAndDrop = new DragAndDrop();
 
 
-
         createCollapsibleWidget(contentTable);
     }
 
     public void enableDraggingInEditedSlot() {
-        if(sourceInEdition != null)
-        {
+        if (sourceInEdition != null) {
             dragAndDrop.addSource(sourceInEdition);
             sourceInEdition = null;
         }
     }
+
     public void disableDraggingInEditedSlot() {
-        if(sourceInEdition != null)
-        {
+        if (sourceInEdition != null) {
             dragAndDrop.removeSource(sourceInEdition);
         }
     }
@@ -137,7 +135,7 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public UILayerItem getCurrentSelectedLayer() {
-        return rows.get(rows.size-1-currentSelectedLayerIndex).uiLayerItem;
+        return rows.get(rows.size - 1 - currentSelectedLayerIndex).uiLayerItem;
     }
 
     public void clearItems() {
@@ -153,8 +151,9 @@ public class UILayerBox extends UICollapsibleBox {
     }
 
     public void setCurrentSelectedLayer(int index) {
-        if(index == -1) return;
-        UILayerItemSlot slot = rows.get(rows.size-1-index);
+        if (index == -1)
+            return;
+        UILayerItemSlot slot = rows.get(rows.size - 1 - index);
 
         clearSelection();
         slot.getUiLayerItem().setSelected(true);
@@ -178,11 +177,9 @@ public class UILayerBox extends UICollapsibleBox {
 
                 VisTextField textField = itemSlot.getUiLayerItem().getNameField();
 
-                if(sourceInEdition != null)
-                {
+                if (sourceInEdition != null) {
                     VisTextField prevField = ((UILayerItem) sourceInEdition.getActor()).getNameField();
-                    if(textField != prevField)
-                    {
+                    if (textField != prevField) {
                         prevField.clearSelection();
                         prevField.setDisabled(true);
                         enableDraggingInEditedSlot();
@@ -196,8 +193,7 @@ public class UILayerBox extends UICollapsibleBox {
                 facade.sendNotification(LAYER_ROW_CLICKED, itemSlot.getUiLayerItem());
 
                 // Change name mode if double click
-                if(getTapCount() == 2 && !itemSlot.getUiLayerItem().getData().isLocked)
-                {
+                if (getTapCount() == 2 && !itemSlot.getUiLayerItem().getData().isLocked) {
                     sourceInEdition = sourceItem;
                     textField.setDisabled(false);
                     textField.focusField();
@@ -223,7 +219,8 @@ public class UILayerBox extends UICollapsibleBox {
         }
 
         @Override
-        public void dragStop(InputEvent event, float x, float y, int pointer, DragAndDrop.Payload payload, DragAndDrop.Target target) {
+        public void dragStop(InputEvent event, float x, float y, int pointer, DragAndDrop.Payload payload,
+                DragAndDrop.Target target) {
             UILayerItem uiLayerItemActor = (UILayerItem) getActor();
             UILayerItemSlot uiLayerItemSlot = uiLayerItemActor.getItemSlot();
             if (target != null) {
@@ -254,10 +251,10 @@ public class UILayerBox extends UICollapsibleBox {
 
         @Override
         public boolean drag(DragAndDrop.Source source, DragAndDrop.Payload payload, float x, float y, int pointer) {
-//            Slot payloadSlot = (Slot) payload.getObject();
-//            // if (targetSlot.getItem() == payloadSlot.getItem() ||
-//            // targetSlot.getItem() == null) {
-//            getActor().setColor(Color.BLUE);
+            //            Slot payloadSlot = (Slot) payload.getObject();
+            //            // if (targetSlot.getItem() == payloadSlot.getItem() ||
+            //            // targetSlot.getItem() == null) {
+            //            getActor().setColor(Color.BLUE);
             return true;
             // } else {
             // getActor().setColor(Color.DARK_GRAY);
@@ -272,7 +269,7 @@ public class UILayerBox extends UICollapsibleBox {
 
         @Override
         public void reset(DragAndDrop.Source source, DragAndDrop.Payload payload) {
-//            getActor().setColor(Color.LIGHT_GRAY);
+            //            getActor().setColor(Color.LIGHT_GRAY);
         }
 
     }
@@ -425,7 +422,7 @@ public class UILayerBox extends UICollapsibleBox {
             @Override
             public void clicked(InputEvent event, float x, float y) {
                 super.clicked(event, x, y);
-                final String sendEvent = (owner.isChecked())? eventOnUnchecking : eventOnChecking;
+                final String sendEvent = (owner.isChecked()) ? eventOnUnchecking : eventOnChecking;
                 facade.sendNotification(sendEvent, itemSlot.getUiLayerItem());
             }
         }

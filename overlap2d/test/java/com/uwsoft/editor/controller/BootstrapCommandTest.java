@@ -3,7 +3,12 @@ package com.uwsoft.editor.controller;
 import com.google.common.collect.Sets;
 import com.puremvc.patterns.observer.BaseNotification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.controller.commands.*;
+import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
+import com.uwsoft.editor.controller.commands.AddSelectionCommand;
+import com.uwsoft.editor.controller.commands.CopyItemsCommand;
+import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
+import com.uwsoft.editor.controller.commands.ItemTransformCommand;
+import com.uwsoft.editor.controller.commands.UpdateEntityComponentsCommand;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -51,7 +56,9 @@ public class BootstrapCommandTest {
         //TODO: This some how gives too many incovations
         //verify(overlap2DFacade, times(26)).registerCommand(anyString(), any());
         //assertThat(commandsList.size(), is(26));
-        assertThat(commandsList, hasItems(CopyItemsCommand.class, DeleteItemsCommand.class, AddComponentToItemCommand.class));
-        assertThat(commandsList, hasItems(ItemTransformCommand.class, AddSelectionCommand.class, UpdateEntityComponentsCommand.class));
+        assertThat(commandsList,
+                hasItems(CopyItemsCommand.class, DeleteItemsCommand.class, AddComponentToItemCommand.class));
+        assertThat(commandsList,
+                hasItems(ItemTransformCommand.class, AddSelectionCommand.class, UpdateEntityComponentsCommand.class));
     }
 }

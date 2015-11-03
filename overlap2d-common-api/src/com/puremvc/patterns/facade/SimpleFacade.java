@@ -198,7 +198,8 @@ public class SimpleFacade implements Facade {
     /**
      * Remove a previously registered <code>ICommand</code> to <code>INotification</code> mapping from the Controller.
      *
-     * @param notificationName the name of the <code>INotification</code> to remove the <code>ICommand</code> mapping for
+     * @param notificationName the name of the <code>INotification</code> to remove the <code>ICommand</code> mapping
+     *                         for
      */
     public void removeCommand(String notificationName) {
         controller.removeCommand(notificationName);
@@ -234,7 +235,6 @@ public class SimpleFacade implements Facade {
     public void registerProxy(Proxy proxy) {
         model.registerProxy(proxy);
     }
-
 
 
     /**
@@ -306,8 +306,9 @@ public class SimpleFacade implements Facade {
 
     @Override
     public <T extends Proxy> T retrieveProxy(String proxyName) {
-         return this.model.retrieveProxy(proxyName);
+        return this.model.retrieveProxy(proxyName);
     }
+
     /**
      * Create and send an <code>INotification</code>.
      * <p>

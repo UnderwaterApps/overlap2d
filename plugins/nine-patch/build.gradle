@@ -18,7 +18,7 @@
 
 apply plugin: "java"
 
-sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.java.srcDirs = ["src/"]
 
 ext {
     gdxVersion = '1.6.5'

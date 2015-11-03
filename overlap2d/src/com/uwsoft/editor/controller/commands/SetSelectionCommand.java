@@ -18,16 +18,15 @@
 
 package com.uwsoft.editor.controller.commands;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.utils.Array;
-import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.Set;
 
 /**
  * Created by azakhary on 5/14/2015.
@@ -41,12 +40,12 @@ public class SetSelectionCommand extends RevertableCommand {
 
     @Override
     public void doAction() {
-        HashSet<Entity> previousSelection = new HashSet<>(Sandbox.getInstance().getSelector().getSelectedItems());
+        HashSet<Entity> previousSelection = new HashSet<>(sandbox.getSelector().getSelectedItems());
         previousSelectionIds = EntityUtils.getEntityId(previousSelection);
 
         Set<Entity> items = getNotification().getBody();
 
-        if(items == null) {
+        if (items == null) {
             // deselect all
             sandbox.getSelector().setSelections(items, true);
             facade.sendNotification(DONE);
@@ -55,14 +54,14 @@ public class SetSelectionCommand extends RevertableCommand {
 
         // check if items are in viewable element, if no - cancel
         NodeComponent nodeComponent = ComponentRetriever.get(sandbox.getCurrentViewingEntity(), NodeComponent.class);
-        for (Iterator<Entity> iterator = items.iterator(); iterator.hasNext();) {
+        for (Iterator<Entity> iterator = items.iterator(); iterator.hasNext(); ) {
             Entity item = iterator.next();
-            if(!nodeComponent.children.contains(item, true)) {
+            if (!nodeComponent.children.contains(item, true)) {
                 iterator.remove();
             }
         }
 
-        if(items.size() == 0) {
+        if (items.size() == 0) {
             cancel();
         } else {
             sandbox.getSelector().setSelections(items, true);
@@ -72,7 +71,7 @@ public class SetSelectionCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-        Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
+        sandbox.getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
         facade.sendNotification(DONE);
     }
 }

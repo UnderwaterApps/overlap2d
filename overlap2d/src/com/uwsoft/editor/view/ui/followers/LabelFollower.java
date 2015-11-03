@@ -32,7 +32,7 @@ import java.util.HashMap;
 /**
  * Created by azakhary on 5/20/2015.
  */
-public class LabelFollower extends NormalSelectionFollower implements FollowerTransformationListener{
+public class LabelFollower extends NormalSelectionFollower implements FollowerTransformationListener {
 
     HashMap<Integer, LabelAnchorListener> anchorListeners;
 
@@ -44,7 +44,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
     public void create() {
         super.create();
         anchorListeners = new HashMap<>();
-        for(int i = 0; i < miniRects.length; i++) {
+        for (int i = 0; i < miniRects.length; i++) {
             LabelAnchorListener listener = new LabelAnchorListener(this, this, i);
             anchorListeners.put(i, listener);
             miniRects[i].addListener(listener);
@@ -60,7 +60,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
 
     @Override
     public void setFollowerListener(FollowerTransformationListener listener) {
-        for(int i = 0; i < miniRects.length; i++) {
+        for (int i = 0; i < miniRects.length; i++) {
             anchorListeners.get(i).setListenerTransform(listener);
         }
     }
@@ -74,7 +74,7 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
         super.setMode(mode);
         transformGroup.setVisible(true);
         miniRects[ORIGIN].setVisible(false);
-        if(mode == SelectionMode.transform) {
+        if (mode == SelectionMode.transform) {
             miniRects[ORIGIN].setVisible(true);
         }
     }
@@ -93,7 +93,8 @@ public class LabelFollower extends NormalSelectionFollower implements FollowerTr
         y = stageCoordinates.y;
 
         TransformComponent transformComponent = ComponentRetriever.get(follower.getEntity(), TransformComponent.class);
-        DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(), DimensionsComponent.class);
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(follower.getEntity(),
+                DimensionsComponent.class);
 
         float newX = transformComponent.x;
         float newY = transformComponent.y;

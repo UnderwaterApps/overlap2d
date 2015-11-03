@@ -20,15 +20,19 @@ package com.uwsoft.editor.view.stage;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.*;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.RulersUIMediator;
 import com.uwsoft.editor.view.ui.UIMainTable;
 import com.uwsoft.editor.view.ui.box.UIItemsTreeBox;
-import com.uwsoft.editor.renderer.data.CompositeItemVO;
-import com.uwsoft.editor.renderer.data.LayerItemVO;
 
 public class UIStage extends Stage {
 
@@ -37,7 +41,7 @@ public class UIStage extends Stage {
     public UIMainTable uiMainTable;
     public Group contextMenuContainer;
 
-	public Group midUI;
+    public Group midUI;
 
 
     public UIStage() {
@@ -111,12 +115,13 @@ public class UIStage extends Stage {
     }
 
     public LayerItemVO getCurrentSelectedLayer() {
-    	return null;
-    	//TODO fix and uncomment
-//        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
-//        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
-//        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers.get(selectedLayerIndex);
-//        return layerVO;
+        return null;
+        //TODO fix and uncomment
+        //        UILayerBoxMediator mediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        //        int selectedLayerIndex = mediator.getCurrentSelectedLayerIndex();
+        //        LayerItemVO layerVO = Sandbox.getInstance().sceneControl.getCurrentScene().dataVO.composite.layers
+        // .get(selectedLayerIndex);
+        //        return layerVO;
     }
 
 

@@ -55,11 +55,8 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
 
     @Override
     public String[] listNotificationInterests() {
-        return new String[]{
-                NinePatchPlugin.EDIT_NINE_PATCH,
-                NinePatchPlugin.CONVERT_TO_NINE_PATCH,
-                MainPanel.SAVE_CLICKED
-        };
+        return new String[]{NinePatchPlugin.EDIT_NINE_PATCH, NinePatchPlugin.CONVERT_TO_NINE_PATCH, MainPanel
+                .SAVE_CLICKED};
     }
 
     @Override
@@ -97,7 +94,7 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         entity.add(ninePatchComponent);
 
         //remove original image
-        File originalImg = new File(plugin.getAPI().getProjectPath() + "/assets/orig/images/"+regionName+".png");
+        File originalImg = new File(plugin.getAPI().getProjectPath() + "/assets/orig/images/" + regionName + ".png");
         originalImg.delete();
 
         //save project
@@ -120,7 +117,7 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         String content = packAtlas.readString();
         int regionIndex = content.indexOf(textureRegionName);
         int splitEnd = content.indexOf("orig: ", regionIndex);
-        String splitStr = "split: "+splits[0]+", "+splits[1]+", "+splits[2]+", "+splits[3]+"\n  ";
+        String splitStr = "split: " + splits[0] + ", " + splits[1] + ", " + splits[2] + ", " + splits[3] + "\n  ";
         String newContent = content.substring(0, splitEnd) + splitStr + content.substring(splitEnd, content.length());
         File test = new File(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
         writeFile(newContent, test);
@@ -132,14 +129,15 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         FileHandle imagesDir = Gdx.files.internal(plugin.getAPI().getProjectPath() + "/assets/orig/pack/");
         TextureAtlas.TextureAtlasData atlas = new TextureAtlas.TextureAtlasData(packAtlas, imagesDir, false);
         BufferedImage finalImage = imageUtils.extractImage(atlas, textureRegionName, splits);
-        imageUtils.saveImage(finalImage, plugin.getAPI().getProjectPath() + "/assets/orig/images/"+textureRegionName+".9.png");
+        imageUtils.saveImage(finalImage,
+                plugin.getAPI().getProjectPath() + "/assets/orig/images/" + textureRegionName + ".9.png");
 
         // now need to modify the pack
         String content = packAtlas.readString();
         int regionIndex = content.indexOf(textureRegionName);
         int splitStart = content.indexOf("split: ", regionIndex) + "split: ".length();
         int splitEnd = content.indexOf("orig: ", splitStart);
-        String splitStr = splits[0]+", "+splits[1]+", "+splits[2]+", "+splits[3]+"\n  ";
+        String splitStr = splits[0] + ", " + splits[1] + ", " + splits[2] + ", " + splits[3] + "\n  ";
         String newContent = content.substring(0, splitStart) + splitStr + content.substring(splitEnd, content.length());
         File test = new File(plugin.getAPI().getProjectPath() + "/assets/orig/pack/pack.atlas");
         writeFile(newContent, test);
@@ -153,14 +151,15 @@ public class MainPanelMediator extends SimpleMediator<MainPanel> {
         try {
             output = new BufferedWriter(new FileWriter(file));
             output.write(content);
-        } catch ( IOException e ) {
+        } catch (IOException e) {
             e.printStackTrace();
         } finally {
-            if ( output != null ) try {
-                output.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            if (output != null)
+                try {
+                    output.close();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
         }
     }
 
