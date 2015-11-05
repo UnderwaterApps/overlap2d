@@ -15,7 +15,7 @@ If you were using the old runtime, and have to use it for your old projects, her
 
 If you are using gradle, yo can just add this line to your dependecies:
 
-    $ compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1-SNAPSHOT
+    $ compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.2-SNAPSHOT
 
 Otherwise just download this as sources, and include in your project by any means you see comfortable.
 
