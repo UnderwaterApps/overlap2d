@@ -109,6 +109,7 @@ public class SceneLoader {
 
 		// this has to be done differently.
 		engine.removeAllEntities();
+		entityFactory.clean();
 
 		pixelsPerWU = rm.getProjectVO().pixelToWorld;
 

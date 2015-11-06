@@ -305,5 +305,8 @@ public class EntityFactory {
 		return entities.get(id);
 	}
 
-	
+
+	public void clean() {
+		entities.clear();
+	}
 }

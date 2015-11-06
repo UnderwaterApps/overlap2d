@@ -5,6 +5,8 @@ import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
+import java.util.ArrayList;
+
 public class CompositeItemVO extends MainItemVO {
 
 	public CompositeVO composite;
@@ -68,5 +70,13 @@ public class CompositeItemVO extends MainItemVO {
 
 		width = dimensionsComponent.width;
 		height = dimensionsComponent.height;
+	}
+
+	public void cleanIds() {
+		uniqueId = -1;
+		ArrayList<MainItemVO> items = composite.getAllItems();
+		for(MainItemVO subItem: items) {
+			subItem.uniqueId = -1;
+		}
 	}
 }
