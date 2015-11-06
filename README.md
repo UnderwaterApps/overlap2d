@@ -15,7 +15,7 @@ If you were using the old runtime, and have to use it for your old projects, her
 
 If you are using gradle, yo can just add this line to your dependecies:
 
-    $ compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1-SNAPSHOT
+    $ compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.2-SNAPSHOT
 
 Otherwise just download this as sources, and include in your project by any means you see comfortable.
 
@@ -24,7 +24,7 @@ Otherwise just download this as sources, and include in your project by any mean
 When creating new prohect, why not use libGDX setup app? Here are the instructions:
 http://overlap2d.com/overlap2d-is-just-one-checkbox-away-with-libgdx-official-setup-app/
 
-When generated the project, just make sure to change the version of overlap2d runtime to 0.1.1-SNAPSHOT (this will be updated soon)
+When generated the project, just make sure to change the version of overlap2d runtime to 0.1.2-SNAPSHOT (this will be updated soon)
 
 ##Using Spine with your o2d runtime
 Spine is not included by default, instead it's kind of an external plugin. Because Spine runtime is not in maven, here is the hell you have to go throguh:
