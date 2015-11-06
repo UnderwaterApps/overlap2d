@@ -62,6 +62,7 @@ public abstract class EntityModifyRevertableCommand extends RevertableCommand {
             if (libraryItems.containsKey(mainItemComponent.libraryLink)) {
                 CompositeItemVO itemVO = new CompositeItemVO();
                 itemVO.loadFromEntity(entity);
+                itemVO.cleanIds();
                 libraryItems.put(mainItemComponent.libraryLink, itemVO);
             }
 
