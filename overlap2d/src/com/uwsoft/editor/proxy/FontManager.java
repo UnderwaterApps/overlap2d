@@ -68,14 +68,29 @@ public class FontManager extends BaseProxy {
             result[2] = "/System/Library/Fonts";
             return result;
         } else if (SystemUtils.IS_OS_LINUX) {
-            String path = System.getProperty("user.home") + File.separator + ".fonts";
-            File tmp = new File(path);
-            if (tmp.exists() && tmp.isDirectory()) {
-                result = new String[1];
-                result[0] = path;
-            } else {
+            String[] pathsToCheck = {
+                    System.getProperty("user.home") + File.separator + ".fonts",
+                    "/usr/share/fonts/truetype"
+            };
+            ArrayList<String> resultList = new ArrayList<>();
+
+            for (int i = pathsToCheck.length - 1; i >= 0; i--) {
+                String path = pathsToCheck[i];
+                File tmp = new File(path);
+                if (tmp.exists() && tmp.isDirectory() && tmp.canRead()) {
+                    resultList.add(path);
+                }
+            }
+
+            if (resultList.isEmpty()) {
+                // TODO: show user warning, TextTool will be crash editor, because system font directories not found
                 result = new String[0];
             }
+            else {
+                result = new String[resultList.size()];
+                result = resultList.toArray(result);
+            }
+
             return result;
         }
 
