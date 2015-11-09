@@ -23,6 +23,7 @@ import com.commons.MsgAPI;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.CustomVariableModifyCommand;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.renderer.utils.CustomVariables;
@@ -61,7 +62,8 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
                 UIBasicItemProperties.CUSTOM_VARS_BUTTON_CLICKED,
                 CustomVariablesDialog.ADD_BUTTON_PRESSED,
                 CustomVariablesDialog.DELETE_BUTTON_PRESSED,
-                Overlap2DMenuBar.CUSTOM_VARIABLES_EDITOR_OPEN
+                Overlap2DMenuBar.CUSTOM_VARIABLES_EDITOR_OPEN,
+                CustomVariableModifyCommand.DONE
         };
     }
 
@@ -90,31 +92,25 @@ public class CustomVariablesDialogMediator extends SimpleMediator<CustomVariable
                 break;
             case CustomVariablesDialog.ADD_BUTTON_PRESSED:
                 setVariable();
-                updateView();
                 break;
             case CustomVariablesDialog.DELETE_BUTTON_PRESSED:
                 removeVariable(notification.getBody());
+                break;
+            case CustomVariableModifyCommand.DONE:
                 updateView();
                 break;
         }
     }
 
     private void setVariable() {
-        MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(mainItemComponent.customVars);
         String key = viewComponent.getKey();
         String value = viewComponent.getValue();
-        vars.setVariable(key, value);
-        mainItemComponent.customVars = vars.saveAsString();
+
+        sendNotification(MsgAPI.CUSTOM_VARIABLE_MODIFY, CustomVariableModifyCommand.addCustomVariable(observable, key, value));
     }
 
     private void removeVariable(String key) {
-        MainItemComponent mainItemComponent = ComponentRetriever.get(observable, MainItemComponent.class);
-        CustomVariables vars = new CustomVariables();
-        vars.loadFromString(mainItemComponent.customVars);
-        vars.removeVariable(key);
-        mainItemComponent.customVars = vars.saveAsString();
+        sendNotification(MsgAPI.CUSTOM_VARIABLE_MODIFY, CustomVariableModifyCommand.removeCustomVariable(observable, key));
     }
 
     private void setObservable(Entity item) {

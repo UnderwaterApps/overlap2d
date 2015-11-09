@@ -162,7 +162,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 clearRecents();
                 break;
             case Overlap2DMenuBar.EXPORT:
-                projectManager.exportProject();
+                facade.sendNotification(MsgAPI.ACTION_EXPORT_PROJECT);
                 break;
             case Overlap2DMenuBar.EXPORT_SETTINGS:
                 //showDialog("showExportDialog");

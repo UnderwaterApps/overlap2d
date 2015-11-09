@@ -31,8 +31,6 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 import com.commons.MsgAPI;
 import com.overlap2d.extensions.spine.SpineItemType;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.data.vo.ProjectVO;
-import com.uwsoft.editor.data.vo.SceneConfigVO;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
@@ -50,6 +48,8 @@ import com.uwsoft.editor.view.ItemControlMediator;
 import com.uwsoft.editor.view.SceneControlMediator;
 import com.uwsoft.editor.view.stage.input.InputListener;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
+import com.vo.ProjectVO;
+import com.vo.SceneConfigVO;
 
 import java.util.HashMap;
 

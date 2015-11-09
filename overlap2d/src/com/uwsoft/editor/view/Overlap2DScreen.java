@@ -32,6 +32,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Vector2;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.view.ui.widget.actors.basic.SandboxBackUI;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -181,7 +182,7 @@ public class Overlap2DScreen implements Screen, InputProcessor {
                     projectManager.saveCurrentProject(vo);
                     break;
                 case Input.Keys.E:
-                    projectManager.exportProject();
+                    facade.sendNotification(MsgAPI.ACTION_EXPORT_PROJECT);
                     break;
             }
         }

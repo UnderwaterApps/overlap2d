@@ -24,9 +24,11 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -59,6 +61,7 @@ public class AddToLibraryCommand extends RevertableCommand {
 
             CompositeItemVO newVO = new CompositeItemVO();
             newVO.loadFromEntity(item);
+            newVO.cleanIds();
             libraryItems.put(createdLibraryItemName, newVO);
 
             //mark this entity as belonging to library

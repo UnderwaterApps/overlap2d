@@ -51,6 +51,7 @@ public class BootstrapCommand extends SimpleCommand {
 
         facade.registerCommand(MsgAPI.ACTION_ADD_COMPONENT, AddComponentToItemCommand.class);
         facade.registerCommand(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.class);
+        facade.registerCommand(MsgAPI.CUSTOM_VARIABLE_MODIFY, CustomVariableModifyCommand.class);
 
         facade.registerCommand(MsgAPI.ACTION_ITEMS_MOVE_TO, ItemsMoveCommand.class);
         facade.registerCommand(MsgAPI.ACTION_ITEM_TRANSFORM_TO, ItemTransformCommand.class);
@@ -71,6 +72,8 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(MsgAPI.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
 
         facade.registerCommand(MsgAPI.ACTION_UPDATE_MESH_DATA, UpdatePolygonComponentCommand.class);
+
+        facade.registerCommand(MsgAPI.ACTION_EXPORT_PROJECT, ExportProjectCommand.class);
 
         facade.registerCommand(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, PluginItemCommand.class);
     }

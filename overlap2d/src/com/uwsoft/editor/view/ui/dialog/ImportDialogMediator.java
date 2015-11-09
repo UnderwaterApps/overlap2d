@@ -261,7 +261,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
             Gdx.app.postRunnable(() -> {
                 Sandbox sandbox = Sandbox.getInstance();
                 ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-                projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectVO().projectName);
+                projectManager.openProjectAndLoadAllData(projectManager.getCurrentProjectPath());
                 sandbox.loadCurrentProject();
                 ImportDialogMediator.this.viewComponent.setDroppingView();
                 facade.sendNotification(ProjectManager.PROJECT_DATA_UPDATED);

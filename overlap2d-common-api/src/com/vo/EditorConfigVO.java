@@ -16,34 +16,22 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.data.vo;
+package com.vo;
 
 import com.badlogic.gdx.utils.Json;
-import com.badlogic.gdx.utils.JsonWriter.OutputType;
+import com.badlogic.gdx.utils.JsonWriter;
 
-import java.util.ArrayList;
-
-public class ProjectVO {
-
-    public String projectName = "";
-
-    public String projectVersion = null;
-
-    public String projectMainExportPath = "";
-
-    public String lastOpenScene = "";
-    public String lastOpenResolution = "";
-    public String texturepackerWidth	=	"4096";
-    public String texturepackerHeight  =	"4096";
-    public boolean texturepackerDuplicate;
-
-    public ArrayList<SceneConfigVO> sceneConfigs = new ArrayList<>();
-
+/**
+ * Created by sargis on 8/1/14.
+ */
+public class EditorConfigVO {
+    public static final String EDITOR_CONFIG_FILE = "config.pit";
+    public String lastOpenedSystemPath = "";
 
     public String constructJsonString() {
         String str = "";
         Json json = new Json();
-        json.setOutputType(OutputType.json);
+        json.setOutputType(JsonWriter.OutputType.json);
         str = json.toJson(this);
         return str;
     }
