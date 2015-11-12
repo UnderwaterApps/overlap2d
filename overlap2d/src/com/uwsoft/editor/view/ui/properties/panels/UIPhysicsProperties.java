@@ -35,6 +35,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     private VisCheckBox allowSleepBox;
     private VisCheckBox awakeBox;
     private VisCheckBox bulletBox;
+    private VisCheckBox sensor;
 
     public UIPhysicsProperties() {
         super("Physics Component");
@@ -67,6 +68,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         allowSleepBox = new VisCheckBox("Allow Sleep");
         awakeBox = new VisCheckBox("Awake");
         bulletBox = new VisCheckBox("Bullet");
+        sensor = new VisCheckBox("Sensor");
 
         mainTable.add(new VisLabel("Body type:", Align.right)).padRight(5).colspan(2).fillX();
         mainTable.add(bodyTypeBox).width(100).colspan(2);
@@ -109,6 +111,11 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         bottomTable.add(allowSleepBox);
         bottomTable.add(awakeBox);
         bottomTable.add(bulletBox);
+
+        bottomTable.row();
+
+        bottomTable.add(sensor);
+
         mainTable.add(bottomTable).padBottom(5).colspan(4);
         mainTable.row().padTop(5);
     }
@@ -129,6 +136,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         allowSleepBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         awakeBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         bulletBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        sensor.addListener(new CheckBoxChangeListener(getUpdateEventName()));
     }
 
     public int getBodyType() {
@@ -192,6 +200,8 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     public VisCheckBox getBulletBox() {
         return bulletBox;
     }
+
+    public VisCheckBox getSensorBox() { return sensor; }
 
     @Override
     public void onClose() {
