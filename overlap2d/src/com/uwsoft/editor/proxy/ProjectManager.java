@@ -943,8 +943,8 @@ public class ProjectManager extends BaseProxy {
         }
     }
 
-    public void setExportPaths(File path) {
-        currentProjectVO.projectMainExportPath = path.getPath();
+    public void setExportPaths(String path) {
+        currentProjectVO.projectMainExportPath = path;
     }
 
     public void setTexturePackerSizes(int width, int height) {
