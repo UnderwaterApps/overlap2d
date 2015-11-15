@@ -178,6 +178,7 @@ public abstract class ComponentFactory {
     protected PhysicsBodyComponent createPhysicsBodyPropertiesComponent(Entity entity, MainItemVO vo) {
         PhysicsBodyComponent component = new PhysicsBodyComponent();
         component.allowSleep = vo.physics.allowSleep;
+        component.sensor = vo.physics.sensor;
         component.awake = vo.physics.awake;
         component.bodyType = vo.physics.bodyType;
         component.bullet = vo.physics.bullet;
