@@ -114,7 +114,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
 
         bottomTable.row();
 
-        bottomTable.add(sensor);
+        bottomTable.add(sensor).colspan(3).left();
 
         mainTable.add(bottomTable).padBottom(5).colspan(4);
         mainTable.row().padTop(5);
