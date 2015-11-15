@@ -46,6 +46,8 @@ public class PhysicsBodyLoader {
             fixtureDef.density = pysicsComponent.density;
             fixtureDef.friction = pysicsComponent.friction;
             fixtureDef.restitution = pysicsComponent.restitution;
+
+            fixtureDef.isSensor = pysicsComponent.sensor;
         }
 
         BodyDef bodyDef = new BodyDef();
