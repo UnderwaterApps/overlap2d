@@ -15,6 +15,7 @@ public class PhysicsBodyDataVO {
 	public boolean allowSleep;
 	public boolean awake;
 	public boolean bullet;
+    public boolean sensor;
 
     public float density;
     public float friction;
@@ -32,6 +33,7 @@ public class PhysicsBodyDataVO {
     	damping = vo.damping;
     	gravityScale = vo.gravityScale;
     	allowSleep = vo.allowSleep;
+        sensor = vo.sensor;
     	awake = vo.awake;
     	bullet = vo.bullet;
         density = vo.density;
@@ -47,6 +49,7 @@ public class PhysicsBodyDataVO {
         damping = physicsComponent.damping;
         gravityScale = physicsComponent.gravityScale;
         allowSleep = physicsComponent.allowSleep;
+        sensor = physicsComponent.sensor;
         awake = physicsComponent.awake;
         bullet = physicsComponent.bullet;
         density = physicsComponent.density;

@@ -12,9 +12,11 @@ public class PhysicsBodyComponent implements Component {
 	public float rotationalInertia;
 	public float damping;
 	public float gravityScale;
+
 	public boolean allowSleep;
 	public boolean awake;
 	public boolean bullet;
+    public boolean sensor;
 
 	public float density;
 	public float friction;
@@ -31,6 +33,7 @@ public class PhysicsBodyComponent implements Component {
         damping = 0;
         gravityScale = 0;
         allowSleep = true;
+        sensor = false;
         awake = true;
         bullet = false;
         density = 1;
