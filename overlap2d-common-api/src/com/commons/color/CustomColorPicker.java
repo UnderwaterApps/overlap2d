@@ -99,6 +99,8 @@ public class CustomColorPicker extends VisWindow implements Disposable {
     private Image currentColor;
     private Image newColor;
 
+	private boolean pickerCreated = false;
+
 	private boolean closeAfterPickingFinished = true;
 
 	public CustomColorPicker () {
@@ -146,6 +148,8 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 
         setStyle(VisUI.getSkin().get("box", WindowStyle.class));
         getTitleLabel().setAlignment(Align.left);
+
+		pickerCreated = true;
     }
 
     @Override
@@ -461,7 +465,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
         hexField.setText(color.toString().toUpperCase());
         hexField.setCursorPosition(hexField.getMaxLength());
 		
-		if (listener != null) listener.changed(new Color(color));
+		if (listener != null && pickerCreated) listener.changed(new Color(color));
     }
 	@Override
 	/** Sets current selected color in picker.*/

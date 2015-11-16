@@ -727,7 +727,7 @@
       "barSelector": "color-picker-bar-selector",
       "cross": "color-picker-cross",
       "verticalSelector": "color-picker-selector-vertical",
-      "horizontalSelector": "color-picker-selector-horizontal",
+      "horizontalSelector": "color-picker-selector-horizontal"
     }
   },
   "com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle": {
