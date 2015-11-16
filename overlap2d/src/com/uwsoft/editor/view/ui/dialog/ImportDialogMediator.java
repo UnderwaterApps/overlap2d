@@ -162,7 +162,7 @@ public class ImportDialogMediator extends SimpleMediator<ImportDialog> {
          Sandbox sandbox = Sandbox.getInstance();
         FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
 
-        fileChooser.setMultiselectionEnabled(true);
+        fileChooser.setMultiSelectionEnabled(true);
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected(Array<FileHandle> files) {

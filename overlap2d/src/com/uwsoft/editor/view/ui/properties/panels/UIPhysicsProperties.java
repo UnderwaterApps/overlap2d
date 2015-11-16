@@ -23,15 +23,15 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     private HashMap<Integer, String> bodyTypes = new HashMap<>();
 
     private VisSelectBox<String> bodyTypeBox;
-    private VisValidableTextField massField;
-    private VisValidableTextField centerOfMassXField;
-    private VisValidableTextField centerOfMassYField;
-    private VisValidableTextField rotationalIntertiaField;
-    private VisValidableTextField dumpingField;
-    private VisValidableTextField gravityScaleField;
-    private VisValidableTextField densityField;
-    private VisValidableTextField frictionField;
-    private VisValidableTextField restitutionField;
+    private VisValidatableTextField massField;
+    private VisValidatableTextField centerOfMassXField;
+    private VisValidatableTextField centerOfMassYField;
+    private VisValidatableTextField rotationalIntertiaField;
+    private VisValidatableTextField dumpingField;
+    private VisValidatableTextField gravityScaleField;
+    private VisValidatableTextField densityField;
+    private VisValidatableTextField frictionField;
+    private VisValidatableTextField restitutionField;
     private VisCheckBox allowSleepBox;
     private VisCheckBox awakeBox;
     private VisCheckBox bulletBox;
@@ -145,39 +145,39 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         bodyTypeBox.setSelected(bodyTypes.get(type));
     }
 
-    public VisValidableTextField getMassField() {
+    public VisValidatableTextField getMassField() {
         return massField;
     }
 
-    public VisValidableTextField getCenterOfMassXField() {
+    public VisValidatableTextField getCenterOfMassXField() {
         return centerOfMassXField;
     }
 
-    public VisValidableTextField getCenterOfMassYField() {
+    public VisValidatableTextField getCenterOfMassYField() {
         return centerOfMassYField;
     }
 
-    public VisValidableTextField getRotationalIntertiaField() {
+    public VisValidatableTextField getRotationalIntertiaField() {
         return rotationalIntertiaField;
     }
 
-    public VisValidableTextField getDumpingField() {
+    public VisValidatableTextField getDumpingField() {
         return dumpingField;
     }
 
-    public VisValidableTextField getGravityScaleField() {
+    public VisValidatableTextField getGravityScaleField() {
         return gravityScaleField;
     }
 
-    public VisValidableTextField getDensityField() {
+    public VisValidatableTextField getDensityField() {
         return densityField;
     }
 
-    public VisValidableTextField getFrictionField() {
+    public VisValidatableTextField getFrictionField() {
         return frictionField;
     }
 
-    public VisValidableTextField getRestitutionField() {
+    public VisValidatableTextField getRestitutionField() {
         return restitutionField;
     }
 

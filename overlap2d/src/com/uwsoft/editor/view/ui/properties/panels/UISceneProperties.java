@@ -53,9 +53,9 @@ public class UISceneProperties extends UIAbstractProperties {
 
         pixelsPerWorldUnitField = new VisLabel("1");
         physicsEnabledCheckBox = new VisCheckBox(null);
-        gravityXTextField = new VisValidableTextField(floatValidator);
-        gravityYTextField = new VisValidableTextField(floatValidator);
-        sleepVelocityTextField = new VisValidableTextField(floatValidator);
+        gravityXTextField = new VisValidatableTextField(floatValidator);
+        gravityYTextField = new VisValidatableTextField(floatValidator);
+        sleepVelocityTextField = new VisValidatableTextField(floatValidator);
         enableLightsCheckBox = new VisCheckBox(null);
         diffuseCheckBox = new VisCheckBox(null);
         ambientColorComponent = new TintButton(29, 21);

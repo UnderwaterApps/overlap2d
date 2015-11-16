@@ -6,7 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.runner.LibgdxRunner;
 import com.runner.NeedGL;
 import org.junit.Before;
@@ -41,8 +41,8 @@ public class O2DDialogTest {
 
     @Test
     @NeedGL
-    public void shouldCreateVisValidableTextFieldWithInputValidator() throws Exception {
-        VisValidableTextField visValidableTextField = o2DDialog.createValidableTextField("inputText", input -> true);
+    public void shouldCreateVisValidatableTextFieldWithInputValidator() throws Exception {
+        VisValidatableTextField visValidableTextField = o2DDialog.createValidableTextField("inputText", input -> true);
 
         assertThat(visValidableTextField, not(nullValue()));
         assertThat(visValidableTextField.getText(), is("inputText"));

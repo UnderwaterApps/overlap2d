@@ -79,7 +79,7 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     }
 
     public int getFPS() {
-        return fpsSelector.getValue();
+        return (int) fpsSelector.getValue();
     }
 
     public void setPlayModes() {

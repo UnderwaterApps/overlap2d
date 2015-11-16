@@ -31,7 +31,7 @@ import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.uwsoft.editor.event.ClickNotifier;
 
 
@@ -52,24 +52,24 @@ public class PhysicsEditorDialog extends O2DDialog {
 
 
     private VisSelectBox<String> bodyTypeBox;
-    private VisValidableTextField massField;
+    private VisValidatableTextField massField;
 
-    private VisValidableTextField centerOfMassXField;
-    private VisValidableTextField centerOfMassYField;
-    private VisValidableTextField rotationalIntertiaField;
-    private VisValidableTextField dumpingField;
-    private VisValidableTextField gravityScaleField;
-    private VisValidableTextField densityField;
-    private VisValidableTextField frictionField;
-    private VisValidableTextField restitutionField;
+    private VisValidatableTextField centerOfMassXField;
+    private VisValidatableTextField centerOfMassYField;
+    private VisValidatableTextField rotationalIntertiaField;
+    private VisValidatableTextField dumpingField;
+    private VisValidatableTextField gravityScaleField;
+    private VisValidatableTextField densityField;
+    private VisValidatableTextField frictionField;
+    private VisValidatableTextField restitutionField;
     private VisCheckBox allowSleepBox;
     private VisCheckBox awakeBox;
     private VisCheckBox bulletBox;
     private VisTextButton saveButton;
 
     private VisSelectBox<String> poligonyzerBox;
-    private VisValidableTextField hullToleranceField;
-    private VisValidableTextField alphaToleranceField;
+    private VisValidatableTextField hullToleranceField;
+    private VisValidatableTextField alphaToleranceField;
     private VisCheckBox multiPartDetectionBox;
     private VisCheckBox holeDetectionBox;
     private VisTextButton retraceButton;

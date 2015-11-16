@@ -23,7 +23,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.uwsoft.editor.event.KeyboardListener;
 
 /**
@@ -32,7 +32,7 @@ import com.uwsoft.editor.event.KeyboardListener;
 public class UIGridBox extends UIBaseBox {
 
     public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.view.ui.box.UIGridBox" + ".GRID_SIZE_TEXT_FIELD_UPDATED";
-    private VisValidableTextField gridSizeTextField;
+    private VisValidatableTextField gridSizeTextField;
 
     public UIGridBox() {
         super();
@@ -48,7 +48,7 @@ public class UIGridBox extends UIBaseBox {
     private void init() {
         VisLabel lbl = new VisLabel("Grid Size:");
         add(lbl).padRight(4);
-        gridSizeTextField = new VisValidableTextField(new Validators.IntegerValidator());
+        gridSizeTextField = new VisValidatableTextField(new Validators.IntegerValidator());
         gridSizeTextField.setStyle(VisUI.getSkin().get("light", VisTextField.VisTextFieldStyle.class));
         //gridSizeTextField.setRightAligned(true);
         gridSizeTextField.addListener(new KeyboardListener(GRID_SIZE_TEXT_FIELD_UPDATED));
