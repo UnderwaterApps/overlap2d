@@ -63,6 +63,7 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
         viewComponent.getAllowSleepBox().setChecked(physicsComponent.allowSleep);
         viewComponent.getAwakeBox().setChecked(physicsComponent.awake);
         viewComponent.getBulletBox().setChecked(physicsComponent.bullet);
+        viewComponent.getSensorBox().setChecked(physicsComponent.sensor);
     }
 
     @Override
@@ -83,6 +84,7 @@ public class UIPhysicsPropertiesMediator extends UIItemPropertiesMediator<Entity
         physicsComponent.allowSleep = viewComponent.getAllowSleepBox().isChecked();
         physicsComponent.awake = viewComponent.getAwakeBox().isChecked();
         physicsComponent.bullet = viewComponent.getBulletBox().isChecked();
+        physicsComponent.sensor = viewComponent.getSensorBox().isChecked();
 
     }
 }

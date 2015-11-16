@@ -11,8 +11,19 @@ dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     compile "com.kotcrab.vis:vis-ui:0.9.2"
-    compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.2-SNAPSHOT"
+    compile project(":overlap2d-runtime-libgdx")
     compile 'net.mountainblade:modular:1.0'
+}
+
+project(":overlap2d-runtime-libgdx") {
+    apply plugin: "java"
+    sourceSets.main.java.srcDirs = ["src/"]
+    sourceSets.test.java.srcDirs = ["test/"]
+
+    dependencies {
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        compile fileTree(dir: 'libs', include: '*.jar')
+    }
 }
 
 repositories {
