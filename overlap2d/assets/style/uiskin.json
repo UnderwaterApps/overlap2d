@@ -732,8 +732,8 @@
   },
   "com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle": {
     "default": {
-      //      "background": "menu-bg",
-      //      "bottomBar": "list-selection",
+      //"background": "menu-bg",
+      //"bottomBar": "list-selection",
       "buttonStyle": {
         "up": "tab-inactive",
         "checked": "tab-active",

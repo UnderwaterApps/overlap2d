@@ -24,8 +24,7 @@ public class O2DDialogTest {
 
     @Before
     public void setUp() throws Exception {
-        VisUI visUI = new VisUI();
-        visUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
+        VisUI.load(Gdx.files.local("overlap2d/assets/style/uiskin.json"));
         o2DDialog = new O2DDialog("O2DDialog Test");
     }
 
@@ -42,11 +41,11 @@ public class O2DDialogTest {
     @Test
     @NeedGL
     public void shouldCreateVisValidatableTextFieldWithInputValidator() throws Exception {
-        VisValidatableTextField visValidableTextField = o2DDialog.createValidableTextField("inputText", input -> true);
+        VisValidatableTextField visValidatableTextField = o2DDialog.createValidableTextField("inputText", input -> true);
 
-        assertThat(visValidableTextField, not(nullValue()));
-        assertThat(visValidableTextField.getText(), is("inputText"));
-        assertThat(visValidableTextField.getListeners().size, greaterThan(0));
+        assertThat(visValidatableTextField, not(nullValue()));
+        assertThat(visValidatableTextField.getText(), is("inputText"));
+        assertThat(visValidatableTextField.getListeners().size, greaterThan(0));
     }
 
     @Test

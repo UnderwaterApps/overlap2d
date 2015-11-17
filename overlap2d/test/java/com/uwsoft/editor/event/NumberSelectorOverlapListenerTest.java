@@ -28,8 +28,8 @@ public class NumberSelectorOverlapListenerTest {
 
     @Test
     public void shouldSendNumber() throws Exception {
-        numberSelectorOverlapListener.changed(1);
+        numberSelectorOverlapListener.changed(1f);
 
-        verify(overlap2DFacade).sendNotification(eq("test"), eq(1));
+        verify(overlap2DFacade).sendNotification(eq("test"), eq(1f));
     }
 }
