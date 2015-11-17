@@ -144,11 +144,11 @@ public class EditSpriteAnimationDialog extends UIDraggablePanel {
     }
 
     public int getFrameFrom() {
-        return fromFrameField.getValue();
+        return (int) fromFrameField.getValue();
     }
 
     public int getFrameTo() {
-        return toFrameField.getValue();
+        return (int) toFrameField.getValue();
     }
 
 

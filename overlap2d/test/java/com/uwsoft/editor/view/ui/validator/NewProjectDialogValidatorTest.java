@@ -2,7 +2,7 @@ package com.uwsoft.editor.view.ui.validator;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -25,7 +25,7 @@ public class NewProjectDialogValidatorTest {
     @Mock
     private Stage stage;
     @Mock
-    private VisValidableTextField projectName;
+    private VisValidatableTextField projectName;
 
     @Before
     public void setUp() throws Exception {

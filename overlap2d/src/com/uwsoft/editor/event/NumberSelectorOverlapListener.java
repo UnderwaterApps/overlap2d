@@ -33,7 +33,7 @@ public class NumberSelectorOverlapListener implements NumberSelector.NumberSelec
     }
 
     @Override
-    public void changed(int number) {
+    public void changed(float number) {
         Overlap2DFacade facade = Overlap2DFacade.getInstance();
         facade.sendNotification(eventName, number);
     }

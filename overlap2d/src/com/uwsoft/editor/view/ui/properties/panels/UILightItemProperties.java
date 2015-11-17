@@ -24,7 +24,7 @@ import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
@@ -39,10 +39,10 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private VisCheckBox isXRayCheckBox;
     private NumberSelector rayCountSelector;
 
-    private VisValidableTextField pointLightRadiusField;
-    private VisValidableTextField coneInnerAngleField;
-    private VisValidableTextField coneDistanceField;
-    private VisValidableTextField softnessLengthField;
+    private VisValidatableTextField pointLightRadiusField;
+    private VisValidatableTextField coneInnerAngleField;
+    private VisValidatableTextField coneDistanceField;
+    private VisValidatableTextField softnessLengthField;
 
     private VisLabel lightTypeLabel;
 
@@ -56,10 +56,10 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         isXRayCheckBox = new VisCheckBox(null);
         rayCountSelector = new NumberSelector(null, 4, 4, 5000, 1);
         lightTypeLabel = new VisLabel();
-        pointLightRadiusField = new VisValidableTextField(floatValidator);
-        coneInnerAngleField = new VisValidableTextField(floatValidator);
-        coneDistanceField = new VisValidableTextField(floatValidator);
-        softnessLengthField = new VisValidableTextField(floatValidator);
+        pointLightRadiusField = new VisValidatableTextField(floatValidator);
+        coneInnerAngleField = new VisValidatableTextField(floatValidator);
+        coneDistanceField = new VisValidatableTextField(floatValidator);
+        softnessLengthField = new VisValidatableTextField(floatValidator);
 
         secondaryTable = new VisTable();
 
@@ -115,7 +115,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getRayCount() {
-        return rayCountSelector.getValue();
+        return (int) rayCountSelector.getValue();
     }
 
     public void setRayCount(int count) {

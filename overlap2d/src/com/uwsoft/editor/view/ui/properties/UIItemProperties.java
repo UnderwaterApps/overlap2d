@@ -25,7 +25,7 @@ import com.kotcrab.vis.ui.InputValidator;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 
 /**
  * Created by azakhary on 4/15/2015.
@@ -62,20 +62,20 @@ public abstract class UIItemProperties extends UIAbstractProperties {
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
-        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+    protected VisValidatableTextField createValidableTextField(String text, InputValidator inputValidator) {
+        VisValidatableTextField visTextField = new VisValidatableTextField(inputValidator);
         visTextField.setText(text);
         visTextField.setStyle(skin.get("default", VisTextField.VisTextFieldStyle.class));
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(InputValidator inputValidator) {
-        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
+    protected VisValidatableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidatableTextField visTextField = createValidableTextField("", inputValidator);
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
-        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+    protected VisValidatableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidatableTextField visTextField = createValidableTextField(text, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }
