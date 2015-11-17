@@ -436,7 +436,6 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
 
 	@Override
 	public ShaderProgram getShaderProgram(String shaderName) {
-		// TODO Auto-generated method stub
-		return null;
+        return shaderPrograms.get(shaderName);
 	}
 }
