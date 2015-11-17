@@ -397,7 +397,6 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
 
 	@Override
 	public ShaderProgram getShaderProgram(String shaderName) {
-		// TODO Auto-generated method stub
 		return shaderPrograms.get(shaderName);
 	}
 

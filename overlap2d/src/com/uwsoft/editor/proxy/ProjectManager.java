@@ -818,6 +818,10 @@ public class ProjectManager extends BaseProxy {
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             exportParticles(currentProjectVO.projectMainExportPath);
         }
+        exportShaders(defaultBuildPath);
+        if (!currentProjectVO.projectMainExportPath.isEmpty()) {
+            exportShaders(currentProjectVO.projectMainExportPath);
+        }
         exportFonts(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             exportFonts(currentProjectVO.projectMainExportPath);
@@ -840,6 +844,18 @@ public class ProjectManager extends BaseProxy {
             FileUtils.copyDirectory(stylesDirectory.file(), fileTarget);
         } catch (IOException e) {
             //e.printStackTrace();
+        }
+    }
+
+    private void exportShaders(String targetPath) {
+        String srcPath = currentProjectPath + "/assets";
+        FileHandle origDirectoryHandle = Gdx.files.absolute(srcPath);
+        FileHandle shadersDirectory = origDirectoryHandle.child("shaders");
+        File fileTarget = new File(targetPath + "/" + shadersDirectory.name());
+        try {
+            FileUtils.copyDirectory(shadersDirectory.file(), fileTarget);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
