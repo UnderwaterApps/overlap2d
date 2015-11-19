@@ -143,8 +143,9 @@ public class CompositeActor extends Group {
             Label.LabelStyle style = new Label.LabelStyle(ir.getBitmapFont(labels.get(i).style, labels.get(i).size), Color.WHITE);
             Label label = new Label(labels.get(i).text, style);
             label.setAlignment(labels.get(i).align);
-            label.setWidth(labels.get(i).width * pixelsPerWU/resMultiplier);
-            label.setHeight(labels.get(i).height * pixelsPerWU/resMultiplier);
+            label.setWidth(labels.get(i).width * pixelsPerWU / resMultiplier);
+            label.setHeight(labels.get(i).height * pixelsPerWU / resMultiplier);
+            label.setScale(1f/resMultiplier);
             processMain(label, labels.get(i));
             addActor(label);
 
@@ -157,8 +158,8 @@ public class CompositeActor extends Group {
         buildCoreData(actor, vo);
 
         //actor properties
-        actor.setPosition(vo.x * pixelsPerWU, vo.y * pixelsPerWU/resMultiplier);
-        actor.setOrigin(vo.originX * pixelsPerWU, vo.originY * pixelsPerWU/resMultiplier);
+        actor.setPosition(vo.x * pixelsPerWU/resMultiplier, vo.y * pixelsPerWU/resMultiplier);
+        actor.setOrigin(vo.originX * pixelsPerWU/resMultiplier, vo.originY * pixelsPerWU/resMultiplier);
         actor.setScale(vo.scaleX, vo.scaleY);
         actor.setRotation(vo.rotation);
         actor.setColor(new Color(vo.tint[0], vo.tint[1], vo.tint[2], vo.tint[3]));
