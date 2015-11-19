@@ -145,7 +145,6 @@ public class CompositeActor extends Group {
             label.setAlignment(labels.get(i).align);
             label.setWidth(labels.get(i).width * pixelsPerWU / resMultiplier);
             label.setHeight(labels.get(i).height * pixelsPerWU / resMultiplier);
-            label.setScale(resMultiplier);
             processMain(label, labels.get(i));
             addActor(label);
 
