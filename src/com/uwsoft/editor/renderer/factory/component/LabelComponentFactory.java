@@ -10,10 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label.LabelStyle;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.label.LabelComponent;
 import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
-import com.uwsoft.editor.renderer.data.LabelVO;
-import com.uwsoft.editor.renderer.data.MainItemVO;
-import com.uwsoft.editor.renderer.data.ParticleEffectVO;
-import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
@@ -51,7 +48,10 @@ public class LabelComponentFactory extends ComponentFactory{
         component.setAlignment(vo.align);
 
         ProjectInfoVO projectInfoVO = rm.getProjectVO();
-        component.setFontScale(1f/projectInfoVO.pixelToWorld);
+        ResolutionEntryVO resolutionEntryVO = rm.getLoadedResolution();
+        float multiplier = resolutionEntryVO.getMultiplier(rm.getProjectVO().originalResolution);
+
+        component.setFontScale(multiplier/projectInfoVO.pixelToWorld);
 
         entity.add(component);
         return component;
