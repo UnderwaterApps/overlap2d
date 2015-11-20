@@ -70,7 +70,7 @@ public class ResolutionManager extends BaseProxy {
         try {
             BufferedImage sourceBufferedImage = ImageIO.read(file);
             if (ratio == 1.0) {
-                return null;
+                return sourceBufferedImage;
             }
             // When image has to be resized smaller then 3 pixels we should leave it as is, as to ResampleOP limitations
             // But it should also trigger a warning dialog at the and of the import, to notify the user of non resized images.
