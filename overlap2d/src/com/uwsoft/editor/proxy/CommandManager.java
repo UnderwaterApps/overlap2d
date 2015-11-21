@@ -55,7 +55,7 @@ public class CommandManager extends BaseProxy {
     }
 
     public void undoCommand() {
-        if(cursor < 0) return;
+        if(cursor <= 0) return;
         RevertableCommand command = commands.get(cursor);
         if(command.isStateDone()) {
             command.callUndoAction();
