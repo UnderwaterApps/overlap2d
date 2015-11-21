@@ -31,7 +31,7 @@ public class CommandManager extends BaseProxy {
     private static final String TAG = CommandManager.class.getCanonicalName();
     public static final String NAME = TAG;
 
-    private int cursor = 0;
+    private int cursor = -1;
 
     private ArrayList<RevertableCommand> commands = new ArrayList<>();
 
@@ -55,7 +55,7 @@ public class CommandManager extends BaseProxy {
     }
 
     public void undoCommand() {
-        if(cursor <= 0) return;
+        if(cursor < 0) return;
         RevertableCommand command = commands.get(cursor);
         if(command.isStateDone()) {
             command.callUndoAction();
