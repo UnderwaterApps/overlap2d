@@ -10,6 +10,9 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map.Entry;
 
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
 import com.uwsoft.editor.renderer.data.*;
 
 import org.apache.commons.io.FileUtils;
@@ -51,6 +54,8 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
     private HashMap<FontSizePair, BitmapFont> bitmapFonts = new HashMap<>();
     private HashMap<String, ShaderProgram> shaderPrograms = new HashMap<String, ShaderProgram>(1);
 
+    private TextureRegion defaultRegion;
+
     private ResolutionManager resolutionManager;
 
     public ResourceManager() {
@@ -62,11 +67,21 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         super.onRegister();
         facade = Overlap2DFacade.getInstance();
         resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+
+        // TODO: substitute this with "NO IMAGE" icon
+        Pixmap pixmap = new Pixmap(50, 50, Pixmap.Format.RGBA8888);
+        pixmap.setColor(new Color(1, 1, 1, 0.4f));
+        pixmap.fill();
+        defaultRegion = new TextureRegion(new Texture(pixmap));
     }
 
     @Override
     public TextureRegion getTextureRegion(String name) {
         TextureRegion reg = currentProjectAtlas.findRegion(name);
+
+        if(reg == null) {
+            reg = defaultRegion;
+        }
 
         return reg;
     }
@@ -218,7 +233,7 @@ public class ResourceManager extends BaseProxy implements IResourceRetriever {
         }
     }
 
-    private void loadCurrentProjectAssets(String packPath) {
+    public void loadCurrentProjectAssets(String packPath) {
         try {
             currentProjectAtlas = new TextureAtlas(Gdx.files.getFileHandle(packPath, Files.FileType.Internal));
         } catch (Exception e) {

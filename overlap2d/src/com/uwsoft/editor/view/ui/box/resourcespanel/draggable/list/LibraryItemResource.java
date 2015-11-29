@@ -20,6 +20,7 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 
 /**
@@ -39,6 +40,8 @@ public class LibraryItemResource extends ListItemResource {
         payloadImg.getColor().a = .85f;
         payload = new ResourcePayloadObject();
         payload.name = key;
+
+        setRightClickEvent(UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK, payload.name);
     }
 
     public String getKey() {

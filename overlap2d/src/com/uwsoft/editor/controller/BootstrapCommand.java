@@ -27,6 +27,8 @@ import com.uwsoft.editor.controller.commands.component.UpdateLabelDataCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateLightDataCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateSpriteAnimationDataCommand;
+import com.uwsoft.editor.controller.commands.resource.DeleteImageResource;
+import com.uwsoft.editor.controller.commands.resource.DeleteLibraryItem;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -77,5 +79,9 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(MsgAPI.SAVE_EXPORT_PATH, SaveExportPathCommand.class);
 
         facade.registerCommand(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, PluginItemCommand.class);
+
+        // Resources
+        facade.registerCommand(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE, DeleteImageResource.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_LIBRARY_ITEM, DeleteLibraryItem.class);
     }
 }
