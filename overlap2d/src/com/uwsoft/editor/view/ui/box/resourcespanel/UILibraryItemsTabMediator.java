@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.resource.DeleteLibraryItem;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
@@ -47,7 +48,11 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
     @Override
     public String[] listNotificationInterests() {
         String[] listNotification = super.listNotificationInterests();
-        return ArrayUtils.add(listNotification, MsgAPI.LIBRARY_LIST_UPDATED);
+
+        listNotification = ArrayUtils.add(listNotification, MsgAPI.LIBRARY_LIST_UPDATED);
+        listNotification = ArrayUtils.add(listNotification, DeleteLibraryItem.DONE);
+
+        return listNotification;
     }
 
     @Override
@@ -56,7 +61,10 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
         switch (notification.getName()) {
             case MsgAPI.LIBRARY_LIST_UPDATED:
                 initList(viewComponent.searchString);
-
+                break;
+            case DeleteLibraryItem.DONE:
+                initList(viewComponent.searchString);
+                break;
             default:
                 break;
         }

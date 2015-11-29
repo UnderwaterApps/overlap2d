@@ -73,4 +73,9 @@ public class CommandManager extends BaseProxy {
             command.setStateDone(true);
         }
     }
+
+    public void clearHistory() {
+        cursor = -1;
+        commands.clear();
+    }
 }

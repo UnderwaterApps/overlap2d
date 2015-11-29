@@ -25,9 +25,6 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.commons.MsgAPI;
-import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.facade.SimpleFacade;
 import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
@@ -61,13 +58,7 @@ public class ImageResource extends BoxItemResource {
 
         addActor(img);
 
-        img.addListener(new InputListener() {
-            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
-                if(button == Input.Buttons.RIGHT) {
-                    SimpleFacade.getInstance().sendNotification(UIResourcesBoxMediator.IMAGE_RIGHT_CLICK, new Vector2(x, y));
-                }
-            }
-        });
+        setRightClickEvent(UIResourcesBoxMediator.IMAGE_RIGHT_CLICK, region.name);
 
         payloadImg = new Image(region);
         payload = new ResourcePayloadObject();

@@ -40,7 +40,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
 
     public static final Integer SCENE_ACTIONS_SET = 0;
     public static final Integer ITEMS_ACTIONS_SET = 1;
-    public static final Integer RESOURCE_ACTION_SET = 2;
+    public static final Integer LIBRARY_ITEM_ACTION_SET = 2;
     public static final Integer IMAGE_RESOURCE_ACTION_SET = 3;
 
     private Sandbox sandbox;
@@ -65,11 +65,10 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(SCENE_ACTIONS_SET).add(MsgAPI.ACTION_PASTE);
         actionSets.get(SCENE_ACTIONS_SET).add(MsgAPI.ACTION_CREATE_PRIMITIVE);
 
-        actionSets.put(RESOURCE_ACTION_SET, new Array<>());
-        actionSets.get(RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE);
-
         actionSets.put(IMAGE_RESOURCE_ACTION_SET, new Array<>());
-        //actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE_RESOURCE);
+        actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE);
+        actionSets.put(LIBRARY_ITEM_ACTION_SET, new Array<>());
+        actionSets.get(LIBRARY_ITEM_ACTION_SET).add(MsgAPI.ACTION_DELETE_LIBRARY_ITEM);
 
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CUT);
@@ -132,13 +131,13 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 showPopup(IMAGE_RESOURCE_ACTION_SET, notification.getBody());
                 break;
             case UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK:
-                showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                //showPopup(RESOURCE_ACTION_SET, notification.getBody());
                 break;
             case UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK:
-                showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                showPopup(LIBRARY_ITEM_ACTION_SET, notification.getBody());
                 break;
             case UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK:
-                showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                //showPopup(RESOURCE_ACTION_SET, notification.getBody());
                 break;
             case UIDropDownMenu.ITEM_CLICKED:
                 facade.sendNotification(notification.getBody(), currentObservable);
@@ -152,13 +151,13 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         showPopup(actionSets.get(actionsSet), observable);
     }
 
-    private void showPopup(Array<String> actionsSet,Object observable) {
+    private void showPopup(Array<String> actionsSet, Object observable) {
         Vector2 coordinates = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
 
         sandbox.getUIStage().addActor(viewComponent);
         viewComponent.setActionList(actionsSet);
         viewComponent.setX(coordinates.x);
-        viewComponent.setY(coordinates.y);
+        viewComponent.setY(coordinates.y - viewComponent.getHeight());
 
         currentCoordinates = new Vector2(coordinates);
 

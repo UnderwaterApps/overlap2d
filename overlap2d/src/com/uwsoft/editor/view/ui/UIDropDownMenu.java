@@ -54,8 +54,14 @@ public class UIDropDownMenu extends PopupMenu {
         //actionNames.put(MsgAPI.ACTION_EDIT_PHYSICS, "Edit physics");
         //actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
-        //actionNames.put(MsgAPI.ACTION_DELETE_RESOURCE, "Delete");
         actionNames.put(MsgAPI.ACTION_CREATE_PRIMITIVE, "Create Primitive");
+
+        actionNames.put(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE, "Delete");
+        actionNames.put(MsgAPI.ACTION_DELETE_LIBRARY_ITEM, "Delete");
+        actionNames.put(MsgAPI.ACTION_DELETE_PARTICLE_EFFECT, "Delete");
+        actionNames.put(MsgAPI.ACTION_DELETE_SPRITE_ANIMATION_RESOURCE, "Delete");
+        actionNames.put(MsgAPI.ACTION_DELETE_SPRITER_ANIMATION_RESOURCE, "Delete");
+        actionNames.put(MsgAPI.ACTION_DELETE_SPINE_ANIMATION_RESOURCE, "Delete");
     }
 
     public void setActionName(String action, String name) {

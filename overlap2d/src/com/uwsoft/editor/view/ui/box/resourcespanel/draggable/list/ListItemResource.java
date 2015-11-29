@@ -18,12 +18,16 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list;
 
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
+import com.puremvc.patterns.facade.SimpleFacade;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResourceView;
 
@@ -41,6 +45,20 @@ public abstract class ListItemResource extends Button implements DraggableResour
         icon = new Image(getStyle().resourceUp);
         add(icon);
         add(new VisLabel(name, getStyle().labelStyle)).expandX().fillX();
+    }
+
+    public void setRightClickEvent(String eventName, String payload) {
+        addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                super.touchDown(event, x, y, pointer, button);
+                return true;
+            }
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                if(button == Input.Buttons.RIGHT) {
+                    SimpleFacade.getInstance().sendNotification(eventName, payload);
+                }
+            }
+        });
     }
 
 

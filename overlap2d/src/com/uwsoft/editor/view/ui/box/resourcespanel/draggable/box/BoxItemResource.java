@@ -18,8 +18,13 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
+import com.puremvc.patterns.facade.SimpleFacade;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResourceView;
@@ -40,5 +45,19 @@ public abstract class BoxItemResource extends Group implements DraggableResource
         addActor(rc);
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
+    }
+
+    public void setRightClickEvent(String eventName, String payload) {
+        addListener(new InputListener() {
+            public boolean touchDown (InputEvent event, float x, float y, int pointer, int button) {
+                super.touchDown(event, x, y, pointer, button);
+                return true;
+            }
+            public void touchUp (InputEvent event, float x, float y, int pointer, int button) {
+                if(button == Input.Buttons.RIGHT) {
+                    SimpleFacade.getInstance().sendNotification(eventName, payload);
+                }
+            }
+        });
     }
 }
