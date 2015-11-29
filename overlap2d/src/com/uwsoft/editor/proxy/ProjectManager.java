@@ -253,6 +253,11 @@ public class ProjectManager extends BaseProxy {
         }
     }
 
+    public void reLoadProjectAssets() {
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        resourceManager.loadCurrentProjectAssets(currentProjectPath + "/assets/" + resolutionManager.currentResolutionName + "/pack/pack.atlas");
+    }
 
     private void loadProjectData(String projectPath) {
         // All legit loading assets
@@ -1107,5 +1112,13 @@ public class ProjectManager extends BaseProxy {
             return new FileHandle(editorConfigVO.lastOpenedSystemPath);
         }
         return new FileHandle(defaultWorkspacePath);
+    }
+
+    public boolean deleteImage(String imageName) {
+        String imagesPath = currentProjectPath + "/assets/orig/images/";
+        String filePath = imagesPath+imageName+".png";
+
+        File file = new File(filePath);
+        return file.delete();
     }
 }

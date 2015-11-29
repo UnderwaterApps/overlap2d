@@ -27,4 +27,8 @@ public abstract class NonRevertableCommand extends SandboxCommand {
     public void callDoAction() {
         doAction();
     }
+
+    public void cancel() {
+        isCancelled = true;
+    }
 }
