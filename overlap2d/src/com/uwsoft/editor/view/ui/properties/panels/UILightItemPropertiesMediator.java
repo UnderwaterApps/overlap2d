@@ -52,6 +52,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         viewComponent.setRadius(lightObjectComponent.distance + "");
         viewComponent.setAngle(lightObjectComponent.coneDegree + "");
         viewComponent.setDistance(lightObjectComponent.distance + "");
+        viewComponent.setDirection(lightObjectComponent.directionDegree + "");
         viewComponent.setSoftnessLength(lightObjectComponent.softnessLength + "");
     }
 
@@ -70,6 +71,7 @@ public class UILightItemPropertiesMediator extends UIItemPropertiesMediator<Enti
             payloadVo.distance = NumberUtils.toFloat(viewComponent.getRadius());
         } else {
             payloadVo.distance = NumberUtils.toFloat(viewComponent.getDistance());
+            payloadVo.directionDegree = NumberUtils.toFloat(viewComponent.getDirection());
         }
 
         Object payload = UpdateLightDataCommand.payload(observableReference, payloadVo);
