@@ -1,3 +1,7 @@
+Overlap2D - 0.1.2
+------------------------------
+
+
 Overlap2D - 0.1.1 (skipping 0.0.9)
 ------------------------------
 
@@ -5,7 +9,7 @@ Plugin system
 Performance display Plugin
 Fixed bug with layers not working normally - and undo redo actisn related to that
 Fixed bug with copying and pasting composite
-
+*Other things (I was lazy to write this down)
 
 Overlap2D - 0.1.0 (skipping 0.0.9)
 ------------------------------
