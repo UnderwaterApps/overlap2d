@@ -73,11 +73,11 @@ public class Main {
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
             config.backgroundFPS = 0;
-            config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
+            config.title = "Overlap2D - v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
             LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-            config.title = "Overlap2D - Public Alpha v" + AppConfig.getInstance().version;
+            config.title = "Overlap2D - v" + AppConfig.getInstance().version;
             config.fullscreen = true;
             config.resizable = false;
             config.width = (int) (width);

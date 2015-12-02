@@ -54,7 +54,7 @@ public class InputFileWidget extends VisTable {
     private void initFileChooser(FileChooser.Mode mode, FileChooser.SelectionMode selectionMode, boolean multiselectionEnabled) {
         fileChooser = new FileChooser(mode);
         fileChooser.setSelectionMode(selectionMode);
-        fileChooser.setMultiselectionEnabled(multiselectionEnabled);
+        fileChooser.setMultiSelectionEnabled(multiselectionEnabled);
         fileChooser.setListener(new InputFileWidgetFileChooserListener());
     }
 
@@ -68,7 +68,7 @@ public class InputFileWidget extends VisTable {
     }
 
     public FileHandle getValue() {
-        if (fileChooser.isMultiselectionEnabled()) {
+        if (fileChooser.isMultiSelectionEnabled()) {
             throw new IllegalStateException("Multiselection is enabled, use 'getValues' instead of 'getValue'");
         }
         return value;
@@ -80,7 +80,7 @@ public class InputFileWidget extends VisTable {
     }
 
     public Array<FileHandle> getValues() {
-        if (!fileChooser.isMultiselectionEnabled()) {
+        if (!fileChooser.isMultiSelectionEnabled()) {
             throw new IllegalStateException("Multiselection is not enabled, use 'getValue' instead of 'getValues'");
         }
         return values;

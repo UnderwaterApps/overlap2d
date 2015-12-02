@@ -25,11 +25,11 @@ import com.uwsoft.editor.proxy.ProjectManager;
 /**
  * Created by azakhary on 11/3/2015.
  */
-public class ExportProjectCommand extends SandboxCommand {
+public class ExportProjectCommand extends SandboxCommand { @Override
+                                                           public void execute(Notification notification) {
+    ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+    projectManager.exportProject();
+}
 
-    @Override
-    public void execute(Notification notification) {
-        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
-        projectManager.exportProject();
-    }
+
 }

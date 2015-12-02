@@ -451,6 +451,12 @@
       "over": "button-over",
       "imageUp": "icon-close"
     },
+    "close-active-tab": {
+      "down": "button-red",
+      "up": "button",
+      "over": "button-over",
+      "imageUp": "icon-close"
+    },
     "close-box": {
       "imageUp": "box-colapse-on",
       "imageChecked": "box-colapse-off"
@@ -581,7 +587,7 @@
       "imageCheckedOver": "icon-unlink-active"
     }
   },
-  "com.kotcrab.vis.ui.widget.VisSlider$VisSliderStyle": {
+  "com.badlogic.gdx.scenes.scene2d.ui.Slider$SliderStyle": {
     "default-horizontal": {
       "background": "slider",
       "knob": "slider-knob",
@@ -678,10 +684,56 @@
       "up": "select-up"
     }
   },
+  "com.kotcrab.vis.ui.Sizes": {
+    "default": {
+      "scaleFactor": 1,
+      "spacingBottom": 8,
+      "spacingRight": 6,
+      "menuItemIconSize": 22,
+      "numberSelectorButtonSize": 12,
+      "numberSelectorButtonsWidth": 12,
+      "numberSelectorFieldSize": 40
+    }
+  },
+  "com.kotcrab.vis.ui.widget.Tooltip$TooltipStyle": {
+    "default":
+    {
+      "background": "tooltip-bg"
+    }
+  },
+  "com.kotcrab.vis.ui.widget.file.FileChooserStyle": {
+      "default": {
+        "highlight": "list-selection",
+        "popupMenuStyleName": "default",
+        "iconArrowLeft": "icon-arrow-left",
+        "iconArrowRight": "icon-arrow-right",
+        "iconFolder": "icon-folder",
+        "iconFolderParent": "icon-folder",
+        "iconFolderNew": "icon-folder",
+        "iconDrive": "icon-drive",
+        "iconFolderStar": "icon-folder",
+        "iconTrash": "icon-trash",
+        "iconFileText": "icon-label",
+        "iconFileImage": "icon-image",
+        "iconFilePdf": "icon-label",
+        "iconFileAudio": "icon-label"
+      }
+    },
+  "com.kotcrab.vis.ui.widget.color.ColorPickerStyle": {
+    "default": {
+      "white": "white",
+      "alphaBar10px": "alpha-bar-10px",
+      "alphaBar25px": "alpha-bar-25px",
+      "barSelector": "color-picker-bar-selector",
+      "cross": "color-picker-cross",
+      "verticalSelector": "color-picker-selector-vertical",
+      "horizontalSelector": "color-picker-selector-horizontal"
+    }
+  },
   "com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane$TabbedPaneStyle": {
     "default": {
-      //      "background": "menu-bg",
-      //      "bottomBar": "list-selection",
+      //"background": "menu-bg",
+      //"bottomBar": "list-selection",
       "buttonStyle": {
         "up": "tab-inactive",
         "checked": "tab-active",

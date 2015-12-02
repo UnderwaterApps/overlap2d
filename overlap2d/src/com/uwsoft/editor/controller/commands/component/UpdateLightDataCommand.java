@@ -50,6 +50,7 @@ public class UpdateLightDataCommand extends EntityModifyRevertableCommand {
         lightObjectComponent.coneDegree = vo.coneDegree;
         lightObjectComponent.distance = vo.distance;
         lightObjectComponent.softnessLength = vo.softnessLength;
+        lightObjectComponent.directionDegree = vo.directionDegree;
         
     }
 
@@ -64,6 +65,7 @@ public class UpdateLightDataCommand extends EntityModifyRevertableCommand {
         lightObjectComponent.coneDegree = backup.coneDegree;
         lightObjectComponent.distance = backup.distance;
         lightObjectComponent.softnessLength  = backup.softnessLength;
+        lightObjectComponent.directionDegree = backup.directionDegree;
     }
 
     public static Object payload(Entity entity, LightVO vo) {

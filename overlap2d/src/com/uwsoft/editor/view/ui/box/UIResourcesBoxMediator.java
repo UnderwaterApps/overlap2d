@@ -102,5 +102,7 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
         UIParticleEffectsTabMediator particlesTabMediator = facade.retrieveMediator(UIParticleEffectsTabMediator.NAME);
         Tab particlesTab = particlesTabMediator.getViewComponent();
         viewComponent.addTab(3, particlesTab);
+
+        viewComponent.setActiveTabContent(imagesTab);
     }
 }

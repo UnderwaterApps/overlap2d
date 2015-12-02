@@ -225,7 +225,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         //fileChooser.setSelectionMode(FileChooser.SelectionMode.FILES);
         //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
 
-        fileChooser.setMultiselectionEnabled(false);
+        fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setDirectory(projectManager.getWorkspacePath());
         fileChooser.setListener(new FileChooserAdapter() {
             @Override

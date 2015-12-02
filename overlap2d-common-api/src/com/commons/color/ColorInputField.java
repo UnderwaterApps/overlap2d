@@ -25,9 +25,10 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.scenes.scene2d.utils.FocusListener;
+import com.badlogic.gdx.scenes.scene2d.utils.UIUtils;
 import com.kotcrab.vis.ui.InputValidator;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 
 
 /**
@@ -35,7 +36,7 @@ import com.kotcrab.vis.ui.widget.VisValidableTextField;
  * provides quick increment/decrement of current value by pressing [shift +] plus or minus on numpad
  * @author Kotcrab
  */
-public class ColorInputField extends VisValidableTextField {
+public class ColorInputField extends VisValidatableTextField {
     private int value;
     private int maxValue;
 
@@ -56,12 +57,12 @@ public class ColorInputField extends VisValidableTextField {
             }
         });
 
-        addListener(new InputListener() {
-            @Override
-            public boolean keyTyped (InputEvent event, char character) {
-                ColorInputField field = (ColorInputField) event.getListenerActor();
-                if (character == '+') field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? 10 : 1);
-                if (character == '-') field.changeValue(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT) ? -10 : -1);
+		addListener(new InputListener() {
+			@Override
+			public boolean keyTyped (InputEvent event, char character) {
+				ColorInputField field = (ColorInputField) event.getListenerActor();
+				if (character == '+') field.changeValue(UIUtils.shift() ? 10 : 1);
+				if (character == '-') field.changeValue(UIUtils.shift() ? -10 : -1);
 
                 if (character != 0) listener.changed(getValue());
 

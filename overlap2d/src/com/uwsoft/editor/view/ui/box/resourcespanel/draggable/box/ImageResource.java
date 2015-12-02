@@ -18,9 +18,15 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.puremvc.patterns.facade.SimpleFacade;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 
 public class ImageResource extends BoxItemResource {
@@ -52,6 +58,7 @@ public class ImageResource extends BoxItemResource {
 
         addActor(img);
 
+        setRightClickEvent(UIResourcesBoxMediator.IMAGE_RIGHT_CLICK, region.name);
 
         payloadImg = new Image(region);
         payload = new ResourcePayloadObject();

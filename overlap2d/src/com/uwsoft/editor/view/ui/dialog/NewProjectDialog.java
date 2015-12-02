@@ -41,7 +41,7 @@ public class NewProjectDialog extends O2DDialog {
     private static final String DEFAULT_PPWU = "80";
 
     private final InputFileWidget workspacePathField;
-    private final VisValidableTextField projectName;
+    private final VisValidatableTextField projectName;
     private VisTextField originWidthTextField;
     private VisTextField originHeightTextField;
     private String defaultWorkspacePath;

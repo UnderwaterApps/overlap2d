@@ -20,11 +20,16 @@ package com.uwsoft.editor.view.ui.box.resourcespanel;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.commands.resource.DeleteImageResource;
+import com.uwsoft.editor.controller.commands.resource.DeleteLibraryItem;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.DraggableResource;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box.ImageResource;
+import org.apache.commons.lang3.ArrayUtils;
 
 /**
  * Created by azakhary on 4/17/2015.
@@ -37,6 +42,27 @@ public class UIImagesTabMediator extends UIResourcesTabMediator<UIImagesTab> {
 
     public UIImagesTabMediator() {
         super(NAME, new UIImagesTab());
+    }
+
+    @Override
+    public String[] listNotificationInterests() {
+        String[] listNotification = super.listNotificationInterests();
+
+        listNotification = ArrayUtils.add(listNotification, DeleteImageResource.DONE);
+
+        return listNotification;
+    }
+
+    @Override
+    public void handleNotification(Notification notification) {
+        super.handleNotification(notification);
+        switch (notification.getName()) {
+            case DeleteImageResource.DONE:
+                initList(viewComponent.searchString);
+                break;
+            default:
+                break;
+        }
     }
 
     @Override

@@ -253,6 +253,11 @@ public class ProjectManager extends BaseProxy {
         }
     }
 
+    public void reLoadProjectAssets() {
+        ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
+        ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
+        resourceManager.loadCurrentProjectAssets(currentProjectPath + "/assets/" + resolutionManager.currentResolutionName + "/pack/pack.atlas");
+    }
 
     private void loadProjectData(String projectPath) {
         // All legit loading assets
@@ -818,6 +823,10 @@ public class ProjectManager extends BaseProxy {
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             exportParticles(currentProjectVO.projectMainExportPath);
         }
+        exportShaders(defaultBuildPath);
+        if (!currentProjectVO.projectMainExportPath.isEmpty()) {
+            exportShaders(currentProjectVO.projectMainExportPath);
+        }
         exportFonts(defaultBuildPath);
         if (!currentProjectVO.projectMainExportPath.isEmpty()) {
             exportFonts(currentProjectVO.projectMainExportPath);
@@ -840,6 +849,18 @@ public class ProjectManager extends BaseProxy {
             FileUtils.copyDirectory(stylesDirectory.file(), fileTarget);
         } catch (IOException e) {
             //e.printStackTrace();
+        }
+    }
+
+    private void exportShaders(String targetPath) {
+        String srcPath = currentProjectPath + "/assets";
+        FileHandle origDirectoryHandle = Gdx.files.absolute(srcPath);
+        FileHandle shadersDirectory = origDirectoryHandle.child("shaders");
+        File fileTarget = new File(targetPath + "/" + shadersDirectory.name());
+        try {
+            FileUtils.copyDirectory(shadersDirectory.file(), fileTarget);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -943,8 +964,8 @@ public class ProjectManager extends BaseProxy {
         }
     }
 
-    public void setExportPaths(File path) {
-        currentProjectVO.projectMainExportPath = path.getPath();
+    public void setExportPaths(String path) {
+        currentProjectVO.projectMainExportPath = path;
     }
 
     public void setTexturePackerSizes(int width, int height) {
@@ -1091,5 +1112,13 @@ public class ProjectManager extends BaseProxy {
             return new FileHandle(editorConfigVO.lastOpenedSystemPath);
         }
         return new FileHandle(defaultWorkspacePath);
+    }
+
+    public boolean deleteImage(String imageName) {
+        String imagesPath = currentProjectPath + "/assets/orig/images/";
+        String filePath = imagesPath+imageName+".png";
+
+        File file = new File(filePath);
+        return file.delete();
     }
 }

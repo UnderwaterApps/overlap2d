@@ -26,7 +26,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.uwsoft.editor.proxy.CursorManager;
 import com.uwsoft.editor.view.ui.widget.CursorListener;
 
@@ -90,21 +90,21 @@ public class StandardWidgetsFactory {
         return visTextField;
     }
     
-    public static  VisValidableTextField createValidableTextField(InputValidator inputValidator) {
-        VisValidableTextField visTextField = createValidableTextField("default", inputValidator);
+    public static  VisValidatableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidatableTextField visTextField = createValidableTextField("default", inputValidator);
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator) {
-        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+    public static  VisValidatableTextField createValidableTextField(String style, InputValidator inputValidator) {
+        VisValidatableTextField visTextField = new VisValidatableTextField(inputValidator);
         Skin skin = VisUI.getSkin();
         visTextField.setStyle(skin.get(style, VisTextField.VisTextFieldStyle.class));
         visTextField.addListener(new CursorListener(CursorManager.TEXT));
         return visTextField;
     }
 
-    public static  VisValidableTextField createValidableTextField(String style, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
-        VisValidableTextField visTextField = createValidableTextField(style, inputValidator);
+    public static  VisValidatableTextField createValidableTextField(String style, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidatableTextField visTextField = createValidableTextField(style, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         visTextField.addListener(new CursorListener(CursorManager.TEXT));
         return visTextField;

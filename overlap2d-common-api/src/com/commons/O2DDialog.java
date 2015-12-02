@@ -26,7 +26,7 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisTextField;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 
 /**
  * Created by sargis on 4/27/15.
@@ -68,20 +68,20 @@ public class O2DDialog extends VisDialog {
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator) {
-        VisValidableTextField visTextField = new VisValidableTextField(inputValidator);
+    protected VisValidatableTextField createValidableTextField(String text, InputValidator inputValidator) {
+        VisValidatableTextField visTextField = new VisValidatableTextField(inputValidator);
         visTextField.setText(text);
         visTextField.setStyle(skin.get("light", VisTextField.VisTextFieldStyle.class));
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(InputValidator inputValidator) {
-        VisValidableTextField visTextField = createValidableTextField("", inputValidator);
+    protected VisValidatableTextField createValidableTextField(InputValidator inputValidator) {
+        VisValidatableTextField visTextField = createValidableTextField("", inputValidator);
         return visTextField;
     }
 
-    protected VisValidableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
-        VisValidableTextField visTextField = createValidableTextField(text, inputValidator);
+    protected VisValidatableTextField createValidableTextField(String text, InputValidator inputValidator, VisTextField.TextFieldFilter textFieldFilter) {
+        VisValidatableTextField visTextField = createValidableTextField(text, inputValidator);
         visTextField.setTextFieldFilter(textFieldFilter);
         return visTextField;
     }

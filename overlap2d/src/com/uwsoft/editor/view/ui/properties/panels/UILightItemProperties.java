@@ -24,7 +24,7 @@ import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.VisValidableTextField;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
@@ -39,10 +39,11 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private VisCheckBox isXRayCheckBox;
     private NumberSelector rayCountSelector;
 
-    private VisValidableTextField pointLightRadiusField;
-    private VisValidableTextField coneInnerAngleField;
-    private VisValidableTextField coneDistanceField;
-    private VisValidableTextField softnessLengthField;
+    private VisValidatableTextField pointLightRadiusField;
+    private VisValidatableTextField coneInnerAngleField;
+    private VisValidatableTextField coneDistanceField;
+    private VisValidatableTextField coneDirectionField;
+    private VisValidatableTextField softnessLengthField;
 
     private VisLabel lightTypeLabel;
 
@@ -56,10 +57,11 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         isXRayCheckBox = new VisCheckBox(null);
         rayCountSelector = new NumberSelector(null, 4, 4, 5000, 1);
         lightTypeLabel = new VisLabel();
-        pointLightRadiusField = new VisValidableTextField(floatValidator);
-        coneInnerAngleField = new VisValidableTextField(floatValidator);
-        coneDistanceField = new VisValidableTextField(floatValidator);
-        softnessLengthField = new VisValidableTextField(floatValidator);
+        pointLightRadiusField = new VisValidatableTextField(floatValidator);
+        coneInnerAngleField = new VisValidatableTextField(floatValidator);
+        coneDistanceField = new VisValidatableTextField(floatValidator);
+        softnessLengthField = new VisValidatableTextField(floatValidator);
+        coneDirectionField =  new VisValidatableTextField(floatValidator);
 
         secondaryTable = new VisTable();
 
@@ -102,6 +104,9 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         secondaryTable.add(createLabel("Angle: ", Align.right)).padRight(5).fillX().right();
         secondaryTable.add(coneInnerAngleField).width(70).left();
         secondaryTable.row().padTop(5);
+        secondaryTable.add(createLabel("Direction: ", Align.right)).padRight(5).fillX().right();
+        secondaryTable.add(coneDirectionField).width(70).left();
+        secondaryTable.row().padTop(5);
     }
 
     public void setType(LightVO.LightType type) {
@@ -115,7 +120,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getRayCount() {
-        return rayCountSelector.getValue();
+        return (int) rayCountSelector.getValue();
     }
 
     public void setRayCount(int count) {
@@ -161,6 +166,14 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     public void setDistance(String distance) {
         coneDistanceField.setText(distance);
     }
+
+    public String getDirection() {
+        return coneDirectionField.getText();
+    }
+
+    public void setDirection(String distance) {
+        coneDirectionField.setText(distance);
+    }
     
     public String getSoftnessLength() {
         return softnessLengthField.getText();
@@ -183,5 +196,6 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
         softnessLengthField.addListener(new KeyboardListener(getUpdateEventName()));
+        coneDirectionField.addListener(new KeyboardListener(getUpdateEventName()));
     }
 }

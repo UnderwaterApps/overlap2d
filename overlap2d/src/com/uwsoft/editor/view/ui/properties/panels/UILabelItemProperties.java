@@ -147,7 +147,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getFontSize() {
-        return fontSizeField.getValue();
+        return (int) fontSizeField.getValue();
     }
 
     public void setFontSize(int fontSize) {

@@ -16,25 +16,23 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.event;
+package com.uwsoft.editor.controller.commands;
 
-import com.kotcrab.vis.ui.widget.NumberSelector;
-import com.uwsoft.editor.Overlap2DFacade;
+import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.controller.SandboxCommand;
+import com.uwsoft.editor.proxy.ProjectManager;
 
 /**
- * Created by azakhary on 6/12/2015.
+ * Created by azakhary on 11/12/2015.
  */
-public class NumberSelectorOverlapListener implements NumberSelector.NumberSelectorListener {
-
-    private final String eventName;
-
-    public NumberSelectorOverlapListener(String eventName) {
-        this.eventName = eventName;
-    }
+public class SaveExportPathCommand extends SandboxCommand {
 
     @Override
-    public void changed(float number) {
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        facade.sendNotification(eventName, number);
+    public void execute(Notification notification) {
+        String path = notification.getBody();
+
+        ProjectManager projectManager = facade.retrieveProxy(ProjectManager.NAME);
+        projectManager.setExportPaths(path);
+        projectManager.saveCurrentProject();
     }
 }

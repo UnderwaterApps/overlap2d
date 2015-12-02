@@ -23,18 +23,19 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     private HashMap<Integer, String> bodyTypes = new HashMap<>();
 
     private VisSelectBox<String> bodyTypeBox;
-    private VisValidableTextField massField;
-    private VisValidableTextField centerOfMassXField;
-    private VisValidableTextField centerOfMassYField;
-    private VisValidableTextField rotationalIntertiaField;
-    private VisValidableTextField dumpingField;
-    private VisValidableTextField gravityScaleField;
-    private VisValidableTextField densityField;
-    private VisValidableTextField frictionField;
-    private VisValidableTextField restitutionField;
+    private VisValidatableTextField massField;
+    private VisValidatableTextField centerOfMassXField;
+    private VisValidatableTextField centerOfMassYField;
+    private VisValidatableTextField rotationalIntertiaField;
+    private VisValidatableTextField dumpingField;
+    private VisValidatableTextField gravityScaleField;
+    private VisValidatableTextField densityField;
+    private VisValidatableTextField frictionField;
+    private VisValidatableTextField restitutionField;
     private VisCheckBox allowSleepBox;
     private VisCheckBox awakeBox;
     private VisCheckBox bulletBox;
+    private VisCheckBox sensor;
 
     public UIPhysicsProperties() {
         super("Physics Component");
@@ -67,6 +68,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         allowSleepBox = new VisCheckBox("Allow Sleep");
         awakeBox = new VisCheckBox("Awake");
         bulletBox = new VisCheckBox("Bullet");
+        sensor = new VisCheckBox("Sensor");
 
         mainTable.add(new VisLabel("Body type:", Align.right)).padRight(5).colspan(2).fillX();
         mainTable.add(bodyTypeBox).width(100).colspan(2);
@@ -109,6 +111,11 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         bottomTable.add(allowSleepBox);
         bottomTable.add(awakeBox);
         bottomTable.add(bulletBox);
+
+        bottomTable.row();
+
+        bottomTable.add(sensor).colspan(3).left();
+
         mainTable.add(bottomTable).padBottom(5).colspan(4);
         mainTable.row().padTop(5);
     }
@@ -129,6 +136,7 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         allowSleepBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         awakeBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         bulletBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        sensor.addListener(new CheckBoxChangeListener(getUpdateEventName()));
     }
 
     public int getBodyType() {
@@ -145,39 +153,39 @@ public class UIPhysicsProperties extends UIRemovableProperties {
         bodyTypeBox.setSelected(bodyTypes.get(type));
     }
 
-    public VisValidableTextField getMassField() {
+    public VisValidatableTextField getMassField() {
         return massField;
     }
 
-    public VisValidableTextField getCenterOfMassXField() {
+    public VisValidatableTextField getCenterOfMassXField() {
         return centerOfMassXField;
     }
 
-    public VisValidableTextField getCenterOfMassYField() {
+    public VisValidatableTextField getCenterOfMassYField() {
         return centerOfMassYField;
     }
 
-    public VisValidableTextField getRotationalIntertiaField() {
+    public VisValidatableTextField getRotationalIntertiaField() {
         return rotationalIntertiaField;
     }
 
-    public VisValidableTextField getDumpingField() {
+    public VisValidatableTextField getDumpingField() {
         return dumpingField;
     }
 
-    public VisValidableTextField getGravityScaleField() {
+    public VisValidatableTextField getGravityScaleField() {
         return gravityScaleField;
     }
 
-    public VisValidableTextField getDensityField() {
+    public VisValidatableTextField getDensityField() {
         return densityField;
     }
 
-    public VisValidableTextField getFrictionField() {
+    public VisValidatableTextField getFrictionField() {
         return frictionField;
     }
 
-    public VisValidableTextField getRestitutionField() {
+    public VisValidatableTextField getRestitutionField() {
         return restitutionField;
     }
 
@@ -192,6 +200,8 @@ public class UIPhysicsProperties extends UIRemovableProperties {
     public VisCheckBox getBulletBox() {
         return bulletBox;
     }
+
+    public VisCheckBox getSensorBox() { return sensor; }
 
     @Override
     public void onClose() {
