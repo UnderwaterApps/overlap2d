@@ -36,6 +36,7 @@ import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
+import com.uwsoft.editor.renderer.components.additional.ButtonComponent;
 import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
@@ -230,6 +231,11 @@ public class Sandbox {
         ProjectManager projectManager = Overlap2DFacade.getInstance().retrieveProxy(ProjectManager.NAME);
         SceneConfigVO sceneConfigVO = projectManager.getCurrentSceneConfigVO();
         getCamera().position.set(sceneConfigVO.cameraPosition[0], sceneConfigVO.cameraPosition[1], 0);
+
+        // add additional components
+        // TODO: maybe moe this somewhere else
+        sceneControl.sceneLoader.addComponentsByTagName("button", ButtonComponent.class);
+
     }
 
     public void initSceneView(CompositeItemVO compositeItemVO) {
