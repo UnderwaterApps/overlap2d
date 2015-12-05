@@ -68,8 +68,6 @@ public class SelectionTool extends SimpleTool {
 
 	private DimensionsComponent dimensionsComponent;
 
-    private boolean isCopyMode = false;
-
     public SelectionTool() {
     
     }
@@ -147,13 +145,6 @@ public class SelectionTool extends SimpleTool {
 
         if(isEntityVisible(entity)) {
 
-            // if ALT was pressed setting COPY mode
-            if(Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT)) {
-                isCopyMode = true;
-            } else {
-                isCopyMode = false;
-            }
-
             // if shift is pressed we are in add/remove selection mode
             if (isShiftPressed()) {
                 //TODO block selection handling (wat?)
@@ -205,7 +196,7 @@ public class SelectionTool extends SimpleTool {
     public void itemMouseDragged(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
 
-        if(isDragging == false && isCopyMode) { // first drag iteration and is copy mode
+        if(isDragging == false && (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT))) { // first drag iteration and is copy mode
             // we need to copy/paste the item in place, the set it as selection and draggable, then perform the drag.
             Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_COPY);
             Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_PASTE);
