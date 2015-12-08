@@ -78,7 +78,7 @@ public class ResourceManager implements IResourceLoader, IResourceRetriever {
      * @param resolution String resolution name, default is "orig" later use resolution names created in editor
      */
     public void setWorkingResolution(String resolution) {
-        ResolutionEntryVO resolutionObject = getProjectVO().getResolution("resolutionName");
+        ResolutionEntryVO resolutionObject = getProjectVO().getResolution(resolution);
         if(resolutionObject != null) {
             packResolutionName = resolution;
         }
