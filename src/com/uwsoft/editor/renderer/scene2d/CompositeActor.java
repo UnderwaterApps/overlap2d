@@ -319,6 +319,11 @@ public class CompositeActor extends Group {
         return vo;
     }
 
+
+    public ArrayList<IActorScript> getScripts() {
+        return scripts;
+    }
+
     /**
      * Enables customization of the CompositeActor during building.
      * Example use cases: tag handling, custom variables handling
