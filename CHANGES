@@ -1,0 +1,182 @@
+Overlap2D - 0.1.2
+------------------------------
+Drop down for library items and images to delete from resource panel
+It is now possible to copy items if dragged while ALT is pressed
+Fixed Button preview and layer visibility bug for buttons
+
+Overlap2D - 0.1.1 (skipping 0.0.9)
+------------------------------
+
+Plugin system
+Performance display Plugin
+Fixed bug with layers not working normally - and undo redo actisn related to that
+Fixed bug with copying and pasting composite
+*Other things (I was lazy to write this down)
+
+Overlap2D - 0.1.0 (skipping 0.0.9)
+------------------------------
+
+Complete code rewrite
+Now based on puremvc
+editors UI is fully based on scene2d
+switched to new under the hood runtime based on Ashley ECS
+Ditched old physics editor
+Items now can have optional property boxes
+added new physics property box to items
+added new polygon property box to items
+you can now add and edit new polygon to any item directly from the scene.
+coordinates are now in world units (meaning you get to specify how much pixels is in one world unit)
+switching between resolutions does not make your scene smaller, but just renders it in current quality
+new Guides and Rulers system allows you to be more precise (we ditched, old bounding box for resolution size)
+Search box for all resources (not only library items)
+Library items are now easier to managed added library button to composite property box
+Custom vars dialog now stays on top
+works better on small screens
+better zooming
+Position setting don't break anymore when changing to non orig resolution
+Amazing new undo/redo system is almost bugless.
+Text items now can be created using text tool. No need to import new fonts, as we use fonts from your system.
+Import System is changed, now it works with Drag and Drop, and is more aware of file types, so you don't have to specify.
+
+
+
+
+Overlap2D - 0.0.8
+------------------------------
+
+Zoom functionality added - you can now zoom with Alt+Scroll or Ctrl+- and you can default zoom with Ctrl+0
+1px image import was crashing if more then one resolution exists.
+Tons of refactorings.
+New color picker and file open dialog (check out thisL: https://github.com/kotcrab/VisEditor/wiki/VisUI for awesome libgdx UI widgets!)
+Other UI changed to another UI system (with actual design changes to come soon)
+Ditched swing JFrame and Menu, using libGDX widgets instead.
+Vertical Center and Horizontal Center alignment buttons
+Search Box added to library list of you have many library items.
+Added  "Recent Projects" submenu, with list of recently opened projects.
+
+Overlap2D - 0.0.7
+------------------------------
+
+Spriter Animations importing
+Spriter animations runtime support
+Labels are now multiline and alignable
+Upgraded libGDX to 1.5.3
+Upgraded box2DLights to 1.3.0
+Physics mesh created on low res is no more is wrong after reload
+copy paste is working on other resolutions
+Now generating packs in resolution specified by user
+crash on 1 ray light fixed
+new particle editor generated files are now importing
+root element click is not crashing enymore
+stack trace of crash is now saved in file overlog.txt
+
+
+
+Overlap2D - 0.0.6 - hotfix
+-------------------------------
+
+Physics Editor resizes for small screens
+Fixed bug freezing all when middle button is pressed
+Fixed many reported crash bugs
+9Patch now works good when you scale or set width with pixels, so you can set 9patch sizes more preicesly
+Bug: Silly error when you write non numbers in scale value - fixed
+Bug: when reloading scene in small resolution light sizes get smaller and smaller - fixed
+You cannot select an item that is not in scope of current opened composite from node view
+composite size calculation is wrong when inside items have negative scales
+Bug: labels where adding to locked layer by default
+Item rotation selection rectangle is fixed
+Ctrl+Z was sometimes loosing progress - fixed
+
+
+
+
+Overlap2D - 0.0.5
+-------------------------------
+
+Added Physics Editor, you can now set physics data such as mass/friction and also edit bounding mesh/polygon
+Dynamic Lights - lights now react to physics bounding meshes by dropping shadows if set to be not x-ray
+Runtime physics support - runtime loads physics data for all items
+MacBook CPU bug - changed to JGLFW backend for MacOSX, CPU does not skyrocket anymore
+Asset loading architecture changed in runtime, DefaultAssetManager is removed, you can use Resourcemanager instead which is very smart.
+Spine and Sprite Animations now resize with project, we unpack the atlas pack, resize it and pack back for each res
+You can now drag screen with middle mouse button as well
+9patch resizing is fixed as well as used different resize filter for pixel perfect 9patches
+Now you can change image scale by just typing desired width in basic properties box
+version manager is added, Overlap2D will now be able to upgrade old projects to new ones
+Label Scaling related bugs fixed
+DropDown is not affected by ambient light anymore
+Panels now can be collapsed or expanded to save up space on small screens
+Right click is not getting to stage through dialog boxes
+Scissoring composite items now works properly
+Added physics settings for entire scene (gravity)
+Fonts work proper on all resolutions
+you can now see list of animations of spine object
+deleteing old resolution is not resulting in bug anymore
+Align was not taking minus scales into account, now fixed
+now you can set rotation with number
+remove iscript method in runtime
+added tons of comments to runtime
+invisible layers now are not clickable as well
+you can set label default align from basic properties
+Changed Export dialog, as well as added easier export dialog settings.
+Delete was not working from dropdown, now fixed
+
+
+Known issues:
+Physics is new and requires testing, might have lots of bugs, and will be fixed in next hotfix, please report all you notice
+Key Bindings stopped working on OSX, will bring back in next hotfix
+Label mouse scaling is turned off, need different approach to supoprt aligning.
+
+
+
+
+Overlap2D - 0.0.4
+-------------------------------
+
+1. Ambient light is now hidden if you are inside composite items
+2. Fixed asset jump to left during drug if it is too big
+3. Ambient and point/cone lights now have different checkboxes to turn on/off
+4. Library Items scrolling was buggy, now fixed
+5. New 9patch item, 9 patch importing and exporting system, 9 patch resizing for all resolutions, and proper scaling from editor
+6. Ctrl+Z is not anymore resulting in reset camera to 0 coordiante
+7. Custom Variables system for composite items (check out basic properties panel)
+8. Dialogs are now movable only when draging from top
+9. repack button now also updates asset list
+10. Automatic composite cleaner mechanism (removes empty composite items when saved, to avoid garbage)
+11. When aligning items, selectin boxes were not updating positions
+12. Proper directory filters on image importing
+13. Sprite animation thumbnail is changed to be more graphical
+14. Sprite animations, feature to add actions and specify frame ranges
+15. FreeFontType generator integration, so you can now import TTF fonts
+instead of styles, in order to use labels. (will have a better asset management for this in next version)
+16. Fixed bug with missing composites from the root
+17. Fixed bug with rescaling composite inside composite with scale tool
+18. Complete change of Spine integration to be complient with their Licensing.
+From now on it works using reflection, and you need to get their runtime into your project yourself for spine actors to display properly.
+19. New Node Tree view for all items on the left panel
+
+
+
+Overlap2D - 0.0.3
+-------------------------------
+
+1. Align Items functionality in left top toolbar
+2. Sprite Animations support (importing, exporting, runtime)
+3. Changed BUild Btns to Export, added keybindings, and made dialog a bit prettier
+4. Resolution chooser auto opens now, and remembers your last choice
+5. delete scene functionality from File->Scene
+
+
+
+Overlap2D - 0.0.2
+-------------------------------
+
+1. Fixed bug with "stupid" error on object move
+2. Fixed bug with some coordinate messup
+
+
+
+Overlap2D - 0.0.1
+-------------------------------
+First version ever.
+

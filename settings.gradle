@@ -1,0 +1,8 @@
+include 'spine-runtime-libgdx'
+include 'spine-o2d-extension'
+include 'overlap2d-runtime-libgdx'
+include 'overlap2d-common-api'
+project(':spine-runtime-libgdx').projectDir = new File(settingsDir, 'spine-runtimes/spine-libgdx/spine-libgdx')
+project(':overlap2d-runtime-libgdx').projectDir = new File(settingsDir, 'overlap2d-runtime-libgdx')
+project(':spine-o2d-extension').projectDir = new File(settingsDir, 'overlap2d-runtime-libgdx/extensions/spine')
+project(':overlap2d-common-api').projectDir = new File(settingsDir, 'overlap2d-common-api')

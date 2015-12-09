@@ -1,0 +1,15 @@
+language: java
+jdk:
+  - oraclejdk8
+sudo: required
+services:
+  - docker
+after_success:
+  - ./gradlew coveralls
+before_install:
+  - docker build -t underwaterapps/overlap2d .
+install:
+  - ./gradlew
+script:
+  - "docker run -v $(pwd):/root/overlap2d underwaterapps/overlap2d /bin/bash -c '/sbin/start-stop-daemon --start --quiet --pidfile /tmp/custom_xvfb_99.pid --make-pidfile --background --exec /usr/bin/Xvfb -- +extension RANDR :99 -ac -screen 0 1280x1024x16;./gradlew clean check'"
+  - "./gradlew checkTest"
