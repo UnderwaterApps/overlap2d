@@ -40,8 +40,8 @@ public class NinePatchUtils {
         column = getPixels(image, 0, 0, 1, height, column);
 
         boolean[] result = new boolean[1];
-        row = getPixels(image, 0, height - 1, width, 1, row);
-        column = getPixels(image, width - 1, 0, 1, height, column);
+        //row = getPixels(image, 0, height - 1, width, 1, row);
+        //column = getPixels(image, width - 1, 0, 1, height, column);
 
         Pair<java.util.List<Pair<Integer>>> top = getPatches(row, result);
         Pair<java.util.List<Pair<Integer>>> left = getPatches(column, result);
