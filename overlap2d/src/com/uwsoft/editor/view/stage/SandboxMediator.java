@@ -477,7 +477,8 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         private boolean isControlPressed() {
             return Gdx.input.isKeyPressed(Input.Keys.SYM)
                     || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)
-                    || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT);
+                    || Gdx.input.isKeyPressed(Input.Keys.CONTROL_RIGHT)
+                    || Gdx.input.isKeyPressed(Input.Keys.SYM);
         }
 
         private boolean isShiftKey(int keycode) {
