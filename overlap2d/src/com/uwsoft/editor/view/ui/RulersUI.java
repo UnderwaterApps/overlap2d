@@ -23,9 +23,10 @@ import com.uwsoft.editor.view.stage.Sandbox;
  * Created by azakhary on 7/18/2015.
  */
 public class RulersUI extends Actor {
-
+	
     private static final String CLASS_NAME = "com.uwsoft.editor.view.ui.RulersUI";
     public static final String ACTION_GUIDES_MODIFIED = CLASS_NAME + "ACTION_GUIDES_MODIFIED";
+    public static final String RIGHT_CLICK_RULER = CLASS_NAME + "RIGHT_CLICK_RULER";
 
     private static final int rulerBoxSize = 14;
 
@@ -39,6 +40,9 @@ public class RulersUI extends Actor {
     private static final Color GUIDE_COLOR = new Color(255f/255f, 94f/255f, 0f/255f, 0.5f);
     private static final Color OVER_GUIDE_COLOR = new Color(255f/255f, 173f/255f, 125f/255f, 1f);
     private static final Color TEXT_COLOR = new Color(194f/255f, 194f/255f, 194f/255f, 1f);
+    
+    //Allows the ChangeRulerXPositionCommand to change the guide's position from the function UpdateGuideManully
+	private static Guide editableDraggingGuide = null;
 
     private ShapeRenderer shapeRenderer;
 
@@ -102,9 +106,15 @@ public class RulersUI extends Actor {
                 if(collisionGuide != null) {
                     draggingGuide = collisionGuide;
                 }
+                
+                if (button == 1) {
+                	editableDraggingGuide = draggingGuide;
+                	Overlap2DFacade.getInstance().sendNotification(RIGHT_CLICK_RULER);
+                }
 
                 return true;
             }
+            
             @Override
             public void touchDragged(InputEvent event, float x, float y, int pointer) {
                 super.touchDragged(event, x, y, pointer);
@@ -115,12 +125,18 @@ public class RulersUI extends Actor {
                     guides.add(draggingGuide);
                 }
 
+                //Changes the dragging guide's position to the world position
                 if(draggingGuide != null) {
                     Vector2 worldCoords = hereToWorld(new Vector2(x-Gdx.graphics.getWidth()/2, y-Gdx.graphics.getHeight()/2));
                     if (draggingGuide.isVertical) {
                         draggingGuide.pos = worldCoords.x;
+                        if (!isShowingPixels)
+                        	snap(draggingGuide);
                     } else {
                         draggingGuide.pos = worldCoords.y;
+                        if (!isShowingPixels) {
+                        	snap(draggingGuide);
+                        }
                     }
                 }
 
@@ -345,10 +361,17 @@ public class RulersUI extends Actor {
                 pos = draggingGuide.pos * Sandbox.getInstance().getPixelPerWU();
                 postfix="px";
             }
+            
+            //Rounds the guide's position to the nearest 100th, if in World Unit mode
+            String positionAsString = "" + pos;
+            if (!isShowingPixels) {
+            	pos = (float) Math.round(pos * 100) / 100;
+            	positionAsString = String.format("%.2f", pos);
+            }
+            else
+            	pos = (float) (Math.round(pos * 100)/100);
 
-            pos = (float) (Math.round(pos * 100)/100);
-
-            guidePosLbl.setText(axis+": "+pos+postfix);
+            guidePosLbl.setText(axis+": "+ positionAsString + postfix);
             guidePosLbl.setPosition(Gdx.input.getX()+15, Gdx.graphics.getHeight() - Gdx.input.getY()+15);
             guidePosLbl.draw(batch, parentAlpha);
         }
@@ -400,6 +423,28 @@ public class RulersUI extends Actor {
         }
 
         return null;
+    }
+    
+    //Snaps to nearest quarter if less than 0.04 World Units away
+    private void snap(Guide guide) {
+    	float snapDistance = 0.04f;
+    	float absoluteValPos = Math.abs(guide.pos);
+    	float nearestQuarter = Math.round(absoluteValPos * 4) / 4f;
+    	if (Math.abs(absoluteValPos - nearestQuarter) < snapDistance) {
+    		absoluteValPos = nearestQuarter;
+    	}
+    	if (guide.pos < 0)
+    		absoluteValPos *= -1;
+    	guide.pos = absoluteValPos;
+    }
+    
+    public static Guide getPreviousGuide() {
+    	return editableDraggingGuide;
+    }
+    
+    //Allows the ChangeRulerXPositionCommand to change the guide's position
+    public static void updateGuideManually(float destination) {
+    	editableDraggingGuide.pos = destination;
     }
 
     public Array<Guide> getGuides() {

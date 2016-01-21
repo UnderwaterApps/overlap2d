@@ -42,6 +42,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     public static final Integer ITEMS_ACTIONS_SET = 1;
     public static final Integer LIBRARY_ITEM_ACTION_SET = 2;
     public static final Integer IMAGE_RESOURCE_ACTION_SET = 3;
+    public static final Integer RULER_RESOURCE_ACTION_SET = 4;
 
     private Sandbox sandbox;
 
@@ -77,6 +78,9 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_DELETE);
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CONVERT_TO_BUTTON);
+        
+        actionSets.put(RULER_RESOURCE_ACTION_SET, new Array<>());
+        actionSets.get(RULER_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_UPDATE_RULER_POSITION);
 
         facade = Overlap2DFacade.getInstance();
     }
@@ -91,6 +95,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK,
                 UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK,
                 UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK,
+                RulersUI.RIGHT_CLICK_RULER,
         };
     }
 
@@ -139,6 +144,9 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
             case UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK:
                 //showPopup(RESOURCE_ACTION_SET, notification.getBody());
                 break;
+            case RulersUI.RIGHT_CLICK_RULER:
+            	showPopup(RULER_RESOURCE_ACTION_SET, notification.getBody());
+            	break;
             case UIDropDownMenu.ITEM_CLICKED:
                 facade.sendNotification(notification.getBody(), currentObservable);
                 break;
