@@ -104,7 +104,13 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
 
     private void addDefaultMesh() {
         DimensionsComponent dimensionsComponent = ComponentRetriever.get(observableReference, DimensionsComponent.class);
-        polygonComponent.makeRectangle(dimensionsComponent.width, dimensionsComponent.height);
+        if(dimensionsComponent.boundBox != null) { // If the bound box is not null we have a Composite Item!
+            polygonComponent.makeRectangle( dimensionsComponent.boundBox.x, dimensionsComponent.boundBox.y, dimensionsComponent.boundBox.width, dimensionsComponent.boundBox.height);
+        }
+        else // Otherwise its a normal item
+        {
+            polygonComponent.makeRectangle( dimensionsComponent.width, dimensionsComponent.height );
+        }
 
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, observableReference);
     }
