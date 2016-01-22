@@ -161,6 +161,8 @@ public class ItemFactory {
         PasteItemsCommand.forceIdChange(itemVO.composite);
         Entity entity = createCompositeItem(itemVO, position);
 
+        if(entity == null) return false;
+
         //adding library name
         MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
         mainItemComponent.libraryLink = libraryName;
