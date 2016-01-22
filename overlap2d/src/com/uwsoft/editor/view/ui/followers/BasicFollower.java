@@ -85,11 +85,11 @@ public abstract class BasicFollower extends Group {
              *       ...........
              */
 
-            setWidth(pixelPerWU * (dimensionsComponent.boundBox.x + dimensionsComponent.boundBox.width) * transformComponent.scaleX / camera.zoom);
+            setWidth (pixelPerWU * (dimensionsComponent.boundBox.x + dimensionsComponent.boundBox.width) * transformComponent.scaleX / camera.zoom);
             setHeight(pixelPerWU * (dimensionsComponent.boundBox.y + dimensionsComponent.boundBox.height) * transformComponent.scaleY / camera.zoom);
         }
         else {
-            setWidth( pixelPerWU * dimensionsComponent.width * transformComponent.scaleX / camera.zoom );
+            setWidth ( pixelPerWU * dimensionsComponent.width * transformComponent.scaleX / camera.zoom );
             setHeight( pixelPerWU * dimensionsComponent.height * transformComponent.scaleY / camera.zoom );
         }
 
