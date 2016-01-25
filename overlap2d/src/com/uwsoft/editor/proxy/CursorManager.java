@@ -77,7 +77,7 @@ public class CursorManager extends BaseProxy {
         }
 
         Pixmap pm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
-        Cursor cursorObj = Gdx.graphics.newCursor(pm, cursor.getHotspotX(), currentCursor.getHotspotY());
+        Cursor cursorObj = Gdx.graphics.newCursor(pm, currentCursor.getHotspotX(), currentCursor.getHotspotY());
         Gdx.graphics.setCursor(cursorObj);
         pm.dispose();
     }
