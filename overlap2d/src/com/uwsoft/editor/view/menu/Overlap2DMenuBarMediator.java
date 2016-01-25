@@ -87,7 +87,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         super.handleNotification(notification);
         String type = notification.getType();
 
-        if(notification.getName().equals(Overlap2DMenuBar.RECENT_LIST_MODIFIED)) {
+        if (notification.getName().equals(Overlap2DMenuBar.RECENT_LIST_MODIFIED)) {
             PreferencesManager prefs = PreferencesManager.getInstance();
             viewComponent.reInitRecent(prefs.getRecentHistory());
         }
@@ -226,7 +226,11 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         //fileChooser.setFileFilter(new SuffixFileFilter(".pit"));
 
         fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setDirectory(projectManager.getWorkspacePath());
+
+        FileHandle workspacePath = (projectManager.getWorkspacePath() == null || !projectManager.getWorkspacePath().exists()) ?
+                Gdx.files.absolute(System.getProperty("user.home")) : projectManager.getWorkspacePath();
+        fileChooser.setDirectory(workspacePath);
+
         fileChooser.setListener(new FileChooserAdapter() {
             @Override
             public void selected(FileHandle file) {
