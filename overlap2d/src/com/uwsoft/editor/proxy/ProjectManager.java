@@ -55,6 +55,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -414,15 +415,45 @@ public class ProjectManager extends BaseProxy {
                 Settings settings = new Settings();
                 settings.square = true;
                 settings.flattenPaths = true;
-
                 TexturePacker texturePacker = new TexturePacker(settings);
-                FileHandle pngsDir = new FileHandle(fileHandles.get(0).parent().path());
+
+                String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
+                String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
+
+                boolean noFileNameWithoutFrame = false;
+                if (Objects.equals(fileNameWithoutFrame, "")) {
+                    fileNameWithoutFrame = fileHandles.get(0).parent().name();
+                    noFileNameWithoutFrame = true;
+                }
+
+                String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
+
+                for (FileHandle file : fileHandles) {
+                    File src = file.file();
+
+                    String destName;
+                    if(noFileNameWithoutFrame){
+                        destName =  targetPath + File.separator + fileNameWithoutFrame + src.getName();
+                    }else{
+                        destName = targetPath + File.separator + src.getName();
+                    }
+
+                    File dest = new File(destName);
+                    try {
+                        FileUtils.copyFile(src, dest);
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+                FileHandle pngsDir = new FileHandle(targetPath);
                 for (FileHandle entry : pngsDir.list(Overlap2DUtils.PNG_FILTER)) {
                     texturePacker.addImage(entry.file());
                 }
-                String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
-                String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
-                String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
+
+                String packName = "Pack";
+                targetPath = targetPath + packName;
+
                 File targetDir = new File(targetPath);
                 if (targetDir.exists()) {
                     try {
@@ -431,8 +462,17 @@ public class ProjectManager extends BaseProxy {
                         e.printStackTrace();
                     }
                 }
-                texturePacker.pack(targetDir, fileNameWithoutFrame);
-                newAnimName = fileNameWithoutFrame;
+
+                texturePacker.pack(targetDir, fileNameWithoutFrame + packName);
+
+                //delete newly created directory and images
+                try {
+                    FileUtils.deleteDirectory(pngsDir.file());
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+                newAnimName = fileNameWithoutFrame + packName;
             } else {
                 for (FileHandle fileHandle : fileHandles) {
                     try {
@@ -1116,7 +1156,7 @@ public class ProjectManager extends BaseProxy {
 
     public boolean deleteImage(String imageName) {
         String imagesPath = currentProjectPath + "/assets/orig/images/";
-        String filePath = imagesPath+imageName+".png";
+        String filePath = imagesPath + imageName + ".png";
 
         File file = new File(filePath);
         return file.delete();
