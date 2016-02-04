@@ -52,6 +52,8 @@ public class MsgAPI {
 
     public static final String LIBRARY_LIST_UPDATED = GLOBAL_PREFIX + ".LIBRARY_LIST_UPDATED";
 
+    private static final String TOOL_BOX_MEDIATOR_PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
+    public static final String TOOL_SELECTED = TOOL_BOX_MEDIATOR_PREFIX + ".TOOL_CHANGED";
 
     /**
      *  Previous Sandbox class notifications

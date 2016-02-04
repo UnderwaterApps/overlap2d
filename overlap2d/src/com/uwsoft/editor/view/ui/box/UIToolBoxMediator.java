@@ -19,6 +19,7 @@
 package com.uwsoft.editor.view.ui.box;
 
 import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -31,9 +32,6 @@ import com.uwsoft.editor.view.stage.tools.*;
 public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String TAG = UIToolBoxMediator.class.getCanonicalName();
     public static final String NAME = TAG;
-
-    private static final String PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
-    public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
     private Array<String> toolList;
     private String currentTool;
@@ -84,7 +82,7 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         switch (notification.getName()) {
             case UIToolBox.TOOL_CLICKED:
                 currentTool = notification.getBody();
-                facade.sendNotification(TOOL_SELECTED, currentTool);
+                facade.sendNotification(MsgAPI.TOOL_SELECTED, currentTool);
                 break;
         }
     }

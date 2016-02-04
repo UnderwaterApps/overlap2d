@@ -106,7 +106,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 MsgAPI.SCENE_LOADED,
-                UIToolBoxMediator.TOOL_SELECTED,
+                MsgAPI.TOOL_SELECTED,
                 MsgAPI.NEW_ITEM_ADDED,
                 CompositeCameraChangeCommand.DONE,
                 AddComponentToItemCommand.DONE,
@@ -122,7 +122,7 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case MsgAPI.SCENE_LOADED:
                 handleSceneLoaded(notification);
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case MsgAPI.TOOL_SELECTED:
                 setCurrentTool(notification.getBody());
                 break;
             case MsgAPI.NEW_ITEM_ADDED:
