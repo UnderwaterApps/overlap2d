@@ -23,6 +23,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.commons.IItemCommand;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
 
@@ -78,6 +79,13 @@ public interface PluginAPI {
      * @param notificationName unique notification id that will be fired when this menu item is clicked
      */
     public void addMenuItem(String menu, String subMenuName, String notificationName);
+
+    /**
+     * Adds new tool to the tool bar
+     * @param toolName pretty string to name new tool item
+     * @param notificationName unique notification id that will be fired when this tool item is clicked
+     */
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, String notificationName);
 
     /**
      * Creates new menu item for Contextual drop down menu, that is created when user right clicks on something in the editor.

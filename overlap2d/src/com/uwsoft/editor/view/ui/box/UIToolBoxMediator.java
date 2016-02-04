@@ -19,6 +19,7 @@
 package com.uwsoft.editor.view.ui.box;
 
 import com.badlogic.gdx.utils.Array;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -34,9 +35,8 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     private static final String PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator.";
     public static final String TOOL_SELECTED = PREFIX + ".TOOL_CHANGED";
 
-
-    private String currentTool;
     private Array<String> toolList;
+    private String currentTool;
 
 
     public UIToolBoxMediator() {
@@ -47,22 +47,27 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
     public void onRegister() {
         facade = Overlap2DFacade.getInstance();
 
-        toolList = getToolNameList();
+        toolList = new Array<String>();
+        initToolNameList();
         currentTool = SelectionTool.NAME;
 
         viewComponent.createToolButtons(toolList);
     }
 
+    private void initToolNameList() {
+        toolList.add(SelectionTool.NAME);
+        toolList.add(TransformTool.NAME);
+        toolList.add(TextTool.NAME);
+        toolList.add(PointLightTool.NAME);
+        toolList.add(ConeLightTool.NAME);
+        toolList.add(PolygonTool.NAME);
+    }
 
-    public Array<String> getToolNameList() {
-        Array<String> toolNames = new Array();
-        toolNames.add(SelectionTool.NAME);
-        toolNames.add(TransformTool.NAME);
-        toolNames.add(TextTool.NAME);
-        toolNames.add(PointLightTool.NAME);
-        toolNames.add(ConeLightTool.NAME);
-        toolNames.add(PolygonTool.NAME);
-        return toolNames;
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, String notificationName) {
+        toolList.add(toolName);
+        viewComponent.addToolButton(toolName, toolBtnStyle);
+
+        facade.sendNotification(notificationName);
     }
 
     @Override

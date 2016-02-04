@@ -25,6 +25,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.commons.IItemCommand;
 import com.commons.MsgAPI;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -37,6 +38,7 @@ import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
+import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.util.ArrayList;
 import java.util.Set;
@@ -125,6 +127,12 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public void addMenuItem(String menu, String subMenuName, String notificationName) {
         Overlap2DMenuBarMediator overlap2DMenuBarMediator = facade.retrieveMediator(Overlap2DMenuBarMediator.NAME);
         overlap2DMenuBarMediator.addMenuItem(menu, subMenuName, notificationName);
+    }
+
+    @Override
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, String notificationName) {
+        UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+        uiToolBoxMediator.addTool(toolName, toolBtnStyle, notificationName);
     }
 
     public void setPluginDir(String pluginDir) {
