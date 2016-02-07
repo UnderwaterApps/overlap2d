@@ -26,7 +26,6 @@ import com.badlogic.gdx.math.Vector2;
 import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CursorManager;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.NinePatchComponent;
@@ -156,8 +155,15 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
         float newX = transformComponent.x;
         float newY = transformComponent.y;
-        float newWidth = dimensionsComponent.width*transformComponent.scaleX;
-        float newHeight = dimensionsComponent.height*transformComponent.scaleY;
+
+        float newWidth = dimensionsComponent.width * transformComponent.scaleX;
+        float newHeight = dimensionsComponent.height * transformComponent.scaleY;
+
+        if(dimensionsComponent.boundBox != null)
+        {
+            newWidth = ( dimensionsComponent.boundBox.width + dimensionsComponent.boundBox.x ) * transformComponent.scaleX;
+            newHeight = ( dimensionsComponent.boundBox.height + dimensionsComponent.boundBox.y ) * transformComponent.scaleY;
+        }
 
         float tmpAdjustmentX = transformComponent.originX*(transformComponent.scaleX-1);
         float tmpAdjustmentY = transformComponent.originY*(transformComponent.scaleY-1);
@@ -231,6 +237,11 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
 
         float newScaleX = newWidth / dimensionsComponent.width;
         float newScaleY = newHeight / dimensionsComponent.height;
+
+        if( dimensionsComponent.boundBox != null ) {
+            newScaleX = newWidth / ( dimensionsComponent.boundBox.width + dimensionsComponent.boundBox.x ) ;
+            newScaleY = newHeight / ( dimensionsComponent.boundBox.height + dimensionsComponent.boundBox.y ) ;
+        }
 
         commandBuilder.setScale(newScaleX, newScaleY);
         commandBuilder.setPos(newX, newY);
