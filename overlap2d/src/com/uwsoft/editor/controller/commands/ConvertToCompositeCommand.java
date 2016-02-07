@@ -93,6 +93,7 @@ public class ConvertToCompositeCommand extends EntityModifyRevertableCommand {
         Vector2 newSize = EntityUtils.getRightTopPoint(entities);
         dimensionsComponent.width = newSize.x;
         dimensionsComponent.height = newSize.y;
+        dimensionsComponent.boundBox.set(0, 0, newSize.x, newSize.y);
 
         ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         zIndexComponent.layerName = layerBoxMediator.getCurrentSelectedLayerName();
