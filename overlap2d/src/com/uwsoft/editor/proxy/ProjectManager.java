@@ -1036,6 +1036,9 @@ public class ProjectManager extends BaseProxy {
     public void openProjectFromPath(String path) {
         File projectFile = new File(path);
         File projectFolder = projectFile.getParentFile();
+
+        if (!projectFile.exists()) return;
+
         String projectName = projectFolder.getName();
         editorConfigVO.lastOpenedSystemPath = projectFolder.getParentFile().getPath();
         saveEditorConfig();
@@ -1116,7 +1119,7 @@ public class ProjectManager extends BaseProxy {
 
     public boolean deleteImage(String imageName) {
         String imagesPath = currentProjectPath + "/assets/orig/images/";
-        String filePath = imagesPath+imageName+".png";
+        String filePath = imagesPath + imageName + ".png";
 
         File file = new File(filePath);
         return file.delete();
