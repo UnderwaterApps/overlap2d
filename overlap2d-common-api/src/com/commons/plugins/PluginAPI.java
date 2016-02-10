@@ -83,9 +83,11 @@ public interface PluginAPI {
     /**
      * Adds new tool to the tool bar
      * @param toolName pretty string to name new tool item
+     * @param toolBtnStyle tool button style
+     * @param addSeparator true, if should add menu separator
      * @param notificationName unique notification id that will be fired when this tool item is clicked
      */
-    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, String notificationName);
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, String notificationName);
 
     /**
      * Creates new menu item for Contextual drop down menu, that is created when user right clicks on something in the editor.

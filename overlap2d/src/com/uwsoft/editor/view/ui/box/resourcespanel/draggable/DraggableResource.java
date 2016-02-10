@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable;
 
-import java.util.function.BiFunction;
-
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
@@ -28,7 +26,10 @@ import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+
+import java.util.function.BiFunction;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -76,6 +77,13 @@ public class DraggableResource extends DragAndDrop {
                 DraggableResource.this.drop(payload, vector);
             }
         });
+
+
+        Overlap2DFacade facade = Overlap2DFacade.getInstance();
+        UIResourcesBoxMediator resourcesBoxMediator = facade.retrieveMediator(UIResourcesBoxMediator.NAME);
+        for (Target t : resourcesBoxMediator.customTargets) {
+            addTarget(t);
+        }
     }
 
     private void drop(DragAndDrop.Payload payload, Vector2 vector2) {

@@ -25,12 +25,12 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.commons.IItemCommand;
 import com.commons.MsgAPI;
+import com.commons.plugins.O2DPlugin;
+import com.commons.plugins.PluginAPI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.commons.plugins.O2DPlugin;
-import com.commons.plugins.PluginAPI;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.SceneVO;
@@ -130,9 +130,9 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     }
 
     @Override
-    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, String notificationName) {
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, String notificationName) {
         UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
-        uiToolBoxMediator.addTool(toolName, toolBtnStyle, notificationName);
+        uiToolBoxMediator.addTool(toolName, toolBtnStyle, addSeparator, notificationName);
     }
 
     public void setPluginDir(String pluginDir) {
