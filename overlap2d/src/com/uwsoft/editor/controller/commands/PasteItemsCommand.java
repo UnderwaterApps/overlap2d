@@ -50,7 +50,8 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
     public void doAction() {
         Object[] payload = (Object[]) Sandbox.getInstance().retrieveFromClipboard();
 
-        if(payload == null) {
+        UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        if(layerBoxMediator.getCurrentSelectedLayerName() == null) {
             cancel();
             return;
         }
@@ -69,7 +70,7 @@ public class PasteItemsCommand extends EntityModifyRevertableCommand {
             transformComponent.x += diff.x;
             transformComponent.y += diff.y;
             ZIndexComponent zIndexComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
-            UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+//            UILayerBoxMediator layerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
             zIndexComponent.layerName = layerBoxMediator.getCurrentSelectedLayerName();
             Overlap2DFacade.getInstance().sendNotification(MsgAPI.NEW_ITEM_ADDED, entity);
             pastedEntityIds.add(EntityUtils.getEntityId(entity));

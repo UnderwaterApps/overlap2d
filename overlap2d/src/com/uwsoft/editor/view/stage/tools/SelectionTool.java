@@ -144,6 +144,7 @@ public class SelectionTool extends SimpleTool {
         currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
 
         if(isEntityVisible(entity)) {
+
             // if shift is pressed we are in add/remove selection mode
             if (isShiftPressed()) {
                 //TODO block selection handling (wat?)
@@ -194,6 +195,28 @@ public class SelectionTool extends SimpleTool {
     @Override
     public void itemMouseDragged(Entity entity, float x, float y) {
         sandbox = Sandbox.getInstance();
+
+        if(isDragging == false && (Gdx.input.isKeyPressed(Input.Keys.ALT_LEFT) || Gdx.input.isKeyPressed(Input.Keys.ALT_RIGHT))) { // first drag iteration and is copy mode
+            // we need to copy/paste the item in place, the set it as selection and draggable, then perform the drag.
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_COPY);
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_PASTE);
+
+            dragStartPositions.clear();
+            dragTouchDiff.clear();
+            for (Entity itemInstance : sandbox.getSelector().getCurrentSelection()) {
+                transformComponent = ComponentRetriever.get(itemInstance, TransformComponent.class);
+
+                dragTouchDiff.put(itemInstance, new Vector2(x - transformComponent.x, y - transformComponent.y));
+                dragStartPositions.put(itemInstance, new Vector2(transformComponent.x, transformComponent.y));
+            }
+
+            dragMouseStartPosition = new Vector2(x, y);
+
+            // pining UI to update current item properties tools
+            Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_DATA_UPDATED, entity);
+
+        }
+
 
         isDragging = true;
 

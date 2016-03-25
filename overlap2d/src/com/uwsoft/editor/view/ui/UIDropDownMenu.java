@@ -62,6 +62,8 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(MsgAPI.ACTION_DELETE_SPRITE_ANIMATION_RESOURCE, "Delete");
         actionNames.put(MsgAPI.ACTION_DELETE_SPRITER_ANIMATION_RESOURCE, "Delete");
         actionNames.put(MsgAPI.ACTION_DELETE_SPINE_ANIMATION_RESOURCE, "Delete");
+        
+        actionNames.put(MsgAPI.ACTION_UPDATE_RULER_POSITION, "Change Ruler Position");
     }
 
     public void setActionName(String action, String name) {

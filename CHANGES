@@ -1,6 +1,8 @@
 Overlap2D - 0.1.2
 ------------------------------
 Drop down for library items and images to delete from resource panel
+It is now possible to copy items if dragged while ALT is pressed
+Fixed Button preview and layer visibility bug for buttons
 
 Overlap2D - 0.1.1 (skipping 0.0.9)
 ------------------------------
