@@ -21,10 +21,10 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.view.ui.widget.actors.SpriteAnimationActor;
-import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+import com.commons.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
+import com.uwsoft.editor.view.ui.widget.actors.SpriteAnimationActor;
 
 /**
  * Created by azakhary on 7/3/2014.

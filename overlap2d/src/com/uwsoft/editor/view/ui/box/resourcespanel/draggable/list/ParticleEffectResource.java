@@ -20,8 +20,8 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.list;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.commons.ResourcePayloadObject;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 
 /**
  * Created by azakhary on 7/3/2014.

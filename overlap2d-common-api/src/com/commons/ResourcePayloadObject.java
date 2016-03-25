@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads;
+package com.commons;
 
 
 public class ResourcePayloadObject {
