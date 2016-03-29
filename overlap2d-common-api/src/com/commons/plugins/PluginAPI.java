@@ -21,8 +21,10 @@ package com.commons.plugins;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.commons.IItemCommand;
+import com.commons.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
@@ -85,9 +87,9 @@ public interface PluginAPI {
      * @param toolName pretty string to name new tool item
      * @param toolBtnStyle tool button style
      * @param addSeparator true, if should add menu separator
-     * @param notificationName unique notification id that will be fired when this tool item is clicked
+     * @param tool the tool object that is going to be added
      */
-    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, String notificationName);
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool);
 
     /**
      * Creates new menu item for Contextual drop down menu, that is created when user right clicks on something in the editor.
@@ -120,4 +122,5 @@ public interface PluginAPI {
      */
     public void removeFollower(Entity entity);
 
+    boolean createSimpleImage(String regionName, Vector2 position);
 }

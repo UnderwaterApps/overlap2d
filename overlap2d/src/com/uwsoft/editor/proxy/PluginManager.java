@@ -21,17 +21,20 @@ package com.uwsoft.editor.proxy;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.commons.IItemCommand;
 import com.commons.MsgAPI;
 import com.commons.plugins.O2DPlugin;
 import com.commons.plugins.PluginAPI;
+import com.commons.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
+import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
@@ -41,6 +44,7 @@ import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -130,9 +134,28 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     }
 
     @Override
-    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, String notificationName) {
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool) {
         UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
-        uiToolBoxMediator.addTool(toolName, toolBtnStyle, addSeparator, notificationName);
+        uiToolBoxMediator.addTool(toolName, toolBtnStyle, addSeparator, tool);
+        Map.Entry<String, Tool> toolPair = new Map.Entry<String, Tool>() {
+            @Override
+            public String getKey() {
+                return toolName;
+            }
+
+            @Override
+            public Tool getValue() {
+                return tool;
+            }
+
+            @Override
+            public Tool setValue(Tool value) {
+                Tool old = getValue();
+                setValue(value);
+                return old;
+            }
+        };
+        facade.sendNotification(MsgAPI.NEW_TOOL_ADDED, toolPair);
     }
 
     public void setPluginDir(String pluginDir) {
@@ -163,5 +186,10 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     @Override
     public Stage getUIStage() {
         return Sandbox.getInstance().getUIStage();
+    }
+
+    @Override
+    public boolean createSimpleImage(String regionName, Vector2 position) {
+        return ItemFactory.get().createSimpleImage(regionName, position);
     }
 }

@@ -20,6 +20,7 @@ package com.uwsoft.editor.view.ui.box;
 
 import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
+import com.commons.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.Separator;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.mediator.SimpleMediator;
@@ -62,14 +63,14 @@ public class UIToolBoxMediator extends SimpleMediator<UIToolBox> {
         toolList.add(PolygonTool.NAME);
     }
 
-    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, String notificationName) {
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool) {
         toolList.add(toolName);
         if(addSeparator) {
             viewComponent.add(new Separator("menu")).padTop(2).padBottom(2).fill().expand().row();
         }
         viewComponent.addToolButton(toolName, toolBtnStyle);
 
-        facade.sendNotification(notificationName);
+        facade.sendNotification(toolName, tool);
     }
 
     @Override

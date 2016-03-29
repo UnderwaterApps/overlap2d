@@ -54,6 +54,7 @@ public class MsgAPI {
 
     private static final String TOOL_BOX_MEDIATOR_PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator";
     public static final String TOOL_SELECTED = TOOL_BOX_MEDIATOR_PREFIX + ".TOOL_CHANGED";
+    public static final String NEW_TOOL_ADDED = TOOL_BOX_MEDIATOR_PREFIX + ".NEW_TOOL_ADDED";
 
     private static final String IMAGES_TAB_MEDIATOR_PREFIX= "com.uwsoft.editor.view.ui.box.resourcespanel.UIImagesTabMediator";
     public static final String ADD_TARGET = IMAGES_TAB_MEDIATOR_PREFIX + ".ADD_TARGET";
