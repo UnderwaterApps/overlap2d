@@ -36,6 +36,7 @@ import com.uwsoft.editor.renderer.components.ParentNodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 
@@ -362,8 +363,10 @@ public class SelectionTool extends SimpleTool {
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
-            if (isEntityVisible(entity) &&
-                    Intersector.overlaps(sR, tmp.set(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height))) {
+
+            EntityBounds entityBounds = new EntityBounds(entity);
+            boolean intersects = Intersector.overlaps(sR, tmp.set(entityBounds.getVisualX(), entityBounds.getVisualY(), entityBounds.getVisualWidth(), entityBounds.getVisualHeight()));
+            if (isEntityVisible(entity) && intersects) {
                 curr.add(entity);
             }
         }
