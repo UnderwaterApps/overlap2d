@@ -29,6 +29,8 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
 
+import java.util.HashSet;
+
 /**
  * Plugin API is a main interface of communication between plugin and Overlap2D editor
  * Created by azakhary on 7/24/2015.
@@ -122,5 +124,40 @@ public interface PluginAPI {
      */
     public void removeFollower(Entity entity);
 
-    boolean createSimpleImage(String regionName, Vector2 position);
+    /**
+     * Draws an image at selected position
+     * @param regionName name of texture region to create image from
+     * @param position position to draw image at
+     * @return image entity
+     */
+    Entity drawImage(String regionName, Vector2 position);
+
+    /**
+     * Selects an entity
+     * @param entity
+     */
+    void selectEntity(Entity entity);
+
+    /**
+     * @return entities that are on scene
+     */
+    HashSet<Entity> getProjectEntities();
+
+    /**
+     * Sets entity set that plugin places on the scene
+     * @param entities entities to set
+     */
+    void setPluginEntities(HashSet<Entity> entities);
+
+    /**
+     * @return plugin-created entities
+     */
+    HashSet<Entity> getPluginEntities();
+
+    /**
+     * @param x mouse coordinate
+     * @param y mouse coordinate
+     * @return entity that contains the coordinate, null if there is no such entity
+     */
+    Entity getPluginEntityWithCoordinate(float x, float y);
 }

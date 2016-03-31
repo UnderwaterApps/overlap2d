@@ -21,6 +21,7 @@ package com.uwsoft.editor.proxy;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -36,7 +37,12 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
@@ -44,6 +50,7 @@ import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -56,6 +63,8 @@ public class PluginManager extends BaseProxy implements PluginAPI {
 
     private ArrayList<O2DPlugin> plugins = new ArrayList<>();
     private String pluginDir;
+
+    private HashSet<Entity> pluginEntities;
 
     public PluginManager() {
         super(NAME);
@@ -189,7 +198,56 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     }
 
     @Override
-    public boolean createSimpleImage(String regionName, Vector2 position) {
-        return ItemFactory.get().createSimpleImage(regionName, position);
+    public Entity drawImage(String regionName, Vector2 position) {
+        ItemFactory itemFactory = ItemFactory.get();
+        itemFactory.createSimpleImage(regionName, position);
+        return itemFactory.getImageEntity();
+    }
+
+    @Override
+    public void selectEntity(Entity entity) {
+        Sandbox sandbox = Sandbox.getInstance();
+        boolean currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
+        if (!currentTouchedItemWasSelected) {
+            // get selection, add this item to selection
+            Set<Entity> items = new HashSet<>();
+            items.add(entity);
+            facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, items);
+        }
+    }
+
+    @Override
+    public Entity getPluginEntityWithCoordinate(float x, float y) {
+        for (Entity entity : pluginEntities) {
+            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+            Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height);
+
+            if (isEntityVisible(entity) && tmp.contains(x, y)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    private boolean isEntityVisible(Entity e) {
+        LayerItemVO layer = EntityUtils.getEntityLayer(e);
+        return layer != null && layer.isVisible;
+    }
+
+    @Override
+    public void setPluginEntities(HashSet<Entity> entities) {
+        this.pluginEntities = entities;
+    }
+
+    @Override
+    public HashSet<Entity> getPluginEntities() {
+        return pluginEntities;
+    }
+
+    @Override
+    public HashSet<Entity> getProjectEntities() {
+        Sandbox sandbox = Sandbox.getInstance();
+        return sandbox.getSelector().getAllFreeItems();
     }
 }
