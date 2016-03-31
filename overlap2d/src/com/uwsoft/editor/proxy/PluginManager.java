@@ -250,4 +250,10 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         Sandbox sandbox = Sandbox.getInstance();
         return sandbox.getSelector().getAllFreeItems();
     }
+
+    @Override
+    public void setGridSize(int gridSize) {
+        Sandbox sandbox = Sandbox.getInstance();
+        sandbox.setGridSize(gridSize);
+    }
 }

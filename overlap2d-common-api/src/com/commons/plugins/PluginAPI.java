@@ -160,4 +160,9 @@ public interface PluginAPI {
      * @return entity that contains the coordinate, null if there is no such entity
      */
     Entity getPluginEntityWithCoordinate(float x, float y);
+
+    /**
+     * @param gridSize
+     */
+    void setGridSize(int gridSize);
 }
