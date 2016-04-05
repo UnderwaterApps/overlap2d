@@ -38,6 +38,8 @@ public class MsgAPI {
     // tmp events
     public static final String ZOOM_CHANGED = GLOBAL_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = GLOBAL_PREFIX + ".GRID_SIZE_CHANGED";
+    public static final String HIDE_GRID = GLOBAL_PREFIX + ".HIDE_GRID";
+    public static final String SHOW_GRID = GLOBAL_PREFIX + ".SHOW_GRID";
     public static final String ITEM_DATA_UPDATED = GLOBAL_PREFIX + ".ITEM_DATA_UPDATED";
     public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = GLOBAL_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
 
