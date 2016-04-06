@@ -21,7 +21,6 @@ package com.uwsoft.editor.proxy;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -37,11 +36,8 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.SceneLoader;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
-import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -216,33 +212,9 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         }
     }
 
-    @Override
-    public Entity getPluginEntityWithCoordinate(float x, float y) {
-        for (Entity entity : pluginEntities) {
-            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-            Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height);
-
-            if (isEntityVisible(entity) && tmp.contains(x, y)) {
-                return entity;
-            }
-        }
-        return null;
-    }
-
-    private boolean isEntityVisible(Entity e) {
+    public boolean isEntityVisible(Entity e) {
         LayerItemVO layer = EntityUtils.getEntityLayer(e);
         return layer != null && layer.isVisible;
-    }
-
-    @Override
-    public void setPluginEntities(HashSet<Entity> entities) {
-        this.pluginEntities = entities;
-    }
-
-    @Override
-    public HashSet<Entity> getPluginEntities() {
-        return pluginEntities;
     }
 
     @Override

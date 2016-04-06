@@ -144,20 +144,8 @@ public interface PluginAPI {
     HashSet<Entity> getProjectEntities();
 
     /**
-     * Sets entity set that plugin places on the scene
-     * @param entities entities to set
+     * @param entity
+     * @return if entity is on visible layer
      */
-    void setPluginEntities(HashSet<Entity> entities);
-
-    /**
-     * @return plugin-created entities
-     */
-    HashSet<Entity> getPluginEntities();
-
-    /**
-     * @param x mouse coordinate
-     * @param y mouse coordinate
-     * @return entity that contains the coordinate, null if there is no such entity
-     */
-    Entity getPluginEntityWithCoordinate(float x, float y);
+    boolean isEntityVisible(Entity entity);
 }
