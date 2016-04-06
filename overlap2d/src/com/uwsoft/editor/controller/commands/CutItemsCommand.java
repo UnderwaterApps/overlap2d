@@ -46,7 +46,7 @@ public class CutItemsCommand extends EntityModifyRevertableCommand {
         Sandbox.getInstance().copyToClipboard(payload);
         sandbox.getSelector().removeCurrentSelectedItems();
 
-        facade.sendNotification(DeleteItemsCommand.DONE);
+        facade.sendNotification(MsgAPI.DELETE_ITEMS_COMMAND_DONE);
     }
 
     @Override

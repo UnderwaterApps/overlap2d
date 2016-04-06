@@ -126,4 +126,7 @@ public class MsgAPI {
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";
     public static final String SCENE_DATA_PREFIX = "com.uwsoft.editor.proxy.SceneDataManager";
     public static final String SCENE_LOADED = SCENE_DATA_PREFIX + ".SCENE_LOADED";
+
+    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteItemsCommand";
+    public static final String DELETE_ITEMS_COMMAND_DONE = CLASS_NAME + "DONE";
 }
