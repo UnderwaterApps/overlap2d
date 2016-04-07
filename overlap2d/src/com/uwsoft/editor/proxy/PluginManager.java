@@ -20,6 +20,7 @@ package com.uwsoft.editor.proxy;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -42,13 +43,11 @@ import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
+import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -221,5 +220,23 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public HashSet<Entity> getProjectEntities() {
         Sandbox sandbox = Sandbox.getInstance();
         return sandbox.getSelector().getAllFreeItems();
+    }
+
+    @Override
+    public void showPopup(HashMap<String, String> actionsSet, Object observable) {
+        UIDropDownMenu uiDropDownMenu = new UIDropDownMenu();
+        actionsSet.entrySet().forEach(entry -> uiDropDownMenu.setActionName(entry.getKey(), entry.getValue()));
+
+        Array<String> actions = new Array<>();
+        actionsSet.keySet().forEach(key -> actions.add(key));
+        uiDropDownMenu.setActionList(actions);
+
+        Vector2 coordinates = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+        uiDropDownMenu.setX(coordinates.x);
+        uiDropDownMenu.setY(coordinates.y - uiDropDownMenu.getHeight());
+        getUIStage().addActor(uiDropDownMenu);
+
+        UIDropDownMenuMediator dropDownMenuMediator = facade.retrieveMediator(UIDropDownMenuMediator.NAME);
+        dropDownMenuMediator.setCurrentObservable(observable);
     }
 }

@@ -29,6 +29,7 @@ import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
 
+import java.util.HashMap;
 import java.util.HashSet;
 
 /**
@@ -148,4 +149,11 @@ public interface PluginAPI {
      * @return if entity is on visible layer
      */
     boolean isEntityVisible(Entity entity);
+
+    /**
+     * shows drop down menu with specified actions set
+     * @param actionsSet
+     * @param observable item with right click on it
+     */
+    void showPopup(HashMap<String, String> actionsSet, Object observable);
 }
