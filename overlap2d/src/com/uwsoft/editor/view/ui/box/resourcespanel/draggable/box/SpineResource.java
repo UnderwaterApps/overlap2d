@@ -89,6 +89,7 @@ public class SpineResource extends BoxItemResource {
 
         payload = new ResourcePayloadObject();
         payload.name = animationName;
+        payload.className = getClass().getName();
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
 

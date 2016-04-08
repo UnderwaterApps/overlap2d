@@ -40,6 +40,7 @@ public class ParticleEffectResource extends ListItemResource {
         payloadImg.getColor().a = .85f;
         payload = new ResourcePayloadObject();
         payload.name = particleName;
+        payload.className = getClass().getName();
     }
 
     @Override

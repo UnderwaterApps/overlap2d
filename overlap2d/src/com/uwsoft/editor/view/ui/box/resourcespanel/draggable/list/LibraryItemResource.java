@@ -40,6 +40,7 @@ public class LibraryItemResource extends ListItemResource {
         payloadImg.getColor().a = .85f;
         payload = new ResourcePayloadObject();
         payload.name = key;
+        payload.className = getClass().getName();
 
         setRightClickEvent(UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK, payload.name);
     }

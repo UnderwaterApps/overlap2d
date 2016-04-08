@@ -65,6 +65,7 @@ public class SpriterResource extends BoxItemResource {
         payloadActor = new SpriterActor(animationName, sandbox.getSceneControl().sceneLoader.getRm());
         payload = new ResourcePayloadObject();
         payload.name = animationName;
+        payload.className = getClass().getName();
 
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);

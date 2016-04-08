@@ -58,6 +58,7 @@ public class ImageResource extends BoxItemResource {
         payloadImg = new Image(region);
         payload = new ResourcePayloadObject();
         payload.name = region.name;
+        payload.className = getClass().getName();
     }
 
     @Override

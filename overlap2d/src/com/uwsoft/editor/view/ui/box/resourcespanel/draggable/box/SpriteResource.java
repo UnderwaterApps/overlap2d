@@ -83,6 +83,7 @@ public class SpriteResource extends BoxItemResource {
         payloadActor = new SpriteAnimationActor(animationName, rm);
         payload = new ResourcePayloadObject();
         payload.name = animationName;
+        payload.className = getClass().getName();
 
         setHeight(thumbnailSize);
     }
