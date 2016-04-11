@@ -16,11 +16,15 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads;
+package com.commons;
 
 
 public class ResourcePayloadObject {
     public String name;
     public float xOffset;
     public float yOffset;
+    public String className;
+
+    public ResourcePayloadObject() {
+    }
 }

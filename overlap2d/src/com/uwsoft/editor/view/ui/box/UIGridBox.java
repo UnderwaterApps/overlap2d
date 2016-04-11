@@ -31,7 +31,8 @@ import com.uwsoft.editor.event.KeyboardListener;
  */
 public class UIGridBox extends UIBaseBox {
 
-    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = "com.uwsoft.editor.view.ui.box.UIGridBox" + ".GRID_SIZE_TEXT_FIELD_UPDATED";
+    private static final String GRID_BOX_PREFIX = "com.uwsoft.editor.view.ui.box.UIGridBox";
+    public static final String GRID_SIZE_TEXT_FIELD_UPDATED = GRID_BOX_PREFIX + ".GRID_SIZE_TEXT_FIELD_UPDATED";
     private VisValidatableTextField gridSizeTextField;
 
     public UIGridBox() {
@@ -57,5 +58,13 @@ public class UIGridBox extends UIBaseBox {
 
     public void setGridSize(int gridSize) {
         gridSizeTextField.setText(gridSize + "");
+    }
+
+    public void hide() {
+        setVisible(false);
+    }
+
+    public void show() {
+        setVisible(true);
     }
 }

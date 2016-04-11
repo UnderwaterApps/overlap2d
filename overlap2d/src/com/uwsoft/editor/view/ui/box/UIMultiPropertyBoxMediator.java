@@ -26,9 +26,7 @@ import com.puremvc.patterns.mediator.Mediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
-import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.components.ShaderComponent;
 import com.uwsoft.editor.renderer.components.physics.PhysicsBodyComponent;
@@ -129,7 +127,7 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
                 MsgAPI.EMPTY_SPACE_CLICKED,
                 MsgAPI.ITEM_DATA_UPDATED,
                 MsgAPI.ITEM_SELECTION_CHANGED,
-                DeleteItemsCommand.DONE,
+                MsgAPI.DELETE_ITEMS_COMMAND_DONE,
                 SandboxMediator.SANDBOX_TOOL_CHANGED,
                 AddComponentToItemCommand.DONE,
                 RemoveComponentFromItemCommand.DONE
@@ -161,7 +159,7 @@ public class UIMultiPropertyBoxMediator extends PanelMediator<UIMultiPropertyBox
             case SandboxMediator.SANDBOX_TOOL_CHANGED:
                 initAllPropertyBoxes(notification.getBody());
                 break;
-            case DeleteItemsCommand.DONE:
+            case MsgAPI.DELETE_ITEMS_COMMAND_DONE:
                 initAllPropertyBoxes(null);
                 break;
             default:

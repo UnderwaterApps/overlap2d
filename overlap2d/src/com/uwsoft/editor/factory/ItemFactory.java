@@ -47,6 +47,7 @@ public class ItemFactory {
     private EntityFactory entityFactory;
     private SceneLoader sceneLoader;
     private Sandbox sandbox;
+    private Entity imageEntity;
 
     private static ItemFactory instance;
 
@@ -87,10 +88,14 @@ public class ItemFactory {
         vo.imageName = regionName;
 
         if(!setEssentialData(vo, position)) return false;
-        Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
-        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
+        imageEntity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, imageEntity);
 
         return true;
+    }
+
+    public Entity getImageEntity() {
+        return imageEntity;
     }
 
     public boolean create9Patch(String regionName, Vector2 position) {

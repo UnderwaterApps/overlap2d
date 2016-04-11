@@ -20,26 +20,34 @@ package com.uwsoft.editor.proxy;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.commons.IItemCommand;
 import com.commons.MsgAPI;
+import com.commons.plugins.O2DPlugin;
+import com.commons.plugins.PluginAPI;
+import com.commons.view.tools.Tool;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.commons.plugins.O2DPlugin;
-import com.commons.plugins.PluginAPI;
 import com.uwsoft.editor.controller.commands.PluginItemCommand;
+import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
+import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
+import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -50,6 +58,8 @@ public class PluginManager extends BaseProxy implements PluginAPI {
 
     private ArrayList<O2DPlugin> plugins = new ArrayList<>();
     private String pluginDir;
+
+    private HashSet<Entity> pluginEntities;
 
     public PluginManager() {
         super(NAME);
@@ -127,6 +137,31 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         overlap2DMenuBarMediator.addMenuItem(menu, subMenuName, notificationName);
     }
 
+    @Override
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool) {
+        UIToolBoxMediator uiToolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+        uiToolBoxMediator.addTool(toolName, toolBtnStyle, addSeparator, tool);
+        Map.Entry<String, Tool> toolPair = new Map.Entry<String, Tool>() {
+            @Override
+            public String getKey() {
+                return toolName;
+            }
+
+            @Override
+            public Tool getValue() {
+                return tool;
+            }
+
+            @Override
+            public Tool setValue(Tool value) {
+                Tool old = getValue();
+                setValue(value);
+                return old;
+            }
+        };
+        facade.sendNotification(MsgAPI.NEW_TOOL_ADDED, toolPair);
+    }
+
     public void setPluginDir(String pluginDir) {
         this.pluginDir = pluginDir;
     }
@@ -155,5 +190,53 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     @Override
     public Stage getUIStage() {
         return Sandbox.getInstance().getUIStage();
+    }
+
+    @Override
+    public Entity drawImage(String regionName, Vector2 position) {
+        ItemFactory itemFactory = ItemFactory.get();
+        itemFactory.createSimpleImage(regionName, position);
+        return itemFactory.getImageEntity();
+    }
+
+    @Override
+    public void selectEntity(Entity entity) {
+        Sandbox sandbox = Sandbox.getInstance();
+        boolean currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
+        if (!currentTouchedItemWasSelected) {
+            // get selection, add this item to selection
+            Set<Entity> items = new HashSet<>();
+            items.add(entity);
+            facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, items);
+        }
+    }
+
+    public boolean isEntityVisible(Entity e) {
+        LayerItemVO layer = EntityUtils.getEntityLayer(e);
+        return layer != null && layer.isVisible;
+    }
+
+    @Override
+    public HashSet<Entity> getProjectEntities() {
+        Sandbox sandbox = Sandbox.getInstance();
+        return sandbox.getSelector().getAllFreeItems();
+    }
+
+    @Override
+    public void showPopup(HashMap<String, String> actionsSet, Object observable) {
+        UIDropDownMenu uiDropDownMenu = new UIDropDownMenu();
+        actionsSet.entrySet().forEach(entry -> uiDropDownMenu.setActionName(entry.getKey(), entry.getValue()));
+
+        Array<String> actions = new Array<>();
+        actionsSet.keySet().forEach(key -> actions.add(key));
+        uiDropDownMenu.setActionList(actions);
+
+        Vector2 coordinates = new Vector2(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY());
+        uiDropDownMenu.setX(coordinates.x);
+        uiDropDownMenu.setY(coordinates.y - uiDropDownMenu.getHeight());
+        getUIStage().addActor(uiDropDownMenu);
+
+        UIDropDownMenuMediator dropDownMenuMediator = facade.retrieveMediator(UIDropDownMenuMediator.NAME);
+        dropDownMenuMediator.setCurrentObservable(observable);
     }
 }

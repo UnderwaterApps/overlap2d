@@ -45,7 +45,6 @@ public class UIToolBox extends VisTable {
     public void createToolButtons(Array<String> toolList) {
         for(int i = 0; i < toolList.size; i++) {
             addToolButton(toolList.get(i));
-            row();
             if(i == 1) addSeparator().width(31);
         }
     }
@@ -53,11 +52,24 @@ public class UIToolBox extends VisTable {
     private void addToolButton(String name) {
         VisImageButton button = createButton("tool-" + name, name);
         buttonMap.put(name, button);
-        add(button).width(31).height(31);
+        add(button).width(31).height(31).row();
+    }
+
+    public void addToolButton(String name, VisImageButton.VisImageButtonStyle btnStyle) {
+        VisImageButton button = createButton(btnStyle, name);
+        buttonMap.put(name, button);
+        add(button).width(31).height(31).row();
     }
 
     private VisImageButton createButton(String styleName, String toolId) {
         VisImageButton visImageButton = new VisImageButton(styleName);
+        toolsButtonGroup.add(visImageButton);
+        visImageButton.addListener(new ToolboxButtonClickListener(toolId));
+        return visImageButton;
+    }
+
+    private VisImageButton createButton(VisImageButton.VisImageButtonStyle btnStyle, String toolId) {
+        VisImageButton visImageButton = new VisImageButton(btnStyle);
         toolsButtonGroup.add(visImageButton);
         visImageButton.addListener(new ToolboxButtonClickListener(toolId));
         return visImageButton;

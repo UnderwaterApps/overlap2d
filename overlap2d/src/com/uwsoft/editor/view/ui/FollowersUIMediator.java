@@ -67,7 +67,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
                 MsgAPI.HIDE_SELECTIONS,
                 MsgAPI.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
-                UIToolBoxMediator.TOOL_SELECTED,
+                MsgAPI.TOOL_SELECTED,
                 MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
                 CompositeCameraChangeCommand.DONE,
                 MsgAPI.ZOOM_CHANGED,
@@ -112,7 +112,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
             case MsgAPI.SHOW_SELECTIONS:
                 showAllFollowers(notification.getBody());
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case MsgAPI.TOOL_SELECTED:
                 pushNotificationToFollowers(notification);
                 break;
             case MsgAPI.ZOOM_CHANGED:
@@ -186,7 +186,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
         followers.put(entity, follower);
 
         SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
-        follower.handleNotification(new BaseNotification(UIToolBoxMediator.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
+        follower.handleNotification(new BaseNotification(MsgAPI.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
     }
 
     public void removeFollower(Entity entity) {
