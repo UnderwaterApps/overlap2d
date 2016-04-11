@@ -9,6 +9,7 @@ import com.badlogic.gdx.utils.SnapshotArray;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.uwsoft.editor.renderer.components.*;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
+import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -37,7 +38,7 @@ public class SandboxInputAdapter implements InputProcessor {
 		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 			sandboxListeners.get(i).keyDown(null, keycode);
 		}
-		
+
 		return false;
 	}
 
@@ -56,47 +57,47 @@ public class SandboxInputAdapter implements InputProcessor {
 		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 			sandboxListeners.get(i).keyTyped(null, character);
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-		
+
 		//Handle Global Listeners than others
 		rootEntity = sandbox.getCurrentViewingEntity();
-		
+
 		if(rootEntity == null){
 			return false;
 		}
-				
+
 		Viewport viewPort = ComponentRetriever.get(rootEntity, ViewPortComponent.class).viewPort;
 		if (screenX < viewPort.getScreenX() || screenX >= viewPort.getScreenX() + viewPort.getScreenWidth()) return false;
 		if (Gdx.graphics.getHeight() - screenY < viewPort.getScreenY()
 			|| Gdx.graphics.getHeight() - screenY >= viewPort.getScreenY() + viewPort.getScreenHeight()) return false;
-		
+
 		hitTargetLocalCoordinates.set(screenX, screenY);
 		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
-		
+
 		//System.out.println("SCREEN TO STAGE X="+ hitTargetLocalCoordinates.x +" Y=" + hitTargetLocalCoordinates.y);
-		
+
 		target = hit(rootEntity, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y);
-		if(target == null){ 
-			
+		if(target == null){
+
 			hitTargetLocalCoordinates.set(screenX, screenY);
 			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
-			
+
 			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
 			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 				sandboxListeners.get(i).touchDown(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button);
 			}
-			
+
 			return false;
 		}
-		
+
 		hitTargetLocalCoordinates.set(screenX, screenY);
 		screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
-		
+
 		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
@@ -106,27 +107,27 @@ public class SandboxInputAdapter implements InputProcessor {
 				return true;
 			}
 		}
-		
+
 		return false;
 	}
 
 	@Override
 	public boolean touchUp(int screenX, int screenY, int pointer, int button) {
 		rootEntity = sandbox.getCurrentViewingEntity();
-		
+
 		if(rootEntity == null){
 			return false;
 		}
-		
+
 		if(target == null){
 			hitTargetLocalCoordinates.set(screenX, screenY);
 			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
-			
+
 			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
 			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 				sandboxListeners.get(i).touchUp(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer, button);
 			}
-			
+
 			return false;
 		}
 		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
@@ -142,22 +143,22 @@ public class SandboxInputAdapter implements InputProcessor {
 	@Override
 	public boolean touchDragged(int screenX, int screenY, int pointer) {
 		rootEntity = sandbox.getCurrentViewingEntity();
-		
+
 		if(rootEntity == null){
 			return false;
 		}
-		
+
 		if(target == null){
 			hitTargetLocalCoordinates.set(screenX, screenY);
 			screenToSceneCoordinates(rootEntity, hitTargetLocalCoordinates);
-			
+
 			Array<InputListener> sandboxListeners = sandbox.getAllListeners();
 			for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 				sandboxListeners.get(i).touchDragged(null, hitTargetLocalCoordinates.x, hitTargetLocalCoordinates.y, pointer);
 			}
 			return false;
 		}
-		
+
 		inpputListenerComponent = target.getComponent(InputListenerComponent.class);
 		if(inpputListenerComponent == null) return false;
 		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
@@ -187,17 +188,17 @@ public class SandboxInputAdapter implements InputProcessor {
 	@Override
 	public boolean scrolled(int amount) {
 		rootEntity = sandbox.getCurrentViewingEntity();
-		
+
 		if(rootEntity == null){
 			return false;
 		}
-		
+
 		Array<InputListener> sandboxListeners = sandbox.getAllListeners();
 		for (int i = 0, s = sandboxListeners.size; i < s; i++) {
 			sandboxListeners.get(i).scrolled(null, amount);
 		}
-		
-		//TODO scroll for other Entities don't know how deep tis should go all entities or only hit tested 
+
+		//TODO scroll for other Entities don't know how deep tis should go all entities or only hit tested
 //		inpputListenerComponent = ComponentRetriever.get(entity, InputListenerComponent.class);
 //		if(inpputListenerComponent == null) continue;
 //		Array<InputListener> listeners = inpputListenerComponent.getAllListeners();
@@ -206,8 +207,8 @@ public class SandboxInputAdapter implements InputProcessor {
 //				return true;
 //			}
 //		}
-			
-		
+
+
 		return false;
 	}
 	
@@ -219,12 +220,9 @@ public class SandboxInputAdapter implements InputProcessor {
 		DimensionsComponent dimentionsComponent;
 		NodeComponent nodeComponent = ComponentRetriever.get(root, NodeComponent.class);
 		SnapshotArray<Entity> childrenEntities = nodeComponent.children;
-		
-		Vector2 childLocalCoordinates  = new Vector2(localCoordinates);
 		int n = childrenEntities.size-1;
 		for (int i = n; i >= 0; i--){
 			Entity childEntity = childrenEntities.get(i);
-			childLocalCoordinates.set(localCoordinates);
 
 			// get layer locked or not
 			LayerItemVO layerItemVO = EntityUtils.getEntityLayer(childEntity);
@@ -232,13 +230,9 @@ public class SandboxInputAdapter implements InputProcessor {
 				continue;
 			}
 
-			TransformMathUtils.parentToLocalCoordinates(childEntity, childLocalCoordinates);
-			
-			dimentionsComponent = ComponentRetriever.get(childEntity, DimensionsComponent.class);
-			
-			if(dimentionsComponent.hit(childLocalCoordinates.x, childLocalCoordinates.y)){
-				return childEntity;
-			}
+            if (new EntityBounds(childEntity).intersects(localCoordinates)) {
+                return childEntity;
+            }
 		}
 		dimentionsComponent = ComponentRetriever.get(root, DimensionsComponent.class);
 //		if(dimentionsComponent.hit(localCoordinates.x, localCoordinates.y)){
