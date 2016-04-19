@@ -55,4 +55,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-libsDirName = '/Users/mariam/Desktop/Projects/jars'
+libsDirName = '/Users/mariam/Desktop/Projects/overlap2d/overlap2d/assets/plugins'
