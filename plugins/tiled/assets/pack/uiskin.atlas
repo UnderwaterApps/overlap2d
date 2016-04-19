@@ -1,0 +1,81 @@
+
+uiskin.png
+size: 512,128
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+image-Box-active
+  rotate: false
+  xy: 87, 22
+  size: 4, 4
+  split: 1, 1, 1, 1
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+image-Box-inactive
+  rotate: false
+  xy: 436, 40
+  size: 4, 4
+  split: 1, 1, 1, 1
+  orig: 4, 4
+  offset: 0, 0
+  index: -1
+plugin-tab-active
+  rotate: false
+  xy: 436, 105
+  size: 73, 21
+  split: 4, 4, 3, 0
+  orig: 73, 21
+  offset: 0, 0
+  index: -1
+plugin-tab-inactive
+  rotate: false
+  xy: 2, 5
+  size: 83, 21
+  split: 3, 3, 2, 1
+  orig: 83, 21
+  offset: 0, 0
+  index: -1
+tab-back-line
+  rotate: false
+  xy: 2, 2
+  size: 2, 1
+  split: 0, 0, 0, 0
+  orig: 2, 1
+  offset: 0, 0
+  index: -1
+tile
+  rotate: false
+  xy: 436, 71
+  size: 32, 32
+  orig: 32, 32
+  offset: 0, 0
+  index: -1
+tiles-drop-here-normal
+  rotate: false
+  xy: 2, 28
+  size: 215, 98
+  orig: 215, 98
+  offset: 0, 0
+  index: -1
+tiles-drop-here-over
+  rotate: false
+  xy: 219, 28
+  size: 215, 98
+  orig: 215, 98
+  offset: 0, 0
+  index: -1
+tool-tilebrush
+  rotate: false
+  xy: 436, 46
+  size: 22, 23
+  orig: 22, 23
+  offset: 0, 0
+  index: -1
+tool-tileeraser
+  rotate: false
+  xy: 470, 80
+  size: 22, 23
+  orig: 22, 23
+  offset: 0, 0
+  index: -1

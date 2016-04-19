@@ -1,3 +1,5 @@
+import com.badlogic.gdx.tools.texturepacker.TexturePacker
+
 /*
  * ******************************************************************************
  *  * Copyright 2015 See AUTHORS file.
@@ -18,15 +20,26 @@
 
 apply plugin: "java"
 
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.badlogicgames.gdx:gdx-tools:1.6.5'
+    }
+}
+
 sourceSets.main.java.srcDirs = [ "src/" ]
 
 ext {
     gdxVersion = '1.6.5'
     ashleyVersion = '1.5.0'
+    pack = ["assets/textures", "assets/pack/", "uiskin"]
 }
 
 dependencies {
     compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+    compile "com.badlogicgames.gdx:gdx-tools:$gdxVersion"
     compile "com.badlogicgames.ashley:ashley:$ashleyVersion"
     compile project(":overlap2d-common-api")
     compile "com.kotcrab.vis:vis-ui:0.7.6"
@@ -54,5 +67,14 @@ repositories {
 task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
+
+task pack {
+    if (project.ext.has('pack')) {
+        logger.info "Calling TexturePacker: " + pack
+        println file(pack[0]).absolutePath+" "+file(pack[1]).absolutePath+" "+pack[2]
+        TexturePacker.processIfModified(file(pack[0]).absolutePath, file(pack[1]).absolutePath, pack[2])
+    }
+}
+build.dependsOn pack
 
 libsDirName = '/Users/mariam/Desktop/Projects/overlap2d/overlap2d/assets/plugins'
