@@ -19,12 +19,19 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.commons.plugins.O2DPluginAdapter;
 import com.commons.plugins.PluginAPI;
+import com.google.common.io.ByteStreams;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.overlap2d.plugins.tiled.save.DataToSave;
 import com.overlap2d.plugins.tiled.save.SaveDataManager;
@@ -35,6 +42,8 @@ import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import net.mountainblade.modular.annotations.Implementation;
+
+import java.io.*;
 
 /**
  * Created by mariam on 2/2/2016.
@@ -71,6 +80,18 @@ public class TiledPlugin extends O2DPluginAdapter {
     @Override
     public void initPlugin() {
         facade.registerMediator(tiledPanelMediator);
+
+        InputStream in = getClass().getResourceAsStream("/plugin.png");
+        try {
+            byte[] byteArray = ByteStreams.toByteArray(in);
+            in.close();
+            Pixmap pixmap = new Pixmap(byteArray, 0, byteArray.length);
+            Texture texture = new Texture(pixmap);
+            VisImage image = new VisImage(texture);
+            System.out.println("wh "+image.getPrefWidth()+" "+image.getPrefHeight());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
         initTools();
 

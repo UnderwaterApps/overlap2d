@@ -30,11 +30,13 @@ buildscript {
 }
 
 sourceSets.main.java.srcDirs = [ "src/" ]
+sourceSets.main.resources.srcDirs = [ "assets/pack" ]
 
 ext {
     gdxVersion = '1.6.5'
     ashleyVersion = '1.5.0'
-    pack = ["assets/textures", "assets/pack/", "uiskin"]
+    pack = ["assets/textures", "assets/pack/", "plugin"]
+    jarPath = "../../overlap2d/assets/plugins"
 }
 
 dependencies {
@@ -71,10 +73,11 @@ task wrapper(type: Wrapper) {
 task pack {
     if (project.ext.has('pack')) {
         logger.info "Calling TexturePacker: " + pack
-        println file(pack[0]).absolutePath+" "+file(pack[1]).absolutePath+" "+pack[2]
         TexturePacker.processIfModified(file(pack[0]).absolutePath, file(pack[1]).absolutePath, pack[2])
     }
 }
 build.dependsOn pack
 
-libsDirName = '/Users/mariam/Desktop/Projects/overlap2d/overlap2d/assets/plugins'
+if(project.ext.has('jarPath')) {
+    libsDirName = file(jarPath).absolutePath
+}
