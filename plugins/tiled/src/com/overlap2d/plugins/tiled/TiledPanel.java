@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisDialog;
@@ -31,6 +32,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneListener;
+import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 import com.overlap2d.plugins.tiled.view.tabs.GridTilesTab;
 import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
 import com.puremvc.patterns.facade.Facade;
@@ -63,16 +65,13 @@ public class TiledPanel extends UIDraggablePanel {
     private Image bottomBar;
     private VisTable mainTable;
     private Engine engine;
+    private ResourcesManager resourcesManager;
 
     public TiledPanel(TiledPlugin tiledPlugin) {
         super("Tiles");
         this.tiledPlugin = tiledPlugin;
 
         facade = SimpleFacade.getInstance();
-
-        bottomBar = new Image(VisUI.getSkin().getDrawable("tab-back-line"));
-        bottomBar.setWidth(80);
-        addActor(bottomBar);
 
         mainTable = new VisTable();
         add(mainTable)
@@ -83,12 +82,19 @@ public class TiledPanel extends UIDraggablePanel {
     }
 
     public void initView() {
+        if (bottomBar == null) {
+            this.resourcesManager = tiledPlugin.pluginRM;
+            bottomBar = new Image(resourcesManager.getTextureRegion("tab-back-line"));
+            bottomBar.setWidth(80);
+            addActorBefore(mainTable, bottomBar);
+        }
+
         mainTable.clear();
 
         TabbedPane.TabbedPaneStyle style = new TabbedPane.TabbedPaneStyle();
         VisTextButton.VisTextButtonStyle btnStyle = new VisTextButton.VisTextButtonStyle();
-        btnStyle.up = VisUI.getSkin().getDrawable("plugin-tab-inactive");
-        btnStyle.checked = VisUI.getSkin().getDrawable("plugin-tab-active");
+        btnStyle.up = new TextureRegionDrawable(resourcesManager.getTextureRegion("plugin-tab-inactive"));
+        btnStyle.checked = new TextureRegionDrawable(resourcesManager.getTextureRegion("plugin-tab-active"));
         btnStyle.font = VisUI.getSkin().getFont("default-font");
         btnStyle.fontColor = VisUI.getSkin().getColor("white");
         style.buttonStyle = btnStyle;

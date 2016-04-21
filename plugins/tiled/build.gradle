@@ -35,7 +35,7 @@ sourceSets.main.resources.srcDirs = [ "assets/pack" ]
 ext {
     gdxVersion = '1.6.5'
     ashleyVersion = '1.5.0'
-    pack = ["assets/textures", "assets/pack/", "plugin"]
+    pack = ["assets/textures", "assets/pack/", "tiled"]
     jarPath = "../../overlap2d/assets/plugins"
 }
 

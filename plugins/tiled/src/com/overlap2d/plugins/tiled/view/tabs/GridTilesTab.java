@@ -3,17 +3,16 @@ package com.overlap2d.plugins.tiled.view.tabs;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.overlap2d.plugins.tiled.TiledPanel;
 import com.overlap2d.plugins.tiled.TiledPlugin;
+import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 
 
 /**
@@ -31,11 +30,13 @@ public class GridTilesTab extends DefaultTab {
     private boolean isBottomEdge;
 
     private TiledPlugin tiledPlugin;
+    private ResourcesManager resourcesManager;
 
     public GridTilesTab(TiledPanel panel, int tabIndex) {
         super(panel, "Tiles", tabIndex);
 
         tiledPlugin = panel.tiledPlugin;
+        resourcesManager = tiledPlugin.pluginRM;
         tiles = new Array<>();
         savedTiles = tiledPlugin.dataToSave.getTileNames();
         tileIndex = savedTiles.size;
@@ -45,9 +46,8 @@ public class GridTilesTab extends DefaultTab {
     public void initView() {
         if (isDrop = savedTiles.size == 0) {
             VisImageButton.VisImageButtonStyle dropBoxStyle = new VisImageButton.VisImageButtonStyle();
-            Skin skin = VisUI.getSkin();
-            dropBoxStyle.up = skin.getDrawable("tiles-drop-here-normal");
-            dropBoxStyle.imageOver = skin.getDrawable("tiles-drop-here-over");
+            dropBoxStyle.up = new TextureRegionDrawable(resourcesManager.getTextureRegion("tiles-drop-here-normal"));
+            dropBoxStyle.imageOver = new TextureRegionDrawable(resourcesManager.getTextureRegion("tiles-drop-here-over"));
             VisImageButton dropRegion = new VisImageButton(dropBoxStyle);
             content.clear();
             content.add(dropRegion)
@@ -105,8 +105,8 @@ public class GridTilesTab extends DefaultTab {
     }
 
     private void setGridSizeToFirstTileSize(String tileName) {
-        float gridWidth = tiledPlugin.getTextureRegion(tileName).getRegionWidth() / tiledPlugin.getPixelToWorld();
-        float gridHeight = tiledPlugin.getTextureRegion(tileName).getRegionHeight() / tiledPlugin.getPixelToWorld();
+        float gridWidth = resourcesManager.getTextureRegion(tileName).getRegionWidth() / tiledPlugin.getPixelToWorld();
+        float gridHeight = resourcesManager.getTextureRegion(tileName).getRegionHeight() / tiledPlugin.getPixelToWorld();
         tiledPlugin.dataToSave.setGrid(gridWidth, gridHeight);
         tiledPlugin.facade.sendNotification(TiledPlugin.GRID_CHANGED);
     }
@@ -127,18 +127,17 @@ public class GridTilesTab extends DefaultTab {
 
         for (int i=0; i<tilesCount; i++) {
             VisImageButton ct;
-            Skin skin = VisUI.getSkin();
             VisImageButton.VisImageButtonStyle imageBoxStyle = new VisImageButton.VisImageButtonStyle();
-            imageBoxStyle.up = skin.getDrawable("image-Box-inactive");
-            imageBoxStyle.down = skin.getDrawable("image-Box-active");
-            imageBoxStyle.checked = skin.getDrawable("image-Box-active");
-            imageBoxStyle.over = skin.getDrawable("image-Box-active");
+            imageBoxStyle.up = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-inactive"));
+            imageBoxStyle.down = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
+            imageBoxStyle.checked = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
+            imageBoxStyle.over = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
             Drawable tileDrawable = null;
             if (i < savedTiles.size) {
-                tileDrawable = new TextureRegionDrawable(tiledPlugin.getTextureRegion(savedTiles.get(i)));
+                tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(savedTiles.get(i)));
             } else if (!tileName.equals("")) {
                 if (i == tileIndex) {
-                    tileDrawable = new TextureRegionDrawable(tiledPlugin.getTextureRegion(tileName));
+                    tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(tileName));
                 }
             }
             imageBoxStyle.imageUp = tileDrawable;

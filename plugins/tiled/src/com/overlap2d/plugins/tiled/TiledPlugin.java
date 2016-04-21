@@ -19,20 +19,18 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.Pixmap;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.plugins.O2DPluginAdapter;
 import com.commons.plugins.PluginAPI;
 import com.google.common.io.ByteStreams;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisImage;
 import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 import com.overlap2d.plugins.tiled.save.DataToSave;
 import com.overlap2d.plugins.tiled.save.SaveDataManager;
 import com.overlap2d.plugins.tiled.tools.DeleteTileTool;
@@ -72,6 +70,7 @@ public class TiledPlugin extends O2DPluginAdapter {
     private DrawTileTool drawTileTool;
     private DeleteTileTool deleteTileTool;
     public TiledPanelMediator tiledPanelMediator;
+    public ResourcesManager pluginRM;
 
     public TiledPlugin() {
         tiledPanelMediator = new TiledPanelMediator(this);
@@ -81,17 +80,7 @@ public class TiledPlugin extends O2DPluginAdapter {
     public void initPlugin() {
         facade.registerMediator(tiledPanelMediator);
 
-        InputStream in = getClass().getResourceAsStream("/plugin.png");
-        try {
-            byte[] byteArray = ByteStreams.toByteArray(in);
-            in.close();
-            Pixmap pixmap = new Pixmap(byteArray, 0, byteArray.length);
-            Texture texture = new Texture(pixmap);
-            VisImage image = new VisImage(texture);
-            System.out.println("wh "+image.getPrefWidth()+" "+image.getPrefHeight());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        pluginRM = new ResourcesManager(this);
 
         initTools();
 
@@ -101,7 +90,7 @@ public class TiledPlugin extends O2DPluginAdapter {
         tileAddButtonStyle.down = skin.getDrawable("toolbar-down");
         tileAddButtonStyle.checked = skin.getDrawable("toolbar-down");
         tileAddButtonStyle.over = skin.getDrawable("toolbar-over");
-        tileAddButtonStyle.imageUp = skin.getDrawable("tool-tilebrush");
+        tileAddButtonStyle.imageUp = new TextureRegionDrawable(pluginRM.getTextureRegion("tool-tilebrush"));
         pluginAPI.addTool(TILE_ADD_TOOL, tileAddButtonStyle, true, drawTileTool);
 
         VisImageButton.VisImageButtonStyle tileDeleteButtonStyle = new VisImageButton.VisImageButtonStyle();
@@ -109,12 +98,10 @@ public class TiledPlugin extends O2DPluginAdapter {
         tileDeleteButtonStyle.down = skin.getDrawable("toolbar-down");
         tileDeleteButtonStyle.checked = skin.getDrawable("toolbar-down");
         tileDeleteButtonStyle.over = skin.getDrawable("toolbar-over");
-        tileDeleteButtonStyle.imageUp = skin.getDrawable("tool-tileeraser");
+        tileDeleteButtonStyle.imageUp = new TextureRegionDrawable(pluginRM.getTextureRegion("tool-tileeraser"));
         pluginAPI.addTool(TILE_DELETE_TOOL, tileDeleteButtonStyle, false, deleteTileTool);
-    }
 
-    public TextureRegion getTextureRegion(String name) {
-        return pluginAPI.getSceneLoader().getRm().getTextureRegion(name);
+
     }
 
     public PluginAPI getPluginAPI() {
