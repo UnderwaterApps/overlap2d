@@ -21,6 +21,7 @@ package com.commons.plugins;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.commons.IItemCommand;
@@ -28,6 +29,7 @@ import com.commons.view.tools.Tool;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.vo.CursorData;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -156,4 +158,11 @@ public interface PluginAPI {
      * @param observable item with right click on it
      */
     void showPopup(HashMap<String, String> actionsSet, Object observable);
+
+    /**
+     * sets cursor to new one with cursorData
+     * @param cursorData
+     * @param region for plugin unic textureRegion
+     */
+    void setCursor(CursorData cursorData, TextureRegion region);
 }

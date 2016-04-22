@@ -22,6 +22,7 @@ import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
@@ -46,6 +47,7 @@ import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
+import com.vo.CursorData;
 
 import java.util.*;
 
@@ -238,5 +240,11 @@ public class PluginManager extends BaseProxy implements PluginAPI {
 
         UIDropDownMenuMediator dropDownMenuMediator = facade.retrieveMediator(UIDropDownMenuMediator.NAME);
         dropDownMenuMediator.setCurrentObservable(observable);
+    }
+
+    @Override
+    public void setCursor(CursorData cursorData, TextureRegion region) {
+        CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
+        cursorManager.setCursor(cursorData, region);
     }
 }

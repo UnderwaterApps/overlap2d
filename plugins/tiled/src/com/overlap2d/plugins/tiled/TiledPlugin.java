@@ -51,17 +51,17 @@ public class TiledPlugin extends O2DPluginAdapter {
 
     //-------notifications---------//
     public static final String CLASS_NAME = "com.overlap2d.plugins.tiled";
-    public static final String TILE_ADD_TOOL = CLASS_NAME + ".TILE_ADD_TOOL";
-    public static final String TILE_DELETE_TOOL = CLASS_NAME + ".TILE_DELETE_TOOL";
-    public static final String TILE_ADDED = CLASS_NAME + ".TILE_ADDED";
-    public static final String TILE_SELECTED = CLASS_NAME + ".TILE_SELECTED";
-    public static final String PANEL_OPEN = CLASS_NAME + ".PANEL_OPEN";
-    public static final String OPEN_DROP_DOWN = CLASS_NAME + ".OPEN_DROP_DOWN";
-    public static final String DELETE_TILE = CLASS_NAME + ".DELETE_TILE";
-    public static final String GRID_CHANGED = CLASS_NAME + ".GRID_CHANGED";
+    public static final String TILE_ADDED       = CLASS_NAME + ".TILE_ADDED";
+    public static final String TILE_SELECTED    = CLASS_NAME + ".TILE_SELECTED";
+    public static final String PANEL_OPEN       = CLASS_NAME + ".PANEL_OPEN";
+    public static final String OPEN_DROP_DOWN   = CLASS_NAME + ".OPEN_DROP_DOWN";
+    public static final String DELETE_TILE      = CLASS_NAME + ".DELETE_TILE";
+    public static final String GRID_CHANGED     = CLASS_NAME + ".GRID_CHANGED";
     //-------end--------//
 
-    public static final String TILE_TAG = "TILE";
+    public static final String TILE_ADD_TOOL    = "TILE_ADD_TOOL";
+    public static final String TILE_DELETE_TOOL = "TILE_DELETE_TOOL";
+    public static final String TILE_TAG         = "TILE";
 
     public DataToSave dataToSave;
     public SaveDataManager saveDataManager;

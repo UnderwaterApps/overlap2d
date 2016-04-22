@@ -20,6 +20,7 @@ package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.commons.MsgAPI;
 import com.commons.ResourcePayloadObject;
@@ -28,6 +29,7 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.vo.CursorData;
 
 import java.util.HashMap;
 
@@ -147,18 +149,26 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 break;
             case MsgAPI.TOOL_SELECTED:
                 String body = notification.getBody();
+                String cursorName = null;
                 switch (body.toString()) {
                     case TiledPlugin.TILE_ADD_TOOL:
+                        cursorName = "tile";
                         tiledPlugin.facade.sendNotification(TiledPlugin.PANEL_OPEN);
                         tiledPlugin.facade.sendNotification(MsgAPI.HIDE_GRID);
                         break;
                     case TiledPlugin.TILE_DELETE_TOOL:
+                        cursorName = "tile-eraser";
                         tiledPlugin.facade.sendNotification(MsgAPI.HIDE_GRID);
                         break;
                     default:
                         tiledPlugin.facade.sendNotification(MsgAPI.SHOW_GRID);
                         viewComponent.hide();
                         break;
+                }
+                if (cursorName != null) {
+                    CursorData cursorData = new CursorData(cursorName, 14, 14);
+                    TextureRegion region = tiledPlugin.pluginRM.getTextureRegion(cursorName);
+                    tiledPlugin.getPluginAPI().setCursor(cursorData, region);
                 }
                 break;
             case SettingsTab.OK_BTN_CLICKED:
