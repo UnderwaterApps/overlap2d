@@ -57,6 +57,12 @@ nb-configuration.xml
 overlap2d-runtime-libgdx
 spine-runtimes
 
+overlap2d/assets/style/uiskin.png
+overlap2d/assets/style/uiskin.atlas
 assets/style/uiskin.png
 assets/style/uiskin.atlas
+overlap2d/assets/splash/splash.png
+overlap2d/assets/splash/splash.atlas
+assets/splash/splash.png
+assets/splash/splash.atlas
 /runOverlap2d_dev.bat
