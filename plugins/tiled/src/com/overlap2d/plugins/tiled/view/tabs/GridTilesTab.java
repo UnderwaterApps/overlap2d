@@ -1,9 +1,11 @@
 package com.overlap2d.plugins.tiled.view.tabs;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
+import com.badlogic.gdx.scenes.scene2d.utils.NinePatchDrawable;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.VisImageButton;
@@ -128,10 +130,12 @@ public class GridTilesTab extends DefaultTab {
         for (int i=0; i<tilesCount; i++) {
             VisImageButton ct;
             VisImageButton.VisImageButtonStyle imageBoxStyle = new VisImageButton.VisImageButtonStyle();
-            imageBoxStyle.up = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-inactive"));
-            imageBoxStyle.down = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
-            imageBoxStyle.checked = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
-            imageBoxStyle.over = new TextureRegionDrawable(resourcesManager.getTextureRegion("image-Box-active"));
+            NinePatchDrawable inactive = new NinePatchDrawable(new NinePatch(resourcesManager.getPluginNinePatch("image-Box-inactive")));
+            NinePatchDrawable active = new NinePatchDrawable(new NinePatch(resourcesManager.getPluginNinePatch("image-Box-active")));
+            imageBoxStyle.up = inactive;
+            imageBoxStyle.down = active;
+            imageBoxStyle.checked = active;
+            imageBoxStyle.over = active;
             Drawable tileDrawable = null;
             if (i < savedTiles.size) {
                 tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(savedTiles.get(i)));

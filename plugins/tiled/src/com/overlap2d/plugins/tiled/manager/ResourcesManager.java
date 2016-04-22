@@ -1,6 +1,7 @@
 package com.overlap2d.plugins.tiled.manager;
 
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.graphics.g2d.NinePatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.google.common.io.ByteStreams;
@@ -56,5 +57,11 @@ public class ResourcesManager {
             region = tiledPlugin.getPluginAPI().getSceneLoader().getRm().getTextureRegion(name);
         }
         return region;
+    }
+
+    public NinePatch getPluginNinePatch(String name) {
+        TextureAtlas.AtlasRegion region = textureAtlas.findRegion(name);
+        if(region == null) return null;
+        return new NinePatch(region, region.splits[0], region.splits[1], region.splits[2], region.splits[3]);
     }
 }
