@@ -123,8 +123,8 @@ public class TiledPlugin extends O2DPluginAdapter {
         for (Entity entity : pluginAPI.getProjectEntities()) {
             if(!isTile(entity)) continue;
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-            DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
-            Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y, dimensionsComponent.width, dimensionsComponent.height);
+            Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y,
+                    dataToSave.getParameterVO().gridWidth, dataToSave.getParameterVO().gridHeight);
 
             boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
             if (isEntityVisible && tmp.contains(x, y)) {
