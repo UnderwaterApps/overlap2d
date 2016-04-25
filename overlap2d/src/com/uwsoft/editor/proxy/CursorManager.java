@@ -19,7 +19,6 @@
 package com.uwsoft.editor.proxy;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
@@ -52,7 +51,6 @@ public class CursorManager extends BaseProxy {
 
     private CursorData cursor;
     private CursorData overrideCursor = null;
-    private Pixmap cursorPm;
 
     public CursorManager() {
         super(NAME);
@@ -63,16 +61,7 @@ public class CursorManager extends BaseProxy {
     public void setCursor(CursorData cursor, TextureRegion region) {
         this.cursor = cursor;
 
-        if (region == null) {
-            cursorPm = new Pixmap(Gdx.files.internal("cursors/" + cursor.region + ".png"));
-        } else {
-            Texture texture = region.getTexture();
-            if (!texture.getTextureData().isPrepared()) {
-                texture.getTextureData().prepare();
-            }
-            cursorPm = texture.getTextureData().consumePixmap();
-        }
-        setCursorPixmap();
+        setCursorPixmap(region);
     }
 
     public void setCursor(CursorData cursor) {
@@ -81,17 +70,28 @@ public class CursorManager extends BaseProxy {
 
     public void setOverrideCursor(CursorData cursor) {
         overrideCursor = cursor;
-        setCursorPixmap();
+        setCursorPixmap(null);
     }
 
     public void removeOverrideCursor() {
         setOverrideCursor(null);
     }
 
-    private void setCursorPixmap() {
+    private void setCursorPixmap(TextureRegion region) {
         CursorData currentCursor = overrideCursor;
         if(currentCursor == null) {
             currentCursor = cursor;
+        }
+
+        Pixmap cursorPm;
+        if (region == null) {
+            cursorPm = new Pixmap(Gdx.files.internal("cursors/" + cursor.region + ".png"));
+        } else {
+            Texture texture = region.getTexture();
+            if (!texture.getTextureData().isPrepared()) {
+                texture.getTextureData().prepare();
+            }
+            cursorPm = texture.getTextureData().consumePixmap();
         }
 
         Cursor cursorObj = Gdx.graphics.newCursor(cursorPm, currentCursor.getHotspotX(), currentCursor.getHotspotY());

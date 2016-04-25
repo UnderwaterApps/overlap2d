@@ -32,8 +32,8 @@ public class ResourcesManager {
         File atlasTempFile = getResourceFileFromJar(".atlas");
         File pngTempFile = getResourceFileFromJar(".png");
         textureAtlas = new TextureAtlas(new FileHandle(atlasTempFile));
-        atlasTempFile.delete();
-        pngTempFile.delete();
+        atlasTempFile.deleteOnExit();
+        pngTempFile.deleteOnExit();
     }
 
     private File getResourceFileFromJar(String extension) {
