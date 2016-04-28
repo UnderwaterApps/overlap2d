@@ -1,3 +1,14 @@
+Overlap2D - 0.1.3
+------------------------------
+Bugfix:
+Rotated/scaled item accepts touch at actual borders.
+On item translation/rotation/scaling item follower follows its item instantly
+Transforming item by dragging anchor point - edge extends along its normal independent of rotation
+
+Improvement:
+Composite item manual resize support
+
+
 Overlap2D - 0.1.2
 ------------------------------
 Drop down for library items and images to delete from resource panel

@@ -15,6 +15,9 @@ import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
  */
 public class BasicStrategy extends AbstractTransformStrategy {
 
+    private float deltaW;
+    private float deltaH;
+
     @Override
     public void calculate(float mouseDx, float mouseDy, int anchor, Entity entity, TransformCommandBuilder transformCommandBuilder, Vector2 mousePointStage, float lastTransformAngle, float lastEntityAngle) {
         TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
@@ -26,100 +29,89 @@ public class BasicStrategy extends AbstractTransformStrategy {
         float[] horizontal = calculateSizeAndXyAmount(mouseDx, mouseDy, transformComponent.rotation);
         float[] vertical = calculateSizeAndXyAmount(mouseDx, mouseDy, transformComponent.rotation + 90);
 
+        deltaW = horizontal[0];
+        deltaH = vertical[0];
+
         transformComponent.originX = dimensionsComponent.width * 0.5f;
         transformComponent.originY = dimensionsComponent.height * 0.5f;
 
         switch (anchor) {
             case NormalSelectionFollower.L:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX - horizontal[0];
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
+                positionHorizontally(transformComponent, horizontal);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX - deltaW;
                 break;
             case NormalSelectionFollower.R:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX + horizontal[0];
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
+                positionHorizontally(transformComponent, horizontal);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX + deltaW;
                 break;
             case NormalSelectionFollower.B:
-                newHeight = dimensionsComponent.height * transformComponent.scaleY - vertical[0];
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
+                positionVertically(transformComponent, vertical);
+                newHeight = dimensionsComponent.height * transformComponent.scaleY - deltaH;
                 break;
             case NormalSelectionFollower.T:
-                newHeight = dimensionsComponent.height * transformComponent.scaleY + vertical[0];
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
+                positionVertically(transformComponent, vertical);
+                newHeight = dimensionsComponent.height * transformComponent.scaleY + deltaH;
                 break;
             case NormalSelectionFollower.LT:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX - horizontal[0];
-                newHeight = dimensionsComponent.height * transformComponent.scaleY + vertical[0];
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
+                positionItem(transformComponent, horizontal, vertical);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX - deltaW;
+                newHeight = dimensionsComponent.height * transformComponent.scaleY + deltaH;
                 break;
             case NormalSelectionFollower.RT:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX + horizontal[0];
-                newHeight = dimensionsComponent.height * transformComponent.scaleY + vertical[0];
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
+                positionItem(transformComponent, horizontal, vertical);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX + deltaW;
+                newHeight = dimensionsComponent.height * transformComponent.scaleY + deltaH;
                 break;
             case NormalSelectionFollower.RB:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX + horizontal[0];
-                newHeight = dimensionsComponent.height * transformComponent.scaleY - vertical[0];
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
+                positionItem(transformComponent, horizontal, vertical);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX + deltaW;
+                newHeight = dimensionsComponent.height * transformComponent.scaleY - deltaH;
                 break;
             case NormalSelectionFollower.LB:
-                newWidth = dimensionsComponent.width * transformComponent.scaleX - horizontal[0];
-                newHeight = dimensionsComponent.height * transformComponent.scaleY - vertical[0];
-                transformComponent.x += horizontal[1] * 0.5f;
-                transformComponent.y += horizontal[2] * 0.5f;
-                transformComponent.x += vertical[1] * 0.5f;
-                transformComponent.y += vertical[2] * 0.5f;
+                positionItem(transformComponent, horizontal, vertical);
+                newWidth = dimensionsComponent.width * transformComponent.scaleX - deltaW;
+                newHeight = dimensionsComponent.height * transformComponent.scaleY - deltaH;
                 break;
         }
 
-        //region proportional scaling
-        // This was making sure for proportional sizing
-        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
-            float enclosingRectSize = Math.max(newWidth, newHeight);
-            if (dimensionsComponent.width >= dimensionsComponent.height) {
-                newWidth = enclosingRectSize;
-                newHeight = (newWidth / dimensionsComponent.width) * dimensionsComponent.height;
-            }
-            if (dimensionsComponent.height > dimensionsComponent.width) {
-                newHeight = enclosingRectSize;
-                newWidth = (newHeight / dimensionsComponent.height) * dimensionsComponent.width;
-            }
-            System.out.println("");
-        }
-        //endregion
-
-        //region rotation related stuff
         // Rotating
-        if (anchor >= NormalSelectionFollower.ROTATION_LT && anchor <= NormalSelectionFollower.ROTATION_LB) {
-            Vector2 originPoint = new Vector2(transformComponent.x + transformComponent.originX, transformComponent.y + transformComponent.originY);
-            mousePointStage.sub(originPoint);
-            float currentAngle = mousePointStage.angle();
-            float angleDiff = currentAngle - lastTransformAngle;
-            float newRotation = lastEntityAngle + angleDiff;
-            transformComponent.rotation = newRotation;
-            transformCommandBuilder.setRotation(newRotation);
-            System.out.println();
-        }
-        //endregion
+        rotating(anchor, transformCommandBuilder, mousePointStage, lastTransformAngle, lastEntityAngle, transformComponent);
 
         float newScaleX = newWidth / dimensionsComponent.width;
         float newScaleY = newHeight / dimensionsComponent.height;
-
-        transformCommandBuilder.setScale(newScaleX, newScaleY);
         transformComponent.scaleX = newScaleX;
         transformComponent.scaleY = newScaleY;
+        transformCommandBuilder.setScale(newScaleX, newScaleY);
+    }
+
+    private void positionItem(TransformComponent transformComponent, float[] horizontal, float[] vertical) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            deltaW *= 2;
+            deltaH *= 2;
+        } else {
+            transformComponent.x += horizontal[1] * 0.5f;
+            transformComponent.y += horizontal[2] * 0.5f;
+            transformComponent.x += vertical[1] * 0.5f;
+            transformComponent.y += vertical[2] * 0.5f;
+        }
+    }
+
+    private void positionHorizontally(TransformComponent transformComponent, float[] horizontal) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            deltaW *= 2;
+        } else {
+            transformComponent.x += horizontal[1] * 0.5f;
+            transformComponent.y += horizontal[2] * 0.5f;
+        }
+    }
+
+    private void positionVertically(TransformComponent transformComponent, float[] vertical) {
+        if (Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
+            deltaH *= 2;
+        } else {
+            transformComponent.x += vertical[1] * 0.5f;
+            transformComponent.y += vertical[2] * 0.5f;
+        }
     }
 
 }

@@ -3,12 +3,16 @@ package com.uwsoft.editor.controller.commands;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.badlogic.gdx.utils.SnapshotArray;
 import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
+
+import java.util.ArrayList;
 
 /**
  * Created by Osman on 01.08.2015.
@@ -64,6 +68,10 @@ public class ItemTransformCommand extends EntityModifyRevertableCommand {
         transformComponent.y = prevPos.y;
         dimensionsComponent.width = prevSize.x;
         dimensionsComponent.height = prevSize.y;
+        if (dimensionsComponent.boundBox != null) {
+            dimensionsComponent.boundBox.width = dimensionsComponent.width;
+            dimensionsComponent.boundBox.height = dimensionsComponent.height;
+        }
         transformComponent.scaleX = prevScale.x;
         transformComponent.scaleY = prevScale.y;
         transformComponent.rotation = prevRotation;

@@ -140,6 +140,7 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
         switch (EntityUtils.getType(follower.getEntity())) {
             case EntityFactory.COMPOSITE_TYPE:
                 transformStrategy = compositeStrategy;
+                compositeStrategy.getInitialPositions(follower.getEntity());
                 break;
             case EntityFactory.NINE_PATCH:
                 transformStrategy = ninePatchStrategy;
@@ -168,6 +169,9 @@ public class TransformTool extends SelectionTool implements FollowerTransformati
     @Override
     public void anchorUp(NormalSelectionFollower follower, int anchor, float x, float y) {
         commandBuilder.execute();
+        if (transformStrategy == compositeStrategy) {
+            compositeStrategy.swapItemFinalAndInitialStates(follower.getEntity());
+        }
     }
 
     @Override
