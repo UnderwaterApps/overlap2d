@@ -38,6 +38,7 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.ComponentCloner;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
@@ -65,6 +66,9 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     public UIBasicItemPropertiesMediator() {
         super(NAME, new UIBasicItemProperties());
     }
+
+    Object object1;
+    Object object2;
 
     @Override
     public void onRegister() {
@@ -196,6 +200,11 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
         dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
         dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
+
+        if (dimensionComponent.boundBox != null) {
+            dimensionComponent.boundBox.width = dimensionComponent.width;
+            dimensionComponent.boundBox.height = dimensionComponent.height;
+        }
 
         // TODO: manage width and height
         transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);

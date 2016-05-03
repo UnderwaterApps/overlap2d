@@ -29,12 +29,17 @@ import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 public class UICompositeItemProperties extends UIItemCollapsibleProperties {
 
     private VisCheckBox scissorsEnabledCheckBox;
+    private VisCheckBox automaticResizeCheckBox;
 
     public UICompositeItemProperties() {
         super("Composite");
         scissorsEnabledCheckBox = new VisCheckBox(null);
+        automaticResizeCheckBox = new VisCheckBox(null);
         mainTable.add(createLabel("Scissors Enabled", Align.right)).padRight(5).width(120).right();
-        mainTable.add(scissorsEnabledCheckBox).left();
+        mainTable.add(scissorsEnabledCheckBox).left().row();
+
+        mainTable.add(createLabel("Automatic Resize", Align.right)).padRight(5).width(120).right();
+        mainTable.add(automaticResizeCheckBox).left();
         setListeners();
     }
 
@@ -46,6 +51,14 @@ public class UICompositeItemProperties extends UIItemCollapsibleProperties {
         scissorsEnabledCheckBox.setChecked(scissorsEnabled);
     }
 
+    public boolean isAutomaticResizeIsEnabled(){
+        return automaticResizeCheckBox.isChecked();
+    }
+
+    public void setAutomaticResize(boolean automaResize){
+        automaticResizeCheckBox.setChecked(automaResize);
+    }
+
     @Override
     public String getPrefix() {
         return this.getClass().getCanonicalName();
@@ -53,5 +66,6 @@ public class UICompositeItemProperties extends UIItemCollapsibleProperties {
 
     private void setListeners() {
         scissorsEnabledCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
+        automaticResizeCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
     }
 }
