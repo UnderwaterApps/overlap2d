@@ -106,8 +106,8 @@ public class CompositeStrategy extends AbstractTransformStrategy {
     @Override
     public void calculate(float mouseDx, float mouseDy, int anchor, Entity entity, TransformCommandBuilder transformCommandBuilder, Vector2 mousePointStage, float lastTransformAngle, float lastEntityAngle) {
         CompositeTransformComponent component = entity.getComponent(CompositeTransformComponent.class);
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
         if (!component.automaticResize) {
-            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
             float newWidth = dimensionsComponent.width;
@@ -217,10 +217,6 @@ public class CompositeStrategy extends AbstractTransformStrategy {
                     transformComponent.y += vertical[2];
                     break;
             }
-
-            // Rotating
-            rotating(anchor, transformCommandBuilder, mousePointStage, lastTransformAngle, lastEntityAngle, transformComponent);
-
             dimensionsComponent.width = newWidth;
             dimensionsComponent.height = newHeight;
             dimensionsComponent.boundBox.width = newWidth;
@@ -228,6 +224,8 @@ public class CompositeStrategy extends AbstractTransformStrategy {
         } else {
             System.out.println("Automatic resize is enabled. Uncheck and try again.");
         }
+        // Rotating
+        rotating(anchor, transformCommandBuilder, mousePointStage, lastTransformAngle, lastEntityAngle, transformComponent);
     }
 
     private void move(Entity node, float x, float y) {
