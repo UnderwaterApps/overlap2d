@@ -46,6 +46,7 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.vo.CursorData;
 
@@ -246,5 +247,11 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public void setCursor(CursorData cursorData, TextureRegion region) {
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         cursorManager.setCursor(cursorData, region);
+    }
+
+    @Override
+    public String getCurrentSelectedLayerName() {
+        UILayerBoxMediator uiLayerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        return uiLayerBoxMediator.getViewComponent().getCurrentSelectedLayer().getLayerName();
     }
 }

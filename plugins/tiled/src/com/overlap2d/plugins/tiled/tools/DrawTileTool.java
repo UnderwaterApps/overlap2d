@@ -52,6 +52,8 @@ public class DrawTileTool implements Tool {
 
     @Override
     public boolean itemMouseDown(Entity entity, float x, float y) {
+        initGridThings();
+        drawOnEntity(entity, x, y);
         return true;
     }
 
@@ -61,6 +63,7 @@ public class DrawTileTool implements Tool {
 
     @Override
     public void itemMouseDragged(Entity entity, float x, float y) {
+        drawOnEntity(entity, x, y);
     }
 
     @Override
@@ -97,4 +100,10 @@ public class DrawTileTool implements Tool {
         MainItemComponent mainItemComponent = ComponentRetriever.get(imageEntity, MainItemComponent.class);
         mainItemComponent.tags.add(TiledPlugin.TILE_TAG);
     }
+
+    private void drawOnEntity(Entity entity, float x, float y) {
+        if (tiledPlugin.isOnCurrentSelectedLayer(entity)) return;
+        drawImage(x, y);
+    }
+
 }

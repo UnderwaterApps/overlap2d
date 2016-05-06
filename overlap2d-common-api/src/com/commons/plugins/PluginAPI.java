@@ -165,4 +165,9 @@ public interface PluginAPI {
      * @param region for plugin unic textureRegion
      */
     void setCursor(CursorData cursorData, TextureRegion region);
+
+    /**
+     * returns current selected layer name
+     */
+    String getCurrentSelectedLayerName();
 }

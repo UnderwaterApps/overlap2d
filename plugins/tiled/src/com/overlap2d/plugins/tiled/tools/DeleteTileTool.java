@@ -85,8 +85,7 @@ public class DeleteTileTool implements Tool {
     private void deleteEntity(Entity entity) {
         tiledPlugin.getPluginAPI().selectEntity(entity);
 
-        MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
-        if (mainItemComponent.tags.contains(TiledPlugin.TILE_TAG)) { // check is special for itemMouseUp(). Item may not be tile
+        if (tiledPlugin.isTile(entity)) { // check is special for itemMouseUp(). Item may not be tile
             String regionName = ComponentRetriever.get(entity, TextureRegionComponent.class).regionName;
             tiledPlugin.facade.sendNotification(MsgAPI.ACTION_DELETE, regionName);
             tiledPlugin.facade.sendNotification(MsgAPI.DELETE_ITEMS_COMMAND_DONE, regionName);
