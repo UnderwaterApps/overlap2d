@@ -33,9 +33,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -46,6 +44,8 @@ import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.awt.*;
 import java.util.HashMap;
+
+import static com.uwsoft.editor.view.ui.box.UIToolBox.TOOL_CLICKED;
 
 /**
  * Created by sargis on 4/20/15.
@@ -308,6 +308,11 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if (keycode == Input.Keys.V) {
                     facade.sendNotification(MsgAPI.ACTION_PASTE);
                 }
+                if (keycode == Input.Keys.T) {
+                    facade.sendNotification(TOOL_CLICKED, TransformTool.NAME);
+                    UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                    toolBoxMediator.setCurrentTool(TransformTool.NAME);
+                }
                 if(keycode == Input.Keys.Z) {
                     if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                         CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
@@ -317,6 +322,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                         commandManager.undoCommand();
                     }
                 }
+            }
+
+            if (keycode == Input.Keys.V) {
+                facade.sendNotification(TOOL_CLICKED, SelectionTool.NAME);
+                UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                toolBoxMediator.setCurrentTool(SelectionTool.NAME);
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.S) && !isControlPressed()) {
