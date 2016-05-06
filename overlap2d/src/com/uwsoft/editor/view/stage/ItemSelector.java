@@ -26,7 +26,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.renderer.utils.Constants;
+import com.uwsoft.editor.utils.Constants;
 import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
