@@ -26,6 +26,7 @@ import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.light.LightObjectComponent;
+import com.uwsoft.editor.renderer.components.particle.ParticleComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
@@ -79,6 +80,15 @@ public class EntityBounds extends Rectangle {
             height = dimensionsComponent.boundBox.height;
         }
 
+        if (ComponentRetriever.get(entity, ParticleComponent.class) != null) {
+            width = dimensionsComponent.boundBox.width;
+            height = dimensionsComponent.boundBox.height;
+            dimensionsComponent.width = width;
+            dimensionsComponent.height = height;
+            x += dimensionsComponent.boundBox.x;
+            y += dimensionsComponent.boundBox.y;
+        }
+
         Matrix3 transMat = TransformUtils.identity();
 
         if ((scaleX != 1 || scaleY != 1) && transformComponent.rotation != 0) {
@@ -113,19 +123,19 @@ public class EntityBounds extends Rectangle {
     }
 
     public float getVisualX() {
-        return getP1x();
+        return Math.min(getP1x(), getP3x());
     }
 
     public float getVisualY() {
-        return getP1y();
+        return Math.min(getP1y(), getP3y());
     }
 
     public float getVisualRightX() {
-        return getP3x();
+        return Math.max(getP1x(), getP3x());
     }
 
     public float getVisualTopY() {
-        return getP3y();
+        return Math.max(getP1y(), getP3y());
     }
 
     public float getP1x() {
