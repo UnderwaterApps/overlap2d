@@ -28,9 +28,12 @@ import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCom
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.PolygonUtils;
+import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import org.apache.commons.lang3.ArrayUtils;
+
 
 /**
  * Created by azakhary on 7/2/2015.
@@ -53,7 +56,8 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
                 UIPolygonComponentProperties.COPY_BUTTON_CLICKED,
                 UIPolygonComponentProperties.PASTE_BUTTON_CLICKED,
-                UIPolygonComponentProperties.CLOSE_CLICKED
+                UIPolygonComponentProperties.CLOSE_CLICKED,
+                UIPolygonComponentProperties.POLYGONIZER_CHANGED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -72,6 +76,9 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 break;
             case UIPolygonComponentProperties.PASTE_BUTTON_CLICKED:
                 pasteMesh();
+                break;
+            case UIPolygonComponentProperties.POLYGONIZER_CHANGED:
+                changePolygonizer();
                 break;
             case UIPolygonComponentProperties.CLOSE_CLICKED:
                 Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
@@ -95,11 +102,19 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         } else {
             viewComponent.initEmptyView();
         }
+
+        viewComponent.setPolygonizerType("BAYAZIT");
     }
 
     @Override
     protected void translateViewToItemData() {
-
+            System.out.println("here" + viewComponent.getPolygonyzerType());
+           polygonComponent = observableReference.getComponent(PolygonComponent.class);
+          Vector2[] points =  PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices);
+polygonComponent.vertices = polygonize(points);
+         // Object[] payload = UpdatePolygonComponentCommand.payloadInitialState(observableReference);
+         // payload = UpdatePolygonComponentCommand.payload(payload, polygonize(points));
+         // Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, payload);
     }
 
     private void addDefaultMesh() {
@@ -120,6 +135,14 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         Sandbox.getInstance().copyToLocalClipboard("meshData", polygonComponent.vertices);
     }
 
+    private Vector2[][] polygonize(Vector2[] vertices) {
+        return Clipper.polygonize(Clipper.Polygonizer.valueOf(viewComponent.getPolygonyzerType()), vertices);
+    }
+
+    private void changePolygonizer() {
+
+    }
+    
     private void pasteMesh() {
         Vector2[][] vertices = (Vector2[][]) Sandbox.getInstance().retrieveFromLocalClipboard("meshData");
         if(vertices == null) return;
