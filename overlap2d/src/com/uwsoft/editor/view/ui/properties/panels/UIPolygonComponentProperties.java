@@ -40,7 +40,6 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
     public static final String PASTE_BUTTON_CLICKED = prefix + ".PASTE_BUTTON_CLICKED";
     public static final String ADD_DEFAULT_MESH_BUTTON_CLICKED = prefix + ".ADD_DEFAULT_MESH_BUTTON_CLICKED";
     public static final String CLOSE_CLICKED = prefix + ".CLOSE_CLICKED";
-    public static final String POLYGONIZER_CHANGED = prefix + ".POLYGONIZER_CHANGED";
 
     private VisTextButton addDefaultMeshButton;
 
@@ -106,7 +105,6 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
     private void initListeners() {
         copyBtn.addListener(new ButtonToNotificationListener(COPY_BUTTON_CLICKED));
         pasteBtn.addListener(new ButtonToNotificationListener(PASTE_BUTTON_CLICKED));
-        polygonyzerBox.addListener(new SelectBoxChangeListener(POLYGONIZER_CHANGED));
         polygonyzerBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
     }
 

@@ -56,8 +56,7 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 UIPolygonComponentProperties.ADD_DEFAULT_MESH_BUTTON_CLICKED,
                 UIPolygonComponentProperties.COPY_BUTTON_CLICKED,
                 UIPolygonComponentProperties.PASTE_BUTTON_CLICKED,
-                UIPolygonComponentProperties.CLOSE_CLICKED,
-                UIPolygonComponentProperties.POLYGONIZER_CHANGED
+                UIPolygonComponentProperties.CLOSE_CLICKED
         };
 
         return ArrayUtils.addAll(defaultNotifications, notificationInterests);
@@ -76,9 +75,6 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
                 break;
             case UIPolygonComponentProperties.PASTE_BUTTON_CLICKED:
                 pasteMesh();
-                break;
-            case UIPolygonComponentProperties.POLYGONIZER_CHANGED:
-                changePolygonizer();
                 break;
             case UIPolygonComponentProperties.CLOSE_CLICKED:
                 Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_REMOVE_COMPONENT, RemoveComponentFromItemCommand.payload(observableReference, PolygonComponent.class));
@@ -108,13 +104,9 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
 
     @Override
     protected void translateViewToItemData() {
-            System.out.println("here" + viewComponent.getPolygonyzerType());
-           polygonComponent = observableReference.getComponent(PolygonComponent.class);
-          Vector2[] points =  PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices);
-polygonComponent.vertices = polygonize(points);
-         // Object[] payload = UpdatePolygonComponentCommand.payloadInitialState(observableReference);
-         // payload = UpdatePolygonComponentCommand.payload(payload, polygonize(points));
-         // Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_UPDATE_MESH_DATA, payload);
+        polygonComponent = observableReference.getComponent(PolygonComponent.class);
+        Vector2[] points =  PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices);
+        polygonComponent.vertices = polygonize(points);
     }
 
     private void addDefaultMesh() {
@@ -137,10 +129,6 @@ polygonComponent.vertices = polygonize(points);
 
     private Vector2[][] polygonize(Vector2[] vertices) {
         return Clipper.polygonize(Clipper.Polygonizer.valueOf(viewComponent.getPolygonyzerType()), vertices);
-    }
-
-    private void changePolygonizer() {
-
     }
     
     private void pasteMesh() {
