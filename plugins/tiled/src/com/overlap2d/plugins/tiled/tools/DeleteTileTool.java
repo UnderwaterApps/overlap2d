@@ -1,6 +1,7 @@
 package com.overlap2d.plugins.tiled.tools;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Input;
 import com.commons.view.tools.Tool;
 import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.puremvc.patterns.observer.Notification;
@@ -13,6 +14,8 @@ public class DeleteTileTool implements Tool {
     public static final String NAME = "DELETE_TILE_TOOL";
 
     private TiledPlugin tiledPlugin;
+
+    private boolean isHotswapped = false;
 
     public DeleteTileTool(TiledPlugin tiledPlugin) {
         this.tiledPlugin = tiledPlugin;
@@ -77,6 +80,16 @@ public class DeleteTileTool implements Tool {
 
     }
 
+    @Override
+    public void keyUp(Entity entity, int keycode) {
+        if(isHotswapped) {
+            if(keycode == Input.Keys.SHIFT_LEFT) {
+                isHotswapped = false;
+                tiledPlugin.getPluginAPI().toolHotSwapBack();
+            }
+        }
+    }
+
     private void deleteEntity(Entity entity) {
         if (tiledPlugin.isTile(entity) && tiledPlugin.isOnCurrentSelectedLayer(entity)) {
             tiledPlugin.getPluginAPI().removeFollower(entity);
@@ -89,5 +102,9 @@ public class DeleteTileTool implements Tool {
         if (entity != null) {
             deleteEntity(entity);
         }
+    }
+
+    public void setHotSwapped() {
+        isHotswapped = true;
     }
 }

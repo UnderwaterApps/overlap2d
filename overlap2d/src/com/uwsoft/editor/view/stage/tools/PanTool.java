@@ -26,6 +26,7 @@ public class PanTool extends SimpleTool {
         return NAME;
     }
 
+
     @Override
     public void initTool() {
 

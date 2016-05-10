@@ -1,6 +1,7 @@
 package com.overlap2d.plugins.tiled.tools;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.view.tools.Tool;
@@ -83,6 +84,14 @@ public class DrawTileTool implements Tool {
 
     @Override
     public void keyDown(Entity entity, int keycode) {
+        if(keycode == Input.Keys.SHIFT_LEFT) {
+            tiledPlugin.getPluginAPI().toolHotSwap(tiledPlugin.deleteTileTool);
+            tiledPlugin.deleteTileTool.setHotSwapped();
+        }
+    }
+
+    @Override
+    public void keyUp(Entity entity, int keycode) {
 
     }
 

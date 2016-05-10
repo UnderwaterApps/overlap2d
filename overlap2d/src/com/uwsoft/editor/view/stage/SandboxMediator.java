@@ -364,6 +364,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 toolHotSwapBack();
             }
 
+            if(currentSelectedTool != null) {
+                currentSelectedTool.keyUp(entity, keycode);
+            }
+
             return true;
         }
 
@@ -499,12 +503,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         }
     }
 
-    private void toolHotSwap(Tool tool) {
+    public void toolHotSwap(Tool tool) {
         hotSwapMemory = currentSelectedTool;
         currentSelectedTool = tool;
     }
 
-    private void toolHotSwapBack() {
+    public void toolHotSwapBack() {
         currentSelectedTool = hotSwapMemory;
         hotSwapMemory = null;
     }
