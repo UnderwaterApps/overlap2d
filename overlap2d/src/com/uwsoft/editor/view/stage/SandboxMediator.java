@@ -27,15 +27,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.SnapshotArray;
 import com.commons.MsgAPI;
+import com.commons.view.tools.Tool;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddComponentToItemCommand;
 import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
 import com.uwsoft.editor.controller.commands.RemoveComponentFromItemCommand;
-import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.CommandManager;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -46,6 +45,7 @@ import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by sargis on 4/20/15.
@@ -106,8 +106,9 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
     public String[] listNotificationInterests() {
         return new String[]{
                 MsgAPI.SCENE_LOADED,
-                UIToolBoxMediator.TOOL_SELECTED,
+                MsgAPI.TOOL_SELECTED,
                 MsgAPI.NEW_ITEM_ADDED,
+                MsgAPI.NEW_TOOL_ADDED,
                 CompositeCameraChangeCommand.DONE,
                 AddComponentToItemCommand.DONE,
                 RemoveComponentFromItemCommand.DONE,
@@ -122,11 +123,14 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
             case MsgAPI.SCENE_LOADED:
                 handleSceneLoaded(notification);
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case MsgAPI.TOOL_SELECTED:
                 setCurrentTool(notification.getBody());
                 break;
             case MsgAPI.NEW_ITEM_ADDED:
                 addListenerToItem(notification.getBody());
+                break;
+            case MsgAPI.NEW_TOOL_ADDED:
+                addSandboxTool(notification.getBody());
                 break;
             case CompositeCameraChangeCommand.DONE:
                 initItemListeners();
@@ -137,6 +141,10 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
         if(currentSelectedTool != null) {
             currentSelectedTool.handleNotification(notification);
         }
+    }
+
+    private void addSandboxTool(Map.Entry<String, Tool> newTool) {
+        sandboxTools.put(newTool.getKey(), newTool.getValue());
     }
 
     private void handleSceneLoaded(Notification notification) {
