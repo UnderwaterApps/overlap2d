@@ -24,6 +24,7 @@ import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Touchable;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.VisUI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.ui.widget.actors.basic.PixelRect;
@@ -219,7 +220,7 @@ public class NormalSelectionFollower extends BasicFollower {
     public void handleNotification(Notification notification) {
         super.handleNotification(notification);
         switch (notification.getName()) {
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case MsgAPI.TOOL_SELECTED:
                 if(notification.getBody().equals(TransformTool.NAME)) {
                     setMode(SelectionMode.transform);
                 } else {

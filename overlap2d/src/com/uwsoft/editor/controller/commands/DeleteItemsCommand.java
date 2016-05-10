@@ -35,9 +35,6 @@ import java.util.Set;
  */
 public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
-    private static final String CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteItemsCommand";
-    public static final String DONE = CLASS_NAME + "DONE";
-
     private String backup;
     private Array<Integer> entityIdsToDelete;
 
@@ -71,7 +68,7 @@ public class DeleteItemsCommand extends EntityModifyRevertableCommand {
 
         sandbox.getSelector().getCurrentSelection().clear();
 
-        facade.sendNotification(DONE);
+        facade.sendNotification(MsgAPI.DELETE_ITEMS_COMMAND_DONE);
     }
 
     @Override

@@ -21,8 +21,10 @@ package com.uwsoft.editor.proxy;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.Pixmap;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.view.ui.widget.CursorData;
+import com.vo.CursorData;
 
 /**
  * Created by azakhary on 5/15/2015.
@@ -56,29 +58,44 @@ public class CursorManager extends BaseProxy {
         setCursor(NORMAL);
     }
 
-    public void setCursor(CursorData cursor) {
+    public void setCursor(CursorData cursor, TextureRegion region) {
         this.cursor = cursor;
-        setCursorPixmap();
+
+        setCursorPixmap(region);
+    }
+
+    public void setCursor(CursorData cursor) {
+        setCursor(cursor, null);
     }
 
     public void setOverrideCursor(CursorData cursor) {
         overrideCursor = cursor;
-        setCursorPixmap();
+        setCursorPixmap(null);
     }
 
     public void removeOverrideCursor() {
         setOverrideCursor(null);
     }
 
-    private void setCursorPixmap() {
+    private void setCursorPixmap(TextureRegion region) {
         CursorData currentCursor = overrideCursor;
         if(currentCursor == null) {
             currentCursor = cursor;
         }
 
-        Pixmap pm = new Pixmap(Gdx.files.internal("cursors/" + currentCursor.region + ".png"));
-        Cursor cursorObj = Gdx.graphics.newCursor(pm, currentCursor.getHotspotX(), currentCursor.getHotspotY());
+        Pixmap cursorPm;
+        if (region == null) {
+            cursorPm = new Pixmap(Gdx.files.internal("cursors/" + cursor.region + ".png"));
+        } else {
+            Texture texture = region.getTexture();
+            if (!texture.getTextureData().isPrepared()) {
+                texture.getTextureData().prepare();
+            }
+            cursorPm = texture.getTextureData().consumePixmap();
+        }
+
+        Cursor cursorObj = Gdx.graphics.newCursor(cursorPm, currentCursor.getHotspotX(), currentCursor.getHotspotY());
         Gdx.graphics.setCursor(cursorObj);
-        pm.dispose();
+        cursorPm.dispose();
     }
 }

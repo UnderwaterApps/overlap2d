@@ -23,6 +23,7 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.proxy.CursorManager;
+import com.vo.CursorData;
 
 /**
  * Created by NateS

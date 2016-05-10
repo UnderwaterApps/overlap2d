@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.stage.tools;
+package com.commons.view.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;
@@ -38,4 +38,5 @@ public interface Tool {
     public String getName();
     public void handleNotification(Notification notification);
     public void keyDown(Entity entity, int keycode);
+    public void keyUp(Entity entity, int keycode);
 }

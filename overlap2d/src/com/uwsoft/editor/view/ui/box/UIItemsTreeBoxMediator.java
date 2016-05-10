@@ -26,11 +26,8 @@ import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.controller.commands.AddSelectionCommand;
-import com.uwsoft.editor.controller.commands.DeleteItemsCommand;
 import com.uwsoft.editor.controller.commands.ReleaseSelectionCommand;
 import com.uwsoft.editor.controller.commands.SetSelectionCommand;
-import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.proxy.SceneDataManager;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -60,7 +57,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 SetSelectionCommand.DONE,
                 AddSelectionCommand.DONE,
                 ReleaseSelectionCommand.DONE,
-                DeleteItemsCommand.DONE
+                MsgAPI.DELETE_ITEMS_COMMAND_DONE
         }).flatMap(Stream::of).toArray(String[]::new);
     }
 
@@ -77,7 +74,7 @@ public class UIItemsTreeBoxMediator extends PanelMediator<UIItemsTreeBox> {
                 rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;
-            case DeleteItemsCommand.DONE:
+            case MsgAPI.DELETE_ITEMS_COMMAND_DONE:
                 rootEntity = sandbox.getRootEntity();
                 viewComponent.init(rootEntity);
                 break;

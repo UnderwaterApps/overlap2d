@@ -172,4 +172,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         currentObservable = observable;
     }
 
+    public void setCurrentObservable(Object currentObservable) {
+        this.currentObservable = currentObservable;
+    }
 }

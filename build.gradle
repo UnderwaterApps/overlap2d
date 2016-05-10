@@ -23,8 +23,8 @@ allprojects {
         box2DLightsVersion = '1.4'
         visuiVersion = '0.9.2'
 
-        packMain = ["overlap2d/art/textures", "overlap2d/assets/style/", "overlap2d/uiskin"]
-        packSplash = ["overlap2d/art/splash_textures", "overlap2d/assets/splash/", "overlap2d/splash"]
+        packMain = ["overlap2d/art/textures", "overlap2d/assets/style/", "uiskin"]
+        packSplash = ["overlap2d/art/splash_textures", "overlap2d/assets/splash/", "splash"]
     }
 
     repositories {

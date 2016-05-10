@@ -443,6 +443,11 @@ public class SelectionTool extends SimpleTool {
         }
     }
 
+    @Override
+    public void keyUp(Entity entity, int keycode) {
+
+    }
+
     private boolean isControlPressed() {
         return Gdx.input.isKeyPressed(Input.Keys.SYM)
                 || Gdx.input.isKeyPressed(Input.Keys.CONTROL_LEFT)

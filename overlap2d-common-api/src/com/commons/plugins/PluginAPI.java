@@ -21,10 +21,18 @@ package com.commons.plugins;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.commons.IItemCommand;
+import com.commons.view.tools.Tool;
+import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.puremvc.patterns.facade.Facade;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.vo.CursorData;
+
+import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Plugin API is a main interface of communication between plugin and Overlap2D editor
@@ -80,6 +88,26 @@ public interface PluginAPI {
     public void addMenuItem(String menu, String subMenuName, String notificationName);
 
     /**
+     * Adds new tool to the tool bar
+     * @param toolName pretty string to name new tool item
+     * @param toolBtnStyle tool button style
+     * @param addSeparator true, if should add menu separator
+     * @param tool the tool object that is going to be added
+     */
+    public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool);
+
+
+    /**
+     * hot-swaps a tool
+     */
+    public void toolHotSwap(Tool tool);
+
+    /**
+     * hot-swaps a tool back
+     */
+    public void toolHotSwapBack();
+
+    /**
      * Creates new menu item for Contextual drop down menu, that is created when user right clicks on something in the editor.
      * This only creates a menu item, but it should be specifically added later to action set, at the moment context menu is summoned
      * @param action unique name of notification id that will be fired when this menu item is clicked
@@ -110,4 +138,41 @@ public interface PluginAPI {
      */
     public void removeFollower(Entity entity);
 
+    /**
+     * Draws an image at selected position
+     * @param regionName name of texture region to create image from
+     * @param position position to draw image at
+     * @return image entity
+     */
+    Entity drawImage(String regionName, Vector2 position);
+
+    /**
+     * @return entities that are on scene
+     */
+    HashSet<Entity> getProjectEntities();
+
+    /**
+     * @param entity
+     * @return if entity is on visible layer
+     */
+    boolean isEntityVisible(Entity entity);
+
+    /**
+     * shows drop down menu with specified actions set
+     * @param actionsSet
+     * @param observable item with right click on it
+     */
+    void showPopup(HashMap<String, String> actionsSet, Object observable);
+
+    /**
+     * sets cursor to new one with cursorData
+     * @param cursorData
+     * @param region for plugin unic textureRegion
+     */
+    void setCursor(CursorData cursorData, TextureRegion region);
+
+    /**
+     * returns current selected layer name
+     */
+    String getCurrentSelectedLayerName();
 }

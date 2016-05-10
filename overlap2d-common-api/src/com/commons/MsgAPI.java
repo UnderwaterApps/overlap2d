@@ -38,6 +38,8 @@ public class MsgAPI {
     // tmp events
     public static final String ZOOM_CHANGED = GLOBAL_PREFIX + ".ZOOM_CHANGED";
     public static final String GRID_SIZE_CHANGED = GLOBAL_PREFIX + ".GRID_SIZE_CHANGED";
+    public static final String HIDE_GRID = GLOBAL_PREFIX + ".HIDE_GRID";
+    public static final String SHOW_GRID = GLOBAL_PREFIX + ".SHOW_GRID";
     public static final String ITEM_DATA_UPDATED = GLOBAL_PREFIX + ".ITEM_DATA_UPDATED";
     public static final String ITEM_PROPERTY_DATA_FINISHED_MODIFYING = GLOBAL_PREFIX + ".ITEM_PROPERTY_DATA_FINISHED_MODIFYING";
 
@@ -52,6 +54,12 @@ public class MsgAPI {
 
     public static final String LIBRARY_LIST_UPDATED = GLOBAL_PREFIX + ".LIBRARY_LIST_UPDATED";
 
+    private static final String TOOL_BOX_MEDIATOR_PREFIX =  "com.uwsoft.editor.view.ui.box.UIToolBoxMediator";
+    public static final String TOOL_SELECTED = TOOL_BOX_MEDIATOR_PREFIX + ".TOOL_CHANGED";
+    public static final String NEW_TOOL_ADDED = TOOL_BOX_MEDIATOR_PREFIX + ".NEW_TOOL_ADDED";
+
+    private static final String IMAGES_TAB_MEDIATOR_PREFIX= "com.uwsoft.editor.view.ui.box.resourcespanel.UIImagesTabMediator";
+    public static final String ADD_TARGET = IMAGES_TAB_MEDIATOR_PREFIX + ".ADD_TARGET";
 
     /**
      *  Previous Sandbox class notifications
@@ -119,4 +127,9 @@ public class MsgAPI {
     public static final String NEW_ITEM_ADDED = ITEM_FACTORY_PREFIX + ".NEW_ITEM_ADDED";
     public static final String SCENE_DATA_PREFIX = "com.uwsoft.editor.proxy.SceneDataManager";
     public static final String SCENE_LOADED = SCENE_DATA_PREFIX + ".SCENE_LOADED";
+
+    private static final String DELETE_ITEMS_COMMAND_CLASS_NAME = "com.uwsoft.editor.controller.commands.DeleteItemsCommand";
+    public static final String DELETE_ITEMS_COMMAND_DONE = DELETE_ITEMS_COMMAND_CLASS_NAME + "DONE";
+
+
 }

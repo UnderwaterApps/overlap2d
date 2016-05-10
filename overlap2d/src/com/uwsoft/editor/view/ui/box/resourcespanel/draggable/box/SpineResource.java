@@ -21,10 +21,10 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
-import com.uwsoft.editor.view.ui.widget.actors.SpineActor;
+import com.commons.ResourcePayloadObject;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.data.SpineVO;
+import com.uwsoft.editor.view.ui.widget.actors.SpineActor;
 
 /**
  * Created by azakhary on 7/3/2014.
@@ -89,6 +89,7 @@ public class SpineResource extends BoxItemResource {
 
         payload = new ResourcePayloadObject();
         payload.name = animationName;
+        payload.className = getClass().getName();
         setWidth(thumbnailSize);
         setHeight(thumbnailSize);
 
