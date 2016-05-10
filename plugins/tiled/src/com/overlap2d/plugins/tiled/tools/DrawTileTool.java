@@ -2,12 +2,17 @@ package com.overlap2d.plugins.tiled.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.view.tools.Tool;
 import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.puremvc.patterns.observer.Notification;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
+import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 
 /**
@@ -64,12 +69,36 @@ public class DrawTileTool implements Tool {
 
     @Override
     public void itemMouseDragged(Entity entity, float x, float y) {
-        drawOnEntity(entity, x, y);
+        drawImage(x, y);
     }
 
     @Override
     public void itemMouseDoubleClick(Entity entity, float x, float y) {
-
+        if (!tiledPlugin.isOnCurrentSelectedLayer(entity)) return;
+        if (entity != null) {
+            TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+            // there is already other tile under this one
+            if (textureRegionComponent.regionName.equals(tiledPlugin.selectedTileName)) {
+                //rotate
+                TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+                if (transformComponent.scaleX > 0 && transformComponent.scaleY > 0) {
+                    transformComponent.scaleX *= -1f;
+                    return;
+                }
+                if (transformComponent.scaleX < 0 && transformComponent.scaleY > 0) {
+                    transformComponent.scaleY *= -1f;
+                    return;
+                }
+                if (transformComponent.scaleX < 0 && transformComponent.scaleY < 0) {
+                    transformComponent.scaleX *= -1f;
+                    return;
+                }
+                if (transformComponent.scaleX > 0 && transformComponent.scaleY < 0) {
+                    transformComponent.scaleY *= -1f;
+                    return;
+                }
+            }
+        }
     }
 
     @Override
@@ -102,17 +131,44 @@ public class DrawTileTool implements Tool {
 
     private void drawImage(float x, float y) {
         if (tiledPlugin.selectedTileName.equals("")) return;
-        if (tiledPlugin.getPluginEntityWithCoordinate(x, y) != null) return;
+        Entity underneathTile = tiledPlugin.getPluginEntityWithCoordinate(x, y);
+        if (underneathTile != null) {
+            updateRegion(underneathTile, tiledPlugin.selectedTileName);
+            return;
+        }
         float newX = MathUtils.floor(x / gridWidth) * gridWidth;
         float newY = MathUtils.floor(y / gridHeight) * gridHeight;
+
         Entity imageEntity = tiledPlugin.getPluginAPI().drawImage(tiledPlugin.selectedTileName, new Vector2(newX, newY));
         MainItemComponent mainItemComponent = ComponentRetriever.get(imageEntity, MainItemComponent.class);
         mainItemComponent.tags.add(TiledPlugin.TILE_TAG);
     }
 
     private void drawOnEntity(Entity entity, float x, float y) {
-        if (tiledPlugin.isOnCurrentSelectedLayer(entity)) return;
+        if (!tiledPlugin.isOnCurrentSelectedLayer(entity)) return;
+        if (entity != null) {
+            TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+            // there is already other tile under this one
+            if(textureRegionComponent.regionName.equals(tiledPlugin.selectedTileName)) {
+                return;
+            } else {
+                //replace
+                updateRegion(entity, tiledPlugin.selectedTileName);
+            }
+            return;
+        }
         drawImage(x, y);
+    }
+
+    private void updateRegion(Entity entity, String region) {
+        TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+        DimensionsComponent size = ComponentRetriever.get(entity, DimensionsComponent.class);
+        textureRegionComponent.regionName = tiledPlugin.selectedTileName;
+        textureRegionComponent.region = tiledPlugin.getPluginAPI().getSceneLoader().getRm().getTextureRegion(region);
+        ProjectInfoVO projectInfoVO = tiledPlugin.getPluginAPI().getSceneLoader().getRm().getProjectVO();
+        float ppwu = projectInfoVO.pixelToWorld;
+        size.width = textureRegionComponent.region.getRegionWidth() / ppwu;
+        size.height = textureRegionComponent.region.getRegionHeight() / ppwu;
     }
 
 }
