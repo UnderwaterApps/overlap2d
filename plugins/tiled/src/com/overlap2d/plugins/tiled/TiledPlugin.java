@@ -37,7 +37,6 @@ import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import net.mountainblade.modular.annotations.Implementation;
 
-import java.io.*;
 
 /**
  * Created by mariam on 2/2/2016.
@@ -67,6 +66,10 @@ public class TiledPlugin extends O2DPluginAdapter {
     private DeleteTileTool deleteTileTool;
     public TiledPanelMediator tiledPanelMediator;
     public ResourcesManager pluginRM;
+
+    public TransformComponent leftComponent;
+    public TransformComponent bottomComponent;
+    private Entity leftEntity, bottomEntity;
 
     public TiledPlugin() {
         tiledPanelMediator = new TiledPanelMediator(this);
@@ -141,5 +144,22 @@ public class TiledPlugin extends O2DPluginAdapter {
     public boolean isOnCurrentSelectedLayer(Entity entity) {
         ZIndexComponent entityZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         return entityZComponent.layerName.equals(pluginAPI.getCurrentSelectedLayerName());
+    }
+
+    public void initPluginMinEntities() {
+        bottomEntity = leftEntity = pluginAPI.getProjectEntities().iterator().next();
+        pluginAPI.getProjectEntities().forEach(entity -> {
+            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            leftComponent = ComponentRetriever.get(leftEntity, TransformComponent.class);
+            bottomComponent = ComponentRetriever.get(bottomEntity, TransformComponent.class);
+            if (transformComponent.x < leftComponent.x) {
+                leftComponent = transformComponent;
+                leftEntity = entity;
+            }
+            if (transformComponent.y < bottomComponent.y) {
+                bottomComponent = transformComponent;
+                bottomEntity = entity;
+            }
+        });
     }
 }

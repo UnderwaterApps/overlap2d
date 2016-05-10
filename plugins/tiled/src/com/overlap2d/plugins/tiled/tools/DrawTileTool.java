@@ -8,6 +8,7 @@ import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
 /**
  * Created by mariam on 3/29/16.
@@ -99,6 +100,13 @@ public class DrawTileTool implements Tool {
         Entity imageEntity = tiledPlugin.getPluginAPI().drawImage(tiledPlugin.selectedTileName, new Vector2(newX, newY));
         MainItemComponent mainItemComponent = ComponentRetriever.get(imageEntity, MainItemComponent.class);
         mainItemComponent.tags.add(TiledPlugin.TILE_TAG);
+
+        int row = MathUtils.floor(newY / gridHeight);
+        int column = MathUtils.floor(newX / gridWidth);
+        CustomVariables customVariables = new CustomVariables();
+        customVariables.setVariable("row", Float.toString(row));
+        customVariables.setVariable("column", Float.toString(column));
+        mainItemComponent.customVars = customVariables.saveAsString();
     }
 
     private void drawOnEntity(Entity entity, float x, float y) {

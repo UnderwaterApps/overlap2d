@@ -28,6 +28,7 @@ import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.vo.CursorData;
 
@@ -64,6 +65,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 SettingsTab.OK_BTN_CLICKED,
                 MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM,
                 MsgAPI.ACTION_DELETE_IMAGE_RESOURCE,
+                MsgAPI.ITEM_DATA_UPDATED,
                 MsgAPI.ADD_TARGET,
                 MsgAPI.TOOL_SELECTED
         };
@@ -187,6 +189,12 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 tiledPlugin.facade.sendNotification(TiledPlugin.GRID_CHANGED);
                 break;
             case MsgAPI.ADD_TARGET:
+                break;
+            case MsgAPI.ITEM_DATA_UPDATED:
+                Entity item = notification.getBody();
+                if (tiledPlugin.isTile(item)) {
+                    ComponentRetriever.get(item, MainItemComponent.class).tags.remove(TiledPlugin.TILE_TAG);
+                }
                 break;
         }
     }
