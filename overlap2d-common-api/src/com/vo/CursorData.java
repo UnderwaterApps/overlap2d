@@ -16,11 +16,29 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads;
+package com.vo;
 
 
-public class ResourcePayloadObject {
-    public String name;
-    public float xOffset;
-    public float yOffset;
+/**
+ * Created by azakhary on 5/15/2015.
+ */
+public class CursorData {
+
+    public String region;
+    public int hotspotX;
+    public int hotspotY;
+
+    public CursorData(String region, int x, int y) {
+        this.region = region;
+        hotspotX = x;
+        hotspotY = y;
+    }
+
+    public int getHotspotX() {
+        return hotspotX;
+    }
+
+    public int getHotspotY() {
+        return hotspotY;
+    }
 }

@@ -31,7 +31,7 @@ dependencies {
     compile project(":overlap2d-common-api")
     compile "com.kotcrab.vis:vis-ui:0.7.6"
     compile "com.underwaterapps.overlap2druntime:overlap2d-runtime-libgdx:0.1.1"
-    compile "net.mountainblade:modular:1.0-SNAPSHOT"
+    compile "net.mountainblade:modular:1.0"
 }
 
 project(":overlap2d-common-api") {
@@ -55,4 +55,4 @@ task wrapper(type: Wrapper) {
     gradleVersion = '1.12'
 }
 
-libsDirName = 'D:\\work\\plugins'
+libsDirName = '/Users/mariam/Desktop/Projects/overlap2d/overlap2d/assets/plugins'

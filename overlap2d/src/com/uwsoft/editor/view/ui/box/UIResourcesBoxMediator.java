@@ -18,6 +18,9 @@
 
 package com.uwsoft.editor.view.ui.box;
 
+import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
+import com.badlogic.gdx.utils.Array;
+import com.commons.MsgAPI;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -44,6 +47,8 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
     public static final String LIBRARY_ITEM_RIGHT_CLICK = "LIBRARY_ITEM_RIGHT_CLICK";
     public static final String PARTICLE_EFFECT_RIGHT_CLICK = "PARTICLE_EFFECT_RIGHT_CLICK";
 
+    public Array<DragAndDrop.Target> customTargets = new Array<DragAndDrop.Target>();
+
     @Override
     public void onRegister() {
         super.onRegister();
@@ -61,7 +66,8 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
         String[] parentNotifications = super.listNotificationInterests();
         return Stream.of(parentNotifications, new String[]{
                 ProjectManager.PROJECT_OPENED,
-                ProjectManager.PROJECT_DATA_UPDATED
+                ProjectManager.PROJECT_DATA_UPDATED,
+                MsgAPI.ADD_TARGET,
             }).flatMap(Stream::of).toArray(String[]::new);
     }
 
@@ -73,7 +79,10 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
 
                 break;
             case ProjectManager.PROJECT_DATA_UPDATED:
-
+                break;
+            case MsgAPI.ADD_TARGET:
+                customTargets.add(notification.getBody());
+                break;
             default:
                 break;
         }

@@ -16,7 +16,7 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.stage.tools;
+package com.commons.view.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.puremvc.patterns.observer.Notification;

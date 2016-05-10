@@ -16,29 +16,15 @@
  *  *****************************************************************************
  */
 
-package com.uwsoft.editor.view.ui.widget;
+package com.commons;
 
 
-/**
- * Created by azakhary on 5/15/2015.
- */
-public class CursorData {
+public class ResourcePayloadObject {
+    public String name;
+    public float xOffset;
+    public float yOffset;
+    public String className;
 
-    public String region;
-    public int hotspotX;
-    public int hotspotY;
-
-    public CursorData(String region, int x, int y) {
-        this.region = region;
-        hotspotX = x;
-        hotspotY = y;
-    }
-
-    public int getHotspotX() {
-        return hotspotX;
-    }
-
-    public int getHotspotY() {
-        return hotspotY;
+    public ResourcePayloadObject() {
     }
 }

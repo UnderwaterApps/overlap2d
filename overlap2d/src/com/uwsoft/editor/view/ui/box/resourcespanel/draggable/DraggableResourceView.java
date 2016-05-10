@@ -19,7 +19,7 @@
 package com.uwsoft.editor.view.ui.box.resourcespanel.draggable;
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
+import com.commons.ResourcePayloadObject;
 
 /**
  * Created by sargis on 5/7/15.

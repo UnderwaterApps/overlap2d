@@ -31,7 +31,6 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.PanTool;
-import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.FollowerFactory;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
@@ -67,7 +66,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
                 MsgAPI.HIDE_SELECTIONS,
                 MsgAPI.NEW_ITEM_ADDED,
                 PanTool.SCENE_PANNED,
-                UIToolBoxMediator.TOOL_SELECTED,
+                MsgAPI.TOOL_SELECTED,
                 MsgAPI.ITEM_PROPERTY_DATA_FINISHED_MODIFYING,
                 CompositeCameraChangeCommand.DONE,
                 MsgAPI.ZOOM_CHANGED,
@@ -112,7 +111,7 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
             case MsgAPI.SHOW_SELECTIONS:
                 showAllFollowers(notification.getBody());
                 break;
-            case UIToolBoxMediator.TOOL_SELECTED:
+            case MsgAPI.TOOL_SELECTED:
                 pushNotificationToFollowers(notification);
                 break;
             case MsgAPI.ZOOM_CHANGED:
@@ -186,12 +185,14 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
         followers.put(entity, follower);
 
         SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
-        follower.handleNotification(new BaseNotification(UIToolBoxMediator.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
+        follower.handleNotification(new BaseNotification(MsgAPI.TOOL_SELECTED, sandboxMediator.getCurrentSelectedToolName()));
     }
 
     public void removeFollower(Entity entity) {
-        followers.get(entity).remove();
-        followers.remove(entity);
+//        if (followers.get(entity) != null) {
+            followers.get(entity).remove();
+            followers.remove(entity);
+//        }
     }
 
     public void clearAllListeners() {
