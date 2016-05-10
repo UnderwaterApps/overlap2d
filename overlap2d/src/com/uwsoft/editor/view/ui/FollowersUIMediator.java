@@ -31,7 +31,6 @@ import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.stage.tools.PanTool;
-import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.uwsoft.editor.view.ui.followers.BasicFollower;
 import com.uwsoft.editor.view.ui.followers.FollowerFactory;
 import com.uwsoft.editor.view.ui.followers.NormalSelectionFollower;
@@ -190,8 +189,10 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
     }
 
     public void removeFollower(Entity entity) {
-        followers.get(entity).remove();
-        followers.remove(entity);
+//        if (followers.get(entity) != null) {
+            followers.get(entity).remove();
+            followers.remove(entity);
+//        }
     }
 
     public void clearAllListeners() {

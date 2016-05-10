@@ -136,12 +136,6 @@ public interface PluginAPI {
     Entity drawImage(String regionName, Vector2 position);
 
     /**
-     * Selects an entity
-     * @param entity
-     */
-    void selectEntity(Entity entity);
-
-    /**
      * @return entities that are on scene
      */
     HashSet<Entity> getProjectEntities();

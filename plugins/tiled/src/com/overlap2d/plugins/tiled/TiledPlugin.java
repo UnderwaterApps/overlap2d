@@ -19,15 +19,11 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.plugins.O2DPluginAdapter;
 import com.commons.plugins.PluginAPI;
-import com.google.common.io.ByteStreams;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;

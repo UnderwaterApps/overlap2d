@@ -202,18 +202,6 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         return itemFactory.getImageEntity();
     }
 
-    @Override
-    public void selectEntity(Entity entity) {
-        Sandbox sandbox = Sandbox.getInstance();
-        boolean currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
-        if (!currentTouchedItemWasSelected) {
-            // get selection, add this item to selection
-            Set<Entity> items = new HashSet<>();
-            items.add(entity);
-            facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, items);
-        }
-    }
-
     public boolean isEntityVisible(Entity e) {
         LayerItemVO layer = EntityUtils.getEntityLayer(e);
         return layer != null && layer.isVisible;
