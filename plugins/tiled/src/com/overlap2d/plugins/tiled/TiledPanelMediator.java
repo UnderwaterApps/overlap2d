@@ -168,7 +168,8 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 if (cursorName != null) {
                     CursorData cursorData = new CursorData(cursorName, 14, 14);
                     TextureRegion region = tiledPlugin.pluginRM.getTextureRegion(cursorName);
-                    tiledPlugin.getPluginAPI().setCursor(cursorData, region);
+                    System.out.println("cursor: "+cursorName);
+//                    tiledPlugin.getPluginAPI().setCursor(cursorData, region);
                 }
                 break;
             case SettingsTab.OK_BTN_CLICKED:

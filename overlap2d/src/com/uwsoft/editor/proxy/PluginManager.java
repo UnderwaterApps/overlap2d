@@ -46,6 +46,7 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
+import com.uwsoft.editor.view.ui.box.UILayerBoxMediator;
 import com.uwsoft.editor.view.ui.box.UIToolBoxMediator;
 import com.vo.CursorData;
 
@@ -201,18 +202,6 @@ public class PluginManager extends BaseProxy implements PluginAPI {
         return itemFactory.getImageEntity();
     }
 
-    @Override
-    public void selectEntity(Entity entity) {
-        Sandbox sandbox = Sandbox.getInstance();
-        boolean currentTouchedItemWasSelected = sandbox.getSelector().getCurrentSelection().contains(entity);
-        if (!currentTouchedItemWasSelected) {
-            // get selection, add this item to selection
-            Set<Entity> items = new HashSet<>();
-            items.add(entity);
-            facade.sendNotification(MsgAPI.ACTION_SET_SELECTION, items);
-        }
-    }
-
     public boolean isEntityVisible(Entity e) {
         LayerItemVO layer = EntityUtils.getEntityLayer(e);
         return layer != null && layer.isVisible;
@@ -246,5 +235,11 @@ public class PluginManager extends BaseProxy implements PluginAPI {
     public void setCursor(CursorData cursorData, TextureRegion region) {
         CursorManager cursorManager = Overlap2DFacade.getInstance().retrieveProxy(CursorManager.NAME);
         cursorManager.setCursor(cursorData, region);
+    }
+
+    @Override
+    public String getCurrentSelectedLayerName() {
+        UILayerBoxMediator uiLayerBoxMediator = facade.retrieveMediator(UILayerBoxMediator.NAME);
+        return uiLayerBoxMediator.getViewComponent().getCurrentSelectedLayer().getLayerName();
     }
 }

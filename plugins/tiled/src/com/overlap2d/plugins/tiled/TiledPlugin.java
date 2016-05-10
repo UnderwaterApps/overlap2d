@@ -19,15 +19,11 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.files.FileHandle;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.plugins.O2DPluginAdapter;
 import com.commons.plugins.PluginAPI;
-import com.google.common.io.ByteStreams;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
@@ -35,9 +31,9 @@ import com.overlap2d.plugins.tiled.save.DataToSave;
 import com.overlap2d.plugins.tiled.save.SaveDataManager;
 import com.overlap2d.plugins.tiled.tools.DeleteTileTool;
 import com.overlap2d.plugins.tiled.tools.DrawTileTool;
-import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
+import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import net.mountainblade.modular.annotations.Implementation;
 
@@ -127,7 +123,7 @@ public class TiledPlugin extends O2DPluginAdapter {
                     dataToSave.getParameterVO().gridWidth, dataToSave.getParameterVO().gridHeight);
 
             boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
-            if (isEntityVisible && tmp.contains(x, y)) {
+            if (isEntityVisible && tmp.contains(x, y) && isOnCurrentSelectedLayer(entity)) {
                 return entity;
             }
         }
@@ -138,7 +134,12 @@ public class TiledPlugin extends O2DPluginAdapter {
         return pluginAPI.getSceneLoader().getRm().getProjectVO().pixelToWorld;
     }
 
-    private boolean isTile(Entity entity) {
+    public boolean isTile(Entity entity) {
         return ComponentRetriever.get(entity, MainItemComponent.class).tags.contains(TILE_TAG);
+    }
+
+    public boolean isOnCurrentSelectedLayer(Entity entity) {
+        ZIndexComponent entityZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
+        return entityZComponent.layerName.equals(pluginAPI.getCurrentSelectedLayerName());
     }
 }

@@ -136,12 +136,6 @@ public interface PluginAPI {
     Entity drawImage(String regionName, Vector2 position);
 
     /**
-     * Selects an entity
-     * @param entity
-     */
-    void selectEntity(Entity entity);
-
-    /**
      * @return entities that are on scene
      */
     HashSet<Entity> getProjectEntities();
@@ -165,4 +159,9 @@ public interface PluginAPI {
      * @param region for plugin unic textureRegion
      */
     void setCursor(CursorData cursorData, TextureRegion region);
+
+    /**
+     * returns current selected layer name
+     */
+    String getCurrentSelectedLayerName();
 }
