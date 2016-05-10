@@ -43,6 +43,7 @@ import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.menu.Overlap2DMenuBarMediator;
 import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.stage.SandboxMediator;
 import com.uwsoft.editor.view.ui.FollowersUIMediator;
 import com.uwsoft.editor.view.ui.UIDropDownMenu;
 import com.uwsoft.editor.view.ui.UIDropDownMenuMediator;
@@ -163,6 +164,18 @@ public class PluginManager extends BaseProxy implements PluginAPI {
             }
         };
         facade.sendNotification(MsgAPI.NEW_TOOL_ADDED, toolPair);
+    }
+
+    @Override
+    public void toolHotSwap(Tool tool) {
+        SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+        sandboxMediator.toolHotSwap(tool);
+    }
+
+    @Override
+    public void toolHotSwapBack() {
+        SandboxMediator sandboxMediator = facade.retrieveMediator(SandboxMediator.NAME);
+        sandboxMediator.toolHotSwapBack();
     }
 
     public void setPluginDir(String pluginDir) {

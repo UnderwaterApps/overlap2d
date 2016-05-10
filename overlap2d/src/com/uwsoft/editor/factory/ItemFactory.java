@@ -21,6 +21,7 @@ package com.uwsoft.editor.factory;
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.MsgAPI;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -28,6 +29,7 @@ import com.uwsoft.editor.controller.commands.PasteItemsCommand;
 import com.uwsoft.editor.proxy.ProjectManager;
 import com.uwsoft.editor.proxy.ResourceManager;
 import com.uwsoft.editor.renderer.SceneLoader;
+import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.data.*;
 import com.uwsoft.editor.renderer.factory.EntityFactory;
@@ -198,12 +200,21 @@ public class ItemFactory {
         if(!setEssentialData(vo, position)) return null;
         Entity entity = entityFactory.createEntity(sandbox.getCurrentViewingEntity(), vo);
 
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        float boundBoxSize = 10f;
+        dimensionsComponent.boundBox = new Rectangle(-boundBoxSize / 2f, -boundBoxSize / 2f, boundBoxSize, boundBoxSize);
+
         Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_CREATE_ITEM, entity);
         return entity;
     }
 
     public boolean tryCreateParticleItem(String particleName, Vector2 position) {
         Entity entity = createParticleItem(particleName, position);
+
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        float boundBoxSize = 10f;
+        dimensionsComponent.boundBox = new Rectangle(-boundBoxSize / 2f, -boundBoxSize / 2f, boundBoxSize, boundBoxSize);
+
         if(entity == null) return false;
 
         return true;

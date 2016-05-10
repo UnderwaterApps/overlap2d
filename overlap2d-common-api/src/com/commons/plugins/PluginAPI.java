@@ -96,6 +96,17 @@ public interface PluginAPI {
      */
     public void addTool(String toolName, VisImageButton.VisImageButtonStyle toolBtnStyle, boolean addSeparator, Tool tool);
 
+
+    /**
+     * hot-swaps a tool
+     */
+    public void toolHotSwap(Tool tool);
+
+    /**
+     * hot-swaps a tool back
+     */
+    public void toolHotSwapBack();
+
     /**
      * Creates new menu item for Contextual drop down menu, that is created when user right clicks on something in the editor.
      * This only creates a menu item, but it should be specifically added later to action set, at the moment context menu is summoned

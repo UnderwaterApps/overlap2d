@@ -38,4 +38,5 @@ public interface Tool {
     public String getName();
     public void handleNotification(Notification notification);
     public void keyDown(Entity entity, int keycode);
+    public void keyUp(Entity entity, int keycode);
 }

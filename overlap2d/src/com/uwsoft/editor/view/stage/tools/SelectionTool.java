@@ -22,10 +22,7 @@ import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.math.Intersector;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.commons.MsgAPI;
@@ -58,6 +55,10 @@ public class SelectionTool extends SimpleTool {
     private boolean isCastingRectangle = false;
 
     private Rectangle tmp = new Rectangle();
+    private final EntityBounds tmpEntityBounds = new EntityBounds();
+    private final float[] draggedRectanglePoints = new float[8];
+    private final Polygon tmpPolygon1 = new Polygon();
+    private final Polygon tmpPolygon2 = new Polygon();
 
     private Vector2 directionVector = null;
 
@@ -358,14 +359,24 @@ public class SelectionTool extends SimpleTool {
         Set<Entity> curr = new HashSet<>();
         Rectangle sR = sandbox.screenToWorld(sandbox.selectionRec.getRect());
 
+        draggedRectanglePoints[0] = sR.x;
+        draggedRectanglePoints[1] = sR.y;
+        draggedRectanglePoints[2] = sR.x + sR.width;
+        draggedRectanglePoints[3] = sR.y;
+        draggedRectanglePoints[4] = sR.x + sR.width;
+        draggedRectanglePoints[5] = sR.y + sR.height;
+        draggedRectanglePoints[6] = sR.x;
+        draggedRectanglePoints[7] = sR.y + sR.height;
+
         for (Entity entity : freeItems) {
             transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
 
             //if (!freeItems.get(i).isLockedByLayer() && Intersector.overlaps(sR, new Rectangle(entity.getX(), entity.getY(), entity.getWidth(), entity.getHeight()))) {
 
-            EntityBounds entityBounds = new EntityBounds(entity);
-            boolean intersects = Intersector.overlaps(sR, tmp.set(entityBounds.getVisualX(), entityBounds.getVisualY(), entityBounds.getVisualWidth(), entityBounds.getVisualHeight()));
+            tmpPolygon1.setVertices(draggedRectanglePoints);
+            tmpPolygon2.setVertices(tmpEntityBounds.getBoundPoints(entity));
+            boolean intersects = Intersector.overlapConvexPolygons(tmpPolygon1, tmpPolygon2);
             if (isEntityVisible(entity) && intersects) {
                 curr.add(entity);
             }
@@ -430,6 +441,11 @@ public class SelectionTool extends SimpleTool {
         if (keycode == Input.Keys.DEL || keycode == Input.Keys.FORWARD_DEL) {
             Overlap2DFacade.getInstance().sendNotification(MsgAPI.ACTION_DELETE);
         }
+    }
+
+    @Override
+    public void keyUp(Entity entity, int keycode) {
+
     }
 
     private boolean isControlPressed() {

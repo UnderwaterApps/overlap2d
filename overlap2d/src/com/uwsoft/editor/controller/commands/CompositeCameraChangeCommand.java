@@ -19,6 +19,7 @@
 package com.uwsoft.editor.controller.commands;
 
 import com.badlogic.ashley.core.Entity;
+import com.commons.MsgAPI;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ViewPortComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -61,6 +62,7 @@ public class CompositeCameraChangeCommand extends RevertableCommand {
         transformComponent.disableTransform();
 
         facade.sendNotification(DONE, enteringInto);
+        facade.sendNotification(MsgAPI.EMPTY_SPACE_CLICKED);
     }
 
     @Override

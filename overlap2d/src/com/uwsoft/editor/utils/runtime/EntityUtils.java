@@ -101,6 +101,39 @@ public class EntityUtils {
         return new Vector2(transformComponent.x, transformComponent.y);
     }
 
+    public static void getPosition(Entity entity, Vector2 position) {
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        position.set(transformComponent.x, transformComponent.y);
+    }
+
+    public static TransformComponent setPosition(Entity entity, Vector2 position) {
+        TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+        transformComponent.x = position.x;
+        transformComponent.y = position.y;
+        return transformComponent;
+    }
+
+    public static Vector2 getSize(Entity entity) {
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        return new Vector2(dimensionsComponent.width, dimensionsComponent.height);
+    }
+
+    public static void getSize(Entity entity, Vector2 size) {
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        size.set(dimensionsComponent.width, dimensionsComponent.height);
+    }
+
+    public static DimensionsComponent setSize(Entity entity, Vector2 size) {
+        DimensionsComponent dimensionsComponent = ComponentRetriever.get(entity, DimensionsComponent.class);
+        dimensionsComponent.width = size.x;
+        dimensionsComponent.height = size.y;
+        if (dimensionsComponent.boundBox != null) {
+            dimensionsComponent.boundBox.width = size.x;
+            dimensionsComponent.boundBox.height = size.y;
+        }
+        return dimensionsComponent;
+    }
+
     public static Vector2 getRightTopPoint(Set<Entity> entities) {
         if(entities.size() == 0) return null;
 

@@ -62,8 +62,8 @@ public class TiledPlugin extends O2DPluginAdapter {
     public SaveDataManager saveDataManager;
     public String selectedTileName = "";
     public boolean isSceneLoaded = false;
-    private DrawTileTool drawTileTool;
-    private DeleteTileTool deleteTileTool;
+    public DrawTileTool drawTileTool;
+    public DeleteTileTool deleteTileTool;
     public TiledPanelMediator tiledPanelMediator;
     public ResourcesManager pluginRM;
 

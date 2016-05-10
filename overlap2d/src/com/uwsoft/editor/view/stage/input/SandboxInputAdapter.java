@@ -3,6 +3,7 @@ package com.uwsoft.editor.view.stage.input;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Intersector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.SnapshotArray;
@@ -25,6 +26,7 @@ public class SandboxInputAdapter implements InputProcessor {
 	private Entity target;
 	private Vector2 hitTargetLocalCoordinates = new Vector2();
 	private Sandbox sandbox;
+	private final EntityBounds tempEntityBounds = new EntityBounds();
 
 	public SandboxInputAdapter() {
 		facade = Overlap2DFacade.getInstance();
@@ -230,9 +232,9 @@ public class SandboxInputAdapter implements InputProcessor {
 				continue;
 			}
 
-            if (new EntityBounds(childEntity).intersects(localCoordinates)) {
-                return childEntity;
-            }
+			if (Intersector.isPointInPolygon(tempEntityBounds.getBoundPointsList(childEntity), localCoordinates)) {
+				return childEntity;
+			}
 		}
 		dimentionsComponent = ComponentRetriever.get(root, DimensionsComponent.class);
 //		if(dimentionsComponent.hit(localCoordinates.x, localCoordinates.y)){

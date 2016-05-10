@@ -19,7 +19,16 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import com.badlogic.ashley.core.Entity;
+import com.badlogic.gdx.Gdx;
+import com.commons.MsgAPI;
+import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.renderer.components.CompositeTransformComponent;
+import com.uwsoft.editor.renderer.systems.CompositeSystem;
+import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
+
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -35,11 +44,21 @@ public class UICompositeItemPropertiesMediator extends UIItemPropertiesMediator<
 
     @Override
     protected void translateObservableDataToView(Entity item) {
-
+        viewComponent.setAutomaticResize(item.getComponent(CompositeTransformComponent.class).automaticResize);
     }
 
     @Override
     protected void translateViewToItemData() {
+        CompositeTransformComponent component = observableReference.getComponent(CompositeTransformComponent.class);
+        component.automaticResize = viewComponent.isAutomaticResizeIsEnabled();
 
+        CompositeSystem compositeSystem = Sandbox.getInstance().getEngine().getSystem(CompositeSystem.class);
+        if (compositeSystem != null) {
+            compositeSystem.processEntity(observableReference, Gdx.graphics.getDeltaTime());
+        }
+
+        Set<Entity> entityHashSet = new HashSet<>();
+        entityHashSet.add(observableReference);
+        Overlap2DFacade.getInstance().sendNotification(MsgAPI.ITEM_SELECTION_CHANGED, entityHashSet);
     }
 }

@@ -84,4 +84,9 @@ public abstract class SimpleTool implements Tool {
     public void keyDown(Entity entity, int keycode) {
 
     }
+
+    @Override
+    public void keyUp(Entity entity, int keycode) {
+
+    }
 }

@@ -26,6 +26,7 @@ import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.utils.Constants;
 import com.uwsoft.editor.utils.EntityBounds;
 import com.uwsoft.editor.utils.MoveCommandBuilder;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
@@ -109,7 +110,7 @@ public class ItemSelector {
 
 
     public BiConsumer<Entity, AccContainer> broadestItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MIN;
         EntityBounds bounds = new EntityBounds(i);
         final float width = bounds.getVisualWidth();
         if (width > acc.carryVal) {
@@ -119,7 +120,7 @@ public class ItemSelector {
     };
 
     public BiConsumer<Entity, AccContainer> highestItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MIN;
         EntityBounds bounds = new EntityBounds(i);
         final float height = bounds.getVisualHeight();
         if (height > acc.carryVal) {
@@ -129,17 +130,18 @@ public class ItemSelector {
     };
 
     public BiConsumer<Entity, AccContainer> rightmostItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MIN;
         EntityBounds bounds = new EntityBounds(i);
         final float x = bounds.getVisualRightX();
         if (x > acc.carryVal) {
             acc.carryVal = x;
             acc.carry = i;
         }
+        System.out.println("MaxFloat  = " + Float.MAX_VALUE + " MinFloat = " + Float.MIN_VALUE);
     };
 
     public BiConsumer<Entity, AccContainer> leftmostItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MAX_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MAX;
         EntityBounds bounds = new EntityBounds(i);
         final float x = bounds.getVisualX();
         if (x < acc.carryVal) {
@@ -149,7 +151,7 @@ public class ItemSelector {
     };
 
     public BiConsumer<Entity, AccContainer> topmostItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MIN_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MIN;
         EntityBounds bounds = new EntityBounds(i);
         final float y = bounds.getVisualTopY();
         if (y > acc.carryVal) {
@@ -158,7 +160,7 @@ public class ItemSelector {
         }
     };
     public BiConsumer<Entity, AccContainer> bottommostItem = (i, acc) -> {
-        if (acc.carryVal == null) acc.carryVal = Float.MAX_VALUE;
+        if (acc.carryVal == null) acc.carryVal = Constants.FLOAT_MAX;
         EntityBounds bounds = new EntityBounds(i);
         final float y = bounds.getVisualY();
         if (y < acc.carryVal) {
