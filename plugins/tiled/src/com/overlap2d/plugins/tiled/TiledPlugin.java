@@ -57,6 +57,8 @@ public class TiledPlugin extends O2DPluginAdapter {
     public static final String TILE_ADD_TOOL    = "TILE_ADD_TOOL";
     public static final String TILE_DELETE_TOOL = "TILE_DELETE_TOOL";
     public static final String TILE_TAG         = "TILE";
+    public static final String ROW = "ROW";
+    public static final String COLUMN = "COLUMN";
 
     public DataToSave dataToSave;
     public SaveDataManager saveDataManager;

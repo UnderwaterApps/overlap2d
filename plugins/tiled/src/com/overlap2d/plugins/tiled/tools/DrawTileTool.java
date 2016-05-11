@@ -2,7 +2,6 @@ package com.overlap2d.plugins.tiled.tools;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.commons.view.tools.Tool;
@@ -147,8 +146,8 @@ public class DrawTileTool implements Tool {
         int row = MathUtils.floor(newY / gridHeight);
         int column = MathUtils.floor(newX / gridWidth);
         CustomVariables customVariables = new CustomVariables();
-        customVariables.setVariable("row", Float.toString(row));
-        customVariables.setVariable("column", Float.toString(column));
+        customVariables.setVariable(TiledPlugin.ROW, Integer.toString(row));
+        customVariables.setVariable(TiledPlugin.COLUMN, Integer.toString(column));
         mainItemComponent.customVars = customVariables.saveAsString();
     }
 

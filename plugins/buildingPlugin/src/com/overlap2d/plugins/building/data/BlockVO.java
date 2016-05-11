@@ -7,8 +7,8 @@ public class BlockVO {
 
     public String regionName = "";
     public int hp;
-    public float x;
-    public float y;
+    public float col;
+    public float row;
 
     public BlockVO() {
     }

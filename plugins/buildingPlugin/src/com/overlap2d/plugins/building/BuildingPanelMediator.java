@@ -20,7 +20,7 @@ package com.overlap2d.plugins.building;
 
 import com.badlogic.ashley.core.Engine;
 import com.badlogic.ashley.core.Entity;
-import com.badlogic.gdx.utils.Array;
+import com.commons.plugins.PluginAPI;
 import com.overlap2d.plugins.building.data.BlockVO;
 import com.overlap2d.plugins.building.data.BuildingVO;
 import com.overlap2d.plugins.building.data.DecorVO;
@@ -29,10 +29,9 @@ import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.components.TextureRegionComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 
-import java.util.Comparator;
 import java.util.HashSet;
 
 /**
@@ -45,6 +44,12 @@ public class BuildingPanelMediator extends SimpleMediator<BuildingPanel> {
     public static final String SCENE_LOADED = "com.uwsoft.editor.proxy.SceneDataManager.SCENE_LOADED";
 
     private BuildingPlugin buildingPlugin;
+    private Entity leftEntity, bottomEntity;
+    public int minCol;
+    public int minRow;
+    private CustomVariables currentCustomVars;
+    private CustomVariables leftCustomVars;
+    private CustomVariables bottomCustomVars;
 
     public BuildingPanelMediator(BuildingPlugin buildingPlugin) {
         super(NAME, new BuildingPanel());
@@ -52,7 +57,9 @@ public class BuildingPanelMediator extends SimpleMediator<BuildingPanel> {
 
         viewComponent.initLockView();
 
-
+        currentCustomVars = new CustomVariables();
+        leftCustomVars = new CustomVariables();
+        bottomCustomVars = new CustomVariables();
     }
 
     @Override
@@ -86,19 +93,20 @@ public class BuildingPanelMediator extends SimpleMediator<BuildingPanel> {
     }
 
     private void saveGameData() {
+        initPluginMinEntities();
         BuildingVO buildingVO = new BuildingVO();
 
         HashSet<Entity> entities = buildingPlugin.getPluginAPI().getProjectEntities();
         for (Entity entity : entities) {
             MainItemComponent mainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            currentCustomVars.loadFromString(mainItemComponent.customVars);
             ItemVO itemVO = new ItemVO();
-            if (mainItemComponent.tags.contains(buildingPlugin.TILE_TAG)) {
+            if (buildingPlugin.isTile(entity)) {
                 BlockVO blockVO = new BlockVO();
                 TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
                 blockVO.regionName = textureRegionComponent.regionName;
-                TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-                blockVO.x = transformComponent.x;
-                blockVO.y = transformComponent.y;
+                blockVO.col = currentCustomVars.getIntegerVariable(BuildingPlugin.COLUMN) - minCol;
+                blockVO.row = currentCustomVars.getIntegerVariable(BuildingPlugin.ROW) - minRow;
                 itemVO.blocks.add(blockVO);
             } else {
                 DecorVO decorVO = new DecorVO();
@@ -108,5 +116,34 @@ public class BuildingPanelMediator extends SimpleMediator<BuildingPanel> {
         }
 
         buildingPlugin.savePluginData(buildingVO);
+    }
+
+    private void initPluginMinEntities() {
+        PluginAPI pluginAPI = buildingPlugin.getPluginAPI();
+        if (pluginAPI.getProjectEntities().size() == 0) return;
+        bottomEntity = leftEntity = pluginAPI.getProjectEntities().iterator().next();
+
+        pluginAPI.getProjectEntities().forEach(entity -> {
+            if (!buildingPlugin.isTile(entity)) return;
+
+            currentCustomVars.loadFromString(ComponentRetriever.get(entity, MainItemComponent.class).customVars);
+            int currentRow = currentCustomVars.getIntegerVariable(BuildingPlugin.ROW);
+            int currentColumn = currentCustomVars.getIntegerVariable(BuildingPlugin.COLUMN);
+
+            leftCustomVars.loadFromString(ComponentRetriever.get(leftEntity, MainItemComponent.class).customVars);
+            minCol = leftCustomVars.getIntegerVariable(BuildingPlugin.COLUMN);
+            if (currentColumn < minCol) {
+                minCol = currentColumn;
+                leftEntity = entity;
+            }
+
+            bottomCustomVars.loadFromString(ComponentRetriever.get(bottomEntity, MainItemComponent.class).customVars);
+            minRow = bottomCustomVars.getIntegerVariable(BuildingPlugin.ROW);
+            if (currentRow < minRow) {
+                minRow = currentRow;
+                bottomEntity = entity;
+            }
+
+        });
     }
 }

@@ -27,13 +27,8 @@ import com.commons.plugins.O2DPluginAdapter;
 import com.commons.plugins.PluginAPI;
 import com.overlap2d.plugins.building.data.BuildingVO;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
-import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
-import com.uwsoft.editor.renderer.utils.CustomVariables;
 import net.mountainblade.modular.annotations.Implementation;
-
-import java.io.IOException;
-import java.io.Writer;
 
 /**
  * Created by azakhary on 7/24/2015.
@@ -46,20 +41,14 @@ public class BuildingPlugin extends O2DPluginAdapter {
     public static final String SAVE_DATA = CLASS_NAME + ".SAVE_DATA";
     public static final String FILE_MENU = "com.uwsoft.editor.view.Overlap2DMenuBar.FILE_MENU";
     public static final String TILE_TAG         = "TILE";
-    private final String row = "row";
-    private final String column = "column";
+    public static final String ROW = "ROW";
+    public static final String COLUMN = "COLUMN";
 
     private BuildingPanelMediator buildingPanelMediator;
 
     private Json buildingJson;
     private FileHandle fileHandle;
 
-    private CustomVariables currentCustomVars;
-    private CustomVariables leftCustomVars;
-    private CustomVariables bottomCustomVars;
-    private Entity leftEntity, bottomEntity;
-    public int leftColumn;
-    public int bottomRow;
 
     public BuildingPlugin() {
         buildingPanelMediator = new BuildingPanelMediator(this);
@@ -78,17 +67,12 @@ public class BuildingPlugin extends O2DPluginAdapter {
     public void initPluginData() {
         buildingJson = new Json();
         buildingJson.setOutputType(JsonWriter.OutputType.json);
+        buildingJson.setUsePrototypes(false);
         fileHandle = Gdx.files.absolute(pluginAPI.getProjectPath() + "/building.json");
-
-        currentCustomVars = new CustomVariables();
-        leftCustomVars = new CustomVariables();
-        bottomCustomVars = new CustomVariables();
-        initPluginMinEntities();
-        System.out.println("min-max: leftColumn = "+leftColumn+", bottomRow = "+bottomRow);
     }
 
     public void savePluginData(BuildingVO buildingVO) {
-        String dataString = buildingJson.toJson(buildingVO);
+        String dataString = buildingJson.prettyPrint(buildingVO);
         fileHandle.writeString(dataString, false);
     }
 
@@ -96,31 +80,5 @@ public class BuildingPlugin extends O2DPluginAdapter {
         return ComponentRetriever.get(entity, MainItemComponent.class).tags.contains(TILE_TAG);
     }
 
-    public void initPluginMinEntities() {
-        if (pluginAPI.getProjectEntities().size() == 0) return;
-        bottomEntity = leftEntity = pluginAPI.getProjectEntities().iterator().next();
 
-        pluginAPI.getProjectEntities().forEach(entity -> {
-            if (!isTile(entity)) return;
-
-            currentCustomVars.loadFromString(ComponentRetriever.get(entity, MainItemComponent.class).customVars);
-            int currentRow = Integer.parseInt(currentCustomVars.getStringVariable(row));
-            int currentColumn = Integer.parseInt(currentCustomVars.getStringVariable(column));
-
-            leftCustomVars.loadFromString(ComponentRetriever.get(leftEntity, MainItemComponent.class).customVars);
-            leftColumn = Integer.parseInt(leftCustomVars.getStringVariable(column));
-            if (currentColumn < leftColumn) {
-                leftColumn = currentColumn;
-                leftEntity = entity;
-            }
-
-            bottomCustomVars.loadFromString(ComponentRetriever.get(bottomEntity, MainItemComponent.class).customVars);
-            bottomRow = Integer.parseInt(bottomCustomVars.getStringVariable(row));
-            if (currentRow < bottomRow) {
-                bottomRow = currentRow;
-                bottomEntity = entity;
-            }
-
-        });
-    }
 }
