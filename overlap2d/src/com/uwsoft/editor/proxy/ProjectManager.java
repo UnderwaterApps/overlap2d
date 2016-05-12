@@ -24,6 +24,7 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.google.common.collect.Lists;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
@@ -49,10 +50,9 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
@@ -1154,10 +1154,17 @@ public class ProjectManager extends BaseProxy {
     }
 
     public boolean deleteImage(String imageName) {
-        String imagesPath = currentProjectPath + "/assets/orig/images/";
-        String filePath = imagesPath + imageName + ".png";
+        Path path = Paths.get(currentProjectPath, "/assets/orig/images/", imageName);
 
-        File file = new File(filePath);
-        return file.delete();
+        ArrayList<Path> possibleFiles = Lists.newArrayList(
+                path.resolveSibling(path.getFileName() + ".png"),
+                path.resolveSibling(path.getFileName() + ".9.png"));
+
+        for(Path p : possibleFiles) {
+            if (p.toFile().exists())
+                return p.toFile().delete();
+        }
+
+        throw new IllegalStateException(String.format("The file %s is not found",path.toString()));
     }
 }
