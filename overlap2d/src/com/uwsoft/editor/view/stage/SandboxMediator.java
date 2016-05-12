@@ -47,6 +47,8 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.uwsoft.editor.view.ui.box.UIToolBox.TOOL_CLICKED;
+
 /**
  * Created by sargis on 4/20/15.
  */
@@ -316,6 +318,11 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                 if (keycode == Input.Keys.V) {
                     facade.sendNotification(MsgAPI.ACTION_PASTE);
                 }
+                if (keycode == Input.Keys.T) {
+                    facade.sendNotification(TOOL_CLICKED, TransformTool.NAME);
+                    UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                    toolBoxMediator.setCurrentTool(TransformTool.NAME);
+                }
                 if(keycode == Input.Keys.Z) {
                     if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)) {
                         CommandManager commandManager = facade.retrieveProxy(CommandManager.NAME);
@@ -325,6 +332,12 @@ public class SandboxMediator extends SimpleMediator<Sandbox> {
                         commandManager.undoCommand();
                     }
                 }
+            }
+
+            if (keycode == Input.Keys.V) {
+                facade.sendNotification(TOOL_CLICKED, SelectionTool.NAME);
+                UIToolBoxMediator toolBoxMediator = facade.retrieveMediator(UIToolBoxMediator.NAME);
+                toolBoxMediator.setCurrentTool(SelectionTool.NAME);
             }
 
             if (Gdx.input.isKeyPressed(Input.Keys.S) && !isControlPressed()) {
