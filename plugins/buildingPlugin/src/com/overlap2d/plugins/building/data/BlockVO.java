@@ -6,7 +6,7 @@ package com.overlap2d.plugins.building.data;
 public class BlockVO {
 
     public String regionName = "";
-    public int hp;
+    public int hp = 10;
     public float col;
     public float row;
 
