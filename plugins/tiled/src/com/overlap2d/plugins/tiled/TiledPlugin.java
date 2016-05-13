@@ -20,6 +20,7 @@ package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.plugins.O2DPluginAdapter;
@@ -34,6 +35,7 @@ import com.overlap2d.plugins.tiled.save.SaveDataManager;
 import com.overlap2d.plugins.tiled.tools.DeleteTileTool;
 import com.overlap2d.plugins.tiled.tools.DrawTileTool;
 import com.uwsoft.editor.renderer.components.MainItemComponent;
+import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
@@ -155,11 +157,23 @@ public class TiledPlugin extends O2DPluginAdapter {
         return selectedTileVO.regionName;
     }
 
-    public float getSelectedTileGridOffset() {
+    public Vector2 getSelectedTileGridOffset() {
         return selectedTileVO.gridOffset;
     }
 
-    public void setSelectedTileGridOffset (float gridOffset) {
+    public void setSelectedTileGridOffset (Vector2 gridOffset) {
         selectedTileVO.gridOffset = gridOffset;
+    }
+
+    public void applySelectedTileGridOffset() {
+        pluginAPI.getProjectEntities().forEach(entity -> {
+            if (!(isTile(entity))) return;
+            TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+            TransformComponent transformComponent  =ComponentRetriever.get(entity, TransformComponent.class);
+            if (selectedTileVO.regionName.equals(textureRegionComponent.regionName)) {
+                transformComponent.x -= selectedTileVO.gridOffset.x;
+                transformComponent.y -= selectedTileVO.gridOffset.y;
+            }
+        });
     }
 }

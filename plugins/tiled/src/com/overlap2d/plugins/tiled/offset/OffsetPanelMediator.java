@@ -1,5 +1,6 @@
 package com.overlap2d.plugins.tiled.offset;
 
+import com.badlogic.gdx.math.Vector2;
 import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -38,7 +39,11 @@ public class OffsetPanelMediator extends SimpleMediator<OffsetPanel> {
                 tiledPlugin.offsetPanel.show(tiledPlugin.getAPI().getUIStage());
                 break;
             case TiledPlugin.TILE_GRID_OFFSET_ADDED:
-                float offsetValue = notification.getBody();
+                Vector2 offsetValue = notification.getBody();
+                tiledPlugin.setSelectedTileGridOffset(offsetValue);
+                tiledPlugin.applySelectedTileGridOffset();
+                tiledPlugin.dataToSave.setTileGridOffset(tiledPlugin.selectedTileVO);
+                tiledPlugin.saveDataManager.save();
                 System.out.println(offsetValue);
                 break;
         }

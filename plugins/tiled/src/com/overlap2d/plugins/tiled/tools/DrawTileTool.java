@@ -136,8 +136,8 @@ public class DrawTileTool implements Tool {
             updateRegion(underneathTile, tiledPlugin.getSelectedTileName());
             return;
         }
-        float newX = MathUtils.floor(x / gridWidth) * gridWidth;
-        float newY = MathUtils.floor(y / gridHeight) * gridHeight;
+        float newX = MathUtils.floor(x / gridWidth) * gridWidth - tiledPlugin.getSelectedTileGridOffset().x;
+        float newY = MathUtils.floor(y / gridHeight) * gridHeight - tiledPlugin.getSelectedTileGridOffset().y;
 
         Entity imageEntity = tiledPlugin.getAPI().drawImage(tiledPlugin.getSelectedTileName(), new Vector2(newX, newY));
         MainItemComponent mainItemComponent = ComponentRetriever.get(imageEntity, MainItemComponent.class);
