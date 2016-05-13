@@ -57,7 +57,7 @@ public class ResourcesManager {
             System.out.println("region: "+name+",  "+region.getRegionWidth()+" "+region.getRegionHeight());
         }
         if (region == null) { // take the region from overlap assets
-            region = tiledPlugin.getPluginAPI().getSceneLoader().getRm().getTextureRegion(name);
+            region = tiledPlugin.getAPI().getSceneLoader().getRm().getTextureRegion(name);
         }
         return region;
     }

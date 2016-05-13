@@ -58,7 +58,8 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 SCENE_LOADED,
                 TiledPlugin.TILE_ADDED,
                 TiledPlugin.TILE_SELECTED,
-                TiledPlugin.DELETE_TILE,
+                TiledPlugin.ACTION_DELETE_TILE,
+                TiledPlugin.ACTION_SET_OFFSET,
                 TiledPlugin.PANEL_OPEN,
                 TiledPlugin.OPEN_DROP_DOWN,
                 TiledPlugin.GRID_CHANGED,
@@ -66,7 +67,6 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM,
                 MsgAPI.ACTION_DELETE_IMAGE_RESOURCE,
                 MsgAPI.ITEM_DATA_UPDATED,
-                MsgAPI.ADD_TARGET,
                 MsgAPI.TOOL_SELECTED
         };
     }
@@ -122,19 +122,20 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
             case TiledPlugin.OPEN_DROP_DOWN:
                 tileName = notification.getBody();
                 HashMap<String, String> actionsSet = new HashMap<>();
-                actionsSet.put(TiledPlugin.DELETE_TILE, "Delete");
-                tiledPlugin.getPluginAPI().showPopup(actionsSet, tileName);
+                actionsSet.put(TiledPlugin.ACTION_DELETE_TILE, "Delete");
+                actionsSet.put(TiledPlugin.ACTION_OPEN_OFFSET_PANEL, "Set offset");
+                tiledPlugin.getAPI().showPopup(actionsSet, tileName);
                 break;
             case MsgAPI.ACTION_DELETE_IMAGE_RESOURCE:
                 tileName = notification.getBody();
-                tiledPlugin.facade.sendNotification(TiledPlugin.DELETE_TILE, tileName);
+                tiledPlugin.facade.sendNotification(TiledPlugin.ACTION_DELETE_TILE, tileName);
                 break;
-            case TiledPlugin.DELETE_TILE:
+            case TiledPlugin.ACTION_DELETE_TILE:
                 String tn = notification.getBody();
                 if (!tiledPlugin.dataToSave.getTileNames().contains(tn, false)) return;
                 tiledPlugin.dataToSave.removeTile(tn);
                 tiledPlugin.saveDataManager.save();
-                tiledPlugin.selectedTileName = "";
+                tiledPlugin.setSelectedTileName("");
 
                 viewComponent.removeTile();
                 break;
@@ -187,8 +188,6 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 DimensionsComponent dimensionsComponent = ComponentRetriever.get(observable, DimensionsComponent.class);
                 tiledPlugin.dataToSave.setGrid(dimensionsComponent.width, dimensionsComponent.height);
                 tiledPlugin.facade.sendNotification(TiledPlugin.GRID_CHANGED);
-                break;
-            case MsgAPI.ADD_TARGET:
                 break;
             case MsgAPI.ITEM_DATA_UPDATED:
                 Entity item = notification.getBody();

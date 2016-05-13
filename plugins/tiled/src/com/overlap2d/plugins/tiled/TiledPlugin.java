@@ -23,9 +23,9 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.plugins.O2DPluginAdapter;
-import com.commons.plugins.PluginAPI;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 import com.overlap2d.plugins.tiled.save.DataToSave;
 import com.overlap2d.plugins.tiled.save.SaveDataManager;
@@ -46,12 +46,15 @@ public class TiledPlugin extends O2DPluginAdapter {
 
     //-------notifications---------//
     public static final String CLASS_NAME = "com.overlap2d.plugins.tiled";
-    public static final String TILE_ADDED       = CLASS_NAME + ".TILE_ADDED";
-    public static final String TILE_SELECTED    = CLASS_NAME + ".TILE_SELECTED";
-    public static final String PANEL_OPEN       = CLASS_NAME + ".PANEL_OPEN";
-    public static final String OPEN_DROP_DOWN   = CLASS_NAME + ".OPEN_DROP_DOWN";
-    public static final String DELETE_TILE      = CLASS_NAME + ".DELETE_TILE";
-    public static final String GRID_CHANGED     = CLASS_NAME + ".GRID_CHANGED";
+    public static final String TILE_ADDED                   = CLASS_NAME + ".TILE_ADDED";
+    public static final String TILE_SELECTED                = CLASS_NAME + ".TILE_SELECTED";
+    public static final String PANEL_OPEN                   = CLASS_NAME + ".PANEL_OPEN";
+    public static final String OPEN_DROP_DOWN               = CLASS_NAME + ".OPEN_DROP_DOWN";
+    public static final String GRID_CHANGED                 = CLASS_NAME + ".GRID_CHANGED";
+    public static final String ACTION_DELETE_TILE           = CLASS_NAME + ".ACTION_DELETE_TILE";
+    public static final String ACTION_SET_OFFSET            = CLASS_NAME + ".ACTION_SET_OFFSET";
+    public static final String ACTION_OPEN_OFFSET_PANEL     = CLASS_NAME + ".ACTION_OPEN_OFFSET_PANEL";
+    public static final String TILE_GRID_OFFSET_ADDED       = CLASS_NAME + ".TILE_GRID_OFFSET_ADDED";
     //-------end--------//
 
     public static final String TILE_ADD_TOOL    = "TILE_ADD_TOOL";
@@ -62,22 +65,24 @@ public class TiledPlugin extends O2DPluginAdapter {
 
     public DataToSave dataToSave;
     public SaveDataManager saveDataManager;
-    public String selectedTileName = "";
+    public TileVO selectedTileVO;
     public boolean isSceneLoaded = false;
     public DrawTileTool drawTileTool;
     public DeleteTileTool deleteTileTool;
-    public TiledPanelMediator tiledPanelMediator;
     public ResourcesManager pluginRM;
+    public OffsetPanel offsetPanel;
 
     public TiledPlugin() {
-        tiledPanelMediator = new TiledPanelMediator(this);
+        selectedTileVO = new TileVO();
     }
 
     @Override
     public void initPlugin() {
-        facade.registerMediator(tiledPanelMediator);
+        facade.registerMediator(new TiledPanelMediator(this));
+        facade.registerMediator(new OffsetPanelMediator(this));
 
         pluginRM = new ResourcesManager(this);
+        offsetPanel = new OffsetPanel(this);
 
         initTools();
 
@@ -99,10 +104,6 @@ public class TiledPlugin extends O2DPluginAdapter {
         pluginAPI.addTool(TILE_DELETE_TOOL, tileDeleteButtonStyle, false, deleteTileTool);
 
 
-    }
-
-    public PluginAPI getPluginAPI() {
-        return pluginAPI;
     }
 
     public void initSaveData() {
@@ -142,5 +143,21 @@ public class TiledPlugin extends O2DPluginAdapter {
     public boolean isOnCurrentSelectedLayer(Entity entity) {
         ZIndexComponent entityZComponent = ComponentRetriever.get(entity, ZIndexComponent.class);
         return entityZComponent.layerName.equals(pluginAPI.getCurrentSelectedLayerName());
+    }
+
+    public void setSelectedTileName (String regionName) {
+        selectedTileVO.regionName = regionName;
+    }
+
+    public String getSelectedTileName() {
+        return selectedTileVO.regionName;
+    }
+
+    public float getSelectedTileGridOffset() {
+        return selectedTileVO.gridOffset;
+    }
+
+    public void setSelectedTileGridOffset (float gridOffset) {
+        selectedTileVO.gridOffset = gridOffset;
     }
 }

@@ -87,7 +87,7 @@ public class GridTilesTab extends DefaultTab {
     }
 
     public void selectTile(String tileName) {
-        tiledPlugin.selectedTileName = tileName;
+        tiledPlugin.setSelectedTileName(tileName);
     }
 
     public void removeTile() {
