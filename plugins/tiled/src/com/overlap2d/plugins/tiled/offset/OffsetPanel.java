@@ -1,9 +1,10 @@
-package com.overlap2d.plugins.tiled;
+package com.overlap2d.plugins.tiled.offset;
 
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.overlap2d.plugins.tiled.data.AttributeVO;
 import com.overlap2d.plugins.tiled.view.Attribute;
 

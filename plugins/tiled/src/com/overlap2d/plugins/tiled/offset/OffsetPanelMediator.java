@@ -1,5 +1,6 @@
-package com.overlap2d.plugins.tiled;
+package com.overlap2d.plugins.tiled.offset;
 
+import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 

@@ -27,6 +27,8 @@ import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
+import com.overlap2d.plugins.tiled.offset.OffsetPanel;
+import com.overlap2d.plugins.tiled.offset.OffsetPanelMediator;
 import com.overlap2d.plugins.tiled.save.DataToSave;
 import com.overlap2d.plugins.tiled.save.SaveDataManager;
 import com.overlap2d.plugins.tiled.tools.DeleteTileTool;
