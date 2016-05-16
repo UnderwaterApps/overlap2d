@@ -127,9 +127,14 @@ public class TiledPlugin extends O2DPluginAdapter {
         for (Entity entity : pluginAPI.getProjectEntities()) {
             if(!isTile(entity)) continue;
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-            Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y,
-                    dataToSave.getParameterVO().gridWidth,
-                    dataToSave.getParameterVO().gridHeight);
+            TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
+            float offsetX = dataToSave.getTile(textureRegionComponent.regionName).gridOffset.x;
+            float offsetY = dataToSave.getTile(textureRegionComponent.regionName).gridOffset.y;
+            Rectangle tmp = new Rectangle(
+                    transformComponent.x + offsetX,
+                    transformComponent.y + offsetY,
+                    dataToSave.getParameterVO().gridWidth - offsetX,
+                    dataToSave.getParameterVO().gridHeight - offsetY);
 
             boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
             if (isEntityVisible && tmp.contains(x, y) && isOnCurrentSelectedLayer(entity)) {

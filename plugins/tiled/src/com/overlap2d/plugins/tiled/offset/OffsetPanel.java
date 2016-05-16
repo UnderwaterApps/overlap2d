@@ -17,12 +17,14 @@ import com.overlap2d.plugins.tiled.view.Category;
  */
 public class OffsetPanel extends UIDraggablePanel {
 
-    private final String TILE_OFFSET_WIDTH = "Tile offset width";
-    private final String TILE_OFFSET_HEIGHT = "Tile offset height";
+    private final String TILE_OFFSET_X = "Tile offset x";
+    private final String TILE_OFFSET_Y = "Tile offset y";
 
     private TiledPlugin tiledPlugin;
     private Table mainTable;
     private Category offsetCategory;
+    private AttributeVO offsetAttributeX;
+    private AttributeVO offsetAttributeY;
 
 
     public OffsetPanel(TiledPlugin tiledPlugin) {
@@ -39,8 +41,8 @@ public class OffsetPanel extends UIDraggablePanel {
 
     private void initView() {
 
-        AttributeVO offsetAttributeX = new AttributeVO(TILE_OFFSET_WIDTH);
-        AttributeVO offsetAttributeY = new AttributeVO(TILE_OFFSET_HEIGHT);
+        offsetAttributeX = new AttributeVO(TILE_OFFSET_X, true);
+        offsetAttributeY = new AttributeVO(TILE_OFFSET_Y, true);
 
         Array<AttributeVO> attributeVOs = new Array<>();
         attributeVOs.add(offsetAttributeX);
@@ -50,7 +52,7 @@ public class OffsetPanel extends UIDraggablePanel {
                 .pad(7)
                 .row();
 
-        VisTextButton addButton = new VisTextButton("Add");
+        VisTextButton addButton = new VisTextButton("Set");
         addButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y) {
@@ -63,8 +65,8 @@ public class OffsetPanel extends UIDraggablePanel {
     }
 
     public void refreshOffsetValues() {
-        AttributeVO offsetAttributeX = new AttributeVO(TILE_OFFSET_WIDTH, tiledPlugin.getSelectedTileGridOffset().x);
-        AttributeVO offsetAttributeY = new AttributeVO(TILE_OFFSET_HEIGHT, tiledPlugin.getSelectedTileGridOffset().y);
+        offsetAttributeX = new AttributeVO(TILE_OFFSET_X, tiledPlugin.getSelectedTileGridOffset().x, true);
+        offsetAttributeY = new AttributeVO(TILE_OFFSET_Y, tiledPlugin.getSelectedTileGridOffset().y, true);
 
         Array<AttributeVO> attributeVOs = new Array<>();
         attributeVOs.add(offsetAttributeX);
