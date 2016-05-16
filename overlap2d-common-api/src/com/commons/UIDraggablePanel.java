@@ -20,15 +20,20 @@ package com.commons;
 
 
 import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisImageButton;
 
 /**
  * Created by azakhary on 5/12/2015.
  */
 public class UIDraggablePanel extends O2DDialog {
+
+    public boolean isOpen;
+
     public UIDraggablePanel(String title) {
         super(title);
         setMovable(true);
@@ -58,4 +63,18 @@ public class UIDraggablePanel extends O2DDialog {
         setPosition(getX(), getY() + heightDiff);
     }
 
+    @Override
+    public VisDialog show(Stage stage) {
+
+        isOpen = true;
+
+        return super.show(stage);
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
+
+        isOpen = false;
+    }
 }

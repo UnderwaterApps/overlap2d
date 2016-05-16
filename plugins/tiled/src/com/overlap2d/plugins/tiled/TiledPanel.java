@@ -19,13 +19,11 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
@@ -55,7 +53,6 @@ public class TiledPanel extends UIDraggablePanel {
 
     public TiledPlugin tiledPlugin;
     public Facade facade;
-    public boolean isOpen = false;
 
     protected TabbedPane tabbedPane;
     protected VisTable tabTable; //table inside of each tab
@@ -183,20 +180,6 @@ public class TiledPanel extends UIDraggablePanel {
 
     public void reInitGridSettings() {
         settingsTab.resetGridCategory();
-    }
-
-    @Override
-    public void hide() {
-        super.hide();
-
-        isOpen = false;
-    }
-
-    @Override
-    public VisDialog show(Stage stage) {
-        isOpen = true;
-
-        return super.show(stage);
     }
 
     public void addTile(String tileName) {

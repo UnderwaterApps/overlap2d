@@ -26,7 +26,8 @@ public class OffsetPanelMediator extends SimpleMediator<OffsetPanel> {
     public String[] listNotificationInterests() {
         return new String[] {
                 TiledPlugin.ACTION_OPEN_OFFSET_PANEL,
-                TiledPlugin.TILE_GRID_OFFSET_ADDED
+                TiledPlugin.TILE_GRID_OFFSET_ADDED,
+                TiledPlugin.TILE_SELECTED
         };
     }
 
@@ -43,6 +44,11 @@ public class OffsetPanelMediator extends SimpleMediator<OffsetPanel> {
                 Vector2 offsetValue = notification.getBody();
                 tiledPlugin.setSelectedTileGridOffset(offsetValue);
                 tiledPlugin.applySelectedTileGridOffset();
+                break;
+            case TiledPlugin.TILE_SELECTED:
+                if (viewComponent.isOpen) {
+                    viewComponent.refreshOffsetValues();
+                }
                 break;
         }
 
