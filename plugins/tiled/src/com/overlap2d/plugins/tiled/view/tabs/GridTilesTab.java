@@ -83,12 +83,12 @@ public class GridTilesTab extends DefaultTab {
         panel.pack();
         scrollTiles();
         tiles.get(tileIndex).setChecked(true);
-        tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, tileName);
+        tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, new TileVO(tileName));
         tileIndex++;
     }
 
-    public void selectTile(String tileName) {
-        tiledPlugin.setSelectedTileName(tileName);
+    public void selectTile(TileVO tileVO) {
+        tiledPlugin.setSelectedTileVO(tileVO);
     }
 
     public void removeTile() {
@@ -181,7 +181,7 @@ public class GridTilesTab extends DefaultTab {
                         return;
                     }
 
-                    tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, savedTiles.get(index).regionName);
+                    tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, savedTiles.get(index));
                 }
             });
             listTable.add(ct)

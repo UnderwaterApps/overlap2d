@@ -69,12 +69,13 @@ public class TiledPlugin extends O2DPluginAdapter {
 
     public DataToSave dataToSave;
     public SaveDataManager saveDataManager;
-    public TileVO selectedTileVO;
     public boolean isSceneLoaded = false;
     public DrawTileTool drawTileTool;
     public DeleteTileTool deleteTileTool;
     public ResourcesManager pluginRM;
     public OffsetPanel offsetPanel;
+
+    private TileVO selectedTileVO;
 
     public TiledPlugin() {
         selectedTileVO = new TileVO();
@@ -165,6 +166,14 @@ public class TiledPlugin extends O2DPluginAdapter {
         selectedTileVO.gridOffset = gridOffset;
     }
 
+    public TileVO getSelectedTileVO() {
+        return selectedTileVO;
+    }
+
+    public void setSelectedTileVO(TileVO selectedTileVO) {
+        this.selectedTileVO = selectedTileVO;
+    }
+
     public void applySelectedTileGridOffset() {
         pluginAPI.getProjectEntities().forEach(entity -> {
             if (!(isTile(entity))) return;
@@ -175,5 +184,11 @@ public class TiledPlugin extends O2DPluginAdapter {
                 transformComponent.y -= selectedTileVO.gridOffset.y;
             }
         });
+        saveOffsetChanges();
+    }
+
+    private void saveOffsetChanges() {
+        dataToSave.setTileGridOffset(selectedTileVO);
+        saveDataManager.save();
     }
 }

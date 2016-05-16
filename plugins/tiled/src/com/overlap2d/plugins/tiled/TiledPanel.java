@@ -32,6 +32,7 @@ import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneListener;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 import com.overlap2d.plugins.tiled.view.tabs.GridTilesTab;
 import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
@@ -202,8 +203,8 @@ public class TiledPanel extends UIDraggablePanel {
         tilesTab.addTile(tileName);
     }
 
-    public void selectTile(String tileName) {
-        tilesTab.selectTile(tileName);
+    public void selectTile(TileVO tileVO) {
+        tilesTab.selectTile(tileVO);
     }
 
     public void removeTile() {

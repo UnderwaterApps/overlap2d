@@ -42,9 +42,6 @@ public class OffsetPanelMediator extends SimpleMediator<OffsetPanel> {
                 Vector2 offsetValue = notification.getBody();
                 tiledPlugin.setSelectedTileGridOffset(offsetValue);
                 tiledPlugin.applySelectedTileGridOffset();
-                tiledPlugin.dataToSave.setTileGridOffset(tiledPlugin.selectedTileVO);
-                tiledPlugin.saveDataManager.save();
-                System.out.println(offsetValue);
                 break;
         }
 

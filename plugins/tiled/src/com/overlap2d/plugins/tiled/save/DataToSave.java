@@ -1,5 +1,6 @@
 package com.overlap2d.plugins.tiled.save;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.overlap2d.plugins.tiled.data.ParameterVO;
 import com.overlap2d.plugins.tiled.data.TileVO;
@@ -36,12 +37,18 @@ public class DataToSave {
     }
 
     public void setTileGridOffset(TileVO tileVO) {
-        tiles.forEach(tile -> {
-            if (tile.regionName.equals(tileVO.regionName)) {
-                tile.gridOffset = tileVO.gridOffset;
-                return;
-            }
-        });
+        StreamSupport.stream(tiles.spliterator(), false)
+                .filter(tile -> tile.regionName.equals(tileVO.regionName))
+                .findFirst()
+                .ifPresent(t -> t.gridOffset = tileVO.gridOffset);
+    }
+
+    public Vector2 getTileGridOffset(String regionName) {
+        return StreamSupport.stream(tiles.spliterator(), false)
+                .filter(tile -> tile.regionName.equals(regionName))
+                .findFirst()
+                .get()
+                .gridOffset;
     }
 
     public Array<TileVO> getTiles() {

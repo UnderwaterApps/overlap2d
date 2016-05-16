@@ -24,6 +24,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.commons.MsgAPI;
 import com.commons.ResourcePayloadObject;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -135,7 +136,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 if (!tiledPlugin.dataToSave.containsTile(tn)) return;
                 tiledPlugin.dataToSave.removeTile(tn);
                 tiledPlugin.saveDataManager.save();
-                tiledPlugin.setSelectedTileName("");
+                tiledPlugin.setSelectedTileVO(new TileVO());
 
                 viewComponent.removeTile();
                 break;
