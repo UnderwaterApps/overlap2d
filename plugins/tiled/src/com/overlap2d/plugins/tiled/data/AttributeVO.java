@@ -11,8 +11,12 @@ public class AttributeVO {
     public AttributeVO() {
     }
 
+    public AttributeVO(String title) {
+        this.title = title+": ";
+    }
+
     public AttributeVO(String title, float value) {
-        this.title = title;
+        this.title = title+": ";
         this.value = value;
     }
 }

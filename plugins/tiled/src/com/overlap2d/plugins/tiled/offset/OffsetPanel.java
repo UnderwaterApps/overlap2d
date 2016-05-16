@@ -2,21 +2,27 @@ package com.overlap2d.plugins.tiled.offset;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.Array;
 import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.overlap2d.plugins.tiled.TiledPlugin;
 import com.overlap2d.plugins.tiled.data.AttributeVO;
-import com.overlap2d.plugins.tiled.view.Attribute;
+import com.overlap2d.plugins.tiled.data.CategoryVO;
+import com.overlap2d.plugins.tiled.view.Category;
 
 /**
  * Created by mariam on 5/12/16.
  */
 public class OffsetPanel extends UIDraggablePanel {
 
+    private final String TILE_OFFSET_WIDTH = "Tile offset width";
+    private final String TILE_OFFSET_HEIGHT = "Tile offset height";
+
     private TiledPlugin tiledPlugin;
-    private AttributeVO offsetAttributeX;
-    private AttributeVO offsetAttributeY;
+    private Table mainTable;
+    private Category offsetCategory;
 
 
     public OffsetPanel(TiledPlugin tiledPlugin) {
@@ -25,23 +31,24 @@ public class OffsetPanel extends UIDraggablePanel {
         this.tiledPlugin = tiledPlugin;
         addCloseButton();
 
+        mainTable = new Table();
+        add(mainTable).pad(3);
+
         initView();
     }
 
     private void initView() {
-        offsetAttributeX = new AttributeVO();
-        offsetAttributeX.title = "Tile offset x";
-        Attribute offsetX = new Attribute(offsetAttributeX);
-        add(offsetX)
-            .pad(7)
-            .row();
 
-        offsetAttributeY = new AttributeVO();
-        offsetAttributeY.title = "Tile offset y";
-        Attribute offsetY = new Attribute(offsetAttributeY);
-        add(offsetY)
-            .pad(7)
-            .row();
+        AttributeVO offsetAttributeX = new AttributeVO(TILE_OFFSET_WIDTH);
+        AttributeVO offsetAttributeY = new AttributeVO(TILE_OFFSET_HEIGHT);
+
+        Array<AttributeVO> attributeVOs = new Array<>();
+        attributeVOs.add(offsetAttributeX);
+        attributeVOs.add(offsetAttributeY);
+        offsetCategory = new Category(new CategoryVO("", attributeVOs));
+        mainTable.add(offsetCategory)
+                .pad(7)
+                .row();
 
         VisTextButton addButton = new VisTextButton("Add");
         addButton.addListener(new ClickListener() {
@@ -52,8 +59,16 @@ public class OffsetPanel extends UIDraggablePanel {
                 super.clicked(event, x, y);
             }
         });
-        add(addButton)
-            .pad(7)
-            .center();
+        mainTable.add(addButton);
+    }
+
+    public void refreshOffsetValues() {
+        AttributeVO offsetAttributeX = new AttributeVO(TILE_OFFSET_WIDTH, tiledPlugin.getSelectedTileGridOffset().x);
+        AttributeVO offsetAttributeY = new AttributeVO(TILE_OFFSET_HEIGHT, tiledPlugin.getSelectedTileGridOffset().y);
+
+        Array<AttributeVO> attributeVOs = new Array<>();
+        attributeVOs.add(offsetAttributeX);
+        attributeVOs.add(offsetAttributeY);
+        offsetCategory.reInitView(attributeVOs);
     }
 }

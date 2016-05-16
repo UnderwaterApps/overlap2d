@@ -51,6 +51,13 @@ public class DataToSave {
                 .gridOffset;
     }
 
+    public TileVO getTile(String regionName) {
+        return StreamSupport.stream(tiles.spliterator(), false)
+                .filter(tile -> tile.regionName.equals(regionName))
+                .findFirst()
+                .get();
+    }
+
     public Array<TileVO> getTiles() {
         return tiles;
     }

@@ -84,10 +84,11 @@ public class TiledPlugin extends O2DPluginAdapter {
     @Override
     public void initPlugin() {
         facade.registerMediator(new TiledPanelMediator(this));
-        facade.registerMediator(new OffsetPanelMediator(this));
 
         pluginRM = new ResourcesManager(this);
         offsetPanel = new OffsetPanel(this);
+
+        facade.registerMediator(new OffsetPanelMediator(this));
 
         initTools();
 
@@ -127,7 +128,8 @@ public class TiledPlugin extends O2DPluginAdapter {
             if(!isTile(entity)) continue;
             TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
             Rectangle tmp = new Rectangle(transformComponent.x, transformComponent.y,
-                    dataToSave.getParameterVO().gridWidth, dataToSave.getParameterVO().gridHeight);
+                    dataToSave.getParameterVO().gridWidth,
+                    dataToSave.getParameterVO().gridHeight);
 
             boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
             if (isEntityVisible && tmp.contains(x, y) && isOnCurrentSelectedLayer(entity)) {

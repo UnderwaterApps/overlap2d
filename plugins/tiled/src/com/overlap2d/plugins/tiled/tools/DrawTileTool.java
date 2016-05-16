@@ -136,7 +136,7 @@ public class DrawTileTool implements Tool {
             updateRegion(underneathTile, tiledPlugin.getSelectedTileName());
             return;
         }
-        System.out.println("ttt "+tiledPlugin.getSelectedTileName()+" "+tiledPlugin.getSelectedTileGridOffset());
+
         float newX = MathUtils.floor(x / gridWidth) * gridWidth - tiledPlugin.getSelectedTileGridOffset().x;
         float newY = MathUtils.floor(y / gridHeight) * gridHeight - tiledPlugin.getSelectedTileGridOffset().y;
 

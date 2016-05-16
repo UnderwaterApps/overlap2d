@@ -54,7 +54,7 @@ public class ResourcesManager {
     public TextureRegion getTextureRegion(String name) {
         TextureRegion region = textureAtlas.findRegion(name); // try to get region from plugin assets
         if (region != null) {
-            System.out.println("region: "+name+",  "+region.getRegionWidth()+" "+region.getRegionHeight());
+//            System.out.println("region: "+name+",  "+region.getRegionWidth()+" "+region.getRegionHeight());
         }
         if (region == null) { // take the region from overlap assets
             region = tiledPlugin.getAPI().getSceneLoader().getRm().getTextureRegion(name);

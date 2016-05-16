@@ -125,6 +125,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 HashMap<String, String> actionsSet = new HashMap<>();
                 actionsSet.put(TiledPlugin.ACTION_DELETE_TILE, "Delete");
                 actionsSet.put(TiledPlugin.ACTION_OPEN_OFFSET_PANEL, "Set offset");
+                tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, tiledPlugin.dataToSave.getTile(tileName));
                 tiledPlugin.getAPI().showPopup(actionsSet, tileName);
                 break;
             case MsgAPI.ACTION_DELETE_IMAGE_RESOURCE:

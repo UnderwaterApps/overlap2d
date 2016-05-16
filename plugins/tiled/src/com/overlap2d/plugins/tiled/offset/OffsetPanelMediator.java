@@ -36,7 +36,8 @@ public class OffsetPanelMediator extends SimpleMediator<OffsetPanel> {
 
         switch (notification.getName()) {
             case TiledPlugin.ACTION_OPEN_OFFSET_PANEL:
-                tiledPlugin.offsetPanel.show(tiledPlugin.getAPI().getUIStage());
+                viewComponent.refreshOffsetValues();
+                viewComponent.show(tiledPlugin.getAPI().getUIStage());
                 break;
             case TiledPlugin.TILE_GRID_OFFSET_ADDED:
                 Vector2 offsetValue = notification.getBody();
