@@ -4,6 +4,8 @@ import com.badlogic.gdx.utils.Array;
 import com.overlap2d.plugins.tiled.data.ParameterVO;
 import com.overlap2d.plugins.tiled.data.TileVO;
 
+import java.util.stream.StreamSupport;
+
 /**
  * Created by mariam on 3/23/16.
  */
@@ -20,7 +22,7 @@ public class DataToSave {
     public void addTile(String tileDrawableName) {
         TileVO newTile = new TileVO(tileDrawableName);
         if (!tiles.contains(newTile, false)) {
-            tiles.add(new TileVO(tileDrawableName));
+            tiles.add(newTile);
         }
     }
 
@@ -42,10 +44,12 @@ public class DataToSave {
         });
     }
 
-    public Array<String> getTileNames() {
-        Array<String> tileNames = new Array<>();
-        tiles.forEach(tile -> tileNames.add(tile.regionName));
-        return tileNames;
+    public Array<TileVO> getTiles() {
+        return tiles;
+    }
+
+    public boolean containsTile(String regionName) {
+        return StreamSupport.stream(tiles.spliterator(), false).anyMatch(tile -> tile.regionName.equals(regionName));
     }
 
     public ParameterVO getParameterVO() {

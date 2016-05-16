@@ -11,10 +11,12 @@ public class TileVO {
     public Vector2 gridOffset;
 
     public TileVO() {
+        gridOffset = new Vector2();
     }
 
     public TileVO(String regionName) {
         this.regionName = regionName;
+        gridOffset = new Vector2();
     }
 
     public TileVO(String regionName, Vector2 offset) {

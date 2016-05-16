@@ -97,7 +97,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                         if (!resourcePayloadObject.className.endsWith(".ImageResource")) return; //only image resource can become a tile!
 
                         String tileName = resourcePayloadObject.name;
-                        if (tiledPlugin.dataToSave.getTileNames().contains(tileName, false)) return;
+                        if (tiledPlugin.dataToSave.containsTile(tileName)) return;
 
                         tiledPlugin.facade.sendNotification(TiledPlugin.TILE_ADDED, tileName);
 
@@ -132,7 +132,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 break;
             case TiledPlugin.ACTION_DELETE_TILE:
                 String tn = notification.getBody();
-                if (!tiledPlugin.dataToSave.getTileNames().contains(tn, false)) return;
+                if (!tiledPlugin.dataToSave.containsTile(tn)) return;
                 tiledPlugin.dataToSave.removeTile(tn);
                 tiledPlugin.saveDataManager.save();
                 tiledPlugin.setSelectedTileName("");
