@@ -22,6 +22,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.commons.ResourcePayloadObject;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
+import com.uwsoft.editor.view.ui.widget.actors.SpriteAnimationActor;
+import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
 import com.uwsoft.editor.renderer.data.SpriteAnimationVO;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 import com.uwsoft.editor.view.ui.widget.actors.SpriteAnimationActor;
@@ -86,6 +89,7 @@ public class SpriteResource extends BoxItemResource {
         payload.className = getClass().getName();
 
         setHeight(thumbnailSize);
+        setRightClickEvent(UIResourcesBoxMediator.SPRITE_ANIMATION_RIGHT_CLICK, payload.name);
     }
 
 

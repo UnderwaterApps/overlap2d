@@ -67,6 +67,12 @@ public class ProjectManager extends BaseProxy {
     public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
     public static final String PROJECT_DATA_UPDATED = EVENT_PREFIX + ".PROJECT_DATA_UPDATED";
 
+    private static final String IMAGE_DIR_PATH = "assets/orig/images";
+    private static final String SPINE_DIR_PATH = "assets/orig/spine-animations";
+    private static final String SPRITE_DIR_PATH = "assets/orig/sprite-animations";
+    private static final String SPRITER_DIR_PATH = "assets/orig/animations";
+    private static final String PARTICLE_DIR_PATH = "assets/orig/particles";
+
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
     private String currentProjectPath;
@@ -1166,5 +1172,51 @@ public class ProjectManager extends BaseProxy {
         }
 
         throw new IllegalStateException(String.format("The file %s is not found",path.toString()));
+
+    }
+
+    public boolean deleteSingleImage(String imageName) {
+        String imagesPath = currentProjectPath + File.separator + IMAGE_DIR_PATH + File.separator;
+        String filePath = imagesPath + imageName + ".png";
+        return (new File(filePath)).delete();
+    }
+
+    public boolean deleteParticle(String particleName) {
+        String particlePath = currentProjectPath + File.separator + PARTICLE_DIR_PATH + File.separator;
+        String filePath = particlePath + particleName;
+        return (new File(filePath)).delete();
+    }
+
+    public boolean deleteSpineAnimation(String spineName) {
+        String spinePath = currentProjectPath + File.separator + SPINE_DIR_PATH + File.separator;
+        String filePath = spinePath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    public boolean deleteSpriteAnimation(String spineName) {
+        String spritePath = currentProjectPath + File.separator + SPRITE_DIR_PATH + File.separator;
+        String filePath = spritePath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    public boolean deleteSpriterAnimation(String spineName) {
+        String spriterPath = currentProjectPath + File.separator + SPRITER_DIR_PATH + File.separator;
+        String filePath = spriterPath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    private boolean deleteDirectory(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (!file.exists()) {
+                return true;
+            }
+        }
+        return false;
     }
 }
