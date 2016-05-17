@@ -28,7 +28,7 @@ public class DeleteImageResource extends NonRevertibleCommand {
     @Override
     public void doAction() {
         String imageName = notification.getBody();
-        if (projectManager.deleteImage(imageName)) {
+        if (projectManager.deleteSingleImage(imageName)) {
             deleteEntitiesWithImages(sandbox.getRootEntity(), imageName);
             deleteAllItemsImages(imageName);
             ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
