@@ -18,12 +18,6 @@
 
 package com.uwsoft.editor.utils.runtime;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Set;
-
 import com.badlogic.ashley.core.Component;
 import com.badlogic.ashley.core.Entity;
 import com.badlogic.ashley.core.Family;
@@ -32,10 +26,14 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.uwsoft.editor.renderer.SceneLoader;
 import com.uwsoft.editor.renderer.components.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
 import com.uwsoft.editor.renderer.data.CompositeVO;
 import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.view.stage.Sandbox;
+
+import java.util.*;
+import java.util.function.Consumer;
 
 /**
  * Created by azakhary on 6/9/2015.
@@ -237,4 +235,36 @@ public class EntityUtils {
 
         return layerMapComponent.getLayer(zIndexComponent.layerName);
     }
+
+    /**
+     * iterate over children recursively and do some operations
+     *
+     * @param root
+     * @param action
+     */
+    public static void applyActionRecursivelyOnEntities(Entity root, Consumer<Entity> action) {
+        action.accept(root);
+        NodeComponent nodeComponent = ComponentRetriever.get(root, NodeComponent.class);
+        if (nodeComponent != null && nodeComponent.children != null) {
+            for (Entity targetEntity : nodeComponent.children) {
+                applyActionRecursivelyOnEntities(targetEntity, action);
+            }
+        }
+    }
+
+    public static void applyActionRecursivelyOnLibraryItems(CompositeItemVO rootCompositeItemVo, Consumer<CompositeItemVO> action) {
+        action.accept(rootCompositeItemVo);
+        if (rootCompositeItemVo.composite != null && rootCompositeItemVo.composite.sComposites.size() != 0) {
+            for (CompositeItemVO currentCompositeItemVo : rootCompositeItemVo.composite.sComposites) {
+                applyActionRecursivelyOnLibraryItems(currentCompositeItemVo, action);
+            }
+        }
+    }
+
+    public static void removeEntities(ArrayList<Entity> entityList) {
+        for (Entity entity : entityList) {
+            Sandbox.getInstance().getEngine().removeEntity(entity);
+        }
+    }
+
 }
