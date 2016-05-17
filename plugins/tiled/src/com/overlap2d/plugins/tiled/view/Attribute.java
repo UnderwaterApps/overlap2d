@@ -14,7 +14,7 @@ public class Attribute extends Table {
     public Attribute(AttributeVO attributeVO) {
         add(new VisLabel(attributeVO.title));
         VisTextField visTextField = new VisTextField();
-        visTextField.setTextFieldFilter(new FloatDigitsOnlyFilter(false));
+        visTextField.setTextFieldFilter(new FloatDigitsOnlyFilter(attributeVO.acceptNegativeValues));
         visTextField.setMaxLength(5);
         visTextField.setText(attributeVO.value+"");
         visTextField.setTextFieldListener((VisTextField textField, char c) -> {

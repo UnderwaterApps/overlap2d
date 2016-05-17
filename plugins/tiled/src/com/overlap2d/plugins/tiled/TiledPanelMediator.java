@@ -24,10 +24,12 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.utils.DragAndDrop;
 import com.commons.MsgAPI;
 import com.commons.ResourcePayloadObject;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
+import com.uwsoft.editor.renderer.components.MainItemComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.vo.CursorData;
 
@@ -57,14 +59,15 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 SCENE_LOADED,
                 TiledPlugin.TILE_ADDED,
                 TiledPlugin.TILE_SELECTED,
-                TiledPlugin.DELETE_TILE,
+                TiledPlugin.ACTION_DELETE_TILE,
+                TiledPlugin.ACTION_SET_OFFSET,
                 TiledPlugin.PANEL_OPEN,
                 TiledPlugin.OPEN_DROP_DOWN,
                 TiledPlugin.GRID_CHANGED,
                 SettingsTab.OK_BTN_CLICKED,
                 MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM,
                 MsgAPI.ACTION_DELETE_IMAGE_RESOURCE,
-                MsgAPI.ADD_TARGET,
+                MsgAPI.ITEM_DATA_UPDATED,
                 MsgAPI.TOOL_SELECTED
         };
     }
@@ -95,7 +98,7 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                         if (!resourcePayloadObject.className.endsWith(".ImageResource")) return; //only image resource can become a tile!
 
                         String tileName = resourcePayloadObject.name;
-                        if (tiledPlugin.dataToSave.getTileNames().contains(tileName, false)) return;
+                        if (tiledPlugin.dataToSave.containsTile(tileName)) return;
 
                         tiledPlugin.facade.sendNotification(TiledPlugin.TILE_ADDED, tileName);
 
@@ -120,19 +123,21 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
             case TiledPlugin.OPEN_DROP_DOWN:
                 tileName = notification.getBody();
                 HashMap<String, String> actionsSet = new HashMap<>();
-                actionsSet.put(TiledPlugin.DELETE_TILE, "Delete");
-                tiledPlugin.getPluginAPI().showPopup(actionsSet, tileName);
+                actionsSet.put(TiledPlugin.ACTION_DELETE_TILE, "Delete");
+                actionsSet.put(TiledPlugin.ACTION_OPEN_OFFSET_PANEL, "Set offset");
+                tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, tiledPlugin.dataToSave.getTile(tileName));
+                tiledPlugin.getAPI().showPopup(actionsSet, tileName);
                 break;
             case MsgAPI.ACTION_DELETE_IMAGE_RESOURCE:
                 tileName = notification.getBody();
-                tiledPlugin.facade.sendNotification(TiledPlugin.DELETE_TILE, tileName);
+                tiledPlugin.facade.sendNotification(TiledPlugin.ACTION_DELETE_TILE, tileName);
                 break;
-            case TiledPlugin.DELETE_TILE:
+            case TiledPlugin.ACTION_DELETE_TILE:
                 String tn = notification.getBody();
-                if (!tiledPlugin.dataToSave.getTileNames().contains(tn, false)) return;
+                if (!tiledPlugin.dataToSave.containsTile(tn)) return;
                 tiledPlugin.dataToSave.removeTile(tn);
                 tiledPlugin.saveDataManager.save();
-                tiledPlugin.selectedTileName = "";
+                tiledPlugin.setSelectedTileVO(new TileVO());
 
                 viewComponent.removeTile();
                 break;
@@ -186,7 +191,11 @@ public class TiledPanelMediator extends SimpleMediator<TiledPanel> {
                 tiledPlugin.dataToSave.setGrid(dimensionsComponent.width, dimensionsComponent.height);
                 tiledPlugin.facade.sendNotification(TiledPlugin.GRID_CHANGED);
                 break;
-            case MsgAPI.ADD_TARGET:
+            case MsgAPI.ITEM_DATA_UPDATED:
+                Entity item = notification.getBody();
+                if (tiledPlugin.isTile(item)) {
+                    ComponentRetriever.get(item, MainItemComponent.class).tags.remove(TiledPlugin.TILE_TAG);
+                }
                 break;
         }
     }

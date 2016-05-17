@@ -14,6 +14,7 @@ import com.kotcrab.vis.ui.widget.VisScrollPane;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.overlap2d.plugins.tiled.TiledPanel;
 import com.overlap2d.plugins.tiled.TiledPlugin;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 
 
@@ -26,7 +27,7 @@ public class GridTilesTab extends DefaultTab {
 
     private int tilesCount = 19;
     private Array<VisImageButton> tiles;
-    private Array<String> savedTiles;
+    private Array<TileVO> savedTiles;
     private int tileIndex;
     private VisScrollPane pane;
     private boolean isBottomEdge;
@@ -40,7 +41,7 @@ public class GridTilesTab extends DefaultTab {
         tiledPlugin = panel.tiledPlugin;
         resourcesManager = tiledPlugin.pluginRM;
         tiles = new Array<>();
-        savedTiles = tiledPlugin.dataToSave.getTileNames();
+        savedTiles = tiledPlugin.dataToSave.getTiles();
         tileIndex = savedTiles.size;
     }
 
@@ -82,12 +83,12 @@ public class GridTilesTab extends DefaultTab {
         panel.pack();
         scrollTiles();
         tiles.get(tileIndex).setChecked(true);
-        tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, tileName);
+        tiledPlugin.facade.sendNotification(TiledPlugin.TILE_SELECTED, new TileVO(tileName));
         tileIndex++;
     }
 
-    public void selectTile(String tileName) {
-        tiledPlugin.selectedTileName = tileName;
+    public void selectTile(TileVO tileVO) {
+        tiledPlugin.setSelectedTileVO(tileVO);
     }
 
     public void removeTile() {
@@ -138,7 +139,7 @@ public class GridTilesTab extends DefaultTab {
             imageBoxStyle.over = active;
             Drawable tileDrawable = null;
             if (i < savedTiles.size) {
-                tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(savedTiles.get(i)));
+                tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(savedTiles.get(i).regionName));
             } else if (!tileName.equals("")) {
                 if (i == tileIndex) {
                     tileDrawable = new TextureRegionDrawable(resourcesManager.getTextureRegion(tileName));
@@ -171,7 +172,7 @@ public class GridTilesTab extends DefaultTab {
                     super.touchUp(event, x, y, pointer, button);
 
                     if(button == Input.Buttons.RIGHT) {
-                        tiledPlugin.facade.sendNotification(TiledPlugin.OPEN_DROP_DOWN, savedTiles.get(index));
+                        tiledPlugin.facade.sendNotification(TiledPlugin.OPEN_DROP_DOWN, savedTiles.get(index).regionName);
                         return;
                     }
 

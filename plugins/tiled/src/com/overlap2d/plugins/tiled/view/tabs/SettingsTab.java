@@ -29,11 +29,9 @@ public class SettingsTab extends DefaultTab {
 
     @Override
     public void initView() {
-//        content.setDebug(true);
-
         Array<AttributeVO> gridAttributes = new Array<>();
-        gridAttributes.add(new AttributeVO("Width: ", currentParameters.gridWidth));
-        gridAttributes.add(new AttributeVO("Height: ", currentParameters.gridHeight));
+        gridAttributes.add(new AttributeVO("Width", currentParameters.gridWidth));
+        gridAttributes.add(new AttributeVO("Height", currentParameters.gridHeight));
         CategoryVO gridVO = new CategoryVO("Grid size: ", gridAttributes);
         grid = new Category(gridVO);
         content.add(grid)
@@ -69,8 +67,8 @@ public class SettingsTab extends DefaultTab {
 
     public void resetGridCategory() {
         Array<AttributeVO> gridAttributes = new Array<>();
-        gridAttributes.add(new AttributeVO("Width: ", currentParameters.gridWidth));
-        gridAttributes.add(new AttributeVO("Height: ", currentParameters.gridHeight));
+        gridAttributes.add(new AttributeVO("Width", currentParameters.gridWidth));
+        gridAttributes.add(new AttributeVO("Height", currentParameters.gridHeight));
         grid.reInitView(gridAttributes);
     }
 }

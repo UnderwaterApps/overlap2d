@@ -19,19 +19,18 @@
 package com.overlap2d.plugins.tiled;
 
 import com.badlogic.ashley.core.Engine;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 import com.commons.UIDraggablePanel;
 import com.kotcrab.vis.ui.VisUI;
-import com.kotcrab.vis.ui.widget.VisDialog;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.kotcrab.vis.ui.widget.tabbedpane.Tab;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPane;
 import com.kotcrab.vis.ui.widget.tabbedpane.TabbedPaneListener;
+import com.overlap2d.plugins.tiled.data.TileVO;
 import com.overlap2d.plugins.tiled.manager.ResourcesManager;
 import com.overlap2d.plugins.tiled.view.tabs.GridTilesTab;
 import com.overlap2d.plugins.tiled.view.tabs.SettingsTab;
@@ -54,7 +53,6 @@ public class TiledPanel extends UIDraggablePanel {
 
     public TiledPlugin tiledPlugin;
     public Facade facade;
-    public boolean isOpen = false;
 
     protected TabbedPane tabbedPane;
     protected VisTable tabTable; //table inside of each tab
@@ -184,26 +182,12 @@ public class TiledPanel extends UIDraggablePanel {
         settingsTab.resetGridCategory();
     }
 
-    @Override
-    public void hide() {
-        super.hide();
-
-        isOpen = false;
-    }
-
-    @Override
-    public VisDialog show(Stage stage) {
-        isOpen = true;
-
-        return super.show(stage);
-    }
-
     public void addTile(String tileName) {
         tilesTab.addTile(tileName);
     }
 
-    public void selectTile(String tileName) {
-        tilesTab.selectTile(tileName);
+    public void selectTile(TileVO tileVO) {
+        tilesTab.selectTile(tileVO);
     }
 
     public void removeTile() {
