@@ -39,6 +39,7 @@ import com.uwsoft.editor.renderer.components.TextureRegionComponent;
 import com.uwsoft.editor.renderer.components.TransformComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.CustomVariables;
 import net.mountainblade.modular.annotations.Implementation;
 
 
@@ -76,9 +77,13 @@ public class TiledPlugin extends O2DPluginAdapter {
     public OffsetPanel offsetPanel;
 
     private TileVO selectedTileVO;
+    private CustomVariables currentEntityCustomVariables;
+    private MainItemComponent currentEntityMainItemComponent;
+    private TransformComponent currentEntityTransformComponent;
 
     public TiledPlugin() {
         selectedTileVO = new TileVO();
+        currentEntityCustomVariables = new CustomVariables();
     }
 
     @Override
@@ -123,21 +128,35 @@ public class TiledPlugin extends O2DPluginAdapter {
     }
 
 
-    public Entity getPluginEntityWithCoordinate(float x, float y) {
+    public Entity getPluginEntityWithParams(int row, int column) {
         for (Entity entity : pluginAPI.getProjectEntities()) {
             if(!isTile(entity)) continue;
-            TransformComponent transformComponent = ComponentRetriever.get(entity, TransformComponent.class);
-            TextureRegionComponent textureRegionComponent = ComponentRetriever.get(entity, TextureRegionComponent.class);
-            float offsetX = dataToSave.getTile(textureRegionComponent.regionName).gridOffset.x;
-            float offsetY = dataToSave.getTile(textureRegionComponent.regionName).gridOffset.y;
-            Rectangle tmp = new Rectangle(
-                    transformComponent.x + offsetX,
-                    transformComponent.y + offsetY,
-                    dataToSave.getParameterVO().gridWidth - offsetX,
-                    dataToSave.getParameterVO().gridHeight - offsetY);
-
             boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
-            if (isEntityVisible && tmp.contains(x, y) && isOnCurrentSelectedLayer(entity)) {
+            if (!isEntityVisible || !isOnCurrentSelectedLayer(entity)) continue;
+
+            currentEntityMainItemComponent = ComponentRetriever.get(entity, MainItemComponent.class);
+            currentEntityCustomVariables.loadFromString(currentEntityMainItemComponent.customVars);
+            if (currentEntityCustomVariables.getIntegerVariable(ROW) == row
+                    && currentEntityCustomVariables.getIntegerVariable(COLUMN) == column) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+    public Entity getPluginEntityWithCoords(float x, float y) {
+        for (Entity entity : pluginAPI.getProjectEntities()) {
+            if (!isTile(entity)) continue;
+            boolean isEntityVisible = pluginAPI.isEntityVisible(entity);
+            if (!isEntityVisible || !isOnCurrentSelectedLayer(entity)) continue;
+
+            currentEntityTransformComponent = ComponentRetriever.get(entity, TransformComponent.class);
+            Rectangle tmp = new Rectangle(
+                    currentEntityTransformComponent.x,
+                    currentEntityTransformComponent.y,
+                    dataToSave.getParameterVO().gridWidth,
+                    dataToSave.getParameterVO().gridHeight);
+            if (tmp.contains(x, y)) {
                 return entity;
             }
         }

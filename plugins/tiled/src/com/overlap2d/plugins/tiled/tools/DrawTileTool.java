@@ -131,21 +131,22 @@ public class DrawTileTool implements Tool {
 
     private void drawImage(float x, float y) {
         if (tiledPlugin.getSelectedTileName().equals("")) return;
-        Entity underneathTile = tiledPlugin.getPluginEntityWithCoordinate(x, y);
+
+        float newX = MathUtils.floor(x / gridWidth) * gridWidth + tiledPlugin.getSelectedTileGridOffset().x;
+        float newY = MathUtils.floor(y / gridHeight) * gridHeight + tiledPlugin.getSelectedTileGridOffset().y;
+        int row = MathUtils.floor(newY / gridHeight);
+        int column = MathUtils.floor(newX / gridWidth);
+
+        Entity underneathTile = tiledPlugin.getPluginEntityWithParams(row, column);
         if (underneathTile != null) {
             updateRegion(underneathTile, tiledPlugin.getSelectedTileName());
             return;
         }
 
-        float newX = MathUtils.floor(x / gridWidth) * gridWidth + tiledPlugin.getSelectedTileGridOffset().x;
-        float newY = MathUtils.floor(y / gridHeight) * gridHeight + tiledPlugin.getSelectedTileGridOffset().y;
-
         Entity imageEntity = tiledPlugin.getAPI().drawImage(tiledPlugin.getSelectedTileName(), new Vector2(newX, newY));
         MainItemComponent mainItemComponent = ComponentRetriever.get(imageEntity, MainItemComponent.class);
         mainItemComponent.tags.add(TiledPlugin.TILE_TAG);
 
-        int row = MathUtils.floor(newY / gridHeight);
-        int column = MathUtils.floor(newX / gridWidth);
         CustomVariables customVariables = new CustomVariables();
         customVariables.setVariable(TiledPlugin.ROW, Integer.toString(row));
         customVariables.setVariable(TiledPlugin.COLUMN, Integer.toString(column));

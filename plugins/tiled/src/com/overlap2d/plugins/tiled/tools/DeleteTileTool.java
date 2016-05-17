@@ -98,7 +98,7 @@ public class DeleteTileTool implements Tool {
     }
 
     private void deleteEntityWithCoordinate (float x, float y) {
-        Entity entity = tiledPlugin.getPluginEntityWithCoordinate(x, y);
+        Entity entity = tiledPlugin.getPluginEntityWithCoords(x, y);
         if (entity != null) {
             deleteEntity(entity);
         }
