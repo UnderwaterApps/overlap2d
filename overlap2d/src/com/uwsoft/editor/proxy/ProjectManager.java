@@ -54,7 +54,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -67,6 +66,12 @@ public class ProjectManager extends BaseProxy {
 
     public static final String PROJECT_OPENED = EVENT_PREFIX + ".PROJECT_OPENED";
     public static final String PROJECT_DATA_UPDATED = EVENT_PREFIX + ".PROJECT_DATA_UPDATED";
+
+    private static final String IMAGE_DIR_PATH = "assets/orig/images";
+    private static final String SPINE_DIR_PATH = "assets/orig/spine-animations";
+    private static final String SPRITE_DIR_PATH = "assets/orig/sprite-animations";
+    private static final String SPRITER_DIR_PATH = "assets/orig/animations";
+    private static final String PARTICLE_DIR_PATH = "assets/orig/particles";
 
     public ProjectVO currentProjectVO;
     public ProjectInfoVO currentProjectInfoVO;
@@ -260,7 +265,7 @@ public class ProjectManager extends BaseProxy {
         resourceManager.loadCurrentProjectAssets(currentProjectPath + "/assets/" + resolutionManager.currentResolutionName + "/pack/pack.atlas");
     }
 
-    private void loadProjectData(String projectPath) {
+    public void loadProjectData(String projectPath) {
         // All legit loading assets
         ResolutionManager resolutionManager = facade.retrieveProxy(ResolutionManager.NAME);
         ResourceManager resourceManager = facade.retrieveProxy(ResourceManager.NAME);
@@ -1155,10 +1160,47 @@ public class ProjectManager extends BaseProxy {
     }
 
     public boolean deleteImage(String imageName) {
-        String imagesPath = currentProjectPath + "/assets/orig/images/";
+        String imagesPath = currentProjectPath + File.separator + IMAGE_DIR_PATH + File.separator;
         String filePath = imagesPath + imageName + ".png";
+        return (new File(filePath)).delete();
+    }
 
-        File file = new File(filePath);
-        return file.delete();
+    public boolean deleteParticle(String particleName) {
+        String particlePath = currentProjectPath + File.separator + PARTICLE_DIR_PATH + File.separator;
+        String filePath = particlePath + particleName;
+        return (new File(filePath)).delete();
+    }
+
+    public boolean deleteSpineAnimation(String spineName) {
+        String spinePath = currentProjectPath + File.separator + SPINE_DIR_PATH + File.separator;
+        String filePath = spinePath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    public boolean deleteSpriteAnimation(String spineName) {
+        String spritePath = currentProjectPath + File.separator + SPRITE_DIR_PATH + File.separator;
+        String filePath = spritePath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    public boolean deleteSpriterAnimation(String spineName) {
+        String spriterPath = currentProjectPath + File.separator + SPRITER_DIR_PATH + File.separator;
+        String filePath = spriterPath + spineName;
+        return deleteDirectory(filePath);
+    }
+
+    private boolean deleteDirectory(String path) {
+        File file = new File(path);
+        if (file.exists()) {
+            try {
+                FileUtils.deleteDirectory(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (!file.exists()) {
+                return true;
+            }
+        }
+        return false;
     }
 }

@@ -40,7 +40,9 @@ public class UIResourcesBoxMediator extends PanelMediator<UIResourcesBox> {
     private static final String PREFIX = "com.uwsoft.editor.view.ui.box";
 
     public static final String IMAGE_RIGHT_CLICK = "IMAGE_RIGHT_CLICK";
-    public static final String ANIMATION_RIGHT_CLICK = "ANIMATION_RIGHT_CLICK";
+    public static final String SPINE_ANIMATION_RIGHT_CLICK = "SPINE_ANIMATION_RIGHT_CLICK";
+    public static final String SPRITE_ANIMATION_RIGHT_CLICK = "SPRITE_ANIMATION_RIGHT_CLICK";
+    public static final String SPRITER_ANIMATION_RIGHT_CLICK = "SPRITER_ANIMATION_RIGHT_CLICK";
     public static final String LIBRARY_ITEM_RIGHT_CLICK = "LIBRARY_ITEM_RIGHT_CLICK";
     public static final String PARTICLE_EFFECT_RIGHT_CLICK = "PARTICLE_EFFECT_RIGHT_CLICK";
 

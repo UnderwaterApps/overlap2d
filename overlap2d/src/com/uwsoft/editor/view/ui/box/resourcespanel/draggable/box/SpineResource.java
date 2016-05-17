@@ -21,6 +21,7 @@ package com.uwsoft.editor.view.ui.box.resourcespanel.draggable.box;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.widget.actors.SpineActor;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.view.ui.box.resourcespanel.draggable.payloads.ResourcePayloadObject;
@@ -93,6 +94,7 @@ public class SpineResource extends BoxItemResource {
         setHeight(thumbnailSize);
 
         super.act(1f);
+        setRightClickEvent(UIResourcesBoxMediator.SPINE_ANIMATION_RIGHT_CLICK, payload.name);
     }
 
     @Override

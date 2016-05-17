@@ -43,6 +43,10 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
     public static final Integer LIBRARY_ITEM_ACTION_SET = 2;
     public static final Integer IMAGE_RESOURCE_ACTION_SET = 3;
     public static final Integer RULER_RESOURCE_ACTION_SET = 4;
+    public static final Integer SPINE_ANIMATION_ACTION_SET = 5;
+    public static final Integer SPRITE_ANIMATION_ACTION_SET = 7;
+    public static final Integer SPRITER_ANIMATION_ACTION_SET = 8;
+    public static final Integer PARTICLE_ACTION_SET = 9;
 
     private Sandbox sandbox;
 
@@ -71,6 +75,18 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.put(LIBRARY_ITEM_ACTION_SET, new Array<>());
         actionSets.get(LIBRARY_ITEM_ACTION_SET).add(MsgAPI.ACTION_DELETE_LIBRARY_ITEM);
 
+        actionSets.put(SPINE_ANIMATION_ACTION_SET, new Array<>());
+        actionSets.get(SPINE_ANIMATION_ACTION_SET).add(MsgAPI.ACTION_DELETE_SPINE_ANIMATION_RESOURCE);
+
+        actionSets.put(SPRITE_ANIMATION_ACTION_SET, new Array<>());
+        actionSets.get(SPRITE_ANIMATION_ACTION_SET).add(MsgAPI.ACTION_DELETE_SPRITE_ANIMATION_RESOURCE);
+
+        actionSets.put(SPRITER_ANIMATION_ACTION_SET, new Array<>());
+        actionSets.get(SPRITER_ANIMATION_ACTION_SET).add(MsgAPI.ACTION_DELETE_SPRITER_ANIMATION_RESOURCE);
+
+        actionSets.put(PARTICLE_ACTION_SET, new Array<>());
+        actionSets.get(PARTICLE_ACTION_SET).add(MsgAPI.ACTION_DELETE_PARTICLE_EFFECT);
+
         actionSets.put(ITEMS_ACTIONS_SET, new Array<>());
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CUT);
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_COPY);
@@ -92,7 +108,9 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
                 MsgAPI.ITEM_RIGHT_CLICK,
                 UIDropDownMenu.ITEM_CLICKED,
                 UIResourcesBoxMediator.IMAGE_RIGHT_CLICK,
-                UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK,
+                UIResourcesBoxMediator.SPINE_ANIMATION_RIGHT_CLICK,
+                UIResourcesBoxMediator.SPRITE_ANIMATION_RIGHT_CLICK,
+                UIResourcesBoxMediator.SPRITER_ANIMATION_RIGHT_CLICK,
                 UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK,
                 UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK,
                 RulersUI.RIGHT_CLICK_RULER,
@@ -135,14 +153,20 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
             case UIResourcesBoxMediator.IMAGE_RIGHT_CLICK:
                 showPopup(IMAGE_RESOURCE_ACTION_SET, notification.getBody());
                 break;
-            case UIResourcesBoxMediator.ANIMATION_RIGHT_CLICK:
-                //showPopup(RESOURCE_ACTION_SET, notification.getBody());
+            case UIResourcesBoxMediator.SPINE_ANIMATION_RIGHT_CLICK:
+                showPopup(SPINE_ANIMATION_ACTION_SET, notification.getBody());
+                break;
+            case UIResourcesBoxMediator.SPRITE_ANIMATION_RIGHT_CLICK:
+                showPopup(SPRITE_ANIMATION_ACTION_SET, notification.getBody());
+                break;
+            case UIResourcesBoxMediator.SPRITER_ANIMATION_RIGHT_CLICK:
+                showPopup(SPRITER_ANIMATION_ACTION_SET, notification.getBody());
                 break;
             case UIResourcesBoxMediator.LIBRARY_ITEM_RIGHT_CLICK:
                 showPopup(LIBRARY_ITEM_ACTION_SET, notification.getBody());
                 break;
             case UIResourcesBoxMediator.PARTICLE_EFFECT_RIGHT_CLICK:
-                //showPopup(RESOURCE_ACTION_SET, notification.getBody());
+                showPopup(PARTICLE_ACTION_SET, notification.getBody());
                 break;
             case RulersUI.RIGHT_CLICK_RULER:
             	showPopup(RULER_RESOURCE_ACTION_SET, notification.getBody());
