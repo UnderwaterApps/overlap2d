@@ -85,20 +85,20 @@ public class DeleteTileTool implements Tool {
         if(isHotswapped) {
             if(keycode == Input.Keys.SHIFT_LEFT) {
                 isHotswapped = false;
-                tiledPlugin.getPluginAPI().toolHotSwapBack();
+                tiledPlugin.getAPI().toolHotSwapBack();
             }
         }
     }
 
     private void deleteEntity(Entity entity) {
         if (tiledPlugin.isTile(entity) && tiledPlugin.isOnCurrentSelectedLayer(entity)) {
-            tiledPlugin.getPluginAPI().removeFollower(entity);
-            tiledPlugin.getPluginAPI().getEngine().removeEntity(entity);
+            tiledPlugin.getAPI().removeFollower(entity);
+            tiledPlugin.getAPI().getEngine().removeEntity(entity);
         }
     }
 
     private void deleteEntityWithCoordinate (float x, float y) {
-        Entity entity = tiledPlugin.getPluginEntityWithCoordinate(x, y);
+        Entity entity = tiledPlugin.getPluginEntityWithCoords(x, y);
         if (entity != null) {
             deleteEntity(entity);
         }
