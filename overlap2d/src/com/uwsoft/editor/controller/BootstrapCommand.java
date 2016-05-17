@@ -27,8 +27,7 @@ import com.uwsoft.editor.controller.commands.component.UpdateLabelDataCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateLightDataCommand;
 import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCommand;
 import com.uwsoft.editor.controller.commands.component.UpdateSpriteAnimationDataCommand;
-import com.uwsoft.editor.controller.commands.resource.DeleteImageResource;
-import com.uwsoft.editor.controller.commands.resource.DeleteLibraryItem;
+import com.uwsoft.editor.controller.commands.resource.*;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -68,7 +67,7 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(MsgAPI.ACTION_SET_SELECTION, SetSelectionCommand.class);
         facade.registerCommand(MsgAPI.ACTION_ADD_SELECTION, AddSelectionCommand.class);
         facade.registerCommand(MsgAPI.ACTION_RELEASE_SELECTION, ReleaseSelectionCommand.class);
-        
+
         facade.registerCommand(MsgAPI.ACTION_UPDATE_RULER_POSITION, ChangeRulerPositionCommand.class);
         // DATA MODIFY by components
         facade.registerCommand(MsgAPI.ACTION_UPDATE_ITEM_DATA, UpdateEntityComponentsCommand.class);
@@ -87,5 +86,9 @@ public class BootstrapCommand extends SimpleCommand {
         // Resources
         facade.registerCommand(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE, DeleteImageResource.class);
         facade.registerCommand(MsgAPI.ACTION_DELETE_LIBRARY_ITEM, DeleteLibraryItem.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_PARTICLE_EFFECT, DeleteParticleEffect.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_SPINE_ANIMATION_RESOURCE, DeleteSpineAnimation.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_SPRITE_ANIMATION_RESOURCE, DeleteSpriteAnimation.class);
+        facade.registerCommand(MsgAPI.ACTION_DELETE_SPRITER_ANIMATION_RESOURCE, DeleteSpriterAnimation.class);
     }
 }

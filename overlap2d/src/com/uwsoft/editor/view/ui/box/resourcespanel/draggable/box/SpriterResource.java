@@ -22,6 +22,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.commons.ResourcePayloadObject;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.SpriterVO;
+import com.uwsoft.editor.view.ui.box.UIResourcesBoxMediator;
 import com.uwsoft.editor.view.ui.widget.actors.SpriterActor;
 
 /**
@@ -71,6 +72,7 @@ public class SpriterResource extends BoxItemResource {
         setHeight(thumbnailSize);
 
         super.act(1f);
+        setRightClickEvent(UIResourcesBoxMediator.SPRITER_ANIMATION_RIGHT_CLICK, payload.name);
     }
 
 
