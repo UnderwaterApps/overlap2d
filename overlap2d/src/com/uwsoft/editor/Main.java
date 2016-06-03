@@ -72,7 +72,7 @@ public class Main {
             JglfwApplicationConfiguration config = new JglfwApplicationConfiguration();
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
-            config.backgroundFPS = 0;
+            config.backgroundFPS = 60;
             config.title = "Overlap2D - v" + AppConfig.getInstance().version;
             new JglfwApplication(overlap2D, config);
         } else {
@@ -82,7 +82,7 @@ public class Main {
             config.resizable = false;
             config.width = (int) (width);
             config.height = (int) (height - height * .04);
-            config.backgroundFPS = 0;
+            config.backgroundFPS = 60;
             mainFrame = new LwjglFrame(overlap2D, config);
             mainFrame.setExtendedState(mainFrame.getExtendedState() | JFrame.MAXIMIZED_BOTH);
             toggleVisible();
