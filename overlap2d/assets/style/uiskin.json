@@ -115,7 +115,7 @@
       "up": "button",
       "over": "button-over",
       "disabled": "button",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
@@ -124,7 +124,7 @@
       "up": "button",
       "checked": "button-down",
       "over": "button-over",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white"
     }
   },
@@ -145,12 +145,12 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.SelectBox$SelectBoxStyle": {
     "default": {
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "background": "default-select",
       "scrollStyle": "default",
       "listStyle": {
-        "font": "default-font",
+        "font": "default-font-normal",
         "selection": "list-selection",
         "background": "select-box-list-bg"
       }
@@ -179,23 +179,23 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Window$WindowStyle": {
     "default": {
-      "titleFont": "big-font",
+      "titleFont": "big-font-normal",
       "background": "window",
       "titleFontColor": "white"
     },
     "noborder": {
-      "titleFont": "big-font",
+      "titleFont": "big-font-normal",
       "background": "window-noborder",
       "titleFontColor": "white"
     },
     "dialog": {
-      "titleFont": "big-font",
+      "titleFont": "big-font-normal",
       "background": "window",
       "titleFontColor": "white",
       "stageBackground": "dialogDim"
     },
     "box": {
-      "titleFont": "big-font",
+      "titleFont": "big-font-normal",
       "background": "box",
       "titleFontColor": "white"
     }
@@ -226,15 +226,15 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Label$LabelStyle": {
     "default": {
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white"
     },
     "small": {
-      "font": "small-font",
+      "font": "small-font-normal",
       "fontColor": "white"
     },
     "menuitem-shortcut": {
-      "font": "small-font",
+      "font": "small-font-normal",
       "fontColor": "overlap2d-menuitem-shortcut-grey"
     }
   },
@@ -242,7 +242,7 @@
     "default": {
       "selection": "selection",
       "background": "textfield",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "cursor": "cursor"
     }
@@ -251,14 +251,14 @@
     "default": {
       "checkboxOn": "check-on",
       "checkboxOff": "check-off",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey"
     },
     "radio": {
       "checkboxOn": "radio-on",
       "checkboxOff": "radio-off",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey"
     }
@@ -268,7 +268,7 @@
       "fontColorUnselected": "white",
       "selection": "list-selection",
       "fontColorSelected": "white",
-      "font": "default-font"
+      "font": "default-font-normal"
     }
   },
   "com.badlogic.gdx.scenes.scene2d.ui.Touchpad$TouchpadStyle": {
@@ -292,7 +292,7 @@
       "backgroundOver": "textfield-over",
       "focusBorder": "border",
       "errorBorder": "border-error",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
@@ -303,7 +303,7 @@
       "backgroundOver": "textfield-light-over",
       "focusBorder": "border",
       "errorBorder": "border-error",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey",
       "cursor": "cursor"
@@ -312,7 +312,7 @@
       "selection": "default-select-selection",
       "focusBorder": "border",
       "errorBorder": "border-error",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "cursor": "cursor"
     }
@@ -346,7 +346,7 @@
       "up": "button-dark",
       "over": "button-dark-over",
       "disabled": "button-dark",
-      "font": "big-font",
+      "font": "big-font-normal",
       "fontColor": "overlap2d-button-text-black",
       "disabledFontColor": "grey"
     },
@@ -363,14 +363,14 @@
       "down": "toolbar-over",
       "up": "toolbar-over",
       "fontColor": "white",
-      "font": "default-font"
+      "font": "default-font-normal"
     },
     "toggle": {
       "down": "button-down",
       "up": "button",
       "checked": "button-down",
       "over": "button-over",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "focusBorder": "border"
     },
@@ -378,7 +378,7 @@
       "down": "menu-bg-down",
       "up": "menu-bg-up",
       "over": "menu-bg-over",
-      "font": "big-font",
+      "font": "big-font-normal",
       "fontColor": "overlap2d-menuitem-grey"
     }
   },
@@ -391,7 +391,7 @@
       "resourceDown": "icon-library-over",
       "resourceOver": "icon-library-over",
       "labelStyle": {
-        "font": "small-font",
+        "font": "small-font-normal",
         "fontColor": "white"
       }
     },
@@ -403,7 +403,7 @@
       "resourceDown": "icon-particle-over",
       "resourceOver": "icon-particle-over",
       "labelStyle": {
-        "font": "small-font",
+        "font": "small-font-normal",
         "fontColor": "white"
       }
     }
@@ -614,7 +614,7 @@
       "checkboxOffDisabled": "check-off",
       "checkboxOnDisabled": "check-on-disabled",
       "focusBorder": "border",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey"
     },
@@ -627,7 +627,7 @@
       "checkboxOnDown": "radio-down-on",
       "checkboxOffDisabled": "radio-off",
       "checkboxOnDisabled": "radio-on-disabled",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "white",
       "disabledFontColor": "grey"
     }
@@ -672,7 +672,7 @@
       "up": "popup-menu",
       "over": "popup-menu-over",
       "disabled": "popup-menu",
-      "font": "default-font",
+      "font": "default-font-normal",
       "fontColor": "overlap2d-menuitem-grey",
       "disabledFontColor": "overlap2d-menuitem-disabled-grey",
       "subMenu": "sub-menu"
@@ -737,7 +737,7 @@
       "buttonStyle": {
         "up": "tab-inactive",
         "checked": "tab-active",
-        "font": "default-font",
+        "font": "default-font-normal",
         "fontColor": "white"
       }
     }
