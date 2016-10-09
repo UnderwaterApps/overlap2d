@@ -34,15 +34,6 @@ public class MenuItemListener extends ChangeListener {
 
     @Override
     public void changed(ChangeEvent event, Actor actor) {
-        if(menuType == null) {
-            if(data == null) {
-                facade.sendNotification(menuCommand);
-            } else {
-                facade.sendNotification(menuCommand, data);
-            }
-        } else {
             facade.sendNotification(menuCommand, data, menuType);
-        }
-
     }
 }
