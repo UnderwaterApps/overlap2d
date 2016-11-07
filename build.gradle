@@ -165,11 +165,6 @@ task dist(type: Jar) {
     from { configurations.compile.collect { zipTree(it) } }
     from files(project.assetsDir);
 
-	from {
-        (configurations.runtime).collect {
-            it.isDirectory() ? it : zipTree(it)
-        }
-	}
     manifest {
         attributes 'Main-Class': project.mainClassName
     }
