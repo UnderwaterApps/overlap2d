@@ -122,10 +122,6 @@ public class InputFileWidget extends VisTable {
             setValues(files);
         }
 
-        @Override
-        public void selected(FileHandle file) {
-            setValue(file);
-        }
 
         @Override
         public void canceled() {

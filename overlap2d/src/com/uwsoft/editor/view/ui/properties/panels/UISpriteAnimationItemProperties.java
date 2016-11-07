@@ -23,7 +23,8 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.widget.NumberSelector;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.kotcrab.vis.ui.widget.VisTextButton;
 import com.uwsoft.editor.event.KeyboardListener;
@@ -41,7 +42,8 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     public static final String EDIT_ANIMATIONS_CLICKED = "com.uwsoft.editor.view.ui.properties.panels.UISpriteAnimationItemProperties" + ".EDIT_ANIMATIONS_CLICKED";
 
 
-    private NumberSelector fpsSelector;
+    private Spinner fpsSpinner;
+    private IntSpinnerModel fpsModel;
     private VisSelectBox<String> animationsSelectBox;
     private VisSelectBox<String> playModesSelectBox;
     private VisTextButton editAnimationsButton;
@@ -51,13 +53,14 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     public UISpriteAnimationItemProperties() {
         super("Sprite Animation");
 
-        fpsSelector = new NumberSelector("", 0, 0, 120);
+        fpsModel = new IntSpinnerModel(0,0,120);
+        fpsSpinner = new Spinner("",fpsModel);
         animationsSelectBox = new VisSelectBox<>();
         playModesSelectBox = new VisSelectBox<>();
         editAnimationsButton = new VisTextButton("Edit animations");
 
         mainTable.add(createLabel("FPS:", Align.right)).padRight(5).fillX();
-        mainTable.add(fpsSelector).width(50).left();
+        mainTable.add(fpsSpinner).width(50).left();
         mainTable.row().padTop(5);
 
         mainTable.add(createLabel("Play modes:", Align.right)).padRight(5).fillX();
@@ -75,11 +78,11 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     }
 
     public void setFPS(int fps) {
-        fpsSelector.setValue(fps);
+        fpsModel.setValue(fps);
     }
 
     public int getFPS() {
-        return (int) fpsSelector.getValue();
+        return (int) fpsModel.getValue();
     }
 
     public void setPlayModes() {
@@ -135,7 +138,7 @@ public class UISpriteAnimationItemProperties extends UIItemCollapsibleProperties
     }
 
     private void setListeners() {
-        fpsSelector.addListener(new KeyboardListener(getUpdateEventName()));
+        fpsSpinner.addListener(new KeyboardListener(getUpdateEventName()));
 
         animationsSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
         playModesSelectBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));

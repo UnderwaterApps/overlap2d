@@ -1,2 +1,0 @@
-include 'overlap2d-common-api'
-project(':overlap2d-common-api').projectDir = new File(settingsDir, '../../overlap2d-common-api')
