@@ -58,6 +58,7 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
         switch (notification.getName()) {
             case UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED:
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                    private boolean firstRun = true;
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
@@ -65,8 +66,13 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
                     }
                     @Override
                     public void changed(Color newColor) {
-                        viewComponent.setAmbientColor(newColor);
-                        facade.sendNotification(viewComponent.getUpdateEventName());
+                        if(!firstRun) {
+                            viewComponent.setAmbientColor(newColor);
+                            facade.sendNotification(viewComponent.getUpdateEventName());
+                        }
+                        else{
+                            firstRun=false;
+                        }
                     }
                 });
 
