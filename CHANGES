@@ -1,3 +1,11 @@
+Overlap2D - 0.1.4
+------------------------------
+Updated versions of all relevant libraries used and performed a major code refactor to match the updated libraries.
+Bugfix:
+fixed a crash that occurs when spamming undo after a multiple object copy-paste to a new layer
+fixed Export settings dialog failing to save export settings
+fixed color picker defaulting to black every time it's opened
+
 Overlap2D - 0.1.3
 ------------------------------
 Bugfix:
