@@ -106,6 +106,7 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
         switch (notification.getName()) {
             case UIBasicItemProperties.TINT_COLOR_BUTTON_CLICKED:
                 ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                    private boolean firstRun = true;
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setTintColor(newColor);
@@ -114,8 +115,13 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
 
                     @Override
                     public void changed(Color newColor) {
-                        viewComponent.setTintColor(newColor);
-                        facade.sendNotification(viewComponent.getUpdateEventName());
+                        if(!firstRun) {
+                            viewComponent.setTintColor(newColor);
+                            facade.sendNotification(viewComponent.getUpdateEventName());
+                        }
+                        else{
+                            firstRun=false;
+                        }
                     }
                 });
 
