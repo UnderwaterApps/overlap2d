@@ -72,7 +72,7 @@ public class SetSelectionCommand extends RevertableCommand {
 
     @Override
     public void undoAction() {
-            Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
+        Sandbox.getInstance().getSelector().setSelections(EntityUtils.getByUniqueId(previousSelectionIds), true);
         facade.sendNotification(DONE);
     }
 }
