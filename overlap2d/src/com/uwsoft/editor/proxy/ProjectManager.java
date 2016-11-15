@@ -403,17 +403,14 @@ public class ProjectManager extends BaseProxy {
 
 
     public void importSpriteAnimationsIntoProject(final Array<FileHandle> fileHandles, ProgressHandler progressHandler) {
-       if (fileHandles == null) {
+        if (fileHandles == null) {
             return;
         }
         handler = progressHandler;
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
-
             String newAnimName = null;
-            
             String rawFileName = fileHandles.get(0).name();
             String fileExtension = FilenameUtils.getExtension(rawFileName);
             if (fileExtension.equals("png")) {
