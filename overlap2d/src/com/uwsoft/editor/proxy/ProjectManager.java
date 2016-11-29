@@ -24,8 +24,11 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.JsonWriter;
 import com.google.common.collect.Lists;
 import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.widget.file.FileChooser;
+import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.manager.PreferencesManager;
@@ -50,7 +53,10 @@ import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import java.awt.image.BufferedImage;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -140,6 +146,7 @@ public class ProjectManager extends BaseProxy {
 
         FileUtils.forceMkdir(new File(projPath));
         FileUtils.forceMkdir(new File(projPath + File.separator + "export"));
+        FileUtils.forceMkdir(new File(projPath + File.separator + "export/libraryItems"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "scenes"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig"));
@@ -213,7 +220,7 @@ public class ProjectManager extends BaseProxy {
                 String prjInfoFilePath = projectPath + "/project.dt";
                 FileHandle projectInfoFile = Gdx.files.internal(prjInfoFilePath);
                 String projectInfoContents = FileUtils.readFileToString(projectInfoFile.file());
-                ProjectInfoVO voInfo = json.fromJson(ProjectInfoVO.class, projectInfoContents);
+                ProjectInfoVO voInfo = json.fromJson(ProjectInfoVO.class, projectInfoContents);// here project reads all data from json
                 currentProjectInfoVO = voInfo;
 
             } catch (IOException e) {
@@ -274,11 +281,62 @@ public class ProjectManager extends BaseProxy {
 
     public void saveCurrentProject() {
         try {
+            //here project saves all necessary files
             FileUtils.writeStringToFile(new File(currentProjectPath + "/project.pit"), currentProjectVO.constructJsonString(), "utf-8");
             FileUtils.writeStringToFile(new File(currentProjectPath + "/project.dt"), currentProjectInfoVO.constructJsonString(), "utf-8");
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void exportAllLibraryItems() {
+        Json json = new Json(JsonWriter.OutputType.json);
+        String jsonString;
+        for (String libraryItemName : currentProjectInfoVO.libraryItems.keySet()) {
+            CompositeItemVO compositeItemVO = currentProjectInfoVO.libraryItems.get(libraryItemName);
+            jsonString = json.toJson(compositeItemVO);
+            json.prettyPrint(jsonString);
+            try {
+                FileUtils.writeStringToFile(new File(currentProjectPath + "\\export\\libraryItems\\" + libraryItemName + ".json"), jsonString, "utf-8");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    public void importLibraryItems() {
+        Sandbox sandbox = Sandbox.getInstance();
+        //chooser creation
+        FileChooser fileChooser = new FileChooser(FileChooser.Mode.OPEN);
+        fileChooser.setMultiSelectionEnabled(true);
+        fileChooser.setListener(new FileChooserAdapter() {
+            @Override
+            public void selected(Array<FileHandle> files) {
+                System.out.println("file chosen");
+                for (FileHandle fileHandle : files) {
+                    String path = fileHandle.file().getAbsolutePath();
+                    if (fileHandle.extension().equals("json")) {
+                        openFromLibraryItem(path);
+                    }
+                }
+            }
+        });
+        sandbox.getUIStage().addActor(fileChooser.fadeIn());
+    }
+
+    private void openFromLibraryItem(String projectPath) {
+        Json json = new Json();
+        FileHandle projectInfoFile = Gdx.files.internal(projectPath);
+        String projectInfoContents = null;
+        try {
+            projectInfoContents = FileUtils.readFileToString(projectInfoFile.file());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        CompositeItemVO voInfo = json.fromJson(CompositeItemVO.class, projectInfoContents);
+        String fileNameAndExtension = projectInfoFile.name();
+        String fileName = FilenameUtils.removeExtension(fileNameAndExtension);
+        this.currentProjectInfoVO.libraryItems.put(fileName, voInfo);
     }
 
     public void saveCurrentProject(SceneVO vo) {
@@ -1166,18 +1224,29 @@ public class ProjectManager extends BaseProxy {
                 path.resolveSibling(path.getFileName() + ".png"),
                 path.resolveSibling(path.getFileName() + ".9.png"));
 
-        for(Path p : possibleFiles) {
+        for (Path p : possibleFiles) {
             if (p.toFile().exists())
                 return p.toFile().delete();
         }
 
-        throw new IllegalStateException(String.format("The file %s is not found",path.toString()));
+        throw new IllegalStateException(String.format("The file %s is not found", path.toString()));
 
     }
 
     public boolean deleteSingleImage(String imageName) {
-        String imagesPath = currentProjectPath + File.separator + IMAGE_DIR_PATH + File.separator;
-        String filePath = imagesPath + imageName + ".png";
+        String imagesPath;
+        String filePath;
+
+        for (ResolutionEntryVO resolutionEntryVO : currentProjectInfoVO.resolutions) {
+            imagesPath = currentProjectPath + File.separator + "assets/" + resolutionEntryVO.name + "/images" + File.separator;
+            filePath = imagesPath + imageName + ".png";
+            File file = new File(filePath);
+            if (file.delete()) {
+                System.out.println("deleted " + resolutionEntryVO.name + "'s resolution " + imageName + ".png" + " image");
+            }
+        }
+        imagesPath = currentProjectPath + File.separator + IMAGE_DIR_PATH + File.separator;
+        filePath = imagesPath + imageName + ".png";
         return (new File(filePath)).delete();
     }
 

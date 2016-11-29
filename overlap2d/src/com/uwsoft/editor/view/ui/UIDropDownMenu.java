@@ -51,11 +51,13 @@ public class UIDropDownMenu extends PopupMenu {
         actionNames.put(MsgAPI.ACTION_PASTE, "Paste");
         actionNames.put(MsgAPI.ACTION_DELETE, "Delete");
         actionNames.put(MsgAPI.SHOW_ADD_LIBRARY_DIALOG, "Add to library");
+        actionNames.put(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM, "Export as library item");
         //actionNames.put(MsgAPI.ACTION_EDIT_PHYSICS, "Edit physics");
         //actionNames.put(ACTION_EDIT_RESOURCE_PHYSICS, "Edit physics");
         actionNames.put(MsgAPI.ACTION_SET_GRID_SIZE_FROM_ITEM, "Set grid size");
         actionNames.put(MsgAPI.ACTION_CREATE_PRIMITIVE, "Create Primitive");
 
+        actionNames.put(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM_FROM_RES_PANEL, "Export");
         actionNames.put(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE, "Delete");
         actionNames.put(MsgAPI.ACTION_DELETE_LIBRARY_ITEM, "Delete");
         actionNames.put(MsgAPI.ACTION_DELETE_PARTICLE_EFFECT, "Delete");
@@ -85,7 +87,7 @@ public class UIDropDownMenu extends PopupMenu {
     private void initView() {
         clear();
 
-        for(int i = 0; i < currentActionList.size; i++) {
+        for (int i = 0; i < currentActionList.size; i++) {
             String itemName = actionNames.get(currentActionList.get(i));
             MenuItem menuItem = new MenuItem(itemName, new MenuItemListener(ITEM_CLICKED, currentActionList.get(i)));
             addItem(menuItem);

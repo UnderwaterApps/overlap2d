@@ -58,6 +58,8 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
     public String[] listNotificationInterests() {
         return new String[]{
                 //FILE
+                Overlap2DMenuBar.IMPORT_LIBRARY_ITEM,
+                Overlap2DMenuBar.EXPORT_LIBRARY_ITEM,
                 Overlap2DMenuBar.NEW_PROJECT,
                 Overlap2DMenuBar.OPEN_PROJECT,
                 Overlap2DMenuBar.SAVE_PROJECT,
@@ -153,6 +155,12 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 break;
             case Overlap2DMenuBar.IMPORT_TO_LIBRARY:
                 //showDialog("showImportDialog");
+                break;
+            case Overlap2DMenuBar.IMPORT_LIBRARY_ITEM:
+                projectManager.importLibraryItems();
+                break;
+            case Overlap2DMenuBar.EXPORT_LIBRARY_ITEM:
+                projectManager.exportAllLibraryItems();
                 break;
             case Overlap2DMenuBar.RECENT_PROJECTS:
                 recentProjectItemClicked(notification.getBody());
