@@ -6,7 +6,7 @@ buildscript {
     dependencies {
         classpath 'net.sf.proguard:proguard-gradle:5.0'
         classpath 'org.ajoberstar:gradle-git:1.2.0'
-        classpath 'com.badlogicgames.gdx:gdx-tools:1.6.5'
+        classpath 'com.badlogicgames.gdx:gdx-tools:1.9.6'
         classpath 'org.kt3k.gradle.plugin:coveralls-gradle-plugin:2.0.1'
     }
 }
