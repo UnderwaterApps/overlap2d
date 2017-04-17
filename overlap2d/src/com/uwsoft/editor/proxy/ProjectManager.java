@@ -42,6 +42,7 @@ import com.vo.ProjectVO;
 import com.vo.SceneConfigVO;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.SystemUtils;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
@@ -698,7 +699,9 @@ public class ProjectManager extends BaseProxy {
      */
     private int copyImageFilesIntoProject(Array<FileHandle> files, ResolutionEntryVO resolution, Boolean performResize) {
         float ratio = ResolutionManager.getResolutionRatio(resolution, currentProjectInfoVO.originalResolution);
-        String targetPath = currentProjectPath + "/assets/" + resolution.name + "/images";
+
+        String separator = SystemUtils.IS_OS_WINDOWS ? "\\" : "/";
+        String targetPath = currentProjectPath + separator + "assets" + separator + resolution.name + separator + "images";
         float perCopyPercent = 95.0f / files.size;
 
         int resizeWarningsCount = 0;
