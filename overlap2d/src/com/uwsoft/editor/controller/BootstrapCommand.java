@@ -44,6 +44,7 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(MsgAPI.ACTION_CREATE_ITEM, CreateItemCommand.class);
         facade.registerCommand(MsgAPI.ACTION_CAMERA_CHANGE_COMPOSITE, CompositeCameraChangeCommand.class);
         facade.registerCommand(MsgAPI.ACTION_CREATE_PRIMITIVE, CreatePrimitiveCommand.class);
+        facade.registerCommand(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM, ExportLibraryItemCommand.class);
 
         facade.registerCommand(MsgAPI.ACTION_DELETE_LAYER, DeleteLayerCommand.class);
         facade.registerCommand(MsgAPI.ACTION_NEW_LAYER, NewLayerCommand.class);
@@ -84,6 +85,8 @@ public class BootstrapCommand extends SimpleCommand {
         facade.registerCommand(MsgAPI.ACTION_PLUGIN_PROXY_COMMAND, PluginItemCommand.class);
 
         // Resources
+        facade.registerCommand(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM_FROM_RES_PANEL, ExportLibraryItemFromResPanelCommand.class);
+
         facade.registerCommand(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE, DeleteImageResource.class);
         facade.registerCommand(MsgAPI.ACTION_DELETE_LIBRARY_ITEM, DeleteLibraryItem.class);
         facade.registerCommand(MsgAPI.ACTION_DELETE_PARTICLE_EFFECT, DeleteParticleEffect.class);

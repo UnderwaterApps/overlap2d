@@ -22,6 +22,7 @@ import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.controller.commands.ExportLibraryItemFromResPanelCommand;
 import com.uwsoft.editor.controller.commands.resource.DeleteLibraryItem;
 import com.uwsoft.editor.factory.ItemFactory;
 import com.uwsoft.editor.proxy.ProjectManager;
@@ -51,6 +52,7 @@ public class UILibraryItemsTabMediator extends UIResourcesTabMediator<UILibraryI
 
         listNotification = ArrayUtils.add(listNotification, MsgAPI.LIBRARY_LIST_UPDATED);
         listNotification = ArrayUtils.add(listNotification, DeleteLibraryItem.DONE);
+        listNotification = ArrayUtils.add(listNotification, ExportLibraryItemFromResPanelCommand.DONE);
 
         return listNotification;
     }

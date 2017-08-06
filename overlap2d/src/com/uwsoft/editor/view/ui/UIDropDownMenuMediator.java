@@ -74,6 +74,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(IMAGE_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_DELETE_IMAGE_RESOURCE);
         actionSets.put(LIBRARY_ITEM_ACTION_SET, new Array<>());
         actionSets.get(LIBRARY_ITEM_ACTION_SET).add(MsgAPI.ACTION_DELETE_LIBRARY_ITEM);
+        actionSets.get(LIBRARY_ITEM_ACTION_SET).add(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM_FROM_RES_PANEL);
 
         actionSets.put(SPINE_ANIMATION_ACTION_SET, new Array<>());
         actionSets.get(SPINE_ANIMATION_ACTION_SET).add(MsgAPI.ACTION_DELETE_SPINE_ANIMATION_RESOURCE);
@@ -94,6 +95,7 @@ public class UIDropDownMenuMediator extends SimpleMediator<UIDropDownMenu> {
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_DELETE);
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_GROUP_ITEMS);
         actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_CONVERT_TO_BUTTON);
+        actionSets.get(ITEMS_ACTIONS_SET).add(MsgAPI.ACTION_EXPORT_AS_LIBRARY_ITEM);
         
         actionSets.put(RULER_RESOURCE_ACTION_SET, new Array<>());
         actionSets.get(RULER_RESOURCE_ACTION_SET).add(MsgAPI.ACTION_UPDATE_RULER_POSITION);

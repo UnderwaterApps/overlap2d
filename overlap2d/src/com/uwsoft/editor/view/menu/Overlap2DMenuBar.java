@@ -18,26 +18,27 @@
 
 package com.uwsoft.editor.view.menu;
 
-import java.io.File;
-import java.util.ArrayList;
-
-import org.apache.commons.lang3.SystemUtils;
-
 import com.badlogic.gdx.scenes.scene2d.ui.Cell;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.widget.MenuItem;
 import com.kotcrab.vis.ui.widget.PopupMenu;
-import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.Overlap2DFacade;
+import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.event.MenuItemListener;
 import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.view.ui.widget.CustomMenu;
 import com.uwsoft.editor.view.ui.widget.CustomMenuBar;
+import org.apache.commons.lang3.SystemUtils;
+
+import java.io.File;
+import java.util.ArrayList;
 
 public class Overlap2DMenuBar extends CustomMenuBar {
 
     public static final String prefix = "com.uwsoft.editor.view.Overlap2DMenuBar";
 
+    public static final String IMPORT_LIBRARY_ITEM = prefix + ".IMPORT_LIBRARY_ITEM";
+    public static final String EXPORT_LIBRARY_ITEM = prefix + ".EXPORT_LIBRARY_ITEM";
     public static final String FILE_MENU = prefix + ".FILE_MENU";
     public static final String NEW_PROJECT = prefix + ".NEW_PROJECT";
     public static final String OPEN_PROJECT = prefix + ".OPEN_PROJECT";
@@ -171,6 +172,9 @@ public class Overlap2DMenuBar extends CustomMenuBar {
         private final MenuItem export;
         private final MenuItem exportSettings;
 
+        private final MenuItem importLibraryItem;
+        private final MenuItem exportLibraryItem;
+
         private final PopupMenu recentProjectsPopupMenu;
         private final Array<MenuItem> recentProjectsMenuItems;
         private final MenuItem recentProjectsMenuItem;
@@ -195,6 +199,12 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             addItem(importToLibrary);
             addItem(export);
             addItem(exportSettings);
+
+            addSeparator();
+            importLibraryItem = new MenuItem("Import Library Item(s)", new MenuItemListener(IMPORT_LIBRARY_ITEM, null, FILE_MENU));
+            exportLibraryItem = new MenuItem("Export Library Items", new MenuItemListener(EXPORT_LIBRARY_ITEM, null, FILE_MENU));
+            addItem(importLibraryItem);
+            addItem(exportLibraryItem);
             //
             addSeparator();
             recentProjectsMenuItem = new MenuItem("Recent Projects...");
@@ -263,6 +273,8 @@ public class Overlap2DMenuBar extends CustomMenuBar {
             importToLibrary.setDisabled(!open);
             export.setDisabled(!open);
             exportSettings.setDisabled(!open);
+            importLibraryItem.setDisabled(!open);
+            exportLibraryItem.setDisabled(!open);
         }
 
 //        private class RecentProjectListener extends ChangeListener {
