@@ -8,6 +8,8 @@ import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Array;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.*;
 import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
@@ -30,7 +32,8 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     private VisSelectBox<String> alignSelectBox;
     private VisCheckBox boldCheckBox;
     private VisCheckBox italicCheckBox;
-    private NumberSelector fontSizeField;
+    private Spinner fontSizeSpinner;
+    private IntSpinnerModel fontSizeModel;
     private VisTextArea textArea;
 
     public UILabelItemProperties() {
@@ -43,7 +46,8 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         alignSelectBox = new VisSelectBox<>();
         boldCheckBox = new VisCheckBox(null);
         italicCheckBox = new VisCheckBox(null);
-        fontSizeField = new NumberSelector("", 12, 0, 100);
+        fontSizeModel = new IntSpinnerModel(12, 0, 100);
+        fontSizeSpinner = new Spinner("", fontSizeModel);
 
         fontFamilySelectBox.setMaxListCount(10);
         alignSelectBox.setMaxListCount(10);
@@ -63,7 +67,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         mainTable.row().padTop(5);
         */
         mainTable.add(createLabel("Font Size", Align.right)).padRight(5).width(90).left();
-        mainTable.add(fontSizeField).width(55).padRight(5);
+        mainTable.add(fontSizeSpinner).width(55).padRight(5);
         mainTable.row().padTop(5);
         mainTable.add(createLabel("Align", Align.right)).padRight(5).width(90).left();
         mainTable.add(alignSelectBox).width(90).padRight(5);
@@ -147,11 +151,11 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getFontSize() {
-        return (int) fontSizeField.getValue();
+        return (int) fontSizeModel.getValue();
     }
 
     public void setFontSize(int fontSize) {
-        fontSizeField.setValue(fontSize);
+        fontSizeModel.setValue(fontSize);
     }
 
     @Override
@@ -165,7 +169,7 @@ public class UILabelItemProperties extends UIItemCollapsibleProperties {
         alignSelectBox.addListener(new SelectBoxChangeListener(eventName));
         boldCheckBox.addListener(new CheckBoxChangeListener(eventName));
         italicCheckBox.addListener(new CheckBoxChangeListener(eventName));
-        fontSizeField.addListener(new KeyboardListener(eventName));
+        fontSizeSpinner.addListener(new KeyboardListener(eventName));
         textArea.addListener(new KeyboardListener(eventName));
         textArea.addListener(textArea.new TextAreaListener() {
             @Override

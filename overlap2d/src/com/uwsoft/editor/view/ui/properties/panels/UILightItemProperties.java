@@ -18,9 +18,12 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.NumberSelector;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
@@ -37,7 +40,8 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
 
     private VisCheckBox isStaticCheckBox;
     private VisCheckBox isXRayCheckBox;
-    private NumberSelector rayCountSelector;
+    private Spinner rayCountSpinner;
+    private IntSpinnerModel rayCountModel;
 
     private VisValidatableTextField pointLightRadiusField;
     private VisValidatableTextField coneInnerAngleField;
@@ -55,7 +59,8 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
 
         isStaticCheckBox = new VisCheckBox(null);
         isXRayCheckBox = new VisCheckBox(null);
-        rayCountSelector = new NumberSelector(null, 4, 4, 5000, 1);
+        rayCountModel = new IntSpinnerModel(4, 4, 5000, 1);
+        rayCountSpinner = new Spinner(null, rayCountModel);
         lightTypeLabel = new VisLabel();
         pointLightRadiusField = new VisValidatableTextField(floatValidator);
         coneInnerAngleField = new VisValidatableTextField(floatValidator);
@@ -75,7 +80,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
         mainTable.add(isXRayCheckBox).left();
         mainTable.row().padTop(5);
         mainTable.add(new VisLabel("Ray Count: ", Align.right)).padRight(5).width(75).right();
-        mainTable.add(rayCountSelector).left();
+        mainTable.add(rayCountSpinner).left();
         mainTable.row().padTop(5);
         mainTable.add(new VisLabel("Softness lenght: ", Align.right)).padRight(5).width(100).right();
         mainTable.add(softnessLengthField).width(70).left();
@@ -120,11 +125,11 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getRayCount() {
-        return (int) rayCountSelector.getValue();
+        return (int) rayCountModel.getValue();
     }
 
     public void setRayCount(int count) {
-        rayCountSelector.setValue(count);
+        rayCountModel.setValue(count);
     }
 
     public boolean isStatic() {
@@ -191,7 +196,12 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private void setListeners() {
         isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        rayCountSpinner.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                facade.sendNotification(getUpdateEventName());
+            }
+        });
         pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));

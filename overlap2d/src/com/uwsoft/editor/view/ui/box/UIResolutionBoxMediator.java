@@ -19,7 +19,7 @@
 package com.uwsoft.editor.view.ui.box;
 
 import com.badlogic.gdx.math.Vector3;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.view.stage.Sandbox;
@@ -82,7 +82,7 @@ public class UIResolutionBoxMediator extends SimpleMediator<UIResolutionBox> {
                 break;
             case UIResolutionBox.DELETE_RESOLUTION_BTN_CLICKED:
                 resolutionEntryVO = notification.getBody();
-                DialogUtils.showConfirmDialog(sandbox.getUIStage(),
+                Dialogs.showConfirmDialog(sandbox.getUIStage(),
                         "Delete Resolution",
                         "Are you sure you want to delete resolution: " + resolutionEntryVO.name + "?",
                         new String[]{"Delete", "Cancel"}, new Integer[]{0, 1},

@@ -88,6 +88,10 @@ public class InputFileWidget extends VisTable {
 
     private void setValues(Array<FileHandle> values) {
         this.values = values;
+        if(!fileChooser.isMultiSelectionEnabled())
+        {
+            setValue(values.first());
+        }
         String path = "";
         for (FileHandle handle : values) {
             path += handle.name() + ",";
@@ -122,10 +126,6 @@ public class InputFileWidget extends VisTable {
             setValues(files);
         }
 
-        @Override
-        public void selected(FileHandle file) {
-            setValue(file);
-        }
 
         @Override
         public void canceled() {

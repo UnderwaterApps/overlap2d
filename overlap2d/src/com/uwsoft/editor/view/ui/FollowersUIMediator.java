@@ -144,7 +144,13 @@ public class FollowersUIMediator extends SimpleMediator<FollowersUI> {
     private void setNewSelectionConfiguration(Set<Entity> items) {
         followers.values().forEach(com.uwsoft.editor.view.ui.followers.BasicFollower::hide);
         for (Entity item : items) {
-            followers.get(item).show();
+            try {
+                followers.get(item).show();
+            }
+            catch(NullPointerException e)
+            {
+                System.out.print("NullPointerException caught in setNewSelectionConfiguration\n");
+            }
         }
     }
 

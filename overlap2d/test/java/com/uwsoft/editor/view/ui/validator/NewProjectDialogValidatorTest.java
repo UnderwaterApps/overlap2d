@@ -1,7 +1,7 @@
 package com.uwsoft.editor.view.ui.validator;
 
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.widget.VisValidatableTextField;
 import org.junit.Before;
 import org.junit.Test;
@@ -19,7 +19,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest(DialogUtils.class)
+@PrepareForTest(Dialogs.class)
 public class NewProjectDialogValidatorTest {
     private NewProjectDialogValidator validator;
     @Mock
@@ -31,7 +31,7 @@ public class NewProjectDialogValidatorTest {
     public void setUp() throws Exception {
         initMocks(this);
         validator = new NewProjectDialogValidator();
-        PowerMockito.mockStatic(DialogUtils.class);
+        PowerMockito.mockStatic(Dialogs.class);
     }
 
     @Test

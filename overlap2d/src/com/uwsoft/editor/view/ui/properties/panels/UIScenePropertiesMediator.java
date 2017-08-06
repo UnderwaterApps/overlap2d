@@ -18,8 +18,6 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
-import com.commons.color.ColorPickerAdapter;
-import com.commons.color.CustomColorPicker;
 import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 
@@ -29,6 +27,8 @@ import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIAbstractPropertiesMediator;
 import com.uwsoft.editor.renderer.data.PhysicsPropertiesVO;
 import com.uwsoft.editor.renderer.data.SceneVO;
+import com.kotcrab.vis.ui.widget.color.ColorPicker;
+import com.kotcrab.vis.ui.widget.color.ColorPickerAdapter;
 
 /**
  * Created by azakhary on 4/16/2015.
@@ -57,7 +57,8 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
 
         switch (notification.getName()) {
             case UISceneProperties.AMBIENT_COLOR_BUTTON_CLICKED:
-                CustomColorPicker picker = new CustomColorPicker(new ColorPickerAdapter() {
+                ColorPicker picker = new ColorPicker(new ColorPickerAdapter() {
+                    private boolean firstRun = true;
                     @Override
                     public void finished(Color newColor) {
                         viewComponent.setAmbientColor(newColor);
@@ -65,8 +66,13 @@ public class UIScenePropertiesMediator extends UIAbstractPropertiesMediator<Scen
                     }
                     @Override
                     public void changed(Color newColor) {
-                        viewComponent.setAmbientColor(newColor);
-                        facade.sendNotification(viewComponent.getUpdateEventName());
+                        if(!firstRun) {
+                            viewComponent.setAmbientColor(newColor);
+                            facade.sendNotification(viewComponent.getUpdateEventName());
+                        }
+                        else{
+                            firstRun=false;
+                        }
                     }
                 });
 

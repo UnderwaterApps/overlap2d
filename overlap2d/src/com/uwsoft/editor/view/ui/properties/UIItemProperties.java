@@ -21,7 +21,7 @@ package com.uwsoft.editor.view.ui.properties;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.utils.Align;
-import com.kotcrab.vis.ui.InputValidator;
+import com.kotcrab.vis.ui.util.InputValidator;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextField;
