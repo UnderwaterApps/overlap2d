@@ -11,7 +11,7 @@ animations, particle effects, light system, physics and complex grouped items.
 
 ### Getting Started
 
-* [Check out our website](http://overlap2d.com/)
+* [Our Website is down, download jar from here](https://www.dropbox.com/s/uy6jut6m5t4hnor/overlap2d.tar.gz?dl=0)
 * [Watch the video on YouTube](https://www.youtube.com/watch?v=I0g-t0nZ-qE)
 * [Check out the quick start guide](http://overlap2d.com/getting-started/)
 
