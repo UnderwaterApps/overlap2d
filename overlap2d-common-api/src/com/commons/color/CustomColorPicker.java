@@ -276,7 +276,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 		}
 
 		barTexture = new Texture(barPixmap);
-		PickerCommons pickerCommons = new PickerCommons(style.pickerStyle, sizes, false);
+		PickerCommons pickerCommons = new PickerCommons(style.pickerStyle, sizes, true);
 		palette = new Palette(pickerCommons, 0, new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
