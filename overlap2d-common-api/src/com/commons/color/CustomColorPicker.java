@@ -18,6 +18,12 @@
 
 package com.commons.color;
 
+import static com.commons.color.ColorPickerText.CANCEL;
+import static com.commons.color.ColorPickerText.HEX;
+import static com.commons.color.ColorPickerText.OK;
+import static com.commons.color.ColorPickerText.RESTORE;
+import static com.commons.color.ColorPickerText.TITLE;
+
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Pixmap.Format;
@@ -30,17 +36,23 @@ import com.badlogic.gdx.scenes.scene2d.utils.Drawable;
 import com.badlogic.gdx.utils.Align;
 import com.badlogic.gdx.utils.Disposable;
 import com.badlogic.gdx.utils.I18NBundle;
+import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.VisUI;
 import com.kotcrab.vis.ui.util.ColorUtils;
-import com.kotcrab.vis.ui.widget.*;
+import com.kotcrab.vis.ui.widget.VisImageButton;
+import com.kotcrab.vis.ui.widget.VisLabel;
+import com.kotcrab.vis.ui.widget.VisTable;
+import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisTextField;
 import com.kotcrab.vis.ui.widget.VisTextField.TextFieldFilter;
-import com.kotcrab.vis.ui.widget.color.AlphaImage;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
+import com.kotcrab.vis.ui.widget.VisWindow;
 import com.kotcrab.vis.ui.widget.color.ColorPickerStyle;
-import com.kotcrab.vis.ui.widget.color.Palette;
-import com.kotcrab.vis.ui.widget.color.VerticalChannelBar;
-
-import static com.commons.color.ColorPickerText.*;
+import com.kotcrab.vis.ui.widget.color.internal.AlphaImage;
+import com.kotcrab.vis.ui.widget.color.internal.Palette;
+import com.kotcrab.vis.ui.widget.color.internal.PickerCommons;
+import com.kotcrab.vis.ui.widget.color.internal.VerticalChannelBar;
 
 /**
  * Created by azakhary on 7/14/2015.
@@ -124,7 +136,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 		this.listener = listener;
 		this.style = VisUI.getSkin().get(styleName, ColorPickerStyle.class);
 		this.sizes = VisUI.getSizes();
-		this.bundle = VisUI.getColorPickerBundle();
+		this.bundle = Locales.getColorPickerBundle();
 
 		if (title == null) getTitleLabel().setText(getText(TITLE));
 
@@ -202,11 +214,15 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 
 	private VisTable createColorsPreviewTable () {
 		VisTable table = new VisTable(false);
-		table.add(new VisLabel(getText(OLD))).spaceRight(3);
-		table.add(currentColor = new AlphaImage(style)).height(25 * sizes.scaleFactor).expandX().fillX();
+		PickerCommons commons = new PickerCommons(style.pickerStyle, new Sizes(), true);
+		//FIXME getText(OLD)
+		table.add(new VisLabel("Old")).spaceRight(3);
+		table.add(currentColor = new AlphaImage(commons, 0)).height(25 * sizes.scaleFactor).expandX().fillX();
 		table.row();
-		table.add(new VisLabel(getText(NEW))).spaceRight(3);
-		table.add(newColor = new AlphaImage(style, true)).height(25 * sizes.scaleFactor).expandX().fillX();
+		//FIXME getText(NEW)
+		table.add(new VisLabel("New")).spaceRight(3);
+		
+		table.add(newColor = new AlphaImage(commons, 0)).height(25 * sizes.scaleFactor).expandX().fillX();
 
 		currentColor.setColor(color);
 		newColor.setColor(color);
@@ -260,8 +276,8 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 		}
 
 		barTexture = new Texture(barPixmap);
-
-		palette = new Palette(style, sizes, paletteTexture, 0, 0, 100, new ChangeListener() {
+		PickerCommons pickerCommons = new PickerCommons(style.pickerStyle, sizes, false);
+		palette = new Palette(pickerCommons, 0, new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				sBar.setValue(palette.getV());
@@ -272,7 +288,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
             }
         });
 
-		verticalBar = new VerticalChannelBar(style, sizes, barTexture, 0, 360, new ChangeListener() {
+		verticalBar = new VerticalChannelBar(pickerCommons, 0, new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				hBar.setValue(verticalBar.getValue());

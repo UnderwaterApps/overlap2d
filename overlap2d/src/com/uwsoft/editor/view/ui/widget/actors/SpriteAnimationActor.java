@@ -2,6 +2,7 @@ package com.uwsoft.editor.view.ui.widget.actors;
 
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas.AtlasRegion;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
@@ -14,7 +15,7 @@ public class SpriteAnimationActor extends Actor {
     private String animationName;
     private IResourceRetriever rm;
 
-    private Animation animation;
+    private Animation<AtlasRegion> animation;
 
     private float stateTime = 0;
     private int fps;
@@ -24,7 +25,7 @@ public class SpriteAnimationActor extends Actor {
     public SpriteAnimationActor(String animationName, IResourceRetriever rm) {
         this.animationName = animationName;
         this.rm = rm;
-        animation = new Animation(1/24f, rm.getSpriteAnimation(animationName).getRegions());
+        animation = new Animation<AtlasRegion>(1/24f, rm.getSpriteAnimation(animationName).getRegions());
         animation.setPlayMode(Animation.PlayMode.LOOP);
 
         TextureRegion region = animation.getKeyFrame(stateTime);

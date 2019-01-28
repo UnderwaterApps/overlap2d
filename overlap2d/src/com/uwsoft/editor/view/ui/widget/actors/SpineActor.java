@@ -4,11 +4,18 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.utils.Array;
-import com.esotericsoftware.spine.*;
+import com.esotericsoftware.spine.Animation;
+import com.esotericsoftware.spine.AnimationState;
+import com.esotericsoftware.spine.AnimationStateData;
+import com.esotericsoftware.spine.BoneData;
+import com.esotericsoftware.spine.Skeleton;
+import com.esotericsoftware.spine.SkeletonData;
+import com.esotericsoftware.spine.SkeletonJson;
+import com.esotericsoftware.spine.SkeletonRenderer;
+import com.esotericsoftware.spine.Slot;
 import com.esotericsoftware.spine.attachments.Attachment;
 import com.esotericsoftware.spine.attachments.MeshAttachment;
 import com.esotericsoftware.spine.attachments.RegionAttachment;
-import com.esotericsoftware.spine.attachments.WeightedMeshAttachment;
 import com.uwsoft.editor.renderer.resources.IResourceRetriever;
 
 public class SpineActor extends Actor {
@@ -41,7 +48,7 @@ public class SpineActor extends Actor {
             Slot slot = skeleton.getSlots().get(i);
             Attachment attachment = slot.getAttachment();
             if (attachment == null) continue;
-            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) || (attachment instanceof WeightedMeshAttachment))) continue;
+            if (!((attachment instanceof RegionAttachment) || (attachment instanceof MeshAttachment) /*|| (attachment instanceof WeightedMeshAttachment)*/)) continue;
             float[] vertices = new float[0];
             if ((attachment instanceof RegionAttachment)) {
                 RegionAttachment region = (RegionAttachment) attachment;
@@ -53,11 +60,11 @@ public class SpineActor extends Actor {
                 region.updateWorldVertices(slot, false);
                 vertices = region.getWorldVertices();
             }
-            if ((attachment instanceof WeightedMeshAttachment)) {
+            /*if ((attachment instanceof WeightedMeshAttachment)) {
                 WeightedMeshAttachment region = (WeightedMeshAttachment) attachment;
                 region.updateWorldVertices(slot, false);
                 vertices = region.getWorldVertices();
-            }
+            }*/
 
 
             for (int ii = 0, nn = vertices.length; ii < nn; ii += 5) {

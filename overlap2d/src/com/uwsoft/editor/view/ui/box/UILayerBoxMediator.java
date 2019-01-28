@@ -18,15 +18,22 @@
 
 package com.uwsoft.editor.view.ui.box;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Stream;
+
 import com.badlogic.ashley.core.Entity;
 import com.commons.MsgAPI;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.observer.Notification;
 import com.uwsoft.editor.Overlap2DFacade;
-import com.uwsoft.editor.controller.commands.*;
-import com.uwsoft.editor.factory.ItemFactory;
-import com.uwsoft.editor.proxy.SceneDataManager;
+import com.uwsoft.editor.controller.commands.CompositeCameraChangeCommand;
+import com.uwsoft.editor.controller.commands.DeleteLayerCommand;
+import com.uwsoft.editor.controller.commands.LayerSwapCommand;
+import com.uwsoft.editor.controller.commands.NewLayerCommand;
+import com.uwsoft.editor.controller.commands.RenameLayerCommand;
 import com.uwsoft.editor.renderer.components.LayerMapComponent;
 import com.uwsoft.editor.renderer.components.NodeComponent;
 import com.uwsoft.editor.renderer.components.ZIndexComponent;
@@ -34,11 +41,6 @@ import com.uwsoft.editor.renderer.data.LayerItemVO;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
 import com.uwsoft.editor.utils.runtime.EntityUtils;
 import com.uwsoft.editor.view.stage.Sandbox;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.stream.Stream;
 
 
 /**
@@ -120,7 +122,7 @@ public class UILayerBoxMediator extends PanelMediator<UILayerBox> {
                 selectEntitiesByLayerName(layerItem);
                 break;
             case UILayerBox.CREATE_NEW_LAYER:
-                DialogUtils.showInputDialog(Sandbox.getInstance().getUIStage(), "Please set unique name for your Layer", "Please set unique name for your Layer", new InputDialogListener() {
+                Dialogs.showInputDialog(Sandbox.getInstance().getUIStage(), "Please set unique name for your Layer", "Please set unique name for your Layer", new InputDialogListener() {
                     @Override
                     public void finished(String input) {
                         if (checkIfNameIsUnique(input)) {

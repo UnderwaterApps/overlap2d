@@ -20,8 +20,9 @@ package com.uwsoft.editor.view.menu;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
+import com.badlogic.gdx.utils.Array;
 import com.commons.MsgAPI;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.kotcrab.vis.ui.widget.file.FileChooser;
 import com.kotcrab.vis.ui.widget.file.FileChooserAdapter;
@@ -171,7 +172,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 Gdx.app.exit();
                 break;
             case Overlap2DMenuBar.NEW_SCENE:
-                DialogUtils.showInputDialog(sandbox.getUIStage(), "Create New Scene", "Scene Name : ", new InputDialogListener() {
+                Dialogs.showInputDialog(sandbox.getUIStage(), "Create New Scene", "Scene Name : ", new InputDialogListener() {
                     @Override
                     public void finished(String input) {
                         if (input == null || input.equals("")) {
@@ -193,7 +194,7 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
                 sceneMenuItemClicked(notification.getBody());
                 break;
             case Overlap2DMenuBar.DELETE_CURRENT_SCENE:
-                DialogUtils.showConfirmDialog(sandbox.getUIStage(),
+                Dialogs.showConfirmDialog(sandbox.getUIStage(),
                         "Delete Scene", "Do you realy want to delete '" + projectManager.currentProjectVO.lastOpenScene + "' scene?",
                         new String[]{"Delete", "Cancel"}, new Integer[]{0, 1}, result -> {
                             if (result == 0) {
@@ -232,7 +233,12 @@ public class Overlap2DMenuBarMediator extends SimpleMediator<Overlap2DMenuBar> {
         fileChooser.setDirectory(workspacePath);
 
         fileChooser.setListener(new FileChooserAdapter() {
+        	
             @Override
+			public void selected(Array<FileHandle> files) {
+				selected(files.first());
+			}
+
             public void selected(FileHandle file) {
                 String path = file.file().getAbsolutePath();
                 if (path.length() > 0) {

@@ -18,17 +18,22 @@
 
 package com.uwsoft.editor.view.ui.properties.panels;
 
+import javax.swing.AbstractSpinnerModel;
+import javax.swing.SpinnerNumberModel;
+
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
-import com.kotcrab.vis.ui.widget.NumberSelector;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
 import com.kotcrab.vis.ui.widget.VisValidatableTextField;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
 import com.uwsoft.editor.event.CheckBoxChangeListener;
 import com.uwsoft.editor.event.KeyboardListener;
-import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 import com.uwsoft.editor.renderer.data.LightVO;
+import com.uwsoft.editor.utils.StandardWidgetsFactory;
+import com.uwsoft.editor.view.ui.properties.UIItemCollapsibleProperties;
 
 /**
  * Created by azakhary on 4/28/2015.
@@ -37,7 +42,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
 
     private VisCheckBox isStaticCheckBox;
     private VisCheckBox isXRayCheckBox;
-    private NumberSelector rayCountSelector;
+    private Spinner rayCountSelector;
 
     private VisValidatableTextField pointLightRadiusField;
     private VisValidatableTextField coneInnerAngleField;
@@ -55,7 +60,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
 
         isStaticCheckBox = new VisCheckBox(null);
         isXRayCheckBox = new VisCheckBox(null);
-        rayCountSelector = new NumberSelector(null, 4, 4, 5000, 1);
+        rayCountSelector = StandardWidgetsFactory.createNumberSelector("", 4, 4, 5000, 1);
         lightTypeLabel = new VisLabel();
         pointLightRadiusField = new VisValidatableTextField(floatValidator);
         coneInnerAngleField = new VisValidatableTextField(floatValidator);
@@ -120,11 +125,11 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     }
 
     public int getRayCount() {
-        return (int) rayCountSelector.getValue();
+        return ((IntSpinnerModel) rayCountSelector.getModel()).getValue();
     }
 
     public void setRayCount(int count) {
-        rayCountSelector.setValue(count);
+    	((IntSpinnerModel) rayCountSelector.getModel()).setValue(count);
     }
 
     public boolean isStatic() {
@@ -191,7 +196,7 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private void setListeners() {
         isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        rayCountSelector.addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        ((AbstractSpinnerModel) rayCountSelector.getModel()).addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
         pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));

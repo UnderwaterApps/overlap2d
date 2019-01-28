@@ -64,7 +64,7 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
                 Engine engine = sandboxMediator.getViewComponent().getEngine();
 
             	getViewComponent().setEngine(engine);
-                viewComponent.show();
+            	getViewComponent().show();
                 break;
             case MsgAPI.SCENE_LOADED:
                 facade = Overlap2DFacade.getInstance();
@@ -75,17 +75,17 @@ public class Overlap2DScreenMediator extends SimpleMediator<Overlap2DScreen> {
                 getViewComponent().disableDrawingBgLogo();
                 break;
             case MsgAPI.PAUSE:
-                viewComponent.pause();
+            	getViewComponent().pause();
                 break;
             case MsgAPI.RESUME:
-                viewComponent.resume();
+            	getViewComponent().resume();
                 break;
             case MsgAPI.RENDER:
-                viewComponent.render(notification.getBody());
+            	getViewComponent().render(notification.getBody());
                 break;
             case MsgAPI.RESIZE:
                 int[] data = notification.getBody();
-                viewComponent.resize(data[0], data[1]);
+                getViewComponent().resize(data[0], data[1]);
                 break;
             case MsgAPI.DISPOSE:
                 break;

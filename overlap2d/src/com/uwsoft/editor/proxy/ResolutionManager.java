@@ -37,16 +37,16 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
 import com.badlogic.gdx.tools.texturepacker.TextureUnpacker;
 import com.badlogic.gdx.utils.Array;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.mortennobel.imagescaling.ResampleOp;
 import com.puremvc.patterns.proxy.BaseProxy;
-import com.uwsoft.editor.view.stage.Sandbox;
-import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.renderer.data.ProjectInfoVO;
 import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
 import com.uwsoft.editor.utils.NinePatchUtils;
 import com.uwsoft.editor.utils.Overlap2DUtils;
+import com.uwsoft.editor.view.stage.Sandbox;
+import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 
 public class ResolutionManager extends BaseProxy {
     private static final String TAG = ResolutionManager.class.getCanonicalName();
@@ -170,7 +170,7 @@ public class ResolutionManager extends BaseProxy {
             createResizedAnimations(resolutionEntryVO);
             changePercentBy(5);
             if (resizeWarnings > 0) {
-                DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+                Dialogs.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", resizeWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
             }
             Overlap2DFacade.getInstance().sendNotification(RESOLUTION_LIST_CHANGED);
         });
