@@ -19,8 +19,10 @@
 package com.uwsoft.editor.view.ui.properties.panels;
 
 import javax.swing.AbstractSpinnerModel;
-import javax.swing.SpinnerNumberModel;
 
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.util.Validators;
 import com.kotcrab.vis.ui.widget.VisCheckBox;
@@ -196,7 +198,14 @@ public class UILightItemProperties extends UIItemCollapsibleProperties {
     private void setListeners() {
         isStaticCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
         isXRayCheckBox.addListener(new CheckBoxChangeListener(getUpdateEventName()));
-        ((AbstractSpinnerModel) rayCountSelector.getModel()).addChangeListener(number -> facade.sendNotification(getUpdateEventName()));
+        rayCountSelector.addListener(new ChangeListener() {
+			
+			@Override
+			public void changed(ChangeEvent event, Actor actor) {
+				facade.sendNotification(getUpdateEventName());
+				
+			}
+		});
         pointLightRadiusField.addListener(new KeyboardListener(getUpdateEventName()));
         coneInnerAngleField.addListener(new KeyboardListener(getUpdateEventName()));
         coneDistanceField.addListener(new KeyboardListener(getUpdateEventName()));
