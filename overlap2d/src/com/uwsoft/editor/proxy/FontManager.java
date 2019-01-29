@@ -71,7 +71,8 @@ public class FontManager extends BaseProxy {
             String[] pathsToCheck = {
                     System.getProperty("user.home") + File.separator + ".fonts",
                     "/usr/share/fonts/truetype",
-                    "/usr/share/fonts/TTF"
+                    "/usr/share/fonts/TTF",
+                    "/usr/share/fonts"
             };
             ArrayList<String> resultList = new ArrayList<>();
 
