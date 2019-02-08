@@ -88,8 +88,6 @@ public class CustomColorPicker extends VisWindow implements Disposable {
     private Texture barTexture;
     private VerticalChannelBar verticalBar;
 
-    private Texture paletteTexture;
-    private Pixmap palettePixmap;
     private Palette palette;
 
     private ColorChannelWidget hBar;
@@ -265,9 +263,6 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 	}
 
 	private void createColorWidgets () {
-		palettePixmap = new Pixmap(100, 100, Format.RGB888);
-		paletteTexture = new Texture(palettePixmap);
-
 		barPixmap = new Pixmap(1, 360, Format.RGB888);
 
 		for (int h = 0; h < 360; h++) {
@@ -277,7 +272,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 
 		barTexture = new Texture(barPixmap);
 		PickerCommons pickerCommons = new PickerCommons(style.pickerStyle, sizes, true);
-		palette = new Palette(pickerCommons, 0, new ChangeListener() {
+		palette = new Palette(pickerCommons, 100, new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				sBar.setValue(palette.getV());
@@ -288,10 +283,11 @@ public class CustomColorPicker extends VisWindow implements Disposable {
             }
         });
 
-		verticalBar = new VerticalChannelBar(pickerCommons, 0, new ChangeListener() {
+		verticalBar = new VerticalChannelBar(pickerCommons, 360, new ChangeListener() {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				hBar.setValue(verticalBar.getValue());
+				palette.setPickerHue(hBar.getValue());
 				updateHSVValuesFromFields();
 				updatePixmaps();
 			}
@@ -457,17 +453,8 @@ public class CustomColorPicker extends VisWindow implements Disposable {
     }
 
 	private void updatePixmaps () {
-		for (int v = 0; v <= 100; v++) {
-			for (int s = 0; s <= 100; s++) {
-				ColorUtils.HSVtoRGB(hBar.getValue(), s, v, tmpColor);
-				palettePixmap.drawPixel(v, 100 - s, Color.rgba8888(tmpColor));
-			}
-		}
-
-        paletteTexture.draw(palettePixmap, 0, 0);
-
         newColor.setColor(color);
-
+        
         hBar.redraw();
         sBar.redraw();
         vBar.redraw();
@@ -516,10 +503,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 
     @Override
     public void dispose () {
-        paletteTexture.dispose();
         barTexture.dispose();
-
-        palettePixmap.dispose();
         barPixmap.dispose();
 
         hBar.dispose();

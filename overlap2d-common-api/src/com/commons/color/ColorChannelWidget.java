@@ -100,9 +100,7 @@ public class ColorChannelWidget extends VisTable implements Disposable {
 
 			@Override
 			public void updateFields() {
-				value = bar.getValue();
-				drawer.updateFields();
-				inputField.setValue(value);
+				
 			}
 
 			@Override
