@@ -287,7 +287,6 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 			@Override
 			public void changed (ChangeEvent event, Actor actor) {
 				hBar.setValue(verticalBar.getValue());
-				palette.setPickerHue(hBar.getValue());
 				updateHSVValuesFromFields();
 				updatePixmaps();
 			}
@@ -453,6 +452,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
     }
 
 	private void updatePixmaps () {
+		palette.setPickerHue(hBar.getValue());
         newColor.setColor(color);
         
         hBar.redraw();

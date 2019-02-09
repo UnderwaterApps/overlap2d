@@ -1,0 +1,66 @@
+
+splash.png
+size: 512,512
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+background
+  rotate: false
+  xy: 457, 2
+  size: 30, 418
+  split: 12, 12, 13, 13
+  pad: 13, 13, 13, 13
+  orig: 30, 418
+  offset: 0, 0
+  index: -1
+devider
+  rotate: false
+  xy: 67, 157
+  size: 1, 2
+  orig: 1, 2
+  offset: 0, 0
+  index: -1
+graphic
+  rotate: false
+  xy: 2, 248
+  size: 453, 172
+  orig: 453, 172
+  offset: 0, 0
+  index: -1
+icon
+  rotate: false
+  xy: 71, 222
+  size: 24, 24
+  orig: 24, 24
+  offset: 0, 0
+  index: -1
+logo
+  rotate: false
+  xy: 2, 161
+  size: 67, 85
+  orig: 67, 85
+  offset: 0, 0
+  index: -1
+logoText
+  rotate: false
+  xy: 2, 145
+  size: 63, 14
+  orig: 63, 14
+  offset: 0, 0
+  index: -1
+progressBar
+  rotate: false
+  xy: 489, 415
+  size: 12, 5
+  split: 3, 3, 2, 2
+  orig: 12, 5
+  offset: 0, 0
+  index: -1
+progressBg
+  rotate: false
+  xy: 2, 138
+  size: 12, 5
+  split: 4, 4, 2, 2
+  orig: 12, 5
+  offset: 0, 0
+  index: -1

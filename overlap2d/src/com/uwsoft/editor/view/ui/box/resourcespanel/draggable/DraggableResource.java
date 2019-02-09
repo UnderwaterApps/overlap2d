@@ -60,7 +60,7 @@ public class DraggableResource extends DragAndDrop {
                 payload.setDragActor(dragActor);
                 payload.setObject(payloadData);
                 payload.setInvalidDragActor(null);
-                setDragActorPosition(-dragActor.getWidth() / 2f, dragActor.getHeight() / 2f);
+                setDragActorPosition(dragActor.getWidth() / 2f, -dragActor.getHeight() / 2f);
                 return payload;
             }
         });
