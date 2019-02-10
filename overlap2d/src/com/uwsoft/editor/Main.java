@@ -51,6 +51,7 @@ public class Main {
     private LwjglFrame mainFrame;
 
     public Main() {
+    	 LwjglApplicationConfiguration.disableAudio = true;
         splash = new SplashStarter(() -> startLoadingEditor());
     }
 
