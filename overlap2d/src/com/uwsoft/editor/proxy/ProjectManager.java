@@ -156,6 +156,7 @@ public class ProjectManager extends BaseProxy {
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/particles"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/animations"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/pack"));
+        FileUtils.forceMkdir(new File(projPath + File.separator + "assets/shaders"));
 
 
         // create project file
