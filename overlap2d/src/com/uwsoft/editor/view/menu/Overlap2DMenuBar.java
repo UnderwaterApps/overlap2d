@@ -245,6 +245,7 @@ public class Overlap2DMenuBar extends CustomMenuBar {
         public void reInitRecent(ArrayList<String> paths) {
             recentProjectsMenuItems.clear();
             recentProjectsPopupMenu.clear();
+            recentProjectsPopupMenu.remove();
 
             addRecent(paths);
 
