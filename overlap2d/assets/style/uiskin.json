@@ -237,15 +237,15 @@
   },
   "com.badlogic.gdx.scenes.scene2d.ui.CheckBox$CheckBoxStyle": {
     "default": {
-      "down": "check-on",
-      "up": "check-off",
+      "checkboxOn": "check-on",
+      "checkboxOff": "check-off",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
     },
     "radio": {
-      "down": "radio-on",
-      "up": "radio-off",
+      "checkboxOn": "radio-on",
+      "checkboxOff": "radio-off",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
@@ -593,21 +593,22 @@
   },
   "com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
     "default": {
-      "checked": "check-on",
-      "up": "check-off",
-      "over": "check-over-off",
-      "disabled": "check-on-disabled",
+	  "checkBackgroundDown": "check-on",
+      "checkBackground": "check-off",
+	  "checkBackgroundOver": "check-over-off",
+	  "tick": "check-on"
+	  "tickDisabled": "check-on-disabled"     
       "focusBorder": "border",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
     },
     "radio": {
-     "checked": "check-on",
-      "up": "check-off",
-      "over": "check-over-off",
-      "disabled": "check-on-disabled",
-      "focusBorder": "border",
+      "checkBackgroundDown": "radio-on",
+      "checkBackground": "radio-off",
+	  "checkBackgroundOver": "radio-over-off",
+	  "tick": "radio-on"
+	  "tickDisabled": "radio-on-disabled"
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
