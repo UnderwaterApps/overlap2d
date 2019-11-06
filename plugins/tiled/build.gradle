@@ -25,7 +25,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        classpath 'com.badlogicgames.gdx:gdx-tools:1.6.5'
+        classpath 'com.badlogicgames.gdx:gdx-tools:1.9.8'
     }
 }
 
@@ -33,8 +33,8 @@ sourceSets.main.java.srcDirs = [ "src/" ]
 sourceSets.main.resources.srcDirs = [ "assets/pack" ]
 
 ext {
-    gdxVersion = '1.6.5'
-    ashleyVersion = '1.5.0'
+    gdxVersion = '1.9.8'
+    ashleyVersion = '1.7.3'
     pack = ["assets/textures", "assets/pack/", "tiled"]
     jarPath = "../../overlap2d/assets/plugins"
 }
@@ -66,17 +66,13 @@ repositories {
     maven { url "http://repo.serkprojects.com/content/groups/public/" }
 }
 
-task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
-}
-
-task pack {
+task packTask {
     if (project.ext.has('pack')) {
         logger.info "Calling TexturePacker: " + pack
         TexturePacker.processIfModified(file(pack[0]).absolutePath, file(pack[1]).absolutePath, pack[2])
     }
 }
-build.dependsOn pack
+build.dependsOn packTask
 
 if(project.ext.has('jarPath')) {
     libsDirName = file(jarPath).absolutePath
