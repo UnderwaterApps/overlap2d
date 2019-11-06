@@ -6,11 +6,3 @@ project(':spine-runtime-libgdx').projectDir = new File(settingsDir, 'spine-runti
 project(':overlap2d-runtime-libgdx').projectDir = new File(settingsDir, 'overlap2d-runtime-libgdx')
 project(':spine-o2d-extension').projectDir = new File(settingsDir, 'overlap2d-runtime-libgdx/extensions/spine')
 project(':overlap2d-common-api').projectDir = new File(settingsDir, 'overlap2d-common-api')
-
-// plugins
-include 'plugin-performance'
-project(':plugin-performance').projectDir = new File(settingsDir, 'plugins/performance')
-include 'plugin-tiled'
-project(':plugin-tiled').projectDir = new File(settingsDir, 'plugins/tiled')
-include 'plugin-nine-patch'
-project(':plugin-nine-patch').projectDir = new File(settingsDir, 'plugins/nine-patch')
