@@ -1,16 +1,5 @@
 package com.uwsoft.editor.view.ui.validator;
 
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
-import com.kotcrab.vis.ui.widget.VisValidatableTextField;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
-import org.powermock.api.mockito.PowerMockito;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.BDDMockito.given;
@@ -18,7 +7,20 @@ import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
 
-@RunWith(PowerMockRunner.class)
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.mockito.Mock;
+import org.powermock.api.mockito.PowerMockito;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Dialog;
+import com.kotcrab.vis.ui.widget.VisValidatableTextField;
+import com.runner.LibgdxRunner;
+import com.runner.NeedGL;
+
+@RunWith(LibgdxRunner.class)
 @PrepareForTest(Dialog.class)
 public class NewProjectDialogValidatorTest {
     private NewProjectDialogValidator validator;
@@ -35,6 +37,7 @@ public class NewProjectDialogValidatorTest {
     }
 
     @Test
+    @NeedGL
     public void shouldLogErrorIfTheProjectNameIsInvalid() throws Exception {
         given(projectName.getText()).willReturn("endWithSpace ");
         boolean validate = validator.validate(stage, projectName);

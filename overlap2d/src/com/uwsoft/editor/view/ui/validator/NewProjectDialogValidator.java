@@ -8,7 +8,7 @@ import org.apache.commons.lang3.StringUtils;
 public class NewProjectDialogValidator {
     public boolean validate(Stage stage, VisValidatableTextField projectName) {
         if (StringUtils.isEmpty(projectName.getText()) || StringUtils.endsWith(projectName.getText(), " ")) {
-        	//Dialogs.showErrorDialog(stage, "Please input a valid project name");
+        	Dialogs.showErrorDialog(stage, "Please input a valid project name");
             return false;
         }
         return true;
