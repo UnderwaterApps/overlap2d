@@ -312,7 +312,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 		sBar = new ColorChannelWidget(style, sizes, "S", 100, new ColorChannelWidget.ColorChannelWidgetListener() {
 			@Override
 			public void updateFields () {
-				palette.setValue(vBar.getValue(), sBar.getValue());
+				palette.setValue(sBar.getValue(), vBar.getValue());
 				updateHSVValuesFromFields();
 				updatePixmaps();
 			}
@@ -329,7 +329,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
 		vBar = new ColorChannelWidget(style, sizes, "V", 100, new ColorChannelWidget.ColorChannelWidgetListener() {
 			@Override
 			public void updateFields () {
-				palette.setValue(vBar.getValue(), sBar.getValue());
+				palette.setValue(sBar.getValue(), vBar.getValue());
 				updateHSVValuesFromFields();
 				updatePixmaps();
 			}
@@ -539,7 +539,7 @@ public class CustomColorPicker extends VisWindow implements Disposable {
         aBar.setValue(ca);
 
         verticalBar.setValue(hBar.getValue());
-        palette.setValue(vBar.getValue(), sBar.getValue());
+        palette.setValue(sBar.getValue(), vBar.getValue());
     }
 
     private void updateHSVValuesFromFields () {
@@ -584,6 +584,6 @@ public class CustomColorPicker extends VisWindow implements Disposable {
         vBar.setValue(cv);
 
         verticalBar.setValue(hBar.getValue());
-        palette.setValue(vBar.getValue(), sBar.getValue());
+        palette.setValue(sBar.getValue(), vBar.getValue());
     }
 }
