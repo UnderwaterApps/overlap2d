@@ -593,22 +593,25 @@
   },
   "com.kotcrab.vis.ui.widget.VisCheckBox$VisCheckBoxStyle": {
     "default": {
-	  "checkBackgroundDown": "check-on",
+	  "checkBackgroundDown":"check-down",
       "checkBackground": "check-off",
 	  "checkBackgroundOver": "check-over-off",
 	  "tick": "check-on"
 	  "tickDisabled": "check-on-disabled"     
       "focusBorder": "border",
+	  "errorBorder":"border-error",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
     },
     "radio": {
-      "checkBackgroundDown": "radio-on",
+      "checkBackgroundDown":"radio-down",
       "checkBackground": "radio-off",
 	  "checkBackgroundOver": "radio-over-off",
 	  "tick": "radio-on"
 	  "tickDisabled": "radio-on-disabled"
+	  "focusBorder":"border-circle",
+	  "errorBorder":"border-circle",
       "font": "default-font",
       "fontColor": "white",
       "disabledFontColor": "grey"
