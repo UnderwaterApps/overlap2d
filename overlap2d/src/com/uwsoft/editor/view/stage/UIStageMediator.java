@@ -20,7 +20,7 @@ package com.uwsoft.editor.view.stage;
 
 import com.badlogic.ashley.core.Entity;
 import com.commons.MsgAPI;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
 import com.puremvc.patterns.mediator.SimpleMediator;
 import com.puremvc.patterns.observer.Notification;
@@ -58,7 +58,7 @@ public class UIStageMediator extends SimpleMediator<UIStage> {
 
                 Entity item = notification.getBody();
 
-                DialogUtils.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
+                Dialogs.showInputDialog(sandbox.getUIStage(), "New Library Item ", "Unique Name", new InputDialogListener() {
                     @Override
                     public void finished(String input) {
                         Object[] payload = new Object[2];

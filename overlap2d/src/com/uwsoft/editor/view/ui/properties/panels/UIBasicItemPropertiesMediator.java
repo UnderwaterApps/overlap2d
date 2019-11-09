@@ -198,19 +198,38 @@ public class UIBasicItemPropertiesMediator extends UIItemPropertiesMediator<Enti
     	transformComponent.x = NumberUtils.toFloat(viewComponent.getXValue(), transformComponent.x);
     	transformComponent.y = NumberUtils.toFloat(viewComponent.getYValue(), transformComponent.y);
 
-        dimensionComponent.width = NumberUtils.toFloat(viewComponent.getWidthValue());
-        dimensionComponent.height = NumberUtils.toFloat(viewComponent.getHeightValue());
-
         if (dimensionComponent.boundBox != null) {
             dimensionComponent.boundBox.width = dimensionComponent.width;
             dimensionComponent.boundBox.height = dimensionComponent.height;
         }
+        
 
-        // TODO: manage width and height
+        float originalWidth = dimensionComponent.width /  transformComponent.scaleX;
+        float originalHeight = dimensionComponent.height /  transformComponent.scaleY;
+        
+        float newWidth = NumberUtils.toFloat(viewComponent.getWidthValue());
+        float newHeight = NumberUtils.toFloat(viewComponent.getHeightValue());
+        float newScaleX = newWidth / originalWidth; 
+        float newScaleY = newHeight / originalHeight;
+        
+        if(newWidth !=  dimensionComponent.width) {
+        	dimensionComponent.width = newWidth;
+        	transformComponent.scaleX = newScaleX;
+        }else {
+        	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
+        	dimensionComponent.width = transformComponent.scaleX * originalWidth;
+        }
+        
+        if(newHeight != dimensionComponent.height) {
+        	dimensionComponent.height = newHeight;
+        	transformComponent.scaleY = newScaleY;
+        }else {
+        	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
+        	dimensionComponent.height = transformComponent.scaleY * originalHeight; 
+        }
+        		
         transformComponent.rotation = NumberUtils.toFloat(viewComponent.getRotationValue(), transformComponent.rotation);
-    	transformComponent.scaleX = (viewComponent.getFlipH() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleXValue(), transformComponent.scaleX);
-    	transformComponent.scaleY = (viewComponent.getFlipV() ? -1 : 1) * NumberUtils.toFloat(viewComponent.getScaleYValue(), transformComponent.scaleY);
-        Color color = viewComponent.getTintColor();
+    	Color color = viewComponent.getTintColor();
         tintComponent.color.set(color);
 
         Array<Component> componentsToUpdate = new Array<>();

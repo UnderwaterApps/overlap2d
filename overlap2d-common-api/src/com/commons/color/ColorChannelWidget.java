@@ -24,15 +24,18 @@ package com.commons.color;
 
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShaderProgram;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.Disposable;
 import com.kotcrab.vis.ui.Sizes;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTable;
-import com.kotcrab.vis.ui.widget.color.AlphaChannelBar;
-import com.kotcrab.vis.ui.widget.color.ChannelBar;
 import com.kotcrab.vis.ui.widget.color.ColorPickerStyle;
+import com.kotcrab.vis.ui.widget.color.internal.AlphaChannelBar;
+import com.kotcrab.vis.ui.widget.color.internal.ChannelBar;
+import com.kotcrab.vis.ui.widget.color.internal.ChannelBar.ChannelBarListener;
+import com.kotcrab.vis.ui.widget.color.internal.PickerCommons;
 
 /**
  * Used to display one color channel (hue, saturation etc.) with label, ColorInputField and ChannelBar
@@ -92,8 +95,22 @@ public class ColorChannelWidget extends VisTable implements Disposable {
 				bar.setValue(newValue);
 			}
 		})).width(CustomColorPicker.FIELD_WIDTH * sizes.scaleFactor);
-		add(bar = createBarImage()).size(CustomColorPicker.BAR_WIDTH * sizes.scaleFactor, CustomColorPicker.BAR_HEIGHT * sizes.scaleFactor);
+		bar = createBarImage();
+		bar.setChannelBarListener(new ChannelBarListener() {
 
+			@Override
+			public void updateFields() {
+				
+			}
+
+			@Override
+			public void setShaderUniforms(ShaderProgram shader) {
+								
+			}
+			
+		});
+		add(bar).size(CustomColorPicker.BAR_WIDTH * sizes.scaleFactor, CustomColorPicker.BAR_HEIGHT * sizes.scaleFactor);
+		
         inputField.setValue(0);
     }
 
@@ -119,10 +136,12 @@ public class ColorChannelWidget extends VisTable implements Disposable {
     }
 
 	private ChannelBar createBarImage () {
+		
+		PickerCommons commons = new PickerCommons(style.pickerStyle, sizes, true);
 		if (useAlpha)
-			return new AlphaChannelBar(style, sizes, texture, value, maxValue, barListener);
+			return new AlphaChannelBar(commons, value, maxValue, barListener);
 		else
-			return new ChannelBar(style, sizes, texture, value, maxValue, barListener);
+			return new ChannelBar(commons, value, maxValue, barListener);
 	}
 
     public boolean isInputValid () {

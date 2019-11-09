@@ -18,7 +18,7 @@
 
 package com.commons.color;
 
-import com.kotcrab.vis.ui.VisUI;
+import com.kotcrab.vis.ui.Locales;
 import com.kotcrab.vis.ui.i18n.BundleText;
 
 /**
@@ -31,14 +31,14 @@ public enum ColorPickerText implements BundleText {
     RESTORE					{public String getName () {return "restore";}},
     CANCEL 					{public String getName () {return "cancel";}},
     OK						{public String getName () {return "ok";}},
-    NEW 					{public String getName () {return "new";}},
-    OLD 					{public String getName () {return "old";}},
+    //NEW 					{public String getName () {return "new";}},
+    //OLD 					{public String getName () {return "old";}},
     HEX 					{public String getName () {return "hex";}};
     // @formatter:on
 
     @Override
     public String get () {
-        return VisUI.getColorPickerBundle().get(getName());
+        return Locales.getColorPickerBundle().get(getName());
     }
 
     @Override

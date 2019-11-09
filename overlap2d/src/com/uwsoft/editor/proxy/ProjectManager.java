@@ -18,6 +18,28 @@
 
 package com.uwsoft.editor.proxy;
 
+import java.awt.image.BufferedImage;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
+import javax.imageio.ImageIO;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.tools.texturepacker.TexturePacker;
@@ -25,12 +47,16 @@ import com.badlogic.gdx.tools.texturepacker.TexturePacker.Settings;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.Json;
 import com.google.common.collect.Lists;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.puremvc.patterns.proxy.BaseProxy;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.data.manager.PreferencesManager;
 import com.uwsoft.editor.data.migrations.ProjectVersionMigrator;
-import com.uwsoft.editor.renderer.data.*;
+import com.uwsoft.editor.renderer.data.CompositeItemVO;
+import com.uwsoft.editor.renderer.data.MainItemVO;
+import com.uwsoft.editor.renderer.data.ProjectInfoVO;
+import com.uwsoft.editor.renderer.data.ResolutionEntryVO;
+import com.uwsoft.editor.renderer.data.SceneVO;
 import com.uwsoft.editor.renderer.utils.MySkin;
 import com.uwsoft.editor.utils.AppConfig;
 import com.uwsoft.editor.utils.Overlap2DUtils;
@@ -40,23 +66,6 @@ import com.uwsoft.editor.view.ui.widget.ProgressHandler;
 import com.vo.EditorConfigVO;
 import com.vo.ProjectVO;
 import com.vo.SceneConfigVO;
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import javax.imageio.ImageIO;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.awt.image.BufferedImage;
-import java.io.*;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 
 public class ProjectManager extends BaseProxy {
@@ -147,6 +156,7 @@ public class ProjectManager extends BaseProxy {
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/particles"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/animations"));
         FileUtils.forceMkdir(new File(projPath + File.separator + "assets/orig/pack"));
+        FileUtils.forceMkdir(new File(projPath + File.separator + "assets/shaders"));
 
 
         // create project file
@@ -686,7 +696,7 @@ public class ProjectManager extends BaseProxy {
             totalWarnings += copyImageFilesIntoProject(files, resolutionEntryVO, performResize);
         }
         if (totalWarnings > 0) {
-            DialogUtils.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
+            Dialogs.showOKDialog(Sandbox.getInstance().getUIStage(), "Warning", totalWarnings + " images were not resized for smaller resolutions due to already small size ( < 3px )");
         }
     }
 

@@ -18,13 +18,18 @@
 
 package com.uwsoft.editor.event;
 
-import com.kotcrab.vis.ui.widget.NumberSelector;
+
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.kotcrab.vis.ui.widget.spinner.IntSpinnerModel;
+import com.kotcrab.vis.ui.widget.spinner.Spinner;
+import com.kotcrab.vis.ui.widget.spinner.SpinnerModel;
 import com.uwsoft.editor.Overlap2DFacade;
 
 /**
  * Created by azakhary on 6/12/2015.
  */
-public class NumberSelectorOverlapListener implements NumberSelector.NumberSelectorListener {
+public class NumberSelectorOverlapListener extends ChangeListener {
 
     private final String eventName;
 
@@ -32,9 +37,10 @@ public class NumberSelectorOverlapListener implements NumberSelector.NumberSelec
         this.eventName = eventName;
     }
 
-    @Override
-    public void changed(float number) {
-        Overlap2DFacade facade = Overlap2DFacade.getInstance();
-        facade.sendNotification(eventName, number);
-    }
+	@Override
+	public void changed(ChangeEvent event, Actor actor) {
+		Overlap2DFacade facade = Overlap2DFacade.getInstance();
+		Spinner spinner = (Spinner) actor;
+        facade.sendNotification(eventName, ((IntSpinnerModel) spinner.getModel()).getValue());		
+	}
 }

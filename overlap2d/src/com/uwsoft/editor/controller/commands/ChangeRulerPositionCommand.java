@@ -1,9 +1,8 @@
 package com.uwsoft.editor.controller.commands;
 
-import com.kotcrab.vis.ui.InputValidator;
-import com.kotcrab.vis.ui.util.dialog.DialogUtils;
+import com.kotcrab.vis.ui.util.InputValidator;
+import com.kotcrab.vis.ui.util.dialog.Dialogs;
 import com.kotcrab.vis.ui.util.dialog.InputDialogListener;
-import com.uwsoft.editor.utils.Guide;
 import com.uwsoft.editor.view.ui.RulersUI;
 
 /**
@@ -19,7 +18,7 @@ public class ChangeRulerPositionCommand extends RevertableCommand {
 		previousPosition = RulersUI.getPreviousGuide().pos;
 		direction =  RulersUI.getPreviousGuide().isVertical ? "Y" : "X";
 		
-		DialogUtils.showInputDialog(sandbox.getUIStage(), "Manual " + direction + " Position", direction + " : ", new MyInputValidator(), new InputDialogListener() {
+		Dialogs.showInputDialog(sandbox.getUIStage(), "Manual " + direction + " Position", direction + " : ", new MyInputValidator(), new InputDialogListener() {
             @Override
             public void finished(String input) {
             	RulersUI.updateGuideManually(Float.parseFloat(input));
