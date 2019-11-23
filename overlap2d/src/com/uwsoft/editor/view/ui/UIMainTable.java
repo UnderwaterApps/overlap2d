@@ -45,9 +45,8 @@ public class UIMainTable extends VisTable {
     private final VisTable middleTable;
     private final Overlap2DFacade facade;
 
-    //TODO: fuck! make this private!!!!
-    public UISubmenuBar compositePanel;
-    public UIItemsTreeBox itemsBox;
+    private UISubmenuBar compositePanel;
+    private UIItemsTreeBox itemsBox;
 
     public UIMainTable() {
         facade = Overlap2DFacade.getInstance();
