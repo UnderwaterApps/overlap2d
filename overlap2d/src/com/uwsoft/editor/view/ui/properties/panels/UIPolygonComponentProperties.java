@@ -21,9 +21,13 @@ package com.uwsoft.editor.view.ui.properties.panels;
 import com.badlogic.gdx.utils.Align;
 import com.kotcrab.vis.ui.widget.VisLabel;
 import com.kotcrab.vis.ui.widget.VisTextButton;
+import com.kotcrab.vis.ui.widget.VisSelectBox;
 import com.uwsoft.editor.Overlap2DFacade;
 import com.uwsoft.editor.event.ButtonToNotificationListener;
+import com.uwsoft.editor.event.SelectBoxChangeListener;
 import com.uwsoft.editor.view.ui.properties.UIRemovableProperties;
+
+import com.badlogic.gdx.utils.Array;
 
 /**
  * Created by azakhary on 7/2/2015.
@@ -43,6 +47,9 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
     private VisTextButton copyBtn;
     private VisTextButton pasteBtn;
 
+    private VisSelectBox<String> polygonyzerBox;
+    
+
     public UIPolygonComponentProperties() {
         super("Polygon Component");
     }
@@ -61,6 +68,14 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
         mainTable.add(pasteBtn).right().padRight(4);
         mainTable.row();
 
+        polygonyzerBox = new VisSelectBox<>("white");
+        Array<String> types = new Array<>();
+        types.add("EWJORDAN");
+        types.add("BAYAZIT");
+        polygonyzerBox.setItems(types);
+        mainTable.add(polygonyzerBox).width(150).left().colspan(4);
+        mainTable.row();
+
         initListeners();
     }
 
@@ -68,6 +83,13 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
         verticesCountLbl.setText(count+"");
     }
 
+    public String getPolygonyzerType() {
+        return polygonyzerBox.getSelected().toString();
+    }
+
+    public void setPolygonizerType(String v) {
+        polygonyzerBox.setSelected(v);
+    }
     public void initEmptyView() {
         mainTable.clear();
 
@@ -83,6 +105,7 @@ public class UIPolygonComponentProperties extends UIRemovableProperties {
     private void initListeners() {
         copyBtn.addListener(new ButtonToNotificationListener(COPY_BUTTON_CLICKED));
         pasteBtn.addListener(new ButtonToNotificationListener(PASTE_BUTTON_CLICKED));
+        polygonyzerBox.addListener(new SelectBoxChangeListener(getUpdateEventName()));
     }
 
     private void initEmptyViewListeners() {

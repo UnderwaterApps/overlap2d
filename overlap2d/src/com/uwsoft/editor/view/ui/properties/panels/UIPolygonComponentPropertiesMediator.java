@@ -28,9 +28,12 @@ import com.uwsoft.editor.controller.commands.component.UpdatePolygonComponentCom
 import com.uwsoft.editor.renderer.components.DimensionsComponent;
 import com.uwsoft.editor.renderer.components.PolygonComponent;
 import com.uwsoft.editor.renderer.utils.ComponentRetriever;
+import com.uwsoft.editor.renderer.utils.PolygonUtils;
+import com.uwsoft.editor.utils.poly.Clipper;
 import com.uwsoft.editor.view.stage.Sandbox;
 import com.uwsoft.editor.view.ui.properties.UIItemPropertiesMediator;
 import org.apache.commons.lang3.ArrayUtils;
+
 
 /**
  * Created by azakhary on 7/2/2015.
@@ -95,11 +98,15 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         } else {
             viewComponent.initEmptyView();
         }
+
+        viewComponent.setPolygonizerType("BAYAZIT");
     }
 
     @Override
     protected void translateViewToItemData() {
-
+        polygonComponent = observableReference.getComponent(PolygonComponent.class);
+        Vector2[] points =  PolygonUtils.mergeTouchingPolygonsToOne(polygonComponent.vertices);
+        polygonComponent.vertices = polygonize(points);
     }
 
     private void addDefaultMesh() {
@@ -120,6 +127,10 @@ public class UIPolygonComponentPropertiesMediator extends UIItemPropertiesMediat
         Sandbox.getInstance().copyToLocalClipboard("meshData", polygonComponent.vertices);
     }
 
+    private Vector2[][] polygonize(Vector2[] vertices) {
+        return Clipper.polygonize(Clipper.Polygonizer.valueOf(viewComponent.getPolygonyzerType()), vertices);
+    }
+    
     private void pasteMesh() {
         Vector2[][] vertices = (Vector2[][]) Sandbox.getInstance().retrieveFromLocalClipboard("meshData");
         if(vertices == null) return;
