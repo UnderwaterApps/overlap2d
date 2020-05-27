@@ -417,13 +417,10 @@ public class ProjectManager extends BaseProxy {
             return;
         }
         handler = progressHandler;
-
         ExecutorService executor = Executors.newSingleThreadExecutor();
 
         executor.execute(() -> {
-
             String newAnimName = null;
-
             String rawFileName = fileHandles.get(0).name();
             String fileExtension = FilenameUtils.getExtension(rawFileName);
             if (fileExtension.equals("png")) {
@@ -435,59 +432,24 @@ public class ProjectManager extends BaseProxy {
                 String fileNameWithoutExt = FilenameUtils.removeExtension(rawFileName);
                 String fileNameWithoutFrame = fileNameWithoutExt.replaceAll("\\d*$", "");
 
-                boolean noFileNameWithoutFrame = false;
                 if (Objects.equals(fileNameWithoutFrame, "")) {
                     fileNameWithoutFrame = fileHandles.get(0).parent().name();
-                    noFileNameWithoutFrame = true;
                 }
 
                 String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutFrame;
-
+                File targetDir = new File(targetPath);
+                if (targetDir.exists())
+                {
+                	JOptionPane.showMessageDialog(null, "Animation already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                	return;
+                }
                 for (FileHandle file : fileHandles) {
                     File src = file.file();
-
-                    String destName;
-                    if (noFileNameWithoutFrame) {
-                        destName = targetPath + File.separator + fileNameWithoutFrame + src.getName();
-                    } else {
-                        destName = targetPath + File.separator + src.getName();
-                    }
-
-                    File dest = new File(destName);
-                    try {
-                        FileUtils.copyFile(src, dest);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
+                    texturePacker.addImage(src);
                 }
-
-                FileHandle pngsDir = new FileHandle(targetPath);
-                for (FileHandle entry : pngsDir.list(Overlap2DUtils.PNG_FILTER)) {
-                    texturePacker.addImage(entry.file());
-                }
-
-                String packName = "Pack";
-                targetPath = targetPath + packName;
-
-                File targetDir = new File(targetPath);
-                if (targetDir.exists()) {
-                    try {
-                        FileUtils.deleteDirectory(targetDir);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-
-                texturePacker.pack(targetDir, fileNameWithoutFrame + packName);
-
-                //delete newly created directory and images
-                try {
-                    FileUtils.deleteDirectory(pngsDir.file());
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-
-                newAnimName = fileNameWithoutFrame + packName;
+                
+                texturePacker.pack(targetDir, fileNameWithoutFrame);
+                newAnimName = fileNameWithoutFrame;
             } else {
                 for (FileHandle fileHandle : fileHandles) {
                     try {
@@ -496,7 +458,9 @@ public class ProjectManager extends BaseProxy {
                         String targetPath = currentProjectPath + "/assets/orig/sprite-animations" + File.separator + fileNameWithoutExt;
                         File targetDir = new File(targetPath);
                         if (targetDir.exists()) {
-                            FileUtils.deleteDirectory(targetDir);
+                            //FileUtils.deleteDirectory(targetDir);
+                        	JOptionPane.showMessageDialog(null, "Animation already exists!", "Error", JOptionPane.ERROR_MESSAGE);
+                        	return;
                         }
                         for (File img : imgs) {
                             FileUtils.copyFileToDirectory(img, targetDir);
