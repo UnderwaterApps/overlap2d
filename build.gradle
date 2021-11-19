@@ -13,6 +13,10 @@ buildscript {
 
 
 allprojects {
+    tasks.withType(JavaCompile).configureEach {
+        options.incremental = true
+    }
+
     apply plugin: "eclipse"
     apply plugin: "idea"
 
